@@ -1,0 +1,109 @@
+<template>
+  <div class="ninja-table-dg-wrapper">
+    <div class="ninja_main_nav">
+      <top-nav :initialData="initialData"
+               :selectedDevice="selectedDevice"
+               @deviceSelected="deviceSelected"
+               :tableId="$route.params.table_id">
+      </top-nav>
+    </div>
+    <el-row align="middle" :gutter="20">
+      <el-col :xs="24" :sm="10" :md="9" :lg="6" :xl="6" id="leftside">
+        <left-side-bar :singleItem="singleItem"
+                       :initialData="initialData"
+                       :selectedDevice="selectedDevice"
+                       @deviceSelected="deviceSelected"
+        ></left-side-bar>
+      </el-col>
+      <el-col :xs="24" :sm="14" :md="15" :lg="18" :xl="18">
+        <right-side-bar v-if="initialData"
+                        @editItem="editItem"
+                        :table="initialData.table"
+                        :selectedDevice="selectedDevice"
+                        :initialData="initialData"
+                        :tableId="$route.params.table_id"
+                        style="height: auto; padding-bottom: 25px;">
+        </right-side-bar>
+      </el-col>
+    </el-row>
+  </div>
+</template>
+<script>
+import TopNav from "./TopNav";
+import LeftSideBar from "./Sidebar/LeftSideBar";
+import RightSideBar from "./Sidebar/RightSideBar";
+
+export default {
+  name: "TableBuilderHome",
+  data() {
+    return {
+      tableId: '',
+      initialData: {},
+      singleItem: {},
+      selectedDevice: '',
+      changeSomething: false
+    };
+  },
+  components: {
+    TopNav,
+    LeftSideBar,
+    RightSideBar
+  },
+  methods: {
+    deviceSelected(data) {
+      this.selectedDevice = data;
+    },
+    editItem(singleItem) {
+      this.singleItem = singleItem
+    },
+    addOrEditTable() {
+      let data = {
+        action: "ninja_tables_builder_ajax_actions",
+        target_action: "edit-table-by-id",
+        id: this.$route.params.table_id,
+      };
+      this.$get(data)
+          .done(response => {
+            this.initialData = response.data;
+          })
+          .fail(error => {
+            this.$message({
+              showClose: true,
+              message: this.$t('Something went wrong, please try again.'),
+              type: 'warning'
+            });
+          });
+    },
+  },
+  mounted() {
+    this.clipboard();
+    this.addOrEditTable();
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.changeSomething) {
+      const answer = window.confirm('Changes that you made may not be saved');
+      if (answer) {
+        next();
+        window.onbeforeunload = null;
+      } else {
+        next(false);
+      }
+    } else {
+      next();
+    }
+  },
+  created() {
+    window.ninjaTableBus.$on("somethingChanged", () => {
+      this.changeSomething = true;
+      window.onbeforeunload = function () {
+        return true;
+      }
+    });
+
+    window.ninjaTableBus.$on("saveData", () => {
+      this.changeSomething = false;
+      window.onbeforeunload = null;
+    });
+  },
+};
+</script>

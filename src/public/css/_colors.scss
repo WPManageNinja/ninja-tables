@@ -1,0 +1,994 @@
+table.ninja_table_pro.inverted {
+
+  th, td {
+    background-color: inherit;
+    color: inherit;
+  }
+
+  &.table {
+    a {
+      color: inherit;
+    }
+    a.checkbox {
+      color: black;
+    }
+  }
+
+  /*-------------------
+         Colors
+  --------------------*/
+  /* Red */
+  @mixin red {
+    background-color: rgba(231, 76, 60, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  &.red.table {
+    @include red;
+    &.footable-details {
+      tr th {
+        background-color: rgba(65, 65, 65, 1) !important;
+        color: rgba(255, 255, 255, 1) !important;
+      }
+    }
+    thead {
+      @include red;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(65, 65, 65, 1) !important;
+            color: rgba(255, 255, 255, 1) !important;
+            th {
+              //border-color: rgba(153, 153, 153, 0.99) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(231, 76, 60, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(129, 123, 122, 1) !important;
+          color: rgba(255, 255, 255, 1) !important;
+          border-color: rgba(255, 255, 255, 0.99) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 185, 185, 1) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(231, 76, 60, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include red;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(231, 76, 60, 1)
+    }
+  }
+
+  /* Orange */
+  @mixin orange {
+    background-color: rgba(253, 95, 32, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  &.orange.table {
+    @include orange;
+    &.footable-details {
+      tr th {
+        background-color: rgba(75, 87, 117, 1) !important;
+        color: rgba(255, 255, 255, 1) !important;
+      }
+    }
+    thead {
+      @include orange;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(75, 87, 117, 1) !important;
+            color: rgba(255, 255, 255, 1) !important;
+            th {
+              //border-color: rgba(138, 138, 138, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(253, 95, 32, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(255, 183, 155, 1) !important;
+          color: rgba(75, 87, 117, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 255, 255, 0.35) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(253, 95, 32, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include orange;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(253, 95, 32, 1)
+    }
+  }
+
+  /* Yellow */
+  @mixin yellow {
+    background-color: rgba(246, 185, 59, 1) !important;
+    color: rgba(0, 0, 0, 1) !important;
+  }
+  &.yellow.table {
+    @include yellow;
+    &.footable-details {
+      tr th {
+        background-color: rgba(89, 89, 89, 1) !important;
+        color: rgba(255, 255, 255, 1) !important;
+      }
+    }
+    thead {
+      @include yellow;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(89, 89, 89, 1) !important;
+            color: rgba(255, 255, 255, 1) !important;
+            th {
+              //border-color: rgba(109, 109, 109, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(246, 185, 59, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(255, 229, 176, 1) !important;
+          color: rgba(0, 0, 0, 1) !important;
+          border-color: rgba(246, 185, 59, 1) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(39, 42, 48, 0.05) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(246, 185, 59, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include yellow;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(246, 185, 59, 1)
+    }
+  }
+
+  /* Olive */
+  @mixin olive {
+    background-color: rgba(182, 203, 49, 1) !important;
+    color: rgba(38, 38, 38, 1) !important;
+  }
+  &.olive.table {
+    @include olive;
+    &.footable-details {
+    tr th {
+      background-color: rgba(67, 72, 37, 1) !important;
+      color: rgba(255, 255, 255, 1) !important;
+    }
+  }
+    thead {
+      @include olive;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(67, 72, 37, 1) !important;
+            color: rgba(255, 255, 255, 1) !important;
+            th {
+              //border-color: rgba(255, 255, 255, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(182, 203, 49, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(145, 162, 39, 1) !important;
+          color: rgba(255, 255, 255, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 255, 255, 0.67) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(182, 203, 49, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include olive;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(182, 203, 49, 1)
+    }
+  }
+
+  /* Green */
+  @mixin green {
+    background-color: rgba(45, 185, 76, 1) !important;
+    color: rgba(38, 38, 38, 1) !important;
+  }
+  &.green.table {
+    @include green;
+    &.footable-details {
+      tr th {
+        background-color: rgba(59, 80, 63, 1) !important;
+        color: rgba(255, 255, 255, 1) !important;
+      }
+    }
+    thead {
+      @include green;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(59, 80, 63, 1) !important;
+            color: rgba(255, 255, 255, 1) !important;
+            th {
+              //border-color: rgba(255, 255, 255, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(45, 185, 76, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(38, 153, 64, 1) !important;
+          color: rgba(255, 255, 255, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 255, 255, 0.67) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(45, 185, 76, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include green;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(45, 185, 76, 1)
+    }
+  }
+
+  /* Teal */
+  @mixin teal {
+    background-color: rgba(28, 181, 173, 1) !important;
+    color: rgba(45, 45, 45, 1) !important;
+  }
+  &.teal.table {
+    @include teal;
+    &.footable-details {
+      tr th {
+        background-color: rgba(12, 85, 81, 1) !important;
+        color: rgba(255, 255, 255, 1) !important;
+      }
+    }
+    thead {
+      @include teal;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(12, 85, 81, 1) !important;
+            color: rgba(255, 255, 255, 1) !important;
+            th {
+              //border-color: rgba(255, 255, 255, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(28, 181, 173, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(23, 156, 148, 1) !important;
+          color: rgba(255, 255, 255, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 255, 255, 0.67) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(28, 181, 173, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include teal;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(28, 181, 173, 1)
+    }
+  }
+
+  /* Blue */
+  @mixin blue {
+    background-color: rgba(41, 135, 206, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  &.blue.table {
+    @include blue;
+    &.footable-details {
+      tr th {
+        background-color: rgba(23, 71, 108, 1) !important;
+        color: rgba(255, 255, 255, 1) !important;
+      }
+    }
+    thead {
+      @include blue;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(23, 71, 108, 1) !important;
+            color: rgba(255, 255, 255, 1) !important;
+            th {
+              //border-color: rgba(255, 255, 255, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(41, 135, 206, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(31, 105, 162, 1) !important;
+          color: rgba(255, 255, 255, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 255, 255, 0.79) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(41, 135, 206, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include blue;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(41, 135, 206, 1)
+    }
+  }
+
+  /* Violet */
+  @mixin violet {
+    background-color: rgba(108, 92, 231, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  &.violet.table {
+    @include violet;
+    &.footable-details {
+      tr th {
+        background-color: rgba(44, 37, 96, 1) !important;
+        color: rgba(255, 255, 255, 1) !important;
+      }
+    }
+    thead {
+      @include violet;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(44, 37, 96, 1) !important;
+            color: rgba(255, 255, 255, 1) !important;
+            th {
+              //border-color: rgba(255, 255, 255, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(108, 92, 231, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(72, 61, 156, 1) !important;
+          color: rgba(255, 255, 255, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 255, 255, 0.46) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(108, 92, 231, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include violet;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(108, 92, 231, 1)
+    }
+  }
+
+  /* Purple */
+  @mixin purple {
+    background-color: rgba(145, 111, 205, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  &.purple.table {
+    @include purple;
+    &.footable-details {
+      tr th {
+        background-color: rgba(65, 48, 94, 1) !important;
+        color: rgba(252, 252, 252, 1) !important;
+      }
+    }
+    thead {
+      @include purple;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(65, 48, 94, 1) !important;
+            color: rgba(252, 252, 252, 1) !important;
+            th {
+              //border-color: rgba(255, 255, 255, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(145, 111, 205, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(104, 78, 150, 1) !important;
+          color: rgba(255, 255, 255, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 255, 255, 0.46) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(145, 111, 205, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include purple;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(145, 111, 205, 1)
+    }
+  }
+
+  /* Pink */
+  @mixin pink {
+    background-color: rgba(253, 121, 168, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  &.pink.table {
+    @include pink;
+    &.footable-details {
+      tr th {
+        background-color: rgba(69, 69, 69, 1) !important;
+        color: rgba(252, 252, 252, 1) !important;
+      }
+    }
+    thead {
+      @include pink;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(69, 69, 69, 1) !important;
+            color: rgba(252, 252, 252, 1) !important;
+            th {
+              //border-color: rgba(255, 255, 255, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(253, 121, 168, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(208, 98, 137, 1) !important;
+          color: rgba(255, 255, 255, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 255, 255, 0.46) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(253, 121, 168, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include pink;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(253, 121, 168, 1)
+    }
+  }
+
+  /* Brown */
+  @mixin brown {
+    background-color: #A5673F !important;
+    color: #FFFFFF !important;
+    border-color: brown !important;
+  }
+  &.brown.table {
+    @include brown;
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: #A5673F;
+    }
+    thead {
+      @include brown;
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include brown;
+    }
+  }
+
+  /* Grey */
+  @mixin grey {
+    background-color: rgba(99, 110, 114, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  &.grey.table {
+    @include grey;
+    &.footable-details {
+      tr th {
+        background-color: rgba(69, 69, 69, 1) !important;
+        color: rgba(252, 252, 252, 1) !important;
+      }
+    }
+    thead {
+      @include grey;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(69, 69, 69, 1) !important;
+            color: rgba(252, 252, 252, 1) !important;
+            th {
+              //border-color: rgba(255, 255, 255, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(99, 110, 114, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(185, 195, 199, 1) !important;
+          color: rgba(56, 61, 63, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 255, 255, 0.46) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(99, 110, 114, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include grey;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(99, 110, 114, 1)
+    }
+  }
+
+  /* Black */
+  @mixin black {
+    background-color: rgba(33, 33, 33, 1) !important;
+    color: rgba(181, 181, 181, 1) !important;
+  }
+  &.black.table {
+    @include black;
+    &.footable-details {
+      tr th {
+        background-color: rgba(0, 206, 201, 1) !important;
+        color: #202020 !important;
+      }
+    }
+    thead {
+      @include black;
+
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(0, 206, 201, 1) !important;
+            color: #202020 !important;
+            th {
+              //border-color: rgba(255, 255, 255, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(27, 28, 29, 1) !important;
+          }
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(185, 195, 199, 1) !important;
+          color: rgba(56, 61, 63, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+
+      tr,
+      td,
+      th {
+        //border-color: rgba(255, 255, 255, 0.46) !important;
+      }
+    }
+
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+
+          &.active a {
+            background-color: rgba(27, 28, 29, 1) !important;
+          }
+        }
+      }
+    }
+
+    &.ninja_stacked_table .footable-details tbody {
+      @include black;
+    }
+
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: #1B1C1D;
+    }
+  }
+
+  /* White */
+  @mixin white {
+    background-color: rgba(255, 255, 255, 1) !important;
+    color: rgba(123, 123, 123, 1) !important;
+  }
+  &.white.table {
+    @include white;
+    &.footable-details {
+      tr th {
+        background-color: rgba(0, 206, 201, 1) !important;
+        color: rgba(255, 255, 255, 1) !important;
+      }
+    }
+    thead {
+      @include white;
+      tr {
+        &.footable {
+          &-header {
+            background-color: rgba(0, 206, 201, 1) !important;
+            color: rgba(255, 255, 255, 1) !important;
+            th {
+              //border-color: rgba(255, 255, 255, 1) !important;
+            }
+          }
+          &-filtering th {
+            background-color: rgba(255, 255, 255, 1) !important;
+            color: rgba(0, 206, 201, 1) !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr:not(.footable-detail-row) {
+        &:hover {
+          background-color: rgba(185, 195, 199, 1) !important;
+          color: rgba(56, 61, 63, 1) !important;
+          border-color: rgba(255, 255, 255, 1) !important;
+        }
+      }
+      tr,
+      td {
+        //border-color: rgba(161, 161, 161, 0.46) !important;
+      }
+    }
+    tfoot {
+      .footable-paging {
+        //background-color: rgba(255, 255, 255, 1) !important;
+        .footable-page {
+          a {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          &.active a {
+            background-color: rgba(0, 206, 201, 1) !important;
+          }
+        }
+      }
+    }
+    &.ninja_stacked_table .footable-details tbody {
+      @include white;
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(0, 206, 201, 1)
+    }
+  }
+
+  /*--------------
+      Inverted
+  ---------------*/
+
+  /* Text Color */
+  //&.table {
+  //  background: #333333;
+  //  color: rgba(255, 255, 255, 0.9);
+  //}
+  //&.table thead > th {
+  //  background-color: rgba(0, 0, 0, 0.15);
+  //  border-color: rgba(255, 255, 255, 0.1) !important;
+  //  color: rgba(255, 255, 255, 0.9) !important;
+  //}
+  //&.table tr td {
+  //  border-color: rgba(255, 255, 255, 0.1) !important;
+  //}
+
+  &.hide_all_borders.table {
+    thead {
+      border-color: transparent !important;
+      tr, th, td {
+        border-color: transparent !important;
+      }
+    }
+    tbody {
+      th, td, th {
+        border-color: transparent !important;
+      }
+    }
+  }
+
+  &.table tr.disabled td,
+  &.table tr td.disabled,
+  &.table tr.disabled:hover td,
+  &.table tr:hover td.disabled {
+    pointer-events: none;
+    color: rgba(225, 225, 225, 0.3);
+  }
+
+  /* Definition */
+  &.definition.table tfoot:not(.full-width) th:first-child,
+  &.definition.table thead:not(.full-width) th:first-child {
+    background: #FFFFFF;
+  }
+  &.definition.table tr td:first-child {
+    background: rgba(255, 255, 255, 0.02);
+    color: #ffffff;
+  }
+
+  &.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  &.table-hover > tbody > tr:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  /*******************************
+           Site Overrides
+  *******************************/
+  & {
+    .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      color: rgba(255, 255, 255, 0.9) !important;
+      -webkit-box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    .pagination a.footable-page-link {
+      color: rgba(0, 0, 0, 0.5);
+    }
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+  }
+
+  thead tr.footable-header {
+    background: inherit;
+    color: inherit;
+    border-color: inherit;
+  }
+
+  tbody tr, tbody tr td {
+    background: inherit;
+    color: inherit;
+    //border-color: inherit;
+  }
+}

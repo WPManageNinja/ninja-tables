@@ -1,0 +1,125 @@
+@import "footable";
+@import "common";
+@import "foo_icons";
+
+.bootstrap3 {
+  @import "table_boostrap3";
+
+    .table-bordered.ninja_footable {
+        border: 1px solid #dddddd;
+    }
+}
+
+.bootstrap4 {
+  @import "table_bootstrap4";
+
+    .table-bordered.ninja_footable {
+        border: 1px solid #dee2e6;
+    }
+}
+
+.semantic_ui {
+  @import "table_semantic_ui";
+
+    .ui.table {
+        tbody tr {
+            th {
+                border-top: 1px solid rgba(34, 36, 38, 0.1);
+            }
+
+            &:first-child th {
+                border-top: none;
+            }
+        }
+
+        tfoot tr.footable-paging td {
+            border-top: 1px solid rgba(34, 36, 38, 0.15) !important;
+            border-radius: 0 0 0.28571429rem 0.28571429rem;
+        }
+    }
+}
+
+.colored_table {
+  @import "colors";
+
+    table.ninja_table_pro.inverted.table {
+        &.ninja_stacked_table {
+            background-color: unset !important;
+            color: unset !important;
+        }
+    }
+}
+
+@import "stackable";
+
+@import "editor";
+
+table.ninja_footable.hide_all_borders {
+  border: none !important;
+}
+
+table.hide_horizonal_borders tbody tr {
+    td,
+    th {
+        border-bottom: none !important;
+        border-top: none !important;
+    }
+}
+
+table.hide_vertical_borders {
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  tbody tr {
+      td,
+      th {
+          border-left-width: 0px !important;
+          border-right-width: 0px !important;
+      }
+  }
+}
+
+table.ninja_footable.ninja_stacked_table {
+  border: none !important;
+    background-color: unset !important;
+  .footable-details {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+.footable_legacy_loader {
+  display: none;
+}
+
+body.ninja_tables_modal_open {
+  overflow: hidden !important;
+}
+
+@-moz-document url-prefix() {
+  .optWrapper.multiple,.optWrapper.multiple .options {
+    //width:100% !important;;
+  }
+}
+
+.invisible {
+  display: none !important;
+}
+
+.ninja_footable {
+    &.table,
+    tbody,
+    td,
+    th {
+        border: unset;
+    }
+    tfoot {
+        .footable-paging {
+            background-color: white;
+        }
+    }
+}
+// Disable frontend loader by rendering setting
+.ninja-footable-loader {
+  .footable-loader {
+    display: none !important;
+  }
+}

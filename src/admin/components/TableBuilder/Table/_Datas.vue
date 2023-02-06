@@ -1,0 +1,413 @@
+<template>
+  <div :style="[margin]" class="ntb-datas-wrapper">
+    <span
+        class="hover-item"
+        v-if="item.data.type === 'text'"
+        :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
+        v-html="item.data.value === '' ? 'Add New': item.data.value"
+    >
+    </span>
+
+    <div v-else-if="item.data.type === 'button'" class="hover-item"
+         :style="[justifyContent, {display:item.data.style.fullWidth ? 'block' : 'flex'}]">
+      <a @click.prevent :href="`${item.data.style.url}`"
+         :style="[justifyContent, displayFlex, {'text-decoration':'none'}]"
+         :target="item.data.style.newTab ? '_black' : ''">
+        <el-button
+            class="ntb-el-button"
+            type="primary"
+            :style="[buttonIconHover, fontSize, color, backgroundColor, border, buttonStyle, {'padding': '0px'}]"
+            :onmouseover="mouseOver"
+            :onmouseout="mouseOut"
+        >
+         <span class="button-content-wrapper" :style="[padding]">
+            <span class="svgIcon"
+                  v-if="item.data.style.iconPosition === 'left' && item.data.style.enableIcon"
+                  :style="[iconWithOtherComponent, textAlign]">
+            </span>
+           <span v-html="item.data.value"
+                 :style="  [fontWeight, {
+                 'margin-left':item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing+'px' : '0px',
+                 'margin-right':item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing+'px' : '0px'}]"
+           >
+            </span>
+           <span class="svgIcon"
+                 v-if="item.data.style.iconPosition === 'right' && item.data.style.enableIcon"
+                 :style="[iconWithOtherComponent, textAlign]">
+           </span>
+         </span>
+
+        </el-button>
+      </a>
+    </div>
+
+    <div
+        class="hover-item"
+        v-else-if="item.data.type === 'custom_html'"
+        v-html="item.data.value"
+        :style="[padding]"
+    ></div>
+    <div
+        class="ninja_table_builder_shortcode hover-item"
+        v-else-if="item.data.type === 'shortcode'"
+        v-html="item.data.value"
+        :style="[textAlign, padding]"
+    ></div>
+    <span v-else-if="item.data.type === 'star_rating'">
+      <el-rate
+          class="ntb-rating hover-item"
+          :score-template="scoreTemplate"
+          v-model="ratingValue"
+          allow-half
+          :show-score="showRatingScore"
+          :text-color="`${item.data.style.color === '' ? setting.global_styling.options.color.value : item.data.style.color}`"
+          :max="item.data.style.maxStar"
+          :colors='starRatingStyling'
+          :style="[ratingStyle, textAlign, padding]"
+      ></el-rate>
+    </span>
+
+    <span v-else-if="item.data.type === 'icon'" :style="[padding, displayBlock, textAlign]" class="hover-item">
+        <span class="svgIcon" :style="[iconStyle, textAlign, {'margin-top': '3px'}]"></span>
+    </span>
+
+    <span
+        class="ntb-progress hover-item"
+        v-else-if="item.data.type === 'progress'"
+        :style="[padding, displayBlock, textAlign]"
+    >
+      <el-progress
+          :type="item.data.style.type"
+          :style="[progressBarTextStyle, {'margin-top': '3px'}]"
+          v-if="Number(item.data.style.percentage)"
+          :width="Number(item.data.style.width)"
+          :percentage="Number(item.data.style.percentage)"
+          :color="[color]"
+          :stroke-width="Number(item.data.style.thickness)"
+      ></el-progress>
+    </span>
+    <span v-else-if="item.data.type === 'image'">
+      <a
+          class="hover-item"
+          @click.prevent
+          target="_blank"
+          :href="`${item.data.style.link}`"
+          :style="[displayBlock, textAlign]"
+      >
+        <img
+            :src="item.data.value"
+            :style="[padding, borderRadius,  {'width': this.item.data.style.size+'%'}]"
+            :alt="`${item.data.style.alt}`"
+        />
+      </a>
+    </span>
+    <span v-else-if="item.data.type === 'list' || item.data.type === 'stylist_list'"
+          :style="[textAlign, displayFlex, justifyContent]"
+          class="ntb-list hover-item"
+    >
+      <component :is="item.data.style.listType"
+                 :class="!manage ? 'ntb-list-style' : ''"
+                 :style="[listStyle, padding]">
+        <li :key="index" v-for="(val, index) in item.data.value"
+            :style="[color, fontSize, lineHeight]"
+        >
+          <span style="cursor: pointer" @click="$emit('list-item', {index: index})">
+
+             <span class="svgIcon"
+                   v-if="item.data.type === 'stylist_list'"
+                   :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
+             </span>
+
+             <span v-html="val"
+                   :style="[fontWeight, verticalAlignMiddle, {'margin-left': item.data.style.itemSpacing +'px'}]">
+            </span>
+          </span>
+           <div class="icon-styles remove-elements" v-if="!manage">
+            <i class="el-icon-copy-document"
+               @click.stop="copyItem(index)">
+            </i>
+            <i class="el-icon-delete" @click.stop="deleteItem(index)"></i>
+          </div>
+        </li>
+      </component>
+    </span>
+    <span v-if="item.data.type === 'text_icon'" :style="[displayFlex,justifyContent]" class="hover-item">
+      <span class="icon-text-wrapper" :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color]"
+      >
+        <span class="svgIcon"
+              v-if="item.data.style.iconPosition === 'left'"
+              :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
+        </span>
+
+        <span v-html="item.data.value" :style="`
+          vertical-align: middle;
+          margin-left: ${item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing : 0}px;
+          margin-right: ${item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing : 0}px;
+          `">
+        </span>
+
+        <span class="svgIcon"
+              v-if="item.data.style.iconPosition === 'right'"
+              :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
+        </span>
+
+    </span>
+    </span>
+    <template v-if="item.data.type === 'ribbon'" style="position:relative;margin:0;padding:0;width:100%;">
+      <div class="ribbon-wrapper"
+           :style="[{ top: yAxisRibbon, left: xAxisRibbon }]">
+        <div :class="[item.data.style.ribbonType, item.data.style.ribbonType === 'bookmark' ? 'up' : '']">
+          <div :class="['content', item.data.style.ribbonPosition === 'left' ? 'left' : 'right']"
+               :style="[ribbonSize, backgroundColor,{'text-align':'center', padding: item.data.style.ribbonType === 'corner' ? item.data.style.height+'px 0px' : ''}]">
+            <p :style="[fontSize, color, fontWeight, {
+              'margin-top': item.data.style.textYAxis+'px',
+              'margin-left': item.data.style.textXAxis+'px'}]"
+            >{{ item.data.value }}</p>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</template>
+<script>
+import {manageDataElement} from "../Mixin/manageDataElement";
+
+export default {
+  name: "Datas",
+  mixins: [manageDataElement],
+  props: ["item", 'manage', 'setting'],
+  methods: {
+    copyItem(index) {
+      this.item.data.value.splice(index + 1, 0, this.item.data.value[index]);
+    },
+    deleteItem(index) {
+      this.item.data.value.splice(index, 1)
+    },
+    getAsset(path) {
+      if (path.includes(window.location.origin)) {
+        return path;
+      } else {
+        return ninja_table_admin.ninja_tables_pro_url + '/assets/libs/icons/' + path + '.svg'
+      }
+    },
+  },
+  computed: {
+    ratingValue: {
+      get() {
+        return Number(this.item.data.value);
+      },
+      set(newValue) {
+        this.item.data.value = newValue;
+      }
+    },
+    mouseOver() {
+      if (this.item.data.style.isHover === true) {
+        let hoverColor = this.item.data.style.hoverColor
+        let hover = hoverColor === '' ? this.setting.global_styling.options.color.value : hoverColor
+        return [
+          "this.style.background='" + this.item.data.style.hoverBackgroundColor + "'",
+          "this.style.color='" + hover + "'",
+          "this.style.border='" + this.item.data.style.hoverBorderSize + 'px solid' + this.item.data.style.hoverBorderColor + "'",
+          "this.style.transform='scale(" + this.item.data.style.transition + ")'",
+        ]
+      }
+    },
+    mouseOut() {
+      if (this.item.data.style.isHover === true) {
+        let iconColor = this.item.data.style.iconColor
+        let unHover = (iconColor === '' || iconColor === '#000000') ? this.setting.global_styling.options.color.value : iconColor
+        return [
+          "this.style.background='" + this.item.data.style.backgroundColor + "'",
+          "this.style.color='" + unHover + "'",
+          "this.style.border='" + this.item.data.style.borderSize + 'px solid' + this.item.data.style.borderColor + "'",
+          "this.style.transform='scale(1)'",
+        ]
+      }
+    },
+  }
+};
+</script>
+<style lang="scss">
+.ribbon-wrapper {
+  position: relative;
+  max-width: 600px;
+  width: 90%;
+  z-index: 1;
+
+  .corner {
+    width: 120px;
+    height: 100px;
+    overflow: hidden;
+    position: absolute;
+
+    .content {
+      position: absolute;
+      display: block;
+      text-align: center;
+      box-shadow: 0px 1px 2px rgba(black, 0.5);
+    }
+
+    .left {
+      right: -25px;
+      top: 30px;
+      transform: rotate(-45deg);
+    }
+
+    .right {
+      left: -25px;
+      top: 30px;
+      transform: rotate(45deg);
+    }
+  }
+
+  .bookmark {
+    position: absolute;
+    overflow: hidden;
+    filter: drop-shadow(2px 3px 2px rgba(black, 0.5));
+
+    > .content {
+      font-size: 1.25rem;
+      text-align: center;
+      font-weight: 400;
+      padding: 8px 2px 4px;
+    }
+
+    &.up > .content {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 8px), 0 100%);
+    }
+  }
+
+  .side {
+    position: relative;
+    float: left;
+    background-size: cover;
+
+    .content {
+      position: absolute;
+      padding: 8px 10px;
+      box-shadow: 1px 2px 3px rgba(black, 0.5);
+
+      &:before {
+        width: 7px;
+        height: 100%;
+        top: 0;
+        left: -6.5px;
+        padding: 1px 0 7px;
+        background: inherit;
+        border-radius: 5px 0 0 5px;
+        content: "";
+        position: absolute;
+      }
+
+      &:after {
+        width: 5px;
+        height: 5px;
+        bottom: -5px;
+        left: -4.5px;
+        background: lightblue;
+        border-radius: 5px 0 0 5px;
+        content: "";
+        position: absolute;
+      }
+    }
+  }
+
+  .horizontal {
+    position: relative;
+    box-shadow: 1px 2px 3px rgba(black, 0.5);
+
+    .content {
+      position: absolute;
+    }
+  }
+}
+
+.ntb-datas-wrapper {
+  //&:hover {
+  //  border: 1px solid #3f9eff;
+  //}
+  .svgIcon {
+    display: inline-block;
+    mask-size: cover;
+    -webkit-mask-size: cover;
+  }
+
+  .ntb-progress {
+    .el-progress {
+      .el-progress__text {
+        color: var(--progress-bar-text-color);
+        font-size: var(--progress-bar-font-size);
+      }
+    }
+  }
+
+  .ntb-rating {
+    height: auto !important;
+
+    .el-rate__item {
+      i {
+        font-size: var(--rating-font-size)
+      }
+    }
+  }
+
+  dd, li {
+    margin-bottom: initial;
+  }
+
+  .ntb-list-style {
+    li {
+      position: relative;
+
+      .icon-styles {
+        position: absolute;
+        height: auto;
+        width: auto;
+        opacity: 0;
+        z-index: 1;
+        justify-content: flex-end;
+        font-size: 12px;
+        color: #ffffff;
+        visibility: hidden;
+
+        i {
+          background: #3f9eff;
+          padding: 0px 1px;
+          font-weight: bold;
+        }
+      }
+
+      &:hover {
+        border: 1px solid #3f9eff;
+        cursor: pointer;
+
+        .icon-styles {
+          top: -17px;
+          opacity: 1;
+          right: 0;
+          visibility: visible;
+        }
+      }
+    }
+  }
+
+
+  .button-content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-text-wrapper {
+    line-height: 1.2;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ntb-el-button:hover {
+    .svgIcon {
+      background-color: var(--icon-color-hover) !important;
+    }
+  }
+}
+</style>

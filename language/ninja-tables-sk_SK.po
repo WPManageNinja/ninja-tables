@@ -1,0 +1,965 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Ninja Tables 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ninja-tables\n"
+"POT-Creation-Date: 2019-07-10 10:35+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2023-01-12 06:37+0000\n"
+"Language-Team: Slovak\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Loco https://localise.biz/\n"
+"Last-Translator: Shahjahan Jewel <cep.jewel@gmail.com>\n"
+"Language: sk_SK\n"
+"X-Loco-Version: 2.2.2; wp-5.2.2"
+
+#: admin/NinjaTablesAdmin.php:566
+msgid " successfully."
+msgstr "úspešne."
+
+#: admin/NinjaTablesAdmin.php:185
+msgid "<span style=\"color:#f39c12;\">Get Pro</span>"
+msgstr "<span style=\"color:#f39c12;\">Get Pro</span>"
+
+#: admin/table-builder/config/setting.php:112
+msgid "Accessibility"
+msgstr ""
+
+#: includes/I18nStrings.php:36
+msgid "Activate Ninja Tables Pro"
+msgstr "Aktivovať Ninja Tabuľky Pro"
+
+#: includes/I18nStrings.php:29
+msgid "Activate Ninja Tables Pro Add-on plugin to unlock this feature"
+msgstr ""
+"Aktivujte doplnok doplnkov Ninja Tables Pro pre odomknutie tejto funkcie"
+
+#: includes/I18nStrings.php:51
+msgid "Add"
+msgstr "Pridať"
+
+#: admin/NinjaTablesAdmin.php:177
+msgid "Add Chart"
+msgstr ""
+
+#: includes/I18nStrings.php:72
+msgid "Add Column"
+msgstr "Pridať stĺpec"
+
+#: includes/I18nStrings.php:49
+msgid "Add Data"
+msgstr "Pridať údaje"
+
+#: includes/I18nStrings.php:13 admin/NinjaTablesAdmin.php:88
+msgid "Add New Table"
+msgstr "Pridať novú tabuľku"
+
+#: includes/I18nStrings.php:11 admin/NinjaTablesAdmin.php:87
+msgid "Add Table"
+msgstr "Pridať tabuľku"
+
+#: includes/I18nStrings.php:99
+msgid "Additional CSS"
+msgstr "Ďalšie CSS"
+
+#: admin/table-builder/config/component.php:159
+msgid "Advanced"
+msgstr ""
+
+#: includes/I18nStrings.php:10 admin/NinjaTablesAdmin.php:1678
+msgid "All Tables"
+msgstr "Všetky tabuľky"
+
+#: includes/I18nStrings.php:62
+msgid "Always show in all devices"
+msgstr "Vždy sa zobrazujú vo všetkých zariadeniach"
+
+#: includes/I18nStrings.php:48
+msgid "Apply"
+msgstr "Uložiť"
+
+#: admin/table-builder/config/setting.php:159
+msgid "Apply Inner Border"
+msgstr ""
+
+#: includes/I18nStrings.php:56
+msgid "Are you sure to delete this?"
+msgstr "Naozaj to chcete odstrániť?"
+
+#: includes/I18nStrings.php:71
+msgid "Available Columns"
+msgstr "Dostupné stĺpce"
+
+#: admin/table-builder/config/setting.php:73
+msgid "Background"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:142
+msgid "Border"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:154
+msgid "Border Color"
+msgstr ""
+
+#: includes/I18nStrings.php:46
+msgid "Bulk Actions"
+msgstr "Hromadné akcie"
+
+#: admin/table-builder/config/component.php:31
+msgid "Button"
+msgstr ""
+
+#: includes/I18nStrings.php:50
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#: includes/I18nStrings.php:57
+msgid "cancel"
+msgstr "Zrušiť"
+
+#: admin/table-builder/config/responsive.php:147
+#: admin/table-builder/config/responsive.php:163
+#: admin/table-builder/config/setting.php:10
+msgid "Cell Padding"
+msgstr ""
+
+#: admin/table-builder/config/responsive.php:32
+#: admin/table-builder/config/responsive.php:79
+msgid "Cell Stack Direction"
+msgstr ""
+
+#: admin/NinjaTablesAdmin.php:165 admin/NinjaTablesAdmin.php:171
+msgid "Charts"
+msgstr ""
+
+#: includes/I18nStrings.php:30
+msgid "Check all"
+msgstr "Skontrolujte všetky"
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:67
+msgid "Clear All"
+msgstr "Zmazať všetko"
+
+#: includes/I18nStrings.php:54
+msgid "Click here"
+msgstr "Kliknite tu"
+
+#: admin/table-builder/config/setting.php:221
+msgid "Color"
+msgstr ""
+
+#: includes/I18nStrings.php:74
+msgid "Column Key"
+msgstr "Kľúč stĺpca"
+
+#: includes/I18nStrings.php:73
+msgid "Column Name"
+msgstr "Názov stĺpca"
+
+#: admin/table-builder/config/templates.php:57
+msgid "Comparison Table Four"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:39
+msgid "Comparison Table One"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:51
+msgid "Comparison Table Three"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:45
+msgid "Comparison Table Two"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:35
+msgid "Comparison Tables"
+msgstr ""
+
+#: includes/I18nStrings.php:58
+msgid "confirm"
+msgstr "potvrdiť"
+
+#: includes/I18nStrings.php:20
+msgid "CSV - Comma-separated values"
+msgstr "CSV - Comma-separated values"
+
+#: includes/NinjaTableImport.php:288
+msgid "CSV File is not valid"
+msgstr "Súbor CSV nie je platný"
+
+#: includes/I18nStrings.php:104
+msgid "CSV Header Structure"
+msgstr "Štruktúra záhlavia CSV"
+
+#: includes/I18nStrings.php:43
+msgid "Custom CSS"
+msgstr "Custom CSS"
+
+#: includes/I18nStrings.php:75
+msgid "Data Type"
+msgstr "Dátový typ"
+
+#: includes/I18nStrings.php:68
+msgid "Date Field"
+msgstr "Pole dátumu"
+
+#: includes/I18nStrings.php:78
+msgid "Date Format"
+msgstr "Formát dátumu"
+
+#: includes/I18nStrings.php:33
+msgid "Deactivate License"
+msgstr "Deaktivovať licenciu"
+
+#: includes/I18nStrings.php:19
+msgid "Delete"
+msgstr "vymazať"
+
+#: includes/I18nStrings.php:47
+msgid "Delete Entries"
+msgstr "Odstrániť záznamy"
+
+#: admin/table-builder/config/responsive.php:26
+#: admin/table-builder/config/responsive.php:73
+msgid "Disable Breakpoint"
+msgstr ""
+
+#: includes/I18nStrings.php:39
+msgid "Documentation"
+msgstr "dokumentácia"
+
+#: includes/I18nStrings.php:37
+msgid "Documentation and Help"
+msgstr ""
+
+#: includes/I18nStrings.php:105
+msgid "Download Sample CSV"
+msgstr "Stiahnite si ukážku CSV"
+
+#: includes/I18nStrings.php:18
+msgid "Duplicate"
+msgstr "duplikát"
+
+#: includes/I18nStrings.php:16 admin/NinjaTablesAdmin.php:89
+#: public/views/frameless/show_ntb_preview.php:31
+#: public/views/frameless/show_preview.php:29
+msgid "Edit"
+msgstr "Zmeniť"
+
+#: admin/NinjaTablesAdmin.php:90 public/views/table_builder_html.php:38
+#: includes/libs/TableDrivers/views/ninja_foo_table.php:44
+msgid "Edit Table"
+msgstr "Zmeniť tabuľku"
+
+#: admin/table-builder/config/templates.php:70
+msgid "Employee Table One"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:82
+msgid "Employee Table Three"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:76
+msgid "Employee Table Two"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:66
+msgid "Employee Tables"
+msgstr ""
+
+#: admin/table-builder/config/responsive.php:10
+msgid "Enable Responsive Table"
+msgstr ""
+
+#: includes/I18nStrings.php:91
+msgid "Enable sorting of the table by the visitor"
+msgstr "Povoliť triedenie tabuľky návštevníkom"
+
+#: includes/I18nStrings.php:90
+msgid "Enable the visitor to filter or search the table."
+msgstr "Povolenie návštevníka na filtrovanie alebo vyhľadávanie v tabuľke."
+
+#: includes/I18nStrings.php:35
+msgid "Enter your license key"
+msgstr "Zadajte licenčný kľúč"
+
+#: admin/table-builder/config/setting.php:83
+msgid "Even Row Background"
+msgstr ""
+
+#: includes/I18nStrings.php:100
+msgid "Export Table"
+msgstr "Tabuľka exportu"
+
+#: includes/I18nStrings.php:82
+msgid "Extra Classes"
+msgstr "Extra triedy"
+
+#: includes/I18nStrings.php:95
+msgid "Extra CSS Class for the table"
+msgstr "Ďalšie trieda CSS pre tabuľku"
+
+#: includes/I18nStrings.php:86
+msgid "Filterable"
+msgstr "filtrovať"
+
+#: admin/table-builder/config/setting.php:105
+msgid "First Column Sticky"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:100
+msgid "First Row Sticky"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:226
+msgid "Font Family"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:214
+msgid "Font Size"
+msgstr ""
+
+#: includes/I18nStrings.php:98
+msgid "Footer Colors"
+msgstr "Zápätie farieb"
+
+#: includes/I18nStrings.php:38
+msgid ""
+"For any type of query which was not covered in our documentation, Please "
+"submit a support ticket ticket"
+msgstr ""
+"Pre akýkoľvek typ dopytu, ktorý nebol zahrnutý v našej dokumentácii, "
+"predložte lístok na podporu leteniek"
+
+#: admin/table-builder/config/component.php:12
+#: admin/table-builder/config/responsive.php:5
+#: admin/table-builder/config/setting.php:5
+msgid "General"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:195
+msgid "Global Style"
+msgstr ""
+
+#: admin/table-builder/config/responsive.php:61
+#: admin/table-builder/config/responsive.php:108
+msgid "Group Separator"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:78
+msgid "Header Background"
+msgstr ""
+
+#: includes/I18nStrings.php:87
+msgid "Header HTML Content"
+msgstr "Obsah hlavičky HTML"
+
+#: admin/table-builder/config/setting.php:164
+msgid "Header Inner Border"
+msgstr ""
+
+#: includes/I18nStrings.php:9 admin/NinjaTablesAdmin.php:218
+msgid "Help"
+msgstr "Pomoc"
+
+#: includes/I18nStrings.php:7
+msgid "Home"
+msgstr "Home"
+
+#: admin/table-builder/config/component.php:117
+msgid "HTML"
+msgstr ""
+
+#: includes/I18nStrings.php:66
+msgid "HTML Field"
+msgstr "Pole HTML"
+
+#. Author URI of the plugin
+msgid "https://ninjatables.com/"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/"
+msgstr "https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/"
+
+#: admin/table-builder/config/component.php:68
+msgid "Icon"
+msgstr ""
+
+#: admin/table-builder/config/component.php:140
+msgid "Image"
+msgstr ""
+
+#: includes/I18nStrings.php:23 admin/NinjaTablesAdmin.php:148
+msgid "Import"
+msgstr "import"
+
+#: includes/I18nStrings.php:44
+msgid "Import - Export"
+msgstr "Import - Export"
+
+#: includes/I18nStrings.php:28
+msgid "Import Format:"
+msgstr "Formát importu:"
+
+#: includes/I18nStrings.php:103
+msgid "Import from CSV"
+msgstr "Importovať z CSV"
+
+#: includes/I18nStrings.php:12
+msgid "Import Table"
+msgstr "Import tabuľky"
+
+#: includes/I18nStrings.php:101
+msgid "Import Table Data"
+msgstr "Importovať údaje tabuľky"
+
+#: includes/I18nStrings.php:59
+msgid "Initial Hidden Mobile"
+msgstr "Počiatočný skrytý mobil"
+
+#: includes/I18nStrings.php:60
+msgid "Initial Hidden Mobile and Tab"
+msgstr "Počiatočný skrytý mobil a tab"
+
+#: includes/I18nStrings.php:61
+msgid "Initial Hidden Mobile, Tab and Regular Computers"
+msgstr "Počiatočný skrytý mobilný, karta a bežné počítače"
+
+#: admin/table-builder/config/setting.php:169
+msgid "Inner Border Color"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:174
+msgid "Inner Border Size"
+msgstr ""
+
+#: admin/NinjaTablesAdmin.php:1188
+msgid "Insert Ninja Tables Shortcode"
+msgstr "Vložiť krátky kód tabuľky"
+
+#: admin/NinjaTablesAdmin.php:1190
+msgid "Insert Shortcode"
+msgstr "Vložiť krátky kód"
+
+#: admin/NinjaTablesAdmin.php:714
+msgid "Invalid Table to Delete"
+msgstr "Nesprávna tabuľka na vymazanie"
+
+#: admin/table-builder/config/responsive.php:53
+#: admin/table-builder/config/responsive.php:100
+msgid "Items Per Header"
+msgstr ""
+
+#: includes/I18nStrings.php:22
+msgid "JSON - Exported From Ninja Tables"
+msgstr "JSON - Exported From Ninja Tables"
+
+#: includes/I18nStrings.php:21
+msgid "JSON - JavaScript Object Notation"
+msgstr "JSON - JavaScript Object Notation"
+
+#: includes/I18nStrings.php:25
+msgid "License"
+msgstr "licencie"
+
+#: includes/I18nStrings.php:34
+msgid "Licensing"
+msgstr "licencovanie"
+
+#: admin/table-builder/config/component.php:98
+msgid "List"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:207
+msgid "Margin Bottom"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:200
+msgid "Margin Top"
+msgstr ""
+
+#: includes/I18nStrings.php:83
+msgid "Max Width"
+msgstr "Maximálna šírka"
+
+#: includes/I18nStrings.php:84
+msgid "Maximum Width"
+msgstr "Maximálna šírka"
+
+#: admin/table-builder/config/responsive.php:17
+msgid "Mode Options"
+msgstr ""
+
+#: admin/NinjaTablesAdmin.php:91
+msgid "New Table"
+msgstr "Nová tabuľka"
+
+#. Name of the plugin
+#: includes/I18nStrings.php:6 admin/NinjaTablesAdmin.php:73
+#: admin/NinjaTablesAdmin.php:84 admin/NinjaTablesAdmin.php:86
+#: admin/NinjaTablesAdmin.php:124
+msgid "Ninja Tables"
+msgstr "Tabuľky"
+
+#: includes/I18nStrings.php:26
+msgid ""
+"NinjaTables can import tables from existing data, like from a CSV or JSON "
+"file. You can also import existing tables from the other WordPress table "
+"plugins."
+msgstr ""
+"NinjaTables dokáže importovať tabuľky z existujúcich dát, napríklad zo "
+"súboru CSV alebo JSON. Môžete tiež importovať existujúce tabuľky z iných "
+"doplnkov tabuľky WordPress."
+
+#: includes/NinjaTableImport.php:29
+msgid "No appropriate driver found for the import format."
+msgstr "Formát zdrojového súboru nie je kompatibilný."
+
+#: public/dataProviders/FluentFormProvider.php:121
+msgid "No fields were selected."
+msgstr "Neboli vybraté žiadne polia."
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:66
+#: includes/libs/TableDrivers/NinjaFooTable.php:339
+msgid "No Result Found"
+msgstr "Nenašiel sa žiadny výsledok"
+
+#: admin/NinjaTablesAdmin.php:95
+msgid "No Table Found"
+msgstr "Nenašli sa tabuľky"
+
+#: admin/NinjaTablesAdmin.php:96
+msgid "No Table Found in Trash"
+msgstr "V koši sa nenašla žiadna tabuľka"
+
+#: includes/libs/Migrations/NinjaTablesSupsysticTableMigration.php:24
+msgid "No Table Found with the selected table"
+msgstr "Tabuľka sa nenašla so zvolenou tabuľkou"
+
+#: includes/libs/Migrations/NinjaTablesUltimateTableMigration.php:21
+msgid "No Ultimate Table Found with the selected table"
+msgstr "No Ultimate Table Found with the selected table"
+
+#: includes/ninja_tables-global-functions.php:1054
+msgid "Nonce verification failed, please try again."
+msgstr ""
+
+#: includes/I18nStrings.php:67
+msgid "Numeric Value"
+msgstr "Číselná hodnota"
+
+#: admin/table-builder/config/setting.php:88
+msgid "Odd Row Background"
+msgstr ""
+
+#: includes/I18nStrings.php:92
+msgid "Pagination Items Per Page"
+msgstr "Položky stránkovania na stránku"
+
+#: includes/I18nStrings.php:93
+msgid "Pagination Position"
+msgstr "Pozícia zobrazenia"
+
+#: admin/NinjaTablesAdmin.php:97
+msgid "Parent Table"
+msgstr "Nadriadená tabuľka"
+
+#: includes/I18nStrings.php:24
+msgid "Permission"
+msgstr "dovolenia"
+
+#: includes/NinjaTableImport.php:299
+msgid "Please set table configuration first"
+msgstr "Najprv nastavte konfiguráciu tabuľky"
+
+#: includes/NinjaTableImport.php:125
+msgid "Please upload valid CSV"
+msgstr "Odovzdajte platný súbor CSV"
+
+#: admin/table-builder/ImportExport.php:33
+msgid "Please upload valid CSV or JSON"
+msgstr ""
+
+#: includes/NinjaTableImport.php:313
+#, fuzzy
+#| msgid "Please use the provided CSV header structure. "
+msgid "Please use the provided CSV header structure font face."
+msgstr "Použite poskytnutú štruktúru hlavičiek CSV."
+
+#: includes/I18nStrings.php:17
+msgid "Preview"
+msgstr "Náhľad"
+
+#: public/views/frameless/show_ntb_preview.php:9
+#: public/views/frameless/show_preview.php:9
+msgid "Preview Table"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:27
+msgid "Pricing Table Four"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:9
+msgid "Pricing Table One"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:21
+msgid "Pricing Table Three"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:15
+msgid "Pricing Table Two"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:5
+msgid "Pricing Tables"
+msgstr ""
+
+#: admin/table-builder/config/component.php:215
+msgid "Progress"
+msgstr ""
+
+#: admin/table-builder/config/component.php:82
+msgid "Rating"
+msgstr ""
+
+#: includes/I18nStrings.php:102
+msgid "Replace Existing Data"
+msgstr "Nahradiť existujúce údaje"
+
+#: includes/I18nStrings.php:76
+msgid "Responsive Breakpoint"
+msgstr "Responsive Breakpoint"
+
+#: admin/table-builder/config/responsive.php:138
+msgid "Responsive Settings"
+msgstr ""
+
+#: admin/table-builder/config/component.php:184
+msgid "Ribbon"
+msgstr ""
+
+#: includes/I18nStrings.php:94
+msgid "Row Details (Responsive drawer)"
+msgstr "Detaily riadku (odpovedajúca zásuvka)"
+
+#: admin/table-builder/config/templates.php:95
+msgid "Schedule Table One"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:107
+msgid "Schedule Table Three"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:101
+msgid "Schedule Table Two"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:91
+msgid "Schedule Tables"
+msgstr ""
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:65
+#: includes/libs/TableDrivers/NinjaFooTable.php:337
+msgid "Search"
+msgstr "Hľadať"
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:64
+#: includes/libs/TableDrivers/NinjaFooTable.php:335
+msgid "Search in"
+msgstr "Hľadať v"
+
+#: admin/NinjaTablesAdmin.php:94
+msgid "Search Table"
+msgstr "Vyhľadať tabuľku"
+
+#: includes/I18nStrings.php:80
+msgid "Select a Format"
+msgstr "Vyberte formát"
+
+#: admin/NinjaTablesAdmin.php:1211
+msgid "Select a Table"
+msgstr "Zvoliť tabuľku"
+
+#: admin/NinjaTablesAdmin.php:1187
+msgid "Select a Table to insert"
+msgstr "Zvoľte tabuľku na pridanie"
+
+#: includes/I18nStrings.php:45
+msgid "Select bulk action"
+msgstr "Vyberte hromadnú akciu"
+
+#: includes/I18nStrings.php:69
+msgid "Select Field"
+msgstr "Vyberte pole"
+
+#: includes/I18nStrings.php:27
+msgid "Select file:"
+msgstr "Vybrať súbor:"
+
+#: includes/I18nStrings.php:81
+msgid "Select Items"
+msgstr "Vyberte položky"
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:68
+msgid "Selected"
+msgstr "vybraný"
+
+#: admin/table-builder/config/setting.php:22
+msgid "Separate Columns/Rows"
+msgstr ""
+
+#: admin/NinjaTablesAdmin.php:1620 admin/NinjaTablesAdmin.php:1667
+#: admin/NinjaTablesAdmin.php:1700
+msgid "Settings successfully updated"
+msgstr "Nastavenia boli úspešne aktualizované"
+
+#: includes/I18nStrings.php:15
+msgid "ShortCode"
+msgstr "Skrátený kód"
+
+#: admin/table-builder/config/component.php:128
+msgid "Shortcode"
+msgstr ""
+
+#: includes/I18nStrings.php:89
+msgid "Show Table Description"
+msgstr "Zobraziť popis tabuľky"
+
+#: includes/I18nStrings.php:88
+msgid "Show Table Title"
+msgstr "Zobraziť názov tabuľky"
+
+#: includes/I18nStrings.php:64
+msgid "Single Line Text Field"
+msgstr "Jedno riadkové textové pole"
+
+#: includes/NinjaTableImport.php:142 admin/table-builder/ImportExport.php:55
+msgid "Something is wrong when parsing the csv"
+msgstr "Niečo nie je zlé pri analýze csv"
+
+#: admin/table-builder/config/setting.php:27
+msgid "Space Between Columns"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:34
+msgid "Space Between Rows"
+msgstr ""
+
+#: includes/I18nStrings.php:79
+msgid "Standard"
+msgstr "štandardné"
+
+#: admin/table-builder/config/responsive.php:127
+msgid "Static Top Row"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:95
+msgid "Sticky"
+msgstr ""
+
+#: admin/table-builder/config/component.php:163
+msgid "Stylist List"
+msgstr ""
+
+#: includes/NinjaTableImport.php:162 includes/NinjaTableImport.php:188
+#: includes/NinjaTableImport.php:255
+msgid "Successfully added a table."
+msgstr "Tabuľka bola úspešne pridaná."
+
+#: admin/NinjaTablesAdmin.php:1041
+msgid "Successfully deleted data."
+msgstr "Dáta boli úspešne vymazané."
+
+#: admin/NinjaTablesAdmin.php:732
+msgid "Successfully deleted the table."
+msgstr "Tabuľka bola vymazaná."
+
+#: admin/NinjaTablesAdmin.php:1325
+msgid "Successfully duplicated table."
+msgstr "Úspešne duplicitná tabuľka."
+
+#: includes/NinjaTableImport.php:77
+msgid ""
+"Successfully imported. Please go to all tables and review your newly "
+"imported table."
+msgstr ""
+"Úspešne importované. Prejdite na všetky tabuľky a skontrolujte novo "
+"importovanú tabuľku."
+
+#: admin/NinjaTablesAdmin.php:945
+msgid "Successfully saved the data."
+msgstr "Dáta boli úspešne uložené."
+
+#: admin/NinjaTablesAdmin.php:688
+msgid "Successfully updated configuration."
+msgstr "Nastavenia boli úspešne uložené."
+
+#: includes/NinjaTableImport.php:353
+msgid "Successfully uploaded data."
+msgstr "Dáta boli úspešne načítané."
+
+#: admin/NinjaTablesAdmin.php:85
+msgid "Table"
+msgstr "Tabuľka"
+
+#: admin/table-builder/config/responsive.php:154
+#: admin/table-builder/config/responsive.php:170
+#: admin/table-builder/config/setting.php:17
+msgid "Table Alignment"
+msgstr ""
+
+#: includes/I18nStrings.php:97
+msgid "Table Body Colors"
+msgstr "Farby tabuľkového telesa"
+
+#: admin/table-builder/config/setting.php:147
+msgid "Table Border"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:57
+msgid "Table Cell Min Auto Width"
+msgstr ""
+
+#: includes/I18nStrings.php:41
+msgid "Table Configuration"
+msgstr "Konfigurácia tabuľky"
+
+#: admin/table-builder/config/setting.php:64
+msgid "Table Container Max Height"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:43
+#: admin/table-builder/config/setting.php:48
+msgid "Table Container Max Width"
+msgstr ""
+
+#: includes/I18nStrings.php:42
+msgid "Table Design"
+msgstr "Návrh tabuľky"
+
+#: includes/I18nStrings.php:96
+msgid "Table Header Colors"
+msgstr "Farby hlavičky tabuľky"
+
+#: admin/table-builder/config/setting.php:117
+msgid "Table Role"
+msgstr ""
+
+#: includes/I18nStrings.php:40
+msgid "Table Rows"
+msgstr "Tabuľkové riadky"
+
+#: admin/NinjaTablesAdmin.php:140
+msgid "Tables"
+msgstr ""
+
+#: includes/NinjaTableImport.php:266
+#: includes/libs/Migrations/NinjaTablesMigration.php:22
+msgid "Temporary table description"
+msgstr "Dočasný popis tabuľky"
+
+#: includes/NinjaTableImport.php:265
+#: includes/libs/Migrations/NinjaTablesMigration.php:19
+msgid "Temporary table name"
+msgstr "Dočasný názov tabuľky"
+
+#: admin/table-builder/NinjaTableBuilder.php:259
+#: admin/table-builder/config/component.php:16
+msgid "Text"
+msgstr ""
+
+#: includes/I18nStrings.php:85
+msgid "Text Align"
+msgstr "Zarovnanie textu"
+
+#: includes/I18nStrings.php:65
+msgid "Text Area"
+msgstr "Textová oblasť"
+
+#: admin/table-builder/config/component.php:233
+msgid "Text Icon"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"The Easiest & Fastest Responsive Table Plugin on WordPress. Multiple "
+"templates, drag-&-drop live table builder, multiple color scheme, and styles."
+msgstr ""
+"Najjednoduchší a najrýchlejší WordPress plugin pre vytváranie tabuliek. "
+"Plugin obsahuje niekoľko príkladov tabuliek, jednoduchý editor tabuliek. "
+"niekoľko farebných schém a štýlov."
+
+#: admin/NinjaTablesAdmin.php:554
+msgid "The name field is required."
+msgstr "Názov tabuľky sa musí zapísať."
+
+#: public/dataProviders/FluentFormProvider.php:114
+msgid "The title field is required."
+msgstr ""
+"Vyžaduje sa názov poľa.\n"
+
+#: includes/I18nStrings.php:14
+msgid "Title"
+msgstr "nadpis"
+
+#: includes/I18nStrings.php:55
+msgid "to view the upgrade guide."
+msgstr "pre zobrazenie sprievodcu inováciou."
+
+#: includes/I18nStrings.php:8 admin/NinjaTablesAdmin.php:156
+msgid "Tools"
+msgstr "Nástroje"
+
+#: admin/table-builder/config/responsive.php:47
+#: admin/table-builder/config/responsive.php:94
+#: admin/table-builder/config/responsive.php:120
+msgid "Top Row As Header"
+msgstr ""
+
+#: includes/I18nStrings.php:63
+msgid "Totally hidden on all devices"
+msgstr "Úplne skryté na všetkých zariadeniach"
+
+#: includes/I18nStrings.php:77
+msgid "Update"
+msgstr "aktualizovať"
+
+#: includes/I18nStrings.php:70
+msgid "Update Configuration"
+msgstr "Aktualizácia konfigurácie"
+
+#: includes/I18nStrings.php:52
+msgid "Upgrade Notice"
+msgstr "Upozornenie na inováciu"
+
+#: admin/NinjaTablesAdmin.php:92 admin/NinjaTablesAdmin.php:93
+msgid "View Table"
+msgstr "Zobraziť tabuľku"
+
+#. Author of the plugin
+msgid "WPManageNinja LLC"
+msgstr "WPManageNinja LLC"
+
+#: includes/NinjaTableImport.php:215
+msgid "You have a faulty JSON file. Please export a new one."
+msgstr "Váš súbor JSON je poškodený. Spravte nový export."
+
+#: includes/I18nStrings.php:31
+msgid "Your License is Active"
+msgstr "Vaša licencia je aktívna"
+
+#: includes/I18nStrings.php:32
+msgid "Your license is active! Enjoy Ninja Tables Pro Add On"
+msgstr "Vaša licencia je aktívna! Vychutnajte si Ninja Tables Pro Add On"
+
+#: includes/I18nStrings.php:53
+msgid ""
+"Your Ninja Tables Pro plugin is outdated. Please upgrade to its latest "
+"version."
+msgstr ""
+"Váš doplnok Ninja Tables Pro je zastaraný. Upgrade na najnovšiu verziu."

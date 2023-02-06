@@ -1,0 +1,359 @@
+<template>
+    <div>
+        <div class="ninja_header">
+            <h2>{{ $t('Import Table') }}</h2>
+        </div>
+        <div class="ninja_content">
+            <div class="ninja_block">
+                <p>
+                    {{ $t('NinjaTables can import tables from existing data, like from a CSV or JSON file. You can also import existing tables from the other WordPress table plugins.') }}
+                </p>
+            </div>
+
+            <hr/>
+            <div class="ninja_block_section">
+                <h3>Import Table from CSV / JSON File</h3>
+                <p>
+                    Browse and locate a CSV/JSON file you backed up before.
+                </p>
+                <p>
+                    Select the intended format and click <strong>Import</strong> button, we will do
+                    the rest for you.
+                </p>
+
+                <div class="form">
+                    <!--Import data-->
+                    <div class="form-item">
+                        <template v-if="imports.source == 'file'">
+                            <label>{{ $t('Select file:') }}</label>
+                            <input type="file" id="fileUpload" @click="clear">
+                        </template>
+                        <template v-else-if="imports.source == 'url'">
+                            File upload url
+                        </template>
+                        <template v-else>
+                            <label>{{ $t('Import data:') }}</label>
+                            <textarea rows="10"></textarea>
+                        </template>
+                    </div>
+
+                    <!--Import format-->
+                    <div class="form-item">
+                        <label for="import_format">{{ $t('Import Format:') }}</label>
+                        <select id="import_format" v-model="imports.format">
+                            <option :value="format"
+                                    v-for="(option, format) in imports.formatOptions"
+                            >{{ $t(option) }}
+                            </option>
+                        </select>
+
+                        <template v-if="imports.format == 'csv'">
+                            <span  class="help">
+                                Check tutorial for importing data from CSV file
+                              <a
+                                    href="https://ninjatables.com/docs/import-table-data-from-a-csv/"
+                                    target="_blank">here</a>
+                            </span>
+
+                            <div class="form-item">
+                                <el-checkbox true-label="yes" false-label="no" v-model="do_unicode">Convert to UTF-8 format ( Check this if your csv is non-unicode format )</el-checkbox>
+                            </div>
+                        </template>
+
+
+                        <span v-show="imports.format == 'json' || imports.format == 'ninjaJson'"
+                              class="help">
+                                Check tutorial for importing Table from JSON file<a
+                                href="https://ninjatables.com/docs/import-ninja-table-json/"
+                                target="_blank">here</a>
+                            </span>
+                    </div>
+
+                    <div class="form-item">
+                        <el-button type="primary" size="small" :loading="btnLoading" @click="importTable">
+                            {{ $t('Import') }}
+                        </el-button>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="ninja_block_section">
+                <h3>Import From Other WP Table Plugin</h3>
+                <p>
+                    To import from other WordPress plugins click the respective <strong>Import</strong>
+                    button.
+                </p>
+                <table style="min-width: 400px;">
+                    <tbody>
+                    <tr v-for="(plugin, plugin_key) in otherPlugins">
+                        <td>{{ plugin }}</td>
+                        <td>
+                            <button class="btn btn-default btn-sm"
+                                    @click="importFromOtherPlugin(plugin_key)"
+                            >
+                                <template v-if="btnsLoading[plugin_key]">
+                                    {{ $t('Processing...') }}
+                                    <i class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
+                                </template>
+                                <template v-else>
+                                    {{ $t('Import') }}
+                                </template>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <el-dialog
+                title="Your current tables"
+                :visible.sync="showPluginModal"
+                @close="closePluginModal()"
+        >
+            <template v-if="otherPluginTables.length">
+                <el-table
+                        :data="otherPluginTables"
+                        style="width: 100%"
+                >
+                    <el-table-column label="Name">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.is_already_imported">( Already Imported )</span> {{
+                            scope.row.post_title }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            label="Action"
+                            fixed="right"
+                    >
+                        <template slot-scope="scope">
+                            <el-button type="primary" size="mini"
+                                       @click="importThisTable(scope.row, scope.$index)"
+                            >{{ $t('Import') }}
+                            </el-button>
+                            <router-link
+                                    :to="{ name: 'data_items', params: { table_id: scope.row.ninja_table_id } }"
+                                    class="el-button el-button--danger el-button--mini ninja_btn"
+                                    v-if="scope.row.ninja_table_id"
+                            >{{ $t('View Imported Table') }}
+                            </router-link>
+                        </template>
+                    </el-table-column>
+                </el-table>
+
+                <template v-if="importing">
+                    <br><br>
+                    <div class="updated notice notice-success"
+                         style="padding: 10px;"
+                    >
+                        {{ $t('Importing the table, please wait a bit ...') }}
+                    </div>
+                </template>
+            </template>
+
+            <div class="updated notice notice-success"
+                 style="padding: 10px;"
+                 v-else
+            >
+                You don't have any tables in your {{ selectedPlugin }} plugin.
+            </div>
+        </el-dialog>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: 'Tools',
+        data() {
+            return {
+                has_pro: window.ninja_table_admin.hasPro,
+                active_menu: 'import',
+                activeNames: [
+                    '1',
+                    '2'
+                ],
+                imports: {
+                    source: 'file',
+                    sourceOptions: ['file'],
+                    formatOptions: {
+                        'csv': this.$t('CSV - Comma-separated values'),
+                        'json': this.$t('JSON - Javascript Object Notation'),
+                        'ninjaJson': this.$t('JSON - Exported From Ninja Tables'),
+                        'dragAndDrop': this.$t('JSON/CSV - Exported From Drag & Drop Tables'),
+                    },
+                    format: 'csv'
+                },
+                do_unicode: 'no',
+                btnLoading: false,
+                otherPlugins: {
+                    'TablePress': 'Table Press',
+                    'supsystic': 'Data Tables Generator by Supsystic',
+                    'UltimateTables': 'Ultimate Tables'
+                },
+                btnsLoading: {
+                    'TablePress': false,
+                    'UltimateTables': false
+                },
+                showPluginModal: false,
+                selectedPlugin: null,
+                otherPluginTables: [],
+                importing: false
+            }
+        },
+        methods: {
+            clear() {
+                jQuery('#fileUpload').val('');
+            },
+            importTable() {
+                this.btnLoading = true;
+
+                // For now only execute when the import source is `file`
+                if (!this.imports.source == 'file') {
+                    this.btnLoading = true;
+                    return;
+                }
+
+                var file = jQuery('#fileUpload')[0].files[0];
+
+                if (!file) {
+                    this.btnLoading = false;
+                    return;
+                }
+
+                var formData = new FormData();
+
+                formData.append('format', this.imports.format);
+                formData.append('file', file);
+                formData.append('action', 'ninja_tables_ajax_actions');
+                formData.append('target_action', 'import-table');
+                formData.append('do_unicode', this.do_unicode);
+                formData.append('ninja_table_admin_nonce', window.ninja_table_admin.ninja_table_admin_nonce);
+
+                jQuery.ajax({
+                    url: ajaxurl,
+                    data: formData,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    success: (response) => {
+                      alert(response.message ? response.message : this.$t("Successfully added a table."));
+                      if (this.imports.format === 'dragAndDrop') {
+                        this.$router.push({
+                          name: "table_builder_edit_table",
+                          params: {table_id: response.data.id},
+                        });
+                      } else {
+                        this.$router.push({
+                          name: 'data_items',
+                          params: {table_id: response.tableId}
+                        });
+                      }
+                    },
+                    error: (error) => {
+                        this.btnLoading = false;
+                        alert(error.responseJSON.message);
+                    }
+                });
+            },
+            importFromOtherPlugin(plugin) {
+                this.selectedPlugin = plugin;
+
+                this.btnsLoading[plugin] = true;
+
+                let data = {
+                    action: 'ninja_tables_ajax_actions',
+                    target_action: 'get-tables-from-plugin',
+                    plugin: plugin,
+                    ninja_table_admin_nonce: window.ninja_table_admin.ninja_table_admin_nonce
+                };
+
+                jQuery.ajax({
+                    url: ajaxurl,
+                    data: data,
+                    type: 'POST',
+                    success: (response) => {
+                        if(!response.tables) {
+                            this.$message.error('No Table Found');
+                        } else {
+                            this.btnsLoading[plugin] = false;
+                        }
+                        this.showPluginModal = true;
+                        this.otherPluginTables = response.tables;
+                    },
+                    error: (error) => {
+                        this.btnsLoading[plugin] = false;
+                        if(error.responseJSON) {
+                            this.$message.error(error.responseJSON.message);
+                        } else {
+                            this.$message.error('No Table Found');
+                        }
+
+                    }
+                });
+            },
+            closePluginModal() {
+                this.otherPluginTables = [];
+                this.btnsLoading[this.selectedPlugin] = false;
+                this.showPluginModal = false;
+                this.selectedPlugin = null;
+
+            },
+            importThisTable(table, index) {
+                this.importing = true;
+
+                let data = {
+                    action: 'ninja_tables_ajax_actions',
+                    target_action: 'import-table-from-plugin',
+                    plugin: this.selectedPlugin,
+                    tableId: table.ID,
+                    ninja_table_admin_nonce: window.ninja_table_admin.ninja_table_admin_nonce
+                };
+
+                jQuery.ajax({
+                    url: ajaxurl,
+                    data: data,
+                    type: 'POST',
+                    success: (response) => {
+                        this.$message.success(response.data.message);
+                        this.importing = false;
+                        this.$set(this.otherPluginTables[index], 'ninja_table_id', response.data.tableId);
+                    },
+                    error: (error) => {
+                        this.$message.error(error.responseJSON.data.message);
+                        this.importing = false;
+                    }
+                });
+            }
+        },
+        mounted() {
+            if (this.$route.query.active_menu) {
+                this.active_menu = this.$route.query.active_menu;
+            }
+            jQuery('.ninja_table_tools_menu').on('click', () => {
+                this.active_menu = 'import';
+            });
+
+            jQuery('.ninja_table_import_menu').on('click', () => {
+                this.active_menu = 'import';
+            });
+
+            jQuery('.ninja_table_license_menu').on('click', () => {
+                this.active_menu = 'license';
+            });
+
+        }
+    }
+</script>
+
+<style scoped>
+    .form-item {
+        margin: 10px 0;
+    }
+
+    .form-item label {
+        width: 100px;
+    }
+</style>

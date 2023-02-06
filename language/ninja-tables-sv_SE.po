@@ -1,0 +1,968 @@
+# Translation of Plugins - Ninja Tables &#8211; WP Data Tables Plugin for WordPress - Stable (latest release) in Swedish
+# This file is distributed under the same license as the Plugins - Ninja Tables &#8211; WP Data Tables Plugin for WordPress - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-01-12 06:38+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Loco https://localise.biz/\n"
+"Language: sv_SE\n"
+"Project-Id-Version: Plugins - Ninja Tables &#8211; WP Data Tables Plugin for "
+"WordPress - Stable (latest release)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-10 10:35+0000\n"
+"Last-Translator: \n"
+"Language-Team: Swedish\n"
+"X-Loco-Version: 2.6.3; wp-6.1.1"
+
+#: admin/NinjaTablesAdmin.php:566
+msgid " successfully."
+msgstr "framgångsrikt."
+
+#: admin/NinjaTablesAdmin.php:185
+msgid "<span style=\"color:#f39c12;\">Get Pro</span>"
+msgstr "<span style=\"color:#f39c12;\">Skaffa Pro</span>"
+
+#: admin/table-builder/config/setting.php:112
+msgid "Accessibility"
+msgstr ""
+
+#: includes/I18nStrings.php:36
+msgid "Activate Ninja Tables Pro"
+msgstr "Antivera Ninja Tables Pro"
+
+#: includes/I18nStrings.php:29
+msgid "Activate Ninja Tables Pro Add-on plugin to unlock this feature"
+msgstr ""
+"Aktivera Ninja Tables Pro Add-on-plugin för att låsa upp den här funktionen"
+
+#: includes/I18nStrings.php:51
+msgid "Add"
+msgstr "Lägg till"
+
+#: admin/NinjaTablesAdmin.php:177
+msgid "Add Chart"
+msgstr "Lägg till diagram"
+
+#: includes/I18nStrings.php:72
+msgid "Add Column"
+msgstr "Lägg till kolumn"
+
+#: includes/I18nStrings.php:49
+msgid "Add Data"
+msgstr "Lägg till data"
+
+#: includes/I18nStrings.php:13 admin/NinjaTablesAdmin.php:88
+msgid "Add New Table"
+msgstr "Lägg till ny tabell"
+
+#: includes/I18nStrings.php:11 admin/NinjaTablesAdmin.php:87
+msgid "Add Table"
+msgstr "Lägg till tabell"
+
+#: includes/I18nStrings.php:99
+msgid "Additional CSS"
+msgstr "Ytterligare CSS"
+
+#: admin/table-builder/config/component.php:159
+msgid "Advanced"
+msgstr ""
+
+#: includes/I18nStrings.php:10 admin/NinjaTablesAdmin.php:1678
+msgid "All Tables"
+msgstr "Alla tabeller"
+
+#: includes/I18nStrings.php:62
+msgid "Always show in all devices"
+msgstr "Visa alltid i alla enheter"
+
+#: includes/I18nStrings.php:48
+msgid "Apply"
+msgstr "Tillämpa"
+
+#: admin/table-builder/config/setting.php:159
+msgid "Apply Inner Border"
+msgstr ""
+
+#: includes/I18nStrings.php:56
+msgid "Are you sure to delete this?"
+msgstr "Är du säker på att ta bort detta?"
+
+#: includes/I18nStrings.php:71
+msgid "Available Columns"
+msgstr "Tillgängliga kolumner"
+
+#: admin/table-builder/config/setting.php:73
+msgid "Background"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:142
+msgid "Border"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:154
+msgid "Border Color"
+msgstr ""
+
+#: includes/I18nStrings.php:46
+msgid "Bulk Actions"
+msgstr "Massåtgärder"
+
+#: admin/table-builder/config/component.php:31
+msgid "Button"
+msgstr ""
+
+#: includes/I18nStrings.php:50
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: includes/I18nStrings.php:57
+msgid "cancel"
+msgstr "avbryt"
+
+#: admin/table-builder/config/responsive.php:147
+#: admin/table-builder/config/responsive.php:163
+#: admin/table-builder/config/setting.php:10
+msgid "Cell Padding"
+msgstr ""
+
+#: admin/table-builder/config/responsive.php:32
+#: admin/table-builder/config/responsive.php:79
+msgid "Cell Stack Direction"
+msgstr ""
+
+#: admin/NinjaTablesAdmin.php:165 admin/NinjaTablesAdmin.php:171
+msgid "Charts"
+msgstr ""
+
+#: includes/I18nStrings.php:30
+msgid "Check all"
+msgstr "Markera alla"
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:67
+msgid "Clear All"
+msgstr "Rensa alla"
+
+#: includes/I18nStrings.php:54
+msgid "Click here"
+msgstr "Klicka här"
+
+#: admin/table-builder/config/setting.php:221
+msgid "Color"
+msgstr ""
+
+#: includes/I18nStrings.php:74
+msgid "Column Key"
+msgstr "Kolumnnyckel"
+
+#: includes/I18nStrings.php:73
+msgid "Column Name"
+msgstr "Kolumnnamn"
+
+#: admin/table-builder/config/templates.php:57
+msgid "Comparison Table Four"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:39
+msgid "Comparison Table One"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:51
+msgid "Comparison Table Three"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:45
+msgid "Comparison Table Two"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:35
+msgid "Comparison Tables"
+msgstr ""
+
+#: includes/I18nStrings.php:58
+msgid "confirm"
+msgstr "bekräfta"
+
+#: includes/I18nStrings.php:20
+msgid "CSV - Comma-separated values"
+msgstr "CSV – Kommaseparerade värden"
+
+#: includes/NinjaTableImport.php:288
+msgid "CSV File is not valid"
+msgstr "CSV-fil är inte giltig"
+
+#: includes/I18nStrings.php:104
+msgid "CSV Header Structure"
+msgstr "Rubrikstruktur för CSV"
+
+#: includes/I18nStrings.php:43
+msgid "Custom CSS"
+msgstr "Anpassad CSS"
+
+#: includes/I18nStrings.php:75
+msgid "Data Type"
+msgstr "Datatyp"
+
+#: includes/I18nStrings.php:68
+msgid "Date Field"
+msgstr "Datumfält"
+
+#: includes/I18nStrings.php:78
+msgid "Date Format"
+msgstr "Datumformat"
+
+#: includes/I18nStrings.php:33
+msgid "Deactivate License"
+msgstr "Inaktivera licens"
+
+#: includes/I18nStrings.php:19
+msgid "Delete"
+msgstr "Ta bort"
+
+#: includes/I18nStrings.php:47
+msgid "Delete Entries"
+msgstr "Ta bort poster"
+
+#: admin/table-builder/config/responsive.php:26
+#: admin/table-builder/config/responsive.php:73
+msgid "Disable Breakpoint"
+msgstr ""
+
+#: includes/I18nStrings.php:39
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: includes/I18nStrings.php:37
+msgid "Documentation and Help"
+msgstr ""
+
+#: includes/I18nStrings.php:105
+msgid "Download Sample CSV"
+msgstr "Ladda ner CSV-exempel"
+
+#: includes/I18nStrings.php:18
+msgid "Duplicate"
+msgstr "Duplicera"
+
+#: includes/I18nStrings.php:16 admin/NinjaTablesAdmin.php:89
+#: public/views/frameless/show_ntb_preview.php:31
+#: public/views/frameless/show_preview.php:29
+msgid "Edit"
+msgstr "Redigera"
+
+#: admin/NinjaTablesAdmin.php:90 public/views/table_builder_html.php:38
+#: includes/libs/TableDrivers/views/ninja_foo_table.php:44
+msgid "Edit Table"
+msgstr "Redigera tabell"
+
+#: admin/table-builder/config/templates.php:70
+msgid "Employee Table One"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:82
+msgid "Employee Table Three"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:76
+msgid "Employee Table Two"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:66
+msgid "Employee Tables"
+msgstr ""
+
+#: admin/table-builder/config/responsive.php:10
+msgid "Enable Responsive Table"
+msgstr ""
+
+#: includes/I18nStrings.php:91
+msgid "Enable sorting of the table by the visitor"
+msgstr "Aktivera sortering av tabellen av besökaren"
+
+#: includes/I18nStrings.php:90
+msgid "Enable the visitor to filter or search the table."
+msgstr "Aktivera besökaren att filtrera eller söka i tabellen."
+
+#: includes/I18nStrings.php:35
+msgid "Enter your license key"
+msgstr "Ange din licensnyckel"
+
+#: admin/table-builder/config/setting.php:83
+msgid "Even Row Background"
+msgstr ""
+
+#: includes/I18nStrings.php:100
+msgid "Export Table"
+msgstr "Exportera tabell"
+
+#: includes/I18nStrings.php:82
+msgid "Extra Classes"
+msgstr "Extra klasser"
+
+#: includes/I18nStrings.php:95
+msgid "Extra CSS Class for the table"
+msgstr "Extra CSS-klass för tabellen"
+
+#: includes/I18nStrings.php:86
+msgid "Filterable"
+msgstr "Filtrerbar"
+
+#: admin/table-builder/config/setting.php:105
+msgid "First Column Sticky"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:100
+msgid "First Row Sticky"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:226
+msgid "Font Family"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:214
+msgid "Font Size"
+msgstr ""
+
+#: includes/I18nStrings.php:98
+msgid "Footer Colors"
+msgstr "Färger för sidfot"
+
+#: includes/I18nStrings.php:38
+msgid ""
+"For any type of query which was not covered in our documentation, Please "
+"submit a support ticket ticket"
+msgstr ""
+"För någon typ av fråga som inte omfattades av vår dokumentation, skicka in "
+"ett supportärende"
+
+#: admin/table-builder/config/component.php:12
+#: admin/table-builder/config/responsive.php:5
+#: admin/table-builder/config/setting.php:5
+msgid "General"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:195
+msgid "Global Style"
+msgstr ""
+
+#: admin/table-builder/config/responsive.php:61
+#: admin/table-builder/config/responsive.php:108
+msgid "Group Separator"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:78
+msgid "Header Background"
+msgstr ""
+
+#: includes/I18nStrings.php:87
+msgid "Header HTML Content"
+msgstr "Header HTML-innehåll"
+
+#: admin/table-builder/config/setting.php:164
+msgid "Header Inner Border"
+msgstr ""
+
+#: includes/I18nStrings.php:9 admin/NinjaTablesAdmin.php:218
+msgid "Help"
+msgstr "Hjälp"
+
+#: includes/I18nStrings.php:7
+msgid "Home"
+msgstr "Hem"
+
+#: admin/table-builder/config/component.php:117
+msgid "HTML"
+msgstr ""
+
+#: includes/I18nStrings.php:66
+msgid "HTML Field"
+msgstr "HTML-fält"
+
+#. Author URI of the plugin
+msgid "https://ninjatables.com/"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/"
+msgstr "https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/"
+
+#: admin/table-builder/config/component.php:68
+msgid "Icon"
+msgstr ""
+
+#: admin/table-builder/config/component.php:140
+msgid "Image"
+msgstr ""
+
+#: includes/I18nStrings.php:23 admin/NinjaTablesAdmin.php:148
+msgid "Import"
+msgstr "Importera"
+
+#: includes/I18nStrings.php:44
+msgid "Import - Export"
+msgstr "Importera – Exportera"
+
+#: includes/I18nStrings.php:28
+msgid "Import Format:"
+msgstr "Importformat:"
+
+#: includes/I18nStrings.php:103
+msgid "Import from CSV"
+msgstr "Importera från CSV"
+
+#: includes/I18nStrings.php:12
+msgid "Import Table"
+msgstr "Importera tabell"
+
+#: includes/I18nStrings.php:101
+msgid "Import Table Data"
+msgstr "Importera tabelldata"
+
+#: includes/I18nStrings.php:59
+msgid "Initial Hidden Mobile"
+msgstr "Initial Hidden Mobile"
+
+#: includes/I18nStrings.php:60
+msgid "Initial Hidden Mobile and Tab"
+msgstr "Initial Hidden Mobile och Tab"
+
+#: includes/I18nStrings.php:61
+msgid "Initial Hidden Mobile, Tab and Regular Computers"
+msgstr "Initial Hidden Mobile, Tab och Regular Computers"
+
+#: admin/table-builder/config/setting.php:169
+msgid "Inner Border Color"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:174
+msgid "Inner Border Size"
+msgstr ""
+
+#: admin/NinjaTablesAdmin.php:1188
+msgid "Insert Ninja Tables Shortcode"
+msgstr "Infoga Ninja Tables kortkod"
+
+#: admin/NinjaTablesAdmin.php:1190
+msgid "Insert Shortcode"
+msgstr "Infoga kortkod"
+
+#: admin/NinjaTablesAdmin.php:714
+msgid "Invalid Table to Delete"
+msgstr "Ogiltigt tabell att ta bort"
+
+#: admin/table-builder/config/responsive.php:53
+#: admin/table-builder/config/responsive.php:100
+msgid "Items Per Header"
+msgstr ""
+
+#: includes/I18nStrings.php:22
+msgid "JSON - Exported From Ninja Tables"
+msgstr "JSON – Exporterad från Ninja-tabeller"
+
+#: includes/I18nStrings.php:21
+msgid "JSON - JavaScript Object Notation"
+msgstr "JSON – JavaScript Object Notation"
+
+#: includes/I18nStrings.php:25
+msgid "License"
+msgstr "Licens"
+
+#: includes/I18nStrings.php:34
+msgid "Licensing"
+msgstr "Licensiering"
+
+#: admin/table-builder/config/component.php:98
+msgid "List"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:207
+msgid "Margin Bottom"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:200
+msgid "Margin Top"
+msgstr ""
+
+#: includes/I18nStrings.php:83
+msgid "Max Width"
+msgstr "Maximal bredd"
+
+#: includes/I18nStrings.php:84
+msgid "Maximum Width"
+msgstr "Maximal bredd"
+
+#: admin/table-builder/config/responsive.php:17
+msgid "Mode Options"
+msgstr ""
+
+#: admin/NinjaTablesAdmin.php:91
+msgid "New Table"
+msgstr "Ny tabell"
+
+#. Name of the plugin
+#: includes/I18nStrings.php:6 admin/NinjaTablesAdmin.php:73
+#: admin/NinjaTablesAdmin.php:84 admin/NinjaTablesAdmin.php:86
+#: admin/NinjaTablesAdmin.php:124
+msgid "Ninja Tables"
+msgstr "Ninja Tables"
+
+#: includes/I18nStrings.php:26
+msgid ""
+"NinjaTables can import tables from existing data, like from a CSV or JSON "
+"file. You can also import existing tables from the other WordPress table "
+"plugins."
+msgstr ""
+"NinjaTables kan importera tabeller från befintliga data, som från en CSV- "
+"eller JSON-fil. Du kan också importera befintliga tabeller från de andra "
+"WordPress-tilläggen."
+
+#: includes/NinjaTableImport.php:29
+msgid "No appropriate driver found for the import format."
+msgstr "Ingen lämplig drivrutin hittades för importformatet."
+
+#: public/dataProviders/FluentFormProvider.php:121
+msgid "No fields were selected."
+msgstr "Inga fält valdes."
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:66
+#: includes/libs/TableDrivers/NinjaFooTable.php:339
+msgid "No Result Found"
+msgstr "Inget resultat hittades"
+
+#: admin/NinjaTablesAdmin.php:95
+msgid "No Table Found"
+msgstr "Ingen tabell hittades"
+
+#: admin/NinjaTablesAdmin.php:96
+msgid "No Table Found in Trash"
+msgstr "Ingen tabell hittad i papperskorgen"
+
+#: includes/libs/Migrations/NinjaTablesSupsysticTableMigration.php:24
+msgid "No Table Found with the selected table"
+msgstr "Ingen tabell hittades med den valda tabellen"
+
+#: includes/libs/Migrations/NinjaTablesUltimateTableMigration.php:21
+msgid "No Ultimate Table Found with the selected table"
+msgstr "Inget Ultimate Table hittades med den valda tabellen"
+
+#: includes/ninja_tables-global-functions.php:1054
+msgid "Nonce verification failed, please try again."
+msgstr ""
+
+#: includes/I18nStrings.php:67
+msgid "Numeric Value"
+msgstr "Numeriskt värde"
+
+#: admin/table-builder/config/setting.php:88
+msgid "Odd Row Background"
+msgstr ""
+
+#: includes/I18nStrings.php:92
+msgid "Pagination Items Per Page"
+msgstr "Pagineringsobjekt per sida"
+
+#: includes/I18nStrings.php:93
+msgid "Pagination Position"
+msgstr "Pagineringsposition"
+
+#: admin/NinjaTablesAdmin.php:97
+msgid "Parent Table"
+msgstr "Överordnad tabell"
+
+#: includes/I18nStrings.php:24
+msgid "Permission"
+msgstr "Behörighet"
+
+#: includes/NinjaTableImport.php:299
+msgid "Please set table configuration first"
+msgstr "Ställ in tabellkonfiguration först"
+
+#: includes/NinjaTableImport.php:125
+msgid "Please upload valid CSV"
+msgstr "Ladda upp giltig CSV"
+
+#: admin/table-builder/ImportExport.php:33
+msgid "Please upload valid CSV or JSON"
+msgstr ""
+
+#: includes/NinjaTableImport.php:313
+#, fuzzy
+#| msgid "Please use the provided CSV header structure. "
+msgid "Please use the provided CSV header structure font face."
+msgstr "Använd den angivna CSV-rubrikstrukturen."
+
+#: includes/I18nStrings.php:17
+msgid "Preview"
+msgstr "Förhandsgranska"
+
+#: public/views/frameless/show_ntb_preview.php:9
+#: public/views/frameless/show_preview.php:9
+msgid "Preview Table"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:27
+msgid "Pricing Table Four"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:9
+msgid "Pricing Table One"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:21
+msgid "Pricing Table Three"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:15
+msgid "Pricing Table Two"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:5
+msgid "Pricing Tables"
+msgstr ""
+
+#: admin/table-builder/config/component.php:215
+msgid "Progress"
+msgstr ""
+
+#: admin/table-builder/config/component.php:82
+msgid "Rating"
+msgstr ""
+
+#: includes/I18nStrings.php:102
+msgid "Replace Existing Data"
+msgstr "Ersätt befintlig data"
+
+#: includes/I18nStrings.php:76
+msgid "Responsive Breakpoint"
+msgstr "Responsiv brytpunkt"
+
+#: admin/table-builder/config/responsive.php:138
+msgid "Responsive Settings"
+msgstr ""
+
+#: admin/table-builder/config/component.php:184
+msgid "Ribbon"
+msgstr ""
+
+#: includes/I18nStrings.php:94
+msgid "Row Details (Responsive drawer)"
+msgstr "Row Detaljer (Responsiv låda)"
+
+#: admin/table-builder/config/templates.php:95
+msgid "Schedule Table One"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:107
+msgid "Schedule Table Three"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:101
+msgid "Schedule Table Two"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:91
+msgid "Schedule Tables"
+msgstr ""
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:65
+#: includes/libs/TableDrivers/NinjaFooTable.php:337
+msgid "Search"
+msgstr "Sök"
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:64
+#: includes/libs/TableDrivers/NinjaFooTable.php:335
+msgid "Search in"
+msgstr "Sök i"
+
+#: admin/NinjaTablesAdmin.php:94
+msgid "Search Table"
+msgstr "Sök tabell"
+
+#: includes/I18nStrings.php:80
+msgid "Select a Format"
+msgstr "Välj ett format"
+
+#: admin/NinjaTablesAdmin.php:1211
+msgid "Select a Table"
+msgstr "Välj en tabell"
+
+#: admin/NinjaTablesAdmin.php:1187
+msgid "Select a Table to insert"
+msgstr "Välj en tabell att infoga"
+
+#: includes/I18nStrings.php:45
+msgid "Select bulk action"
+msgstr "Välj massåtgärd"
+
+#: includes/I18nStrings.php:69
+msgid "Select Field"
+msgstr "Välj fält"
+
+#: includes/I18nStrings.php:27
+msgid "Select file:"
+msgstr "Välj fil:"
+
+#: includes/I18nStrings.php:81
+msgid "Select Items"
+msgstr "Välj objekt"
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:68
+msgid "Selected"
+msgstr "vald"
+
+#: admin/table-builder/config/setting.php:22
+msgid "Separate Columns/Rows"
+msgstr ""
+
+#: admin/NinjaTablesAdmin.php:1620 admin/NinjaTablesAdmin.php:1667
+#: admin/NinjaTablesAdmin.php:1700
+msgid "Settings successfully updated"
+msgstr "Inställningarna har uppdaterats utan problem"
+
+#: includes/I18nStrings.php:15
+msgid "ShortCode"
+msgstr "Kortkod"
+
+#: admin/table-builder/config/component.php:128
+msgid "Shortcode"
+msgstr ""
+
+#: includes/I18nStrings.php:89
+msgid "Show Table Description"
+msgstr "Visa tabellbeskrivning"
+
+#: includes/I18nStrings.php:88
+msgid "Show Table Title"
+msgstr "Visa tabellrubrik"
+
+#: includes/I18nStrings.php:64
+msgid "Single Line Text Field"
+msgstr "Textfält med en rad"
+
+#: includes/NinjaTableImport.php:142 admin/table-builder/ImportExport.php:55
+msgid "Something is wrong when parsing the csv"
+msgstr "Något är fel när man analyserar csv"
+
+#: admin/table-builder/config/setting.php:27
+msgid "Space Between Columns"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:34
+msgid "Space Between Rows"
+msgstr ""
+
+#: includes/I18nStrings.php:79
+msgid "Standard"
+msgstr "Standard"
+
+#: admin/table-builder/config/responsive.php:127
+msgid "Static Top Row"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:95
+msgid "Sticky"
+msgstr ""
+
+#: admin/table-builder/config/component.php:163
+msgid "Stylist List"
+msgstr ""
+
+#: includes/NinjaTableImport.php:162 includes/NinjaTableImport.php:188
+#: includes/NinjaTableImport.php:255
+msgid "Successfully added a table."
+msgstr "Har lagt till tabell utan problem."
+
+#: admin/NinjaTablesAdmin.php:1041
+msgid "Successfully deleted data."
+msgstr "Tog bort data utan problem."
+
+#: admin/NinjaTablesAdmin.php:732
+msgid "Successfully deleted the table."
+msgstr "Tabellen har tagits bort utan problem."
+
+#: admin/NinjaTablesAdmin.php:1325
+msgid "Successfully duplicated table."
+msgstr "Tabellen duplicerades."
+
+#: includes/NinjaTableImport.php:77
+msgid ""
+"Successfully imported. Please go to all tables and review your newly "
+"imported table."
+msgstr ""
+"Importerades utan problem. Gå till alla tabeller och granska din nyligen "
+"importerade tabell."
+
+#: admin/NinjaTablesAdmin.php:945
+msgid "Successfully saved the data."
+msgstr "Sparade data utan problem."
+
+#: admin/NinjaTablesAdmin.php:688
+msgid "Successfully updated configuration."
+msgstr "Konfigurationen uppdaterades utan problem."
+
+#: includes/NinjaTableImport.php:353
+msgid "Successfully uploaded data."
+msgstr "Laddade upp data utan problem."
+
+#: admin/NinjaTablesAdmin.php:85
+msgid "Table"
+msgstr "Tabell"
+
+#: admin/table-builder/config/responsive.php:154
+#: admin/table-builder/config/responsive.php:170
+#: admin/table-builder/config/setting.php:17
+msgid "Table Alignment"
+msgstr ""
+
+#: includes/I18nStrings.php:97
+msgid "Table Body Colors"
+msgstr "Färg på innehållet i tabell"
+
+#: admin/table-builder/config/setting.php:147
+msgid "Table Border"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:57
+msgid "Table Cell Min Auto Width"
+msgstr ""
+
+#: includes/I18nStrings.php:41
+msgid "Table Configuration"
+msgstr "Tabellkonfiguration"
+
+#: admin/table-builder/config/setting.php:64
+msgid "Table Container Max Height"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:43
+#: admin/table-builder/config/setting.php:48
+msgid "Table Container Max Width"
+msgstr ""
+
+#: includes/I18nStrings.php:42
+msgid "Table Design"
+msgstr "Tabelldesign"
+
+#: includes/I18nStrings.php:96
+msgid "Table Header Colors"
+msgstr "Färg på rubriken i tabell"
+
+#: admin/table-builder/config/setting.php:117
+msgid "Table Role"
+msgstr ""
+
+#: includes/I18nStrings.php:40
+msgid "Table Rows"
+msgstr "Tabellrader"
+
+#: admin/NinjaTablesAdmin.php:140
+msgid "Tables"
+msgstr ""
+
+#: includes/NinjaTableImport.php:266
+#: includes/libs/Migrations/NinjaTablesMigration.php:22
+msgid "Temporary table description"
+msgstr "Tillfällig tabellbeskrivning"
+
+#: includes/NinjaTableImport.php:265
+#: includes/libs/Migrations/NinjaTablesMigration.php:19
+msgid "Temporary table name"
+msgstr "Tillfälligt tabellnamn"
+
+#: admin/table-builder/NinjaTableBuilder.php:259
+#: admin/table-builder/config/component.php:16
+msgid "Text"
+msgstr ""
+
+#: includes/I18nStrings.php:85
+msgid "Text Align"
+msgstr "Textjustera"
+
+#: includes/I18nStrings.php:65
+msgid "Text Area"
+msgstr "Textområde"
+
+#: admin/table-builder/config/component.php:233
+msgid "Text Icon"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"The Easiest & Fastest Responsive Table Plugin on WordPress. Multiple "
+"templates, drag-&-drop live table builder, multiple color scheme, and styles."
+msgstr ""
+"Det enklaste och snabbaste tillägget för responsiva tabeller i WordPress. "
+"Flera mallar, tabellbyggare med drag-och-släpp funktion, flera färgscheman "
+"och stilar."
+
+#: admin/NinjaTablesAdmin.php:554
+msgid "The name field is required."
+msgstr "Namnfältet är obligatoriskt."
+
+#: public/dataProviders/FluentFormProvider.php:114
+msgid "The title field is required."
+msgstr "Rubrikfältet är obligatoriskt."
+
+#: includes/I18nStrings.php:14
+msgid "Title"
+msgstr "Rubrik"
+
+#: includes/I18nStrings.php:55
+msgid "to view the upgrade guide."
+msgstr "för att se uppgraderingsguiden."
+
+#: includes/I18nStrings.php:8 admin/NinjaTablesAdmin.php:156
+msgid "Tools"
+msgstr "Verktyg"
+
+#: admin/table-builder/config/responsive.php:47
+#: admin/table-builder/config/responsive.php:94
+#: admin/table-builder/config/responsive.php:120
+msgid "Top Row As Header"
+msgstr ""
+
+#: includes/I18nStrings.php:63
+msgid "Totally hidden on all devices"
+msgstr "Helt dolt på alla enheter"
+
+#: includes/I18nStrings.php:77
+msgid "Update"
+msgstr "Uppdatera"
+
+#: includes/I18nStrings.php:70
+msgid "Update Configuration"
+msgstr "Uppdatera konfiguration"
+
+#: includes/I18nStrings.php:52
+msgid "Upgrade Notice"
+msgstr "Uppgraderingsmeddelande"
+
+#: admin/NinjaTablesAdmin.php:92 admin/NinjaTablesAdmin.php:93
+msgid "View Table"
+msgstr "Visa tabell"
+
+#. Author of the plugin
+msgid "WPManageNinja LLC"
+msgstr "WPManageNinja LLC"
+
+#: includes/NinjaTableImport.php:215
+msgid "You have a faulty JSON file. Please export a new one."
+msgstr "Du har en felaktig JSON-fil. Exportera en ny."
+
+#: includes/I18nStrings.php:31
+msgid "Your License is Active"
+msgstr "Din licens är aktiv"
+
+#: includes/I18nStrings.php:32
+msgid "Your license is active! Enjoy Ninja Tables Pro Add On"
+msgstr "Din licens är aktiv! Njut av Ninja Tables Pro-utökningar"
+
+#: includes/I18nStrings.php:53
+msgid ""
+"Your Ninja Tables Pro plugin is outdated. Please upgrade to its latest "
+"version."
+msgstr ""
+"Ditt tillägg Ninja Tables Pro är föråldrad. Uppgradera till den senaste "
+"versionen."

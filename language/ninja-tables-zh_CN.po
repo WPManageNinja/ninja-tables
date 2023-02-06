@@ -1,0 +1,950 @@
+# Translation of Plugins - Ninja Tables &#8211; Best Data Table Plugin for WordPress - Stable (latest release) in Chinese (China)
+# This file is distributed under the same license as the Plugins - Ninja Tables &#8211; Best Data Table Plugin for WordPress - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-01-12 06:35+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Loco https://localise.biz/\n"
+"Language: zh_CN\n"
+"Project-Id-Version: Plugins - Ninja Tables &#8211; Best Data Table Plugin "
+"for WordPress - Stable (latest release)\n"
+"Language-Team: Chinese (China)"
+
+#: admin/NinjaTablesAdmin.php:566
+msgid " successfully."
+msgstr ""
+
+#: admin/NinjaTablesAdmin.php:185
+msgid "<span style=\"color:#f39c12;\">Get Pro</span>"
+msgstr "<span style=\"color:#f39c12;\">获取Pro版</span>"
+
+#: admin/table-builder/config/setting.php:112
+msgid "Accessibility"
+msgstr "可访问性"
+
+#: includes/I18nStrings.php:36
+msgid "Activate Ninja Tables Pro"
+msgstr "激活Ninja Tables Pro版"
+
+#: includes/I18nStrings.php:29
+msgid "Activate Ninja Tables Pro Add-on plugin to unlock this feature"
+msgstr "激活Ninja Tables Pro版插件以解锁此项功能"
+
+#: includes/I18nStrings.php:51
+msgid "Add"
+msgstr "添加"
+
+#: admin/NinjaTablesAdmin.php:177
+msgid "Add Chart"
+msgstr "添加图表"
+
+#: includes/I18nStrings.php:72
+msgid "Add Column"
+msgstr "添加列"
+
+#: includes/I18nStrings.php:49
+msgid "Add Data"
+msgstr "添加数据"
+
+#: includes/I18nStrings.php:13 admin/NinjaTablesAdmin.php:88
+msgid "Add New Table"
+msgstr "添加新表"
+
+#: includes/I18nStrings.php:11 admin/NinjaTablesAdmin.php:87
+msgid "Add Table"
+msgstr "添加表格"
+
+#: includes/I18nStrings.php:99
+msgid "Additional CSS"
+msgstr ""
+
+#: admin/table-builder/config/component.php:159
+msgid "Advanced"
+msgstr "高级"
+
+#: includes/I18nStrings.php:10 admin/NinjaTablesAdmin.php:1678
+msgid "All Tables"
+msgstr "所有表格"
+
+#: includes/I18nStrings.php:62
+msgid "Always show in all devices"
+msgstr "在所有设备上一直显示"
+
+#: includes/I18nStrings.php:48
+msgid "Apply"
+msgstr "应用"
+
+#: admin/table-builder/config/setting.php:159
+msgid "Apply Inner Border"
+msgstr "应用内边框"
+
+#: includes/I18nStrings.php:56
+msgid "Are you sure to delete this?"
+msgstr "确定要删除吗？"
+
+#: includes/I18nStrings.php:71
+msgid "Available Columns"
+msgstr "可用的列"
+
+#: admin/table-builder/config/setting.php:73
+msgid "Background"
+msgstr "背景"
+
+#: admin/table-builder/config/setting.php:142
+msgid "Border"
+msgstr "边框"
+
+#: admin/table-builder/config/setting.php:154
+msgid "Border Color"
+msgstr "边框颜色"
+
+#: includes/I18nStrings.php:46
+msgid "Bulk Actions"
+msgstr "批量操作"
+
+#: admin/table-builder/config/component.php:31
+msgid "Button"
+msgstr "按钮"
+
+#: includes/I18nStrings.php:50
+msgid "Cancel"
+msgstr "取消"
+
+#: includes/I18nStrings.php:57
+msgid "cancel"
+msgstr "取消"
+
+#: admin/table-builder/config/responsive.php:147
+#: admin/table-builder/config/responsive.php:163
+#: admin/table-builder/config/setting.php:10
+msgid "Cell Padding"
+msgstr "单元格填充"
+
+#: admin/table-builder/config/responsive.php:32
+#: admin/table-builder/config/responsive.php:79
+msgid "Cell Stack Direction"
+msgstr "单元格堆叠方向"
+
+#: admin/NinjaTablesAdmin.php:165 admin/NinjaTablesAdmin.php:171
+msgid "Charts"
+msgstr "图表"
+
+#: includes/I18nStrings.php:30
+msgid "Check all"
+msgstr "全选"
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:67
+msgid "Clear All"
+msgstr "全部清除"
+
+#: includes/I18nStrings.php:54
+msgid "Click here"
+msgstr "单击此处"
+
+#: admin/table-builder/config/setting.php:221
+msgid "Color"
+msgstr "颜色"
+
+#: includes/I18nStrings.php:74
+msgid "Column Key"
+msgstr "列键"
+
+#: includes/I18nStrings.php:73
+msgid "Column Name"
+msgstr "列名"
+
+#: admin/table-builder/config/templates.php:57
+msgid "Comparison Table Four"
+msgstr "比较表四"
+
+#: admin/table-builder/config/templates.php:39
+msgid "Comparison Table One"
+msgstr "比较表格一"
+
+#: admin/table-builder/config/templates.php:51
+msgid "Comparison Table Three"
+msgstr "比较表三"
+
+#: admin/table-builder/config/templates.php:45
+msgid "Comparison Table Two"
+msgstr "比较表格二"
+
+#: admin/table-builder/config/templates.php:35
+msgid "Comparison Tables"
+msgstr "比较表格"
+
+#: includes/I18nStrings.php:58
+msgid "confirm"
+msgstr "确认"
+
+#: includes/I18nStrings.php:20
+msgid "CSV - Comma-separated values"
+msgstr "CSV - 逗号分隔值"
+
+#: includes/NinjaTableImport.php:288
+msgid "CSV File is not valid"
+msgstr ""
+
+#: includes/I18nStrings.php:104
+msgid "CSV Header Structure"
+msgstr ""
+
+#: includes/I18nStrings.php:43
+msgid "Custom CSS"
+msgstr "自定义CSS"
+
+#: includes/I18nStrings.php:75
+msgid "Data Type"
+msgstr "数据类型"
+
+#: includes/I18nStrings.php:68
+msgid "Date Field"
+msgstr "日期字段"
+
+#: includes/I18nStrings.php:78
+msgid "Date Format"
+msgstr "日期格式"
+
+#: includes/I18nStrings.php:33
+msgid "Deactivate License"
+msgstr "停用许可证"
+
+#: includes/I18nStrings.php:19
+msgid "Delete"
+msgstr "删除"
+
+#: includes/I18nStrings.php:47
+msgid "Delete Entries"
+msgstr "删除记录"
+
+#: admin/table-builder/config/responsive.php:26
+#: admin/table-builder/config/responsive.php:73
+msgid "Disable Breakpoint"
+msgstr "禁用断点"
+
+#: includes/I18nStrings.php:39
+msgid "Documentation"
+msgstr "文档"
+
+#: includes/I18nStrings.php:37
+msgid "Documentation and Help"
+msgstr "文档与帮助"
+
+#: includes/I18nStrings.php:105
+msgid "Download Sample CSV"
+msgstr ""
+
+#: includes/I18nStrings.php:18
+msgid "Duplicate"
+msgstr "创建副本"
+
+#: includes/I18nStrings.php:16 admin/NinjaTablesAdmin.php:89
+#: public/views/frameless/show_ntb_preview.php:31
+#: public/views/frameless/show_preview.php:29
+msgid "Edit"
+msgstr "编辑"
+
+#: admin/NinjaTablesAdmin.php:90 public/views/table_builder_html.php:38
+#: includes/libs/TableDrivers/views/ninja_foo_table.php:44
+msgid "Edit Table"
+msgstr "编辑表格"
+
+#: admin/table-builder/config/templates.php:70
+msgid "Employee Table One"
+msgstr "员工表一"
+
+#: admin/table-builder/config/templates.php:82
+msgid "Employee Table Three"
+msgstr "员工表三"
+
+#: admin/table-builder/config/templates.php:76
+msgid "Employee Table Two"
+msgstr "员工表二"
+
+#: admin/table-builder/config/templates.php:66
+msgid "Employee Tables"
+msgstr "员工表"
+
+#: admin/table-builder/config/responsive.php:10
+msgid "Enable Responsive Table"
+msgstr "启用响应表"
+
+#: includes/I18nStrings.php:91
+msgid "Enable sorting of the table by the visitor"
+msgstr ""
+
+#: includes/I18nStrings.php:90
+msgid "Enable the visitor to filter or search the table."
+msgstr ""
+
+#: includes/I18nStrings.php:35
+msgid "Enter your license key"
+msgstr "输入您的许可证密钥"
+
+#: admin/table-builder/config/setting.php:83
+msgid "Even Row Background"
+msgstr "偶数行背景"
+
+#: includes/I18nStrings.php:100
+msgid "Export Table"
+msgstr ""
+
+#: includes/I18nStrings.php:82
+msgid "Extra Classes"
+msgstr ""
+
+#: includes/I18nStrings.php:95
+msgid "Extra CSS Class for the table"
+msgstr ""
+
+#: includes/I18nStrings.php:86
+msgid "Filterable"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:105
+msgid "First Column Sticky"
+msgstr "第一列置顶"
+
+#: admin/table-builder/config/setting.php:100
+msgid "First Row Sticky"
+msgstr "第一行置顶"
+
+#: admin/table-builder/config/setting.php:226
+msgid "Font Family"
+msgstr "字体集"
+
+#: admin/table-builder/config/setting.php:214
+msgid "Font Size"
+msgstr "字号"
+
+#: includes/I18nStrings.php:98
+msgid "Footer Colors"
+msgstr ""
+
+#: includes/I18nStrings.php:38
+msgid ""
+"For any type of query which was not covered in our documentation, Please "
+"submit a support ticket ticket"
+msgstr "对于我们文档中未涉及的任何类型的查询，请提交一份支持申请函"
+
+#: admin/table-builder/config/component.php:12
+#: admin/table-builder/config/responsive.php:5
+#: admin/table-builder/config/setting.php:5
+msgid "General"
+msgstr "常规设置"
+
+#: admin/table-builder/config/setting.php:195
+msgid "Global Style"
+msgstr "全局样式"
+
+#: admin/table-builder/config/responsive.php:61
+#: admin/table-builder/config/responsive.php:108
+msgid "Group Separator"
+msgstr "分组分隔符"
+
+#: admin/table-builder/config/setting.php:78
+msgid "Header Background"
+msgstr "表头（页眉）背景"
+
+#: includes/I18nStrings.php:87
+msgid "Header HTML Content"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:164
+msgid "Header Inner Border"
+msgstr "页眉内边框"
+
+#: includes/I18nStrings.php:9 admin/NinjaTablesAdmin.php:218
+msgid "Help"
+msgstr "帮助"
+
+#: includes/I18nStrings.php:7
+msgid "Home"
+msgstr "首页"
+
+#: admin/table-builder/config/component.php:117
+msgid "HTML"
+msgstr "HTML代码"
+
+#: includes/I18nStrings.php:66
+msgid "HTML Field"
+msgstr "HTML字段"
+
+#. Author URI of the plugin
+msgid "https://ninjatables.com/"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/"
+msgstr ""
+
+#: admin/table-builder/config/component.php:68
+msgid "Icon"
+msgstr "图标"
+
+#: admin/table-builder/config/component.php:140
+msgid "Image"
+msgstr "图片"
+
+#: includes/I18nStrings.php:23 admin/NinjaTablesAdmin.php:148
+msgid "Import"
+msgstr "导入"
+
+#: includes/I18nStrings.php:44
+msgid "Import - Export"
+msgstr "导入 - 导出"
+
+#: includes/I18nStrings.php:28
+msgid "Import Format:"
+msgstr "导入格式"
+
+#: includes/I18nStrings.php:103
+msgid "Import from CSV"
+msgstr ""
+
+#: includes/I18nStrings.php:12
+msgid "Import Table"
+msgstr "导入表"
+
+#: includes/I18nStrings.php:101
+msgid "Import Table Data"
+msgstr ""
+
+#: includes/I18nStrings.php:59
+msgid "Initial Hidden Mobile"
+msgstr "初始隐藏移动"
+
+#: includes/I18nStrings.php:60
+msgid "Initial Hidden Mobile and Tab"
+msgstr "初始隐藏移动和标签"
+
+#: includes/I18nStrings.php:61
+msgid "Initial Hidden Mobile, Tab and Regular Computers"
+msgstr "初始隐藏移动、标签和常规计算机"
+
+#: admin/table-builder/config/setting.php:169
+msgid "Inner Border Color"
+msgstr "内边框颜色"
+
+#: admin/table-builder/config/setting.php:174
+msgid "Inner Border Size"
+msgstr "内边框大小"
+
+#: admin/NinjaTablesAdmin.php:1188
+msgid "Insert Ninja Tables Shortcode"
+msgstr "插入Ninja Tables短代码"
+
+#: admin/NinjaTablesAdmin.php:1190
+msgid "Insert Shortcode"
+msgstr "插入短代码"
+
+#: admin/NinjaTablesAdmin.php:714
+msgid "Invalid Table to Delete"
+msgstr "要删除的表无效"
+
+#: admin/table-builder/config/responsive.php:53
+#: admin/table-builder/config/responsive.php:100
+msgid "Items Per Header"
+msgstr "每个表头的项目"
+
+#: includes/I18nStrings.php:22
+msgid "JSON - Exported From Ninja Tables"
+msgstr "JSON - 从Ninja Tables中导出"
+
+#: includes/I18nStrings.php:21
+msgid "JSON - JavaScript Object Notation"
+msgstr "JSON - JS对象简谱（JavaScript Object Notation的缩写）"
+
+#: includes/I18nStrings.php:25
+msgid "License"
+msgstr "授权许可"
+
+#: includes/I18nStrings.php:34
+msgid "Licensing"
+msgstr "授权许可"
+
+#: admin/table-builder/config/component.php:98
+msgid "List"
+msgstr "列表"
+
+#: admin/table-builder/config/setting.php:207
+msgid "Margin Bottom"
+msgstr "下边距"
+
+#: admin/table-builder/config/setting.php:200
+msgid "Margin Top"
+msgstr "上边距"
+
+#: includes/I18nStrings.php:83
+msgid "Max Width"
+msgstr ""
+
+#: includes/I18nStrings.php:84
+msgid "Maximum Width"
+msgstr ""
+
+#: admin/table-builder/config/responsive.php:17
+msgid "Mode Options"
+msgstr "模式选项"
+
+#: admin/NinjaTablesAdmin.php:91
+msgid "New Table"
+msgstr "新建表格"
+
+#. Name of the plugin
+#: includes/I18nStrings.php:6 admin/NinjaTablesAdmin.php:73
+#: admin/NinjaTablesAdmin.php:84 admin/NinjaTablesAdmin.php:86
+#: admin/NinjaTablesAdmin.php:124
+msgid "Ninja Tables"
+msgstr "Ninja Tables"
+
+#: includes/I18nStrings.php:26
+msgid ""
+"NinjaTables can import tables from existing data, like from a CSV or JSON "
+"file. You can also import existing tables from the other WordPress table "
+"plugins."
+msgstr ""
+"Ninja Tables可以从已存在的数据中导入表格，例如从CSV或JSON文件中导入。您也可以将其他WordPress表格插件中的数据导入进来。"
+
+#: includes/NinjaTableImport.php:29
+msgid "No appropriate driver found for the import format."
+msgstr "找不到适合的驱动程序去导入该格式"
+
+#: public/dataProviders/FluentFormProvider.php:121
+msgid "No fields were selected."
+msgstr ""
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:66
+#: includes/libs/TableDrivers/NinjaFooTable.php:339
+msgid "No Result Found"
+msgstr "未找到结果"
+
+#: admin/NinjaTablesAdmin.php:95
+msgid "No Table Found"
+msgstr "未找到表格"
+
+#: admin/NinjaTablesAdmin.php:96
+msgid "No Table Found in Trash"
+msgstr "回收站中未找到表格"
+
+#: includes/libs/Migrations/NinjaTablesSupsysticTableMigration.php:24
+msgid "No Table Found with the selected table"
+msgstr ""
+
+#: includes/libs/Migrations/NinjaTablesUltimateTableMigration.php:21
+msgid "No Ultimate Table Found with the selected table"
+msgstr ""
+
+#: includes/ninja_tables-global-functions.php:1054
+msgid "Nonce verification failed, please try again."
+msgstr "随机验证失败，请重试。"
+
+#: includes/I18nStrings.php:67
+msgid "Numeric Value"
+msgstr "数值"
+
+#: admin/table-builder/config/setting.php:88
+msgid "Odd Row Background"
+msgstr "奇数行背景"
+
+#: includes/I18nStrings.php:92
+msgid "Pagination Items Per Page"
+msgstr ""
+
+#: includes/I18nStrings.php:93
+msgid "Pagination Position"
+msgstr ""
+
+#: admin/NinjaTablesAdmin.php:97
+msgid "Parent Table"
+msgstr "父级表格"
+
+#: includes/I18nStrings.php:24
+msgid "Permission"
+msgstr "权限"
+
+#: includes/NinjaTableImport.php:299
+msgid "Please set table configuration first"
+msgstr "请先设定表格配置。"
+
+#: includes/NinjaTableImport.php:125
+msgid "Please upload valid CSV"
+msgstr ""
+
+#: admin/table-builder/ImportExport.php:33
+msgid "Please upload valid CSV or JSON"
+msgstr "请上传有效的CSV或JSON"
+
+#: includes/NinjaTableImport.php:313
+msgid "Please use the provided CSV header structure font face."
+msgstr "请使用已提供的CSV标题结构字体。"
+
+#: includes/I18nStrings.php:17
+msgid "Preview"
+msgstr "预览"
+
+#: public/views/frameless/show_ntb_preview.php:9
+#: public/views/frameless/show_preview.php:9
+msgid "Preview Table"
+msgstr ""
+
+#: admin/table-builder/config/templates.php:27
+msgid "Pricing Table Four"
+msgstr "价格表四"
+
+#: admin/table-builder/config/templates.php:9
+msgid "Pricing Table One"
+msgstr "价格表一"
+
+#: admin/table-builder/config/templates.php:21
+msgid "Pricing Table Three"
+msgstr "价格表三"
+
+#: admin/table-builder/config/templates.php:15
+msgid "Pricing Table Two"
+msgstr "价格表二"
+
+#: admin/table-builder/config/templates.php:5
+msgid "Pricing Tables"
+msgstr "价目表"
+
+#: admin/table-builder/config/component.php:215
+msgid "Progress"
+msgstr "进度"
+
+#: admin/table-builder/config/component.php:82
+msgid "Rating"
+msgstr "评分"
+
+#: includes/I18nStrings.php:102
+msgid "Replace Existing Data"
+msgstr ""
+
+#: includes/I18nStrings.php:76
+msgid "Responsive Breakpoint"
+msgstr "响应式断点"
+
+#: admin/table-builder/config/responsive.php:138
+msgid "Responsive Settings"
+msgstr "响应设置"
+
+#: admin/table-builder/config/component.php:184
+msgid "Ribbon"
+msgstr "功能区"
+
+#: includes/I18nStrings.php:94
+msgid "Row Details (Responsive drawer)"
+msgstr "行详细信息（响应式抽屉）"
+
+#: admin/table-builder/config/templates.php:95
+msgid "Schedule Table One"
+msgstr "调度表一"
+
+#: admin/table-builder/config/templates.php:107
+msgid "Schedule Table Three"
+msgstr "调度表三"
+
+#: admin/table-builder/config/templates.php:101
+msgid "Schedule Table Two"
+msgstr "调度表二"
+
+#: admin/table-builder/config/templates.php:91
+msgid "Schedule Tables"
+msgstr "调度表"
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:65
+#: includes/libs/TableDrivers/NinjaFooTable.php:337
+msgid "Search"
+msgstr "搜索"
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:64
+#: includes/libs/TableDrivers/NinjaFooTable.php:335
+msgid "Search in"
+msgstr "在以下位置搜索"
+
+#: admin/NinjaTablesAdmin.php:94
+msgid "Search Table"
+msgstr "搜索表格"
+
+#: includes/I18nStrings.php:80
+msgid "Select a Format"
+msgstr "选择格式"
+
+#: admin/NinjaTablesAdmin.php:1211
+msgid "Select a Table"
+msgstr "选择一个表格"
+
+#: admin/NinjaTablesAdmin.php:1187
+msgid "Select a Table to insert"
+msgstr "选择一个要插入的表单"
+
+#: includes/I18nStrings.php:45
+msgid "Select bulk action"
+msgstr "选择批量操作"
+
+#: includes/I18nStrings.php:69
+msgid "Select Field"
+msgstr "选择字段"
+
+#: includes/I18nStrings.php:27
+msgid "Select file:"
+msgstr "选择文件"
+
+#: includes/I18nStrings.php:81
+msgid "Select Items"
+msgstr "选择项目"
+
+#: includes/libs/TableDrivers/NinjaFooTable.php:68
+msgid "Selected"
+msgstr "已选择"
+
+#: admin/table-builder/config/setting.php:22
+msgid "Separate Columns/Rows"
+msgstr "分隔列/行"
+
+#: admin/NinjaTablesAdmin.php:1620 admin/NinjaTablesAdmin.php:1667
+#: admin/NinjaTablesAdmin.php:1700
+msgid "Settings successfully updated"
+msgstr ""
+
+#: includes/I18nStrings.php:15
+msgid "ShortCode"
+msgstr "短代码"
+
+#: admin/table-builder/config/component.php:128
+msgid "Shortcode"
+msgstr "短代码"
+
+#: includes/I18nStrings.php:89
+msgid "Show Table Description"
+msgstr ""
+
+#: includes/I18nStrings.php:88
+msgid "Show Table Title"
+msgstr ""
+
+#: includes/I18nStrings.php:64
+msgid "Single Line Text Field"
+msgstr "单行文本字段"
+
+#: includes/NinjaTableImport.php:142 admin/table-builder/ImportExport.php:55
+msgid "Something is wrong when parsing the csv"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:27
+msgid "Space Between Columns"
+msgstr "列间距"
+
+#: admin/table-builder/config/setting.php:34
+msgid "Space Between Rows"
+msgstr "行间距"
+
+#: includes/I18nStrings.php:79
+msgid "Standard"
+msgstr "标准模式"
+
+#: admin/table-builder/config/responsive.php:127
+msgid "Static Top Row"
+msgstr "静态顶行"
+
+#: admin/table-builder/config/setting.php:95
+msgid "Sticky"
+msgstr "置顶"
+
+#: admin/table-builder/config/component.php:163
+msgid "Stylist List"
+msgstr "样式列表"
+
+#: includes/NinjaTableImport.php:162 includes/NinjaTableImport.php:188
+#: includes/NinjaTableImport.php:255
+msgid "Successfully added a table."
+msgstr "已成功添加一个表格"
+
+#: admin/NinjaTablesAdmin.php:1041
+msgid "Successfully deleted data."
+msgstr "数据已删除成功。"
+
+#: admin/NinjaTablesAdmin.php:732
+msgid "Successfully deleted the table."
+msgstr "删除表格成功。"
+
+#: admin/NinjaTablesAdmin.php:1325
+msgid "Successfully duplicated table."
+msgstr "已成功复制表格。"
+
+#: includes/NinjaTableImport.php:77
+msgid ""
+"Successfully imported. Please go to all tables and review your newly "
+"imported table."
+msgstr "已成功导入。请转到所有表格并查看您新导入的表格。"
+
+#: admin/NinjaTablesAdmin.php:945
+msgid "Successfully saved the data."
+msgstr "数据已成功保存。"
+
+#: admin/NinjaTablesAdmin.php:688
+msgid "Successfully updated configuration."
+msgstr "已成功更新设置"
+
+#: includes/NinjaTableImport.php:353
+msgid "Successfully uploaded data."
+msgstr "数据已上传成功。"
+
+#: admin/NinjaTablesAdmin.php:85
+msgid "Table"
+msgstr "表格"
+
+#: admin/table-builder/config/responsive.php:154
+#: admin/table-builder/config/responsive.php:170
+#: admin/table-builder/config/setting.php:17
+msgid "Table Alignment"
+msgstr "表格对齐方式"
+
+#: includes/I18nStrings.php:97
+msgid "Table Body Colors"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:147
+msgid "Table Border"
+msgstr "表格边框"
+
+#: admin/table-builder/config/setting.php:57
+msgid "Table Cell Min Auto Width"
+msgstr "表格单元格最小自动宽度"
+
+#: includes/I18nStrings.php:41
+msgid "Table Configuration"
+msgstr "表格配置"
+
+#: admin/table-builder/config/setting.php:64
+msgid "Table Container Max Height"
+msgstr "表容器最大高度"
+
+#: admin/table-builder/config/setting.php:43
+#: admin/table-builder/config/setting.php:48
+msgid "Table Container Max Width"
+msgstr "表容器最大宽度"
+
+#: includes/I18nStrings.php:42
+msgid "Table Design"
+msgstr "表格设计"
+
+#: includes/I18nStrings.php:96
+msgid "Table Header Colors"
+msgstr ""
+
+#: admin/table-builder/config/setting.php:117
+msgid "Table Role"
+msgstr "表格职能"
+
+#: includes/I18nStrings.php:40
+msgid "Table Rows"
+msgstr "表格行"
+
+#: admin/NinjaTablesAdmin.php:140
+msgid "Tables"
+msgstr "表"
+
+#: includes/NinjaTableImport.php:266
+#: includes/libs/Migrations/NinjaTablesMigration.php:22
+msgid "Temporary table description"
+msgstr "临时表描述"
+
+#: includes/NinjaTableImport.php:265
+#: includes/libs/Migrations/NinjaTablesMigration.php:19
+msgid "Temporary table name"
+msgstr "临时表名称"
+
+#: admin/table-builder/NinjaTableBuilder.php:259
+#: admin/table-builder/config/component.php:16
+msgid "Text"
+msgstr "文本"
+
+#: includes/I18nStrings.php:85
+msgid "Text Align"
+msgstr ""
+
+#: includes/I18nStrings.php:65
+msgid "Text Area"
+msgstr "文本区"
+
+#: admin/table-builder/config/component.php:233
+msgid "Text Icon"
+msgstr "文本图标"
+
+#. Description of the plugin
+msgid ""
+"The Easiest & Fastest Responsive Table Plugin on WordPress. Multiple "
+"templates, drag-&-drop live table builder, multiple color scheme, and styles."
+msgstr "WordPress上最简单、响应最快的表格插件。丰富的模板、拖放式实时表格生成器、多种配色方案和样式。"
+
+#: admin/NinjaTablesAdmin.php:554
+msgid "The name field is required."
+msgstr "名字为必填字段"
+
+#: public/dataProviders/FluentFormProvider.php:114
+msgid "The title field is required."
+msgstr ""
+
+#: includes/I18nStrings.php:14
+msgid "Title"
+msgstr "标题"
+
+#: includes/I18nStrings.php:55
+msgid "to view the upgrade guide."
+msgstr "查看升级指南"
+
+#: includes/I18nStrings.php:8 admin/NinjaTablesAdmin.php:156
+msgid "Tools"
+msgstr "工具"
+
+#: admin/table-builder/config/responsive.php:47
+#: admin/table-builder/config/responsive.php:94
+#: admin/table-builder/config/responsive.php:120
+msgid "Top Row As Header"
+msgstr "顶行作为表头"
+
+#: includes/I18nStrings.php:63
+msgid "Totally hidden on all devices"
+msgstr "从全部设备上完全隐藏"
+
+#: includes/I18nStrings.php:77
+msgid "Update"
+msgstr "更新"
+
+#: includes/I18nStrings.php:70
+msgid "Update Configuration"
+msgstr "更新设置"
+
+#: includes/I18nStrings.php:52
+msgid "Upgrade Notice"
+msgstr "升级通知"
+
+#: admin/NinjaTablesAdmin.php:92 admin/NinjaTablesAdmin.php:93
+msgid "View Table"
+msgstr "查看表格"
+
+#. Author of the plugin
+msgid "WPManageNinja LLC"
+msgstr ""
+
+#: includes/NinjaTableImport.php:215
+msgid "You have a faulty JSON file. Please export a new one."
+msgstr "您有一个错误的JSON文件。请导出一个新的。"
+
+#: includes/I18nStrings.php:31
+msgid "Your License is Active"
+msgstr "您的许可证已激活。"
+
+#: includes/I18nStrings.php:32
+msgid "Your license is active! Enjoy Ninja Tables Pro Add On"
+msgstr "您的授权许可已激活！欢迎使用Ninja Tables Pro插件。"
+
+#: includes/I18nStrings.php:53
+msgid ""
+"Your Ninja Tables Pro plugin is outdated. Please upgrade to its latest "
+"version."
+msgstr "您的Ninja Tables Pro插件版本过低，请更新至最新版本。"

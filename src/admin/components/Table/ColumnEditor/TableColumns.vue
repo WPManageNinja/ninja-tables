@@ -1,0 +1,338 @@
+<template>
+    <div>
+        <div class="table-column-settings">
+            <el-container>
+                <el-aside width="200px">
+                    <el-menu background-color="#545c64"
+                             :default-active="active_menu"
+                             text-color="#fff"
+                             active-text-color="#ffd04b"
+                    >
+                        <el-menu-item  @click="active_menu = 'columns'" index="columns">
+                            <i class="dashicons dashicons-editor-table"></i>
+                            <span>Columns</span>
+                        </el-menu-item>
+
+                        <el-menu-item  @click="active_menu = 'rendering_settings'" index="rendering_settings">
+                            <i class="dashicons dashicons-album"></i>
+                            <span>Rendering Settings</span>
+                        </el-menu-item>
+
+                        <el-menu-item  @click="active_menu = 'custom_filters'" index="custom_filters">
+                            <i class="dashicons dashicons-filter"></i>
+                            <span>Custom Filters</span>
+                        </el-menu-item>
+
+                        <el-menu-item  @click="active_menu = 'button_settings'" index="button_settings">
+                            <i class="dashicons dashicons-images-alt"></i>
+                            <span>Buttons (CSV/Print)</span>
+                        </el-menu-item>
+
+                        <el-menu-item  @click="active_menu = 'language_settings'" index="language_settings">
+                            <i class="dashicons dashicons-translation"></i>
+                            <span>Language Settings</span>
+                        </el-menu-item>
+                    </el-menu>
+                </el-aside>
+                <el-main>
+                    <template v-if="active_menu == 'columns'">
+                        <div class="ninja_header">
+                            <h2>Table Column Settings</h2>
+                        </div>
+                        <div class="ninja_content">
+                            <div class="section_widget">
+                                <div class="heading">
+                                    <h3 v-if="addColumnStatus || !columns.length" class="title">{{ $t('Add Table Column') }}</h3>
+                                    <h3 v-else class="title">{{ $t('Available Columns') }}</h3>
+                                    <div v-show="!addColumnStatus" class="inline_action" v-if="addable">
+                                        <el-button size="small" type="primary" v-show="columns.length" @click="addColumnStatus = !addColumnStatus">
+                                            {{ $t('Add Column') }}
+                                        </el-button>
+                                    </div>
+                                </div>
+                                <div class="widget_body">
+                                    <div v-if="addColumnStatus || !columns.length" class="column">
+                                        <div class="add_column_wrapper">
+                                            <columns-editor
+                                                :columns="columns"
+                                                :dataSourceType="config.table.dataSourceType"
+                                                :model="new_column"
+                                                :settings="config.settings"
+                                                :has-pro="has_pro"
+                                                @add="addNewColumn()"
+                                                @cancel="addColumnStatus = !addColumnStatus"
+                                            />
+                                        </div>
+                                    </div>
+                                    <draggable @end="storeSettings" v-model="columns" handle=".handle" animation="150">
+                                        <div class="column drawer"
+                                             v-for="(column, index) in columns"
+                                             :key="column.key"
+                                        >
+                                            <div class="header">
+                                                <span class="dashicons dashicons-editor-justify handle" />
+                                                <span @click="openDrawer(index)">{{ column.name || column.key }}</span>
+                                                <span class="dashicons dashicons-edit edit_icon" @click="openDrawer(index)" />
+                                            </div>
+                                            <div class="drawer_body" :class="'drawer_body_'+index">
+                                                <columns-editor
+                                                    :columns="columns"
+                                                    :dataSourceType="config.table.dataSourceType"
+                                                    :model="column"
+                                                    :has-pro="has_pro"
+                                                    :settings="config.settings"
+                                                    :updating="true"
+                                                    @delete="deleteColumn(index)"
+                                                    @store="storeSettings()"
+                                                />
+                                            </div>
+                                        </div>
+                                    </draggable>
+                                </div>
+                            </div>
+                            <div class="proms">
+                                <div class="help_section">
+                                    <p>Need help to configure the columns and responsive breakdowns, Please check tutorial with
+                                        video <a
+                                                href="https://wpmanageninja.com/r/docs/ninja-tables/configure-responsive-breakdowns-for-table/?utm_source=ninja-tables"
+                                                target="_blank">here</a></p>
+                                </div>
+                                <div v-if="!is_fluent_installed" class="help_section">
+                                    <p>Have you checked out FluentForm yet? We have developed a powerful Drag & Drop WordPress Form
+                                        Builder plugin with some amazing Premium features <a :href="fluent_url">Download from
+                                            WordPress.org</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template v-else-if="active_menu == 'rendering_settings'">
+                        <ninja-rendering-settings
+                                @storeSettings="storeSettings"
+                                :tableSettings="tableSettings"
+                                :config="config"
+                        />
+                    </template>
+
+                    <template v-else-if="active_menu == 'language_settings'">
+                        <ninja-language-settings @storeSettings="storeSettings" :tableSettings="tableSettings"></ninja-language-settings>
+                    </template>
+
+                    <template v-else-if="active_menu == 'custom_filters'">
+                        <ninja-custom-filters :columns="columns" :table_id="tableId"></ninja-custom-filters>
+                    </template>
+
+                    <template v-else-if="active_menu = 'button_settings'">
+                        <ninja-button-settings :table_id="tableId" />
+                    </template>
+                </el-main>
+            </el-container>
+        </div>
+    </div>
+</template>
+<script type="text/babel">
+    import draggable from 'vuedraggable'
+    import findIndex from 'lodash/findIndex';
+    import get from 'lodash/get'
+    import size from 'lodash/size'
+    import snakeCase from 'lodash/snakeCase'
+    import ColumnsEditor from './ColumnsEditor';
+    import NinjaCustomFilters from '../TableFilters/CustomFilter';
+    import NinjaLanguageSettings from '../Configarations/_LanguageSettings'
+    import NinjaRenderingSettings from '../Configarations/_RenderingSettings'
+    import NinjaButtonSettings from '../Configarations/_buttons'
+
+    import { tableLibs } from '../../../data/data'
+
+    export default {
+        name: 'TableConfiguration',
+        components: {
+            draggable,
+            ColumnsEditor,
+            NinjaCustomFilters,
+            NinjaLanguageSettings,
+            NinjaRenderingSettings,
+            NinjaButtonSettings
+        },
+        props: ['config'],
+        data() {
+            return {
+                hasPro: !!window.ninja_table_admin.hasPro,
+                active_menu: 'columns',
+                table_color_primary: '#000',
+                table_color_secondary: '#fff',
+                tableId: this.$route.params.table_id,
+                tableLibs: tableLibs(),
+                doingAjax: false,
+                addColumnStatus: false,
+                new_column: false,
+                breakPointsOptions: {
+                    'xs': this.$t('Initial Hidden Mobile'),
+                    'xs sm': this.$t('Initial Hidden Mobile and Tab'),
+                    'xs sm md lg': this.$t('Initial Hidden Mobile, Tab and Regular Computers'),
+                    '': this.$t('Always show in all devices'),
+                    'hidden': this.$t('Totally hidden on all devices'),
+                },
+                dataTypesOptions: {
+                    'text': this.$t('Single Line Text Field'),
+                    'textarea': this.$t('Text Area'),
+                    'html': this.$t('HTML Field'),
+                    'number': this.$t('Numeric Value'),
+                    'date': this.$t('Date Field'),
+                    'selection': this.$t('Select Field')
+                },
+                attributeModel: {
+                    name: null,
+                    key: null,
+                    breakpoints: ''
+                },
+                columns: this.config.columns,
+                tableSettings: this.config.settings,
+                is_fluent_installed: window.ninja_table_admin.isInstalled,
+                fluent_url: window.ninja_table_admin.fluentform_url,
+                has_pro: !!window.ninja_table_admin.hasPro,
+                hasSortable: !!window.ninja_table_admin.hasSortable,
+                addVisible: false,
+                sortableUpgradeNotice: false
+            }
+        },
+        watch: {
+            'new_column.name': function () {
+                this.new_column.key = snakeCase(this.new_column.name)
+            },
+        },
+        methods: {
+            storeSettings() {
+                window.ninjaTableBus.$emit('tableDoingAjax', true);
+                this.doingAjax = true;
+                let data = {
+                    action: 'ninja_tables_ajax_actions',
+                    target_action: 'update-table-settings',
+                    table_id: this.tableId,
+                    columns: this.columns,
+                    table_settings: this.tableSettings
+                };
+                this.$post(data)
+                    .success((res) => {
+                        this.$message({
+                            showClose: true,
+                            message: res.message,
+                            type: 'success'
+                        });
+                        this.$set(this.config, 'columns', this.columns);
+                    })
+                    .fail((error) => {
+
+                    })
+                    .always(() => {
+                        this.doingAjax = false;
+                        window.ninjaTableBus.$emit('tableDoingAjax', false);
+                    });
+            },
+            openDrawer(index) {
+                jQuery('.drawer_body_' + index).slideToggle();
+            },
+            validateColumn(column) {
+                if (!column.name) {
+                    this.$message({
+                        showClose: true,
+                        message: this.$t('Name is required'),
+                        type: 'error'
+                    });
+                    return false;
+                }
+                if (!column.key) {
+                    this.$message({
+                        showClose: true,
+                        message: this.$t('Column Key is required'),
+                        type: 'error'
+                    });
+                    return false;
+                }
+                // check uniqueness
+                let uniqueStatus = findIndex(this.columns, (co) => {
+                    return co.key == column.key
+                });
+                if (uniqueStatus === -1) {
+                    return true;
+                }
+                this.$message({
+                    showClose: true,
+                    message: this.$t('Column Key needs to be unique. Please add a suffix / prefix to make it unique'),
+                    type: 'error'
+                });
+                return false;
+            },
+            addNewColumn() {
+                if (this.validateColumn(this.new_column)) {
+                    this.columns.push(this.new_column);
+                    this.setNewColumn();
+                    this.addColumnStatus = false;
+                    this.storeSettings();
+                }
+            },
+            deleteColumn(index) {
+                this.config.columns.splice(index, 1);
+                this.storeSettings();
+            },
+            showProAd(title) {
+                this.addVisible = true;
+                window.ninjaTableBus.$emit('show_pro_popup', 1);
+            },
+            size,
+            get,
+            initManualSorting() {
+                let promise = new Promise((resolve, reject) => {
+                    window.ninjaTableBus.$emit('initManualSorting', {
+                        table_id: this.tableId,
+                        noData: true
+                    }, resolve, reject);
+                })
+            },
+            headerColorsClick() {
+                if (!this.has_pro) {
+                    this.showProAd();
+                }
+            },
+            setNewColumn() {
+                let newColumn = {
+                    name: '',
+                    key: '',
+                    breakpoints: '',
+                    data_type: 'text',
+                    dateFormat: '',
+                    timeFormat: '',
+                    header_html_content: "",
+                    enable_html_content: false,
+                };
+                if(this.dataSourceType() === 'wp-posts') {
+                    newColumn.source_type = 'custom';
+                }
+                this.new_column = newColumn;
+            },
+            dataSourceType() {
+                let dataSource = this.config.table.dataSourceType || 'Default';
+                dataSource = dataSource.indexOf('google') > -1 ? 'Google SpreadSheet' : dataSource;
+                return dataSource;
+            }
+        },
+        computed: {
+            addable() {
+                return ['default', 'wp-posts'].indexOf(this.config.table.dataSourceType) != -1;
+            }
+        },
+        mounted() {
+            this.setNewColumn();
+        }
+    }
+</script>
+
+<style lang="scss">
+    .table-column-settings {
+        margin-top: 15px;
+
+        .el-menu {
+            border-right: initial;
+        }
+    }
+</style>

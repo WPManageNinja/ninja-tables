@@ -14,6 +14,8 @@ Domain Path: /language
 
 require __DIR__.'/vendor/autoload.php';
 
+define('NINJA_TABLES_DIR_URL', plugin_dir_url(__FILE__));
+
 call_user_func(function($bootstrap) {
     $bootstrap(__FILE__);
 }, require(__DIR__.'/boot/app.php'));
