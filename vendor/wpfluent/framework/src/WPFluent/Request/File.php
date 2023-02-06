@@ -583,7 +583,7 @@ class File extends \SplFileInfo implements Contract
         'application/x-texinfo'                                                     => 'texinfo',
         'application/x-tgif'                                                        => 'obj',
         'application/x-ustar'                                                       => 'ustar',
-        'application/x-wais-source'                                                 => 'src',
+        'application/x-wais-source'                                                 => 'resources',
         'application/x-x509-ca-cert'                                                => 'der',
         'application/x-xfig'                                                        => 'fig',
         'application/x-xliff+xml'                                                   => 'xlf',

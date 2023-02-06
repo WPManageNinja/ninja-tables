@@ -36,26 +36,26 @@ class AdminMenuHandler
 
         $slug = $config->get('app.slug');
 
-	    $baseUrl = apply_filters('fluent_connector_base_url', admin_url('admin.php?page=' . $slug . '#/'));
+        $baseUrl = apply_filters('fluent_connector_base_url', admin_url('admin.php?page=' . $slug . '#/'));
 
-	    $menuItems = [
-		    [
-			    'key'       => 'dashboard',
-			    'label'     => __('Dashboard', 'ninja-tables'),
-			    'permalink' => $baseUrl
-		    ]
-	    ];
+        $menuItems = [
+            [
+                'key'       => 'dashboard',
+                'label'     => __('Dashboard', 'ninja-tables'),
+                'permalink' => $baseUrl
+            ]
+        ];
 
-	    $app = App::getInstance();
-	    $assets = $app['url.assets'];
+        $app    = App::getInstance();
+        $assets = $app['url.assets'];
 
-	    App::make('view')->render('admin.menu', [
-		    'name'      => $name,
-		    'slug'      => $slug,
-		    'menuItems' => $menuItems,
-		    'baseUrl'   => $baseUrl,
-		    'logo'      => $assets . 'images/logo.svg',
-	    ]);
+        App::make('view')->render('admin.menu', [
+            'name'      => $name,
+            'slug'      => $slug,
+            'menuItems' => $menuItems,
+            'baseUrl'   => $baseUrl,
+            'logo'      => $assets . 'images/logo.svg',
+        ]);
     }
 
     public function enqueueAssets()
@@ -66,7 +66,7 @@ class AdminMenuHandler
 
     protected function getRestInfo($app)
     {
-        $ns = $app->config->get('app.rest_namespace');
+        $ns  = $app->config->get('app.rest_namespace');
         $ver = $app->config->get('app.rest_version');
 
         return [
@@ -81,7 +81,7 @@ class AdminMenuHandler
     protected function getMenuIcon()
     {
         return 'data:image/svg+xml;base64,'
-            . base64_encode('<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+               . base64_encode('<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
               viewBox="0 0 80 80" xml:space="preserve">
                   <g>
                      <g>
@@ -176,8 +176,8 @@ class AdminMenuHandler
 
         $fluentUrl = admin_url('plugin-install.php?s=FluentForm&tab=search&type=term');
 
-        $isInstalled = defined('FLUENTFORM') || defined('NINJATABLESPRO');
-        $dismissed = false;
+        $isInstalled   = defined('FLUENTFORM') || defined('NINJATABLESPRO');
+        $dismissed     = false;
         $dismissedTime = get_option('_ninja_tables_plugin_suggest_dismiss');
 
         if ($dismissedTime) {
@@ -191,18 +191,18 @@ class AdminMenuHandler
 
         $currentUser = wp_get_current_user();
 
-        $leadStatus = false;
-        $reviewOptinStatus = false;
-        $cptName = 'ninja-table';
-        $tableCount = wp_count_posts($cptName);
+        $leadStatus          = false;
+        $reviewOptinStatus   = false;
+        $cptName             = 'ninja-table';
+        $tableCount          = wp_count_posts($cptName);
         $totalPublishedTable = 0;
-        $publish = property_exists( $tableCount , "publish" ) ? $tableCount->publish : 0;
+        $publish             = property_exists($tableCount, "publish") ? $tableCount->publish : 0;
 
         if ($tableCount && $publish > 1) {
             $leadStatus = apply_filters('ninja_tables_show_lead', $leadStatus);
         }
 
-        if ($tableCount && $publish > 2 && !$leadStatus) {
+        if ($tableCount && $publish > 2 && ! $leadStatus) {
             $reviewOptinStatus = apply_filters('ninja_tables_show_review_optin', $reviewOptinStatus);
         }
 
@@ -210,7 +210,7 @@ class AdminMenuHandler
             $totalPublishedTable = $publish;
         }
 
-        $hasFluentFrom = defined('FLUENTFORM_VERSION');
+        $hasFluentFrom       = defined('FLUENTFORM_VERSION');
         $isFluentFromUpdated = false;
 
         // check for right version
@@ -235,12 +235,12 @@ class AdminMenuHandler
 
 
         wp_localize_script($slug . '_admin_app', 'ninja_table_admin', array(
-            'slug'  => $slug,
-            'nonce' => wp_create_nonce($slug),
-            'rest'  => $this->getRestInfo($app),
-            'brand_logo' => $this->getMenuIcon(),
-            'asset_url' => $assets,
-            'me'          => [
+            'slug'                     => $slug,
+            'nonce'                    => wp_create_nonce($slug),
+            'rest'                     => $this->getRestInfo($app),
+            'brand_logo'               => $this->getMenuIcon(),
+            'asset_url'                => $assets,
+            'me'                       => [
                 'id'        => $currentUser->ID,
                 'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
                 'email'     => $currentUser->user_email
@@ -281,7 +281,7 @@ class AdminMenuHandler
             'has_woocommerce'          => defined('WC_PLUGIN_FILE'),
             'license_status'           => get_option('_ninjatables_pro_license_status'),
             'ninja_charts_url'         => defined('NINJA_CHARTS_VERSION') ? self_admin_url('admin.php?page=ninja-charts#/chart-list') : null,
-           // 'ninja_table_admin_nonce'  => wp_create_nonce('ninja_table_admin_nonce'),
+            // 'ninja_table_admin_nonce'  => wp_create_nonce('ninja_table_admin_nonce'),
             'ninja_tables_pro_url'     => defined('NINJATABLESPRO') ? NINJAPROPLUGIN_URL : null
         ));
 
@@ -300,14 +300,16 @@ class AdminMenuHandler
             if (is_admin()) {
                 $skip = apply_filters('ninja_table_skip_no_confict', false);
 
-                if ($skip) return;
+                if ($skip) {
+                    return;
+                }
 
                 global $wp_scripts;
                 $pluginUrl = plugins_url();
                 foreach ($wp_scripts->queue as $script) {
                     $src = $wp_scripts->registered[$script]->src;
 
-                    if (strpos($src, $pluginUrl) !== false && !strpos($src, 'ninja-tables') !== false) {
+                    if (strpos($src, $pluginUrl) !== false && ! strpos($src, 'ninja-tables') !== false) {
                         wp_dequeue_script($wp_scripts->registered[$script]->handle);
                     }
                 }
@@ -336,6 +338,7 @@ class AdminMenuHandler
                 }
             }
         }
+
         return apply_filters('ninja_table_integrity', 'valid');
     }
 }

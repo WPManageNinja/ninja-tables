@@ -25,7 +25,7 @@ class ComposerScript
         }
 
         $itr = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
-            $vendorDir.'/wpfluent/framework/src/', RecursiveDirectoryIterator::SKIP_DOTS
+            $vendorDir.'/wpfluent/framework/resources/', RecursiveDirectoryIterator::SKIP_DOTS
         ), RecursiveIteratorIterator::SELF_FIRST);
 
         foreach ($itr as $file) {

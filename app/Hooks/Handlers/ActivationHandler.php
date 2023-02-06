@@ -14,7 +14,7 @@ class ActivationHandler
     {
         $this->app = $app;
     }
-    
+
     public function handle($network_wide = false)
     {
         DBMigrator::run($network_wide);
