@@ -9,12 +9,17 @@ class AdminMenuHandler
     public function add()
     {
         $capability = 'manage_options';
+        // Top-level page
+        $menuName = __('Ninja Tables', 'ninja-tables');
+        if (defined('NINJATABLESPRO')) {
+            $menuName .= ' Pro';
+        }
 
         add_menu_page(
-            __('Ninja Tables', 'ninjatables'),
-            __('Ninja Tables', 'ninjatables'),
+            $menuName,
+            $menuName,
             $capability,
-            'ninjatables',
+            'ninja_tables',
             [$this, 'render'],
             $this->getMenuIcon(),
             6
@@ -36,7 +41,7 @@ class AdminMenuHandler
 	    $menuItems = [
 		    [
 			    'key'       => 'dashboard',
-			    'label'     => __('Dashboard', 'ninjatables'),
+			    'label'     => __('Dashboard', 'ninja-tables'),
 			    'permalink' => $baseUrl
 		    ]
 	    ];
@@ -188,17 +193,21 @@ class AdminMenuHandler
 
         $leadStatus = false;
         $reviewOptinStatus = false;
-        $tableCount = wp_count_posts($this->cpt_name);
+        $cptName = 'ninja-table';
+        $tableCount = wp_count_posts($cptName);
         $totalPublishedTable = 0;
-        if ($tableCount && $tableCount->publish > 1) {
+        $publish = property_exists( $tableCount , "publish" ) ? $tableCount->publish : 0;
+
+        if ($tableCount && $publish > 1) {
             $leadStatus = apply_filters('ninja_tables_show_lead', $leadStatus);
         }
-        if ($tableCount->publish > 2 && !$leadStatus) {
+
+        if ($tableCount && $publish > 2 && !$leadStatus) {
             $reviewOptinStatus = apply_filters('ninja_tables_show_review_optin', $reviewOptinStatus);
         }
 
-        if ($tableCount && $tableCount->publish > 0) {
-            $totalPublishedTable = $tableCount->publish;
+        if ($tableCount && $publish > 0) {
+            $totalPublishedTable = $publish;
         }
 
         $hasFluentFrom = defined('FLUENTFORM_VERSION');
