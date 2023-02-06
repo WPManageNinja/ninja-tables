@@ -19,5 +19,5 @@ $app->addAction('admin_menu', 'AdminMenuHandler@add');
  * Enable this line if you want to use custom post types
  */
 
-// $app->addAction('init', 'CPTHandler@registerPostTypes');
+ $app->addAction('init', 'CPTHandler@registerPostTypes');
 

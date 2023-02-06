@@ -38,6 +38,7 @@ class ComposerStaticInite2cc3f91f264b6c9d64346c5247abaa6
         'NinjaTables\\Database\\DBMigrator' => __DIR__ . '/../..' . '/database/DBMigrator.php',
         'NinjaTables\\Database\\DBSeeder' => __DIR__ . '/../..' . '/database/DBSeeder.php',
         'NinjaTables\\Database\\Migrations\\ExampleMigrator' => __DIR__ . '/../..' . '/database/Migrations/ExampleMigrator.php',
+        'NinjaTables\\Database\\Migrations\\NinjaTableItemsMigrator' => __DIR__ . '/../..' . '/database/Migrations/NinjaTableItemsMigrator.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

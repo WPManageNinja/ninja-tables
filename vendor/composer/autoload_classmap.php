@@ -10,4 +10,5 @@ return array(
     'NinjaTables\\Database\\DBMigrator' => $baseDir . '/database/DBMigrator.php',
     'NinjaTables\\Database\\DBSeeder' => $baseDir . '/database/DBSeeder.php',
     'NinjaTables\\Database\\Migrations\\ExampleMigrator' => $baseDir . '/database/Migrations/ExampleMigrator.php',
+    'NinjaTables\\Database\\Migrations\\NinjaTableItemsMigrator' => $baseDir . '/database/Migrations/NinjaTableItemsMigrator.php',
 );

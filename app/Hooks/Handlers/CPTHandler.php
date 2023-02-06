@@ -3,6 +3,7 @@
 namespace NinjaTables\App\Hooks\Handlers;
 
 use NinjaTables\App\App;
+use NinjaTables\App\CPT\NinjaTable;
 
 class CPTHandler
 {
@@ -12,7 +13,7 @@ class CPTHandler
 	*/
 
 	protected $customPostTypes = [
-		// ExampleCPT::class
+		NinjaTable::class
 	];
 
 	public function registerPostTypes()
