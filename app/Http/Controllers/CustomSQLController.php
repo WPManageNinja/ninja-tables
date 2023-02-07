@@ -4,12 +4,13 @@ namespace NinjaTables\App\Http\Controllers;
 
 use NinjaTables\Framework\Request\Request;
 
-class WelcomeController extends Controller
+class CustomSQLController extends Controller
 {
     public function index(Request $request)
     {
         return [
-            'message' => 'Welcome to WPFluent.'
+            'message' => 'Custom SQL Controller'
         ];
     }
+
 }
