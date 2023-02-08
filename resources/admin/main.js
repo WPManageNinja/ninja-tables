@@ -31,6 +31,9 @@ window.NINJATABLE.Vue.mixin({
         doAction: window.NINJATABLE.doAction,
         $get: window.NINJATABLE.$get,
         $post: window.NINJATABLE.$post,
+        $del: window.NINJATABLE.$del,
+        $put: window.NINJATABLE.$put,
+        $patch: window.NINJATABLE.$patch,
         $getJSON: window.NINJATABLE.$getJSON,
         clipboard() {
             if (!window.clipboard) {

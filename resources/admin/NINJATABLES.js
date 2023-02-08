@@ -1,5 +1,6 @@
 import Vue from './elements';
 import Router from 'vue-router';
+import Rest from "./Bits/Rest";
 Vue.use(Router);
 
 import { applyFilters, addFilter, addAction, doAction } from '@wordpress/hooks';
@@ -53,18 +54,28 @@ export default class NINJATABLE {
         });
     }
 
-    $get(options) {
-        options['ninja_table_admin_nonce'] = window.ninja_table_admin.ninja_table_admin_nonce;
-        return window.jQuery.get(window.ajaxurl, options);
-    }
-
-    $post(options) {
-        options['ninja_table_admin_nonce'] = window.ninja_table_admin.ninja_table_admin_nonce;
-        return window.jQuery.post(window.ajaxurl, options);
-    }
-
     $getJSON(options) {
-        options['ninja_table_admin_nonce'] = window.ninja_table_admin.ninja_table_admin_nonce;
+        options['nonce'] = window.ninja_table_admin.rest.nonce;
         return window.jQuery.getJSON(window.ajaxurl, options);
+    }
+
+    $get(url, options = {}) {
+        return Rest.get(url, options);
+    }
+
+    $post(url, options = {}) {
+        return Rest.post(url, options);
+    }
+
+    $del(url, options = {}) {
+        return Rest.delete(url, options);
+    }
+
+    $put(url, options = {}) {
+        return Rest.put(url, options);
+    }
+
+    $patch(url, options = {}) {
+        return Rest.patch(url, options);
     }
 }
