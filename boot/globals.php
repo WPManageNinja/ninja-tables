@@ -25,3 +25,5 @@ if (!function_exists('dd')) {
         die();
     }
 }
+
+include_once __DIR__ . '/ninja-tables-global-function.php';
