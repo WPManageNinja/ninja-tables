@@ -226,49 +226,40 @@
                 });
             },
             deleteTable(tableId) {
-                let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'delete-a-table',
-                    table_id: tableId
-                };
-
-                this.$post(data)
-                    .then((response) => {
-                        this.fetchTables();
-                        this.$message({
-                            type: 'success',
-                            message: response.message
-                        });
-                    })
-                    .fail((error) => {
-                        alert(error.responseJSON.data.message);
+              this.$del('table/'+tableId)
+                  .then(response => {
+                    this.fetchTables();
+                    this.$message({
+                      type: 'success',
+                      message: response.message
                     });
+                  })
+                  .catch(error => {
+                    alert(error.responseJSON.data.message);
+                  });
             },
             handleSelectionChange(tables) {
                 this.$emit('selection', tables.map(table => table.ID));
             },
             duplicate(tableId, source = '') {
-                let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'duplicate-table',
-                    tableId: tableId
-                };
 
-                this.$post(data)
-                    .then((response) => {
-                        this.$message({
-                            type: 'success',
-                            message: response.data.message
-                        });
-                      if (source === 'drag_and_drop') {
-                        this.$router.push({ name: 'table_builder_edit_table', params: { table_id: response.data.table_id } });
-                      } else {
-                        this.$router.push({ name: 'data_items', params: { table_id: response.data.table_id } });
-                      }
-                    })
-                    .fail((error) => {
-                        alert(error.responseJSON.data.message);
+              this.$post("duplicate/"+tableId)
+                  .then(response => {
+                    this.fetchTables();
+                    this.$message({
+                      type: 'success',
+                      message: response.data.message
                     });
+                    if (source === 'drag_and_drop') {
+                      this.$router.push({ name: 'table_builder_edit_table', params: { table_id: response.data.table_id } });
+                    } else {
+                      this.$router.push({ name: 'data_items', params: { table_id: response.data.table_id } });
+                    }
+                  })
+                  .catch(error => {
+                    alert(error.responseJSON.data.message);
+                  });
+
             },
             shouldBeVisible(table) {
                 if(table.dataSourceType == 'fluent-form') {

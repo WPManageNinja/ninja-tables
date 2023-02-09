@@ -5,6 +5,8 @@
  */
 
 $router->get('all-tables', 'TablesController@index');
+$router->delete('table/{id}', 'TablesController@deleteTable');
+$router->post('duplicate/{id}', 'TablesController@duplicateTable');
 
 $router->prefix('default')->group(function ($app) {
     $app->get('/', 'DefaultController@index');
