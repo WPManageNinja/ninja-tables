@@ -4,12 +4,14 @@
  * @var $router NinjaTables\Framework\Http\Router\Router
  */
 
+$router->get('all-tables', 'TablesController@index');
+
 $router->prefix('default')->group(function ($app) {
     $app->get('/', 'DefaultController@index');
     $app->post('/', 'DefaultController@store');
-    $app->get('show/{id}', 'DefaultController@show')->int('id');
-    $app->put('update/{id}', 'DefaultController@update')->int('id');
-    $app->delete('remove/{id}', 'DefaultController@destroy')->int('id');
+    $app->get('/{id}', 'DefaultController@show')->int('id');
+    $app->put('/{id}', 'DefaultController@update')->int('id');
+    $app->delete('/{id}', 'DefaultController@destroy')->int('id');
 });
 
 $router->prefix('table-builder')->group(function ($app) {

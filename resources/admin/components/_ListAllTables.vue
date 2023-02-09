@@ -180,29 +180,26 @@
         methods: {
             fetchTables() {
                 this.pageLoading = true;
-                let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'get-all-tables',
-                    per_page: this.paginate.per_page,
-                    page: this.paginate.current_page,
-                    search: this.searchString,
-                    orderBy: this.orderBy,
-                    order: this.order
-                };
 
-                this.$get(data)
-                    .done((response) => {
-                        this.items = response.data;
-                        this.paginate.total = response.total;
-                        this.paginate.current_page = response.current_page;
-                        this.paginate.last_page = response.last_page;
-                        this.pageLoading = false;
-                        if(response.total) {
-                            this.$emit('total_table', response.total);
-                        }
+                this.$get('all-tables', {
+                      per_page: this.paginate.per_page,
+                      page: this.paginate.current_page,
+                      search: this.searchString,
+                      orderBy: this.orderBy,
+                      order: this.order
+                })
+                    .then(response => {
+                      this.items = response.data;
+                      this.paginate.total = response.total;
+                      this.paginate.current_page = response.current_page;
+                      this.paginate.last_page = response.last_page;
+                      this.pageLoading = false;
+                      if(response.total) {
+                        this.$emit('total_table', response.total);
+                      }
                     })
-                    .fail((error) => {
-                        vueNotification.error('Something went wrong, please try again.');
+                    .catch(error => {
+                      vueNotification.error('Something went wrong, please try again.');
                     });
             },
             goToPage(value) {

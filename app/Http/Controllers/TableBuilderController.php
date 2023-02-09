@@ -9,7 +9,7 @@ class TableBuilderController extends Controller
     public function index(Request $request)
     {
         return [
-            'message' => 'Default Table Controller'
+            'message' => 'Table Builder Controller'
         ];
     }
 }

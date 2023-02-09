@@ -238,46 +238,43 @@
                 }, 0);
             },
             addTable: function () {
-                this.btnLoading = true;
-                let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'store-a-table',
-                    post_title: this.table.post_title,
-                    post_content: this.table.post_content,
-                    tableId: this.table.ID
-                };
-                this.$post(data)
-                    .then((response) => {
+              this.btnLoading = true;
+
+              this.$post("default", {
+                post_title: this.table.post_title,
+                post_content: this.table.post_content,
+                tableId: this.table.ID
+              })
+                  .then(response => {
+                      this.$message({
+                        showClose: true,
+                        message: response.message,
+                        type: 'success'
+                      });
+                      window.ninjaTableBus.$emit('addedTable');
+                      if (this.table.ID) {
+                        this.closeModal();
+                      } else {
+                        this.fireTableCreated(response.table_id);
+                      }
+                      this.btnLoading = false;
+                  })
+                  .catch(error => {
+                      if (error.responseJSON.data.message) {
                         this.$message({
-                            showClose: true,
-                            message: response.message,
-                            type: 'success'
+                          showClose: true,
+                          message: error.responseJSON.data.message,
+                          type: 'error'
                         });
-                        window.ninjaTableBus.$emit('addedTable');
-                        if (this.table.ID) {
-                            this.closeModal();
-                        } else {
-                            this.fireTableCreated(response.table_id);
-                        }
-                    })
-                    .fail((error) => {
-                        if (error.responseJSON.data.message) {
-                            this.$message({
-                                showClose: true,
-                                message: error.responseJSON.data.message,
-                                type: 'error'
-                            });
-                        } else {
-                            this.$message({
-                                showClose: true,
-                                message: error.responseText,
-                                type: 'error'
-                            });
-                        }
-                    })
-                    .always(() => {
-                        this.btnLoading = false;
-                    });
+                      } else {
+                        this.$message({
+                          showClose: true,
+                          message: error.responseText,
+                          type: 'error'
+                        });
+                      }
+                      this.btnLoading = false;
+                  });
             },
             closeModal() {
                 this.$emit('modal_close');
