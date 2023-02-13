@@ -236,7 +236,7 @@
             addTable: function () {
               this.btnLoading = true;
 
-              this.$post("default", {
+              this.$post("tables", {
                 post_title: this.table.post_title,
                 post_content: this.table.post_content,
                 tableId: this.table.ID

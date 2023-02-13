@@ -4,9 +4,10 @@ namespace NinjaTables\App\Models;
 
 use NinjaTables\Framework\Foundation\App;
 
-class TableModel extends Model
+class NinjaTable extends Model
 {
     private static $cptName = 'ninja-table';
+    protected $table = 'posts';
 
     public static function getTables($perPage, $currentPage, $tables)
     {
@@ -29,7 +30,7 @@ class TableModel extends Model
             }
         }
 
-        $total    = wp_count_posts('ninja-table');
+        $total    = wp_count_posts(self::$cptName);
         $total    = intval($total->publish);
         $lastPage = ceil($total / $perPage);
 
@@ -51,12 +52,24 @@ class TableModel extends Model
         delete_post_meta($tableId, '_ninja_table_cache_object');
     }
 
-    protected function makeDuplicate($tableId, $newTableId)
+    protected function makeDuplicate($oldPostId, $newPostId)
     {
-        $tableColumns  = get_post_meta($tableId, '_ninja_table_columns', true);
-        $tableSettings = get_post_meta($tableId, '_ninja_table_settings', true);
+        global $wpdb;
 
-        update_post_meta($newTableId, '_ninja_table_columns', $tableColumns);
-        update_post_meta($newTableId, '_ninja_table_settings', $tableSettings);
+        // Duplicate table settings.
+        $postMetas = get_post_meta($oldPostId);
+
+        foreach ($postMetas as $metaKey => $metaValue) {
+            update_post_meta($newPostId, $metaKey, maybe_unserialize($metaValue[0]));
+        }
+
+        // Duplicate table rows.
+        $itemsTable = $wpdb->prefix . ninja_tables_db_table_name();
+
+        $sql = "INSERT INTO $itemsTable (`position`, `table_id`, `owner_id`, `settings`, `attribute`, `value`, `created_at`, `updated_at`)";
+        $sql .= " SELECT `position`, $newPostId, `owner_id`, `settings`, `attribute`, `value`, `created_at`, `updated_at` FROM $itemsTable";
+        $sql .= " WHERE `table_id` = $oldPostId";
+
+        $wpdb->query($sql);
     }
 }

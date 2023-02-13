@@ -2,7 +2,8 @@
 
 namespace NinjaTables\App\Http\Controllers;
 
-use NinjaTables\App\Models\TableModel;
+use NinjaTables\App\Models\NinjaTable;
+use NinjaTables\Database\Migrations\NinjaTableItemsMigrator;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Sanitizer;
 
@@ -21,20 +22,20 @@ class TablesController extends Controller
         $args = array(
             'posts_per_page' => $perPage,
             'offset'         => $skip,
-            'orderby'        => sanitize_text_field($request->orderBy),
-            'order'          => sanitize_text_field($request->order),
-            'post_type'      => 'ninja-table',   //cpt name
+            'orderby'        => Sanitizer::sanitizeTextField($request->orderBy),
+            'order'          => Sanitizer::sanitizeTextField($request->order),
+            'post_type'      => $this->cptName,
             'post_status'    => 'any',
         );
 
         if (isset($request->search) && $request->search) {
-            $args['s'] = sanitize_text_field($request->search);
+            $args['s'] = Sanitizer::sanitizeTextField($request->search);
         }
 
         try {
             $tables    = get_posts($args);
             $tables    = $this->app->applyFilters('ninja_tables_get_all_tables', $tables);
-            $tablesRes = TableModel::getTables($perPage, $currentPage, $tables);
+            $tablesRes = NinjaTable::getTables($perPage, $currentPage, $tables);
             $this->json($tablesRes, 200);
         } catch (\Exception $e) {
             $this->json(array(
@@ -43,8 +44,48 @@ class TablesController extends Controller
         }
     }
 
+    public function store(Request $request)
+    {
+        if ( ! Sanitizer::sanitizeTextField($request->post_title)) {
+            $this->sendError(array(
+                'message' => __('The name field is required.', 'ninja-tables')
+            ), 423);
+        }
 
-    public function deleteTable(Request $request, $id)
+        $postId = intval($request->tableId);
+
+        if (isset($request->table_caption)) {
+            update_post_meta($postId, '_ninja_table_caption', Sanitizer::sanitizeTextField($request->table_caption));
+        }
+
+        $attributes = array(
+            'post_title'   => sanitize_text_field($request->post_title),
+            'post_content' => wp_kses_post($request->post_content),
+            'post_type'    => $this->cptName,
+            'post_status'  => 'publish'
+        );
+
+        $this->json(array(
+            'table_id' => $this->saveTable($attributes, $postId),
+            'message'  => __('Table ' . ($postId ? 'updated' : 'created') . ' successfully.', 'ninja-tables')
+        ), 200);
+    }
+
+    protected function saveTable($attributes, $postId = null)
+    {
+        if ( ! $postId) {
+            $postId = wp_insert_post($attributes);
+        } else {
+            $attributes['ID'] = $postId;
+            wp_update_post($attributes);
+        }
+        update_post_meta($postId, '_last_edited_by', get_current_user_id());
+        update_post_meta($postId, '_last_edited_time', date('Y-m-d H:i:s'));
+
+        return $postId;
+    }
+
+    public function delete(Request $request, $id)
     {
         $tableId = intval($id);
 
@@ -63,7 +104,7 @@ class TablesController extends Controller
         }
 
         try {
-            TableModel::destroyTable($tableId);
+            NinjaTable::destroyTable($tableId);
 
             $this->json(array(
                 'message' => __('Table deleted successfully.', 'ninja-tables')
@@ -75,36 +116,36 @@ class TablesController extends Controller
         }
     }
 
-    public function duplicateTable(Request $request, $id)
+    public function duplicate(Request $request, $id)
     {
-        $tableId = intval($id);
+        $oldPostId = intval($id);
 
-        $table = get_post($tableId);
-
-        if ( ! $table) {
+        if ( ! $oldPostId) {
             $this->json(array(
                 'message' => __('Table not found.', 'ninja-tables')
             ), 404);
         }
 
-        $newTableId = wp_insert_post(array(
-            'post_title'   => $table->post_title . '( Duplicate )',
-            'post_content' => $table->post_content,
-            'post_status'  => 'publish',
-            'post_type'    => $this->cptName,
-        ));
+        NinjaTableItemsMigrator::checkDBMigrations();
 
-        if ( ! $newTableId) {
-            $this->json(array(
-                'message' => __('Something went wrong while duplicating the table.', 'ninja-tables')
-            ), 500);
-        }
+        $post = get_post($oldPostId);
+
+        // Duplicate table itself.
+        $attributes = array(
+            'post_title'   => $post->post_title . '( Duplicate )',
+            'post_content' => $post->post_content,
+            'post_type'    => $post->post_type,
+            'post_status'  => 'publish'
+        );
+
+        $newPostId = wp_insert_post($attributes);
 
         try {
-            TableModel::makeDuplicate($tableId, $newTableId);
+            NinjaTable::makeDuplicate($oldPostId, $newPostId);
 
             $this->json(array(
-                'message' => __('Table duplicated successfully.', 'ninja-tables')
+                'message'  => __('Table duplicated successfully.', 'ninja-tables'),
+                'table_id' => $newPostId
             ), 200);
         } catch (\Exception $e) {
             $this->json(array(

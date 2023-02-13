@@ -3,7 +3,7 @@
 namespace NinjaTables\App\Models;
 
 
-class TableItemsModel extends Model
+class NinjaTableItems extends Model
 {
     protected $table = 'ninja_table_items';
 }

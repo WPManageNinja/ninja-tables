@@ -5,13 +5,12 @@
  */
 
 // common routes for common operations for every type of table
-$router->prefix('table')->group(function ($app) {
-    $app->get('/all', 'TablesController@index');
-    $app->delete('/{id}', 'TablesController@deleteTable')->int('id');
-    $app->post('/{id}/duplicate', 'TablesController@duplicateTable')->int('id');
+$router->prefix('tables')->group(function ($app) {
+    $app->get('/', 'TablesController@index');
+    $app->post('/', 'TablesController@store');
+    $app->delete('/{id}', 'TablesController@delete')->int('id');
+    $app->post('/{id}/duplicate', 'TablesController@duplicate')->int('id');
 });
-
-$router->post('default', 'DefaultController@store');
 
 $router->prefix('table-builder')->group(function ($app) {
     $app->get('/', 'TableBuilderController@index');
@@ -19,8 +18,6 @@ $router->prefix('table-builder')->group(function ($app) {
     $app->put('/{id}', 'TableBuilderController@update')->int('id');
     $app->get('/{id}', 'TableBuilderController@show')->int('id');
 });
-
-$router->get('table-builder', 'TableBuilderController@index');
 
 $router->get('fluent-forms', 'FluentFormsController@index');
 
