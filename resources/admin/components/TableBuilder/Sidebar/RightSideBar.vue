@@ -254,13 +254,9 @@ export default {
           } else {
             this.initialData.table_data.table_type = type;
           }
-          let data = {
-            action: "ninja_tables_builder_ajax_actions",
-            target_action: "create-table",
+          this.$post('table-builder', {
             data: this.initialData,
-          };
-          this.$post(data)
-              .then((response) => {
+          }).then(response => {
                 this.$message({
                   showClose: true,
                   message: this.$t("Table created successfully."),
@@ -271,7 +267,7 @@ export default {
                   params: {table_id: response.data.id},
                 });
               })
-              .fail((error) => {
+              .catch((error) => {
                 this.failedMessage();
               });
         } else {

@@ -11,8 +11,14 @@ $router->prefix('table')->group(function ($app) {
     $app->post('/{id}/duplicate', 'TablesController@duplicateTable')->int('id');
 });
 
-// different routes for different create/import methods
 $router->post('default', 'DefaultController@store');
+
+$router->prefix('table-builder')->group(function ($app) {
+    $app->get('/', 'TableBuilderController@index');
+    $app->post('/', 'TableBuilderController@store');
+    $app->put('/{id}', 'TableBuilderController@update')->int('id');
+    $app->get('/{id}', 'TableBuilderController@show')->int('id');
+});
 
 $router->get('table-builder', 'TableBuilderController@index');
 

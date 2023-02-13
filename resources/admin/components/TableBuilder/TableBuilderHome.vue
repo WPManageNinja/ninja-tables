@@ -57,16 +57,13 @@ export default {
       this.singleItem = singleItem
     },
     addOrEditTable() {
-      let data = {
-        action: "ninja_tables_builder_ajax_actions",
-        target_action: "edit-table-by-id",
+      this.$get(`table-builder/${this.$route.params.table_id}` , {
         id: this.$route.params.table_id,
-      };
-      this.$get(data)
-          .done(response => {
+      })
+          .then(response => {
             this.initialData = response.data;
           })
-          .fail(error => {
+          .catch(error => {
             this.$message({
               showClose: true,
               message: this.$t('Something went wrong, please try again.'),

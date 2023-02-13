@@ -216,15 +216,11 @@
         },
         methods: {
             createDragAndDropTable() {
-              let data = {
-                action: "ninja_tables_builder_ajax_actions",
-                target_action: "get-table-config"
-              };
-              this.$get(data)
-                  .done(response => {
-                    this.initialData = response.data
+              this.$get("table-builder")
+                  .then(response => {
+                    this.initialData = response
                   })
-                  .fail(error => {
+                  .catch(error => {
                     this.$message({
                       showClose: true,
                       message: this.$t('Something went wrong, please try again.'),
