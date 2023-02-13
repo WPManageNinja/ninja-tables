@@ -4,46 +4,28 @@
  * @var $router NinjaTables\Framework\Http\Router\Router
  */
 
-$router->get('all-tables', 'TablesController@index');
-$router->delete('table/{id}', 'TablesController@deleteTable');
-$router->post('duplicate/{id}', 'TablesController@duplicateTable');
-
-$router->prefix('default')->group(function ($app) {
-    $app->get('/', 'DefaultController@index');
-    $app->post('/', 'DefaultController@store');
-    $app->get('/{id}', 'DefaultController@show')->int('id');
-    $app->put('/{id}', 'DefaultController@update')->int('id');
-    $app->delete('/{id}', 'DefaultController@destroy')->int('id');
+// common routes for common operations for every type of table
+$router->prefix('table')->group(function ($app) {
+    $app->get('/all', 'TablesController@index');
+    $app->delete('/{id}', 'TablesController@deleteTable')->int('id');
+    $app->post('/{id}/duplicate', 'TablesController@duplicateTable')->int('id');
 });
 
-$router->prefix('table-builder')->group(function ($app) {
-    $app->get('/', 'TableBuilderController@index');
-});
+// different routes for different create/import methods
+$router->post('default', 'DefaultController@store');
 
-$router->prefix('fluent-forms')->group(function ($app) {
-    $app->get('/', 'FluentFormsController@index');
-});
+$router->get('table-builder', 'TableBuilderController@index');
 
-$router->prefix('wp-posts')->group(function ($app) {
-    $app->get('/', 'WPPostsController@index');
-});
+$router->get('fluent-forms', 'FluentFormsController@index');
 
-$router->prefix('google-sheets')->group(function ($app) {
-    $app->get('/', 'GoogleSheetsController@index');
-});
+$router->get('wp-posts', 'WPPostsController@index');
 
-$router->prefix('csv')->group(function ($app) {
-    $app->get('/', 'ExternalCSVController@index');
-});
+$router->get('google-sheets', 'GoogleSheetsController@index');
 
-$router->prefix('sql')->group(function ($app) {
-    $app->get('/', 'CustomSQLController@index');
-});
+$router->get('csv', 'ExternalCSVController@index');
 
-$router->prefix('import')->group(function ($app) {
-    $app->get('/', 'ImportController@index');
-});
+$router->get('custom-sql', 'CustomSQLController@index');
 
-$router->prefix('woo')->group(function ($app) {
-    $app->get('/', 'WooCommerceController@index');
-});
+$router->get('import', 'ImportController@index');
+
+$router->get('woo', 'WooCommerceController@index');

@@ -181,7 +181,7 @@
             fetchTables() {
                 this.pageLoading = true;
 
-                this.$get('all-tables', {
+                this.$get('table/all', {
                       per_page: this.paginate.per_page,
                       page: this.paginate.current_page,
                       search: this.searchString,
@@ -226,7 +226,7 @@
                 });
             },
             deleteTable(tableId) {
-              this.$del('table/'+tableId)
+              this.$del("table/"+tableId)
                   .then(response => {
                     this.fetchTables();
                     this.$message({
@@ -243,7 +243,7 @@
             },
             duplicate(tableId, source = '') {
 
-              this.$post("duplicate/"+tableId)
+              this.$post("table/"+tableId+"/duplicate")
                   .then(response => {
                     this.fetchTables();
                     this.$message({

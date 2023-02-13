@@ -104,6 +104,7 @@
                     });
             },
             getSettings() {
+              console.log('getSettings');
                 this.doingAjax = true;
                 let data = {
                     action: 'ninja_tables_ajax_actions',
