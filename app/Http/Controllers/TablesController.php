@@ -59,30 +59,16 @@ class TablesController extends Controller
         }
 
         $attributes = array(
-            'post_title'   => sanitize_text_field($request->post_title),
+            'post_title'   => Sanitizer::sanitizeTextField($request->post_title),
             'post_content' => wp_kses_post($request->post_content),
             'post_type'    => $this->cptName,
             'post_status'  => 'publish'
         );
 
         $this->json(array(
-            'table_id' => $this->saveTable($attributes, $postId),
+            'table_id' => NinjaTable::saveTable($attributes, $postId),
             'message'  => __('Table ' . ($postId ? 'updated' : 'created') . ' successfully.', 'ninja-tables')
         ), 200);
-    }
-
-    protected function saveTable($attributes, $postId = null)
-    {
-        if ( ! $postId) {
-            $postId = wp_insert_post($attributes);
-        } else {
-            $attributes['ID'] = $postId;
-            wp_update_post($attributes);
-        }
-        update_post_meta($postId, '_last_edited_by', get_current_user_id());
-        update_post_meta($postId, '_last_edited_time', date('Y-m-d H:i:s'));
-
-        return $postId;
     }
 
     public function delete(Request $request, $id)
@@ -153,4 +139,88 @@ class TablesController extends Controller
             ), 300);
         }
     }
+
+    public function getTableSettings(Request $request, $id)
+    {
+        $table = get_post($tableID = intval($id));
+        if ( ! $table || $table->post_type != $this->cptName) {
+            $this->sendError(array(
+                'message' => __('No Table Found'),
+                'route'   => 'home'
+            ), 423);
+        }
+        $provider = ninja_table_get_data_provider($table->ID);
+
+        $table = $this->app->applyFilters('ninja_tables_get_table_' . $provider, $table);
+
+        $table->table_caption = get_post_meta($tableID, '_ninja_table_caption', true);
+
+        $table->custom_css = get_post_meta($tableID, '_ninja_tables_custom_css', true);
+
+        NinjaTableItemsMigrator::checkDBMigrations();
+
+        $this->json(array(
+            'preview_url' => site_url('?ninjatable_preview=' . $tableID),
+            'columns'     => ninja_table_get_table_columns($tableID, 'admin'),
+            'settings'    => ninja_table_get_table_settings($tableID, 'admin'),
+            'table'       => $table,
+        ), 200);
+    }
+
+    public function updateTableSettings(Request $request, $id)
+    {
+        $tableId = intval($id);
+
+        $tableColumns = array();
+
+        if (isset($request->columns)) {
+            $rawColumns = $this->app->applyFilters('ninja_tables_before_update_settings',
+                ninja_tables_sanitize_array($request->columns), $tableId);
+            $provider   = ninja_table_get_data_provider($tableId);
+
+            if ($rawColumns && is_array($rawColumns)) {
+                foreach ($rawColumns as $column) {
+                    foreach ($column as $column_index => $column_value) {
+                        if ($provider === 'google-csv' && gettype($column_value) === 'string') {
+                            $column_value = htmlspecialchars_decode($column_value);
+                        }
+                        if (is_int($column_value)) {
+                            $column[$column_index] = intval($column_value);
+                        } else {
+                            $column[$column_index] = $column_value;
+                        }
+                    }
+                    $tableColumns[] = $column;
+                }
+                $tableColumns = $this->app->applyFilters('ninja_table_update_columns_' . ninja_table_get_data_provider($tableId),
+                    $tableColumns, $rawColumns, $tableId);
+                $this->app->doAction('ninja_table_before_update_columns_' . ninja_table_get_data_provider($tableId),
+                    $tableColumns, $rawColumns, $tableId);
+                update_post_meta($tableId, '_ninja_table_columns', $tableColumns);
+            }
+        }
+
+        $formattedTablePreference = array();
+
+        if (isset($request->table_settings)) {
+            $tablePreference = ninja_tables_sanitize_array($request->table_settings);
+            if ($tablePreference && is_array($tablePreference)) {
+                $formattedTablePreference = ninjaTableNormalize($tablePreference);
+                update_post_meta($tableId, '_ninja_table_settings', $formattedTablePreference);
+            }
+        }
+
+        ninjaTablesClearTableDataCache($tableId);
+
+        update_post_meta($tableId, '_last_edited_by', get_current_user_id());
+        update_post_meta($tableId, '_last_edited_time', date('Y-m-d H:i:s'));
+
+        $this->json(array(
+            'message'  => __('Successfully updated configuration.', 'ninja-tables'),
+            'columns'  => $tableColumns,
+            'settings' => $formattedTablePreference
+        ), 200);
+    }
+
+
 }

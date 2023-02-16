@@ -411,8 +411,6 @@
         methods: {
             getData() {
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'get-table-data',
                     table_id: this.tableId,
                     page: this.paginate.current_page,
                     per_page: this.paginate.per_page,
@@ -420,19 +418,18 @@
                     default_sorting: this.config.settings.default_sorting
                 };
                 this.loading = true;
-                return this.$get(data)
-                    .success((res) => {
+                return this.$get('tables/'+this.tableId+'/items', data)
+                    .then((res) => {
                         this.items = res.data;
                         this.dataSource = res.data_source;
                         this.paginate.total = parseInt(res.total);
-                        this.paginate.last_page = parseInt(res.last_page)
-                    })
-                    .fail((error) => {
-
-                    })
-                    .always(() => {
+                        this.paginate.last_page = parseInt(res.last_page);
                         this.loading = false;
-                    });
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      this.loading = false;
+                    })
             },
             addTableData() {
 
@@ -454,18 +451,12 @@
                 }
             },
             deleteTable(tableId) {
-                let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'delete-a-table',
-                    table_id: tableId
-                };
-
-                this.$post(data)
+                this.$del("tables/"+tableId)
                     .then((response) => {
                         this.fetchTables();
                         alert(response.message);
                     })
-                    .fail((error) => {
+                    .catch((error) => {
                         alert(error.responseJSON.data.message);
                     });
             },
@@ -497,15 +488,14 @@
             },
             deleteItem(id) {
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'delete-data',
+
                     table_id: this.tableId,
                     id: id
                 };
 
                 let that = this;
 
-                this.$post(data)
+                this.$del('tables/'+this.tableId+'/items', data)
                     .then(response => {
                         this.$message({
                             showClose: true,
@@ -514,13 +504,12 @@
                         });
                         that.getData();
                     })
-                    .fail(error => {
+                    .catch(error => {
                         this.$message({
                             showClose: true,
                             message: this.$t('Something is wrong! Please try again'),
                             type: 'error'
                         });
-
                     });
             },
             closeDataModal(success) {
@@ -700,6 +689,7 @@
                 }
             },
             sortTable(id, newPosition) {
+              console.log('sortable calling from tablerows')
                 this.loading = true;
 
                 let data = {

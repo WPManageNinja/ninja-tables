@@ -43,7 +43,21 @@ class NinjaTable extends Model
         ];
     }
 
-    protected function destroyTable($tableId)
+    public static function saveTable($attributes, $postId = null)
+    {
+        if ( ! $postId) {
+            $postId = wp_insert_post($attributes);
+        } else {
+            $attributes['ID'] = $postId;
+            wp_update_post($attributes);
+        }
+        update_post_meta($postId, '_last_edited_by', get_current_user_id());
+        update_post_meta($postId, '_last_edited_time', date('Y-m-d H:i:s'));
+
+        return $postId;
+    }
+
+    public static function destroyTable($tableId)
     {
         wp_delete_post($tableId, true);
         // Delete the post metas
@@ -52,7 +66,7 @@ class NinjaTable extends Model
         delete_post_meta($tableId, '_ninja_table_cache_object');
     }
 
-    protected function makeDuplicate($oldPostId, $newPostId)
+    public static function makeDuplicate($oldPostId, $newPostId)
     {
         global $wpdb;
 

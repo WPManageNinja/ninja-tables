@@ -202,8 +202,6 @@
                 this.btnLoading = true;
 
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'store-table-data',
                     table_id: this.table_id,
                     row: this.newColumn,
                     id: this.editId,
@@ -216,8 +214,10 @@
                     data['position'] = parseInt(this.insertAfterPosition) + 1;
                 }
 
-                this.$post(data)
+                // check it
+                this.$post('tables/'+this.table_id+'/store-item', data)
                     .then((response) => {
+                      console.log(response);
                         if (!response.item) {
                             this.$message({
                                 showClose: true,
@@ -251,16 +251,14 @@
 
                         this.adding_counter++;
                     })
-                    .fail((error) => {
+                    .catch((error) => {
                         this.$message({
                             showClose: true,
                             message: error.responseJSON.data.message,
                             type: 'error'
                         });
                     })
-                    .always(() => {
-                        this.btnLoading = false;
-                    });
+                   this.btnLoading = false;
             },
             closeModal() {
                 this.$emit('modal_close');

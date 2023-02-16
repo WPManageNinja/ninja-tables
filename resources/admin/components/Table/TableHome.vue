@@ -80,39 +80,27 @@
         },
         methods: {
             updateTableColumns(callback) {
-                this.doingAjax = true;
-                let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'update-table-settings',
-                    table_id: this.tableId,
-                    columns: this.config.columns
-                };
-                this.$post(data)
-                    .success((res) => {
-                        this.$message({
-                            showClose: true,
-                            message: res.message,
-                            type: 'success'
-                        });
-                        callback(res)
-                    })
-                    .fail((error) => {
+              let tableId = this.tableId;
 
-                    })
-                    .always(() => {
-                        this.doingAjax = false;
-                    });
+              let data = {
+                table_id: this.tableId,
+                columns: this.config.columns
+              }
+
+              this.$put('tables/'+tableId, data)
+                  .then((res) => {
+                      this.$message({
+                          showClose: true,
+                          message: res.message,
+                          type: 'success'
+                      });
+                      callback(res)
+                  })
             },
             getSettings() {
-              console.log('getSettings');
-                this.doingAjax = true;
-                let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'get-table-settings',
-                    table_id: this.tableId
-                };
+              let tableId = this.tableId;
 
-                this.$getJSON(data)
+                this.$get('tables/'+tableId)
                     .then(response => {
                         if (Object.prototype.toString.call(response.columns) == '[object Object]') {
                             response.columns = toArray(response.columns);
@@ -121,13 +109,12 @@
                         this.table = response.table;
                         this.preview_url = response.preview_url;
                     })
-                    .fail((error) => {
+                    .catch((error) => {
                         this.$message.error(error.responseJSON.data.message);
                         if(error.responseJSON.data.route) {
                             this.$router.push({ name: error.responseJSON.data.route });
                         }
                     })
-                    .always(() => this.doingAjax = false);
             },
             goToTab(key) {
                 this.user_tab = key;
@@ -174,20 +161,20 @@
             this.clipboard();
 
             // Initialize the table's manual data sorting.
-            window.ninjaTableBus.$on('initManualSorting', (options, resolve, reject) => {
-                let data = {
-                    action: "ninja_tables_init_sortable",
-                    ...options
-                };
+            // window.ninjaTableBus.$on('initManualSorting', (options, resolve, reject) => {
+            //     let data = {
+            //         action: "ninja_tables_init_sortable",
+            //         ...options
+            //     };
+            //
+            //     this.$post(data)
+            //         .success(response => resolve(response))
+            //         .fail(e => reject(e));
+            // });
 
-                this.$post(data)
-                    .success(response => resolve(response))
-                    .fail(e => reject(e));
-            });
-
-            window.ninjaTableBus.$on('tableDoingAjax',  (value) => {
-                this.doingAjax = value;
-            });
+            // window.ninjaTableBus.$on('tableDoingAjax',  (value) => {
+            //     this.doingAjax = value;
+            // });
 
             // removes previous events to prevent duplicate event handlers.
             window.ninjaTableBus.$off('updateTableColumns');

@@ -204,7 +204,7 @@
         methods: {
             storeSettings() {
                 window.ninjaTableBus.$emit('tableDoingAjax', true);
-                this.doingAjax = true;
+
                 let data = {
                     action: 'ninja_tables_ajax_actions',
                     target_action: 'update-table-settings',
@@ -212,22 +212,21 @@
                     columns: this.columns,
                     table_settings: this.tableSettings
                 };
-                this.$post(data)
-                    .success((res) => {
+                this.$post('tables'+/this.tableId/+'column-settings', data)
+                    .then((res) => {
+                      console.log("uodateded")
                         this.$message({
                             showClose: true,
                             message: res.message,
                             type: 'success'
                         });
                         this.$set(this.config, 'columns', this.columns);
+                      window.ninjaTableBus.$emit('tableDoingAjax', false);
                     })
-                    .fail((error) => {
+                    .catch((error) => {
+                      window.ninjaTableBus.$emit('tableDoingAjax', false);
+                    })
 
-                    })
-                    .always(() => {
-                        this.doingAjax = false;
-                        window.ninjaTableBus.$emit('tableDoingAjax', false);
-                    });
             },
             openDrawer(index) {
                 jQuery('.drawer_body_' + index).slideToggle();

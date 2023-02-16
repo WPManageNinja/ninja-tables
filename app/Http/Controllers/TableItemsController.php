@@ -2,12 +2,82 @@
 
 namespace NinjaTables\App\Http\Controllers;
 
+use NinjaTables\App\Models\NinjaTableItems;
+use NinjaTables\Framework\Database\Orm\Model;
 use NinjaTables\Framework\Request\Request;
+use NinjaTables\Framework\Support\Arr;
+use NinjaTables\Framework\Support\Sanitizer;
 
 class TableItemsController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $id)
     {
-        // Your code goes here...
+        // this function is getTableData() in the original plugin in NinjaTables.php line
+        $perPage     = isset($request->per_page) ? intval($request->per_page) : 10;
+        $currentPage = isset($request->page) ? intval($request->page) : 1;
+        $skip        = $perPage * ($currentPage - 1);
+        $tableId     = intval($id);
+        $search      = Sanitizer::sanitizeTextField($request->search);
+
+        $dataSourceType = ninja_table_get_data_provider($tableId);
+
+        $data = NinjaTableItems::getItems($tableId, $perPage, $currentPage, $skip, $search, $dataSourceType);
+
+        $this->json($data, 200);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $data    = ninja_tables_sanitize_array($_REQUEST);
+        $tableId = intval($data['table_id']);
+
+        $id = $data['id'];
+
+        $ids = is_array($id) ? $id : array($id);
+
+        $ids = array_map(function ($item) {
+            return intval($item);
+        }, $ids);
+
+        NinjaTableItems::deleteTableItem($tableId, $ids);
+
+        $this->json(array(
+            'message' => __('Successfully deleted data.', 'ninja-tables')
+        ), 200);
+    }
+
+    /*
+     * This function will store item from add data model
+     * the api endpoints is 'tables/{id}/store-item''
+     * methods: POST
+     */
+    public function store(Request $request, $id)
+    {
+        $tableId = intval($id);
+
+        if (user_can_richedit()) {
+            $row = ninja_tables_sanitize_table_content_array(Arr::get($request->all(), 'row', []), $tableId);
+        } else {
+            ninja_tables_allowed_css_properties();
+            $row = ninja_tables_sanitize_array(Arr::get($request->all(), 'row', []));
+        }
+
+        $formattedRow = array();
+
+        foreach ($row as $key => $item) {
+            $formattedRow[$key] = wp_unslash($item);
+        }
+
+        $created_at    = Arr::get($request->all(), 'created_at');
+        $insertAfterId = Arr::get($request->all(), 'insert_after_id');
+        $settings      = Arr::get($request->all(), 'settings');
+        $id            = Arr::get($request->all(), 'id');
+
+        $data = NinjaTableItems::insertTableItem($id, $tableId, $formattedRow, $created_at, $insertAfterId, $settings);
+
+        $this->json(array(
+            'message' => __('Successfully saved the data.', 'ninja-tables'),
+            'item'    => $data
+        ), 200);
     }
 }
