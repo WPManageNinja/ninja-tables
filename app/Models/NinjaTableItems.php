@@ -92,7 +92,7 @@ class NinjaTableItems extends Model
         ];
     }
 
-    /**
+    /*
      * Get the order by field and order by type values.
      *
      * @param        $tableId
@@ -126,12 +126,12 @@ class NinjaTableItems extends Model
 
     protected function deleteTableItem($tableId, $ids)
     {
-        $app = App::getInstance();
-        $app->addAction('ninja_table_before_items_deleted', $ids, $tableId);
-        $this->where('table_id', $tableId)->whereIn('id', $ids)->delete();
-        $app->addAction('ninja_table_after_items_deleted', $ids, $tableId);
+//        $app = App::getInstance();
+//        there is a problem when we try to use $app->addAction() instead of add_action()
 
-        //FIXME: message : "Undefined array key 1"
+        add_action('ninja_table_before_items_deleted', $ids, $tableId);
+        $this->where('table_id', $tableId)->whereIn('id', $ids)->delete();
+        add_action('ninja_table_after_items_deleted', $ids, $tableId);
 
         ninjaTablesClearTableDataCache($tableId);
     }

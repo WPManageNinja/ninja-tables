@@ -87,7 +87,7 @@
                 columns: this.config.columns
               }
 
-              this.$put('tables/'+tableId, data)
+              this.$post('tables/'+tableId, data)
                   .then((res) => {
                       this.$message({
                           showClose: true,

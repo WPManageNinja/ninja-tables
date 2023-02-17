@@ -215,7 +215,7 @@
                 }
 
                 // check it
-                this.$post('tables/'+this.table_id+'/store-item', data)
+                this.$post('tables/'+this.table_id+'/items', data)
                     .then((response) => {
                       console.log(response);
                         if (!response.item) {

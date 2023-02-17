@@ -10,14 +10,13 @@ $router->prefix('tables')->group(function ($app) {
     $app->post('/', 'TablesController@store');
 
     $app->get('/{id}', 'TablesController@getTableSettings')->int('id');
-    $app->put('/{id}', 'TablesController@updateTableSettings')->int('id');
-
+    $app->post('/{id}', 'TablesController@updateTableSettings')->int('id');
     $app->delete('/{id}', 'TablesController@delete')->int('id');
     $app->post('/{id}/duplicate', 'TablesController@duplicate')->int('id');
 
     $app->get('/{id}/items', 'TableItemsController@index')->int('id');
     $app->delete('/{id}/items', 'TableItemsController@delete')->int('id');
-    $app->post('/{id}/store-item', 'TableItemsController@store')->int('id');
+    $app->post('/{id}/items', 'TableItemsController@store')->int('id');
 });
 
 $router->prefix('table-builder')->group(function ($app) {

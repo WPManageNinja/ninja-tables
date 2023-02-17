@@ -5,6 +5,7 @@ namespace NinjaTables\App\Http\Controllers;
 use NinjaTables\App\Models\NinjaTable;
 use NinjaTables\Database\Migrations\NinjaTableItemsMigrator;
 use NinjaTables\Framework\Request\Request;
+use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
 
 class TablesController extends Controller
@@ -169,58 +170,22 @@ class TablesController extends Controller
 
     public function updateTableSettings(Request $request, $id)
     {
-        $tableId = intval($id);
+        $tableId         = intval($id);
+        $rawColumns      = '';
+        $tablePreference = '';
 
-        $tableColumns = array();
-
-        if (isset($request->columns)) {
+        if (Arr::get($request->all(), 'columns', [])) {
             $rawColumns = $this->app->applyFilters('ninja_tables_before_update_settings',
                 ninja_tables_sanitize_array($request->columns), $tableId);
-            $provider   = ninja_table_get_data_provider($tableId);
-
-            if ($rawColumns && is_array($rawColumns)) {
-                foreach ($rawColumns as $column) {
-                    foreach ($column as $column_index => $column_value) {
-                        if ($provider === 'google-csv' && gettype($column_value) === 'string') {
-                            $column_value = htmlspecialchars_decode($column_value);
-                        }
-                        if (is_int($column_value)) {
-                            $column[$column_index] = intval($column_value);
-                        } else {
-                            $column[$column_index] = $column_value;
-                        }
-                    }
-                    $tableColumns[] = $column;
-                }
-                $tableColumns = $this->app->applyFilters('ninja_table_update_columns_' . ninja_table_get_data_provider($tableId),
-                    $tableColumns, $rawColumns, $tableId);
-                $this->app->doAction('ninja_table_before_update_columns_' . ninja_table_get_data_provider($tableId),
-                    $tableColumns, $rawColumns, $tableId);
-                update_post_meta($tableId, '_ninja_table_columns', $tableColumns);
-            }
         }
 
-        $formattedTablePreference = array();
-
-        if (isset($request->table_settings)) {
+        if (Arr::get($request->all(), 'table_settings', [])) {
             $tablePreference = ninja_tables_sanitize_array($request->table_settings);
-            if ($tablePreference && is_array($tablePreference)) {
-                $formattedTablePreference = ninjaTableNormalize($tablePreference);
-                update_post_meta($tableId, '_ninja_table_settings', $formattedTablePreference);
-            }
         }
 
-        ninjaTablesClearTableDataCache($tableId);
+        $data = NinjaTable::updatedSettings($tableId, $rawColumns, $tablePreference);
 
-        update_post_meta($tableId, '_last_edited_by', get_current_user_id());
-        update_post_meta($tableId, '_last_edited_time', date('Y-m-d H:i:s'));
-
-        $this->json(array(
-            'message'  => __('Successfully updated configuration.', 'ninja-tables'),
-            'columns'  => $tableColumns,
-            'settings' => $formattedTablePreference
-        ), 200);
+        $this->json($data, 200);
     }
-
 
 }

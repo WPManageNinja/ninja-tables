@@ -86,4 +86,49 @@ class NinjaTable extends Model
 
         $wpdb->query($sql);
     }
+
+    public static function updatedSettings($tableId, $rawColumns, $tablePreference)
+    {
+        $app                      = App::getInstance();
+        $tableColumns             = array();
+        $formattedTablePreference = array();
+        $provider                 = ninja_table_get_data_provider($tableId);
+
+        if ($rawColumns && is_array($rawColumns)) {
+            foreach ($rawColumns as $column) {
+                foreach ($column as $column_index => $column_value) {
+                    if ($provider === 'google-csv' && gettype($column_value) === 'string') {
+                        $column_value = htmlspecialchars_decode($column_value);
+                    }
+                    if (is_int($column_value)) {
+                        $column[$column_index] = intval($column_value);
+                    } else {
+                        $column[$column_index] = $column_value;
+                    }
+                }
+                $tableColumns[] = $column;
+            }
+            $tableColumns = $app->applyFilters('ninja_table_update_columns_' . ninja_table_get_data_provider($tableId),
+                $tableColumns, $rawColumns, $tableId);
+            $app->doAction('ninja_table_before_update_columns_' . ninja_table_get_data_provider($tableId),
+                $tableColumns, $rawColumns, $tableId);
+            update_post_meta($tableId, '_ninja_table_columns', $tableColumns);
+        }
+
+        if ($tablePreference && is_array($tablePreference)) {
+            $formattedTablePreference = ninjaTableNormalize($tablePreference);
+            update_post_meta($tableId, '_ninja_table_settings', $formattedTablePreference);
+        }
+
+        ninjaTablesClearTableDataCache($tableId);
+
+        update_post_meta($tableId, '_last_edited_by', get_current_user_id());
+        update_post_meta($tableId, '_last_edited_time', date('Y-m-d H:i:s'));
+
+        return [
+            'message'  => __('Successfully updated configuration.', 'ninja-tables'),
+            'columns'  => $tableColumns,
+            'settings' => $formattedTablePreference,
+        ];
+    }
 }

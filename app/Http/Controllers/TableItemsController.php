@@ -3,7 +3,6 @@
 namespace NinjaTables\App\Http\Controllers;
 
 use NinjaTables\App\Models\NinjaTableItems;
-use NinjaTables\Framework\Database\Orm\Model;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
@@ -28,10 +27,11 @@ class TableItemsController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $data    = ninja_tables_sanitize_array($_REQUEST);
-        $tableId = intval($data['table_id']);
+        $data    = ninja_tables_sanitize_array($request->all());
 
-        $id = $data['id'];
+        $tableId = intval($id);
+
+        $id = Arr::get($data, 'id');
 
         $ids = is_array($id) ? $id : array($id);
 
@@ -46,11 +46,6 @@ class TableItemsController extends Controller
         ), 200);
     }
 
-    /*
-     * This function will store item from add data model
-     * the api endpoints is 'tables/{id}/store-item''
-     * methods: POST
-     */
     public function store(Request $request, $id)
     {
         $tableId = intval($id);
