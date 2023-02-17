@@ -22,7 +22,8 @@ $router->prefix('tables')->group(function ($app) {
 $router->prefix('table-builder')->group(function ($app) {
     $app->get('/', 'TableBuilderController@index');
     $app->post('/', 'TableBuilderController@store');
-    $app->put('/{id}', 'TableBuilderController@update')->int('id');
+    $app->post('/import', 'TableBuilderController@import');
+    $app->patch('/{id}', 'TableBuilderController@update')->int('id');
     $app->get('/{id}', 'TableBuilderController@show')->int('id');
 });
 

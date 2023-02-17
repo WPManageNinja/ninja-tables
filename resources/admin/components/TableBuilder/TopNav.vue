@@ -60,14 +60,11 @@ export default {
           });
           return false;
         }
-        let data = {
-          action: "ninja_tables_builder_ajax_actions",
-          target_action: "update-table",
+        this.$patch(`table-builder/${this.id}`, {
           data: JSON.stringify(this.initialData),
           table_html: tableHtml.innerHTML,
           table_id: this.id
-        };
-        this.$post(data)
+        })
             .then(response => {
               this.$message({
                 showClose: true,
@@ -76,16 +73,13 @@ export default {
               });
               this.id = response.data.id
             })
-            .fail(error => {
+            .catch(error => {
               this.$message({
                 showClose: true,
                 message: this.$t('Something went wrong, please try again.'),
                 type: 'warning'
               });
             })
-            .always(() => {
-
-            });
       })
     },
     fullScreenEnableDisable() {

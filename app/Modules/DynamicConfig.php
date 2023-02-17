@@ -1,5 +1,7 @@
 <?php
 
+namespace NinjaTables\App\Modules;
+
 class DynamicConfig
 {
     public static function getTableDataInfo($data_from_db, $updated_column_properties, $updated_row_properties)
