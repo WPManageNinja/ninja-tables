@@ -206,15 +206,12 @@
                 window.ninjaTableBus.$emit('tableDoingAjax', true);
 
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'update-table-settings',
                     table_id: this.tableId,
                     columns: this.columns,
                     table_settings: this.tableSettings
                 };
-                this.$post('tables'+/this.tableId/+'column-settings', data)
+                this.$post('tables/'+this.tableId, data)
                     .then((res) => {
-                      console.log("uodateded")
                         this.$message({
                             showClose: true,
                             message: res.message,

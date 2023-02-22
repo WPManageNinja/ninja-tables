@@ -5,6 +5,7 @@ namespace NinjaTables\App\Models;
 
 use NinjaTables\App\App;
 use NinjaTables\Framework\Database\Orm\Model;
+use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
 
 class NinjaTableItems extends Model
@@ -149,7 +150,7 @@ class NinjaTableItems extends Model
         );
 
 
-        if ($settings) {
+        if ($settings && $settings !== 'null') {
             $attributes['settings'] = maybe_serialize(
                 wp_unslash(
                     ninja_tables_sanitize_array($settings)
@@ -210,18 +211,23 @@ class NinjaTableItems extends Model
         update_post_meta($tableId, '_last_edited_by', get_current_user_id());
         update_post_meta($tableId, '_last_edited_time', date('Y-m-d H:i:s'));
 
-        $itemSettings = maybe_unserialize($item->settings);
+        $itemSettings = '';
+
+        if ($item && $item->settings !== null) {
+            $itemSettings = maybe_unserialize($item->settings);
+        }
+
         if ( ! is_array($itemSettings)) {
             $itemSettings = (object)array();
         }
 
         return [
-            'id'         => $item->id,
+            'id'         => Arr::get($item, 'id'),
             'values'     => $formattedRow,
-            'row'        => Model::fromJson($item->value),
-            'created_at' => $item->created_at,
+            'row'        => Model::fromJson(Arr::get($item, 'value')),
+            'created_at' => Arr::get($item, 'created_at'),
             'settings'   => $itemSettings,
-            'position'   => property_exists($item, 'position') ? $item->position : null
+            'position'   => Arr::get($item, 'position')
         ];
     }
 

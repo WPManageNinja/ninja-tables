@@ -106,21 +106,17 @@
                 window.ninjaTableBus.$emit('tableDoingAjax', true);
                 this.doingAjax = true;
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'update-table-settings',
                     table_id: this.tableId,
                     table_settings: this.settings
                 };
-                this.$post(data)
+                this.$post('tables/'+this.tableId, data)
                     .success((res) => {
                     })
-                    .fail((error) => {
+                    .catch((error) => {
 
                     })
-                    .always(() => {
-                        this.doingAjax = false;
-                        window.ninjaTableBus.$emit('tableDoingAjax', false);
-                    });
+              this.doingAjax = false;
+              window.ninjaTableBus.$emit('tableDoingAjax', false);
             },
         },
         mounted() {

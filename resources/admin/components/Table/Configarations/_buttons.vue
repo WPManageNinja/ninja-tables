@@ -177,42 +177,33 @@
         methods: {
             getSettings() {
                 this.fetching = true;
-                this.$get({
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'get_button_settings',
-                    table_id: this.table_id
-                })
+                this.$get('tables/' + this.table_id + '/button-settings')
                     .then(response => {
                         this.table_buttons = response.data.button_settings;
+                      this.fetching = false;
                     })
-                    .fail(error => {
-
+                    .catch(error => {
+                      this.fetching = false;
                     })
-                    .always(() => {
-                        this.fetching = false;
-                    });
             },
             saveSettings() {
                 this.saving = true;
-                this.$post({
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'update_button_settings',
-                    table_id: this.table_id,
-                    button_settings: this.table_buttons
-                })
+                let data = {
+                  table_id: this.table_id,
+                  button_settings: this.table_buttons
+                };
+                this.$put('tables/' + this.table_id + '/button-settings', data)
                     .then(response => {
                         this.$message({
                             showClose: true,
                             message: response.data.message,
                             type: 'success'
                         });
+                      this.saving = false;
                     })
-                    .fail(error => {
-
+                    .catch(error => {
+                      this.saving = false;
                     })
-                    .always(() => {
-                        this.saving = false;
-                    });
             }
         },
         mounted() {

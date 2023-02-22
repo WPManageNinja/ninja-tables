@@ -55,7 +55,7 @@ class TablesController extends Controller
 
         $postId = intval($request->tableId);
 
-        if (isset($request->table_caption)) {
+        if (Arr::get($request->all(), 'table_caption')) {
             update_post_meta($postId, '_ninja_table_caption', Sanitizer::sanitizeTextField($request->table_caption));
         }
 
@@ -186,6 +186,53 @@ class TablesController extends Controller
         $data = NinjaTable::updatedSettings($tableId, $rawColumns, $tablePreference);
 
         $this->json($data, 200);
+    }
+
+    public function getButtonSettings(Request $request, $id)
+    {
+        $tableId             = absint($id);
+        $tableButtonDefaults = array(
+            'csv'              => array(
+                'status'     => 'no',
+                'label'      => 'CSV',
+                'all_rows'   => 'no',
+                'bg_color'   => 'rgb(0,0,0)',
+                'text_color' => 'rgb(255,255,255)'
+            ),
+            'print'            => array(
+                'status'           => 'no',
+                'label'            => 'Print',
+                'all_rows'         => 'no',
+                'bg_color'         => 'rgb(0,0,0)',
+                'text_color'       => 'rgb(255,255,255)',
+                'header_each_page' => 'no',
+                'footer_each_page' => 'no',
+            ),
+            'button_position'  => 'after_search_box',
+            'button_alignment' => 'ninja_buttons_right'
+        );
+
+        $tableButtons = get_post_meta($tableId, '_ninja_custom_table_buttons', true);
+        if ( ! $tableButtons) {
+            $tableButtons = array();
+        }
+
+        $tableButtons = array_replace_recursive($tableButtonDefaults, $tableButtons);
+
+        $this->sendSuccess(array(
+            'button_settings' => $tableButtons
+        ));
+    }
+
+    public function updateButtonSettings(Request $request, $id)
+    {
+        ninja_tables_allowed_css_properties();
+        $tableId        = absint($id);
+        $buttonSettings = wp_unslash(ninja_tables_sanitize_array($request->button_settings));
+        update_post_meta($tableId, '_ninja_custom_table_buttons', $buttonSettings);
+        $this->sendSuccess(array(
+            'message' => __('Settings successfully updated', 'ninja-tables')
+        ), 200);
     }
 
 }

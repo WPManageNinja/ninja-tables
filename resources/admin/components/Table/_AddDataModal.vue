@@ -217,7 +217,6 @@
                 // check it
                 this.$post('tables/'+this.table_id+'/items', data)
                     .then((response) => {
-                      console.log(response);
                         if (!response.item) {
                             this.$message({
                                 showClose: true,

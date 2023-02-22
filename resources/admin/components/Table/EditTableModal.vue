@@ -67,24 +67,22 @@
             addTable: function () {
                 this.btnLoading = true;
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'store-a-table',
                     post_title: this.table.post_title,
                     post_content: this.table.post_content,
                     table_caption: this.table.table_caption,
                     tableId: this.table.ID
                 };
-                this.$post(data)
+                this.$post('tables', data)
                     .then((response) => {
                         this.$message({
                             showClose: true,
                             message: response.message,
                             type: 'success'
                         });
-
+                        this.btnLoading = false;
                         this.closeModal();
                     })
-                    .fail((error) => {
+                    .catch((error) => {
                         if (error.responseJSON.data.message) {
                             this.$message({
                                 showClose: true,
@@ -98,10 +96,8 @@
                                 type: 'error'
                             });
                         }
+                      this.btnLoading = false;
                     })
-                    .always(() => {
-                        this.btnLoading = false;
-                    });
             },
             closeModal() {
                 this.$emit('modal_close');
