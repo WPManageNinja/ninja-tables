@@ -16,6 +16,8 @@ $router->prefix('tables')->group(function ($app) {
 
     $app->get('/{id}/button-settings', 'TablesController@getButtonSettings')->int('id');
     $app->put('/{id}/button-settings', 'TablesController@updateButtonSettings')->int('id');
+    $app->get('/{id}/custom-styles', 'TablesController@getCustomCSSJS')->int('id');
+    $app->post('/{id}/custom-styles', 'TablesController@saveCustomCSSJS')->int('id');
 
     $app->get('/{id}/items', 'TableItemsController@index')->int('id');
     $app->delete('/{id}/items', 'TableItemsController@delete')->int('id');

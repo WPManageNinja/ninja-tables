@@ -219,9 +219,11 @@ class TablesController extends Controller
 
         $tableButtons = array_replace_recursive($tableButtonDefaults, $tableButtons);
 
-        $this->sendSuccess(array(
-            'button_settings' => $tableButtons
-        ));
+        return $this->sendSuccess([
+            'data' => [
+                'button_settings' => $tableButtons
+            ]
+        ]);
     }
 
     public function updateButtonSettings(Request $request, $id)
@@ -230,9 +232,42 @@ class TablesController extends Controller
         $tableId        = absint($id);
         $buttonSettings = wp_unslash(ninja_tables_sanitize_array($request->button_settings));
         update_post_meta($tableId, '_ninja_custom_table_buttons', $buttonSettings);
-        $this->sendSuccess(array(
-            'message' => __('Settings successfully updated', 'ninja-tables')
+
+        return $this->sendSuccess(array(
+            'data' => array(
+                'message' => __('Settings successfully updated', 'ninja-tables')
+            )
         ), 200);
+    }
+
+    // Table design & frontend editing code will write here
+
+    public function saveCustomCSSJS(Request $request, $id)
+    {
+        $tableId = intval($id);
+        $css     = Sanitizer::sanitizeTextField($request->custom_css);
+        $css     = wp_strip_all_tags($css);
+        update_post_meta($tableId, '_ninja_tables_custom_css', $css);
+
+        $this->app->doAction('ninja_tables_custom_code_before_save', $request->all());
+
+        return $this->sendSuccess([
+            'data' => [
+                'message' => 'Code successfully saved'
+            ]
+        ], 200);
+    }
+
+    public function getCustomCSSJS(Request $request, $id)
+    {
+        $tableId = intval($id);
+
+        return $this->sendSuccess([
+            'data' => [
+                'custom_css' => get_post_meta($tableId, '_ninja_tables_custom_css', true),
+                'custom_js'  => get_post_meta($tableId, '_ninja_tables_custom_js', true)
+            ]
+        ], 200);
     }
 
 }

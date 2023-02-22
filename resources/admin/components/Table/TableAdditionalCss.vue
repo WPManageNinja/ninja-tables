@@ -79,13 +79,13 @@
                 if(!this.hasPro) {
                     this.custom_js = '';
                 }
-                this.$post({
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'save_custom_css_js',
-                    table_id: this.config.table.ID,
-                    custom_css: this.custom_css,
-                    custom_js: this.custom_js,
-                })
+                let tableId = this.config.table.ID;
+                let data = {
+                  table_id: this.config.table.ID,
+                  custom_css: this.custom_css,
+                  custom_js: this.custom_js,
+                }
+                this.$post('tables/'+tableId+'/custom-styles', data)
                     .then(response => {
                         this.$message( {
                             showClose: true,
@@ -97,27 +97,20 @@
                     .then(error => {
                         console.log(error);
                     })
-                    .always(() => {
-
-                    });
             },
             getScripts() {
                 this.fetching = true;
-                this.$get({
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'get_custom_css_js',
-                    table_id: this.config.table.ID,
-                })
+                let tableId = this.config.table.ID;
+
+                this.$get('tables/'+tableId+'/custom-styles')
                     .then(response => {
                         this.custom_css = response.data.custom_css;
                         this.custom_js = response.data.custom_js;
                     })
-                    .fail(error => {
+                    .catch(error => {
 
                     })
-                    .always(() => {
-                        this.fetching = false;
-                    });
+                this.fetching = false;
             }
         },
         mounted() {
