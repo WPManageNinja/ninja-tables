@@ -3,6 +3,7 @@
 namespace NinjaTables\App\Http\Controllers;
 
 use NinjaTables\App\App;
+use NinjaTables\App\Modules\ImportExport;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Http\Controller;
 use NinjaTables\Framework\Support\Arr;
@@ -68,6 +69,42 @@ class TableBuilderController extends Controller
                 'history' => (object)[]
             ]
         ];
+    }
+
+    public function import(Request $request)
+    {
+        $url      = Sanitizer::sanitizeTextField($request->url);
+        $fileName = 'Ninja-tables' . date('d-m-Y');
+
+        if (isset($url) && ! empty($url)) {
+            $data = ImportExport::importFromURL($url);
+        } else {
+            $data     = ImportExport::import();
+            $fileName = sanitize_text_field($_FILES['file']['name']);
+        }
+
+        return $this->importCSV($data, $fileName);
+    }
+
+    public function importCSV($csvData, $fileName)
+    {
+        $table_id                  = $this->wpInsertPost($fileName);
+        $table_data                = $this->getTableData();
+        $table_data['table']['tr'] = count($csvData);
+        $table_data['table']['tc'] = count($csvData[0]);
+        $table_data['headers']     = $this->makeTableHeader($table_data);
+        $table_data['table_name']  = $fileName;
+        $table_data['data']        = $this->makeTableRow($table_data, $csvData);
+
+        $data = [
+            'table_name'       => $fileName,
+            'table_settings'   => $this->settingConfig(),
+            'table_responsive' => $this->responsiveConfig(),
+            'table_data'       => $table_data,
+            'table_html'       => null
+        ];
+
+        return $this->updatePostMeta($table_id, $data);
     }
 
     public function store(Request $request)

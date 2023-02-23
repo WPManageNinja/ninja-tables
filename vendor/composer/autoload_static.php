@@ -16,6 +16,10 @@ class ComposerStaticInite2cc3f91f264b6c9d64346c5247abaa6
             'NinjaTables\\Framework\\' => 22,
             'NinjaTables\\App\\' => 16,
         ),
+        'L' => 
+        array (
+            'League\\Csv\\' => 11,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -30,6 +34,10 @@ class ComposerStaticInite2cc3f91f264b6c9d64346c5247abaa6
         'NinjaTables\\App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
+        ),
+        'League\\Csv\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/csv/src',
         ),
     );
 

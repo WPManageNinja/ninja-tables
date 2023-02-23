@@ -21,7 +21,8 @@
         }
     ],
     "require": {
-        "wpfluent/framework": "^1.0"
+        "wpfluent/framework": "^1.0",
+        "league/csv": "8.2"
     },
     "autoload": {
         "psr-4": {

@@ -10,6 +10,15 @@
         'dev' => true,
     ),
     'versions' => array(
+        'league/csv' => array(
+            'pretty_version' => '8.2.0',
+            'version' => '8.2.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../league/csv',
+            'aliases' => array(),
+            'reference' => 'ef7eef710810c8bd0cf9371582ccd0123ff96d4b',
+            'dev_requirement' => false,
+        ),
         'wpfluent/framework' => array(
             'pretty_version' => '1.2.1',
             'version' => '1.2.1.0',

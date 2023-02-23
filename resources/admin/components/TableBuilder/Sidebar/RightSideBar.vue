@@ -188,17 +188,10 @@ export default {
       let formData = new FormData();
       formData.append('file', this.file);
       formData.append('url', this.url);
-      formData.append('action', 'ninja_tables_builder_ajax_actions');
-      formData.append('target_action', 'import-table');
-      formData.append('ninja_table_admin_nonce', window.ninja_table_admin.ninja_table_admin_nonce);
+      formData.append('ninja_table_admin_nonce', window.ninja_table_admin.nonce);
 
-      jQuery.ajax({
-        url: ajaxurl,
-        data: formData,
-        type: 'POST',
-        contentType: false,
-        processData: false,
-        success: (response) => {
+      this.$post('table-builder/import', formData)
+        .then(response => {
           this.loading = false;
           this.$message({
             showClose: true,
@@ -209,10 +202,9 @@ export default {
             name: "table_builder_edit_table",
             params: {table_id: response.data.id},
           });
-        },
-        error: (error) => {
+        })
+        .catch(error => {
           this.failedMessage();
-        }
       });
     },
     handleRemove(file, fileList) {

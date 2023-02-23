@@ -8,15 +8,25 @@ const request = function (method, route, data = {}) {
         method = 'POST';
     }
 
-    data.query_timestamp = Date.now();
+    let ajaxContent = {
+        url: url,
+        type: method,
+        data: data,
+        headers: headers
+    }
+
+    if (data && data instanceof FormData) {
+        ajaxContent.data.append('query_timestamp', Date.now())
+        ajaxContent.contentType = false;
+        ajaxContent.processData = false;
+        ajaxContent.cache = false;
+    } else {
+        ajaxContent.data.query_timestamp = Date.now();
+    }
+    
 
     return new Promise((resolve, reject) => {
-        window.jQuery.ajax({
-            url: url,
-            type: method,
-            data: data,
-            headers: headers
-        })
+        window.jQuery.ajax(ajaxContent)
             .then(response => resolve(response))
             .fail(errors => reject(errors.responseJSON));
     });
