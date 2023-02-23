@@ -94,7 +94,7 @@
                         } );
                         this.$set(this.config.table, 'custom_css', this.custom_css );
                     })
-                    .then(error => {
+                    .catch(error => {
                         console.log(error);
                     })
             },

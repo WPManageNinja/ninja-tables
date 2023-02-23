@@ -132,6 +132,7 @@ if ( ! function_exists('ninja_tables_DbTable')) {
     function ninja_tables_DbTable()
     {
         global $wpdb;
+
         return $wpdb->prefix . ninja_tables_db_table_name();
     }
 }
@@ -276,7 +277,6 @@ function ninja_table_get_icon_url()
                         <path d="M78.6,68.3h-58v11v0.1h42.1C70.1,79.4,76.4,74.8,78.6,68.3C78.6,68.4,78.6,68.4,78.6,68.3" fill="#ffffff"/>
                   </g>
                 </svg>');
-
 }
 
 if ( ! function_exists('ninja_tables_is_valid_url')) {
@@ -959,12 +959,21 @@ function ninjaTablePerChunk($table_id = false)
     return $app->applyFilters('ninja_table_per_chunk', 3000, $table_id);
 }
 
-function ninja_table_clear_all_cache()
+function ninja_table_clear_all_cache($posts = array())
 {
-    $tables = ninjaDB()->table('posts')
-                       ->select('ID')
-                       ->where('post_type', 'ninja-table')
-                       ->get();
+    $tables = [];
+
+    if ( ! empty($posts)) {
+        $tables = $posts;
+    } else {
+        //FIXME: Have to replace ninjaDB() model
+
+        $tables = ninjaDB()->table('posts')
+                 ->select('ID')
+                 ->where('post_type', 'ninja-table')
+                 ->get();
+    }
+
     foreach ($tables as $table) {
         ninjaTablesClearTableDataCache($table->ID);
     }
@@ -1087,7 +1096,8 @@ function ninjaTablePreloadFont()
     $app->addAction('wp_head', function () {
         $preloadFontUrl = NINJA_TABLES_DIR_URL . "assets/fonts/ninja-tables.woff2?" . NINJA_TABLES_PRELOAD_FONT_VERSION;
         ?>
-        <link rel="preload" as="font" href="<?php echo esc_url($preloadFontUrl) ?>" type="font/woff2"
+        <link rel="preload" as="font" href="<?php
+        echo esc_url($preloadFontUrl) ?>" type="font/woff2"
               crossorigin="anonymous">
         <?php
     }, 99);

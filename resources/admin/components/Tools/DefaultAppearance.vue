@@ -158,18 +158,13 @@
         methods: {
             get() {
                 this.fetching = true;
-                this.$get({
-                    action: "ninja_tables_ajax_actions",
-                    target_action: 'get_default_settings'
-                })
+                this.$get('tables/tools/default-settings')
                     .then(response => {
                         this.default_settings = response.data.default_settings;
                     })
-                    .fail(e => {
+                    .catch(e => {
                     })
-                    .always(() => {
-                        this.fetching = false;
-                    });
+              this.fetching = false;
             },
             store() {
                 this.saving = true;
@@ -178,9 +173,7 @@
                     validStyles.push(style.key);
                 });
                 this.default_settings.css_classes = intersection(validStyles, this.default_settings.css_classes);
-                this.$post({
-                    action: "ninja_tables_ajax_actions",
-                    target_action: 'save_default_settings',
+                this.$post('tables/tools/default-settings', {
                     default_settings: this.default_settings
                 })
                     .then(response => {
@@ -190,11 +183,9 @@
                             type: "success"
                         });
                     })
-                    .fail(e => {
+                    .catch(e => {
                     })
-                    .always(() => {
-                        this.saving = false;
-                    });
+              this.saving = false;
             }
         },
         mounted() {

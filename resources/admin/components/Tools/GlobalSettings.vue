@@ -37,25 +37,17 @@
             getSettings() {
                 this.loading = true;
 
-                this.$get({
-                    action: "ninja_tables_ajax_actions",
-                    target_action: 'get_global_settings'
-                })
+                this.$get('tables/tools/global-settings')
                     .then(response => {
                         this.ninja_suppress_error = response.data.ninja_suppress_error;
                     })
-                    .fail(error => {})
-                    .always(() => {
-                        this.loading = false;
-                    });
+                    .catch(error => {})
+              this.loading = false;
             },
             storeSettings() {
-                let data = {
-                    action: "ninja_tables_ajax_actions",
-                    target_action: 'update_global_settings',
-                    suppress_error: this.ninja_suppress_error
-                };
-                this.$post(data)
+                this.$post('tables/tools/global-settings', {
+                      suppress_error: this.ninja_suppress_error
+                })
                     .then(response => {
                         this.$message({
                             showClose: true,
@@ -63,14 +55,10 @@
                             type: "success"
                         });
                     })
-                    .fail(e => {});
+                    .catch(e => {});
             },
             clearCache() {
-                let data = {
-                    action: "ninja_tables_ajax_actions",
-                    target_action: 'clear_tables_cache'
-                };
-                this.$post(data)
+                this.$post('tables/tools/clear-cache')
                     .then(response => {
                         this.$message({
                             showClose: true,
@@ -78,7 +66,7 @@
                             type: "success"
                         });
                     })
-                    .fail(e => {});
+                    .catch(e => {});
             }
         },
         mounted() {

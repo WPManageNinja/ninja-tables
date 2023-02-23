@@ -24,6 +24,14 @@ $router->prefix('tables')->group(function ($app) {
     $app->post('/{id}/items', 'TableItemsController@store')->int('id');
 });
 
+$router->prefix('tables/tools')->group(function ($app) {
+    $app->get('/default-settings', 'ToolsController@getDefaultSettings');
+    $app->post('/default-settings', 'ToolsController@saveDefaultSettings');
+    $app->get('/global-settings', 'ToolsController@getGlobalSettings');
+    $app->post('/global-settings', 'ToolsController@updateGlobalSettings');
+    $app->post('/clear-cache', 'ToolsController@clearTableCache');
+});
+
 $router->prefix('table-builder')->group(function ($app) {
     $app->get('/', 'TableBuilderController@index');
     $app->post('/', 'TableBuilderController@store');
