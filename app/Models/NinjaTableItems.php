@@ -4,7 +4,6 @@ namespace NinjaTables\App\Models;
 
 
 use NinjaTables\App\App;
-use NinjaTables\Framework\Database\Orm\Model;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
 
@@ -57,7 +56,7 @@ class NinjaTableItems extends Model
                     'settings'   => $settings,
                     'created_by' => $createdBy,
                     'position'   => property_exists($item, 'position') ? $item->position : null,
-                    'values'     => $this->fromJson($item->value, true)
+                    'values'     => json_decode($item->value, true)
                 );
             }
 
@@ -144,7 +143,7 @@ class NinjaTableItems extends Model
         $attributes = array(
             'table_id'   => $tableId,
             'attribute'  => 'value',
-            'value'      => Model::asJson($formattedRow),
+            'value'      => $this->asJson($formattedRow),
             'owner_id'   => get_current_user_id(),
             'updated_at' => date('Y-m-d H:i:s')
         );
@@ -224,13 +223,12 @@ class NinjaTableItems extends Model
         return [
             'id'         => Arr::get($item, 'id'),
             'values'     => $formattedRow,
-            'row'        => Model::fromJson(Arr::get($item, 'value')),
+            'row'        => json_decode(Arr::get($item, 'value')),
             'created_at' => Arr::get($item, 'created_at'),
             'settings'   => $itemSettings,
             'position'   => Arr::get($item, 'position')
         ];
     }
-
 
     private function fixCreatedAtDate($tableId, $refDate, $orderType)
     {
@@ -255,5 +253,20 @@ class NinjaTableItems extends Model
         ];
         $query    .= " ORDER BY created_at " . $orderType;
         $wpdb->query($wpdb->prepare($query, $bindings));
+    }
+
+    protected function editSingleCell($rowId, $row, $columnKey, $columnValue)
+    {
+        $values             = json_decode($row->value, true);
+        $values[$columnKey] = $columnValue;
+
+        Item::where('id', $rowId)->update([
+            'value'      => $this->asJson($values),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
+        ninjaTablesClearTableDataCache($row->table_id);
+        update_post_meta($row->table_id, '_last_edited_by', get_current_user_id());
+        update_post_meta($row->table_id, '_last_edited_time', date('Y-m-d H:i:s'));
     }
 }

@@ -270,4 +270,9 @@ class TablesController extends Controller
         ], 200);
     }
 
+    public function dismissFluentSuggest(Request $request)
+    {
+        update_option('_ninja_tables_plugin_suggest_dismiss', time());
+    }
+
 }

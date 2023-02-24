@@ -2,6 +2,7 @@
 
 namespace NinjaTables\App\Http\Controllers;
 
+use NinjaTables\App\Models\Item;
 use NinjaTables\App\Models\NinjaTableItems;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Arr;
@@ -27,7 +28,7 @@ class TableItemsController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $data    = ninja_tables_sanitize_array($request->all());
+        $data = ninja_tables_sanitize_array($request->all());
 
         $tableId = intval($id);
 
@@ -74,5 +75,30 @@ class TableItemsController extends Controller
             'message' => __('Successfully saved the data.', 'ninja-tables'),
             'item'    => $data
         ), 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $rowId = intval($id);
+
+        $row = Item::where('id', $rowId)->first();
+
+        if (user_can_richedit()) {
+            $data = ninja_tables_sanitize_table_content_array($request->all(), $row->table_id);
+        } else {
+            ninja_tables_allowed_css_properties();
+            $data = ninja_tables_sanitize_array($request->all());
+        }
+
+        $columnKey   = Sanitizer::sanitizeTextField($data['column_key']);
+        $columnValue = wp_unslash($data['column_value']);
+
+        NinjaTableItems::editSingleCell($rowId, $row, $columnKey, $columnValue);
+
+        return $this->sendSuccess([
+            'data' => [
+                'message' => 'Cell successfully updated'
+            ]
+        ], 200);
     }
 }

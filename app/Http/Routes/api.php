@@ -22,6 +22,9 @@ $router->prefix('tables')->group(function ($app) {
     $app->get('/{id}/items', 'TableItemsController@index')->int('id');
     $app->delete('/{id}/items', 'TableItemsController@delete')->int('id');
     $app->post('/{id}/items', 'TableItemsController@store')->int('id');
+    $app->put('/{id}/edit', 'TableItemsController@update')->int('id');
+
+    $app->post('/dismiss-fluent-suggest', 'TablesController@dismissFluentSuggest');
 });
 
 $router->prefix('tables/tools')->group(function ($app) {

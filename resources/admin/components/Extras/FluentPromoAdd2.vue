@@ -40,20 +40,14 @@
                 return this.img_url_path+image_name;
             },
             dismiss() {
-                let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'dismiss_fluent_suggest'
-                };
-                this.$post(data)
+                this.$post('tables/dismiss-fluent-suggest')
                     .then(response => {
                         
                     })
-                    .fail(error => {
+                    .catch(error => {
                         
                     })
-                    .always(() => {
-                        this.is_installed = true;
-                    });
+              this.is_installed = true;
                 
             }
         }

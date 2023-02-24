@@ -87,9 +87,8 @@
 
                 this.inital_value = JSON.stringify(columnValue);
 
+                let rowId = this.row.id;
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'update-single-cell',
                     row_id: this.row.id,
                     column_key: columnKey,
                     column_value: columnValue
@@ -98,14 +97,18 @@
                 this.btnLoading = true;
                 this.is_editing = false;
 
-                this.$post(data)
-                    .then((response) => {})
-                    .fail((error) => {
-                        this.$message.error('Failed');
+                this.$put('tables/'+rowId+'/edit', data)
+                    .then((response) => {
+                      this.$message.success({
+                        showClose: true,
+                        message: response.data.message,
+                        type: "success"
+                      });
                     })
-                    .always(() => {
-                        this.btnLoading = false;
-                    });
+                    .catch((error) => {
+                        this.$message.error('Failed to update!');
+                    })
+              this.btnLoading = false;
             },
             renderTableCell(value, column, row) {
                 if (column.data_type == 'image') {
