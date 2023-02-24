@@ -30,6 +30,7 @@ $router->prefix('tables')->group(function ($app) {
 $router->prefix('tables/tools')->group(function ($app) {
     $app->get('/default-settings', 'ToolsController@getDefaultSettings');
     $app->post('/default-settings', 'ToolsController@saveDefaultSettings');
+    $app->get('/permission', 'ToolsController@getAccessRoles');
     $app->get('/global-settings', 'ToolsController@getGlobalSettings');
     $app->post('/global-settings', 'ToolsController@updateGlobalSettings');
     $app->post('/clear-cache', 'ToolsController@clearTableCache');
@@ -43,7 +44,9 @@ $router->prefix('table-builder')->group(function ($app) {
     $app->get('/{id}', 'TableBuilderController@show')->int('id');
 });
 
-$router->get('fluent-forms', 'FluentFormsController@index');
+$router->prefix('fluent-forms')->group(function ($app) {
+    $app->post('/', 'FluentFormsController@install');
+});
 
 $router->get('wp-posts', 'WPPostsController@index');
 

@@ -260,22 +260,17 @@
             },
             installFluentFrom() {
                 this.installing = true;
-                this.$post({
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'install_fluent_form'
-                })
+                this.$post('fluent-forms')
                     .then(response => {
                         this.$message.success(response.data.message);
                         if (response.data.redirect_url) {
                             window.location.href = response.data.redirect_url;
                         }
                     })
-                    .fail(error => {
+                    .catch(error => {
                         this.$message.error(error.responseJSON.message);
                     })
-                    .always(() => {
-                        this.installing = false;
-                    });
+                this.installing = false;
             }
         },
         mounted() {

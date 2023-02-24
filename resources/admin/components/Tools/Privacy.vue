@@ -63,20 +63,15 @@
         methods: {
             get() {
                 this.fetching = true;
-                this.$get({
-                    action: "ninja_tables_ajax_actions",
-                    target_action: 'get_access_roles'
-                })
+                this.$get('tables/tools/permission')
                     .then(response => {
                         this.capability = response.capability;
                         this.roles = response.roles;
                         this.sql_permission = response.sql_permission;
                         this.handleCheckedCapabilitiesChange(this.capability);
                     })
-                    .fail(e => {})
-                    .always(() => {
-                        this.fetching = false;
-                    })
+                    .catch(e => {})
+                this.fetching = false;
             },
             store() {
                 let data = {
@@ -92,7 +87,7 @@
                             type: "success"
                         });
                     })
-                    .fail(error => {
+                    .catch(error => {
                         this.$message({
                             showClose: true,
                             message: error.responseJSON.data.message,

@@ -30,7 +30,51 @@ class ToolsController extends Controller
         ], 200);
     }
 
-    // Permission & licence's code will be goes here
+    public function getAccessRoles(Request $request)
+    {
+        $roles = $this->get_roles();
+
+        $formatted     = array();
+        $excludedRoles = array('subscriber', 'administrator');
+        foreach ($roles as $key => $role) {
+            if ( ! in_array($key, $excludedRoles)) {
+                $formatted[] = array(
+                    'name' => $role['name'],
+                    'key'  => $key
+                );
+            }
+        }
+
+        $capability = get_option('_ninja_tables_permission');
+
+        if (is_string($capability)) {
+            $capability = [];
+        }
+
+        $this->json(array(
+            'capability'     => $capability,
+            'roles'          => $formatted,
+            'sql_permission' => get_option('_ninja_tables_sql_permission')
+        ), 200);
+    }
+
+    /**
+     * Filters the list of editable roles.
+     * This is actually WordPress core function - get_editable_roles()
+     * get_editable_roles() is not working in our framework that's why we have to copy the core code here
+     *
+     * @return mixed
+     * @since 2.8.0
+     *
+     */
+    public function get_roles()
+    {
+        $all_roles = wp_roles()->roles;
+
+        return $this->app->applyFIlters('editable_roles', $all_roles);
+    }
+
+    // Tools: Licence's code will be goes here
 
     public function getGlobalSettings(Request $request)
     {
