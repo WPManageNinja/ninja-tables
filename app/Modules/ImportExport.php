@@ -3,23 +3,18 @@
 namespace NinjaTables\App\Modules;
 
 use League\Csv\Reader;
+use League\Csv\Writer;
 use NinjaTables\App\Http\Controllers\TableBuilderController;
 use NinjaTables\Framework\Support\Sanitizer;
 
 class ImportExport
 {
-    public static function export()
+    public static function export($tableId, $tableData, $fileName, $format)
     {
-        $tableId    = intval($_REQUEST['table_id']);
-        $tableTitle = get_the_title($tableId);
-        $fileName   = sanitize_title($tableTitle, 'Export-Table-' . date('Y-m-d-H-i-s'), 'preview');
-        $tableData  = get_post_meta($tableId, '_ninja_table_builder_table_data', true);
-        $format     = sanitize_text_field($_REQUEST['format']);
-
         if ($format === 'csv') {
-            static::exportCSV($tableData, $fileName);
+            return static::exportCSV($tableData, $fileName);
         } elseif ($format === 'json') {
-            static::exportJSON($tableId, $fileName);
+            return static::exportJSON($tableId, $fileName);
         }
     }
 
@@ -53,7 +48,7 @@ class ImportExport
         $data    = file_get_contents($tmpName);
 
         try {
-            $reader = \League\Csv\Reader::createFromString($data)->fetchAll();
+            $reader = Reader::createFromString($data)->fetchAll();
         } catch (\Exception $exception) {
             wp_send_json_error(array(
                 'errors'  => $exception->getMessage(),
@@ -82,7 +77,7 @@ class ImportExport
         $tmpName       = Sanitizer::sanitizeTextField($_FILES['file']['tmp_name']);
         $parsedContent = file_get_contents($tmpName);
         $content       = json_decode($parsedContent, true);
-        $table_id = (new TableBuilderController())->wpInsertPost($content['table_name']);
+        $table_id      = (new TableBuilderController())->wpInsertPost($content['table_name']);
 
         $data = [
             'table_name'       => $content['table_name'],
@@ -118,14 +113,15 @@ class ImportExport
             }
             $rows[] = $cols;
         }
-        static::exportAsCSV($rows, $fileName);
+
+        return static::exportAsCSV($rows, $fileName);
     }
 
     private static function exportAsCSV($data, $fileName = null)
     {
         $fileName = ($fileName) ? $fileName . '.csv' : 'export-data-' . date('d-m-Y') . '.csv';
 
-        $writer = \League\Csv\Writer::createFromFileObject(new SplTempFileObject());
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
         $writer->setDelimiter(",");
         $writer->setNewline("\r\n");
         $writer->insertAll($data);
@@ -148,7 +144,7 @@ class ImportExport
             'table_html'       => $table_html
         ];
 
-        static::exportAsJSON($data, $fileName);
+        return static::exportAsJSON($data, $fileName);
     }
 
     private static function exportAsJSON($data, $fileName = null)

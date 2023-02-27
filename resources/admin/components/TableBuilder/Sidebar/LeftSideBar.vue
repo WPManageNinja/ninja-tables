@@ -114,7 +114,8 @@
         <el-collapse-item :name="key">
           <template slot="title">
             {{ setting.name }}
-            <el-tooltip v-if="setting.name === 'Global Style' || setting.name === 'Sticky'" placement="top-start" effect="light">
+            <el-tooltip v-if="setting.name === 'Global Style' || setting.name === 'Sticky'" placement="top-start"
+                        effect="light">
 
               <template slot="content">
                 <h3>{{ setting.name }}</h3>
@@ -131,14 +132,15 @@
             </el-tooltip>
           </template>
           <div class="component-spacing" v-for="(item, tabKey, index) in setting.options" :key="tabKey">
-            <all-input-element  :disableResponsive="getBoolean(!hasPro && setting.has_pro)" :item="item"></all-input-element>
+            <all-input-element :disableResponsive="getBoolean(!hasPro && setting.has_pro)"
+                               :item="item"></all-input-element>
             <template v-if="item.childs && (getBoolean(item.value))">
               <template v-for="(singleItem, childKey, childIndex) in item.childs">
-                 <all-input-element
-                     :key="childKey"
-                     :item="singleItem"
-                     class="component-spacing"
-                 >
+                <all-input-element
+                    :key="childKey"
+                    :item="singleItem"
+                    class="component-spacing"
+                >
                 </all-input-element>
               </template>
             </template>
@@ -168,22 +170,23 @@
       >
         <el-collapse-item :title="responsiveItem.name" :name="key">
           <div class="component-spacing" v-for="(item, index) in responsiveItem.options" :key="index">
-             <div v-if="'devices' === index">
-                <el-tabs v-model="deviceActiveName" @tab-click="handleDeviceClick">
-                  <el-tab-pane v-for="(devices, index) in item" :key="index" :label="devices.name" :name="devices.key">
-                    <div v-for="(device, index, key) in devices" :key="index" v-if="('name' != index) && ('key' != index)">
-                      <all-input-element
-                          :initialData="initialData"
-                          :item="device"
-                          :disableResponsive="!enableResponsive"
-                          :mobileDisableBreakpoint="devices.key === 'mobile' && isDisableMobileBreakpoint && device.key !== 'disable_breakpoint'"
-                          :tabletDisableBreakpoint="devices.key === 'tablet' && isDisableTabletBreakpoint && device.key !== 'disable_breakpoint'"
-                          :deviceName="devices.key"
-                          class="component-spacing"
-                      ></all-input-element>
-                       </div>
-                    </el-tab-pane>
-                </el-tabs>
+            <div v-if="'devices' === index">
+              <el-tabs v-model="deviceActiveName" @tab-click="handleDeviceClick">
+                <el-tab-pane v-for="(devices, index) in item" :key="index" :label="devices.name" :name="devices.key">
+                  <div v-for="(device, index, key) in devices" :key="index"
+                       v-if="('name' != index) && ('key' != index)">
+                    <all-input-element
+                        :initialData="initialData"
+                        :item="device"
+                        :disableResponsive="!enableResponsive"
+                        :mobileDisableBreakpoint="devices.key === 'mobile' && isDisableMobileBreakpoint && device.key !== 'disable_breakpoint'"
+                        :tabletDisableBreakpoint="devices.key === 'tablet' && isDisableTabletBreakpoint && device.key !== 'disable_breakpoint'"
+                        :deviceName="devices.key"
+                        class="component-spacing"
+                    ></all-input-element>
+                  </div>
+                </el-tab-pane>
+              </el-tabs>
             </div>
             <div v-else>
               <all-input-element :item="item"></all-input-element>
@@ -273,18 +276,20 @@ export default {
   },
   methods: {
     exportTable() {
-      location.href = this.downloadLink(this.exports.format);
+      this.downloadLink(this.exports.format);
     },
     downloadLink(format = 'csv') {
-      const data = {
-        action: 'ninja_tables_builder_ajax_actions',
-        target_action: 'export-table',
+      const payloadData = {
         table_id: this.$route.params.table_id,
-        format: format,
-        ninja_table_admin_nonce: window.ninja_table_admin.ninja_table_admin_nonce
-      };
-
-      return ajaxurl + '?' + jQuery.param(data)
+        format: format
+      }
+      this.$post(`table-builder/export`, payloadData)
+          .then(response => {
+            console.log({response})
+          })
+          .catch(e => {
+            console.log({e})
+          })
     },
     maximumWidth(tdId) {
       let width = jQuery('td#' + tdId).attr('style').split(';')[1];
@@ -332,7 +337,7 @@ export default {
       this.$emit('deviceSelected', data);
     },
     handleChangeResponsive(val) {
-      if(val === 'responsive_settings' && this.deviceActiveName === 'desktop'){
+      if (val === 'responsive_settings' && this.deviceActiveName === 'desktop') {
         this.deviceActiveName = 'tablet';
       }
       this.deviceLastSelected = this.deviceActiveName;
@@ -415,6 +420,7 @@ export default {
   .el-collapse-item__content {
     padding-bottom: 6px;
   }
+
   .accordions {
     .export {
       .el-select {
