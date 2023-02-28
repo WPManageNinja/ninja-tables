@@ -16,10 +16,10 @@ const request = function (method, route, data = {}) {
     }
 
     if (data && data instanceof FormData) {
-        ajaxContent.data.append('query_timestamp', Date.now())
+        // ajaxContent.data.append('query_timestamp', Date.now())
         ajaxContent.contentType = false;
         ajaxContent.processData = false;
-        ajaxContent.cache = false;
+        // ajaxContent.cache = false;
     } else {
         ajaxContent.data.query_timestamp = Date.now();
     }

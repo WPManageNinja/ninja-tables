@@ -205,7 +205,7 @@
         },
         methods: {
             clear() {
-                jQuery('#fileUpload').val('');
+               document.getElementById('fileUpload').value = '';
             },
             importTable() {
                 this.btnLoading = true;
@@ -216,7 +216,7 @@
                     return;
                 }
 
-                var file = jQuery('#fileUpload')[0].files[0];
+                let file = document.getElementById('fileUpload').files[0];
 
                 if (!file) {
                     this.btnLoading = false;
@@ -227,18 +227,10 @@
 
                 formData.append('format', this.imports.format);
                 formData.append('file', file);
-                formData.append('action', 'ninja_tables_ajax_actions');
-                formData.append('target_action', 'import-table');
                 formData.append('do_unicode', this.do_unicode);
-                formData.append('ninja_table_admin_nonce', window.ninja_table_admin.ninja_table_admin_nonce);
 
-                jQuery.ajax({
-                    url: ajaxurl,
-                    data: formData,
-                    type: 'POST',
-                    contentType: false,
-                    processData: false,
-                    success: (response) => {
+              this.$post('import', formData)
+                    .then(response => {
                       alert(response.message ? response.message : this.$t("Successfully added a table."));
                       if (this.imports.format === 'dragAndDrop') {
                         this.$router.push({
@@ -251,12 +243,11 @@
                           params: {table_id: response.tableId}
                         });
                       }
-                    },
-                    error: (error) => {
+                    })
+                    .catch(error => {
                         this.btnLoading = false;
                         alert(error.responseJSON.message);
-                    }
-                });
+                    })
             },
             importFromOtherPlugin(plugin) {
                 this.selectedPlugin = plugin;

@@ -131,7 +131,6 @@
 
                 this.$post('import', formData)
                     .then(response => {
-                      console.log('called from response');
                         this.$message({
                             showClose: true,
                             message: response.message ? response.message : this.$t("Successfully added a table aaa."),
@@ -152,7 +151,6 @@
                         }
                     })
                     .catch(error => {
-                      console.log('called from catch', error);
                         this.errors = error.responseJSON.data.errors;
                         this.$message({
                             showClose: true,

@@ -188,7 +188,6 @@ export default {
       let formData = new FormData();
       formData.append('file', this.file);
       formData.append('url', this.url);
-      formData.append('ninja_table_admin_nonce', window.ninja_table_admin.nonce);
 
       this.$post('table-builder/import', formData)
         .then(response => {
