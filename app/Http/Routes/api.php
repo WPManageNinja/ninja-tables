@@ -65,3 +65,5 @@ $router->prefix('import')->group(function ($app) {
 });
 
 $router->get('woo', 'WooCommerceController@index');
+
+$router->post('ninja-charts', 'NinjaChartsController@installNinjaCharts');

@@ -52,7 +52,7 @@
                     plugin: 'ninja-charts',
                 };
 
-                this.$post(data)
+                this.$post('ninja-charts', data)
                         .then((response) => {
                             this.$message({
                                 showClose: true,
@@ -62,7 +62,7 @@
 
                             window.location = response.data.redirect;
                         })
-                        .fail((error) => {
+                        .catch((error) => {
                             if (error.responseJSON.data.message) {
                                 this.$message({
                                     showClose: true,
@@ -77,9 +77,7 @@
                                 });
                             }
                         })
-                        .always(() => {
-                            this.loading = false;
-                        })
+                this.loading = false;
             }
         }
     }
