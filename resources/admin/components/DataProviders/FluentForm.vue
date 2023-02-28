@@ -251,7 +251,7 @@
             },
             installFluentFrom() {
                 this.installing = true;
-                this.$post('fluent-forms')
+                this.$post('install/fluent-forms')
                     .then(response => {
                         this.$message.success(response.data.message);
                         if (response.data.redirect_url) {

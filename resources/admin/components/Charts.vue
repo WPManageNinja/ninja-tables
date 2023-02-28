@@ -47,12 +47,10 @@
                 this.loading = true;
 
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'install-extra-plugins',
                     plugin: 'ninja-charts',
                 };
 
-                this.$post('ninja-charts', data)
+                this.$post('install/ninja-charts', data)
                         .then((response) => {
                             this.$message({
                                 showClose: true,

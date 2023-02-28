@@ -46,7 +46,6 @@ $router->prefix('table-builder')->group(function ($app) {
 });
 
 $router->prefix('fluent-forms')->group(function ($app) {
-    $app->post('/', 'FluentFormsController@install');
     $app->get('/', 'FluentFormsController@index');
     $app->post('/save', 'FluentFormsController@store');
     $app->get('/{id}', 'FluentFormsController@getFormsFields')->int('id');
@@ -66,4 +65,7 @@ $router->prefix('import')->group(function ($app) {
 
 $router->get('woo', 'WooCommerceController@index');
 
-$router->post('ninja-charts', 'NinjaChartsController@installNinjaCharts');
+$router->prefix('install')->group(function ($app) {
+    $app->post('/fluent-forms', 'PluginInstallerController@installFluentForms');
+    $app->post('/ninja-charts', 'PluginInstallerController@installNinjaCharts');
+});
