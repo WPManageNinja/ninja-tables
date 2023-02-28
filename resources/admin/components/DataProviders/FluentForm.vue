@@ -197,20 +197,13 @@
         methods: {
             fetchForms() {
                 this.fetching = true;
-                this.$get({
-                    action: 'ninja_tables_get-fluentform-forms'
-                })
+                this.$get('fluent-forms')
                     .then(res => this.forms = res.data)
-                    .fail(error => console.log(error))
-                    .always(() => {
-                        this.fetching = false;
-                    });
+                    .catch(error => console.log(error))
+               this.fetching = false;
             },
             handleFormSelectionChange(formId) {
-                this.$get({
-                    form_Id: formId,
-                    action: 'ninja-tables_get-fluentform-fields'
-                })
+                this.$get('fluent-forms/' + formId)
                     .then(res => {
                         this.fields = res.data
                         if (this.editing) {
@@ -224,12 +217,9 @@
                             });
                         }
                     })
-                    .fail(error => {
+                    .catch(error => {
 
                     })
-                    .always(() => {
-
-                    });
             },
             handleFieldsSelectionChange(val) {
                 this.form.fields = val;
@@ -241,14 +231,15 @@
                     this.form.current_user_entry_only = this.config.table.current_user_entry_only;
                 }
 
-                this.$post({
-                    action: 'ninja_tables_save_fluentform_table',
-                    post_title: this.post_title,
-                    form: this.form,
-                    table_Id: this.config && this.config.table.ID || null
-                })
+                let data = {
+                  post_title: this.post_title,
+                  form: this.form,
+                  table_Id: this.config && this.config.table.ID || null
+                }
+
+                this.$post('fluent-forms/save', data)
                     .then(res => this.tableCreated(res.data.table_id))
-                    .fail(error => {
+                    .catch(error => {
                         let message = '';
                         let messages = error.responseJSON.data.message;
                         for (let key in messages) {
@@ -256,7 +247,7 @@
                         }
                         this.$message({showClose: true, message: message, type: 'error'});
                     })
-                    .always(res => this.btnLoading = false);
+                this.btnLoading = false
             },
             installFluentFrom() {
                 this.installing = true;

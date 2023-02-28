@@ -47,6 +47,9 @@ $router->prefix('table-builder')->group(function ($app) {
 
 $router->prefix('fluent-forms')->group(function ($app) {
     $app->post('/', 'FluentFormsController@install');
+    $app->get('/', 'FluentFormsController@index');
+    $app->post('/save', 'FluentFormsController@store');
+    $app->get('/{id}', 'FluentFormsController@getFormsFields')->int('id');
 });
 
 $router->get('wp-posts', 'WPPostsController@index');
