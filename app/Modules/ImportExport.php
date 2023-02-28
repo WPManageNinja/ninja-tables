@@ -66,7 +66,7 @@ class ImportExport
 
 
         if (isset($content['table_id']) && $content['table_id']) {
-            static::ninjaTableJSONImport();
+            return static::ninjaTableJSONImport();
         } else {
             return $content;
         }
@@ -87,7 +87,7 @@ class ImportExport
             'table_html'       => $content['table_html']
         ];
 
-        (new TableBuilderController())->updatePostMeta($table_id, $data);
+        return (new TableBuilderController())->updatePostMeta($table_id, $data);
     }
 
     public static function exportCSV($tableData, $fileName = null)

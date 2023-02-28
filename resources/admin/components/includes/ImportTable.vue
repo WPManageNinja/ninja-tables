@@ -105,7 +105,7 @@
         },
         methods: {
             clear() {
-                jQuery('#fileUpload').val('');
+              document.getElementById('fileUpload').value = '';
             },
             importTable() {
                 this.btnLoading = true;
@@ -116,7 +116,7 @@
                     return;
                 }
 
-                let file = jQuery('#fileUpload')[0].files[0];
+                let file = document.getElementById('fileUpload').files[0];
 
                 if (!file) {
                     this.btnLoading = false;
@@ -127,21 +127,14 @@
 
                 formData.append('format', this.imports.format);
                 formData.append('file', file);
-                formData.append('action', 'ninja_tables_ajax_actions');
-                formData.append('target_action', 'import-table');
                 formData.append('do_unicode', this.do_unicode);
-                formData.append('ninja_table_admin_nonce', window.ninja_table_admin.ninja_table_admin_nonce);
 
-                jQuery.ajax({
-                    url: ajaxurl,
-                    data: formData,
-                    type: 'POST',
-                    contentType: false,
-                    processData: false,
-                    success: (response) => {
+                this.$post('import', formData)
+                    .then(response => {
+                      console.log('called from response');
                         this.$message({
                             showClose: true,
-                            message: response.message ? response.message : this.$t("Successfully added a table."),
+                            message: response.message ? response.message : this.$t("Successfully added a table aaa."),
                             type: 'success'
                         });
                         if (this.imports.format === 'dragAndDrop') {
@@ -157,8 +150,9 @@
                             });
                           }
                         }
-                    },
-                    error: (error) => {
+                    })
+                    .catch(error => {
+                      console.log('called from catch', error);
                         this.errors = error.responseJSON.data.errors;
                         this.$message({
                             showClose: true,
@@ -166,8 +160,7 @@
                             type: 'error'
                         });
                         this.btnLoading = false;
-                    }
-                });
+                    })
             }
         }
     }

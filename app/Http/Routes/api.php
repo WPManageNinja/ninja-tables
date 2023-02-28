@@ -60,6 +60,8 @@ $router->get('csv', 'ExternalCSVController@index');
 
 $router->get('custom-sql', 'CustomSQLController@index');
 
-$router->get('import', 'ImportController@index');
+$router->prefix('import')->group(function ($app) {
+    $app->post('/', 'ImportController@store');
+});
 
 $router->get('woo', 'WooCommerceController@index');

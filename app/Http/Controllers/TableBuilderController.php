@@ -80,7 +80,7 @@ class TableBuilderController extends Controller
             $data = ImportExport::importFromURL($url);
         } else {
             $data     = ImportExport::import();
-            $fileName = sanitize_text_field($_FILES['file']['name']);
+            $fileName = Sanitizer::sanitizeTextField($_FILES['file']['name']);
         }
 
         return $this->importCSV($data, $fileName);
@@ -308,7 +308,6 @@ class TableBuilderController extends Controller
                 'id' => $table_id
             ]
         ], 200);
-
     }
 
     public function show(Request $request, $id)
