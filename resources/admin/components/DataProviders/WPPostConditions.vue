@@ -263,13 +263,10 @@
                 return c.is_selectable == 'true';
             },
             getPostAuthors() {
-                return this.$getJSON({
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'get_wp_post_authors',
-                    post_types: this.selected_post_types
-                }).then(res => {
+                return this.$get('wp-posts/authors')
+                    .then(res => {
                     this.authors = res.data.authors;
-                });
+                })
             }
         },
         mounted() {

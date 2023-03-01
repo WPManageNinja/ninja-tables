@@ -51,7 +51,10 @@ $router->prefix('fluent-forms')->group(function ($app) {
     $app->get('/{id}', 'FluentFormsController@getFormsFields')->int('id');
 });
 
-$router->get('wp-posts', 'WPPostsController@index');
+$router->prefix('wp-posts')->group(function ($app) {
+    $app->get('/', 'WPPostsController@getPostTypes');
+    $app->get('/authors', 'WPPostsController@getPostTypesAuthor');
+});
 
 $router->get('google-sheets', 'GoogleSheetsController@index');
 

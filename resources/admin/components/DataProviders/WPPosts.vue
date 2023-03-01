@@ -310,10 +310,8 @@
             },
             getPostTypes() {
                 this.loading = true;
-                this.$get({
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'get_wp_post_types',
-                })
+
+                this.$get('wp-posts')
                     .then(res => {
                         this.all_types = res.data.post_types;
                         this.postStatuses = res.data.postStatuses;
@@ -340,12 +338,10 @@
                             this.handlePostTypeChange();
                         }
                     })
-                    .fail(error => {
+                    .catch(error => {
                         console.log(error);
                     })
-                    .always(() => {
-                        this.loading = false;
-                    });
+               this.loading = false;
             }
         },
         mounted() {
