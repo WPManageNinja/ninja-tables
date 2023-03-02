@@ -689,7 +689,6 @@
                 }
             },
             sortTable(id, newPosition) {
-              console.log('sortable calling from tablerows')
                 this.loading = true;
 
                 let data = {

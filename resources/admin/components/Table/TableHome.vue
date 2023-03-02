@@ -161,20 +161,20 @@
             this.clipboard();
 
             // Initialize the table's manual data sorting.
-            // window.ninjaTableBus.$on('initManualSorting', (options, resolve, reject) => {
-            //     let data = {
-            //         action: "ninja_tables_init_sortable",
-            //         ...options
-            //     };
-            //
-            //     this.$post(data)
-            //         .success(response => resolve(response))
-            //         .fail(e => reject(e));
-            // });
+            window.ninjaTableBus.$on('initManualSorting', (options, resolve, reject) => {
+                let data = {
+                    action: "ninja_tables_init_sortable",
+                    ...options
+                };
 
-            // window.ninjaTableBus.$on('tableDoingAjax',  (value) => {
-            //     this.doingAjax = value;
-            // });
+                this.$post(data)
+                    .success(response => resolve(response))
+                    .fail(e => reject(e));
+            });
+
+            window.ninjaTableBus.$on('tableDoingAjax',  (value) => {
+                this.doingAjax = value;
+            });
 
             // removes previous events to prevent duplicate event handlers.
             window.ninjaTableBus.$off('updateTableColumns');
