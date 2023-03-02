@@ -276,20 +276,14 @@ export default {
   },
   methods: {
     exportTable() {
-      this.downloadLink(this.exports.format);
+      location.href = this.downloadLink(this.exports.format);
     },
     downloadLink(format = 'csv') {
       const payloadData = {
         table_id: this.$route.params.table_id,
         format: format
       }
-      this.$post(`table-builder/export`, payloadData)
-          .then(response => {
-            console.log({response})
-          })
-          .catch(e => {
-            console.log({e})
-          })
+      return window.ninja_table_admin.rest.url + '/table-builder/export?' + jQuery.param(payloadData);
     },
     maximumWidth(tdId) {
       let width = jQuery('td#' + tdId).attr('style').split(';')[1];

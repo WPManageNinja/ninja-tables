@@ -40,7 +40,7 @@ $router->prefix('table-builder')->group(function ($app) {
     $app->get('/', 'TableBuilderController@index');
     $app->post('/', 'TableBuilderController@store');
     $app->post('/import', 'TableBuilderController@import');
-    $app->post('/export', 'TableBuilderController@export');
+    $app->get('/export', 'TableBuilderController@export');
     $app->patch('/{id}', 'TableBuilderController@update')->int('id');
     $app->get('/{id}', 'TableBuilderController@show')->int('id');
 });
