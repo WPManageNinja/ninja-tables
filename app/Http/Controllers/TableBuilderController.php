@@ -79,6 +79,11 @@ class TableBuilderController extends Controller
         if (isset($url) && ! empty($url)) {
             $data = ImportExport::importFromURL($url);
         } else {
+            $fileType = Sanitizer::sanitizeTextField($_FILES['file']['type']);
+            if ($fileType === "application/json") {
+                return ImportExport::import();
+            }
+
             $data     = ImportExport::import();
             $fileName = Sanitizer::sanitizeTextField($_FILES['file']['name']);
         }

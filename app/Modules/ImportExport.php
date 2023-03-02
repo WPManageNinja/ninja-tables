@@ -64,7 +64,6 @@ class ImportExport
         $tmpName = Sanitizer::sanitizeTextField($_FILES['file']['tmp_name']);
         $content = json_decode(file_get_contents($tmpName), true);
 
-
         if (isset($content['table_id']) && $content['table_id']) {
             return static::ninjaTableJSONImport();
         } else {
