@@ -56,17 +56,9 @@ $router->prefix('wp-posts')->group(function ($app) {
     $app->get('/authors', 'WPPostsController@getPostTypesAuthor');
 });
 
-$router->get('google-sheets', 'GoogleSheetsController@index');
-
-$router->get('csv', 'ExternalCSVController@index');
-
-$router->get('custom-sql', 'CustomSQLController@index');
-
 $router->prefix('import')->group(function ($app) {
     $app->post('/', 'ImportController@store');
 });
-
-$router->get('woo', 'WooCommerceController@index');
 
 $router->prefix('install')->group(function ($app) {
     $app->post('/fluent-forms', 'PluginInstallerController@installFluentForms');
