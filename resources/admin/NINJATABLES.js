@@ -55,16 +55,30 @@ export default class NINJATABLE {
     }
 
     $getJSON(options) {
-        options['nonce'] = window.ninja_table_admin.rest.nonce;
+        options['nonce'] = window.ninja_table_admin.ninja_table_admin_nonce;
         return window.jQuery.getJSON(window.ajaxurl, options);
     }
 
     $get(url, options = {}) {
-        return Rest.get(url, options);
+        // if condition only for pro
+        if (url.action) {
+            options = url;
+            options['ninja_table_admin_nonce'] = window.ninja_table_admin.ninja_table_admin_nonce;
+            return window.jQuery.get(window.ajaxurl, options);
+        } else {
+            return Rest.get(url, options);
+        }
     }
 
     $post(url, options = {}) {
-        return Rest.post(url, options);
+        // if condition only for pro
+        if (url.action) {
+            options = url;
+            options['ninja_table_admin_nonce'] = window.ninja_table_admin.ninja_table_admin_nonce;
+            return window.jQuery.post(window.ajaxurl, options);
+        } else {
+            return Rest.post(url, options);
+        }
     }
 
     $del(url, options = {}) {

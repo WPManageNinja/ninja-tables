@@ -1131,7 +1131,7 @@ function ninjaTablesAdminPrintStyles()
  */
 function ninjaTablesValidateNonce($key = 'ninja_table_admin_nonce')
 {
-    $nonce = \NinjaTables\Classes\ArrayHelper::get($_REQUEST, $key);
+    $nonce = \NinjaTables\Framework\Support\Arr::get($_REQUEST, $key);
 
     if ( ! wp_verify_nonce($nonce, $key)) {
         $app    = App::getInstance();

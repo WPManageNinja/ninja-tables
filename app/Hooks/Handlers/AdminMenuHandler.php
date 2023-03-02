@@ -370,7 +370,7 @@ class AdminMenuHandler
             'has_woocommerce'          => defined('WC_PLUGIN_FILE'),
             'license_status'           => get_option('_ninjatables_pro_license_status'),
             'ninja_charts_url'         => defined('NINJA_CHARTS_VERSION') ? self_admin_url('admin.php?page=ninja-charts#/chart-list') : null,
-            // 'ninja_table_admin_nonce'  => wp_create_nonce('ninja_table_admin_nonce'),
+            'ninja_table_admin_nonce'  => wp_create_nonce('ninja_table_admin_nonce'),
             'ninja_tables_pro_url'     => defined('NINJATABLESPRO') ? NINJAPROPLUGIN_URL : null
         ));
 
