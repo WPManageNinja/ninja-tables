@@ -9,6 +9,10 @@ use NinjaTables\Framework\Support\Sanitizer;
 
 class ImportExport
 {
+    public static function defaultTableExport($data, $fileName)
+    {
+        return static::exportAsCSV($data, $fileName);
+    }
     public static function export($tableId, $tableData, $fileName, $format)
     {
         if ($format === 'csv') {

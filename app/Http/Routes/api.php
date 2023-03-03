@@ -40,7 +40,6 @@ $router->prefix('table-builder')->group(function ($app) {
     $app->get('/', 'TableBuilderController@index');
     $app->post('/', 'TableBuilderController@store');
     $app->post('/import', 'TableBuilderController@import');
-    $app->get('/export', 'TableBuilderController@export');
     $app->patch('/{id}', 'TableBuilderController@update')->int('id');
     $app->get('/{id}', 'TableBuilderController@show')->int('id');
 });
@@ -64,3 +63,6 @@ $router->prefix('install')->group(function ($app) {
     $app->post('/fluent-forms', 'PluginInstallerController@installFluentForms');
     $app->post('/ninja-charts', 'PluginInstallerController@installNinjaCharts');
 });
+
+//export tables
+$router->get('/export-tables', 'ExportTableController@export');

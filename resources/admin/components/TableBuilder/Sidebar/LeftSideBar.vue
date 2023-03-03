@@ -281,9 +281,10 @@ export default {
     downloadLink(format = 'csv') {
       const payloadData = {
         table_id: this.$route.params.table_id,
-        format: format
+        format: format,
+        source: 'dragAndDrop'
       }
-      return window.ninja_table_admin.rest.url + '/table-builder/export?' + jQuery.param(payloadData);
+      return window.ninja_table_admin.rest.url + '/export-tables?' + jQuery.param(payloadData);
     },
     maximumWidth(tdId) {
       let width = jQuery('td#' + tdId).attr('style').split(';')[1];

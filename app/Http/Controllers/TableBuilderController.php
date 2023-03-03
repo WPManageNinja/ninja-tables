@@ -112,16 +112,6 @@ class TableBuilderController extends Controller
         return $this->updatePostMeta($table_id, $data);
     }
 
-    public function export(Request $request)
-    {
-        $tableId    = intval($request->table_id);
-        $tableTitle = get_the_title($tableId);
-        $fileName   = Sanitizer::sanitizeTitle($tableTitle, 'Export-Table-' . date('Y-m-d-H-i-s'), 'preview');
-        $tableData  = get_post_meta($tableId, '_ninja_table_builder_table_data', true);
-        $format     = Sanitizer::sanitizeTextField($request->format);
-        return ImportExport::export($tableId, $tableData, $fileName, $format);
-    }
-
     public function store(Request $request)
     {
         $table_type = Sanitizer::sanitizeTextField($request->data['table_data']['table_type']);
