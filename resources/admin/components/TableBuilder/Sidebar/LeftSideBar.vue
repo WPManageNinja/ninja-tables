@@ -283,7 +283,7 @@ export default {
         table_id: this.$route.params.table_id,
         format: format
       }
-      return window.ninja_table_admin.rest.url + '/table-builder/export?' + jQuery.param(payloadData);
+      return window.ninja_table_admin.rest.url + '/export/drag-and-drop?' + jQuery.param(payloadData);
     },
     maximumWidth(tdId) {
       let width = jQuery('td#' + tdId).attr('style').split(';')[1];

@@ -45,19 +45,15 @@
         },
         methods: {
             downloadLink(format = 'csv') {
-                const data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'export-data',
+                const payloadData = {
                     table_id: this.tableId,
-                    format: format,
-                    ninja_table_admin_nonce: window.ninja_table_admin.ninja_table_admin_nonce
+                    format: format
                 };
 
-                return ajaxurl+'?'+jQuery.param(data)
+                return window.ninja_table_admin.rest.url + '/export/default?' + jQuery.param(payloadData);
             },
             doExport() {
-                let url = this.downloadLink(this.selected);
-                location.href = url;
+               location.href = this.downloadLink(this.selected);
             }
         }
     }

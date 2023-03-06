@@ -79,6 +79,11 @@ class TableBuilderController extends Controller
         if (isset($url) && ! empty($url)) {
             $data = ImportExport::importFromURL($url);
         } else {
+            $fileType = Sanitizer::sanitizeTextField($_FILES['file']['type']);
+            if ($fileType === "application/json") {
+                return ImportExport::import();
+            }
+
             $data     = ImportExport::import();
             $fileName = Sanitizer::sanitizeTextField($_FILES['file']['name']);
         }
@@ -105,16 +110,6 @@ class TableBuilderController extends Controller
         ];
 
         return $this->updatePostMeta($table_id, $data);
-    }
-
-    public function export(Request $request)
-    {
-        $tableId    = intval($request->table_id);
-        $tableTitle = get_the_title($tableId);
-        $fileName   = Sanitizer::sanitizeTitle($tableTitle, 'Export-Table-' . date('Y-m-d-H-i-s'), 'preview');
-        $tableData  = get_post_meta($tableId, '_ninja_table_builder_table_data', true);
-        $format     = Sanitizer::sanitizeTextField($request->format);
-        return ImportExport::export($tableId, $tableData, $fileName, $format);
     }
 
     public function store(Request $request)

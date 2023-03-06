@@ -40,7 +40,6 @@ $router->prefix('table-builder')->group(function ($app) {
     $app->get('/', 'TableBuilderController@index');
     $app->post('/', 'TableBuilderController@store');
     $app->post('/import', 'TableBuilderController@import');
-    $app->get('/export', 'TableBuilderController@export');
     $app->patch('/{id}', 'TableBuilderController@update')->int('id');
     $app->get('/{id}', 'TableBuilderController@show')->int('id');
 });
@@ -63,4 +62,9 @@ $router->prefix('import')->group(function ($app) {
 $router->prefix('install')->group(function ($app) {
     $app->post('/fluent-forms', 'PluginInstallerController@installFluentForms');
     $app->post('/ninja-charts', 'PluginInstallerController@installNinjaCharts');
+});
+
+$router->prefix('export')->group(function ($app) {
+    $app->get('/default', 'ExportTableController@defaultExport');
+    $app->get('/drag-and-drop', 'ExportTableController@dragAndDropExport');
 });
