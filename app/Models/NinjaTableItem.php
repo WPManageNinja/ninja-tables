@@ -36,8 +36,8 @@ class NinjaTableItem extends Model
 
             $hasSettings = true;
             foreach ($data as $item) {
-                $hasSettings = property_exists($item, 'settings');
-                $settings    = (object)array();
+                $hasSettings = isset($item->settings);
+                $settings = array();
                 if ($hasSettings) {
                     $settings = maybe_unserialize($item->settings);
                     if ( ! is_array($settings)) {
@@ -45,18 +45,19 @@ class NinjaTableItem extends Model
                     }
                 }
                 $createdBy = '';
-                if (property_exists($item, 'owner_id')) {
+                if (isset($item->owner_id)) {
                     $userInfo = get_userdata($item->owner_id);
                     if ($userInfo && property_exists($userInfo->data, 'display_name')) {
                         $createdBy = $userInfo->data->display_name;
                     }
                 }
+
                 $response[] = array(
                     'id'         => $item->id,
                     'created_at' => $item->created_at,
                     'settings'   => $settings,
                     'created_by' => $createdBy,
-                    'position'   => property_exists($item, 'position') ? $item->position : null,
+                    'position'   => isset($item->position) ? $item->position : null,
                     'values'     => json_decode($item->value, true)
                 );
             }

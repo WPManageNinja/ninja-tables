@@ -21,3 +21,7 @@ $app->addAction('admin_menu', 'AdminMenuHandler@add');
 
 $app->addAction('init', 'CPTHandler@registerPostTypes');
 
+$app->addAction('ninjatables_loaded', function ($app) {
+    $app->make(\NinjaTables\App\Modules\DataProviders\FluentFormProvider::class)->boot();
+    $app->make(\NinjaTables\App\Modules\DataProviders\DefaultProvider::class)->boot();
+});

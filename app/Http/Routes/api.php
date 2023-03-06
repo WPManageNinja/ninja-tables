@@ -22,6 +22,14 @@ $router->prefix('tables')->group(function ($route) {
     $route->delete('/{id}', [TablesController::class, 'delete'])->int('id');
     $route->post('/{id}/duplicate', [TablesController::class, 'duplicate'])->int('id');
     $route->post('/dismiss-fluent-suggest', [TablesController::class, 'dismissFluentSuggest']);
+
+    $route->prefix('/{id}/item')->group(function ($route) {
+        $route->get('/', [TableItemsController::class, 'index'])->int('id');
+        $route->post('/', [TableItemsController::class, 'store'])->int('id');
+        $route->put('/', [TableItemsController::class, 'update'])->int('id');
+        $route->delete('/', [TableItemsController::class, 'delete'])->int('id');
+    });
+
 });
 
 $router->prefix('settings/{id}')->group(function ($route) {
@@ -33,12 +41,6 @@ $router->prefix('settings/{id}')->group(function ($route) {
     $route->post('/custom-styles', [SettingsController::class, 'saveCustomCSSJS'])->int('id');
 });
 
-$router->prefix('tables/{id}/item')->group(function ($route) {
-    $route->get('/', [TableItemsController::class, 'index'])->int('id');
-    $route->post('/', [TableItemsController::class, 'store'])->int('id');
-    $route->put('/', [TableItemsController::class, 'update'])->int('id');
-    $route->delete('/', [TableItemsController::class, 'delete'])->int('id');
-});
 
 $router->prefix('tables/tools')->group(function ($route) {
     $route->get('/default-settings', [ToolsController::class, 'getDefaultSettings']);

@@ -19,7 +19,4 @@ return function($file) {
     add_action('plugins_loaded', function() use ($app) {
         do_action('ninjatables_loaded', $app);
     });
-
-    $ffProvider = $app->make(\NinjaTables\App\Modules\DataProviders\FluentFormProvider::class);
-    $ffProvider->boot();
 };
