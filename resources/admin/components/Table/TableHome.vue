@@ -87,7 +87,7 @@
                 columns: this.config.columns
               }
 
-              this.$post('tables/'+tableId, data)
+              this.$post('settings/'+tableId, data)
                   .then((res) => {
                       this.$message({
                           showClose: true,
@@ -100,7 +100,7 @@
             getSettings() {
               let tableId = this.tableId;
 
-                this.$get('tables/'+tableId)
+                this.$get('settings/'+tableId)
                     .then(response => {
                         if (Object.prototype.toString.call(response.columns) == '[object Object]') {
                             response.columns = toArray(response.columns);

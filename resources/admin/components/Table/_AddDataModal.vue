@@ -215,7 +215,7 @@
                 }
 
                 // check it
-                this.$post('tables/'+this.table_id+'/items', data)
+                this.$post('tables/'+this.table_id+'/item', data)
                     .then((response) => {
                         if (!response.item) {
                             this.$message({

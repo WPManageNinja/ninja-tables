@@ -97,7 +97,7 @@
                 this.btnLoading = true;
                 this.is_editing = false;
 
-                this.$put('tables/'+rowId+'/edit', data)
+                this.$put('tables/'+rowId+'/item', data)
                     .then((response) => {
                       this.$message.success({
                         showClose: true,

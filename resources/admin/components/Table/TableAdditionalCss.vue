@@ -85,7 +85,7 @@
                   custom_css: this.custom_css,
                   custom_js: this.custom_js,
                 }
-                this.$post('tables/'+tableId+'/custom-styles', data)
+                this.$post('settings/'+tableId+'/custom-styles', data)
                     .then(response => {
                         this.$message( {
                             showClose: true,
@@ -102,7 +102,7 @@
                 this.fetching = true;
                 let tableId = this.config.table.ID;
 
-                this.$get('tables/'+tableId+'/custom-styles')
+                this.$get('settings/'+tableId+'/custom-styles')
                     .then(response => {
                         this.custom_css = response.data.custom_css;
                         this.custom_js = response.data.custom_js;

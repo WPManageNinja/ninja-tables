@@ -418,7 +418,7 @@
                     default_sorting: this.config.settings.default_sorting
                 };
                 this.loading = true;
-                return this.$get('tables/'+this.tableId+'/items', data)
+                return this.$get('tables/'+this.tableId+'/item', data)
                     .then((res) => {
                         this.items = res.data;
                         this.dataSource = res.data_source;
@@ -495,7 +495,7 @@
 
                 let that = this;
 
-                this.$del('tables/'+this.tableId+'/items', data)
+                this.$del('tables/'+this.tableId+'/item', data)
                     .then(response => {
                         this.$message({
                             showClose: true,

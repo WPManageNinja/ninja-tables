@@ -210,7 +210,7 @@
                     columns: this.columns,
                     table_settings: this.tableSettings
                 };
-                this.$post('tables/'+this.tableId, data)
+                this.$post('settings/'+this.tableId, data)
                     .then((res) => {
                         this.$message({
                             showClose: true,

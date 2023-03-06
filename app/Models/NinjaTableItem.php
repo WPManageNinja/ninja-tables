@@ -7,8 +7,9 @@ use NinjaTables\App\App;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
 
-class NinjaTableItems extends Model
+class NinjaTableItem extends Model
 {
+    protected $primaryKey = 'id';
     protected $table = 'ninja_table_items';
 
     protected function getItems($tableId, $perPage, $currentPage, $skip, $search, $dataSourceType)
@@ -260,7 +261,7 @@ class NinjaTableItems extends Model
         $values             = json_decode($row->value, true);
         $values[$columnKey] = $columnValue;
 
-        Item::where('id', $rowId)->update([
+        NinjaTableItem::where('id', $rowId)->update([
             'value'      => $this->asJson($values),
             'updated_at' => date('Y-m-d H:i:s')
         ]);

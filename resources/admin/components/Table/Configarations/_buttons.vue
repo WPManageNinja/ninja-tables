@@ -177,7 +177,7 @@
         methods: {
             getSettings() {
                 this.fetching = true;
-                this.$get('tables/' + this.table_id + '/button-settings')
+                this.$get('settings/' + this.table_id + '/button')
                     .then(response => {
                         this.table_buttons = response.data.button_settings;
                       this.fetching = false;
@@ -192,7 +192,7 @@
                   table_id: this.table_id,
                   button_settings: this.table_buttons
                 };
-                this.$put('tables/' + this.table_id + '/button-settings', data)
+                this.$put('settings/' + this.table_id + '/button', data)
                     .then(response => {
                         this.$message({
                             showClose: true,

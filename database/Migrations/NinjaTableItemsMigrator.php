@@ -2,7 +2,7 @@
 
 namespace NinjaTables\Database\Migrations;
 
-use NinjaTables\App\Models\NinjaTableItems;
+use NinjaTables\App\Models\NinjaTableItem;
 
 class NinjaTableItemsMigrator
 {
@@ -47,7 +47,7 @@ class NinjaTableItemsMigrator
     public static function checkDBMigrations()
     {
         static::migrateIdAndTableIdColumn();
-        $firstRow = NinjaTableItems::first();
+        $firstRow = NinjaTableItem::first();
         if ( ! $firstRow) {
             if (get_option('_ninja_table_db_settings_owner_id')) {
                 return true;

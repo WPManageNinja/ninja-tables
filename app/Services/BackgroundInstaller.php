@@ -14,7 +14,7 @@ class BackgroundInstaller
 
             WP_Filesystem();
 
-            $upgrader = new PluginInstaller(new AutomaticUpgrader());
+            $upgrader          = new PluginInstaller(new AutomaticUpgrader());
             $installed_plugins = array_reduce(array_keys(\get_plugins()), array($this, 'associatePluginFile'), array());
             $plugin_slug       = $plugin['repo-slug'];
             $plugin_file       = isset($plugin['file']) ? $plugin['file'] : $plugin_slug . '.php';

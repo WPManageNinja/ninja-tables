@@ -109,7 +109,7 @@
                     table_id: this.tableId,
                     table_settings: this.settings
                 };
-                this.$post('tables/'+this.tableId, data)
+                this.$post('settings/'+this.tableId, data)
                     .success((res) => {
                     })
                     .catch((error) => {

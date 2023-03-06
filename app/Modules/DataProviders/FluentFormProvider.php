@@ -2,7 +2,6 @@
 
 namespace NinjaTables\App\Modules\DataProviders;
 
-use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
 

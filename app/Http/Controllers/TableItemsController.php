@@ -2,8 +2,7 @@
 
 namespace NinjaTables\App\Http\Controllers;
 
-use NinjaTables\App\Models\Item;
-use NinjaTables\App\Models\NinjaTableItems;
+use NinjaTables\App\Models\NinjaTableItem;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
@@ -21,7 +20,7 @@ class TableItemsController extends Controller
 
         $dataSourceType = ninja_table_get_data_provider($tableId);
 
-        $data = NinjaTableItems::getItems($tableId, $perPage, $currentPage, $skip, $search, $dataSourceType);
+        $data = NinjaTableItem::getItems($tableId, $perPage, $currentPage, $skip, $search, $dataSourceType);
 
         $this->json($data, 200);
     }
@@ -40,7 +39,7 @@ class TableItemsController extends Controller
             return intval($item);
         }, $ids);
 
-        NinjaTableItems::deleteTableItem($tableId, $ids);
+        NinjaTableItem::deleteTableItem($tableId, $ids);
 
         $this->json(array(
             'message' => __('Successfully deleted data.', 'ninja-tables')
@@ -69,7 +68,7 @@ class TableItemsController extends Controller
         $settings      = Arr::get($request->all(), 'settings');
         $id            = Arr::get($request->all(), 'id');
 
-        $data = NinjaTableItems::insertTableItem($id, $tableId, $formattedRow, $created_at, $insertAfterId, $settings);
+        $data = NinjaTableItem::insertTableItem($id, $tableId, $formattedRow, $created_at, $insertAfterId, $settings);
 
         $this->json(array(
             'message' => __('Successfully saved the data.', 'ninja-tables'),
@@ -81,7 +80,7 @@ class TableItemsController extends Controller
     {
         $rowId = intval($id);
 
-        $row = Item::where('id', $rowId)->first();
+        $row = NinjaTableItem::where('id', $rowId)->first();
 
         if (user_can_richedit()) {
             $data = ninja_tables_sanitize_table_content_array($request->all(), $row->table_id);
@@ -93,7 +92,7 @@ class TableItemsController extends Controller
         $columnKey   = Sanitizer::sanitizeTextField($data['column_key']);
         $columnValue = wp_unslash($data['column_value']);
 
-        NinjaTableItems::editSingleCell($rowId, $row, $columnKey, $columnValue);
+        NinjaTableItem::editSingleCell($rowId, $row, $columnKey, $columnValue);
 
         return $this->sendSuccess([
             'data' => [
