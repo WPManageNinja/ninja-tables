@@ -9,19 +9,6 @@ use NinjaTables\Framework\Support\Sanitizer;
 
 class ImportExport
 {
-    public static function defaultTableExport($data, $fileName)
-    {
-        return static::exportAsCSV($data, $fileName);
-    }
-    public static function export($tableId, $tableData, $fileName, $format)
-    {
-        if ($format === 'csv') {
-            return static::exportCSV($tableData, $fileName);
-        } elseif ($format === 'json') {
-            return static::exportJSON($tableId, $fileName);
-        }
-    }
-
     public static function import()
     {
         $mimes    = [
@@ -91,76 +78,6 @@ class ImportExport
         ];
 
         return (new TableBuilderController())->updatePostMeta($table_id, $data);
-    }
-
-    public static function exportCSV($tableData, $fileName = null)
-    {
-        $rows = [];
-        foreach ($tableData['data'] as $row) {
-            $cols = [];
-            foreach ($row['rows'] as $columns) {
-                $values = '';
-                foreach ($columns['columns'] as $key => $item) {
-                    if (is_array($item['data']['value'])) {
-                        $tmp = [];
-                        foreach ($item['data']['value'] as $value) {
-                            $tmp[] = ninjaTablesSanitizeForCSV($value);
-                        }
-
-                        $values .= implode(",", $tmp);
-                    } else {
-                        $values .= " " . ninjaTablesSanitizeForCSV($item['data']['value']);
-                    }
-                }
-                $cols[] = $values;
-            }
-            $rows[] = $cols;
-        }
-
-        return static::exportAsCSV($rows, $fileName);
-    }
-
-    private static function exportAsCSV($data, $fileName = null)
-    {
-        $fileName = ($fileName) ? $fileName . '.csv' : 'export-data-' . date('d-m-Y') . '.csv';
-
-        $writer = Writer::createFromFileObject(new \SplTempFileObject());
-        $writer->setDelimiter(",");
-        $writer->setNewline("\r\n");
-        $writer->insertAll($data);
-        $writer->output($fileName);
-        die();
-    }
-
-    public static function exportJSON($tableId, $fileName = null)
-    {
-        $table_settings   = get_post_meta($tableId, '_ninja_table_builder_table_settings', true);
-        $table_responsive = get_post_meta($tableId, '_ninja_table_builder_table_responsive', true);
-        $table_data       = get_post_meta($tableId, '_ninja_table_builder_table_data', true);
-        $table_html       = get_post_meta($tableId, '_ninja_table_builder_table_html', true);
-        $data             = [
-            'table_id'         => $tableId,
-            'table_name'       => $fileName,
-            'table_settings'   => $table_settings,
-            'table_responsive' => $table_responsive,
-            'table_data'       => $table_data,
-            'table_html'       => $table_html
-        ];
-
-        return static::exportAsJSON($data, $fileName);
-    }
-
-    private static function exportAsJSON($data, $fileName = null)
-    {
-        $fileName = ($fileName) ? $fileName . '.json' : 'export-data-' . date('d-m-Y') . '.json';
-
-        header('Content-disposition: attachment; filename=' . $fileName);
-
-        header('Content-type: application/json');
-
-        echo json_encode($data);
-
-        die();
     }
 
     public static function importFromURL($url)

@@ -64,5 +64,7 @@ $router->prefix('install')->group(function ($app) {
     $app->post('/ninja-charts', 'PluginInstallerController@installNinjaCharts');
 });
 
-//export tables
-$router->get('/export-tables', 'ExportTableController@export');
+$router->prefix('export')->group(function ($app) {
+    $app->get('/default', 'ExportTableController@defaultExport');
+    $app->get('/drag-and-drop', 'ExportTableController@dragAndDropExport');
+});

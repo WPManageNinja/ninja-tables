@@ -10,29 +10,70 @@ use NinjaTables\Framework\Support\Sanitizer;
 
 class ExportTableController extends Controller
 {
-    public function export(Request $request)
+    public function dragAndDropExport(Request $request)
     {
-        $tableId = intval($request->table_id);
-        $format   = Sanitizer::sanitizeTextField($request->format);
-        $source   = Sanitizer::sanitizeTextField($request->source);
-        if ($source === 'dragAndDrop') {
-            return $this->dragAndDropExport($tableId, $format);
-        } else if($source === 'default') {
-            return $this->defaultExport($tableId, $format);
-        }
-    }
-
-    public function dragAndDropExport($tableId, $format)
-    {
+        $tableId    = intval($request->table_id);
+        $format     = Sanitizer::sanitizeTextField($request->format);
         $tableTitle = get_the_title($tableId);
         $fileName   = Sanitizer::sanitizeTitle($tableTitle, 'Export-Table-' . date('Y-m-d-H-i-s'), 'preview');
         $tableData  = get_post_meta($tableId, '_ninja_table_builder_table_data', true);
 
-        return ImportExport::export($tableId, $tableData, $fileName, $format);
+        if ($format === 'csv') {
+            static::exportCSV($tableData, $fileName);
+        } elseif ($format === 'json') {
+            static::exportJSON($tableId, $fileName);
+        }
     }
 
-    public function defaultExport($tableId, $format)
+    public static function exportCSV($tableData, $fileName = null)
     {
+        $rows = [];
+        foreach ($tableData['data'] as $row) {
+            $cols = [];
+            foreach ($row['rows'] as $columns) {
+                $values = '';
+                foreach ($columns['columns'] as $key => $item) {
+                    if (is_array($item['data']['value'])) {
+                        $tmp = [];
+                        foreach ($item['data']['value'] as $value) {
+                            $tmp[] = ninjaTablesSanitizeForCSV($value);
+                        }
+
+                        $values .= implode(",", $tmp);
+                    } else {
+                        $values .= " " . ninjaTablesSanitizeForCSV($item['data']['value']);
+                    }
+                }
+                $cols[] = $values;
+            }
+            $rows[] = $cols;
+        }
+
+        return static::exportAsCSV($rows, $fileName);
+    }
+
+    public static function exportJSON($tableId, $fileName = null)
+    {
+        $table_settings   = get_post_meta($tableId, '_ninja_table_builder_table_settings', true);
+        $table_responsive = get_post_meta($tableId, '_ninja_table_builder_table_responsive', true);
+        $table_data       = get_post_meta($tableId, '_ninja_table_builder_table_data', true);
+        $table_html       = get_post_meta($tableId, '_ninja_table_builder_table_html', true);
+        $data             = [
+            'table_id'         => $tableId,
+            'table_name'       => $fileName,
+            'table_settings'   => $table_settings,
+            'table_responsive' => $table_responsive,
+            'table_data'       => $table_data,
+            'table_html'       => $table_html
+        ];
+
+        return self::exportAsJSON($data, $fileName);
+    }
+
+    public function defaultExport(Request $request)
+    {
+        $tableId = intval($request->table_id);
+        $format  = Sanitizer::sanitizeTextField($request->format);
 
         $tableTitle = get_the_title($tableId);
 
@@ -47,7 +88,7 @@ class ExportTableController extends Controller
             $sortingType = Arr::get($tableSettings, 'sorting_type', 'by_created_at');
 
             $tableColumns = ninja_table_get_table_columns($tableId, 'admin');
-            $data = ninjaTablesGetTablesDataByID($tableId, $tableColumns, $sortingType, true);
+            $data         = ninjaTablesGetTablesDataByID($tableId, $tableColumns, $sortingType, true);
 
             $header = array();
 
@@ -68,24 +109,33 @@ class ExportTableController extends Controller
                 }
                 array_push($exportData, $temp);
             }
-             $this->exportAsCSV(array_values($header), $exportData, $fileName . '.csv');
+
+            return static::exportAsCSV($exportData, $fileName, array_values($header));
         } elseif ($format == 'json') {
             $table = get_post($tableId);
 
             $dataProvider = ninja_table_get_data_provider($tableId);
-            $rows = array();
+            $rows         = array();
             if ($dataProvider == 'default') {
                 $rawRows = ninja_tables_DbTable()
-                    ->select(array('position', 'owner_id', 'attribute', 'value', 'settings', 'created_at', 'updated_at'))
+                    ->select(array(
+                        'position',
+                        'owner_id',
+                        'attribute',
+                        'value',
+                        'settings',
+                        'created_at',
+                        'updated_at'
+                    ))
                     ->where('table_id', $tableId)
                     ->get();
                 foreach ($rawRows as $row) {
                     $row->value = json_decode($row->value, true);
-                    $rows[] = $row;
+                    $rows[]     = $row;
                 }
             }
 
-            $matas = get_post_meta($tableId);
+            $matas   = get_post_meta($tableId);
             $allMeta = array();
 
             $excludedMetaKeys = array(
@@ -99,9 +149,9 @@ class ExportTableController extends Controller
             );
 
             foreach ($matas as $metaKey => $metaValue) {
-                if (!in_array($metaKey, $excludedMetaKeys)) {
+                if ( ! in_array($metaKey, $excludedMetaKeys)) {
                     if (isset($metaValue[0])) {
-                        $metaValue = maybe_unserialize($metaValue[0]);
+                        $metaValue         = maybe_unserialize($metaValue[0]);
                         $allMeta[$metaKey] = $metaValue;
                     }
                 }
@@ -116,18 +166,18 @@ class ExportTableController extends Controller
                 'rows'          => array(),
                 'original_rows' => $rows
             );
-            $this->exportAsJSON($exportData, $fileName . '.json');
+            static::exportAsJSON($exportData, $fileName . '.json');
         }
     }
 
-    private function exportAsCSV($header, $data, $fileName = null)
+    private static function exportAsCSV($data, $fileName = null, $header = null)
     {
-        $fileName = ($fileName) ? $fileName : 'export-data-' . date('d-m-Y') . '.csv';
+        $fileName = ($fileName) ? $fileName . '.csv' : 'export-data-' . date('d-m-Y') . '.csv';
 
         $writer = Writer::createFromFileObject(new \SplTempFileObject());
         $writer->setDelimiter(",");
         $writer->setNewline("\r\n");
-        $writer->insertOne($header);
+        $header !== null ? $writer->insertOne($header) : '';
         $writer->insertAll($data);
         $writer->output($fileName);
         die();
@@ -145,6 +195,4 @@ class ExportTableController extends Controller
 
         die();
     }
-
-
 }

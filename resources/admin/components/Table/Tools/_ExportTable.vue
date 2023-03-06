@@ -47,15 +47,13 @@
             downloadLink(format = 'csv') {
                 const payloadData = {
                     table_id: this.tableId,
-                    format: format,
-                    source: 'default'
+                    format: format
                 };
 
-                return window.ninja_table_admin.rest.url + '/export-tables?' + jQuery.param(payloadData);
+                return window.ninja_table_admin.rest.url + '/export/default?' + jQuery.param(payloadData);
             },
             doExport() {
-                let url = this.downloadLink(this.selected);
-                location.href = url;
+               location.href = this.downloadLink(this.selected);
             }
         }
     }
