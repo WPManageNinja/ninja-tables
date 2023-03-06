@@ -966,10 +966,7 @@ function ninja_table_clear_all_cache($posts = array())
     if ( ! empty($posts)) {
         $tables = $posts;
     } else {
-        //FIXME: Have to replace ninjaDB() model
-
-        $tables = ninjaDB()->table('posts')
-                 ->select('ID')
+        $tables = \NinjaTables\App\Models\Post::select('ID')
                  ->where('post_type', 'ninja-table')
                  ->get();
     }

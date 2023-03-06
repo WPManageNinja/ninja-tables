@@ -379,11 +379,6 @@ class AdminMenuHandler
         // For now I am de-registering their script in ninja-table admin pages.
         wp_deregister_script('elementor-admin-app');
 
-        // These last two line is for dumb devs who enqueue their scripts unversally
-        // People should think what they are writing in their code
-        wp_dequeue_script('vue');
-        wp_dequeue_script('vuejs');
-
         // We are gonna dequeue every other scripts on our pages.
         add_action('wp_print_scripts', function () {
             if (is_admin()) {
