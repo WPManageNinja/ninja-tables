@@ -22,6 +22,7 @@ $router->prefix('tables')->group(function ($route) {
     $route->delete('/{id}', [TablesController::class, 'delete'])->int('id');
     $route->post('/{id}/duplicate', [TablesController::class, 'duplicate'])->int('id');
     $route->post('/dismiss-fluent-suggest', [TablesController::class, 'dismissFluentSuggest']);
+    $route->get('/{id}/preview-html', [TablesController::class, 'previewHtml'])->int('id');;
 
     $route->prefix('/{id}/item')->group(function ($route) {
         $route->get('/', [TableItemsController::class, 'index'])->int('id');

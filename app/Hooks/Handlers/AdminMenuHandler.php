@@ -355,8 +355,8 @@ class AdminMenuHandler
             'published_tables'         => $totalPublishedTable,
             'preview_required_scripts' => array(
                 "$assets/css/ninjatables-public.css",
-                "$plugin_url/public/libs/footable/js/footable.min.js",
-                "$plugin_url/public/libs/moment/moment.min.js",
+                "$assets/libs/footable/js/footable.min.js",
+                "$assets/libs/moment/moment.min.js",
                 "$assets/js/ninja-tables-footable.js",
             ),
             'activated_features'       => apply_filters('ninja_table_activated_features', array(

@@ -2,6 +2,8 @@
 
 namespace NinjaTables\App\Modules\DataProviders;
 
+use NinjaTables\App\Models\NinjaTableItem;
+
 class DefaultProvider
 {
     public function boot()
@@ -39,7 +41,7 @@ class DefaultProvider
             }
         }
 
-        $query = ninja_tables_DbTable()->where('table_id', $tableId);
+        $query = NinjaTableItem::where('table_id', $tableId);
         if ($defaultSorting == 'new_first') {
             $query->orderBy('created_at', 'desc');
         } else if ($defaultSorting == 'manual_sort') {

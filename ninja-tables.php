@@ -1,4 +1,6 @@
-<?php defined('ABSPATH') or die;
+<?php use NinjaTables\App\App;
+
+defined('ABSPATH') or die;
 
 /*
 Plugin Name: Ninja Tables
@@ -15,6 +17,8 @@ Domain Path: /language
 require __DIR__.'/vendor/autoload.php';
 
 define('NINJA_TABLES_DIR_URL', plugin_dir_url(__FILE__));
+define('NINJA_TABLES_DIR_PATH', plugin_dir_path(__FILE__));
+define('NINJA_TABLES_VERSION', '4.3.4');
 
 call_user_func(function($bootstrap) {
     $bootstrap(__FILE__);

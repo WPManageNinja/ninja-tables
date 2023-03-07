@@ -21,7 +21,11 @@ $app->addAction('admin_menu', 'AdminMenuHandler@add');
 
 $app->addAction('init', 'CPTHandler@registerPostTypes');
 
-$app->addAction('ninjatables_loaded', function ($app) {
-    $app->make(\NinjaTables\App\Modules\DataProviders\FluentFormProvider::class)->boot();
-    $app->make(\NinjaTables\App\Modules\DataProviders\DefaultProvider::class)->boot();
-});
+$app->addAction('init', 'PublicDataHandler@registerTableRenderFunctions');
+
+//$app->addAction('wp_ajax_ninja_tables_ajax_actions', 'AjaxHandler@registerAjaxRoutes');
+
+//$app->addAction('wp_enqueue_scripts', 'PublicDataHandler@enqueueNinjaTableScript', 100);
+//
+//$app->addAction('wp_ajax_wp_ajax_ninja_tables_public_action', 'PublicDataHandler@registerAjaxRoutes', 100);
+//$app->addAction('wp_ajax_nopriv_wp_ajax_ninja_tables_public_action', 'PublicDataHandler@registerAjaxRoutes', 100);

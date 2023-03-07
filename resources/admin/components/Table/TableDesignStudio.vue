@@ -853,16 +853,12 @@
         },
         methods: {
             fetchTableBody() {
-                this.$get({
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'get_table_preview_html',
-                    table_id: this.tableId
-                })
+              this.$get(`tables/${this.tableId}/preview-html`)
                     .then(response => {
                         this.tableInnerHtml = response;
                         this.data_loaded = true;
                     })
-                    .fail(error => {
+                    .catch(error => {
                         jQuery('#footable_' + this.tableId).append('<h1>Error Loading</h1>');
                     });
             },
@@ -879,13 +875,10 @@
                 this.savingSettings = true;
                 let filteredTableSettings = this.filterTableSettings(this.tableSettings);
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'update-table-settings',
-                    table_id: this.tableId,
                     columns: this.columns,
                     table_settings: this.tableSettings
                 };
-                this.$post(data)
+                this.$post(`settings/${this.tableId}`, data)
                     .success((res) => {
                         this.$message({
                             showClose: true,
