@@ -129,7 +129,7 @@
                 formData.append('file', file);
                 formData.append('do_unicode', this.do_unicode);
 
-                this.$post('import', formData)
+                this.$post('import/default', formData)
                     .then(response => {
                         this.$message({
                             showClose: true,

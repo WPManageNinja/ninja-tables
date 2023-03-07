@@ -189,7 +189,7 @@ export default {
       formData.append('file', this.file);
       formData.append('url', this.url);
 
-      this.$post('table-builder/import', formData)
+      this.$post('import/table-builder', formData)
         .then(response => {
           this.loading = false;
           this.$message({

@@ -55,7 +55,6 @@ $router->prefix('tables/tools')->group(function ($route) {
 $router->prefix('table-builder')->group(function ($route) {
     $route->get('/', [TableBuilderController::class, 'index']);
     $route->post('/', [TableBuilderController::class, 'store']);
-    $route->post('/import', [TableBuilderController::class, 'import']);
     $route->patch('/{id}', [TableBuilderController::class, 'update'])->int('id');
     $route->get('/{id}', [TableBuilderController::class, 'show'])->int('id');
 });
@@ -72,7 +71,8 @@ $router->prefix('wp-posts')->group(function ($route) {
 });
 
 $router->prefix('import')->group(function ($route) {
-    $route->post('/', [ImportController::class, 'store']);
+    $route->post('/default', [ImportController::class, 'defaultImport']);
+    $route->post('/table-builder', [ImportController::class, 'tableBuilderImport']);
 });
 
 $router->prefix('install')->group(function ($route) {
