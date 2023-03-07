@@ -229,7 +229,7 @@
                 formData.append('file', file);
                 formData.append('do_unicode', this.do_unicode);
 
-              this.$post('import', formData)
+              this.$post('import/default', formData)
                     .then(response => {
                       alert(response.message ? response.message : this.$t("Successfully added a table."));
                       if (this.imports.format === 'dragAndDrop') {
