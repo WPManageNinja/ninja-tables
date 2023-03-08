@@ -263,7 +263,7 @@
                 return c.is_selectable == 'true';
             },
             getPostAuthors() {
-                return this.$get('wp-posts/authors')
+                return this.$get('wp-posts/authors', {post_types: this.selected_post_types})
                     .then(res => {
                     this.authors = res.data.authors;
                 })

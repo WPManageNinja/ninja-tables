@@ -37,7 +37,7 @@ class NinjaTableItem extends Model
             $hasSettings = true;
             foreach ($data as $item) {
                 $hasSettings = isset($item->settings);
-                $settings = array();
+                $settings    = array();
                 if ($hasSettings) {
                     $settings = maybe_unserialize($item->settings);
                     if ( ! is_array($settings)) {
@@ -128,12 +128,11 @@ class NinjaTableItem extends Model
 
     protected function deleteTableItem($tableId, $ids)
     {
-//        $app = App::getInstance();
-//        there is a problem when we try to use $app->addAction() instead of add_action()
+        $app = App::getInstance();
 
-        add_action('ninja_table_before_items_deleted', $ids, $tableId);
+        $app->doAction('ninja_table_before_items_deleted', $ids, $tableId);
         $this->where('table_id', $tableId)->whereIn('id', $ids)->delete();
-        add_action('ninja_table_after_items_deleted', $ids, $tableId);
+        $app->doAction('ninja_table_after_items_deleted', $ids, $tableId);
 
         ninjaTablesClearTableDataCache($tableId);
     }
@@ -200,12 +199,11 @@ class NinjaTableItem extends Model
             $attributes = $app->applyFIlters('ninja_tables_item_attributes', $attributes);
 
             $app->doAction('ninja_table_before_add_item', $tableId, $attributes);
-            $id = $insertId = $this->insert($attributes);
+            $id = $insertId = $this->insertGetId($attributes);
             $app->doAction('ninja_table_after_add_item', $insertId, $tableId, $attributes);
         }
 
         $item = $this->find($id);
-
 
         ninjaTablesClearTableDataCache($tableId);
 
@@ -262,7 +260,7 @@ class NinjaTableItem extends Model
         $values             = json_decode($row->value, true);
         $values[$columnKey] = $columnValue;
 
-        NinjaTableItem::where('id', $rowId)->update([
+        $this->where('id', $rowId)->update([
             'value'      => $this->asJson($values),
             'updated_at' => date('Y-m-d H:i:s')
         ]);

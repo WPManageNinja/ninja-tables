@@ -47,8 +47,7 @@ class WPPostsController extends Controller
                 ]);
             }
 
-//            $status = isset($publicPostTypes[$type]) ? 'public' : 'private';
-            $status = Arr::get($publicPostTypes, 'type') ? 'public' : 'private';
+            $status = isset($publicPostTypes[$type]) ? 'public' : 'private';
 
             $post_types[$status][$type] = array(
                 'status'     => $status,
