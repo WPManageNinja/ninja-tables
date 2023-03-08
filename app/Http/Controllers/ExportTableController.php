@@ -3,7 +3,7 @@
 namespace NinjaTables\App\Http\Controllers;
 
 use League\Csv\Writer;
-use NinjaTables\App\Modules\ImportExport;
+use NinjaTables\App\Models\NinjaTableItem;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
@@ -15,7 +15,7 @@ class ExportTableController extends Controller
         $tableId    = intval($request->table_id);
         $format     = Sanitizer::sanitizeTextField($request->format);
         $tableTitle = get_the_title($tableId);
-        $fileName   = Sanitizer::sanitizeTitle($tableTitle, 'Export-Table-' . date('Y-m-d-H-i-s'), 'preview');
+        $fileName   = Sanitizer::sanitizeTitle($tableTitle);
         $tableData  = get_post_meta($tableId, '_ninja_table_builder_table_data', true);
 
         if ($format === 'csv') {
@@ -117,8 +117,7 @@ class ExportTableController extends Controller
             $dataProvider = ninja_table_get_data_provider($tableId);
             $rows         = array();
             if ($dataProvider == 'default') {
-                $rawRows = ninja_tables_DbTable()
-                    ->select(array(
+                $rawRows = NinjaTableItem::select(array(
                         'position',
                         'owner_id',
                         'attribute',
