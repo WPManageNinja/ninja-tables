@@ -23,9 +23,11 @@ $app->addAction('init', 'CPTHandler@registerPostTypes');
 
 $app->addAction('init', 'PublicDataHandler@registerTableRenderFunctions');
 
-//$app->addAction('wp_ajax_ninja_tables_ajax_actions', 'AjaxHandler@registerAjaxRoutes');
-
 //$app->addAction('wp_enqueue_scripts', 'PublicDataHandler@enqueueNinjaTableScript', 100);
-//
-//$app->addAction('wp_ajax_wp_ajax_ninja_tables_public_action', 'PublicDataHandler@registerAjaxRoutes', 100);
-//$app->addAction('wp_ajax_nopriv_wp_ajax_ninja_tables_public_action', 'PublicDataHandler@registerAjaxRoutes', 100);
+
+$app->addAction('ninja_tables-render-table-footable','PublicDataHandler@runFooTable');
+
+$app->addAction('wp_ajax_wp_ajax_ninja_tables_public_action', 'AjaxHandler@registerAjaxRoutes', 100);
+$app->addAction('wp_ajax_nopriv_wp_ajax_ninja_tables_public_action', 'AjaxHandler@registerAjaxRoutes', 100);
+
+$app->addAction('ninja_tables_inside_table_render', 'PublicDataHandler@renderTableInsideTable', 10, 2);

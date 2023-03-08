@@ -1091,7 +1091,7 @@ function ninjaTablePreloadFont()
 {
     $app = App::getInstance();
     $app->addAction('wp_head', function () {
-        $preloadFontUrl = NINJA_TABLES_DIR_URL . "assets/fonts/ninja-tables.woff2?" . NINJA_TABLES_PRELOAD_FONT_VERSION;
+        $preloadFontUrl = NINJA_TABLES_DIR_URL . "assets/fonts/ninja-tables.woff2";
         ?>
         <link rel="preload" as="font" href="<?php
         echo esc_url($preloadFontUrl) ?>" type="font/woff2"

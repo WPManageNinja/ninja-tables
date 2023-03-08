@@ -879,17 +879,17 @@
                     table_settings: this.tableSettings
                 };
                 this.$post(`settings/${this.tableId}`, data)
-                    .success((res) => {
+                    .then((res) => {
                         this.$message({
                             showClose: true,
                             message: res.message,
                             type: 'success'
                         });
                     })
-                    .fail((error) => {
+                    .catch((error) => {
 
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.savingSettings = false;
                     });
             },

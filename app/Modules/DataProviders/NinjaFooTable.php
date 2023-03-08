@@ -3,6 +3,7 @@
 namespace NinjaTables\App\Modules\DataProviders;
 
 use NinjaTables\App\App;
+use NinjaTables\App\Models\NinjaTableItem;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\App\Modules\DataProviders\FluentFormProvider;
 use NinjaTablesPro\DataProviders\CsvProvider;
@@ -11,6 +12,7 @@ class NinjaFooTable
 {
     public static $version = NINJA_TABLES_VERSION;
 
+    public static $tableInstances = [];
     /**
      * Table specfic css prerender status.
      *
@@ -20,10 +22,9 @@ class NinjaFooTable
 
     public static function run($tableArray)
     {
-        global $ninja_table_instances;
         global $ninja_table_current_rendering_table;
-        $tableInstance = 'ninja_table_instance_' . count($ninja_table_instances);
-        $ninja_table_instances[] = $tableInstance;
+        $tableInstance = 'ninja_table_instance_' . count(static::$tableInstances);
+        static::$tableInstances[] = $tableInstance;
 
         $tableArray['uniqueID'] = 'ninja_table_unique_id_' . rand() . '_' . $tableArray['table_id'];
 
@@ -122,8 +123,7 @@ class NinjaFooTable
         $tableProvider = ninja_table_get_data_provider($tableId);
         if ($tableProvider == 'default' && get_option('_ninja_tables_settings_migration')) {
             ob_start();
-            $cellStyles = ninja_tables_DbTable()
-                ->select(array('id', 'settings'))
+            $cellStyles = NinjaTableItem::select(array('id', 'settings'))
                 ->where('table_id', $tableId)
                 ->whereNotNull('settings')
                 ->get();
@@ -205,7 +205,7 @@ class NinjaFooTable
             return;
         }
         ob_start();
-        include 'views/ninja_footable_css.php';
+        include NINJA_TABLES_DIR_PATH . 'app/Views/public/ninja-footable-css.php';
         return ob_get_clean();
     }
 
@@ -493,7 +493,7 @@ class NinjaFooTable
                 $rows       = $gc->data([], $table_id, false);
                 $totalSize  = count($rows);
             } else {
-                $totalSizeQuery = ninja_tables_DbTable()->where('table_id', $table_id);
+                $totalSizeQuery = NinjaTableItem::where('table_id', $table_id);
                 $totalSizeQuery = apply_filters('ninja_tables_total_size_query', $totalSizeQuery, $table_vars);
                 $totalSize      = $totalSizeQuery->count();
             }
@@ -518,7 +518,7 @@ class NinjaFooTable
         }
 
         do_action('ninja_table_before_render_table_source', $table, $table_vars, $tableArray);
-        include 'views/ninja_foo_table.php';
+        include NINJA_TABLES_DIR_PATH . 'app/Views/public/ninja-footable.php';
     }
 
     /**
@@ -594,7 +594,7 @@ class NinjaFooTable
 
         $formatted_data = apply_filters('ninja_tables_get_public_data', $formatted_data, $table->ID);
 
-        $tableHtml = self::loadView('public/views/table_inner_html', array(
+        $tableHtml = self::loadView('app/Views/public/table-inner-html', array(
             'table_columns' => $tableColumns,
             'table_rows'    => $formatted_data
         ));
