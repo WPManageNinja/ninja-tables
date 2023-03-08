@@ -11,6 +11,8 @@ class ImportController extends Controller
 {
     private $cpt_name = 'ninja-table';
 
+    private static $tableName = 'ninja_table_items';
+
     private static $mimes_type = [
         'text/csv',
         'text/plain',
@@ -317,11 +319,12 @@ class ImportController extends Controller
             ninjaTableInsertDataToTable($tableId, $rows, $header);
         }
 
+        global $wpdb;
         if (isset($content['original_rows']) && $originalRows = $content['original_rows']) {
             foreach ($originalRows as $row) {
                 $row['table_id'] = $tableId;
                 $row['value']    = json_encode($row['value'], JSON_UNESCAPED_UNICODE);
-                $tableName       = ninja_tables_DbTable();
+                $tableName       = $wpdb->prefix . static::$tableName;
                 Import::insert($tableName, $row);
             }
         }
