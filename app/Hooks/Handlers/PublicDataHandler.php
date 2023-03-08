@@ -2,6 +2,7 @@
 
 namespace NinjaTables\App\Hooks\Handlers;
 
+use NinjaTables\App\Models\NinjaTableItem;
 use NinjaTables\App\Modules\DataProviders\NinjaFooTable;
 use NinjaTables\Framework\Foundation\Application;
 use NinjaTables\Framework\Support\Arr;
@@ -118,8 +119,7 @@ class PublicDataHandler
                 }
                 break;
             case 'total_rows':
-                $total = ninjaDB('ninja_table_items')
-                    ->where('table_id', '=', $table->ID)
+                $total = NinjaTableItem::where('table_id', $table->ID)
                     ->count();
                 if ($total) {
                     return $total;
@@ -154,8 +154,7 @@ class PublicDataHandler
         $tableSettings = ninja_table_get_table_settings($id, 'public');
 
         if ($row_id) {
-            $rowData = ninjaDB()->table('ninja_table_items')
-                                ->where('table_id', $id)
+            $rowData = NinjaTableItem::where('table_id', $id)
                                 ->where('id', $row_id)
                                 ->first();
             if (!$rowData) {
@@ -217,8 +216,6 @@ class PublicDataHandler
      */
     public function preRenderTableAssets($tableId)
     {
-        var_dump('sd');
-        exit();
         $tableId = intval($tableId);
 
         $atts = [
@@ -298,7 +295,7 @@ class PublicDataHandler
                 'footable_styles',
                 $styleSrc,
                 [],
-                $this->version,
+                '',
                 'all'
             );
 
@@ -372,7 +369,7 @@ class PublicDataHandler
             'ninja_table_builder_js',
             $styleSrc,
             ['jquery'],
-            $this->version,
+            '',
             'all'
         );
         $styleSrc = NINJA_TABLES_DIR_URL . "assets/css/ninja-table-builder-public.css";
@@ -380,7 +377,7 @@ class PublicDataHandler
             'ninja_table_builder_style',
             $styleSrc,
             [],
-            $this->version,
+            '',
             'all'
         );
     }
@@ -388,5 +385,24 @@ class PublicDataHandler
     public function renderTableInsideTable($table, $tableVars)
     {
         NinjaFooTable::getTableHTML($table, $tableVars);
+    }
+
+    private function processCellInfoArray($value, $column, $tableId)
+    {
+        $tableColumns = ninja_table_get_table_columns($tableId);
+        $targetColumn = [];
+        foreach ($tableColumns as $tableColumn) {
+            if ($tableColumn['key'] == $column) {
+                $targetColumn = $tableColumn;
+            }
+        }
+
+        if ($tableColumn['data_type'] == 'image') {
+            if (function_exists('nt_parse_image_column')) {
+                return nt_parse_image_column($value, $targetColumn);
+            }
+        }
+
+        return implode(', ', $value);
     }
 }

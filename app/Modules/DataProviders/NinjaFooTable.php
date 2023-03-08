@@ -918,7 +918,7 @@ class NinjaFooTable
             'footable_styles',
             $styleSrc,
             array(),
-            self::$version,
+            '',
             'all'
         );
 

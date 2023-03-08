@@ -31,3 +31,6 @@ $app->addAction('wp_ajax_wp_ajax_ninja_tables_public_action', 'AjaxHandler@regis
 $app->addAction('wp_ajax_nopriv_wp_ajax_ninja_tables_public_action', 'AjaxHandler@registerAjaxRoutes', 100);
 
 $app->addAction('ninja_tables_inside_table_render', 'PublicDataHandler@renderTableInsideTable', 10, 2);
+
+$app->addAction('wp_loaded', 'PreviewHandler@defaultTable');
+$app->addAction('wp_loaded', 'PreviewHandler@dragAndDropTable');
