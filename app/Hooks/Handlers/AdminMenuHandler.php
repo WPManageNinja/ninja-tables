@@ -3,6 +3,7 @@
 namespace NinjaTables\App\Hooks\Handlers;
 
 use NinjaTables\App\App;
+use NinjaTables\App\Modules\I18nStrings;
 
 class AdminMenuHandler
 {
@@ -98,8 +99,6 @@ class AdminMenuHandler
                     '',
                     'ninja_table_license_menu'
                 );
-
-
             }
         }
 
@@ -351,7 +350,7 @@ class AdminMenuHandler
             'ace_path_url'             => "$assets/libs/ace",
             'upgradeGuide'             => 'https://wpmanageninja.com/r/docs/ninja-tables/how-to-install-and-upgrade/#upgrade',
             'hasValidLicense'          => get_option('_ninjatables_pro_license_status'),
-            'i18n'                     => '',
+            'i18n'                     => I18nStrings::getStrings(),
             'published_tables'         => $totalPublishedTable,
             'preview_required_scripts' => array(
                 "$assets/css/ninjatables-public.css",
