@@ -27,7 +27,7 @@ class PreviewHandler
 
                 if ($table) {
                     $app = App::getInstance();
-                    echo $app->view->make('/admin/preview/default-table', [
+                    $app->view->render('/admin/preview/default-table', [
                         'table_id' => $tableId
                     ]);
                     exit();
@@ -48,10 +48,10 @@ class PreviewHandler
 
                 if ($table) {
                     $app = App::getInstance();
-                    echo $app->view->make('/admin/preview/drag-and-drop', [
+                    $app->view->render('/admin/preview/drag-and-drop', [
                         'table_id' => $tableId
                     ]);
-                    exit('d');
+                    exit();
                 }
             }
         }

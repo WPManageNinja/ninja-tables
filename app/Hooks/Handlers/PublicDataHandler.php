@@ -273,13 +273,13 @@ class PublicDataHandler
 
         do_action('ninja_table_builder_before_render', $table_id);
 
-        return ninjaTablesLoadView('public/views/table_builder_html', [
+        return $this->app->view->make('public/drag-and-drop-html', [
             'ninja_table_builder_html' => $html,
             'table_data'               => $ninja_table_builder_table_data,
             'setting'                  => $ninja_table_builder_setting,
             'responsive'               => $ninja_table_builder_responsive,
             'table_id'                 => $table_id
-        ] );
+        ]);
     }
 
     public function enqueueNinjaTableScript()
