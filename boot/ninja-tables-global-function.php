@@ -128,15 +128,6 @@ if ( ! function_exists('ninja_tables_db_table_name')) {
     }
 }
 
-if ( ! function_exists('ninja_tables_DbTable')) {
-    function ninja_tables_DbTable()
-    {
-        global $wpdb;
-
-        return $wpdb->prefix . ninja_tables_db_table_name();
-    }
-}
-
 if ( ! function_exists('ninja_table_renameDuplicateValues')) {
     function ninja_table_renameDuplicateValues($values)
     {

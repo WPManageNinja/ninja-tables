@@ -10,7 +10,7 @@ class AdminMenuHandler
     public function add()
     {
         global $submenu;
-        $capability = 'manage_options';
+        $capability = ninja_table_admin_role();
         // Top-level page
         $menuName = __('Ninja Tables', 'ninja-tables');
         if (defined('NINJATABLESPRO')) {

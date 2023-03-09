@@ -1,7 +1,5 @@
 <?php
 
-use NinjaTables\App\App;
-
 defined('ABSPATH') or die;
 
 /*
