@@ -10,11 +10,11 @@
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
-namespace League\Csv;
+namespace NinjaTables\App\Library\Csv;
 
 use InvalidArgumentException;
-use League\Csv\Modifier\RowFilter;
-use League\Csv\Modifier\StreamIterator;
+use NinjaTables\App\Library\Csv\Modifier\RowFilter;
+use NinjaTables\App\Library\Csv\Modifier\StreamIterator;
 use ReflectionMethod;
 use SplFileObject;
 use Traversable;

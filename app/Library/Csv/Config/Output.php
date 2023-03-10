@@ -10,13 +10,13 @@
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
-namespace League\Csv\Config;
+namespace NinjaTables\App\Library\Csv\Config;
 
 use DomDocument;
 use InvalidArgumentException;
 use Iterator;
-use League\Csv\AbstractCsv;
-use League\Csv\Modifier\MapIterator;
+use NinjaTables\App\Library\Csv\AbstractCsv;
+use NinjaTables\App\Library\Csv\Modifier\MapIterator;
 use SplFileObject;
 
 /**

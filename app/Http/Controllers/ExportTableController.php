@@ -2,7 +2,7 @@
 
 namespace NinjaTables\App\Http\Controllers;
 
-use League\Csv\Writer;
+use NinjaTables\App\Library\Csv\Writer;
 use NinjaTables\App\Models\NinjaTableItem;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Arr;

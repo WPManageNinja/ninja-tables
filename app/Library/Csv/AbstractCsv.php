@@ -10,16 +10,16 @@
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
-namespace League\Csv;
+namespace NinjaTables\App\Library\Csv;
 
 use InvalidArgumentException;
 use IteratorAggregate;
 use JsonSerializable;
-use League\Csv\Config\Controls;
-use League\Csv\Config\Output;
-use League\Csv\Modifier\QueryFilter;
-use League\Csv\Modifier\StreamFilter;
-use League\Csv\Modifier\StreamIterator;
+use NinjaTables\App\Library\Csv\Config\Controls;
+use NinjaTables\App\Library\Csv\Config\Output;
+use NinjaTables\App\Library\Csv\Modifier\QueryFilter;
+use NinjaTables\App\Library\Csv\Modifier\StreamFilter;
+use NinjaTables\App\Library\Csv\Modifier\StreamIterator;
 use SplFileInfo;
 use SplFileObject;
 use SplTempFileObject;

@@ -53,7 +53,7 @@ class TableBuilderController extends Controller
 
         $initialData = new InitialDataHandling();
         $table_id              = $this->wpInsertPost($table_name);
-        $data                  = sanitize_post_field('data', $_REQUEST['data'], $table_id, 'db');
+        $data                  = sanitize_post_field('data', $request->data, $table_id, 'db');
         $table_data            = $data['table_data'];
         $table_data['headers'] = $initialData->makeTableHeader($table_data);
         $table_data['data']    = $initialData->makeTableRow($table_data);

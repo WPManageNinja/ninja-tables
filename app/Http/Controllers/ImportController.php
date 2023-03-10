@@ -5,7 +5,7 @@ namespace NinjaTables\App\Http\Controllers;
 use NinjaTables\App\Models\Import;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Sanitizer;
-use League\Csv\Reader;
+use NinjaTables\App\Library\Csv\Reader;
 
 class ImportController extends Controller
 {
@@ -100,6 +100,7 @@ class ImportController extends Controller
     public function defaultImport(Request $request)
     {
         $format = Sanitizer::sanitizeTextField($request->format);
+        $doUnicode = Sanitizer::sanitizeTextField($request->do_unicode);
         if ($format == 'dragAndDrop') {
             $fileType = Sanitizer::sanitizeTextField($_FILES['file']['type']);
             $fileName = Sanitizer::sanitizeTextField($_FILES['file']['name']);
@@ -113,7 +114,7 @@ class ImportController extends Controller
             return static::import();
         } else {
             if ($format == 'csv') {
-                $this->uploadTableCsv();
+                $this->uploadTableCsv($doUnicode);
             } elseif ($format == 'json') {
                 $this->uploadTableJson();
             } elseif ($format == 'ninjaJson') {
@@ -145,7 +146,7 @@ class ImportController extends Controller
 
     }
 
-    private function uploadTableCsv()
+    private function uploadTableCsv($doUnicode)
     {
         $mimes = array(
             'text/csv',
@@ -173,7 +174,7 @@ class ImportController extends Controller
         $fileName = Sanitizer::sanitizeTextField($_FILES['file']['name']);
 
         $data = file_get_contents($tmpName);
-        if (isset($_REQUEST['do_unicode']) && Sanitizer::sanitizeTextField($_REQUEST['do_unicode']) == 'yes') {
+        if ($doUnicode && $doUnicode == 'yes') {
             $data = utf8_encode($data);
         }
 
