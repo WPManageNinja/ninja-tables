@@ -11,6 +11,9 @@ class NinjaTableItem extends Model
 {
     protected $primaryKey = 'id';
     protected $table = 'ninja_table_items';
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s'
+    ];
 
     protected function getItems($tableId, $perPage, $currentPage, $skip, $search, $dataSourceType)
     {
@@ -36,8 +39,9 @@ class NinjaTableItem extends Model
 
             $hasSettings = true;
             foreach ($data as $item) {
-                $hasSettings = isset($item->settings);
-                $settings    = array();
+                $item        = (object)$item->toArray();
+                $hasSettings = property_exists($item, 'settings');
+                $settings    = (object)array();
                 if ($hasSettings) {
                     $settings = maybe_unserialize($item->settings);
                     if ( ! is_array($settings)) {
@@ -45,7 +49,7 @@ class NinjaTableItem extends Model
                     }
                 }
                 $createdBy = '';
-                if (isset($item->owner_id)) {
+                if (property_exists($item, 'owner_id')) {
                     $userInfo = get_userdata($item->owner_id);
                     if ($userInfo && property_exists($userInfo->data, 'display_name')) {
                         $createdBy = $userInfo->data->display_name;
@@ -57,7 +61,7 @@ class NinjaTableItem extends Model
                     'created_at' => $item->created_at,
                     'settings'   => $settings,
                     'created_by' => $createdBy,
-                    'position'   => isset($item->position) ? $item->position : null,
+                    'position'   => property_exists($item, 'position') ? $item->position : null,
                     'values'     => json_decode($item->value, true)
                 );
             }
@@ -196,7 +200,7 @@ class NinjaTableItem extends Model
                 $attributes['created_at'] = date('Y-m-d H:i:s');
             }
 
-            $attributes = $app->applyFIlters('ninja_tables_item_attributes', $attributes);
+            $attributes = $app->applyFilters('ninja_tables_item_attributes', $attributes);
 
             $app->doAction('ninja_table_before_add_item', $tableId, $attributes);
             $id = $insertId = $this->insertGetId($attributes);
@@ -221,12 +225,12 @@ class NinjaTableItem extends Model
         }
 
         return [
-            'id'         => Arr::get($item, 'id'),
+            'id'         => $item->id,
             'values'     => $formattedRow,
-            'row'        => json_decode(Arr::get($item, 'value')),
-            'created_at' => Arr::get($item, 'created_at'),
+            'row'        => json_decode($item->value),
+            'created_at' => $item->created_at,
             'settings'   => $itemSettings,
-            'position'   => Arr::get($item, 'position')
+            'position'   => isset($item->position) ? $item->position : null
         ];
     }
 

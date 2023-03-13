@@ -12,8 +12,8 @@ class TableItemsController extends Controller
     public function index(Request $request, $id)
     {
         // this function is getTableData() in the original plugin in NinjaTables.php line
-        $perPage     = isset($request->per_page) ? intval($request->per_page) : 10;
-        $currentPage = isset($request->page) ? intval($request->page) : 1;
+        $perPage     = Arr::get($request->all(), 'per_page', 10);
+        $currentPage = Arr::get($request->all(), 'page', 1);
         $skip        = $perPage * ($currentPage - 1);
         $tableId     = intval($id);
         $search      = Sanitizer::sanitizeTextField($request->search);
