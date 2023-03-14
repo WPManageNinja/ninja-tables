@@ -22,10 +22,8 @@ use NinjaTables\App\Hooks\Handlers\EditorBlockHandler;
  */
 
 $app->addAction('admin_menu', [AdminMenuHandler::class, 'add']);
-
-/**
- * Enable this line if you want to use custom post types
- */
+$app->addAction('admin_notices', [AdminMenuHandler::class, 'adminNotices']);
+$app->addAction('init', [AdminMenuHandler::class, 'remindMeLater']);
 
 $app->addAction('init', [CPTHandler::class, 'registerPostTypes']);
 

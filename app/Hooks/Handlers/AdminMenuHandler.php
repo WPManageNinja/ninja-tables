@@ -4,6 +4,7 @@ namespace NinjaTables\App\Hooks\Handlers;
 
 use NinjaTables\App\App;
 use NinjaTables\App\Modules\I18nStrings;
+use NinjaTables\Framework\Support\Sanitizer;
 
 class AdminMenuHandler
 {
@@ -234,7 +235,7 @@ class AdminMenuHandler
         $plugin_url = NINJA_TABLES_DIR_URL;
 
         if (function_exists('wp_enqueue_editor')) {
-            add_filter('user_can_richedit', function ($status) {
+            $app->addFilter('user_can_richedit', function ($status) {
                 return true;
             });
             wp_enqueue_editor();
@@ -252,7 +253,7 @@ class AdminMenuHandler
             true
         );
 
-        do_action('ninja_tables_loaded_boot_script');
+        $app->doAction('ninja_tables_loaded_boot_script');
 
         wp_enqueue_script(
             $slug,
@@ -287,11 +288,11 @@ class AdminMenuHandler
         $publish             = property_exists($tableCount, "publish") ? $tableCount->publish : 0;
 
         if ($tableCount && $publish > 1) {
-            $leadStatus = apply_filters('ninja_tables_show_lead', $leadStatus);
+            $leadStatus = $app->applyFilters('ninja_tables_show_lead', $leadStatus);
         }
 
         if ($tableCount && $publish > 2 && ! $leadStatus) {
-            $reviewOptinStatus = apply_filters('ninja_tables_show_review_optin', $reviewOptinStatus);
+            $reviewOptinStatus = $app->applyFilters('ninja_tables_show_review_optin', $reviewOptinStatus);
         }
 
         if ($tableCount && $publish > 0) {
@@ -310,7 +311,7 @@ class AdminMenuHandler
 
         // Let's deregister existing vuejs by other devs
         // Other devs should not regis
-        add_action('admin_print_scripts', function () {
+        $app->addAction('admin_print_scripts', function () {
             wp_dequeue_script('vuejs');
             wp_dequeue_script('vue');
         });
@@ -358,14 +359,14 @@ class AdminMenuHandler
                 "$assets/libs/moment/moment.min.js",
                 "$assets/js/ninja-tables-footable.js",
             ),
-            'activated_features'       => apply_filters('ninja_table_activated_features', array(
+            'activated_features'       => $app->applyFilters('ninja_table_activated_features', array(
                 'default_tables'    => true,
                 'fluentform_tables' => true
             )),
             'nt_integrity'             => $this->getIntegrity(),
-            'admin_notices'            => apply_filters('ninja_dashboard_notices', []),
-            'has_sql_permission'       => apply_filters('ninja_table_sql_permission', $isAdmin),
-            'prefered_thumb'           => apply_filters('ninja_table_prefered_thumb', 'medium'),
+            'admin_notices'            => $app->applyFilters('ninja_dashboard_notices', []),
+            'has_sql_permission'       => $app->applyFilters('ninja_table_sql_permission', $isAdmin),
+            'prefered_thumb'           => $app->applyFilters('ninja_table_prefered_thumb', 'medium'),
             'has_woocommerce'          => defined('WC_PLUGIN_FILE'),
             'license_status'           => get_option('_ninjatables_pro_license_status'),
             'ninja_charts_url'         => defined('NINJA_CHARTS_VERSION') ? self_admin_url('admin.php?page=ninja-charts#/chart-list') : null,
@@ -379,7 +380,7 @@ class AdminMenuHandler
         wp_deregister_script('elementor-admin-app');
 
         // We are gonna dequeue every other scripts on our pages.
-        add_action('wp_print_scripts', function () {
+        $app->addAction('wp_print_scripts', function () {
             if (is_admin()) {
                 $skip = apply_filters('ninja_table_skip_no_confict', false);
 
@@ -402,6 +403,7 @@ class AdminMenuHandler
 
     private function getIntegrity()
     {
+        $app = App::getInstance();
         if (defined('NINJATABLESPRO')) {
             if (is_multisite()) {
                 return 'valid';
@@ -417,12 +419,53 @@ class AdminMenuHandler
                 }
                 $length = strlen($key);
                 if ($length < 20) {
-                    return apply_filters('ninja_table_integrity', 'nope');
+                    return $app->applyFilters('ninja_table_integrity', 'nope');
                 }
             }
         }
 
         return apply_filters('ninja_table_integrity', 'valid');
+    }
+
+    public function adminNotices()
+    {
+        if ($this->isNotice()) {
+            if (isset($_GET['page']) && Sanitizer::sanitizeTextField($_GET['page']) == 'ninja_tables') {
+                echo '<div class="nt_review_notice">In love with Ninja Tables?
+                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Please leave a 5-star review for us! </a>
+                     It will encourage us to come up with more and more features.
+                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a> |
+                     <a href=' . admin_url('admin.php?action=remindMeLater') . '>Remind Me Later</a>
+                     <a href=' . admin_url('admin.php?action=remindMeLater') . '>
+                        <span class="close-icon dashicons dashicons-no"></span>
+                    </a>
+                 </div>';
+            }
+        }
+    }
+
+    public function isNotice()
+    {
+        if (isset($_COOKIE['nt_review_notice'])) {
+            $plugin_version = Sanitizer::sanitizeTextField($_COOKIE['nt_review_notice']);
+            if ($plugin_version == NINJA_TABLES_VERSION) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function remindMeLater()
+    {
+        if (isset($_GET['action']) && Sanitizer::sanitizeTextField($_GET['action']) === 'remindMeLater') {
+            setcookie(
+                "nt_review_notice",
+                NINJA_TABLES_VERSION,
+                time() + (60 * 60 * 24 * 30)
+            );
+            wp_redirect(admin_url('admin.php?page=ninja_tables#home'));
+        }
     }
 }
 
