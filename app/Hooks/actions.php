@@ -1,5 +1,13 @@
 <?php
 
+
+use NinjaTables\App\Hooks\Handlers\AdminMenuHandler;
+use NinjaTables\App\Hooks\Handlers\CPTHandler;
+use NinjaTables\App\Hooks\Handlers\PublicDataHandler;
+use NinjaTables\App\Hooks\Handlers\AjaxHandler;
+use NinjaTables\App\Hooks\Handlers\PreviewHandler;
+use NinjaTables\App\Hooks\Handlers\EditorBlockHandler;
+
 /**
  * All registered action's handlers should be in app\Hooks\Handlers,
  * addAction is similar to add_action and addCustomAction is just a
@@ -13,24 +21,27 @@
  * @var $app NinjaTables\Framework\Foundation\Application
  */
 
-$app->addAction('admin_menu', 'AdminMenuHandler@add');
+$app->addAction('admin_menu', [AdminMenuHandler::class, 'add']);
 
 /**
  * Enable this line if you want to use custom post types
  */
 
-$app->addAction('init', 'CPTHandler@registerPostTypes');
+$app->addAction('init', [CPTHandler::class, 'registerPostTypes']);
 
-$app->addAction('init', 'PublicDataHandler@registerTableRenderFunctions');
+$app->addAction('init', [PublicDataHandler::class, 'registerTableRenderFunctions']);
 
 //$app->addAction('wp_enqueue_scripts', 'PublicDataHandler@enqueueNinjaTableScript', 100);
 
-$app->addAction('ninja_tables-render-table-footable','PublicDataHandler@runFooTable');
+$app->addAction('ninja_tables-render-table-footable', [PublicDataHandler::class, 'runFooTable']);
 
-$app->addAction('wp_ajax_wp_ajax_ninja_tables_public_action', 'AjaxHandler@registerAjaxRoutes', 100);
-$app->addAction('wp_ajax_nopriv_wp_ajax_ninja_tables_public_action', 'AjaxHandler@registerAjaxRoutes', 100);
+$app->addAction('wp_ajax_wp_ajax_ninja_tables_public_action', [AjaxHandler::class, 'registerAjaxRoutes'], 100);
+$app->addAction('wp_ajax_nopriv_wp_ajax_ninja_tables_public_action', [AjaxHandler::class, 'registerAjaxRoutes'], 100);
 
-$app->addAction('ninja_tables_inside_table_render', 'PublicDataHandler@renderTableInsideTable', 10, 2);
+$app->addAction('ninja_tables_inside_table_render', [PublicDataHandler::class, 'renderTableInsideTable'], 10, 2);
 
-$app->addAction('wp_loaded', 'PreviewHandler@defaultTable');
-$app->addAction('wp_loaded', 'PreviewHandler@dragAndDropTable');
+$app->addAction('wp_loaded', [PreviewHandler::class, 'defaultTable']);
+$app->addAction('wp_loaded', [PreviewHandler::class, 'dragAndDropTable']);
+
+$app->addAction('init', [EditorBlockHandler::class, 'loadGutenBlock']);
+$app->addAction('init', [EditorBlockHandler::class, 'addTablesToEditor']);
