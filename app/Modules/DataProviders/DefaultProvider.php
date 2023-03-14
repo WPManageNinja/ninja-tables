@@ -14,13 +14,14 @@ class DefaultProvider
 
     public function getTableSettings($table)
     {
-        $table->isEditable = true;
-        $table->dataSourceType = 'default';
-        $table->isExportable = true;
-        $table->isImportable = true;
-        $table->isSortable = true;
+        $table->isEditable        = true;
+        $table->dataSourceType    = 'default';
+        $table->isExportable      = true;
+        $table->isImportable      = true;
+        $table->isSortable        = true;
         $table->isCreatedSortable = true;
-        $table->hasCacheFeature = true;
+        $table->hasCacheFeature   = true;
+
         return $table;
     }
 
@@ -29,12 +30,12 @@ class DefaultProvider
         $advancedQuery = false;
         $disabledCache = false;
 
-        if($skip || $limit || $ownOnly) {
+        if ($skip || $limit || $ownOnly) {
             $advancedQuery = true;
         }
 
         // if cached not disabled then return cached data
-        if( ! $advancedQuery && ! $disabledCache = ninja_tables_shouldNotCache($tableId) ) {
+        if ( ! $advancedQuery && ! $disabledCache = ninja_tables_shouldNotCache($tableId)) {
             $cachedData = get_post_meta($tableId, '_ninja_table_cache_object', true);
             if ($cachedData) {
                 return $cachedData;
@@ -44,7 +45,7 @@ class DefaultProvider
         $query = NinjaTableItem::where('table_id', $tableId);
         if ($defaultSorting == 'new_first') {
             $query->orderBy('created_at', 'desc');
-        } else if ($defaultSorting == 'manual_sort') {
+        } elseif ($defaultSorting == 'manual_sort') {
             $query->orderBy('position', 'asc');
         } else {
             $query->orderBy('created_at', 'asc');
@@ -58,21 +59,21 @@ class DefaultProvider
         $limit = intval($limit);
         if ($limit && $limit > 0) {
             $query->limit($limit);
-        } else if($skip && $skip > 0) {
+        } elseif ($skip && $skip > 0) {
             $query->limit(99999);
         }
 
-        if($ownOnly) {
+        if ($ownOnly) {
             $query = apply_filters('ninja_table_own_data_filter_query', $query, $tableId);
         }
 
-        global $wpdb;
+
         $items = $query->get();
-        //dd($wpdb->last_query);
+        $data  = [];
         foreach ($items as $item) {
-            $values = json_decode($item->value, true);
+            $values             = json_decode($item->value, true);
             $values['___id___'] = $item->id;
-            $data[] = $values;
+            $data[]             = $values;
         }
 
         // Please do not hook this filter unless you don't know what you are doing.
@@ -80,7 +81,7 @@ class DefaultProvider
         // You should hook this if you need to cache your filter modifications
         $data = apply_filters('ninja_tables_get_raw_table_data', $data, $tableId);
 
-        if (!$advancedQuery && !$disabledCache) {
+        if ( ! $advancedQuery && ! $disabledCache) {
             update_post_meta($tableId, '_ninja_table_cache_object', $data);
         }
 
