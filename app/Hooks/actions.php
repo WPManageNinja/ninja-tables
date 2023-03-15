@@ -9,6 +9,7 @@ use NinjaTables\App\Hooks\Handlers\EditorBlockHandler;
 use NinjaTables\App\Hooks\Handlers\StyleHandler;
 use NinjaTables\App\Hooks\Handlers\DeactivationHandler;
 use NinjaTables\App\Hooks\Handlers\NinjaTableAdminHandler;
+use NinjaTables\App\Hooks\Handlers\DataProviderHandler;
 
 /**
  * All registered action's handlers should be in app\Hooks\Handlers,
@@ -43,9 +44,7 @@ $app->addAction('init', [EditorBlockHandler::class, 'addTablesToEditor']);
 
 $app->addAction('admin_print_styles', [StyleHandler::class, 'adminMenuStyle']);
 
-$app->addAction('ninja_table_check_db_integrity', function () {
-    \NinjaTables\Database\Migrations\NinjaTableItemsMigrator::checkDBMigrations();
-});
+$app->addAction('ninja_table_check_db_integrity', [\NinjaTables\Database\Migrations\NinjaTableItemsMigrator::class, 'checkDBMigrations']);
 
 global $pagenow;
 if ($pagenow == 'plugins.php') {
@@ -56,5 +55,8 @@ $app->addAction('wp_ajax_ninja-tables_deactivate_feedback', [DeactivationHandler
 $app->addAction('wp_head', [NinjaTableAdminHandler::class, 'addNinjaTableAdminScript']);
 $app->addAction('admin_notices', [NinjaTableAdminHandler::class, 'adminNotices']);
 $app->addAction('init', [NinjaTableAdminHandler::class, 'remindMeLater']);
+$app->addAction('save_post', [NinjaTableAdminHandler::class, 'saveNinjaTableFlagOnShortCode']);
 
 $app->addAction('init', [\NinjaTables\App\Modules\Lead\LeadFlow::class, 'boot']);
+
+$app->addAction('init', [DataProviderHandler::class, 'handle']);

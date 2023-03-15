@@ -9,15 +9,6 @@ use NinjaTables\Framework\Support\Arr;
 
 class PublicDataHandler
 {
-    protected $app = null;
-
-    public function __construct(Application $app)
-    {
-        $this->app = $app;
-        $app->make(\NinjaTables\App\Modules\DataProviders\FluentFormProvider::class)->boot();
-        $app->make(\NinjaTables\App\Modules\DataProviders\DefaultProvider::class)->boot();
-    }
-
     public function runFooTable($tableArray)
     {
        NinjaFooTable::run($tableArray);

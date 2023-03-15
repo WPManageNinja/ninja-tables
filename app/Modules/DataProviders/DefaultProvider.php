@@ -67,9 +67,8 @@ class DefaultProvider
             $query = apply_filters('ninja_table_own_data_filter_query', $query, $tableId);
         }
 
-
         $items = $query->get();
-        $data  = [];
+
         foreach ($items as $item) {
             $values             = json_decode($item->value, true);
             $values['___id___'] = $item->id;
