@@ -12,3 +12,15 @@
 /**
  * @var $app NinjaTables\Framework\Foundation\Application
  */
+
+$app->addFilter("plugin_action_links_" . NINJA_TABLES_BASENAME, function ($links) {
+
+    if ( ! defined('NINJATABLESPRO')) {
+        $links[] = '<a style="color: green; font-weight: bold;" target="_blank" href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/">Go Pro</a>';
+    }
+
+    $links[] = '<a href="' . admin_url('admin.php?page=ninja_tables#/') . '">' . __('All Tables',
+            'ninja-tables') . '</a>';
+
+    return $links;
+});

@@ -103,9 +103,6 @@ class AdminMenuHandler
             }
         }
 
-        ninjaTablesAdminPrintStyles();
-
-
         $submenu['ninja_tables']['help'] = array(
             __('Help', 'ninja-tables'),
             $capability,
@@ -425,47 +422,6 @@ class AdminMenuHandler
         }
 
         return apply_filters('ninja_table_integrity', 'valid');
-    }
-
-    public function adminNotices()
-    {
-        if ($this->isNotice()) {
-            if (isset($_GET['page']) && Sanitizer::sanitizeTextField($_GET['page']) == 'ninja_tables') {
-                echo '<div class="nt_review_notice">In love with Ninja Tables?
-                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Please leave a 5-star review for us! </a>
-                     It will encourage us to come up with more and more features.
-                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a> |
-                     <a href=' . admin_url('admin.php?action=remindMeLater') . '>Remind Me Later</a>
-                     <a href=' . admin_url('admin.php?action=remindMeLater') . '>
-                        <span class="close-icon dashicons dashicons-no"></span>
-                    </a>
-                 </div>';
-            }
-        }
-    }
-
-    public function isNotice()
-    {
-        if (isset($_COOKIE['nt_review_notice'])) {
-            $plugin_version = Sanitizer::sanitizeTextField($_COOKIE['nt_review_notice']);
-            if ($plugin_version == NINJA_TABLES_VERSION) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public function remindMeLater()
-    {
-        if (isset($_GET['action']) && Sanitizer::sanitizeTextField($_GET['action']) === 'remindMeLater') {
-            setcookie(
-                "nt_review_notice",
-                NINJA_TABLES_VERSION,
-                time() + (60 * 60 * 24 * 30)
-            );
-            wp_redirect(admin_url('admin.php?page=ninja_tables#home'));
-        }
     }
 }
 

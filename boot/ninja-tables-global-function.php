@@ -192,25 +192,6 @@ function ninjaTablesClearTableDataCache($tableId)
     update_post_meta($tableId, '__ninja_cached_table_html', false);
 }
 
-function ninjaTablesAllowedHtmlTags($tags)
-{
-    $tags['a']['download'] = true;
-    $tags['iframe']        = array(
-        'src'             => true,
-        'srcdoc'          => true,
-        'width'           => true,
-        'height'          => true,
-        'scrolling'       => true,
-        'frameborder'     => true,
-        'allow'           => true,
-        'style'           => true,
-        'allowfullscreen' => true,
-        'name'            => true
-    );
-
-    return $tags;
-}
-
 /**
  * Determine if the table's data has been migrated for manual sorting.
  *
@@ -1092,29 +1073,6 @@ function ninjaTablePreloadFont()
 }
 
 /**
- * Prints admin styles
- */
-function ninjaTablesAdminPrintStyles()
-{
-    $app = App::getInstance();
-    $app->addAction('admin_print_styles', function () {
-        ?>
-        <style>
-            #adminmenu #toplevel_page_ninja_tables li.ninja_tables_help:before {
-                background: #b4b9be;
-                content: "";
-                display: block;
-                height: 1px;
-                margin: 5px auto 0;
-                width: calc(100% - 24px);
-                opacity: .4;
-            }
-        </style>
-        <?php
-    });
-}
-
-/**
  * Validate nonce.
  */
 function ninjaTablesValidateNonce($key = 'ninja_table_admin_nonce')
@@ -1153,20 +1111,6 @@ if ( ! function_exists('ninjaTablesEscCss')) {
 
         return $css;
     }
-}
-
-function ninjaTablesLoadView($file, $data = [])
-{
-    $file = NINJA_TABLES_DIR_PATH . $file . '.php';
-    ob_start();
-    extract($data);
-    if (file_exists($file)) {
-        include $file;
-    } else {
-        return $file . " <span style='color: red'>not exists</span>";
-    }
-
-    return ob_get_clean();
 }
 
 /**
@@ -1220,3 +1164,8 @@ function ninjaTablesEscapeScript($data)
     return preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $data);
 }
 
+// function only for supported ninja charts
+function ninja_tables_boot()
+{
+    return true;
+}

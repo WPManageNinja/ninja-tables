@@ -47,7 +47,13 @@ class NinjaTableItemsMigrator
     public static function checkDBMigrations()
     {
         static::migrateIdAndTableIdColumn();
+
         $firstRow = NinjaTableItem::first();
+
+        if ($firstRow) {
+            $firstRow = (object)$firstRow->toArray();
+        }
+
         if ( ! $firstRow) {
             if (get_option('_ninja_table_db_settings_owner_id')) {
                 return true;
