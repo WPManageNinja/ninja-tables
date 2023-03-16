@@ -191,11 +191,9 @@
                 otherPlugins: {
                     'TablePress': 'Table Press',
                     'supsystic': 'Data Tables Generator by Supsystic',
-                    'UltimateTables': 'Ultimate Tables'
                 },
                 btnsLoading: {
                     'TablePress': false,
-                    'UltimateTables': false
                 },
                 showPluginModal: false,
                 selectedPlugin: null,
