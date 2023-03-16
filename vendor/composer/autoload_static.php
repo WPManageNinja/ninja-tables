@@ -16,10 +16,6 @@ class ComposerStaticInite2cc3f91f264b6c9d64346c5247abaa6
             'NinjaTables\\Framework\\' => 22,
             'NinjaTables\\App\\' => 16,
         ),
-        'L' => 
-        array (
-            'League\\Csv\\' => 11,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -35,10 +31,6 @@ class ComposerStaticInite2cc3f91f264b6c9d64346c5247abaa6
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
-        'League\\Csv\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/league/csv/src',
-        ),
     );
 
     public static $classMap = array (
@@ -47,6 +39,9 @@ class ComposerStaticInite2cc3f91f264b6c9d64346c5247abaa6
         'NinjaTables\\Database\\DBSeeder' => __DIR__ . '/../..' . '/database/DBSeeder.php',
         'NinjaTables\\Database\\Migrations\\ExampleMigrator' => __DIR__ . '/../..' . '/database/Migrations/ExampleMigrator.php',
         'NinjaTables\\Database\\Migrations\\NinjaTableItemsMigrator' => __DIR__ . '/../..' . '/database/Migrations/NinjaTableItemsMigrator.php',
+        'NinjaTables\\Database\\Migrations\\NinjaTablesMigration' => __DIR__ . '/../..' . '/database/Migrations/NinjaTablesMigration.php',
+        'NinjaTables\\Database\\Migrations\\NinjaTablesSupsysticTableMigration' => __DIR__ . '/../..' . '/database/Migrations/NinjaTablesSupsysticTableMigration.php',
+        'NinjaTables\\Database\\Migrations\\NinjaTablesTablePressMigration' => __DIR__ . '/../..' . '/database/Migrations/NinjaTablesTablePressMigration.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

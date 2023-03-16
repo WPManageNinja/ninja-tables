@@ -255,17 +255,11 @@
                 this.btnsLoading[plugin] = true;
 
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'get-tables-from-plugin',
-                    plugin: plugin,
-                    ninja_table_admin_nonce: window.ninja_table_admin.ninja_table_admin_nonce
+                    plugin,
                 };
 
-                jQuery.ajax({
-                    url: ajaxurl,
-                    data: data,
-                    type: 'POST',
-                    success: (response) => {
+                this.$post('import/get-tables-from-other-plugin', data)
+                    .then(response => {
                         if(!response.tables) {
                             this.$message.error('No Table Found');
                         } else {
@@ -273,17 +267,15 @@
                         }
                         this.showPluginModal = true;
                         this.otherPluginTables = response.tables;
-                    },
-                    error: (error) => {
+                    })
+                    .catch(error => {
                         this.btnsLoading[plugin] = false;
                         if(error.responseJSON) {
                             this.$message.error(error.responseJSON.message);
                         } else {
                             this.$message.error('No Table Found');
                         }
-
-                    }
-                });
+                    });
             },
             closePluginModal() {
                 this.otherPluginTables = [];
@@ -296,27 +288,20 @@
                 this.importing = true;
 
                 let data = {
-                    action: 'ninja_tables_ajax_actions',
-                    target_action: 'import-table-from-plugin',
                     plugin: this.selectedPlugin,
                     tableId: table.ID,
-                    ninja_table_admin_nonce: window.ninja_table_admin.ninja_table_admin_nonce
                 };
 
-                jQuery.ajax({
-                    url: ajaxurl,
-                    data: data,
-                    type: 'POST',
-                    success: (response) => {
+                this.$post('import/import-table-from-other-plugin', data)
+                    .then(response => {
                         this.$message.success(response.data.message);
                         this.importing = false;
                         this.$set(this.otherPluginTables[index], 'ninja_table_id', response.data.tableId);
-                    },
-                    error: (error) => {
-                        this.$message.error(error.responseJSON.data.message);
+                    })
+                    .catch(error => {
+                        this.$message.error(error.data.message);
                         this.importing = false;
-                    }
-                });
+                    })
             }
         },
         mounted() {

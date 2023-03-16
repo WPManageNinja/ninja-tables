@@ -3,6 +3,8 @@
 namespace NinjaTables\App\Http\Controllers;
 
 use NinjaTables\App\Models\Import;
+use NinjaTables\Database\Migrations\NinjaTablesSupsysticTableMigration;
+use NinjaTables\Database\Migrations\NinjaTablesTablePressMigration;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Sanitizer;
 use NinjaTables\App\Library\Csv\Reader;
@@ -99,7 +101,7 @@ class ImportController extends Controller
 
     public function defaultImport(Request $request)
     {
-        $format = Sanitizer::sanitizeTextField($request->format);
+        $format    = Sanitizer::sanitizeTextField($request->format);
         $doUnicode = Sanitizer::sanitizeTextField($request->do_unicode);
         if ($format == 'dragAndDrop') {
             $fileType = Sanitizer::sanitizeTextField($_FILES['file']['type']);
@@ -333,6 +335,60 @@ class ImportController extends Controller
         $this->json([
             'message' => __('Successfully added a table.', 'ninja-tables'),
             'tableId' => $tableId
+        ], 200);
+    }
+
+    public function getTablesFromOtherPlugin(Request $request)
+    {
+
+        $plugin = Sanitizer::sanitizeTextField($request->plugin);
+        if ($plugin == 'TablePress') {
+            $libraryClass = new NinjaTablesTablePressMigration();
+        } elseif ($plugin == 'supsystic') {
+            $libraryClass = new NinjaTablesSupsysticTableMigration();
+        } else {
+            return false;
+        }
+
+        $tables = $libraryClass->getTables();
+
+        $this->json([
+            'tables' => $tables
+        ], 200);
+    }
+
+    public function importTableFromOtherPlugin(Request $request)
+    {
+        $plugin  = Sanitizer::sanitizeTextField($request->plugin);
+        $tableId = intval($request->tableId);
+
+        if ($plugin == 'TablePress') {
+            $libraryClass = new NinjaTablesTablePressMigration();
+        } elseif ($plugin == 'supsystic') {
+            $libraryClass = new NinjaTablesSupsysticTableMigration();
+        } else {
+            return false;
+        }
+
+        $tableId = $libraryClass->migrateTable($tableId);
+        if (is_wp_error($tableId)) {
+            return $this->sendError([
+                'data' => [
+                    'message' => 'Something Went Wrong When Migrating'
+                ]
+            ], 423);
+        }
+
+        $message = __(
+            'Successfully imported. Please go to all tables and review your newly imported table.',
+            'ninja-tables'
+        );
+
+        return $this->sendSuccess([
+            'data' => [
+                'message' => $message,
+                'tableId' => $tableId
+            ]
         ], 200);
     }
 }

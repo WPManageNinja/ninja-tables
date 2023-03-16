@@ -73,6 +73,8 @@ $router->withPolicy('UserPolicy')->group(function ($router) {
     $router->prefix('import')->group(function ($route) {
         $route->post('/default', [ImportController::class, 'defaultImport']);
         $route->post('/table-builder', [ImportController::class, 'tableBuilderImport']);
+        $route->post('/get-tables-from-other-plugin', [ImportController::class, 'getTablesFromOtherPlugin']);
+        $route->post('/import-table-from-other-plugin', [ImportController::class, 'importTableFromOtherPlugin']);
     });
 
     $router->prefix('install')->group(function ($route) {
