@@ -75,6 +75,7 @@ $router->withPolicy('UserPolicy')->group(function ($router) {
         $route->post('/table-builder', [ImportController::class, 'tableBuilderImport']);
         $route->post('/get-tables-from-other-plugin', [ImportController::class, 'getTablesFromOtherPlugin']);
         $route->post('/import-table-from-other-plugin', [ImportController::class, 'importTableFromOtherPlugin']);
+        $route->post('/upload-csv-in-existing-table', [ImportController::class, 'uploadCsvInExistingTable']);
     });
 
     $router->prefix('install')->group(function ($route) {

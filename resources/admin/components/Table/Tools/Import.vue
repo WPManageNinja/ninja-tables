@@ -110,43 +110,33 @@
 
                 that.btnLoading = true;
 
-                var file = jQuery('#fileUpload')[0].files[0];
+                let file = document.getElementById('fileUpload').files[0];
 
                 if (!file) {
                     that.btnLoading = false;
                     return;
                 }
 
-                var formData = new FormData();
+                let formData = new FormData();
 
                 formData.append('file', file);
-                formData.append('action', 'ninja_tables_ajax_actions');
-                formData.append('target_action', 'upload-data');
                 formData.append('table_id', this.tableId);
                 formData.append('replace', this.replace);
                 formData.append('do_unicode', this.do_unicode);
-                formData.append('ninja_table_admin_nonce', window.ninja_table_admin.ninja_table_admin_nonce);
 
-                jQuery.ajax({
-                    url: ajaxurl,
-                    data: formData,
-                    type: 'POST',
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
+                this.$post('import/upload-csv-in-existing-table', formData)
+                    .then(response => {
                         that.$emit('csvUploaded');
 
                         that.clear();
 
-                        that.$message.success(response.message)
-                    },
-                    error: function (error) {
-                        that.$message.error(error.responseJSON.message)
-                    }
-                })
-                    .always(function () {
-                        that.btnLoading = false;
-                    });
+                        that.$message.success(response.data.message)
+                    })
+                    .catch(error => {
+                        that.$message.error(error.data.message)
+                    })
+                    that.btnLoading = false;
+
             },
             download: function () {
                 var rows = [1, 2];

@@ -2,12 +2,14 @@
 
 namespace NinjaTables\App\Http\Controllers;
 
+use NinjaTables\App\App;
 use NinjaTables\App\Models\Import;
 use NinjaTables\Database\Migrations\NinjaTablesSupsysticTableMigration;
 use NinjaTables\Database\Migrations\NinjaTablesTablePressMigration;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Sanitizer;
 use NinjaTables\App\Library\Csv\Reader;
+use NinjaTables\App\Models\NinjaTableItem;
 
 class ImportController extends Controller
 {
@@ -390,5 +392,95 @@ class ImportController extends Controller
                 'tableId' => $tableId
             ]
         ], 200);
+    }
+
+
+    public function uploadCsvInExistingTable(Request $request)
+    {
+        global $wpdb;
+        $tableId = intval($request->table_id);
+        $tmpName = $_FILES['file']['tmp_name'];
+
+        $data = file_get_contents($tmpName);
+        if (isset($request->do_unicode) && $request->do_unicode == 'yes') {
+            $data = utf8_encode($data);
+        }
+
+        try {
+            $reader = Reader::createFromString($data)->fetchAll();
+        } catch (\Exception $exception) {
+            wp_send_json_error(array(
+                'errors'  => $exception->getMessage(),
+                'message' => __('CSV File is not valid', 'ninja-tables')
+            ), 423);
+        }
+
+        $csvHeader = array_shift($reader);
+        $csvHeader = array_map('esc_attr', $csvHeader);
+
+        $config = get_post_meta($tableId, '_ninja_table_columns', true);
+
+        if ( ! $config) {
+            return $this->json(array(
+                'message' => __('Please set table configuration first', 'ninja-tables')
+            ), 423);
+        }
+
+        // Extract header keys to a plain array from the config.
+        $header = array_map(function ($item) {
+            return $item['key'];
+        }, $config);
+
+        // We are gonna allow to upload new data if the CSV
+        // has the same number of headers as the config.
+        if (count($header) != count($csvHeader)) {
+            return $this->sendError([
+                'data' => [
+                    'message' => __('Please use the provided CSV header structure font face.', 'ninja-tables')
+                ]
+            ], 423);
+        }
+
+        $data = array();
+
+        $userId    = get_current_user_id();
+        $timeStamp = time() - (count($reader) * 100);
+        foreach ($reader as $item) {
+            $itemTemp = array_combine($header, $item);
+            array_push($data, array(
+                'table_id'   => $tableId,
+                'attribute'  => 'value',
+                'owner_id'   => $userId,
+                'value'      => json_encode($itemTemp, JSON_UNESCAPED_UNICODE),
+                'created_at' => date('Y-m-d H:i:s', $timeStamp),
+                'updated_at' => date('Y-m-d H:i:s')
+            ));
+            $timeStamp = $timeStamp + 100;
+        }
+
+        $replace = $request->replace === 'true';
+
+        $app  = App::getInstance();
+        $data = $app->applyFilters('ninja_tables_import_table_data', $data, $tableId);
+
+        if ($replace) {
+            NinjaTableItem::where('table_id', $tableId)->delete();
+        }
+
+        // We are gonna batch insert by small chunk so that we can avoid PHP
+        // memory issue or MYSQL max_allowed_packet issue for large data set.
+        $tableName = $wpdb->prefix . static::$tableName;
+        foreach (array_chunk($data, 3000) as $chunk) {
+            ninjtaTableBatchInsert($tableName, $chunk);
+        }
+
+        ninjaTablesClearTableDataCache($tableId);
+
+        return $this->json([
+            'data' => [
+                'message' => __('Successfully uploaded data.', 'ninja-tables')
+            ]
+        ]);
+
     }
 }

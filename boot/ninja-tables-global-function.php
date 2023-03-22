@@ -355,9 +355,9 @@ function ninja_tables_allowed_html_tags()
 function ninja_tables_allowed_css_properties()
 {
     $app = App::getInstance();
-    $app->addFilter('safe_style_css', function ($styles) {
+    $app->addFilter('safe_style_css', function ($styles) use ($app) {
         $style_tags = ['display', 'opacity', 'visibility'];
-        $style_tags = $this->app->applyFilters('ninja_tables/allowed_css_properties', $style_tags);
+        $style_tags = $app->applyFilters('ninja_tables/allowed_css_properties', $style_tags);
 
         foreach ($style_tags as $tag) {
             $styles[] = $tag;
