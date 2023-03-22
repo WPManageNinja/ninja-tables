@@ -2,9 +2,9 @@
 
 namespace NinjaTables\App\Hooks\Handlers;
 
+use NinjaTables\App\App;
 use NinjaTables\App\Models\NinjaTableItem;
 use NinjaTables\App\Modules\DataProviders\NinjaFooTable;
-use NinjaTables\Framework\Foundation\Application;
 use NinjaTables\Framework\Support\Arr;
 
 class PublicDataHandler
@@ -264,7 +264,9 @@ class PublicDataHandler
 
         do_action('ninja_table_builder_before_render', $table_id);
 
-        return $this->app->view->make('public/drag-and-drop-html', [
+        $app = App::getInstance();
+
+        return $app->view->make('public/drag-and-drop-html', [
             'ninja_table_builder_html' => $html,
             'table_data'               => $ninja_table_builder_table_data,
             'setting'                  => $ninja_table_builder_setting,
