@@ -409,10 +409,12 @@ class ImportController extends Controller
         try {
             $reader = Reader::createFromString($data)->fetchAll();
         } catch (\Exception $exception) {
-            wp_send_json_error(array(
-                'errors'  => $exception->getMessage(),
-                'message' => __('CSV File is not valid', 'ninja-tables')
-            ), 423);
+            return $this->sendError([
+                'data' => [
+                    'errors'  => $exception->getMessage(),
+                    'message' => __('CSV File is not valid', 'ninja-tables')
+                ]
+            ], 423);
         }
 
         $csvHeader = array_shift($reader);
