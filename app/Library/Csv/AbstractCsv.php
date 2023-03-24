@@ -152,7 +152,7 @@ abstract class AbstractCsv implements JsonSerializable, IteratorAggregate
     public static function createFromString($str)
     {
         $file = new SplTempFileObject();
-        $file->fwrite(static::validateString($str));
+        $file->fwrite(static::customValidateString($str));
 
         return new static($file);
     }
@@ -166,7 +166,7 @@ abstract class AbstractCsv implements JsonSerializable, IteratorAggregate
      *
      * @return string
      */
-    protected static function validateString($str)
+    protected function validateString($str)
     {
         if (is_string($str) || (is_object($str) && method_exists($str, '__toString'))) {
             return (string) $str;
@@ -194,7 +194,7 @@ abstract class AbstractCsv implements JsonSerializable, IteratorAggregate
             $path = $path->getPath().'/'.$path->getBasename();
         }
 
-        return new static(static::validateString($path), $open_mode);
+        return new static(static::customValidateString($path), $open_mode);
     }
 
     /**
@@ -269,5 +269,22 @@ abstract class AbstractCsv implements JsonSerializable, IteratorAggregate
         }
 
         return new SplFileObject($this->getStreamFilterPath(), $this->open_mode);
+    }
+
+    /**
+     * validate a string
+     *
+     * @param mixed $str the value to evaluate as a string
+     *
+     * @throws InvalidArgumentException if the submitted data can not be converted to string
+     *
+     * @return string
+     */
+    protected static function customValidateString($str)
+    {
+        if (is_string($str) || (is_object($str) && method_exists($str, '__toString'))) {
+            return (string) $str;
+        }
+        throw new InvalidArgumentException('Expected data must be a string or stringable');
     }
 }
