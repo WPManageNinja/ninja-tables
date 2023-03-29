@@ -343,7 +343,7 @@ class AdminMenuHandler
             'hasPro'                   => defined('NINJATABLESPRO'),
             'hasFluentForm'            => $hasFluentFrom,
             'isFluentFormUpdated'      => $isFluentFromUpdated,
-            'hasAdvancedFilters'       => class_exists('NinjaTablesPro\CustomFilters'),
+            'hasAdvancedFilters'       => class_exists('NinjaTablesPro\App\Modules\CustomFilters'),
             'hasSortable'              => defined('NINJATABLESPRO_SORTABLE'),
             'ace_path_url'             => "$assets/libs/ace",
             'upgradeGuide'             => 'https://wpmanageninja.com/r/docs/ninja-tables/how-to-install-and-upgrade/#upgrade',
