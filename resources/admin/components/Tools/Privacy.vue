@@ -75,11 +75,10 @@
             },
             store() {
                 let data = {
-                    action: "ninja_tables_set_permission",
                     capability: this.capability,
                     sql_permission: this.sql_permission
                 };
-                this.$post(data)
+                this.$post('pro/permission', data)
                     .then(response => {
                         this.$message({
                             showClose: true,
@@ -90,7 +89,7 @@
                     .catch(error => {
                         this.$message({
                             showClose: true,
-                            message: error.responseJSON.data.message,
+                            message: error.message,
                             type: "error"
                         });
                     });

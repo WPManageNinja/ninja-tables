@@ -71,7 +71,7 @@ class ToolsController extends Controller
     {
         $all_roles = wp_roles()->roles;
 
-        return $this->app->applyFIlters('editable_roles', $all_roles);
+        return $this->app->applyFilters('editable_roles', $all_roles);
     }
 
     // Tools: Licence's code will be goes here

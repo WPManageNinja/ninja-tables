@@ -692,7 +692,7 @@
                 this.loading = true;
 
                 let data = {
-                    action: "ninja_tables_sort_table",
+                    // action: "ninja_tables_sort_table",
                     table_id: this.tableId,
                     id,
                     newPosition,
@@ -702,16 +702,16 @@
                     default_sorting: this.config.settings.default_sorting
                 };
 
-                this.$post(data)
+                this.$post('pro/sortable', data)
                     .then(res => {
                         this.items = res.data;
                         this.paginate.total = parseInt(res.total);
                         this.paginate.last_page = parseInt(res.last_page);
                     })
-                    .fail(e => {
+                    .catch(e => {
                         console.log(e);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.loading = false;
                     });
             },

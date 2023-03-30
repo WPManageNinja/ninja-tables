@@ -163,13 +163,12 @@
             // Initialize the table's manual data sorting.
             window.ninjaTableBus.$on('initManualSorting', (options, resolve, reject) => {
                 let data = {
-                    action: "ninja_tables_init_sortable",
                     ...options
                 };
 
-                this.$post(data)
-                    .success(response => resolve(response))
-                    .fail(e => reject(e));
+                this.$post('pro/sortable/init', data)
+                    .then(response => resolve(response))
+                    .catch(e => reject(e));
             });
 
             window.ninjaTableBus.$on('tableDoingAjax',  (value) => {
