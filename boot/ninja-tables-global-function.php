@@ -19,20 +19,18 @@ use NinjaTables\App\App;
 if ( ! function_exists('ninja_table_get_table_columns')) {
     function ninja_table_get_table_columns($tableId, $scope = 'public')
     {
-        $app          = App::getInstance();
         $tableColumns = get_post_meta($tableId, '_ninja_table_columns', true);
         if ( ! $tableColumns || ! is_array($tableColumns)) {
             $tableColumns = array();
         }
 
-        return $app->applyFilters('ninja_get_table_columns_' . $scope, $tableColumns, $tableId);
+        return apply_filters('ninja_get_table_columns_' . $scope, $tableColumns, $tableId);
     }
 }
 
 if ( ! function_exists('ninja_table_get_table_settings')) {
     function ninja_table_get_table_settings($tableId, $scope = 'public')
     {
-        $app                  = App::getInstance();
         $tableSettings        = get_post_meta($tableId, '_ninja_table_settings', true);
         $defaultTableSettings = getDefaultNinjaTableSettings();
         if ( ! $tableSettings) {
@@ -51,7 +49,7 @@ if ( ! function_exists('ninja_table_get_table_settings')) {
             }
         }
 
-        return $app->applyFilters('ninja_get_table_settings_' . $scope, $tableSettings, $tableId);
+        return apply_filters('ninja_get_table_settings_' . $scope, $tableSettings, $tableId);
     }
 }
 
@@ -59,7 +57,6 @@ if ( ! function_exists('ninja_table_get_table_settings')) {
 if ( ! function_exists('getDefaultNinjaTableSettings')) {
     function getDefaultNinjaTableSettings()
     {
-        $app        = App::getInstance();
         $renderType = defined('NINJATABLESPRO') ? 'legacy_table' : 'ajax_table';
         $settings   = get_option('_ninja_table_default_appearance_settings');
         $defaults   = array(
@@ -96,18 +93,18 @@ if ( ! function_exists('getDefaultNinjaTableSettings')) {
         }
         $settings = wp_parse_args($settings, $defaults);
 
-        return $app->applyFilters('get_default_ninja_table_settings', $settings);
+        return apply_filters('get_default_ninja_table_settings', $settings);
     }
 }
 
 if ( ! function_exists('ninja_table_admin_role')) {
     function ninja_table_admin_role()
     {
-        $app = App::getInstance();
+
         if (current_user_can('administrator')) {
             return 'administrator';
         }
-        $roles = $app->applyFilters('ninja_table_admin_role', array('administrator'));
+        $roles = apply_filters('ninja_table_admin_role', array('administrator'));
         if (is_string($roles)) {
             $roles = array($roles);
         }
@@ -152,9 +149,7 @@ if ( ! function_exists('ninja_table_renameDuplicateValues')) {
 if ( ! function_exists('ninja_table_is_in_production_mood')) {
     function ninja_table_is_in_production_mood()
     {
-        $app = App::getInstance();
-
-        return $app->applyFilters('ninja_table_is_in_production_mood', false);
+        return apply_filters('ninja_table_is_in_production_mood', false);
     }
 }
 
@@ -168,11 +163,10 @@ function ninjaTablesGetTablesDataByID(
     $skip = false,
     $ownOnly = false
 ) {
-    $app          = App::getInstance();
     $providerName = ninja_table_get_data_provider($tableId);
     $providerName = in_array($providerName, array('csv', 'google-csv')) ? 'csv' : $providerName;
 
-    return $app->applyFilters(
+    return apply_filters(
         'ninja_tables_fetching_table_rows_' . $providerName,
         array(),
         $tableId,
@@ -275,7 +269,6 @@ if ( ! function_exists('ninja_tables_is_valid_url')) {
 
 function ninja_tables_allowed_html_tags()
 {
-    $app  = App::getInstance();
     $tags = wp_kses_allowed_html('post');
 
     // form fields - input
@@ -349,15 +342,14 @@ function ninja_tables_allowed_html_tags()
         $tags     = array_merge($tags, $svg_args);
     }
 
-    return $app->applyFilters('ninja_tables/allowed_html_tags', $tags);
+    return apply_filters('ninja_tables/allowed_html_tags', $tags);
 }
 
 function ninja_tables_allowed_css_properties()
 {
-    $app = App::getInstance();
-    $app->addFilter('safe_style_css', function ($styles) use ($app) {
+    add_filter('safe_style_css', function ($styles) use ($app) {
         $style_tags = ['display', 'opacity', 'visibility'];
-        $style_tags = $app->applyFilters('ninja_tables/allowed_css_properties', $style_tags);
+        $style_tags = apply_filters('ninja_tables/allowed_css_properties', $style_tags);
 
         foreach ($style_tags as $tag) {
             $styles[] = $tag;
@@ -430,11 +422,10 @@ function ninjaTableSetExternalCacheData($tableId, $data)
 if ( ! function_exists('getNinjaFluentFormMenuIcon')) {
     function getNinjaFluentFormMenuIcon()
     {
-        $app = App::getInstance();
 
         $icon = 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><defs><style>.cls-1{fill:#fff;}</style></defs><title>dashboard_icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path class="cls-1" d="M15.57,0H4.43A4.43,4.43,0,0,0,0,4.43V15.57A4.43,4.43,0,0,0,4.43,20H15.57A4.43,4.43,0,0,0,20,15.57V4.43A4.43,4.43,0,0,0,15.57,0ZM12.82,14a2.36,2.36,0,0,1-1.66.68H6.5A2.31,2.31,0,0,1,7.18,13a2.36,2.36,0,0,1,1.66-.68l4.66,0A2.34,2.34,0,0,1,12.82,14Zm3.3-3.46a2.36,2.36,0,0,1-1.66.68H3.21a2.25,2.25,0,0,1,.68-1.64,2.36,2.36,0,0,1,1.66-.68H16.79A2.25,2.25,0,0,1,16.12,10.53Zm0-3.73a2.36,2.36,0,0,1-1.66.68H3.21a2.25,2.25,0,0,1,.68-1.64,2.36,2.36,0,0,1,1.66-.68H16.79A2.25,2.25,0,0,1,16.12,6.81Z"/></g></g></svg>');
 
-        return $app->applyFilters('fluent_form_menu_icon', $icon);
+        return apply_filters('fluent_form_menu_icon', $icon);
     }
 }
 
@@ -442,7 +433,6 @@ if ( ! function_exists('getNinjaFluentFormMenuIcon')) {
 if ( ! function_exists('ninjaTablesGetPostStatuses')) {
     function ninjaTablesGetPostStatuses()
     {
-        $app         = App::getInstance();
         $post_status = [
             ['key' => 'publish', 'label' => 'Publish'],
             ['key' => 'pending', 'label' => 'Pending'],
@@ -455,7 +445,7 @@ if ( ! function_exists('ninjaTablesGetPostStatuses')) {
             ['key' => 'any', 'label' => 'Any']
         ];
 
-        return $app->applyFilters('ninja_table_post_status', $post_status);
+        return apply_filters('ninja_table_post_status', $post_status);
     }
 }
 
@@ -926,9 +916,7 @@ function ninjaTableInsertDataToTable($tableId, $values, $header)
 
 function ninjaTablePerChunk($table_id = false)
 {
-    $app = App::getInstance();
-
-    return $app->applyFilters('ninja_table_per_chunk', 3000, $table_id);
+    return apply_filters('ninja_table_per_chunk', 3000, $table_id);
 }
 
 function ninja_table_clear_all_cache($posts = array())
@@ -1061,8 +1049,7 @@ function ninjaTablesGetShortCodeIds($content)
  */
 function ninjaTablePreloadFont()
 {
-    $app = App::getInstance();
-    $app->addAction('wp_head', function () {
+    add_action('wp_head', function () {
         $preloadFontUrl = NINJA_TABLES_DIR_URL . "assets/fonts/ninja-tables.woff2";
         ?>
         <link rel="preload" as="font" href="<?php
@@ -1080,8 +1067,7 @@ function ninjaTablesValidateNonce($key = 'ninja_table_admin_nonce')
     $nonce = \NinjaTables\Framework\Support\Arr::get($_REQUEST, $key);
 
     if ( ! wp_verify_nonce($nonce, $key)) {
-        $app    = App::getInstance();
-        $errors = $app->applyFilters('ninja_tables_nonce_error', [
+        $errors = apply_filters('ninja_tables_nonce_error', [
             '_ninjatablesnonce' => [
                 __('Nonce verification failed, please try again.', 'ninja-tables')
             ]

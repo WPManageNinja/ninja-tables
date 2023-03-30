@@ -2,9 +2,6 @@
 
 namespace NinjaTables\App\Models;
 
-
-use NinjaTables\App\App;
-use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
 
 class NinjaTableItem extends Model
@@ -17,8 +14,6 @@ class NinjaTableItem extends Model
 
     protected function getItems($tableId, $perPage, $currentPage, $skip, $search, $dataSourceType)
     {
-        $app = App::getInstance();
-
         if ($dataSourceType == 'default') {
             list($orderByField, $orderByType) = $this->getTableSortingParams($tableId);
 
@@ -33,7 +28,7 @@ class NinjaTableItem extends Model
                           ->orderBy($orderByField, $orderByType)
                           ->get();
 
-            $total = $data->count();
+            $total = $this->where('table_id', $tableId)->count();
 
             $response = array();
 
@@ -70,7 +65,7 @@ class NinjaTableItem extends Model
                 // We have to migrate the data now
             }
         } else {
-            list($response, $total) = $app->applyFilters(
+            list($response, $total) = apply_filters(
                 'ninja_tables_get_table_data_' . $dataSourceType,
                 array(array(), 0),
                 $tableId,
@@ -80,7 +75,7 @@ class NinjaTableItem extends Model
         }
 
         // Needed for other data source providers
-        list($response, $total) = $app->applyFilters(
+        list($response, $total) = apply_filters(
             'ninja_tables_get_table_data',
             array($response, $total),
             $tableId,
@@ -132,19 +127,15 @@ class NinjaTableItem extends Model
 
     protected function deleteTableItem($tableId, $ids)
     {
-        $app = App::getInstance();
-
-        $app->doAction('ninja_table_before_items_deleted', $ids, $tableId);
+        do_action('ninja_table_before_items_deleted', $ids, $tableId);
         $this->where('table_id', $tableId)->whereIn('id', $ids)->delete();
-        $app->doAction('ninja_table_after_items_deleted', $ids, $tableId);
+        do_action('ninja_table_after_items_deleted', $ids, $tableId);
 
         ninjaTablesClearTableDataCache($tableId);
     }
 
     protected function insertTableItem($id, $tableId, $formattedRow, $created_at, $insertAfterId, $settings)
     {
-        $app = App::getInstance();
-
         $attributes = array(
             'table_id'   => $tableId,
             'attribute'  => 'value',
@@ -173,9 +164,9 @@ class NinjaTableItem extends Model
 
 
         if ($id = intval($id)) {
-            $app->doAction('ninja_table_before_update_item', $id, $tableId, $attributes);
+            do_action('ninja_table_before_update_item', $id, $tableId, $attributes);
             $this->where('id', $id)->update($attributes);
-            $app->doAction('ninja_table_after_update_item', $id, $tableId, $attributes);
+            do_action('ninja_table_after_update_item', $id, $tableId, $attributes);
         } else {
             if ($insertAfterId !== null) {
                 list($orderByField, $orderByType) = $this->getTableSortingParams($tableId);
@@ -200,11 +191,11 @@ class NinjaTableItem extends Model
                 $attributes['created_at'] = date('Y-m-d H:i:s');
             }
 
-            $attributes = $app->applyFilters('ninja_tables_item_attributes', $attributes);
+            $attributes = apply_filters('ninja_tables_item_attributes', $attributes);
 
-            $app->doAction('ninja_table_before_add_item', $tableId, $attributes);
+            do_action('ninja_table_before_add_item', $tableId, $attributes);
             $id = $insertId = $this->insertGetId($attributes);
-            $app->doAction('ninja_table_after_add_item', $insertId, $tableId, $attributes);
+            do_action('ninja_table_after_add_item', $insertId, $tableId, $attributes);
         }
 
         $item = $this->find($id);

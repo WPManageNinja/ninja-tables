@@ -4,7 +4,6 @@ namespace NinjaTables\App\Hooks\Handlers;
 
 use NinjaTables\App\App;
 use NinjaTables\App\Modules\I18nStrings;
-use NinjaTables\Framework\Support\Sanitizer;
 
 class AdminMenuHandler
 {
@@ -400,7 +399,6 @@ class AdminMenuHandler
 
     private function getIntegrity()
     {
-        $app = App::getInstance();
         if (defined('NINJATABLESPRO')) {
             if (is_multisite()) {
                 return 'valid';
@@ -416,7 +414,7 @@ class AdminMenuHandler
                 }
                 $length = strlen($key);
                 if ($length < 20) {
-                    return $app->applyFilters('ninja_table_integrity', 'nope');
+                    return apply_filters('ninja_table_integrity', 'nope');
                 }
             }
         }

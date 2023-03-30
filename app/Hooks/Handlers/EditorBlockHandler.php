@@ -2,17 +2,13 @@
 
 namespace NinjaTables\App\Hooks\Handlers;
 
-use NinjaTables\App\App;
-
 class EditorBlockHandler
 {
     public $cpt_name = 'ninja-table';
 
     public function loadGutenBlock()
     {
-        $app = App::getInstance();
-
-        $app->addAction('enqueue_block_editor_assets', function () {
+        add_action('enqueue_block_editor_assets', function () {
             wp_enqueue_script(
                 'ninja-tables-gutenberg-block',
                 NINJA_TABLES_DIR_URL . 'assets/js/ninja-tables-gutenblock.js',
@@ -29,23 +25,21 @@ class EditorBlockHandler
 
     public function addTablesToEditor()
     {
-        $app                      = App::getInstance();
         $pages_with_editor_button = array('post.php', 'post-new.php');
         foreach ($pages_with_editor_button as $editor_page) {
-            $app->addAction("load-{$editor_page}", array($this, 'initNinjaMceButtons'));
+            add_action("load-{$editor_page}", array($this, 'initNinjaMceButtons'));
         }
     }
 
     public function initNinjaMceButtons()
     {
-        $app = App::getInstance();
 
         if ( ! user_can_richedit()) {
             return;
         }
-        $app->addFilter("mce_external_plugins", array($this, 'NinjaTablesAddButtons'));
-        $app->addFilter('mce_buttons', array($this, 'NinjaTablesRegisterButton'));
-        $app->addAction('admin_footer', array($this, 'pushNinjaTablesToEditorFooter'));
+        add_filter("mce_external_plugins", array($this, 'NinjaTablesAddButtons'));
+        add_filter('mce_buttons', array($this, 'NinjaTablesRegisterButton'));
+        add_action('admin_footer', array($this, 'pushNinjaTablesToEditorFooter'));
     }
 
     public function NinjaTablesAddButtons($plugin_array)

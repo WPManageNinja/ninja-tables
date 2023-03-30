@@ -89,7 +89,6 @@ class Post extends Model
 
     public static function updatedSettings($tableId, $rawColumns, $tablePreference)
     {
-        $app                      = App::getInstance();
         $tableColumns             = array();
         $formattedTablePreference = array();
         $provider                 = ninja_table_get_data_provider($tableId);
@@ -108,9 +107,9 @@ class Post extends Model
                 }
                 $tableColumns[] = $column;
             }
-            $tableColumns = $app->applyFilters('ninja_table_update_columns_' . ninja_table_get_data_provider($tableId),
+            $tableColumns = apply_filters('ninja_table_update_columns_' . ninja_table_get_data_provider($tableId),
                 $tableColumns, $rawColumns, $tableId);
-            $app->doAction('ninja_table_before_update_columns_' . ninja_table_get_data_provider($tableId),
+            do_action('ninja_table_before_update_columns_' . ninja_table_get_data_provider($tableId),
                 $tableColumns, $rawColumns, $tableId);
             update_post_meta($tableId, '_ninja_table_columns', $tableColumns);
         }
