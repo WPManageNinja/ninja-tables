@@ -60,3 +60,10 @@ $app->addAction('save_post', [NinjaTableAdminHandler::class, 'saveNinjaTableFlag
 $app->addAction('init', [\NinjaTables\App\Modules\Lead\LeadFlow::class, 'boot']);
 
 $app->addAction('init', [DataProviderHandler::class, 'handle']);
+
+// Handle Network new Site Activation
+$app->addAction('wpmu_new_blog', function ($blogId) {
+    switch_to_blog($blogId);
+    \NinjaTables\Database\DBMigrator::run();
+    restore_current_blog();
+});
