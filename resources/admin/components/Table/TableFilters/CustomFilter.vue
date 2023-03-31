@@ -153,18 +153,17 @@
             each,
             fetchFilters() {
                 this.loading = true;
-                this.$get({
-                    action: 'ninjatable_get_custom_table_filters',
-                    table_id: this.table_id
+                this.$get('pro/custom-filter', {
+                  table_id: this.table_id
                 })
                     .then((response) => {
                         this.table_filters = response.data.table_filters;
                         this.filter_styling = response.data.filter_styling;
                     })
-                    .fail(error => {
+                    .catch(error => {
 
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.loading = false;
                     });
             },
@@ -197,19 +196,20 @@
             },
             saveFilters() {
                 this.saving = true;
-                this.$post({
-                    action: 'ninjatable_update_custom_table_filters',
-                    table_id: this.table_id,
-                    ninja_filters: this.table_filters,
-                    filter_styling: this.filter_styling
-                })
+                let data = {
+                  table_id: this.table_id,
+                  ninja_filters: this.table_filters,
+                  filter_styling: this.filter_styling
+                };
+
+                this.$post('pro/custom-filter', data)
                     .then((response) => {
                         this.$message.success(response.data.message);
                     })
-                    .fail(error => {
+                    .catch(error => {
 
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.saving = false;
                         this.activeEditor = false;
                         this.editorModal = false;

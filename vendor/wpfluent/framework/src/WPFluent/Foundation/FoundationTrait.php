@@ -39,7 +39,12 @@ trait FoundationTrait
         if (!$handler) return;
 
         if (is_string($handler)) {
-            $handler = $this->policyNamespace . '\\' . $handler;
+
+            if ($this->hasNamespace($handler)) {
+                $handler = $handler;
+            } else {
+                $handler = $this->policyNamespace . '\\' . $handler;
+            }
 
             if ($this->isCallableWithAtSign($handler)) {
                 list($class, $method) = explode('@', $handler);
