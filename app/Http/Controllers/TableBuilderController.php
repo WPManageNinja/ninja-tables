@@ -139,7 +139,7 @@ class TableBuilderController extends Controller
         $table_id   = intval($request->table_id);
         $table_html = ninjaTablesEscapeScript($request->table_html);
         $json       = ninjaTablesEscapeScript($request->data);
-        $data       = json_decode(stripcslashes($json), true);
+        $data       = json_decode(htmlspecialchars_decode($json), true);
 
         $table_name            = Arr::get($data, 'table_data.table_name');
         $table_settings        = Arr::get($data, 'settings');
