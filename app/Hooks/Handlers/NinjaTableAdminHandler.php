@@ -2,6 +2,7 @@
 
 namespace NinjaTables\App\Hooks\Handlers;
 
+use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
 
 class NinjaTableAdminHandler
@@ -32,6 +33,8 @@ class NinjaTableAdminHandler
 
     public function adminNotices()
     {
+        $this->noticeForProVersion();
+
         if ($this->isNotice()) {
             if (isset($_GET['page']) && Sanitizer::sanitizeTextField($_GET['page']) == 'ninja_tables') {
                 echo '<div class="nt_review_notice">In love with Ninja Tables?
@@ -93,6 +96,42 @@ class NinjaTableAdminHandler
             update_post_meta($post_id, '_has_ninja_tables', $ids);
         } elseif (get_post_meta($post_id, '_has_ninja_tables', true)) {
             update_post_meta($post_id, '_has_ninja_tables', 0);
+        }
+    }
+
+    /**
+     * Show a notice if the pro version is installed but not updated and version is less than 4.3.5
+     *
+     * @return void
+     */
+    public function noticeForProVersion()
+    {
+        if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '4.3.5', '<')) {
+
+            $page = Arr::get($_GET, 'page', '');
+            if ($page == 'ninja_tables') {
+                $class = 'nt_review_notice nt_version_update_notice';
+            } else {
+                $class = 'notice notice-info';
+            }
+
+            echo '<div class="' . $class . '">
+            <p>
+                If you are using the old version of Ninja Tables Pro, please 
+                <a href=' . admin_url('plugins.php?plugin_status=upgrade') . '> <b>update</b> </a>
+                  to the latest version. Otherwise, 
+                <a href=' . admin_url('admin.php?action=deactivateProPlugin') . '> <b>deactivate</b> </a>
+                 the old version, or you will face some issues.  
+            </p>
+        </div>';
+        }
+    }
+
+    public function deactivateProPlugin()
+    {
+        if (isset($_GET['action']) && Sanitizer::sanitizeTextField($_GET['action']) === 'deactivateProPlugin') {
+            deactivate_plugins('ninja-tables-pro/ninja-tables-pro.php');
+            wp_redirect(admin_url('admin.php?page=ninja_tables#home'));
         }
     }
 }

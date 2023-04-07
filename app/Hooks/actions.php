@@ -44,7 +44,8 @@ $app->addAction('init', [EditorBlockHandler::class, 'addTablesToEditor']);
 
 $app->addAction('admin_print_styles', [StyleHandler::class, 'adminMenuStyle']);
 
-$app->addAction('ninja_table_check_db_integrity', [\NinjaTables\Database\Migrations\NinjaTableItemsMigrator::class, 'checkDBMigrations']);
+$app->addAction('ninja_table_check_db_integrity',
+    [\NinjaTables\Database\Migrations\NinjaTableItemsMigrator::class, 'checkDBMigrations']);
 
 global $pagenow;
 if ($pagenow == 'plugins.php') {
@@ -55,6 +56,8 @@ $app->addAction('wp_ajax_ninja-tables_deactivate_feedback', [DeactivationHandler
 $app->addAction('wp_head', [NinjaTableAdminHandler::class, 'addNinjaTableAdminScript']);
 $app->addAction('admin_notices', [NinjaTableAdminHandler::class, 'adminNotices']);
 $app->addAction('init', [NinjaTableAdminHandler::class, 'remindMeLater']);
+$app->addAction('init', [NinjaTableAdminHandler::class, 'deactivateProPlugin']);
+
 $app->addAction('save_post', [NinjaTableAdminHandler::class, 'saveNinjaTableFlagOnShortCode']);
 
 $app->addAction('init', [\NinjaTables\App\Modules\Lead\LeadFlow::class, 'boot']);
