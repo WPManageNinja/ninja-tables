@@ -30,13 +30,13 @@ class TablesController extends Controller
             'post_status'    => 'any',
         );
 
-        if (isset($request->search) && $request->search) {
-            $args['s'] = Sanitizer::sanitizeTextField($request->search);
+        if (Arr::get($request->all(), 'search') && $request->search) {
+	        $args['s'] = Sanitizer::sanitizeTextField($request->search);
         }
 
         try {
-            $tables    = get_posts($args);
-            $tables    = $this->app->applyFilters('ninja_tables_get_all_tables', $tables);
+	        $tables    = Post::getPosts($args);
+	        $tables    = $this->app->applyFilters('ninja_tables_get_all_tables', $tables);
             $tablesRes = Post::getTables($perPage, $currentPage, $tables);
             $this->json($tablesRes, 200);
         } catch (\Exception $e) {

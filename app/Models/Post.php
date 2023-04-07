@@ -9,6 +9,21 @@ class Post extends Model
     private static $cptName = 'ninja-table';
     protected $table = 'posts';
 
+    public static function getPosts($args)
+    {
+        return Post::where('post_type', self::$cptName)
+                     ->where(function ($query) use ($args) {
+                         if (isset($args['s'])) {
+                             $query->where('post_title', 'like', '%' . $args['s'] . '%')
+                                   ->orWhere('ID', 'like', '%' . $args['s'] . '%');
+                         }
+                     })
+                     ->orderBy('ID', $args['order'])
+                     ->skip($args['offset'])
+                     ->take($args['posts_per_page'])
+                     ->get();
+    }
+
     public static function getTables($perPage, $currentPage, $tables)
     {
         foreach ($tables as $table) {

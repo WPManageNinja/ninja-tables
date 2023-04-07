@@ -20,7 +20,7 @@ class NinjaTableItem extends Model
             $query = $this->where('table_id', $tableId);
 
             if ($search) {
-                $query->search($search, array('value'));
+                $query->where('value', 'LIKE', "%$search%");
             }
             $data = $query->take($perPage)
                           ->skip($skip)
