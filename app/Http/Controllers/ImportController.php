@@ -4,6 +4,7 @@ namespace NinjaTables\App\Http\Controllers;
 
 use NinjaTables\App\App;
 use NinjaTables\App\Models\Import;
+use NinjaTables\App\Traits\ImportTrait;
 use NinjaTables\Database\Migrations\NinjaTablesSupsysticTableMigration;
 use NinjaTables\Database\Migrations\NinjaTablesTablePressMigration;
 use NinjaTables\Framework\Request\Request;
@@ -13,109 +14,24 @@ use NinjaTables\App\Models\NinjaTableItem;
 
 class ImportController extends Controller
 {
+    use ImportTrait;
+
     private $cpt_name = 'ninja-table';
 
     private static $tableName = 'ninja_table_items';
 
-    private static $mimes_type = [
-        'text/csv',
-        'text/plain',
-        'application/csv',
-        'application/json',
-    ];
-
     public function tableBuilderImport(Request $request)
     {
-        $url      = Sanitizer::sanitizeTextField($request->url);
-        $fileName = 'Ninja-tables' . date('d-m-Y');
-
-        if (isset($url) && ! empty($url)) {
-            $data = static::importFromURL($url);
-        } else {
-            $fileType = Sanitizer::sanitizeTextField($_FILES['file']['type']);
-            if ($fileType === "application/json") {
-                return static::import();
-            }
-
-            $data     = static::import();
-            $fileName = Sanitizer::sanitizeTextField($_FILES['file']['name']);
-        }
-
-        return (new TableBuilderController())->importCSV($data, $fileName);
-    }
-
-    public static function importFromURL($url)
-    {
-        $file_info                  = new \finfo(FILEINFO_MIME_TYPE);
-        $mime_type                  = $file_info->buffer(file_get_contents($url));
-        $_FILES['file']['type']     = $mime_type;
-        $_FILES['file']['tmp_name'] = $url;
-
-        return static::import();
-    }
-
-    private static function importCSV()
-    {
-        $tmpName = Sanitizer::sanitizeTextField($_FILES['file']['tmp_name']);
-        $data    = file_get_contents($tmpName);
-
-        try {
-            $reader = Reader::createFromString($data)->fetchAll();
-        } catch (\Exception $exception) {
-            wp_send_json_error(array(
-                'errors'  => $exception->getMessage(),
-                'message' => __('Something is wrong when parsing the csv', 'ninja-tables')
-            ), 423);
-        }
-
-        return $reader;
-    }
-
-    private static function importJSON()
-    {
-        $tmpName = Sanitizer::sanitizeTextField($_FILES['file']['tmp_name']);
-        $content = json_decode(file_get_contents($tmpName), true);
-
-        if (isset($content['table_id']) && $content['table_id']) {
-            return static::ninjaTableJSONImport();
-        } else {
-            return $content;
-        }
-    }
-
-    private static function ninjaTableJSONImport()
-    {
-        $tmpName       = Sanitizer::sanitizeTextField($_FILES['file']['tmp_name']);
-        $parsedContent = file_get_contents($tmpName);
-        $content       = json_decode($parsedContent, true);
-        $table_id      = (new TableBuilderController())->wpInsertPost($content['table_name']);
-
-        $data = [
-            'table_name'       => $content['table_name'],
-            'table_settings'   => $content['table_settings'],
-            'table_responsive' => $content['table_responsive'],
-            'table_data'       => $content['table_data'],
-            'table_html'       => $content['table_html']
-        ];
-
-        return (new TableBuilderController())->updatePostMeta($table_id, $data);
+        return $this->extracted($request);
     }
 
     public function defaultImport(Request $request)
     {
         $format    = Sanitizer::sanitizeTextField($request->format);
         $doUnicode = Sanitizer::sanitizeTextField($request->do_unicode);
+
         if ($format == 'dragAndDrop') {
-            $fileType = Sanitizer::sanitizeTextField($_FILES['file']['type']);
-            $fileName = Sanitizer::sanitizeTextField($_FILES['file']['name']);
-
-            if ($fileType == 'text/csv') {
-                $data = static::import();
-
-                return (new TableBuilderController())->importCSV($data, $fileName);
-            }
-
-            return static::import();
+            return $this->extracted($request);
         } else {
             if ($format == 'csv') {
                 $this->uploadTableCsv($doUnicode);
@@ -129,25 +45,6 @@ class ImportController extends Controller
                 'message' => __('No appropriate driver found for the import format.', 'ninja-tables')
             ], 423);
         }
-    }
-
-    public static function import()
-    {
-        $mimes    = self::$mimes_type;
-        $fileType = Sanitizer::sanitizeTextField($_FILES['file']['type']);
-        if ( ! in_array($fileType, $mimes)) {
-            wp_send_json_error(array(
-                'errors'  => array(),
-                'message' => __('Please upload valid CSV or JSON', 'ninja-tables')
-            ), 423);
-        }
-
-        if ($fileType === 'text/csv' || $fileType === 'application/csv' || $fileType === 'text/plain') {
-            return static::importCSV();
-        } elseif ($fileType === 'application/json') {
-            return static::importJSON();
-        }
-
     }
 
     private function uploadTableCsv($doUnicode)
@@ -484,5 +381,30 @@ class ImportController extends Controller
             ]
         ]);
 
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function extracted(Request $request)
+    {
+        $fileName = 'Ninja-tables' . date('d-m-Y');
+        $url      = sanitize_url($request->get('url'));
+
+        if ( ! empty($url)) {
+            static::importFromURL($url);
+        }
+
+        $data = static::getData();
+
+        $tableId = $this->savedDragAndDropTable($data, $fileName);
+
+        return $this->sendSuccess([
+            'data' => [
+                'id' => $tableId
+            ]
+        ], 200);
     }
 }

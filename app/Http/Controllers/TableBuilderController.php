@@ -2,8 +2,8 @@
 
 namespace NinjaTables\App\Http\Controllers;
 
-use NinjaTables\App\Modules\DragAndDrop\InitialDataHandling;
-use NinjaTables\App\Modules\ImportExport;
+use NinjaTables\App\Modules\DragAndDrop\InitConfig;
+use NinjaTables\App\Traits\WpPostTrait;
 use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Http\Controller;
 use NinjaTables\Framework\Support\Arr;
@@ -13,32 +13,12 @@ use NinjaTables\App\Modules\ReadyMadeTable;
 
 class TableBuilderController extends Controller
 {
+    use WpPostTrait;
+
     public function index(Request $request)
     {
-        $initialData = (new InitialDataHandling())->getAllInitialData();
-        return $this->sendSuccess($initialData, 200);
-    }
-
-    public function importCSV($csvData, $fileName)
-    {
-        $initialData = new InitialDataHandling();
-        $table_id                  = $this->wpInsertPost($fileName);
-        $table_data                = $initialData->getTableData();
-        $table_data['table']['tr'] = count($csvData);
-        $table_data['table']['tc'] = count($csvData[0]);
-        $table_data['headers']     = $initialData->makeTableHeader($table_data);
-        $table_data['table_name']  = $fileName;
-        $table_data['data']        = $initialData->makeTableRow($table_data, $csvData);
-
-        $data = [
-            'table_name'       => $fileName,
-            'table_settings'   => $initialData->settingConfig(),
-            'table_responsive' => $initialData->responsiveConfig(),
-            'table_data'       => $table_data,
-            'table_html'       => null
-        ];
-
-        return $this->updatePostMeta($table_id, $data);
+        $initConfig = (new InitConfig())->getAllInitialData();
+        return $this->sendSuccess($initConfig, 200);
     }
 
     public function store(Request $request)
@@ -51,22 +31,28 @@ class TableBuilderController extends Controller
         }
 
 
-        $initialData = new InitialDataHandling();
+        $initConfig = new InitConfig();
         $table_id              = $this->wpInsertPost($table_name);
         $data                  = sanitize_post_field('data', $request->data, $table_id, 'db');
         $table_data            = $data['table_data'];
-        $table_data['headers'] = $initialData->makeTableHeader($table_data);
-        $table_data['data']    = $initialData->makeTableRow($table_data);
+        $table_data['headers'] = $initConfig->makeTableHeader($table_data);
+        $table_data['data']    = $initConfig->makeTableRow($table_data);
 
         $meta_data = [
             'table_name'       => $table_name,
-            'table_settings'   => $initialData->settingConfig(),
-            'table_responsive' => $initialData->responsiveConfig(),
+            'table_settings'   => $initConfig->settingConfig(),
+            'table_responsive' => $initConfig->responsiveConfig(),
             'table_data'       => $table_data,
             'table_html'       => null
         ];
 
-        return $this->updatePostMeta($table_id, $meta_data);
+        $this->updatePostMeta($table_id, $meta_data);
+
+        return $this->sendSuccess([
+            'data' => [
+                'id' => $table_id
+            ]
+        ], 200);
     }
 
     public function generateByTemplateConfig($table_type)
@@ -87,16 +73,7 @@ class TableBuilderController extends Controller
             'table_html'       => null
         ];
 
-        return $this->updatePostMeta($table_id, $data);
-    }
-
-    public function updatePostMeta($table_id, array $data)
-    {
-        update_post_meta($table_id, '_ninja_tables_data_provider', 'drag_and_drop');
-        update_post_meta($table_id, '_ninja_table_builder_table_html', $data['table_html']);
-        update_post_meta($table_id, '_ninja_table_builder_table_settings', $data['table_settings']);
-        update_post_meta($table_id, '_ninja_table_builder_table_responsive', $data['table_responsive']);
-        update_post_meta($table_id, '_ninja_table_builder_table_data', $data['table_data']);
+        $this->updatePostMeta($table_id, $data);
 
         return $this->sendSuccess([
             'data' => [
@@ -107,20 +84,20 @@ class TableBuilderController extends Controller
 
     public function show(Request $request, $id)
     {
-        $initialData = new InitialDataHandling();
+        $initConfig = new InitConfig();
         $table_id          = intval($id);
         $table_settings    = get_post_meta($table_id, '_ninja_table_builder_table_settings', true);
         $table_responsive  = get_post_meta($table_id, '_ninja_table_builder_table_responsive', true);
         $table_data        = get_post_meta($table_id, '_ninja_table_builder_table_data', true);
-        $components        = $initialData->componentConfig();
-        $ready_made_tables = $initialData->templateConfig();
-        $table_data_info   = DynamicConfig::getTableDataInfo($table_data['data'], $initialData->tableColumnStyling(),
-            $initialData->tableRawStyling());
+        $components        = $initConfig->componentConfig();
+        $ready_made_tables = $initConfig->templateConfig();
+        $table_data_info   = DynamicConfig::getTableDataInfo($table_data['data'], $initConfig->tableColumnStyling(),
+            $initConfig->tableRawStyling());
 
         return $this->sendSuccess([
             'data' => [
-                'settings'          => DynamicConfig::getSetting($table_settings, $initialData->settingConfig()),
-                'responsive'        => DynamicConfig::getResponsive($table_responsive, $initialData->responsiveConfig()),
+                'settings'          => DynamicConfig::getSetting($table_settings, $initConfig->settingConfig()),
+                'responsive'        => DynamicConfig::getResponsive($table_responsive, $initConfig->responsiveConfig()),
                 'components'        => $components,
                 'ready_made_tables' => $ready_made_tables,
                 'table_data'        => [
@@ -128,7 +105,7 @@ class TableBuilderController extends Controller
                     'table_name' => $table_data['table_name'],
                     'data'       => $table_data_info,
                     'headers'    => $table_data['headers'],
-                    'table'      => array_replace_recursive($initialData->getOtherTableConfig(), $table_data['table'])
+                    'table'      => array_replace_recursive($initConfig->getOtherTableConfig(), $table_data['table'])
                 ]
             ]
         ], 200);
@@ -157,29 +134,12 @@ class TableBuilderController extends Controller
             'table_html'       => $table_html
         ];
 
-        return $this->updatePostMeta($table_id, $data);
-    }
+        $this->updatePostMeta($table_id, $data);
 
-    public function wpInsertPost($table_name)
-    {
-        $my_post = [
-            'post_title'  => $table_name,
-            'post_type'   => 'ninja-table',
-            'post_status' => 'publish'
-        ];
-
-        return wp_insert_post($my_post);
-    }
-
-    public function wpUpdatePost($table_id, $table_name)
-    {
-        $my_post = [
-            'ID'          => $table_id,
-            'post_title'  => $table_name,
-            'post_type'   => 'ninja-table',
-            'post_status' => 'publish'
-        ];
-
-        return wp_update_post($my_post);
+        return $this->sendSuccess([
+            'data' => [
+                'id' => $table_id
+            ]
+        ], 200);
     }
 }

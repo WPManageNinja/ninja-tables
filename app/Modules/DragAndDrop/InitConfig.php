@@ -2,10 +2,17 @@
 
 namespace NinjaTables\App\Modules\DragAndDrop;
 
-use NinjaTables\App\Http\Controllers\Controller;
+use NinjaTables\App\App;
 
-class InitialDataHandling extends Controller
+class InitConfig
 {
+    protected $app;
+
+    public function __construct()
+    {
+        $this->app = App::getInstance();
+    }
+
     public function getAllInitialData()
     {
         return [

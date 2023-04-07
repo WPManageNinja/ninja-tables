@@ -42,7 +42,6 @@ $router->withPolicy('UserPolicy')->group(function ($router) {
         $route->post('/custom-styles', [SettingsController::class, 'saveCustomCSSJS'])->int('id');
     });
 
-
     $router->prefix('tables/tools')->group(function ($route) {
         $route->get('/default-settings', [ToolsController::class, 'getDefaultSettings']);
         $route->post('/default-settings', [ToolsController::class, 'saveDefaultSettings']);
