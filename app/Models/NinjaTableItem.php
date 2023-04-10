@@ -264,4 +264,19 @@ class NinjaTableItem extends Model
         update_post_meta($row->table_id, '_last_edited_by', get_current_user_id());
         update_post_meta($row->table_id, '_last_edited_time', date('Y-m-d H:i:s'));
     }
+
+    protected function selectedRows($tableId)
+    {
+        return $this->select(array(
+            'position',
+            'owner_id',
+            'attribute',
+            'value',
+            'settings',
+            'created_at',
+            'updated_at'
+        ))
+             ->where('table_id', $tableId)
+             ->get();
+    }
 }

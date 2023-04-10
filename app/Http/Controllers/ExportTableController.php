@@ -49,7 +49,7 @@ class ExportTableController extends Controller
             $rows[] = $cols;
         }
 
-        return static::exportAsCSV($rows, $fileName);
+        static::exportAsCSV($rows, $fileName);
     }
 
     public static function exportJSON($tableId, $fileName = null)
@@ -67,7 +67,7 @@ class ExportTableController extends Controller
             'table_html'       => $table_html
         ];
 
-        return self::exportAsJSON($data, $fileName);
+        static::exportAsJSON($data, $fileName);
     }
 
     public function defaultExport(Request $request)
@@ -110,24 +110,17 @@ class ExportTableController extends Controller
                 array_push($exportData, $temp);
             }
 
-            return static::exportAsCSV($exportData, $fileName, array_values($header));
+            static::exportAsCSV($exportData, $fileName, array_values($header));
+
         } elseif ($format == 'json') {
             $table = get_post($tableId);
 
             $dataProvider = ninja_table_get_data_provider($tableId);
             $rows         = array();
             if ($dataProvider == 'default') {
-                $rawRows = NinjaTableItem::select(array(
-                        'position',
-                        'owner_id',
-                        'attribute',
-                        'value',
-                        'settings',
-                        'created_at',
-                        'updated_at'
-                    ))
-                    ->where('table_id', $tableId)
-                    ->get();
+
+                $rawRows = NinjaTableItem::selectedRows($tableId);
+
                 foreach ($rawRows as $row) {
                     $row->value = json_decode($row->value, true);
                     $rows[]     = $row;
@@ -165,7 +158,8 @@ class ExportTableController extends Controller
                 'rows'          => array(),
                 'original_rows' => $rows
             );
-            static::exportAsJSON($exportData, $fileName . '.json');
+
+            static::exportAsJSON($exportData, $fileName);
         }
     }
 

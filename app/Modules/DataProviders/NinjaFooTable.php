@@ -5,8 +5,7 @@ namespace NinjaTables\App\Modules\DataProviders;
 use NinjaTables\App\App;
 use NinjaTables\App\Models\NinjaTableItem;
 use NinjaTables\Framework\Support\Arr;
-use NinjaTables\App\Modules\DataProviders\FluentFormProvider;
-use NinjaTablesPro\DataProviders\CsvProvider;
+use NinjaTablesPro\App\Modules\DataProviders\CsvProvider;
 
 class NinjaFooTable
 {
