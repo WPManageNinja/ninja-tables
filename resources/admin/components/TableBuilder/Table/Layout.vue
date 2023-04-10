@@ -1,901 +1,875 @@
 <template>
-  <div class="ninja-tables-layout">
-    <div class="table-customize-button" v-if="selectedDevice === ''">
-      <el-button-group v-if="activeTab === 'background'" class="button-group" style="margin-top: 0">
-        <el-button
-            type="primary"
-            icon="el-icon-s-grid"
-            size="small"
-            @click="manageCell(true, 'cells')"
-        >{{ $t('Manage Cells') }}
-        </el-button>
-        <el-button
-            type="primary"
-            icon="el-icon-ice-cream-square"
-            size="small"
-            @click="manageCell(true, 'background')"
-        >{{ $t('Background') }}
-        </el-button>
-      </el-button-group>
-      <div class="button-group" style="margin-top: 0" v-else>
-        <el-button
-            type="primary"
-            icon="el-icon-folder-checked"
-            size="small"
-            @click="mergeCell()"
-            :disabled="tdIds.length < 2 || merge.visible === false"
-        >{{ $t('Merge') }}
-        </el-button>
-        <el-button
-            type="primary"
-            icon="el-icon-scissors"
-            size="small"
-            @click="splitCell"
-            :disabled="split.visible === false"
-        >{{ $t('Split') }}
-        </el-button>
-      </div>
-    </div>
-    <div
-        class="ntb_table_wrapper"
-        v-if="setting ?  (setting.general && setting.border && setting.background) : false"
-        id="ninja_tables_builder_id"
-        :style="[tableWrapperStyle, tableWrapperActivePadding]"
-    >
-      <div class="pixel-bar-slider"
-           v-if="responsiveIsEnabled && showPixelSlider.preview">
-        <el-slider
-            v-model="pixelBarValue"
-            :max="showPixelSlider.max"
-            :min="showPixelSlider.min"
-            show-input>
-        </el-slider>
-      </div>
-      <table
-          id="ntb_table"
-          :role="`${setting.accessibility.options.table_role.value}`"
-          :class="'table ninja_tables_builder_class_'+tableData['id']"
-          :style="[tableMarginTop, tableMarginBottom, tableInlineStyle, tableAlign(selectedDevice)]">
-        <div class="table-header" v-if="manage" :style="tableBorder">
-          <draggable v-model="tableData.headers" tag="tr" @change="dragColumn">
-            <th v-for="(header, index) in tableData.headers" :key="header" scope="col"
-                :colspan="headerColSpan(header)"
-                :class="thActiveInactiveClass(header)"
-                :style="[tdThActiveMargin, thInlineStyle(header)]"
-            >
-              <template
-                  v-if="(headerName(table.columnIndex) === header) && tdIds.length === 1 && ((!merge.visible) || split.visible)">
-                <el-dropdown trigger="click" placement="top-start" class="column-options">
+    <div class="ninja-tables-layout">
+        <div class="table-customize-button" v-if="selectedDevice === ''">
+            <el-button-group v-if="activeTab === 'background'" class="button-group" style="margin-top: 0">
+                <el-button
+                    type="primary"
+                    icon="el-icon-s-grid"
+                    size="small"
+                    @click="manageCell(true, 'cells')"
+                >{{ $t('Manage Cells') }}
+                </el-button>
+                <el-button
+                    type="primary"
+                    icon="el-icon-ice-cream-square"
+                    size="small"
+                    @click="manageCell(true, 'background')"
+                >{{ $t('Background') }}
+                </el-button>
+            </el-button-group>
+            <div class="button-group" style="margin-top: 0" v-else>
+                <el-button
+                    type="primary"
+                    icon="el-icon-folder-checked"
+                    size="small"
+                    @click="mergeCell()"
+                    :disabled="tdIds.length < 2 || merge.visible === false"
+                >{{ $t('Merge') }}
+                </el-button>
+                <el-button
+                    type="primary"
+                    icon="el-icon-scissors"
+                    size="small"
+                    @click="splitCell"
+                    :disabled="split.visible === false"
+                >{{ $t('Split') }}
+                </el-button>
+            </div>
+        </div>
+        <div
+            class="ntb_table_wrapper"
+            v-if="setting ?  (setting.general && setting.border && setting.background) : false"
+            id="ninja_tables_builder_id"
+            :style="[tableWrapperStyle, tableWrapperActivePadding]"
+        >
+            <div class="pixel-bar-slider"
+                 v-if="responsiveIsEnabled && showPixelSlider.preview">
+                <el-slider
+                    v-model="pixelBarValue"
+                    :max="showPixelSlider.max"
+                    :min="showPixelSlider.min"
+                    show-input>
+                </el-slider>
+            </div>
+            <table
+                id="ntb_table"
+                :role="`${setting.accessibility.options.table_role.value}`"
+                :class="'table ninja_tables_builder_class_'+tableData['id']"
+                :style="[tableMarginTop, tableMarginBottom, tableInlineStyle, tableAlign(selectedDevice)]">
+                <div class="table-header" v-if="manage" :style="tableBorder">
+                    <draggable v-model="tableData.headers" tag="tr" @change="dragColumn">
+                        <th v-for="(header, index) in tableData.headers" :key="header" scope="col"
+                            :colspan="headerColSpan(header)"
+                            :class="thActiveInactiveClass(header)"
+                            :style="[tdThActiveMargin, thInlineStyle(header)]"
+                        >
+                            <template
+                                v-if="(headerName(table.columnIndex) === header) && tdIds.length === 1 && ((!merge.visible) || split.visible)">
+                                <el-dropdown trigger="click" placement="top-start" class="column-options">
                   <span class="el-dropdown-link">
                       <i
                           :class="index === table.columnIndex ? 'i-active': ''"
                           class="el-icon-caret-bottom el-icon--right"></i>
                     </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="insertColumnBefore()">{{ $t('Insert column before') }}
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="insertColumnAfter">{{ $t('Insert column after') }}
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="addLeftColumn">{{ $t('Insert left column') }}</el-dropdown-item>
-                    <el-dropdown-item @click.native="addRightColumn">{{ $t('Insert right column') }}</el-dropdown-item>
-                    <el-dropdown-item divided @click.native="duplicateColumn">{{
-                        $t('Duplicate column')
-                      }}
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="removeColumn">
-                      <p style="color:red"> {{ $t('Remove column') }}</p>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </template>
-            </th>
-          </draggable>
-        </div>
-        <draggable v-model="tableData.data" class="tbody" tag="tbody" @change="dragRow"
-                   :style="tdThActiveMargin"
-                   v-if="selectedDevice === '' || selectedDevice === 'desktop' || !responsiveIsEnabled || (selectedDevice === 'mobile' && mobileDeviceBreakpoint) || (selectedDevice === 'tablet' && tabletDeviceBreakpoint)">
-          <tr
-              class="desktop-view"
-              :class="`${table.rowIndex === index && tdIds.length <= 0 ? 'single-row-column' : 'tr_class_'+row.style.trId} ${firstRowSticky & index == 0  ? 'firstRowSticky' : ''}`"
-              v-for="(row, index) in tableData.data" :key="index"
-              :id="trId(row.style.trId)"
-              :style="[trInlineStyle(row, index)]">
-            <td v-if="manage && tdIds.length === 1 && !mergedTdIndexes().includes(index)"
-                :rowspan="tdActiveRowSpan(row.style.trId)" :class="tdActiveInactiveClass(row.style.trId)">
-              <el-dropdown trigger="click" placement="top-start" class="row-options">
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item @click.native="insertColumnBefore()">{{ $t('Insert column before') }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click.native="insertColumnAfter">{{ $t('Insert column after') }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click.native="addLeftColumn">{{ $t('Insert left column') }}</el-dropdown-item>
+                                        <el-dropdown-item @click.native="addRightColumn">{{ $t('Insert right column') }}</el-dropdown-item>
+                                        <el-dropdown-item divided @click.native="duplicateColumn">{{
+                                                $t('Duplicate column')
+                                            }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click.native="removeColumn">
+                                            <p style="color:red"> {{ $t('Remove column') }}</p>
+                                        </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </template>
+                        </th>
+                    </draggable>
+                </div>
+                <draggable v-model="tableData.data" class="tbody" tag="tbody" @change="dragRow"
+                           :style="tdThActiveMargin"
+                           v-if="selectedDevice === '' || selectedDevice === 'desktop' || !responsiveIsEnabled || (selectedDevice === 'mobile' && mobileDeviceBreakpoint) || (selectedDevice === 'tablet' && tabletDeviceBreakpoint)">
+                    <tr
+                        class="desktop-view"
+                        :class="`${table.rowIndex === index && tdIds.length <= 0 ? 'single-row-column' : 'tr_class_'+row.style.trId} ${firstRowSticky & index == 0  ? 'firstRowSticky' : ''}`"
+                        v-for="(row, index) in tableData.data" :key="index"
+                        :id="trId(row.style.trId)"
+                        :style="[trInlineStyle(row, index)]">
+                        <td v-if="manage && tdIds.length === 1 && !mergedTdIndexes().includes(index)"
+                            :rowspan="tdActiveRowSpan(row.style.trId)" :class="tdActiveInactiveClass(row.style.trId)">
+                            <el-dropdown trigger="click" placement="top-start" class="row-options">
                 <span class="el-dropdown-link">
                   <i class="el-icon-caret-right"></i>
                 </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item @click.native="insertRowBefore()">{{ $t('Insert row before') }}</el-dropdown-item>
-                  <el-dropdown-item @click.native="insertRowAfter">{{ $t('Insert row after') }}</el-dropdown-item>
-                  <el-dropdown-item @click.native="addTopRow">{{ $t('Insert top row') }}</el-dropdown-item>
-                  <el-dropdown-item @click.native="addBottomRow">{{ $t('Insert bottom row') }}</el-dropdown-item>
-                  <el-dropdown-item divided @click.native="duplicateRow">{{ $t('Duplicate row') }}
-                  </el-dropdown-item>
-                  <el-dropdown-item @click.native="removeRow">
-                    <p style="color:red"> {{ $t('Remove row') }}</p>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </td>
-
-
-            <td v-for="(header, key) in tableData.headers" :key="header"
-                @click.shift="manage ? selectItem(index, header, key, row.rows[header], row, true) : ''"
-                @click.exact="manage ? selectItem(index, header, key, row.rows[header], row, false) : ''"
-                :id="'td_id_'+ tdId(row, header)"
-                :class="[tdClass(row, header, key), highlightClass(row, header)]"
-                :rowspan="row.rows[header].style.rowspan"
-                :colspan="row.rows[header].style.colspan"
-                :style="[tdInlineStyle(row, header), highlightedColumnStyle(row, header), showInnerBorder ?  innerBorder(index) : '', firstColumnSticky && key === 0 ? stickyColumn() : '']"
-            >
-              <draggable :list="row.rows[header].columns" group="people"
-                         :id="tdIds.includes( tdId(row, header)) ? 'selected-item': 'td_id_'+tdId(row, header)"
-                         :move="onMove"
-              >
-                <div v-for="(item, ind) in row.rows[header].columns"
-                     class="single-item"
-                     :class="manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon': 'other-item' : 'responsive-mode')"
-                     :key="ind">
-                  <table-data
-                      :style="[ (item.id === selectedTdId && item.data.type !== 'ribbon') ? selectedTdBackground() : '' ]"
-                      :manage="manage"
-                      :setting="setting"
-                      @list-item="listItem($event)"
-                      @click.native.exact="!manage && selectedDevice === '' ? styleChange(item, index, key, row.rows[header], row) : ''"
-                      v-if="item.id != itemId"
-                      :item="item">
-                  </table-data>
-                  <template v-if="!manage && selectedDevice === ''">
-                    <elements class="remove-elements"
-                              @child-data="childData($event)"
-                              :itemId="itemId"
-                              :setting="setting"
-                              :listItem="listItemIndex"
-                              :item="item">
-                    </elements>
-                    <div class="icon-style remove-elements"
-                         :style="iconSpacing(item)">
-                      <i class="el-icon-rank"></i>
-                      <i class="el-icon-copy-document"
-                         @click="copyItem(index, header, item)"></i>
-                      <i class="el-icon-delete" @click="deleteItem(index, header, ind)"></i>
-                    </div>
-                  </template>
-                </div>
-              </draggable>
-            </td>
-          </tr>
-        </draggable>
-        <tbody v-else>
-        <tr v-for="(item, index) in responsiveInitial.tableData" :key="index"
-            :class="`${selectedDevice === 'mobile' ? 'mobile-view tr_class_mobile_'+index : 'tablet-view tr_class_tablet_'+index}`"
-            :id="`${selectedDevice === 'mobile' ? 'tr_id_mobile_'+index : 'tr_id_tablet_'+index}`"
-            :style="[ responsiveInitial.showHeader ?  bottomBorderResponsive(index, responsiveInitial.cell_direction, responsiveInitial.itemsPerRow, responsive.mode_options.options.devices) : '']">
-          <td v-for="singleTd in item" v-if="singleTd.style.rowspan > 0 && singleTd.style.colspan > 0"
-              :id="`td_id_${singleTd.style.tdId}`"
-              :colspan="calculateColSpan(singleTd.style)"
-              :rowspan="calculateRowSpan(singleTd.style)"
-              :style="[ tdInlineStyleResponsive(singleTd.style, singleTd.rowStyle, singleTd.rowIndex, responsiveInitial.showHeader, responsiveInitial.itemsPerRow, selectedDevice, responsiveInitial.cell_direction), innerBorder(singleTd.rowIndex)]">
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item @click.native="insertRowBefore()">{{ $t('Insert row before') }}</el-dropdown-item>
+                                    <el-dropdown-item @click.native="insertRowAfter">{{ $t('Insert row after') }}</el-dropdown-item>
+                                    <el-dropdown-item @click.native="addTopRow">{{ $t('Insert top row') }}</el-dropdown-item>
+                                    <el-dropdown-item @click.native="addBottomRow">{{ $t('Insert bottom row') }}</el-dropdown-item>
+                                    <el-dropdown-item divided @click.native="duplicateRow">{{ $t('Duplicate row') }}
+                                    </el-dropdown-item>
+                                    <el-dropdown-item @click.native="removeRow">
+                                        <p style="color:red"> {{ $t('Remove row') }}</p>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </td>
+                        
+                        <td v-for="(header, key) in tableData.headers" :key="header"
+                            @click.shift="manage ? selectItem(index, header, key, row.rows[header], row, true) : ''"
+                            @click.exact="manage ? selectItem(index, header, key, row.rows[header], row, false) : ''"
+                            :id="'td_id_'+ tdId(row, header)"
+                            :class="[tdClass(row, header, key), highlightClass(row, header)]"
+                            :rowspan="row.rows[header].style.rowspan"
+                            :colspan="row.rows[header].style.colspan"
+                            :style="[tdInlineStyle(row, header), highlightedColumnStyle(row, header), showInnerBorder ?  innerBorder(index) : '', firstColumnSticky && key === 0 ? stickyColumn() : '']"
+                        >
+                            <draggable :list="row.rows[header].columns" group="people"
+                                       :id="tdIds.includes( tdId(row, header)) ? 'selected-item': 'td_id_'+tdId(row, header)"
+                                       :move="onMove"
+                            >
+                                <div v-for="(item, ind) in row.rows[header].columns"
+                                     class="single-item"
+                                     :class="[item.id === itemId ? 'item-active' : '', manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon': 'other-item' : 'responsive-mode')]"
+                                     :key="ind">
+                                    <table-data
+                                        :manage="manage"
+                                        :setting="setting"
+                                        @click.native.exact="!manage && selectedDevice === '' ? styleChange(item, index, key, row.rows[header], row) : ''"
+                                        :item="item">
+                                    </table-data>
+                                    <template v-if="!manage && selectedDevice === ''">
+                                        <div class="icon-style remove-elements"
+                                             :style="iconSpacing(item)">
+                                            <i class="el-icon-rank"></i>
+                                            <i class="el-icon-copy-document"
+                                               @click="copyItem(index, header, item)"></i>
+                                            <i class="el-icon-delete" @click="deleteItem(index, header, ind)"></i>
+                                        </div>
+                                    </template>
+                                </div>
+                            </draggable>
+                        </td>
+                    </tr>
+                </draggable>
+                <tbody v-else>
+                <tr v-for="(item, index) in responsiveInitial.tableData" :key="index"
+                    :class="`${selectedDevice === 'mobile' ? 'mobile-view tr_class_mobile_'+index : 'tablet-view tr_class_tablet_'+index}`"
+                    :id="`${selectedDevice === 'mobile' ? 'tr_id_mobile_'+index : 'tr_id_tablet_'+index}`"
+                    :style="[ responsiveInitial.showHeader ?  bottomBorderResponsive(index, responsiveInitial.cell_direction, responsiveInitial.itemsPerRow, responsive.mode_options.options.devices) : '']">
+                    <td v-for="singleTd in item" v-if="singleTd.style.rowspan > 0 && singleTd.style.colspan > 0"
+                        :id="`td_id_${singleTd.style.tdId}`"
+                        :colspan="calculateColSpan(singleTd.style)"
+                        :rowspan="calculateRowSpan(singleTd.style)"
+                        :style="[ tdInlineStyleResponsive(singleTd.style, singleTd.rowStyle, singleTd.rowIndex, responsiveInitial.showHeader, responsiveInitial.itemsPerRow, selectedDevice, responsiveInitial.cell_direction), innerBorder(singleTd.rowIndex)]">
             <span v-for="(singleItem, index) in singleTd.columns" :key="index">
               <table-data class="responsive-mode" :setting="setting" v-if="item.id != itemId"
                           :item="singleItem"></table-data>
             </span>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
 
 </template>
 <script>
 import draggable from "vuedraggable";
-import Elements from "./_Elements"
 import TableData from "./_Datas"
 import {manageRowColumn} from "../Mixin/manageRowColumn";
 import {manageResponsiveData} from "../Mixin/manageResponsiveData";
 import {helpers} from "../Mixin/helpers";
 
 export default {
-  name: "Layout",
-  mixins: [manageRowColumn, manageResponsiveData, helpers],
-  props: ["setting", "tableData", "responsive", "selectedDevice", "initialData"],
-  mounted() {
-    this.$nextTick(() => {
-      jQuery('body').click((e) => {
-        const a = document.querySelector('.tbody');
-        jQuery('#leftside').click((l) => {
-          this.isSelectedTdId = true
+    name: "Layout",
+    mixins: [manageRowColumn, manageResponsiveData, helpers],
+    props: ["setting", "tableData", "responsive", "selectedDevice", "initialData"],
+    mounted() {
+        this.$nextTick(() => {
+            jQuery('body').click((e) => {
+                const a = document.querySelector('.tbody');
+                jQuery('#leftside').click((l) => {
+                    this.isSelectedTdId = true
+                })
+                a.onclick = () => {
+                    this.isSelectedTdId = true
+                }
+                if (this.isSelectedTdId === true) {
+                    this.isSelectedTdId = false
+                } else {
+                    this.selectedTdId !== null ? this.$emit('editItem', '') : '';
+                    this.selectedTdId = null;
+                    this.itemId = -1;
+                }
+            });
         })
-        a.onclick = () => {
-          this.isSelectedTdId = true
-        }
-        if (this.isSelectedTdId === true) {
-          this.isSelectedTdId = false
-        } else {
-          this.selectedTdId !== null ? this.$emit('editItem', '') : '';
-          this.selectedTdId = null;
-        }
-      });
-    })
-  },
-  data() {
-    return {
-      countChangeContent: 0,
-      initialTableInfo: {
-        tempTableData: null,
-        tempSetting: null,
-        tempResponsive: null,
-      },
-      isSelectedTdId: true,
-      selectedTdId: null,
-      itemId: -1,
-      listItemIndex: null,
-      manage: false,
-      activeTab: 'background',
-      table: {
-        multipleTd: false,
-        rowIndex: null,
-        columnIndex: null,
-        row: {},
-        column: {},
-        columns: [],
-        rows: [],
-      },
-      maxWidth: ''
-    };
-  },
-  components: {
-    draggable,
-    Elements,
-    TableData
-  },
-  methods: {
-    iconSpacing(item) {
-      if (item.data.type === 'ribbon') {
+    },
+    data() {
         return {
-          'margin-top': item.data.style.yAxis - Number(this.setting.general.options.cell_padding.value - 10) + 'px',
-          'margin-left': (item.data.style.ribbonType === 'corner' ? Number(item.data.style.cornerXAxis - this.setting.general.options.cell_padding.value + 10) : item.data.style.xAxis - Number(this.setting.general.options.cell_padding.value - 10)) + 'px',
-        }
-      }
-      return {
-        'margin-top': item.data.style.yAxis - Number(this.setting.general.options.cell_padding.value - 10) + Number(item.data.style.margin.top) + 'px',
-        'margin-left': `${item.data.style.margin.left}px`,
-        'margin-right': `${item.data.style.margin.right}px`,
-        'width': 'auto'
-      }
-
+            countChangeContent: 0,
+            initialTableInfo: {
+                tempTableData: null,
+                tempSetting: null,
+                tempResponsive: null,
+            },
+            isSelectedTdId: true,
+            selectedTdId: null,
+            itemId: -1,
+            manage: false,
+            activeTab: 'background',
+            table: {
+                multipleTd: false,
+                rowIndex: null,
+                columnIndex: null,
+                row: {},
+                column: {},
+                columns: [],
+                rows: [],
+            },
+            maxWidth: ''
+        };
     },
-    stickyColumn() {
-      return {
-        position: 'sticky',
-        left: 0,
-        zIndex: 1,
-      }
+    components: {
+        draggable,
+        TableData
     },
-    onMove($event) {
-      if ($event && $event.to.id) {
-        window.ninjaTableBus.$emit('singleTdId', $event.to.id)
-      }
-    },
-    thInlineStyle(header) {
-      return {
-        padding: `0px ${this.setting.general.options.cell_padding.value}px`,
-        width: `${this.tableHeadWidth(header)}px`,
-        display: `${this.displayHeader(header)}`
-      }
-    },
-    selectedTdBackground() {
-      return {
-        border: '1px solid #3f9eff',
-      }
-    },
-    displayHeader(header) {
-      if (this.merge && this.merge.rowColumn.length > 1 && this.split.visible) {
-        const headers = Object.values(this.merge.rowColumn);
-        const arr = headers.map(item => {
-          return this.headerName(item.columnIndex);
-        });
-        if ((header !== this.headerName(this.table.columnIndex)) && arr.includes(header)) {
-          return 'none';
-        } else {
-          return '';
-        }
-      } else {
-        return '';
-      }
-    },
-    headerColSpan(header) {
-      const style = this.selectedColumnStyle;
-      return (style && style.colspan && this.headerName(this.table.columnIndex) === header) ? style && style.colspan : 1
-    },
-    columnWidth(row, header) {
-      return (row.rows && row.rows[header] && row.rows[header].style.columnWidth) ? row.rows[header].style.columnWidth : this.setting.general.options.cell_min_auto_width.value;
-    },
-    tdId(row, header) {
-      return row.rows[header] ? row.rows[header].style.tdId : null
-    },
-    listItem($event) {
-      this.listItemIndex = $event.index
-    },
-    dragRowColumn(item, rowIndex, header, columnIndex, column, row) {
-      this.table.columnIndex = columnIndex;
-      this.table.rowIndex = rowIndex;
-      this.manageCell(true, this.activeTab)
-    },
-    setTdIndex() {
-      const table = document.getElementById('ntb_table');
-      const trs = table.getElementsByTagName('tbody');
-      const rows = trs[0].rows;
-
-      const tableSize = {
-        rows: rows.length,
-        cols: rows[0].getElementsByTagName('td').length - 1
-      };
-
-      for (var r = 0; r < trs.length; r++) {
-        var tds = trs[r].getElementsByTagName('td');
-        for (var t = 0; t < tds.length; t++) {
-          jQuery(tds[t]).attr("cellIndex", ((t + r * tableSize.cols) + 1));
-        }
-      }
-    },
-    manageCell(status, activeTab = 'background') {
-      this.isSelectedTdId = true
-      this.selectedTdId = null;
-
-      if (activeTab === 'cells') {
-        let history = this.tableData.table.merge.history;
-        if (!this.isEmpty(history)) {
-          this.merge.history = history;
-        }
-      }
-      this.manage = status;
-      this.activeTab = activeTab;
-      const items = {
-        data: {
-          tdIds: this.tdIds,
-          setting: this.setting,
-          tableData: this.tableData.data,
-          table: this.table,
-          headers: this.tableData.headers
+    methods: {
+        iconSpacing(item) {
+            if (item.data.type === 'ribbon') {
+                return {
+                    'margin-top': item.data.style.yAxis - Number(this.setting.general.options.cell_padding.value - 10) + 'px',
+                    'margin-left': (item.data.style.ribbonType === 'corner' ? Number(item.data.style.cornerXAxis - this.setting.general.options.cell_padding.value + 10) : item.data.style.xAxis - Number(this.setting.general.options.cell_padding.value - 10)) + 'px',
+                }
+            }
+            return {
+                'margin-top': item.data.style.yAxis - Number(this.setting.general.options.cell_padding.value - 10) + Number(item.data.style.margin.top) + 'px',
+                'margin-left': `${item.data.style.margin.left}px`,
+                'margin-right': `${item.data.style.margin.right}px`,
+                'width': 'auto'
+            }
+            
         },
-        active: status,
-        activeTab: activeTab
-      }
-      window.ninjaTableBus.$emit('manage-cell', items);
+        stickyColumn() {
+            return {
+                position: 'sticky',
+                left: 0,
+                zIndex: 1,
+            }
+        },
+        onMove($event) {
+            if ($event && $event.to.id) {
+                window.ninjaTableBus.$emit('singleTdId', $event.to.id)
+            }
+        },
+        thInlineStyle(header) {
+            return {
+                padding: `0px ${this.setting.general.options.cell_padding.value}px`,
+                width: `${this.tableHeadWidth(header)}px`,
+                display: `${this.displayHeader(header)}`
+            }
+        },
+        displayHeader(header) {
+            if (this.merge && this.merge.rowColumn.length > 1 && this.split.visible) {
+                const headers = Object.values(this.merge.rowColumn);
+                const arr = headers.map(item => {
+                    return this.headerName(item.columnIndex);
+                });
+                if ((header !== this.headerName(this.table.columnIndex)) && arr.includes(header)) {
+                    return 'none';
+                } else {
+                    return '';
+                }
+            } else {
+                return '';
+            }
+        },
+        headerColSpan(header) {
+            const style = this.selectedColumnStyle;
+            return (style && style.colspan && this.headerName(this.table.columnIndex) === header) ? style && style.colspan : 1
+        },
+        columnWidth(row, header) {
+            return (row.rows && row.rows[header] && row.rows[header].style.columnWidth) ? row.rows[header].style.columnWidth : this.setting.general.options.cell_min_auto_width.value;
+        },
+        tdId(row, header) {
+            return row.rows[header] ? row.rows[header].style.tdId : null
+        },
+        dragRowColumn(item, rowIndex, header, columnIndex, column, row) {
+            this.table.columnIndex = columnIndex;
+            this.table.rowIndex = rowIndex;
+            this.manageCell(true, this.activeTab)
+        },
+        setTdIndex() {
+            const table = document.getElementById('ntb_table');
+            const trs = table.getElementsByTagName('tbody');
+            const rows = trs[0].rows;
+            
+            const tableSize = {
+                rows: rows.length,
+                cols: rows[0].getElementsByTagName('td').length - 1
+            };
+            
+            for (var r = 0; r < trs.length; r++) {
+                var tds = trs[r].getElementsByTagName('td');
+                for (var t = 0; t < tds.length; t++) {
+                    jQuery(tds[t]).attr("cellIndex", ((t + r * tableSize.cols) + 1));
+                }
+            }
+        },
+        manageCell(status, activeTab = 'background') {
+            this.isSelectedTdId = true
+            this.selectedTdId = null;
+            
+            if (activeTab === 'cells') {
+                let history = this.tableData.table.merge.history;
+                if (!this.isEmpty(history)) {
+                    this.merge.history = history;
+                }
+            }
+            this.manage = status;
+            this.activeTab = activeTab;
+            const items = {
+                data: {
+                    tdIds: this.tdIds,
+                    setting: this.setting,
+                    tableData: this.tableData.data,
+                    table: this.table,
+                    headers: this.tableData.headers
+                },
+                active: status,
+                activeTab: activeTab
+            }
+            window.ninjaTableBus.$emit('manage-cell', items);
+        },
+        styleChange(item, rowIndex, columnIndex, column, row) {
+            this.selectedTdId = item.id;
+            if (!this.manage) {
+                if (item.id == this.itemId) {
+                    this.itemId = -1;
+                } else {
+                    const data = {
+                        edit: true,
+                        item: item
+                    }
+                    this.$emit('editItem', data)
+                    window.ninjaTableBus.$emit('singleTdId', 'td_id_' + column.style.tdId);
+                    this.itemId = item.id;
+                }
+            } else {
+                this.dragRowColumn(item, rowIndex, columnIndex, column, row)
+            }
+        },
+        copyItem(rowIndex, columnIndex, item) {
+            const items = {
+                id: this.id(),
+                data: this.deepClone(item.data)
+            }
+            this.tableData.data[rowIndex].rows[columnIndex].columns.push(items)
+        },
+        deleteItem(rowIndex, columnIndex, id) {
+            this.$emit('editItem', '');
+            this.tableData.data[rowIndex].rows[columnIndex].columns.splice(id, 1)
+        },
+        innerBorder(index) {
+            const innerBorder = this.setting.border.options.inner_border;
+            const childs = innerBorder.childs;
+            let style = ``;
+            if (index !== 0 && innerBorder.value) {
+                style = `${childs.inner_border_size.value}px solid ${childs.inner_border_color.value}`;
+            }
+            if (index === 0 && innerBorder.value && childs.header_inner_border.value) {
+                style = `${childs.inner_border_size.value}px solid ${childs.inner_border_color.value}`;
+            }
+            return {
+                border: style,
+            }
+        },
+        tableHeadWidth(header) {
+            const columnIndex = this.table.columnIndex;
+            const row = this.table.row;
+            let width = row && this.columnWidth(row, header);
+            const colSpan = this.headerColSpan(header);
+            let mergedCellWidth = (colSpan * 11) + (colSpan > 2 ? ((colSpan - 2) * 11) : 0);
+            const headers = this.deepClone(this.tableData.headers);
+            const mergedHeaders = headers.splice(columnIndex, colSpan);
+            if (colSpan > 1) {
+                mergedHeaders.forEach(columnName => {
+                    mergedCellWidth += row && this.columnWidth(row, columnName)
+                })
+                return mergedCellWidth;
+            } else {
+                width = row && this.columnWidth(row, header)
+            }
+            return (width + 1)
+        },
+        detectChangesInTable() {
+            if (this.countChangeContent > 3 && this.initialTableInfo.tempTableData === JSON.stringify(this.tableData.data) && this.initialTableInfo.tempSetting === JSON.stringify(this.setting) && this.initialTableInfo.tempResponsive === JSON.stringify(this.responsive)) {
+                this.countChangeContent = 3;
+                window.ninjaTableBus.$emit('saveData');
+                return;
+            }
+            if (this.countChangeContent > 4) {
+                return;
+            }
+            this.countChangeContent++;
+            this.countChangeContent === 4 ? window.ninjaTableBus.$emit('somethingChanged') : '';
+        },
     },
-    childData($event) {
-      if ($event === 'clickEnter') {
-        this.selectedTdId = null;
-      }
-      this.itemId = -1
-      const lists = ['list', 'stylist_list'];
-      if (lists.includes($event && $event.item && $event.item.data.type)) {
-        this.manageListItem($event.item);
-      }
-    },
-    manageListItem(item) {
-      item.data.value.splice(this.listItemIndex + 1, 0, 'list item x');
-    },
-    styleChange(item, rowIndex, columnIndex, column, row) {
-      this.selectedTdId = item.id;
-      if (!this.manage) {
-        if (item.id == this.itemId) {
-          this.itemId = -1;
-        } else {
-          const data = {
-            edit: true,
-            item: item
-          }
-          this.$emit('editItem', data)
-          window.ninjaTableBus.$emit('singleTdId', 'td_id_' + column.style.tdId);
-          this.itemId = item.id;
-        }
-      } else {
-        this.dragRowColumn(item, rowIndex, columnIndex, column, row)
-      }
-    },
-    copyItem(rowIndex, columnIndex, item) {
-      const items = {
-        id: this.id(),
-        data: this.deepClone(item.data)
-      }
-      this.tableData.data[rowIndex].rows[columnIndex].columns.push(items)
-    },
-    deleteItem(rowIndex, columnIndex, id) {
-      this.$emit('editItem', '');
-      this.tableData.data[rowIndex].rows[columnIndex].columns.splice(id, 1)
-    },
-    innerBorder(index) {
-      const innerBorder = this.setting.border.options.inner_border;
-      const childs = innerBorder.childs;
-      let style = ``;
-      if (index !== 0 && innerBorder.value) {
-        style = `${childs.inner_border_size.value}px solid ${childs.inner_border_color.value}`;
-      }
-      if (index === 0 && innerBorder.value && childs.header_inner_border.value) {
-        style = `${childs.inner_border_size.value}px solid ${childs.inner_border_color.value}`;
-      }
-      return {
-        border: style,
-      }
-    },
-    tableHeadWidth(header) {
-      const columnIndex = this.table.columnIndex;
-      const row = this.table.row;
-      let width = row && this.columnWidth(row, header);
-      const colSpan = this.headerColSpan(header);
-      let mergedCellWidth = (colSpan * 11) + (colSpan > 2 ? ((colSpan - 2) * 11) : 0);
-      const headers = this.deepClone(this.tableData.headers);
-      const mergedHeaders = headers.splice(columnIndex, colSpan);
-      if (colSpan > 1) {
-        mergedHeaders.forEach(columnName => {
-          mergedCellWidth += row && this.columnWidth(row, columnName)
+    created() {
+        window.ninjaTableBus.$on('manageCell', () => {
+            this.table.columnIndex = null
+            this.table.rowIndex = null
+            this.selectedTdId = null
+            this.manage = false
+            this.activeTab = 'background'
+            this.clearMerge();
         })
-        return mergedCellWidth;
-      } else {
-        width = row && this.columnWidth(row, header)
-      }
-      return (width + 1)
     },
-    detectChangesInTable() {
-      if (this.countChangeContent > 3 && this.initialTableInfo.tempTableData === JSON.stringify(this.tableData.data) && this.initialTableInfo.tempSetting === JSON.stringify(this.setting) && this.initialTableInfo.tempResponsive === JSON.stringify(this.responsive)) {
-        this.countChangeContent = 3;
-        window.ninjaTableBus.$emit('saveData');
-        return;
-      }
-      if (this.countChangeContent > 4) {
-        return;
-      }
-      this.countChangeContent++;
-      this.countChangeContent === 4 ? window.ninjaTableBus.$emit('somethingChanged') : '';
+    computed: {
+        firstRowSticky() {
+            const isSticky = this.setting.sticky.options.first_row_sticky.value;
+            return this.getBoolean(isSticky);
+        },
+        firstColumnSticky() {
+            const isSticky = this.setting.sticky.options.first_column_sticky.value;
+            return this.getBoolean(isSticky);
+        },
+        tdThActiveMargin() {
+            if (this.manage && this.setting.border.options.table_border.value > 0 && this.tdIds.length === 1) {
+                return {
+                    '--td-th-active-margin': `-16px`,
+                }
+            }
+        },
+        tableWrapperActivePadding() {
+            if (this.manage && this.setting.border.options.table_border.value > 0 && this.tdIds.length === 1) {
+                return {
+                    '--table-wrapper-padding': `16px`
+                }
+            }
+        },
+        showInnerBorder() {
+            return this.setting.border.options.inner_border.value;
+        },
+        tableBorder() {
+            const tableOption = this.setting.border.options;
+            const columnIndex = this.table.columnIndex;
+            const tableBorderSize = tableOption.table_border ? tableOption.table_border.value : 0;
+            const tableInnerBorderSize = tableOption.inner_border.childs ? tableOption.inner_border.childs.inner_border_size.value : 0;
+            const isSeparateRowColumn = this.getBoolean(this.setting.general.options.columns_rows_separate.value);
+            const colSeparate = this.setting.general.options ? this.setting.general.options.columns_rows_separate.childs.space_between_column.value : 0;
+            const rowSeparate = this.setting.general.options ? this.setting.general.options.columns_rows_separate.childs.space_between_row.value : 0;
+            
+            let calculateSeparate = 0;
+            let columnArrow = 0;
+            if (isSeparateRowColumn) {
+                calculateSeparate = (colSeparate * 2) + (tableOption.inner_border.value ? (columnIndex * tableInnerBorderSize) : 0);
+            }
+            columnArrow = 16 + tableBorderSize + calculateSeparate - columnIndex + (tableOption.inner_border.value ? ((columnIndex + 1) * tableInnerBorderSize) : 0)
+            const _marginTop = `${-5 - (isSeparateRowColumn ? rowSeparate : 0)}px`;
+            
+            return {
+                '--border-color': tableOption.inner_border.childs.inner_border_color.value ? tableOption.inner_border.childs.inner_border_color.value : '#000000',
+                '--border-size': `${tableInnerBorderSize}px`,
+                '--column-arrow': `${columnArrow}px`,
+                '--margin-top': _marginTop,
+                '--margin-bottom': `-${isSeparateRowColumn ? (tableBorderSize === 0 ? (rowSeparate * 3) : rowSeparate) : 0}px`,
+            }
+        },
     },
-  },
-  created() {
-    window.ninjaTableBus.$on('manageCell', () => {
-      this.table.columnIndex = null
-      this.table.rowIndex = null
-      this.selectedTdId = null
-      this.manage = false
-      this.activeTab = 'background'
-      this.clearMerge();
-    })
-  },
-  computed: {
-    firstRowSticky() {
-      const isSticky = this.setting.sticky.options.first_row_sticky.value;
-      return this.getBoolean(isSticky);
-    },
-    firstColumnSticky() {
-      const isSticky = this.setting.sticky.options.first_column_sticky.value;
-      return this.getBoolean(isSticky);
-    },
-    tdThActiveMargin() {
-      if (this.manage && this.setting.border.options.table_border.value > 0 && this.tdIds.length === 1) {
-        return {
-          '--td-th-active-margin': `-16px`,
+    watch: {
+        tableData: {
+            handler(newVal, oldVal) {
+                if (newVal) {
+                    if (this.countChangeContent === 0) {
+                        this.initialTableInfo.tempTableData = JSON.stringify(this.tableData.data);
+                        this.initialTableInfo.tempSetting = JSON.stringify(this.setting);
+                        this.initialTableInfo.tempResponsive = JSON.stringify(this.responsive);
+                    }
+                    this.detectChangesInTable();
+                }
+            },
+            deep: true
+        },
+        setting: {
+            handler(newVal, oldVal) {
+                if (newVal) {
+                    this.detectChangesInTable();
+                }
+            },
+            deep: true
+        },
+        selectedDevice(newVal, oldVal) {
+            this.responsiveInitial.showHeader = newVal === 'mobile' ? this.mobileDeviceShowHeader : (newVal === 'tablet' ? this.tabletDeviceShowHeader : false);
+            this.responsiveInitial.itemsPerRow = newVal === 'mobile' ? this.mobileDeviceItemsPerRow : (newVal === 'tablet' ? this.tabletDeviceItemsPerRow : 1);
+            this.responsiveInitial.cell_direction = newVal === 'mobile' ? this.mobileDeviceCellDirection : (newVal === 'tablet' ? this.tabletDeviceCellDirection : 'row');
+            this.responsiveInitial.tableData = this.getResponsiveTableData(this.responsiveInitial.cell_direction, this.responsiveInitial.showHeader, this.responsiveInitial.itemsPerRow, true);
+        },
+        responsive: {
+            handler(newVal, oldVal) {
+                if (newVal) {
+                    this.detectChangesInTable();
+                }
+                
+                if (this.selectedDevice === 'mobile') {
+                    this.responsiveInitial.showHeader = this.getBoolean(newVal.mode_options.options.devices.mobile.top_row_as_header.value);
+                    this.responsiveInitial.itemsPerRow = newVal.mode_options.options.devices.mobile.items_per_row.value;
+                    this.responsiveInitial.cell_direction = newVal.mode_options.options.devices.mobile.cell_direction.value;
+                } else if (this.selectedDevice === 'tablet') {
+                    this.responsiveInitial.showHeader = this.getBoolean(newVal.mode_options.options.devices.tablet.top_row_as_header.value);
+                    this.responsiveInitial.itemsPerRow = newVal.mode_options.options.devices.tablet.items_per_row.value;
+                    this.responsiveInitial.cell_direction = newVal.mode_options.options.devices.tablet.cell_direction.value;
+                } else {
+                }
+                this.responsiveInitial.tableData = this.getResponsiveTableData(this.responsiveInitial.cell_direction, this.responsiveInitial.showHeader, this.responsiveInitial.itemsPerRow, false);
+            },
+            deep: true
         }
-      }
-    },
-    tableWrapperActivePadding() {
-      if (this.manage && this.setting.border.options.table_border.value > 0 && this.tdIds.length === 1) {
-        return {
-          '--table-wrapper-padding': `16px`
-        }
-      }
-    },
-    showInnerBorder() {
-      return this.setting.border.options.inner_border.value;
-    },
-    tableBorder() {
-      const tableOption = this.setting.border.options;
-      const columnIndex = this.table.columnIndex;
-      const tableBorderSize = tableOption.table_border ? tableOption.table_border.value : 0;
-      const tableInnerBorderSize = tableOption.inner_border.childs ? tableOption.inner_border.childs.inner_border_size.value : 0;
-      const isSeparateRowColumn = this.getBoolean(this.setting.general.options.columns_rows_separate.value);
-      const colSeparate = this.setting.general.options ? this.setting.general.options.columns_rows_separate.childs.space_between_column.value : 0;
-      const rowSeparate = this.setting.general.options ? this.setting.general.options.columns_rows_separate.childs.space_between_row.value : 0;
-
-      let calculateSeparate = 0;
-      let columnArrow = 0;
-      if (isSeparateRowColumn) {
-        calculateSeparate = (colSeparate * 2) + (tableOption.inner_border.value ? (columnIndex * tableInnerBorderSize) : 0);
-      }
-      columnArrow = 16 + tableBorderSize + calculateSeparate - columnIndex + (tableOption.inner_border.value ? ((columnIndex + 1) * tableInnerBorderSize) : 0)
-      const _marginTop = `${-5 - (isSeparateRowColumn ? rowSeparate : 0)}px`;
-
-      return {
-        '--border-color': tableOption.inner_border.childs.inner_border_color.value ? tableOption.inner_border.childs.inner_border_color.value : '#000000',
-        '--border-size': `${tableInnerBorderSize}px`,
-        '--column-arrow': `${columnArrow}px`,
-        '--margin-top': _marginTop,
-        '--margin-bottom': `-${isSeparateRowColumn ? (tableBorderSize === 0 ? (rowSeparate * 3) : rowSeparate) : 0}px`,
-      }
-    },
-  },
-  watch: {
-    tableData: {
-      handler(newVal, oldVal) {
-        if (newVal) {
-          if (this.countChangeContent === 0) {
-            this.initialTableInfo.tempTableData = JSON.stringify(this.tableData.data);
-            this.initialTableInfo.tempSetting = JSON.stringify(this.setting);
-            this.initialTableInfo.tempResponsive = JSON.stringify(this.responsive);
-          }
-          this.detectChangesInTable();
-        }
-      },
-      deep: true
-    },
-    setting: {
-      handler(newVal, oldVal) {
-        if (newVal) {
-          this.detectChangesInTable();
-        }
-      },
-      deep: true
-    },
-    selectedDevice(newVal, oldVal) {
-      this.responsiveInitial.showHeader = newVal === 'mobile' ? this.mobileDeviceShowHeader : (newVal === 'tablet' ? this.tabletDeviceShowHeader : false);
-      this.responsiveInitial.itemsPerRow = newVal === 'mobile' ? this.mobileDeviceItemsPerRow : (newVal === 'tablet' ? this.tabletDeviceItemsPerRow : 1);
-      this.responsiveInitial.cell_direction = newVal === 'mobile' ? this.mobileDeviceCellDirection : (newVal === 'tablet' ? this.tabletDeviceCellDirection : 'row');
-      this.responsiveInitial.tableData = this.getResponsiveTableData(this.responsiveInitial.cell_direction, this.responsiveInitial.showHeader, this.responsiveInitial.itemsPerRow, true);
-    },
-    responsive: {
-      handler(newVal, oldVal) {
-        if (newVal) {
-          this.detectChangesInTable();
-        }
-
-        if (this.selectedDevice === 'mobile') {
-          this.responsiveInitial.showHeader = this.getBoolean(newVal.mode_options.options.devices.mobile.top_row_as_header.value);
-          this.responsiveInitial.itemsPerRow = newVal.mode_options.options.devices.mobile.items_per_row.value;
-          this.responsiveInitial.cell_direction = newVal.mode_options.options.devices.mobile.cell_direction.value;
-        } else if (this.selectedDevice === 'tablet') {
-          this.responsiveInitial.showHeader = this.getBoolean(newVal.mode_options.options.devices.tablet.top_row_as_header.value);
-          this.responsiveInitial.itemsPerRow = newVal.mode_options.options.devices.tablet.items_per_row.value;
-          this.responsiveInitial.cell_direction = newVal.mode_options.options.devices.tablet.cell_direction.value;
-        } else {
-        }
-        this.responsiveInitial.tableData = this.getResponsiveTableData(this.responsiveInitial.cell_direction, this.responsiveInitial.showHeader, this.responsiveInitial.itemsPerRow, false);
-      },
-      deep: true
     }
-  }
 }
 </script>
 <style lang="scss">
 
 .ninja-tables-layout {
-  .table-customize-button {
-    padding-bottom: 20px;
-  }
-
-  .sortable-ghost {
-    border: 1px dashed grey;
-    font-size: 0;
-    overflow: hidden;
-    width: 100%;
-  }
-
-  .button-group {
-    display: flex !important;
-    justify-content: center;
-    margin: 5px auto;
-  }
-
-  .manage-button {
-    display: block;
-    margin: 0px auto 10px auto;
-    padding: 10px 20px;
-  }
-
-  .ntb_table_wrapper {
-    overflow-wrap: break-word;
-    position: relative;
-    z-index: 1;
-    //margin: auto;
-    overflow: auto;
-    padding-top: 5px;
-    padding-left: var(--table-wrapper-padding);
-
-    .pixel-bar-slider {
-      width: 50%;
-      margin: 10px auto;
-      background: #3b503f;
-      padding: 0 20px;
-      border-radius: 10px;
+    .table-customize-button {
+        padding-bottom: 20px;
     }
-
-    .table {
-      .table-header {
-        top: 0;
-        position: sticky;
-        position: -webkit-sticky;
-        z-index: 99;
-        margin-left: var(--column-arrow);
-        margin-bottom: var(--margin-bottom);
-        display: table-caption;
-
-        th {
-          //background-color: #ffffff;
-          //border: var(--border-size) solid var(--border-color);
-
-          .column-options {
-            span {
-              i {
-                border: 1px solid;
-                font-size: 12px;
-                opacity: 1;
-                color: #ffffff;
-              }
-            }
-          }
-
-          &.th-active {
-            display: block;
-            background-color: #409EFF;
-            margin-left: var(--td-th-active-margin);
-            margin-top: var(--margin-top);
-
-            &:hover {
-              cursor: move;
-              background-color: #5f6368;
-
-              .column-options {
-                span {
-                  i {
-                    cursor: pointer;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-
-      .tbody {
-        .td-highlight {
-          background: inherit;
-          position: relative;
-          z-index: 9;
-          border: none !important;
-
-          &:before {
-            content: "";
-            position: absolute;
-            background: inherit;
-            width: calc(100% + 30px);
-            left: -15px;
-            top: 0;
-            height: 100%;
-            z-index: -1;
-            box-shadow: var(--offset-x) var(--offset-y) var(--blur-radius) var(--shadow-color);
-          }
-        }
-
-        tr {
-          &:first-child {
-            .td-highlight {
-              &:before {
-                top: var(--highlight-height-top);
-              }
-            }
-          }
-
-          &:first-child,
-          &:last-child {
-            .td-highlight {
-              &:before {
-                height: calc(100% + var(--highlight-height-bottom));
-              }
-            }
-          }
-        }
-
-        display: block;
-        margin-left: var(--td-th-active-margin);
-
-        tr.firstRowSticky {
-          position: sticky;
-          top: -5px;
-          z-index: 2;
-        }
-
-        tr {
-          position: relative;
-
-          td {
-            .sortIcon {
-              font-size: 30px;
-            }
-
-            position: relative;
-
-            .row-options {
-              top: calc(50% - 10px);
-
-              span {
-                i {
-                  color: #000000;
-                  border: 1px solid;
-                  font-size: 12px;
-                  opacity: 1
-                }
-
-                span {
-                  color: #000000;
-                }
-              }
-
-              &:hover {
-                i {
-                  opacity: 1;
-                  color: #ffffff;
-                  cursor: pointer;
-                }
-
-                span {
-                  color: #ffffff;
-                  cursor: move;
-                }
-              }
-            }
-
-            .row-move {
-              position: absolute;
-              height: 100%;
-              right: -37px;
-              top: 0;
-
-              .el-button {
-                width: 30px;
-
-                i {
-                  transform: rotate(270deg)
-                }
-
-                .top {
-                  position: absolute;
-                  margin-top: 15px;
-                }
-
-                .bottom {
-                  margin-bottom: 15px;
-                }
-              }
-            }
-          }
-
-          .td-active {
-            background-color: #409EFF;
-            position: sticky;
-            position: -webkit-sticky;
-            z-index: 99;
-            cursor: move;
-            max-width: 20px;
-            border-bottom: var(--border-size) solid var(--border-color);
-            opacity: 1;
-
-            .row-options {
-              span {
-                i {
-                  color: #ffffff;
-                  opacity: 1;
-                }
-
-                span {
-                  color: #ffffff;
-                }
-              }
-            }
-
-            &:hover {
-              background-color: #5f6368;
-            }
-          }
-
-          .td-inactive {
-            opacity: 0;
-            visibility: hidden;
-            right: 10px;
-          }
-        }
-      }
-
-      .single-item {
-        position: relative;
-        display: block;
-        border: 0px solid transparent;
-
-        .icon-style {
-          position: absolute;
-          top: -15px;
-          height: auto;
-          width: 100%;
-          opacity: 0;
-          left: 0;
-          right: 0;
-          display: flex;
-          justify-content: flex-end;
-          font-size: 14px;
-          color: #ffffff;
-
-          .el-icon-rank {
-            cursor: move;
-          }
-
-          i {
-            background: #3f9eff;
-            padding: 0px 2px;
-            font-weight: bold;
-          }
-        }
-      }
-
-      .other-item {
-        &:hover {
-          cursor: pointer;
-
-          .hover-item {
-            border: 1px solid #3f9eff;
-          }
-
-          .icon-style {
-            opacity: 1;
-          }
-        }
-      }
-
-      .only-ribbon {
-        position: absolute;
-
-        &:hover {
-          cursor: pointer;
-
-          .corner, .bookmark, .side {
-            border: 1px solid #3f9eff;
-          }
-
-          .icon-style {
-            opacity: 1;
-            justify-content: flex-start;
-            z-index: 3;
-            top: 0;
-          }
-        }
-      }
-
-      @keyframes selected-item-move {
-        0% {
-          background-position: 0% 50%;
-        }
-        100% {
-          background-position: 100% 50%;
-        }
-      }
-
-      #selected-item {
-        background: repeating-linear-gradient(45deg, white, white 5px, #3299d1 5px, #3299d1 10px);
-        background-size: 400% 400%;
-        animation: selected-item-move 40s linear infinite reverse;
-        opacity: .2;
-        top: 0;
-        left: 0;
+    
+    .sortable-ghost {
+        border: 1px dashed grey;
+        font-size: 0;
+        overflow: hidden;
         width: 100%;
-        height: 100%;
-      }
     }
-  }
+    
+    .button-group {
+        display: flex !important;
+        justify-content: center;
+        margin: 5px auto;
+    }
+    
+    .manage-button {
+        display: block;
+        margin: 0px auto 10px auto;
+        padding: 10px 20px;
+    }
+    
+    .ntb_table_wrapper {
+        overflow-wrap: break-word;
+        position: relative;
+        z-index: 1;
+        //margin: auto;
+        overflow: auto;
+        padding-top: 5px;
+        padding-left: var(--table-wrapper-padding);
+        
+        .pixel-bar-slider {
+            width: 50%;
+            margin: 10px auto;
+            background: #3b503f;
+            padding: 0 20px;
+            border-radius: 10px;
+        }
+        
+        .table {
+            .table-header {
+                top: 0;
+                position: sticky;
+                position: -webkit-sticky;
+                z-index: 99;
+                margin-left: var(--column-arrow);
+                margin-bottom: var(--margin-bottom);
+                display: table-caption;
+                
+                th {
+                    //background-color: #ffffff;
+                    //border: var(--border-size) solid var(--border-color);
+                    
+                    .column-options {
+                        span {
+                            i {
+                                border: 1px solid;
+                                font-size: 12px;
+                                opacity: 1;
+                                color: #ffffff;
+                            }
+                        }
+                    }
+                    
+                    &.th-active {
+                        display: block;
+                        background-color: #409EFF;
+                        margin-left: var(--td-th-active-margin);
+                        margin-top: var(--margin-top);
+                        
+                        &:hover {
+                            cursor: move;
+                            background-color: #5f6368;
+                            
+                            .column-options {
+                                span {
+                                    i {
+                                        cursor: pointer;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            .tbody {
+                .td-highlight {
+                    background: inherit;
+                    position: relative;
+                    z-index: 9;
+                    border: none !important;
+                    
+                    &:before {
+                        content: "";
+                        position: absolute;
+                        background: inherit;
+                        width: calc(100% + 30px);
+                        left: -15px;
+                        top: 0;
+                        height: 100%;
+                        z-index: -1;
+                        box-shadow: var(--offset-x) var(--offset-y) var(--blur-radius) var(--shadow-color);
+                    }
+                }
+                
+                tr {
+                    &:first-child {
+                        .td-highlight {
+                            &:before {
+                                top: var(--highlight-height-top);
+                            }
+                        }
+                    }
+                    
+                    &:first-child,
+                    &:last-child {
+                        .td-highlight {
+                            &:before {
+                                height: calc(100% + var(--highlight-height-bottom));
+                            }
+                        }
+                    }
+                }
+                
+                display: block;
+                margin-left: var(--td-th-active-margin);
+                
+                tr.firstRowSticky {
+                    position: sticky;
+                    top: -5px;
+                    z-index: 2;
+                }
+                
+                tr {
+                    position: relative;
+                    
+                    td {
+                        .sortIcon {
+                            font-size: 30px;
+                        }
+                        
+                        position: relative;
+                        
+                        .row-options {
+                            top: calc(50% - 10px);
+                            
+                            span {
+                                i {
+                                    color: #000000;
+                                    border: 1px solid;
+                                    font-size: 12px;
+                                    opacity: 1
+                                }
+                                
+                                span {
+                                    color: #000000;
+                                }
+                            }
+                            
+                            &:hover {
+                                i {
+                                    opacity: 1;
+                                    color: #ffffff;
+                                    cursor: pointer;
+                                }
+                                
+                                span {
+                                    color: #ffffff;
+                                    cursor: move;
+                                }
+                            }
+                        }
+                        
+                        .row-move {
+                            position: absolute;
+                            height: 100%;
+                            right: -37px;
+                            top: 0;
+                            
+                            .el-button {
+                                width: 30px;
+                                
+                                i {
+                                    transform: rotate(270deg)
+                                }
+                                
+                                .top {
+                                    position: absolute;
+                                    margin-top: 15px;
+                                }
+                                
+                                .bottom {
+                                    margin-bottom: 15px;
+                                }
+                            }
+                        }
+                    }
+                    
+                    .td-active {
+                        background-color: #409EFF;
+                        position: sticky;
+                        position: -webkit-sticky;
+                        z-index: 99;
+                        cursor: move;
+                        max-width: 20px;
+                        border-bottom: var(--border-size) solid var(--border-color);
+                        opacity: 1;
+                        
+                        .row-options {
+                            span {
+                                i {
+                                    color: #ffffff;
+                                    opacity: 1;
+                                }
+                                
+                                span {
+                                    color: #ffffff;
+                                }
+                            }
+                        }
+                        
+                        &:hover {
+                            background-color: #5f6368;
+                        }
+                    }
+                    
+                    .td-inactive {
+                        opacity: 0;
+                        visibility: hidden;
+                        right: 10px;
+                    }
+                }
+            }
+            
+            .single-item {
+                position: relative;
+                display: block;
+                border: 0px solid transparent;
+                
+                .icon-style {
+                    position: absolute;
+                    top: -15px;
+                    height: auto;
+                    width: 100%;
+                    opacity: 0;
+                    left: 0;
+                    right: 0;
+                    display: flex;
+                    justify-content: flex-end;
+                    font-size: 14px;
+                    color: #ffffff;
+                    
+                    .el-icon-rank {
+                        cursor: move;
+                    }
+                    
+                    i {
+                        background: #3f9eff;
+                        padding: 0px 2px;
+                        font-weight: bold;
+                    }
+                }
+            }
+            
+            .other-item {
+                .hover-item {
+                    border: 1px solid transparent;
+                }
+                &.item-active {
+                    .hover-item {
+                        border-color: #3f9eff;
+                    }
+                }
+                &:hover {
+                    cursor: pointer;
+                    
+                    .hover-item {
+                        border-color: #3f9eff;
+                    }
+                    
+                    .icon-style {
+                        opacity: 1;
+                    }
+                }
+            }
+            
+            .only-ribbon {
+                position: absolute;
+                
+                &:hover {
+                    cursor: pointer;
+                    
+                    .corner, .bookmark, .side {
+                        border: 1px solid #3f9eff;
+                    }
+                    
+                    .icon-style {
+                        opacity: 1;
+                        justify-content: flex-start;
+                        z-index: 3;
+                        top: 0;
+                    }
+                }
+            }
+            
+            @keyframes selected-item-move {
+                0% {
+                    background-position: 0% 50%;
+                }
+                100% {
+                    background-position: 100% 50%;
+                }
+            }
+            
+            #selected-item {
+                background: repeating-linear-gradient(45deg, white, white 5px, #3299d1 5px, #3299d1 10px);
+                background-size: 400% 400%;
+                animation: selected-item-move 40s linear infinite reverse;
+                opacity: .2;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
 }
 
 .responsive-mode {
-  &:hover {
-    cursor: pointer;
-  }
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 </style>

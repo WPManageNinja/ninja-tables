@@ -52,6 +52,7 @@ export default {
       }
       this.$nextTick(() => {
         const tableHtml = document.getElementById("ninja_tables_builder_id");
+        const innerHTML = tableHtml.innerHTML.replace(/ contenteditable="[^"]*"/g, '');
         if (this.initialData.table_data.table_name === '') {
           this.$message({
             showClose: true,
@@ -62,7 +63,7 @@ export default {
         }
         this.$patch(`table-builder/${this.id}`, {
           data: JSON.stringify(this.initialData),
-          table_html: tableHtml.innerHTML,
+          table_html: innerHTML,
           table_id: this.id
         })
             .then(response => {
