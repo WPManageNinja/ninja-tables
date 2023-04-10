@@ -18,7 +18,6 @@ class WPPostsController extends Controller
             'public' => true
         ));
 
-//        $excludedTypes = apply_filters('ninja_table_excluded_post_types', array(
         $excludedTypes = $this->app->applyFilters('ninja_table_excluded_post_types', array(
             'ninja-table',
             'revision',
@@ -63,10 +62,6 @@ class WPPostsController extends Controller
         } else {
             $post_types = $post_types['public'];
         }
-
-//        wp_send_json_success(
-//            compact('post_fields', 'post_types', 'postStatuses'), 200
-//        );
 
         return $this->sendSuccess([
             'data' => compact('post_fields', 'post_types', 'postStatuses')

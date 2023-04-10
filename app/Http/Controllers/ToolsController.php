@@ -75,8 +75,6 @@ class ToolsController extends Controller
         return $this->app->applyFilters('editable_roles', $all_roles);
     }
 
-    // Tools: Licence's code will be goes here
-
     public function getGlobalSettings(Request $request)
     {
         $suppressError = get_option('_ninja_suppress_error');

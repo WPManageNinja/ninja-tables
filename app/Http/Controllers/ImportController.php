@@ -228,7 +228,8 @@ class ImportController extends Controller
                 $row['table_id'] = $tableId;
                 $row['value']    = json_encode($row['value'], JSON_UNESCAPED_UNICODE);
                 $tableName       = $wpdb->prefix . static::$tableName;
-                Import::insert($tableName, $row);
+//                $this->reset();
+                $wpdb->insert($tableName, $row, false);
             }
         }
 
@@ -240,7 +241,6 @@ class ImportController extends Controller
 
     public function getTablesFromOtherPlugin(Request $request)
     {
-
         $plugin = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'plugin'));
         if ($plugin == 'TablePress') {
             $libraryClass = new NinjaTablesTablePressMigration();
@@ -381,7 +381,6 @@ class ImportController extends Controller
                 'message' => __('Successfully uploaded data.', 'ninja-tables')
             ]
         ]);
-
     }
 
     /**

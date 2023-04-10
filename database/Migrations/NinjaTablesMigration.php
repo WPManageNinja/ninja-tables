@@ -54,7 +54,7 @@ abstract class NinjaTablesMigration
                 'created_at' => $time,
                 'updated_at' => $time
             );
-            Import::insert($table_name, $data);
+            $wpdb->insert($table_name, $data, false);
         }
     }
 
