@@ -12,8 +12,8 @@ class ExportTableController extends Controller
 {
     public function dragAndDropExport(Request $request)
     {
-        $tableId    = intval($request->table_id);
-        $format     = Sanitizer::sanitizeTextField($request->format);
+        $tableId    = intval(Arr::get($request->all(), 'table_id'));
+        $format     = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'format'));
         $tableTitle = get_the_title($tableId);
         $fileName   = Sanitizer::sanitizeTitle($tableTitle);
         $tableData  = get_post_meta($tableId, '_ninja_table_builder_table_data', true);
@@ -72,8 +72,8 @@ class ExportTableController extends Controller
 
     public function defaultExport(Request $request)
     {
-        $tableId = intval($request->table_id);
-        $format  = Sanitizer::sanitizeTextField($request->format);
+        $tableId = intval(Arr::get($request->all(), 'table_id'));
+        $format  = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'format'));
 
         $tableTitle = get_the_title($tableId);
 

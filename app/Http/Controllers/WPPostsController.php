@@ -78,7 +78,7 @@ class WPPostsController extends Controller
         $authors = array();
 
         if (Arr::get($request->all(), 'post_types')) {
-            $postTypes = ninja_tables_sanitize_array($request->post_types);
+            $postTypes = ninja_tables_sanitize_array(Arr::get($request->all(), 'post_types'));
             if ($postTypes) {
                 global $wpdb;
                 $postTypes = implode("','", $postTypes);

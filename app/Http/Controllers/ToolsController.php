@@ -4,6 +4,7 @@ namespace NinjaTables\App\Http\Controllers;
 
 use NinjaTables\App\Models\Post;
 use NinjaTables\Framework\Request\Request;
+use NinjaTables\Framework\Support\Arr;
 
 class ToolsController extends Controller
 {
@@ -20,7 +21,7 @@ class ToolsController extends Controller
 
     public function saveDefaultSettings(Request $request)
     {
-        $settings = ninjaTableNormalize(wp_unslash($request->default_settings));
+        $settings = ninjaTableNormalize(wp_unslash(Arr::get($request->all(), 'default_settings')));
         update_option('_ninja_table_default_appearance_settings', $settings);
 
         return $this->sendSuccess([
@@ -92,7 +93,7 @@ class ToolsController extends Controller
 
     public function updateGlobalSettings(Request $request)
     {
-        $errorHandling = sanitize_text_field($request->suppress_error);
+        $errorHandling = sanitize_text_field(Arr::get($request->all(), 'suppress_error'));
         update_option('_ninja_suppress_error', $errorHandling, true);
 
         return $this->sendSuccess([

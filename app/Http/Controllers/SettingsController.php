@@ -101,7 +101,7 @@ class SettingsController extends Controller
     {
         ninja_tables_allowed_css_properties();
         $tableId        = absint($id);
-        $buttonSettings = wp_unslash(ninja_tables_sanitize_array($request->button_settings));
+        $buttonSettings = wp_unslash(ninja_tables_sanitize_array(Arr::get($request->all(), 'button_settings')));
         update_post_meta($tableId, '_ninja_custom_table_buttons', $buttonSettings);
 
         return $this->sendSuccess(array(
@@ -114,7 +114,7 @@ class SettingsController extends Controller
     public function saveCustomCSSJS(Request $request, $id)
     {
         $tableId = intval($id);
-        $css     = Sanitizer::sanitizeTextField($request->custom_css);
+        $css     = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'custom_css'));
         $css     = wp_strip_all_tags($css);
         update_post_meta($tableId, '_ninja_tables_custom_css', $css);
 

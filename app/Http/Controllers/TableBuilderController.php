@@ -23,8 +23,8 @@ class TableBuilderController extends Controller
 
     public function store(Request $request)
     {
-        $table_type = Sanitizer::sanitizeTextField($request->data['table_data']['table_type']);
-        $table_name = Sanitizer::sanitizeTextField($request->data['table_data']['table_name']);
+        $table_type = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'data.table_data.table_type'));
+        $table_name = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'data.table_data.table_name'));
 
         if (isset($table_type) && $table_type !== '') {
             return $this->generateByTemplateConfig($table_type); // for ready-made table
@@ -33,7 +33,7 @@ class TableBuilderController extends Controller
 
         $initConfig = new InitConfig();
         $table_id              = $this->wpInsertPost($table_name);
-        $data                  = sanitize_post_field('data', $request->data, $table_id, 'db');
+        $data                  = sanitize_post_field('data', Arr::get($request->all(), 'data'), $table_id, 'db');
         $table_data            = $data['table_data'];
         $table_data['headers'] = $initConfig->makeTableHeader($table_data);
         $table_data['data']    = $initConfig->makeTableRow($table_data);
@@ -113,9 +113,9 @@ class TableBuilderController extends Controller
 
     public function update(Request $request, $id)
     {
-        $table_id   = intval($request->table_id);
-        $table_html = ninjaTablesEscapeScript($request->table_html);
-        $json       = ninjaTablesEscapeScript($request->data);
+        $table_id   = intval(Arr::get($request->all(), 'table_id'));
+        $table_html = ninjaTablesEscapeScript(Arr::get($request->all(), 'table_html'));
+        $json       = ninjaTablesEscapeScript(Arr::get($request->all(), 'data'));
         $data       = json_decode(htmlspecialchars_decode($json), true);
 
         $table_name            = Arr::get($data, 'table_data.table_name');

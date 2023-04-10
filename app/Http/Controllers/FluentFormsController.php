@@ -72,7 +72,7 @@ class FluentFormsController extends Controller
             ], 422);
         }
 
-        $form = $request->form;
+        $form = Arr::get($request->all(), 'form');
 
         $tableId = (new FluentFormProvider())->saveTable($form, $fields, $tableId, $formId);
 

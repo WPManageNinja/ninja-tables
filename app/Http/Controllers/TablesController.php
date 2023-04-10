@@ -15,17 +15,17 @@ class TablesController extends Controller
 
     public function index(Request $request)
     {
-        $perPage = intval($request->per_page) ?: 10;
+        $perPage = intval(Arr::get($request->all(), 'per_page')) ?: 10;
 
-        $currentPage = intval($request->page);
+        $currentPage = intval(Arr::get($request->all(), 'page')) ?: 1;
 
         $skip = $perPage * ($currentPage - 1);
 
         $args = array(
             'posts_per_page' => $perPage,
             'offset'         => $skip,
-            'orderby'        => Sanitizer::sanitizeTextField($request->orderBy),
-            'order'          => Sanitizer::sanitizeTextField($request->order),
+            'orderby'        => Sanitizer::sanitizeTextField(Arr::get($request->all(), 'orderBy')),
+            'order'          => Sanitizer::sanitizeTextField(Arr::get($request->all(), 'order')),
             'post_type'      => $this->cptName,
             'post_status'    => 'any',
         );
@@ -48,21 +48,21 @@ class TablesController extends Controller
 
     public function store(Request $request)
     {
-        if ( ! Sanitizer::sanitizeTextField($request->post_title)) {
+        if ( ! Sanitizer::sanitizeTextField(Arr::get($request->all(), 'post_title'))) {
             $this->sendError(array(
                 'message' => __('The name field is required.', 'ninja-tables')
             ), 423);
         }
 
-        $postId = intval($request->tableId);
+        $postId = intval(Arr::get($request->all(), 'tableId'));
 
         if (Arr::get($request->all(), 'table_caption')) {
             update_post_meta($postId, '_ninja_table_caption', Sanitizer::sanitizeTextField($request->table_caption));
         }
 
         $attributes = array(
-            'post_title'   => Sanitizer::sanitizeTextField($request->post_title),
-            'post_content' => wp_kses_post($request->post_content),
+            'post_title'   => Sanitizer::sanitizeTextField(Arr::get($request->all(), 'post_title')),
+            'post_content' => wp_kses_post(Arr::get($request->all(), 'post_content')),
             'post_type'    => $this->cptName,
             'post_status'  => 'publish'
         );

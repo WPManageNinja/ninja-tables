@@ -8,6 +8,7 @@ use NinjaTables\App\Traits\ImportTrait;
 use NinjaTables\Database\Migrations\NinjaTablesSupsysticTableMigration;
 use NinjaTables\Database\Migrations\NinjaTablesTablePressMigration;
 use NinjaTables\Framework\Request\Request;
+use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
 use NinjaTables\App\Library\Csv\Reader;
 use NinjaTables\App\Models\NinjaTableItem;
@@ -27,8 +28,8 @@ class ImportController extends Controller
 
     public function defaultImport(Request $request)
     {
-        $format    = Sanitizer::sanitizeTextField($request->format);
-        $doUnicode = Sanitizer::sanitizeTextField($request->do_unicode);
+        $format    = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'format'));
+        $doUnicode = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'do_unicode'));
 
         if ($format == 'dragAndDrop') {
             return $this->extracted($request);
@@ -240,7 +241,7 @@ class ImportController extends Controller
     public function getTablesFromOtherPlugin(Request $request)
     {
 
-        $plugin = Sanitizer::sanitizeTextField($request->plugin);
+        $plugin = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'plugin'));
         if ($plugin == 'TablePress') {
             $libraryClass = new NinjaTablesTablePressMigration();
         } elseif ($plugin == 'supsystic') {
@@ -258,8 +259,8 @@ class ImportController extends Controller
 
     public function importTableFromOtherPlugin(Request $request)
     {
-        $plugin  = Sanitizer::sanitizeTextField($request->plugin);
-        $tableId = intval($request->tableId);
+        $plugin  = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'plugin'));
+        $tableId = intval(Arr::get($request->all(), 'tableId'));
 
         if ($plugin == 'TablePress') {
             $libraryClass = new NinjaTablesTablePressMigration();
@@ -295,11 +296,11 @@ class ImportController extends Controller
     public function uploadCsvInExistingTable(Request $request)
     {
         global $wpdb;
-        $tableId = intval($request->table_id);
+        $tableId = intval(Arr::get($request->all(), 'table_id'));
         $tmpName = $_FILES['file']['tmp_name'];
 
         $data = file_get_contents($tmpName);
-        if (isset($request->do_unicode) && $request->do_unicode == 'yes') {
+        if (Arr::get($request->all(), 'do_unicode') && $request->do_unicode == 'yes') {
             $data = utf8_encode($data);
         }
 
@@ -357,7 +358,7 @@ class ImportController extends Controller
             $timeStamp = $timeStamp + 100;
         }
 
-        $replace = $request->replace === 'true';
+        $replace = Arr::get($request->all(), 'replace') === 'true';
 
         $app  = App::getInstance();
         $data = $app->applyFilters('ninja_tables_import_table_data', $data, $tableId);

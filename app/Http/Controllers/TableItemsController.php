@@ -15,7 +15,7 @@ class TableItemsController extends Controller
         $currentPage = Arr::get($request->all(), 'page', 1);
         $skip        = $perPage * ($currentPage - 1);
         $tableId     = intval($id);
-        $search      = Sanitizer::sanitizeTextField($request->search);
+        $search      = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'search'));
 
         $dataSourceType = ninja_table_get_data_provider($tableId);
 
