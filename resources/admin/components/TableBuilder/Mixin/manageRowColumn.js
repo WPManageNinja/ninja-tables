@@ -852,10 +852,14 @@ export const manageRowColumn = {
         },
         tdInlineStyle(row, header) {
             const padding = this.setting.general.options.cell_padding.value;
+            let width = this.columnWidth(row, header);
+            if(width === 150) {
+                width = this.setting.general.options.cell_min_auto_width.value;
+            }
             return {
                 padding: padding + 'px',
-                'max-width': this.columnWidth(row, header) + 'px',
-                'min-width': this.columnWidth(row, header) + 'px',
+                'max-width': width + 'px',
+                'min-width': width + 'px',
                 'background-color': row.rows[header] ? row.rows[header].style.backgroundColor : '',
                 'display': (row.rows[header].style.colspan > 0 && row.rows[header].style.rowspan > 0) ? '' : 'none'
             }
