@@ -70,12 +70,16 @@
         }
       }
       display: block;
-      //overflow-y: auto;
 
       .button-content-wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow-wrap: break-word;
+        white-space: break-spaces;
+      }
+      .ntb-el-button {
+        padding: var(--padding-frontend);
       }
       .ntb-el-button:hover {
         .svgIcon {
@@ -86,6 +90,7 @@
     .svgIcon {
       display: inline-block;
       mask-size: cover;
+      flex: none;
       -webkit-mask-size:cover;
     }
     .icon-text-wrapper {
@@ -106,10 +111,15 @@
     }
 
     .ntb-rating {
+      height: auto;
       .el-rate__item {
         i {
-          font-size: var(--rating-font-size)
+          font-size: var(--rating-font-size);
         }
+      }
+      .el-rate__text {
+        display: block;
+        font-size: var(--rating-font-size);
       }
     }
 

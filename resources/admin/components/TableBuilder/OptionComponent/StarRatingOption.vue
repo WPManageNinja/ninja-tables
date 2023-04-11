@@ -5,7 +5,7 @@
         :max="50"
         :min="10"
         :step="1"
-        v-model="item.data.style.fontSize"
+        v-model="item.data.style.ratingSize"
     ></slider-input>
     <alignment-input
         :label="$t('Align')"

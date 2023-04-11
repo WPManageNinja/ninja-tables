@@ -48,6 +48,12 @@
           v-model="item.data.style.alignment"
       ></alignment>
       <text-input :label="$t('URL')" v-model="item.data.style.url"></text-input>
+        <checkbox
+            :label="$t('Link rel attributes')"
+            :options="linkOptions"
+            v-model="item.data.style.linkAttributes"
+        >
+        </checkbox>
       <switch-input
           style="margin-top:12px"
           :label="$t('Open in another tab')"
@@ -67,11 +73,11 @@
           :min="10"
           :step="1"
       ></slider-input>
-      <font-weight
+      <checkbox
           :label="$t('Font Style')"
           v-model="item.data.style.fontWeight"
       >
-      </font-weight>
+      </checkbox>
     </el-tab-pane>
     <el-tab-pane :label="$t('Icon')" name="icon">
       <template v-if="!hasPro">
@@ -172,50 +178,53 @@ import SwitchInput from "../SettingComponent/SwitchInput";
 import TextInput from "../SettingComponent/TextInput";
 import Alignment from "../SettingComponent/Alignment.vue";
 import Icon from "./SplitComponent/Icon";
-import FontWeight from "../SettingComponent/FontWeight"
-import RadioButton from "../SettingComponent/RadioButton"
+import Checkbox from "../SettingComponent/CheckboxInput"
+import RadioButton from "../SettingComponent/RadioButton";
 
 export default {
-  data() {
-    return {
-      activeName: "general",
-        buttonSize: [
-            {
-                value: "small",
-                label: "S"
-            },
-            {
-                value: "medium",
-                label: "M"
-            },
-            {
-                value: "large",
-                label: "L"
-            }
-        ]
-    };
-  },
-  name: "ButtonOption",
-  props: ["item"],
-  components: {
-    ColorInput,
-    SliderInput,
-    SwitchInput,
-    TextInput,
-    Icon,
-    Alignment,
-    FontWeight,
-    RadioButton
-  },
-  computed: {
-    hasPro() {
-      return !!window.ninja_table_admin.hasPro;
+    data() {
+        return {
+            activeName: "general",
+            buttonSize: [
+                {value: "small", label: "S"},
+                {value: "medium", label: "M"},
+                {value: "large", label: "L"},
+            ],
+            fontStyleOptions: [
+                {label: 'Bold', value: 'bold'},
+                {label: 'Italic', value: 'italic'},
+                {label: 'Underline', value: 'underline'},
+            ],
+            linkOptions: [
+                {label: 'sponsored', value: 'sponsored'},
+                {label: 'nofollow', value: 'nofollow'},
+                {label: 'noreferrer', value: 'noreferrer'},
+            ]
+            
+        };
     },
-    extension() {
-      const item = this.item.data.style.iconName;
-      const last4 = item.slice(-4);
-      return last4.slice(-4) === '.svg' || !last4.includes('.');
+    name: "ButtonOption",
+    props: ["item"],
+    
+    components: {
+        ColorInput,
+        SliderInput,
+        SwitchInput,
+        TextInput,
+        Icon,
+        Alignment,
+        Checkbox,
+        RadioButton
+    },
+    computed: {
+        hasPro() {
+            return !!window.ninja_table_admin.hasPro;
+        },
+        extension() {
+            const item = this.item.data.style.iconName;
+            const last4 = item.slice(-4);
+            return last4.slice(-4) === '.svg' || !last4.includes('.');
+        }
     }
-  }
 };
 </script>

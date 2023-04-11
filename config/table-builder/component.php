@@ -51,6 +51,7 @@ return [
                     "fullWidth"            => true,
                     "url"                  => 'https://example.com',
                     "newTab"               => true,
+                    "linkAttributes"       => [],
                     "contentAlignment"     => 'center',
                     "alignment"            => 'center',
                     "fontWeight"           => [],
@@ -86,11 +87,11 @@ return [
                 "has_pro" => false,
                 "value"   => 5,
                 "style"   => [
-                    "color"           => '',
-                    "fontSize"        => 10,
+                    "color"           => '#7C46EA',
+                    "ratingSize"        => 20,
                     "maxStar"         => 5,
                     "alignment"       => 'center',
-                    "showRatingValue" => true,
+                    "showRatingValue" => false,
                     "margin"          => $default_margin_padding,
                     "padding"         => $default_margin_padding
                 ],
@@ -149,6 +150,7 @@ return [
                     'shape'     => 'square',
                     'alt'       => 'Demo Image',
                     'link'      => 'https://www.example.com/',
+                    'linkAttributes' => [],
                     'target'    => 'blank',
                     "margin"    => $default_margin_padding,
                     "padding"   => $default_margin_padding

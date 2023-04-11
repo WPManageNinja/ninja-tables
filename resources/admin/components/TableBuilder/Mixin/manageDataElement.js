@@ -257,6 +257,14 @@ export const manageDataElement = {
             return {
                 'vertical-align': 'middle'
             }
+        },
+        linkAttributes() {
+            const rel = this.item.data.style.linkAttributes;
+            let relAsString = '';
+            if (typeof rel === 'object' && rel.length > 0) {
+                relAsString = rel.join(' ');
+            }
+            return relAsString;
         }
     },
     methods: {
