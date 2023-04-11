@@ -36,6 +36,7 @@ return [
                 "style"   => [
                     "fontSize"             => 10,
                     "color"                => '',
+                    "buttonSize"           => 'M',
                     "backgroundColor"      => '#1E90FF',
                     "borderColor"          => '#000000',
                     "borderSize"           => 0,

@@ -36,6 +36,12 @@
           :label="$t('Full Width')"
           v-model="item.data.style.fullWidth"
       ></switch-input>
+        <radio-button
+            v-if="item.data.style.fullWidth === false"
+            :label="$t('Button Size')"
+            v-model="item.data.style.buttonSize"
+            :options="buttonSize">
+        </radio-button>
       <alignment
           v-if="item.data.style.fullWidth === false"
           :label="$t('Alignment')"
@@ -167,11 +173,26 @@ import TextInput from "../SettingComponent/TextInput";
 import Alignment from "../SettingComponent/Alignment.vue";
 import Icon from "./SplitComponent/Icon";
 import FontWeight from "../SettingComponent/FontWeight"
+import RadioButton from "../SettingComponent/RadioButton"
 
 export default {
   data() {
     return {
       activeName: "general",
+        buttonSize: [
+            {
+                value: "small",
+                label: "S"
+            },
+            {
+                value: "medium",
+                label: "M"
+            },
+            {
+                value: "large",
+                label: "L"
+            }
+        ]
     };
   },
   name: "ButtonOption",
@@ -183,7 +204,8 @@ export default {
     TextInput,
     Icon,
     Alignment,
-    FontWeight
+    FontWeight,
+    RadioButton
   },
   computed: {
     hasPro() {

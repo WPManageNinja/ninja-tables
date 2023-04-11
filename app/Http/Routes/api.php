@@ -19,11 +19,11 @@ $router->withPolicy('UserPolicy')->group(function ($router) {
     $router->prefix('tables')->group(function ($route) {
         $route->get('/', [TablesController::class, 'index']);
         $route->post('/', [TablesController::class, 'store']);
+        $route->post('/dismiss-fluent-suggest', [TablesController::class, 'dismissFluentSuggest']);
 
         $route->prefix('/{id}')->group(function ($route) {
             $route->delete('/', [TablesController::class, 'delete'])->int('id');
             $route->post('/duplicate', [TablesController::class, 'duplicate'])->int('id');
-            $route->post('/dismiss-fluent-suggest', [TablesController::class, 'dismissFluentSuggest']);
             $route->get('/preview-html', [TablesController::class, 'previewHtml'])->int('id');
 
             $route->prefix('/item')->group(function ($route) {

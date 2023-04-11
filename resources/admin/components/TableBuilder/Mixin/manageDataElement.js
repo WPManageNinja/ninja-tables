@@ -100,14 +100,32 @@ export const manageDataElement = {
             return data;
         },
         buttonStyle() {
+            const size = this.item.data.style.buttonSize;
+            const isFullWidth = this.item.data.style.fullWidth;
+
+            let width = '90px';
+            let height = '30px';
+
+            if (size === 'S') {
+                width =  '60px';
+                height = '27px';
+
+            } else if (size === 'L') {
+                width =  '120px';
+                height = '40px';
+            }
+
             return {
                 'text-decoration': 'none',
                 'border-radius': this.item.data.style.borderRadius + 'px',
-                'width': (this.item.data.style.fullWidth === 'true' || this.item.data.style.fullWidth === true) ? '100%' : '',
+                'width': (isFullWidth === 'true' || isFullWidth === true) ? '100%' : width,
+                'height': (isFullWidth === 'true' || isFullWidth === true) ? 'auto' : height,
                 'text-align': this.item.data.style.contentAlignment,
                 'overflow': 'hidden',
-                'line-height': 2,
-                'display': 'inline-block'
+                'line-height': 1,
+                'display': 'inline-block',
+                '--padding-dashboard': (isFullWidth === 'true' || isFullWidth === true) ? '10px' : '5px',
+                '--padding-frontend':  (isFullWidth === 'true' || isFullWidth === true) ? '10px' : '0',
             }
         },
         justifyContent() {
@@ -144,8 +162,8 @@ export const manageDataElement = {
             }
         },
         ratingStyle() {
-            let fontSize = this.item.data.style.fontSize;
-            const ratingFontSize = (fontSize === '' || fontSize === 10) ? this.setting.global_styling.options.font_size.value : fontSize;
+            let ratingSize = this.item.data.style.ratingSize;
+            const ratingFontSize = (ratingSize === '' || ratingSize === 10) ? this.setting.global_styling.options.font_size.value : ratingSize;
 
             return {
                 '--rating-font-size': ratingFontSize + 'px',
