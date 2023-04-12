@@ -265,9 +265,9 @@ class NinjaFooTable
             if ($columnType == 'date') {
                 wp_enqueue_script(
                     'moment',
-                    NINJA_TABLES_DIR_URL . "public/libs/moment/moment.min.js",
+                    NINJA_TABLES_DIR_URL . "assets/libs/moment/moment.min.js",
                     [],
-                    '2.22.0',
+                    '2.29.4',
                     true
                 );
                 $formatted_column['formatString'] = $column['dateFormat'] ?: 'MM/DD/YYYY';
@@ -788,9 +788,9 @@ class NinjaFooTable
         if ($columnType == 'date') {
             wp_enqueue_script(
                 'moment',
-                NINJA_TABLES_DIR_URL . "public/libs/moment/moment.min.js",
+                NINJA_TABLES_DIR_URL . "assets/libs/moment/moment.min.js",
                 [],
-                '2.22.0',
+                '2.29.4',
                 true
             );
             $formatted_column['formatString'] = $column['dateFormat'] ?: 'MM/DD/YYYY';

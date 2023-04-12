@@ -146,30 +146,4 @@ class TablesController extends Controller
     {
         update_option('_ninja_tables_plugin_suggest_dismiss', time());
     }
-
-    public function previewHtml($id)
-    {
-        $tableId = intval($id);
-        $tableColumns = ninja_table_get_table_columns($tableId, 'public');
-        $tableSettings = ninja_table_get_table_settings($tableId, 'public');
-
-        $formattedColumns = [];
-        foreach ($tableColumns as $index => $column) {
-            $formattedColumn = NinjaFooTable::getFormattedColumn($column, $index, $tableSettings, true,
-                'by_created_at');
-            $formattedColumn['original'] = $column;
-            $formattedColumns[] = $formattedColumn;
-        }
-
-        $formatted_data = ninjaTablesGetTablesDataByID($tableId, $tableColumns, $tableSettings['default_sorting'], true, 25);
-
-        if (count($formatted_data) > 25) {
-            $formatted_data = array_slice($formatted_data, 0, 25);
-        }
-
-        return (string) $this->app->view->make('public/table-inner-html', array(
-            'table_columns' => $formattedColumns,
-            'table_rows'    => $formatted_data
-        ));
-    }
 }
