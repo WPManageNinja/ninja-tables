@@ -24,6 +24,7 @@ $router->withPolicy('UserPolicy')->group(function ($router) {
         $route->prefix('/{id}')->group(function ($route) {
             $route->delete('/', [TablesController::class, 'delete'])->int('id');
             $route->post('/duplicate', [TablesController::class, 'duplicate'])->int('id');
+            $route->get('/table-inner-html', [TablesController::class, 'tableInnerHtml'])->int('id');
             $route->prefix('/item')->group(function ($route) {
                 $route->get('/', [TableItemsController::class, 'index'])->int('id');
                 $route->post('/', [TableItemsController::class, 'store'])->int('id');

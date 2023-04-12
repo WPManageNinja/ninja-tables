@@ -853,7 +853,7 @@
         },
         methods: {
             fetchTableBody() {
-              this.$get(`tables/${this.tableId}/preview-html`)
+              this.$get(`tables/${this.tableId}/table-inner-html`)
                     .then(response => {
                         this.tableInnerHtml = response;
                         this.data_loaded = true;
