@@ -1,5 +1,5 @@
 <template>
-    <div class="block">
+    <div class="block nt-checkbox-group">
         <span>{{ label }}</span>
         <el-checkbox-group
             size="mini"
@@ -34,8 +34,11 @@ export default {
 };
 </script>
 
-<style>
-.el-checkbox-group {
-    display: grid;
+<style lang="scss">
+.nt-checkbox-group {
+    .el-checkbox-group {
+        display: grid;
+    }
 }
+
 </style>

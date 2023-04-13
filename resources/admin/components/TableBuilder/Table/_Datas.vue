@@ -106,7 +106,7 @@
       >
         <img
             :src="item.data.value"
-            :style="[padding, borderRadius,  {'width': this.item.data.style.size+'%'}]"
+            :style="[padding, borderRadius,  {'width': this.item.data.style.size+'%', 'margin-top': '5px'}]"
             :alt="`${item.data.style.alt}`"
         />
       </a>
