@@ -35,19 +35,20 @@ class NinjaTableAdminHandler
     {
         $this->noticeForProVersion();
 
-        if ($this->isNotice()) {
-            if (isset($_GET['page']) && Sanitizer::sanitizeTextField($_GET['page']) == 'ninja_tables') {
-                echo '<div class="nt_review_notice">In love with Ninja Tables?
-                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Please leave a 5-star review for us! </a>
-                     It will encourage us to come up with more and more features.
-                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a> |
-                     <a href=' . admin_url('admin.php?action=remindMeLater') . '>Remind Me Later</a>
-                     <a href=' . admin_url('admin.php?action=remindMeLater') . '>
-                        <span class="close-icon dashicons dashicons-no"></span>
-                    </a>
-                 </div>';
-            }
-        }
+        // TODO: We need to uncomment this after one release
+//        if ($this->isNotice()) {
+//            if (isset($_GET['page']) && Sanitizer::sanitizeTextField($_GET['page']) == 'ninja_tables') {
+//                echo '<div class="nt_review_notice">In love with Ninja Tables?
+//                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Please leave a 5-star review for us! </a>
+//                     It will encourage us to come up with more and more features.
+//                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a> |
+//                     <a href=' . admin_url('admin.php?action=remindMeLater') . '>Remind Me Later</a>
+//                     <a href=' . admin_url('admin.php?action=remindMeLater') . '>
+//                        <span class="close-icon dashicons dashicons-no"></span>
+//                    </a>
+//                 </div>';
+//            }
+//        }
     }
 
     public function remindMeLater()
@@ -112,7 +113,7 @@ class NinjaTableAdminHandler
             if ($page == 'ninja_tables') {
                 $class = 'nt_review_notice nt_version_update_notice';
             } else {
-                $class = 'notice notice-info';
+                $class = 'notice notice-error nt_version_update_notice';
             }
 
             echo '<div class="' . $class . '">
