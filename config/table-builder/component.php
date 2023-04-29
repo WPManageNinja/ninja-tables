@@ -87,7 +87,7 @@ return [
                 "has_pro" => false,
                 "value"   => 5,
                 "style"   => [
-                    "color"           => '#7C46EA',
+                    "color"           => '#F2C009',
                     "ratingSize"        => 20,
                     "maxStar"         => 5,
                     "alignment"       => 'center',
