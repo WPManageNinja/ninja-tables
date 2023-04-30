@@ -42,8 +42,8 @@ class NinjaTableAdminHandler
 //                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Please leave a 5-star review for us! </a>
 //                     It will encourage us to come up with more and more features.
 //                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a> |
-//                     <a href=' . admin_url('admin.php?action=remindMeLater') . '>Remind Me Later</a>
-//                     <a href=' . admin_url('admin.php?action=remindMeLater') . '>
+//                     <a href=' . admin_url('admin.php?action=remindMeLater&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>Remind Me Later</a>
+//                     <a href=' . admin_url('admin.php?action=remindMeLater&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>
 //                        <span class="close-icon dashicons dashicons-no"></span>
 //                    </a>
 //                 </div>';
@@ -54,6 +54,9 @@ class NinjaTableAdminHandler
     public function remindMeLater()
     {
         if (isset($_GET['action']) && Sanitizer::sanitizeTextField($_GET['action']) === 'remindMeLater') {
+
+            ninjaTablesValidateNonce('ninja_table_admin_nonce');
+
             setcookie(
                 "nt_review_notice",
                 NINJA_TABLES_VERSION,
@@ -107,7 +110,7 @@ class NinjaTableAdminHandler
      */
     public function noticeForProVersion()
     {
-        if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '4.3.5', '<')) {
+        if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '4.3.6', '<')) {
 
             $page = Arr::get($_GET, 'page', '');
             if ($page == 'ninja_tables') {
@@ -121,7 +124,7 @@ class NinjaTableAdminHandler
                 If you are using the old version of Ninja Tables Pro, please 
                 <a href=' . admin_url('plugins.php?plugin_status=upgrade') . '> <b>update</b> </a>
                   to the latest version. Otherwise, 
-                <a href=' . admin_url('admin.php?action=deactivateProPlugin') . '> <b>deactivate</b> </a>
+                <a href=' . admin_url('admin.php?action=deactivateProPlugin&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '> <b>deactivate</b> </a>
                  the old version, or you will face some issues.  
             </p>
         </div>';
@@ -131,6 +134,7 @@ class NinjaTableAdminHandler
     public function deactivateProPlugin()
     {
         if (isset($_GET['action']) && Sanitizer::sanitizeTextField($_GET['action']) === 'deactivateProPlugin') {
+            ninjaTablesValidateNonce('ninja_table_admin_nonce');
             deactivate_plugins('ninja-tables-pro/ninja-tables-pro.php');
             wp_redirect(admin_url('admin.php?page=ninja_tables#home'));
         }
