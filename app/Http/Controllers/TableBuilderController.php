@@ -18,6 +18,7 @@ class TableBuilderController extends Controller
     public function index(Request $request)
     {
         $initConfig = (new InitConfig())->getAllInitialData();
+
         return $this->sendSuccess($initConfig, 200);
     }
 
@@ -31,7 +32,7 @@ class TableBuilderController extends Controller
         }
 
 
-        $initConfig = new InitConfig();
+        $initConfig            = new InitConfig();
         $table_id              = $this->wpInsertPost($table_name);
         $data                  = sanitize_post_field('data', Arr::get($request->all(), 'data'), $table_id, 'db');
         $table_data            = $data['table_data'];
@@ -84,7 +85,7 @@ class TableBuilderController extends Controller
 
     public function show(Request $request, $id)
     {
-        $initConfig = new InitConfig();
+        $initConfig        = new InitConfig();
         $table_id          = intval($id);
         $table_settings    = get_post_meta($table_id, '_ninja_table_builder_table_settings', true);
         $table_responsive  = get_post_meta($table_id, '_ninja_table_builder_table_responsive', true);
@@ -118,6 +119,12 @@ class TableBuilderController extends Controller
         $json       = ninjaTablesEscapeScript(Arr::get($request->all(), 'data'));
         $data       = json_decode(htmlspecialchars_decode($json), true);
 
+        if ( ! ninjaTablesCanUnfilteredHTML()) {
+            ninja_tables_allowed_css_properties();
+            $table_html = $this->convertRGBtoHex($table_html);
+            $table_html = wp_kses($table_html, ninja_tables_allowed_html_tags());
+        }
+
         $table_name            = Arr::get($data, 'table_data.table_name');
         $table_settings        = Arr::get($data, 'settings');
         $table_responsive      = Arr::get($data, 'responsive');
@@ -141,5 +148,22 @@ class TableBuilderController extends Controller
                 'id' => $table_id
             ]
         ], 200);
+    }
+
+    public function convertRGBtoHex($tableHtml)
+    {
+        return preg_replace_callback('/rgb\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)/', function ($matches) {
+            $rgbArray = explode(",", $matches[0]);
+            $red      = intval(trim($rgbArray[0], "rgb()"));
+            $green    = intval(trim($rgbArray[1]));
+            $blue     = intval(trim($rgbArray[2], " )"));
+
+            // Convert the RGB values to hex format
+            $hexCode = "#" . str_pad(dechex($red), 2, "0", STR_PAD_LEFT) . str_pad(dechex($green), 2, "0",
+                    STR_PAD_LEFT) . str_pad(dechex($blue), 2, "0", STR_PAD_LEFT);
+
+            // Return the hex code
+            return $hexCode;
+        }, $tableHtml);
     }
 }

@@ -347,7 +347,7 @@ function ninja_tables_allowed_html_tags()
 
 function ninja_tables_allowed_css_properties()
 {
-    add_filter('safe_style_css', function ($styles) use ($app) {
+    add_filter('safe_style_css', function ($styles) {
         $style_tags = ['display', 'opacity', 'visibility'];
         $style_tags = apply_filters('ninja_tables/allowed_css_properties', $style_tags);
 
@@ -1148,6 +1148,11 @@ function ninjaTablesSanitizeForCSV($content)
 function ninjaTablesEscapeScript($data)
 {
     return preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $data);
+}
+
+function ninjaTablesCanUnfilteredHTML()
+{
+    return current_user_can('unfiltered_html') || apply_filters('ninja_tables_disable_fields_sanitize', false);
 }
 
 // function only for supported ninja charts
