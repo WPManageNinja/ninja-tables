@@ -307,6 +307,11 @@ export default {
                 }
 
                 $child.attr('aria-label', attr);
+
+                $child.find('a').attr({
+                    'role': 'button',
+                    'aria-label': attr
+                });
             })
         }
 
