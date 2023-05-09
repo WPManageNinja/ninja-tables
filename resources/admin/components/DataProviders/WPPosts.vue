@@ -31,6 +31,7 @@
                 <el-row v-if="!loading">
                     <el-collapse class="nt_conditions" v-model="conditions_section">
                         <el-collapse-item name="1">
+                          <el-checkbox v-model="currentUserPosts">Logged in user posts</el-checkbox>
                             <template slot="title">
                                 <h4 class="no-margin">Conditions</h4>
                             </template>
@@ -120,6 +121,7 @@
                         <div>
                             <el-collapse accordion value="conditions" v-model="conditions_section">
                                 <el-collapse-item name="conditions" title="Conditions">
+                                  <el-checkbox v-model="currentUserPosts">Logged in user posts</el-checkbox>
                                     <wp-post-conditions
                                         v-if="conditions_section"
                                         :postStatuses="postStatuses"
@@ -211,6 +213,7 @@
                     'post_modified',
                     'post_status',
                 ],
+                currentUserPosts: false
             };
         },
         computed: {
@@ -277,7 +280,8 @@
                     columns: this.selected_post_types_fields,
                     where: this.conditions.map(condition => Object.assign({}, condition)),
                     metas: this.metas.map(meta => Object.assign({}, meta)),
-                    query_extra: (this.config && this.config.table) ? this.config.table.query_extra : false
+                    query_extra: (this.config && this.config.table) ? this.config.table.query_extra : false,
+                    current_user_posts: this.currentUserPosts
                 }
 
                 _.forEach(data.where, condition => {
@@ -335,6 +339,7 @@
                             this.metas = this.config.table.metaQuery || [];
                             this.selected_post_types = this.config.table.post_types;
                             this.selected_post_types_fields = this.config.columns.map(c => c.original_name);
+                            this.currentUserPosts = this.config.table.query_extra.current_user_posts === 'true';
                             this.handlePostTypeChange();
                         }
                     })
