@@ -23,7 +23,12 @@ return [
                     "color"      => '',
                     "alignment"  => 'center',
                     "margin"     => $default_margin_padding,
-                    "padding"    => $default_margin_padding,
+                    "padding"    => [
+                        "top"    => 2,
+                        "bottom" => 2,
+                        "left"   => 0,
+                        "right"  => 0,
+                    ],
                     "fontWeight" => [],
                 ],
             ],
@@ -123,7 +128,12 @@ return [
                 "value"   => "<span style='display: block; text-align: center; line-height: 1.1'>custom html</span>",
                 "style"   => [
                     "margin"  => $default_margin_padding,
-                    "padding" => $default_margin_padding,
+                    "padding" => [
+                        "top"    => 4,
+                        "bottom" => 4,
+                        "left"   => 0,
+                        "right"  => 0,
+                    ]
                 ]
             ],
             [
@@ -134,7 +144,12 @@ return [
                 "value"   => "[Shortcode]",
                 "style"   => [
                     "margin"    => $default_margin_padding,
-                    "padding"   => $default_margin_padding,
+                    "padding"   => [
+                        "top"    => 4,
+                        "bottom" => 4,
+                        "left"   => 0,
+                        "right"  => 0,
+                    ],
                     "alignment" => 'center',
                 ],
             ],

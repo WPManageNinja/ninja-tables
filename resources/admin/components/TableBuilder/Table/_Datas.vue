@@ -1,11 +1,11 @@
 <template>
-    <div :style="[margin, {'margin':'2px'}]" class="ntb-datas-wrapper">
+    <div :style="[margin, {'margin':'1px'}]" class="ntb-datas-wrapper">
     <span
         contenteditable="true"
         @blur="updateContent"
         class="hover-item"
         v-if="item.data.type === 'text'"
-        :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle, {'padding': '5px'}]"
+        :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
         v-html="item.data.value === '' ? 'Add New': item.data.value"
     >
     </span>
@@ -52,7 +52,7 @@
             v-html="item.data.value"
             contenteditable="true"
             @blur="updateContent"
-            :style="[padding, {'padding': '6px'}]"
+            :style="[padding]"
         ></div>
         <div
             class="ninja_table_builder_shortcode hover-item"
@@ -60,7 +60,7 @@
             v-html="item.data.value"
             contenteditable="true"
             @blur="updateContent"
-            :style="[textAlign, padding, {'padding': '6px'}]"
+            :style="[textAlign, padding]"
         ></div>
         <span v-else-if="item.data.type === 'star_rating'">
       <el-rate
@@ -75,19 +75,20 @@
           :style="[ratingStyle, textAlign, padding]"
       ></el-rate>
     </span>
-        
-        <span v-else-if="item.data.type === 'icon'" :style="[padding, displayBlock, textAlign]" class="hover-item">
-        <span class="svgIcon" :style="[iconStyle, textAlign, {'margin-top': '3px'}]"></span>
+    <span v-else-if="item.data.type === 'icon'">
+        <span :style="[padding, displayBlock]" class="hover-item">
+        <span class="svgIcon" :style="[iconStyle, displayBlock, dBlockAlign]"></span>
+    </span>
     </span>
         
         <span
             class="ntb-progress hover-item"
             v-else-if="item.data.type === 'progress'"
-            :style="[padding, displayBlock, textAlign]"
+            :style="[padding, displayBlock]"
         >
       <el-progress
           :type="item.data.style.type"
-          :style="[progressBarTextStyle, {'margin-top': '3px'}]"
+          :style="[displayBlock, dBlockAlign, progressBarTextStyle, {'width': this.item.data.style.type === 'circle' ? item.data.style.width +'px' : '100%'}]"
           v-if="Number(item.data.style.percentage)"
           :width="Number(item.data.style.width)"
           :percentage="Number(item.data.style.percentage)"
@@ -101,12 +102,12 @@
           @click.prevent
           target="_blank"
           :href="`${item.data.style.link}`"
-          :style="[displayBlock, textAlign]"
+          :style="[displayBlock]"
           :rel="linkAttributes"
       >
         <img
             :src="item.data.value"
-            :style="[padding, borderRadius,  {'width': this.item.data.style.size+'%', 'margin-top': '5px'}]"
+            :style="[displayBlock, dBlockAlign, padding, borderRadius,  {'width': this.item.data.style.size+'%',}]"
             :alt="`${item.data.style.alt}`"
         />
       </a>

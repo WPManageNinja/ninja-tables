@@ -36,6 +36,22 @@ export const manageDataElement = {
                 'text-align': this.item.data.style.alignment
             }
         },
+        dBlockAlign() {
+            const alignment = this.item.data.style.alignment;
+            if (alignment === 'left') {
+                return {
+                    'margin-right': 'auto'
+                }
+            } else if (alignment === 'right') {
+                return {
+                    'margin-left': 'auto',
+                }
+            }
+            return {
+                'margin-left': 'auto',
+                'margin-right': 'auto'
+            }
+        },
         color() {
             return {
                 'color': this.item.data.style.color === '' || this.item.data.style.color === '#000001' ? this.setting.global_styling.options.color.value : this.item.data.style.color,
