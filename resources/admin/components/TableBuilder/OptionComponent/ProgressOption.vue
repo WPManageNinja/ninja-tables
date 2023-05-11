@@ -49,6 +49,7 @@
     ></slider>
     <alignment
         :label="$t('Alignment')"
+        v-if="item.data.style.type !== 'line'"
         v-model="item.data.style.alignment"
     ></alignment>
   </div>

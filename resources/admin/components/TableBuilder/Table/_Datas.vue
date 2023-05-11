@@ -387,6 +387,12 @@ export default {
         }
     }
     
+    .ntb-list {
+        ul, ol {
+            margin: 0;
+        }
+    }
+    
     dd, li {
         margin-bottom: initial;
     }
