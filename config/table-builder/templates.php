@@ -9,7 +9,7 @@ return [
                 "name"      => __("Pricing Table One", "ninja-tables"),
                 "key"       => "pricing_table_one", // unique
                 "image_url" => '#',
-                "has_pro"   => true,
+                "has_pro"   => false,
             ],
             [
                 "name"      => __("Pricing Table Two", "ninja-tables"),
@@ -27,8 +27,8 @@ return [
                 "name"      => __("Pricing Table Four", "ninja-tables"),
                 "key"       => "pricing_table_four", // unique
                 "image_url" => '#',
-                "has_pro"   => false,
-            ]
+                "has_pro"   => true,
+            ],
         ],
     ],
     "comparison" => [
@@ -39,7 +39,7 @@ return [
                 "name"      => __("Comparison Table One", "ninja-tables"),
                 "key"       => "comparison_table_one", // unique
                 "image_url" => '#',
-                "has_pro"   => true,
+                "has_pro"   => false,
             ],
             [
                 "name"      => __("Comparison Table Two", "ninja-tables"),
@@ -59,6 +59,12 @@ return [
                 "image_url" => '#',
                 "has_pro"   => true,
             ],
+            [
+                "name"      => __("Comparison Table Five", "ninja-tables"),
+                "key"       => "comparison_table_five", // unique
+                "image_url" => '#',
+                "has_pro"   => true,
+            ],
 
         ],
     ],
@@ -70,13 +76,13 @@ return [
                 "name"      => __("Employee Table One", "ninja-tables"),
                 "key"       => "employee_table_one", // unique
                 "image_url" => '#',
-                "has_pro"   => true,
+                "has_pro"   => false,
             ],
             [
                 "name"      => __("Employee Table Two", "ninja-tables"),
                 "key"       => "employee_table_two", // unique
                 "image_url" => '#',
-                "has_pro"   => false,
+                "has_pro"   => true,
             ],
             [
                 "name"      => __("Employee Table Three", "ninja-tables"),
