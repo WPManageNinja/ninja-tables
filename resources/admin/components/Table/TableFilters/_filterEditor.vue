@@ -114,7 +114,7 @@
                             <el-radio label="desc">Descending Way</el-radio>
                         </el-radio-group>
                     </el-form-item>
-                    <el-form-item label="Sort Algorithom">
+                    <el-form-item label="Sort Algorithm">
                         <el-radio-group v-model="activeEditor.sorting_method">
                             <el-radio label="text">As Text Basis</el-radio>
                             <el-radio label="numeric">As Numeric Basis</el-radio>

@@ -1506,3 +1506,16 @@ h2.nav-tab-wrapper {
     margin: 0;
   }
 }
+
+.ninja_tables_wpposts {
+  .el-transfer {
+    .el-transfer-panel__item {
+      .el-checkbox__label {
+        overflow: hidden;
+        &:hover {
+          overflow: initial;
+        }
+      }
+    }
+  }
+}
