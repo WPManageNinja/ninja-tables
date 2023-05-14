@@ -266,6 +266,17 @@ class PublicDataHandler
 
         $app = App::getInstance();
 
+        $custom_css = Arr::get($ninja_table_builder_setting, 'custom_css.value', '');
+        $styleId = "ninja_table_builder_custom_css_$table_id";
+
+        $app->addAction('wp_head', function () use ($custom_css, $styleId) {
+            ?>
+            <style id="<?php echo $styleId; ?>" type='text/css'>
+                <?php echo ninjaTablesEscCss($custom_css); ?>
+            </style>
+            <?php
+        });
+
         return $app->view->make('public/drag-and-drop-html', [
             'ninja_table_builder_html' => $html,
             'table_data'               => $ninja_table_builder_table_data,
