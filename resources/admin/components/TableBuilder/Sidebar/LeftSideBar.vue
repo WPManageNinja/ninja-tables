@@ -136,8 +136,13 @@
             <p>
               You may add <code>.ninja_tables_builder_class_{{initialData.table_data.id}} </code> as your css selector prefix to target this specific table.
             </p>
-            <ace_code_editor @onValidated="isValidCss" style="height: 200px; overflow-y: scroll; overflow-x: hidden !important;" editor_id="ninja_custom_css" mode="css" v-model="initialData.settings.custom_css.value"></ace_code_editor>
+            <ace_code_editor @onValidated="isValidCss" editor_id="ninja_custom_css" mode="css" v-model="initialData.settings.custom_css.value"></ace_code_editor>
             <span>Please don't include <code>&lt;style&gt;&lt;/style&gt;</code> tag</span>
+          </div>
+          <div v-else-if="setting.key == 'ace_editor_js'" style="margin-right: 3px;">
+            <label>Add Your Custom JS</label>
+            <ace_js_editor editor_id="ninja_custom_js" mode="javascript" v-model="initialData.settings.custom_js.value"></ace_js_editor>
+            <span>Please don't include <code>&lt;script>&lt;/script&gt;</code> tag</span>
           </div>
           <div v-else class="component-spacing" v-for="(item, tabKey, index) in setting.options" :key="tabKey">
             <all-input-element :disableResponsive="getBoolean(!hasPro && setting.has_pro)"
@@ -216,6 +221,7 @@
 
 <script>
 import ace_code_editor from '../../../../common/_ace_editor';
+import ace_js_editor from '../../../../common/_ace_editor_js';
 import draggable from "vuedraggable";
 import AllInputElement from "../SettingComponent/AllInputElement";
 import TextOption from "../OptionComponent/TextOption";
@@ -244,6 +250,7 @@ export default {
   mixins: [helpers],
   components: {
     ace_code_editor,
+    ace_js_editor,
     GetPro,
     SelectInput,
     CellSetting,
@@ -424,7 +431,7 @@ export default {
       handler(newValue) {
         if (newValue) {
           let tableId = this.initialData.table_data.id;
-          let script = {
+          let style = {
             type: 'text/css',
             style: document.querySelector(`style[data-id="ninja_table_builder_custom_css_${tableId}"]`) || document.createElement('style'),
             content: newValue,
@@ -436,8 +443,28 @@ export default {
               }
             }
           };
-          script.append();
+          style.append();
         }
+      },
+      deep: true
+    },
+    'initialData.settings.custom_js.value': {
+      handler(newValue) {
+        let tableId = this.initialData.table_data.id;
+
+        let script = {
+          type: 'text/javascript',
+          script: document.querySelector(`script[data-id="ninja_table_builder_custom_js_${tableId}"]`) || document.createElement('script'),
+          content: newValue,
+          append: function () {
+            this.script.setAttribute('data-id', `ninja_table_builder_custom_js_${tableId}`);
+            this.script.innerHTML = this.content;
+            if (!document.querySelector(`script[data-id="ninja_table_builder_custom_js_${tableId}"]`)) {
+              document.body.appendChild(this.script);
+            }
+          }
+        };
+        script.append();
       },
       deep: true
     },
@@ -445,6 +472,13 @@ export default {
 };
 </script>
 <style lang="scss">
+.ninja_custom_css_editor {
+  min-height: 200px;
+}
+.ninja_css_errors, .ninja_javascript_errors {
+  display: none;
+}
+
 .ninja-tables-component {
 
   .el-collapse-item__content {

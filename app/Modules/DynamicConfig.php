@@ -50,6 +50,7 @@ class DynamicConfig
         $global_style  = $dynamic_setting['global_styling']['options'];
 
         $static_config['custom_css']['value']                                                                        = isset($dynamic_setting['custom_css']['value']) ? $dynamic_setting['custom_css']['value'] : '';
+        $static_config['custom_js']['value']                                                                        = isset($dynamic_setting['custom_js']['value']) ? $dynamic_setting['custom_js']['value'] : '';
         $static_config['general']['options']['cell_padding']['value']                                                = $general['cell_padding']['value'];
         $static_config['general']['options']['table_alignment']['value']                                             = $general['table_alignment']['value'];
         $static_config['general']['options']['cell_min_auto_width']['value']                                         = $general['cell_min_auto_width']['value'];
