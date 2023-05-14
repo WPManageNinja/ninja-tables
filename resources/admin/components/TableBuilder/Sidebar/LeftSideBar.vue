@@ -137,6 +137,7 @@
               You may add <code>.ninja_tables_builder_class_{{initialData.table_data.id}} </code> as your css selector prefix to target this specific table.
             </p>
             <ace_code_editor @onValidated="isValidCss" style="height: 200px; overflow-y: scroll; overflow-x: hidden !important;" editor_id="ninja_custom_css" mode="css" v-model="initialData.settings.custom_css.value"></ace_code_editor>
+            <span>Please don't include <code>&lt;style&gt;&lt;/style&gt;</code> tag</span>
           </div>
           <div v-else class="component-spacing" v-for="(item, tabKey, index) in setting.options" :key="tabKey">
             <all-input-element :disableResponsive="getBoolean(!hasPro && setting.has_pro)"

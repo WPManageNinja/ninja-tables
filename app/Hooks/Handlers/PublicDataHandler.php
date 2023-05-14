@@ -7,7 +7,7 @@ use NinjaTables\App\Models\NinjaTableItem;
 use NinjaTables\App\Modules\DataProviders\NinjaFooTable;
 use NinjaTables\Framework\Support\Arr;
 
-class PublicDataHandler
+class PublicDataHandler extends CommonHandler
 {
     public function runFooTable($tableArray)
     {
@@ -266,16 +266,7 @@ class PublicDataHandler
 
         $app = App::getInstance();
 
-        $custom_css = Arr::get($ninja_table_builder_setting, 'custom_css.value', '');
-        $styleId = "ninja_table_builder_custom_css_$table_id";
-
-        $app->addAction('wp_head', function () use ($custom_css, $styleId) {
-            ?>
-            <style id="<?php echo $styleId; ?>" type='text/css'>
-                <?php echo ninjaTablesEscCss($custom_css); ?>
-            </style>
-            <?php
-        });
+        $this->addCustomCssSupport($table_id);
 
         return $app->view->make('public/drag-and-drop-html', [
             'ninja_table_builder_html' => $html,
