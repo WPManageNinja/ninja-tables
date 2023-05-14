@@ -38,6 +38,7 @@
                 editor.session.setMode("ace/mode/"+this.mode);
                 editor.getSession().on("changeAnnotation", () => {
                     var annot = editor.getSession().getAnnotations();
+                    this.$emit('onValidated', annot.length === 0, annot);
                     this.editorError = '';
                     for (var key in annot) {
                        if(annot[key].type == 'error') {

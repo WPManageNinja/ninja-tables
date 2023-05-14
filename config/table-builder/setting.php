@@ -91,6 +91,12 @@ return [
             ],
         ],
     ],
+    "custom_css"        => [
+        "name"    => __("Custom CSS", "ninja-tables"),
+        "key"     => 'ace_editor_css', //unique
+        "has_pro" => false,
+        "value" => ''
+    ],
     "sticky"         => [
         "name"    => __("Sticky", "ninja-tables"),
         "key"     => 'sticky', //unique

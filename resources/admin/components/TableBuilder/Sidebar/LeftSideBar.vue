@@ -131,7 +131,14 @@
               <i style="margin-left: 2px" class="el-icon-info el-text-info"></i>
             </el-tooltip>
           </template>
-          <div class="component-spacing" v-for="(item, tabKey, index) in setting.options" :key="tabKey">
+          <div v-if="setting.key == 'ace_editor_css'" style="margin-right: 3px;">
+            <label>Add Your Custom CSS</label>
+            <p>
+              You may add <code>.ninja_tables_builder_class_{{initialData.table_data.id}} </code> as your css selector prefix to target this specific table.
+            </p>
+            <ace_code_editor @onValidated="isValidCss" style="height: 200px; overflow-y: scroll; overflow-x: hidden !important;" editor_id="ninja_custom_css" mode="css" v-model="initialData.settings.custom_css.value"></ace_code_editor>
+          </div>
+          <div v-else class="component-spacing" v-for="(item, tabKey, index) in setting.options" :key="tabKey">
             <all-input-element :disableResponsive="getBoolean(!hasPro && setting.has_pro)"
                                :item="item"></all-input-element>
             <template v-if="item.childs && (getBoolean(item.value))">
@@ -207,6 +214,7 @@
 </template>
 
 <script>
+import ace_code_editor from '../../../../common/_ace_editor';
 import draggable from "vuedraggable";
 import AllInputElement from "../SettingComponent/AllInputElement";
 import TextOption from "../OptionComponent/TextOption";
@@ -234,6 +242,7 @@ export default {
   props: ["initialData", 'singleItem', 'selectedDevice'],
   mixins: [helpers],
   components: {
+    ace_code_editor,
     GetPro,
     SelectInput,
     CellSetting,
@@ -275,6 +284,11 @@ export default {
     };
   },
   methods: {
+    isValidCss(status) {
+      if(status) {
+        window.ninjaTableBus.$emit('dragAndDropCss', this.initialData.settings.custom_css.value);
+      }
+    },
     exportTable() {
       location.href = this.downloadLink(this.exports.format);
     },
@@ -404,7 +418,28 @@ export default {
         }
       },
       deep: true
-    }
+    },
+    'initialData.settings.custom_css.value': {
+      handler(newValue) {
+        if (newValue) {
+          let tableId = this.initialData.table_data.id;
+          let script = {
+            type: 'text/css',
+            style: document.querySelector(`style[data-id="ninja_table_builder_custom_css_${tableId}"]`) || document.createElement('style'),
+            content: newValue,
+            append: function () {
+              this.style.setAttribute('data-id', `ninja_table_builder_custom_css_${tableId}`);
+              this.style.innerHTML = this.content;
+              if (!document.querySelector(`style[data-id="ninja_table_builder_custom_css_${tableId}"]`)) {
+                document.head.appendChild(this.style);
+              }
+            }
+          };
+          script.append();
+        }
+      },
+      deep: true
+    },
   }
 };
 </script>
