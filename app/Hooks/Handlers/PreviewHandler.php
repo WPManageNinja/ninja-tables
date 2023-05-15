@@ -5,7 +5,7 @@ namespace NinjaTables\App\Hooks\Handlers;
 use NinjaTables\App\App;
 use NinjaTables\App\Modules\DataProviders\NinjaFooTable;
 
-class PreviewHandler extends CommonHandler
+class PreviewHandler
 {
     public function defaultTable()
     {
@@ -46,7 +46,7 @@ class PreviewHandler extends CommonHandler
                 $tableId = intval($_GET['ninjatable_builder_preview']);
                 $table   = get_post($tableId);
 
-                $this->addCustomCssSupport($tableId);
+                (new CommonHandler())->addCustomCssSupport($tableId);
 
                 if ($table) {
                     $app = App::getInstance();
