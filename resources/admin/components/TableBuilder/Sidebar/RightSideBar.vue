@@ -114,7 +114,7 @@
                     :src="getAsset(item.key + '.jpg')"
                     alt=""
                 />
-                <div class="ready-made-table-hover-button">
+                <div class="ready-made-table-button">
                   <el-button
                       size="mini"
                       @click="createTable(item.key, item)"
@@ -294,23 +294,15 @@ export default {
 
   .ready-made-table-image {
     position: relative;
-
-    img {
-      transition: 1s;
-    }
-
-    &:hover {
       img {
-        opacity: 0.25;
+          opacity: 0.6;
       }
-
-      .ready-made-table-hover-button {
-        opacity: 1;
+      .ready-made-table-button {
+          opacity: 1;
       }
-    }
   }
 
-  .ready-made-table-hover-button {
+  .ready-made-table-button {
     position: absolute;
     transition: 0.5s ease;
     opacity: 0;
