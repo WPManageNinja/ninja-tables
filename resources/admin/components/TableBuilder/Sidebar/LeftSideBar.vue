@@ -134,13 +134,16 @@
           <div v-if="setting.key == 'ace_editor_css'" style="margin-right: 3px;">
             <label>Add Your Custom CSS</label>
             <p>
-              You may add <code>.ninja_tables_builder_class_{{initialData.table_data.id}} </code> as your css selector prefix to target this specific table.
+              You may add <code>.ntb_dd_{{initialData.table_data.id}} </code> as your css selector prefix to target this specific table.
             </p>
             <ace_code_editor @onValidated="isValidCss" editor_id="ninja_custom_css" mode="css" v-model="initialData.settings.custom_css.value"></ace_code_editor>
             <span>Please don't include <code>&lt;style&gt;&lt;/style&gt;</code> tag</span>
           </div>
           <div v-else-if="setting.key == 'ace_editor_js'" style="margin-right: 3px;">
             <label>Add Your Custom JS</label>
+            <p>
+              You may use <code>.ntb_dd_{{initialData.table_data.id}} </code> to target this specific table.
+            </p>
             <ace_js_editor editor_id="ninja_custom_js" mode="javascript" v-model="initialData.settings.custom_js.value"></ace_js_editor>
             <span>Please don't include <code>&lt;script>&lt;/script&gt;</code> tag</span>
           </div>
@@ -431,14 +434,15 @@ export default {
       handler(newValue) {
         if (newValue) {
           let tableId = this.initialData.table_data.id;
+          let styleId = `ninja_table_builder_custom_css_${tableId}`;
           let style = {
             type: 'text/css',
-            style: document.querySelector(`style[data-id="ninja_table_builder_custom_css_${tableId}"]`) || document.createElement('style'),
+            style: document.querySelector(`style[data-id="${styleId}"]`) || document.createElement('style'),
             content: newValue,
             append: function () {
-              this.style.setAttribute('data-id', `ninja_table_builder_custom_css_${tableId}`);
+              this.style.setAttribute('data-id', styleId);
               this.style.innerHTML = this.content;
-              if (!document.querySelector(`style[data-id="ninja_table_builder_custom_css_${tableId}"]`)) {
+              if (!document.querySelector(`style[data-id="${styleId}"]`)) {
                 document.head.appendChild(this.style);
               }
             }
@@ -451,15 +455,15 @@ export default {
     'initialData.settings.custom_js.value': {
       handler(newValue) {
         let tableId = this.initialData.table_data.id;
-
+        let scriptId = `ninja_table_builder_custom_js_${tableId}`;
         let script = {
           type: 'text/javascript',
-          script: document.querySelector(`script[data-id="ninja_table_builder_custom_js_${tableId}"]`) || document.createElement('script'),
+          script: document.querySelector(`script[data-id="${scriptId}"]`) || document.createElement('script'),
           content: newValue,
           append: function () {
-            this.script.setAttribute('data-id', `ninja_table_builder_custom_js_${tableId}`);
+            this.script.setAttribute('data-id', scriptId);
             this.script.innerHTML = this.content;
-            if (!document.querySelector(`script[data-id="ninja_table_builder_custom_js_${tableId}"]`)) {
+            if (!document.querySelector(`script[data-id="${scriptId}"]`)) {
               document.body.appendChild(this.script);
             }
           }
