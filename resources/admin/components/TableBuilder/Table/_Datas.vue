@@ -400,6 +400,8 @@ export default {
     .ntb-list-style {
         li {
             position: relative;
+            border: 1px solid transparent;
+            transition: .1s border;
             
             .icon-styles {
                 position: absolute;
@@ -420,7 +422,7 @@ export default {
             }
             
             &:hover {
-                border: 1px solid #3f9eff;
+                border-color: #3f9eff;
                 cursor: pointer;
                 
                 .icon-styles {
