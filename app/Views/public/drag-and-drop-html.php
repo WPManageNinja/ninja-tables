@@ -31,7 +31,9 @@ if (isset($setting['general']['options']['container_max_height']['value'])) {
     ninjaTablesPrintSafeVar($ninja_table_builder_html);
     ?>
 </div>
-
+<?php
+do_action('ninja_tables_drag_and_drop_after_table_print', $table_id);
+?>
 <?php
 if (is_user_logged_in() && ninja_table_admin_role()): ?>
     <a href="<?php echo admin_url('admin.php?page=ninja_tables#/table_builder_edit_table/' . $table_id); ?>"

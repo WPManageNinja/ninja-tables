@@ -54,7 +54,7 @@
             <table
                 id="ntb_table"
                 :role="`${setting.accessibility.options.table_role.value}`"
-                :class="'table ninja_tables_builder_class_'+tableData['id']"
+                :class="'table ninja_tables_builder_class_'+tableData['id'] + ' ntb_dd_' + tableData['id']"
                 :style="[tableMarginTop, tableMarginBottom, tableInlineStyle, tableAlign(selectedDevice)]">
                 <div class="table-header" v-if="manage" :style="tableBorder">
                     <draggable v-model="tableData.headers" tag="tr" @change="dragColumn">
