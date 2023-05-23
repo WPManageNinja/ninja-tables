@@ -47,12 +47,18 @@ export default {
     saveTableData() {
       window.ninjaTableBus.$emit('closeManageCell');
       window.ninjaTableBus.$emit('saveData');
+
       if (this.selectedDevice !== '') {
         this.$emit('deviceSelected', '');
       }
+
       this.$nextTick(() => {
         const tableHtml = document.getElementById("ninja_tables_builder_id");
-        const innerHTML = tableHtml.innerHTML.replace(/ contenteditable="[^"]*"/g, '');
+        const innerHTML = tableHtml.innerHTML.replace(/<!--[\s\S]*?-->/g, '')
+            .replace(/ contenteditable="[^"]*"/g, '')
+            .replace(/ data-gramm="[^"]*"/g, '')
+            .replace(/<div[^>]*class="[^"]*remove-elements[^"]*"[^>]*>[\s\S]*?<\/div>/g, '');
+
         if (this.initialData.table_data.table_name === '') {
           this.$message({
             showClose: true,
@@ -61,6 +67,7 @@ export default {
           });
           return false;
         }
+
         this.$patch(`table-builder/${this.id}`, {
           data: JSON.stringify(this.initialData),
           table_html: innerHTML,
@@ -83,6 +90,7 @@ export default {
             })
       })
     },
+
     fullScreenEnableDisable() {
       const $body = jQuery("body");
       $body.toggleClass("folded");
