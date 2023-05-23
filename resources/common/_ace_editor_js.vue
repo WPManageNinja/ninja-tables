@@ -16,7 +16,8 @@
             return {
                 ace_path: window.ninja_table_admin.ace_path_url,
                 editorError: '',
-                loading: true
+                loading: true,
+                hasPro: !!window.ninja_table_admin.hasPro
             }
         },
         methods: {
@@ -48,6 +49,11 @@
                 editor.getSession().on("change", () => {
                     this.$emit('input', editor.getSession().getValue());
                 });
+
+                if(!this.hasPro) {
+                  editor.setReadOnly(true); // Disable the editor
+                  editor.destroy(); // Remove event listeners
+                }
                 this.loading = false;
             }
         },

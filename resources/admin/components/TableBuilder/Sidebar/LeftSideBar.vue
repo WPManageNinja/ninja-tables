@@ -114,17 +114,16 @@
         <el-collapse-item :name="key">
           <template slot="title">
             {{ setting.name }}
-            <el-tooltip v-if="setting.name === 'Global Style' || setting.name === 'Sticky'" placement="top-start"
+            <el-tooltip v-if="setting.key === 'global_styling' || setting.key === 'sticky' || setting.key === 'ace_editor_js'" placement="top-start"
                         effect="light">
 
               <template slot="content">
                 <h3>{{ setting.name }}</h3>
 
-                <p v-if="setting.name === 'Sticky'">
+                <p v-if="setting.key === 'sticky' || setting.key === 'ace_editor_js'">
                   This is a Pro feature.
                   <get-pro/>
                 </p>
-
                 <p v-else>The global style will be applied if the <br> component individual style is not applied.</p>
               </template>
 
@@ -134,18 +133,18 @@
           <div v-if="setting.key == 'ace_editor_css'" style="margin-right: 3px;">
             <label>Add Your Custom CSS</label>
             <p>
-              You may add <code>.ntb_dd_{{initialData.table_data.id}} </code> as your css selector prefix to target this specific table.
+              You may add <code>.ntb_{{initialData.table_data.id}} </code> as your css selector prefix to target this specific table.
             </p>
-            <ace_code_editor @onValidated="isValidCss" editor_id="ninja_custom_css" mode="css" v-model="initialData.settings.custom_css.value"></ace_code_editor>
+            <ace_code_editor editor_id="ninja_custom_css" mode="css" v-model="initialData.settings.custom_css.value"></ace_code_editor>
             <span>Please don't include <code>&lt;style&gt;&lt;/style&gt;</code> tag</span>
           </div>
           <div v-else-if="setting.key == 'ace_editor_js'" style="margin-right: 3px;">
-            <label>Add Your Custom JS</label>
-            <p>
-              You may use <code>.ntb_dd_{{initialData.table_data.id}} </code> to target this specific table.
-            </p>
-            <ace_js_editor editor_id="ninja_custom_js" mode="javascript" v-model="initialData.settings.custom_js.value"></ace_js_editor>
-            <span>Please don't include <code>&lt;script>&lt;/script&gt;</code> tag</span>
+              <label>Add Your Custom JS</label>
+              <p>
+                You may use <code>.ntb_{{initialData.table_data.id}} </code> to target this specific table.
+              </p>
+              <ace_js_editor editor_id="ninja_custom_js" mode="javascript" v-model="initialData.settings.custom_js.value"></ace_js_editor>
+              <span>Please don't include <code>&lt;script>&lt;/script&gt;</code> tag</span>
           </div>
           <div v-else class="component-spacing" v-for="(item, tabKey, index) in setting.options" :key="tabKey">
             <all-input-element :disableResponsive="getBoolean(!hasPro && setting.has_pro)"
@@ -295,11 +294,6 @@ export default {
     };
   },
   methods: {
-    isValidCss(status) {
-      if(status) {
-        window.ninjaTableBus.$emit('dragAndDropCss', this.initialData.settings.custom_css.value);
-      }
-    },
     exportTable() {
       location.href = this.downloadLink(this.exports.format);
     },
