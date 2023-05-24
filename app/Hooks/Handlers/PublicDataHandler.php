@@ -266,8 +266,6 @@ class PublicDataHandler
 
         $app = App::getInstance();
 
-        (new CommonHandler())->addCustomCssSupport($table_id);
-
         return $app->view->make('public/drag-and-drop-html', [
             'ninja_table_builder_html' => $html,
             'table_data'               => $ninja_table_builder_table_data,

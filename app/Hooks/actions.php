@@ -70,3 +70,5 @@ $app->addAction('wpmu_new_blog', function ($blogId) {
     \NinjaTables\Database\DBMigrator::run();
     restore_current_blog();
 });
+
+$app->addAction('ninja_tables_will_render_table', [EditorBlockHandler::class, 'addCustomCss']);

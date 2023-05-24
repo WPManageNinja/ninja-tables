@@ -1014,34 +1014,36 @@ function ninjaTableNormalize($data = [])
  */
 function ninjaTablesGetShortCodeIds($content)
 {
-    $tag = 'ninja_tables';
-
-    if (false === strpos($content, '[')) {
-        return [];
-    }
-
-    preg_match_all('/' . get_shortcode_regex() . '/', $content, $matches, PREG_SET_ORDER);
-
-    if (empty($matches)) {
-        return [];
-    }
+    $tags = ['ninja_tables', 'ninja_table_builder'];
 
     $ids = [];
 
-    foreach ($matches as $shortcode) {
-        if ($tag === $shortcode[2]) {
-            // Replace braces with empty string.
-            $parsedCode = str_replace(['[', ']', '&#91;', '&#93;', '\\'], '', $shortcode[0]);
+    foreach ($tags as $tag) {
+        if (false === strpos($content, '[')) {
+            return [];
+        }
 
-            $result = shortcode_parse_atts($parsedCode);
+        preg_match_all('/' . get_shortcode_regex() . '/', $content, $matches, PREG_SET_ORDER);
 
-            if ( ! empty($result['id'])) {
-                $ids[$result['id']] = $result['id'];
+        if (empty($matches)) {
+            return [];
+        }
+
+        foreach ($matches as $shortcode) {
+            if ($tag === $shortcode[2]) {
+                // Replace braces with empty string.
+                $parsedCode = str_replace(['[', ']', '&#91;', '&#93;', '\\'], '', $shortcode[0]);
+
+                $result = shortcode_parse_atts($parsedCode);
+
+                if ( ! empty($result['id'])) {
+                    $ids[$result['id']] = $result['id'];
+                }
             }
         }
     }
 
-    return $ids;
+    return  $ids;
 }
 
 /**

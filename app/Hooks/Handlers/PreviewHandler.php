@@ -46,8 +46,6 @@ class PreviewHandler
                 $tableId = intval($_GET['ninjatable_builder_preview']);
                 $table   = get_post($tableId);
 
-                (new CommonHandler())->addCustomCssSupport($tableId);
-
                 if ($table) {
                     $app = App::getInstance();
                     $app->view->render('/admin/preview/drag-and-drop', [
