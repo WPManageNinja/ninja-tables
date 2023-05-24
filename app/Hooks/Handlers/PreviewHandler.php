@@ -40,10 +40,13 @@ class PreviewHandler
     {
         if (isset($_GET['ninjatable_builder_preview']) && $_GET['ninjatable_builder_preview']) {
             if (ninja_table_admin_role()) {
+                $tableId = intval($_GET['ninjatable_builder_preview']);
+
+                do_action('ninja_tables_will_render_table', $tableId);
+
                 wp_enqueue_style('ninja-tables-preview',
                     NINJA_TABLES_DIR_URL . "assets/css/ninja-tables-preview.css");
 
-                $tableId = intval($_GET['ninjatable_builder_preview']);
                 $table   = get_post($tableId);
 
                 if ($table) {
