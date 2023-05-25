@@ -178,7 +178,7 @@ export const manageDataElement = {
             }
         },
         ratingStyle() {
-            let ratingSize = this.item.data.style.ratingSize;
+            let ratingSize = this.item.data.style.ratingSize ? this.item.data.style.ratingSize : 12;
             const ratingFontSize = (ratingSize === '' || ratingSize === 10) ? this.setting.global_styling.options.font_size.value : ratingSize;
 
             return {
