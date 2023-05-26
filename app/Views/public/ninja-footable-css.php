@@ -26,7 +26,7 @@
     background-color: <?php echo esc_attr($colors['table_search_color_secondary']); ?> !important;
     color: <?php echo esc_attr($colors['table_search_color_primary']); ?> !important;
     }
-    <?php echo esc_attr($css_prefix); ?> tr.footable-header, <?php echo esc_attr($css_prefix); ?> tr.footable-header th, .colored_table table.ninja_table_pro.inverted.table.footable-details tbody tr th {
+    <?php echo esc_attr($css_prefix); ?> tr.footable-header, <?php echo esc_attr($css_prefix); ?> tr.footable-header th, .colored_table <?php echo esc_attr($css_prefix); ?> table.ninja_table_pro.inverted.table.footable-details tbody tr th {
     background-color: <?php echo esc_attr($colors['table_header_color_primary']); ?> !important;
     color: <?php echo esc_attr($colors['table_color_header_secondary']); ?> !important;
     }
