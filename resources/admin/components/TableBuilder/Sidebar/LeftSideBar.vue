@@ -130,7 +130,7 @@
               <i style="margin-left: 2px" class="el-icon-info el-text-info"></i>
             </el-tooltip>
           </template>
-          <div v-if="setting.key == 'ace_editor_css'" style="margin-right: 3px;">
+          <div v-if="setting.key == 'ace_editor_css'" style="margin-right: 3px;" class="ntb-ace-editor">
             <label>Add Your Custom CSS</label>
             <p>
               You may add <code>.ntb_{{initialData.table_data.id}} </code> as your css selector prefix to target this specific table.
@@ -138,7 +138,7 @@
             <ace_code_editor editor_id="ninja_custom_css" mode="css" v-model="initialData.settings.custom_css.value"></ace_code_editor>
             <span>Please don't include <code>&lt;style&gt;&lt;/style&gt;</code> tag</span>
           </div>
-          <div v-else-if="setting.key == 'ace_editor_js'" style="margin-right: 3px;">
+          <div v-else-if="setting.key == 'ace_editor_js'" style="margin-right: 3px;" class="ntb-ace-editor">
               <label>Add Your Custom JS</label>
               <p>
                 You may use <code>.ntb_{{initialData.table_data.id}} </code> to target this specific table.
@@ -470,11 +470,15 @@ export default {
 };
 </script>
 <style lang="scss">
-.ninja_custom_css_editor {
-  min-height: 200px;
-}
-.ninja_css_errors, .ninja_javascript_errors {
-  display: none;
+.ntb-ace-editor {
+  & .ninja_custom_css_editor {
+    min-height: 200px;
+  }
+
+  & .ninja_css_errors,
+  & .ninja_javascript_errors {
+    display: none;
+  }
 }
 
 .ninja-tables-component {

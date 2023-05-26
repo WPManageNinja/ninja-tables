@@ -79,7 +79,7 @@ trait ImportTrait
     {
         $tmpName = Sanitizer::sanitizeTextField($_FILES['file']['tmp_name']);
         $data    = file_get_contents($tmpName);
-        $data    = iconv('ISO-8859-1', 'UTF-8', $data);
+        $data    = mb_convert_encoding($data, 'UTF-8', 'ISO-8859-1');
 
         try {
             $reader = Reader::createFromString($data)->fetchAll();
