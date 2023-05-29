@@ -110,7 +110,9 @@
                     .catch(error => {
 
                     })
-                this.fetching = false;
+                    .finally(() => {
+                        this.fetching = false;
+                    });
             }
         },
         mounted() {

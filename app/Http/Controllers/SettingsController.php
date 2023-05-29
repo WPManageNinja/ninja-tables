@@ -114,7 +114,7 @@ class SettingsController extends Controller
     public function saveCustomCSSJS(Request $request, $id)
     {
         $tableId = intval($id);
-        $css     = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'custom_css'));
+        $css     = isset($_REQUEST['custom_css']) ? sanitize_textarea_field($_REQUEST['custom_css']) : '';
         $css     = wp_strip_all_tags($css);
         update_post_meta($tableId, '_ninja_tables_custom_css', $css);
 
