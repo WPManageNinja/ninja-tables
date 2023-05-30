@@ -56,7 +56,6 @@ $app->addAction('wp_ajax_ninja-tables_deactivate_feedback', [DeactivationHandler
 $app->addAction('wp_head', [NinjaTableAdminHandler::class, 'addNinjaTableAdminScript']);
 $app->addAction('admin_notices', [NinjaTableAdminHandler::class, 'adminNotices']);
 $app->addAction('init', [NinjaTableAdminHandler::class, 'remindMeLater']);
-$app->addAction('init', [NinjaTableAdminHandler::class, 'deactivateProPlugin']);
 
 $app->addAction('save_post', [NinjaTableAdminHandler::class, 'saveNinjaTableFlagOnShortCode']);
 
@@ -72,3 +71,9 @@ $app->addAction('wpmu_new_blog', function ($blogId) {
 });
 
 $app->addAction('ninja_tables_will_render_table', [EditorBlockHandler::class, 'addCustomCss']);
+
+if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '4.3.6', '<')) {
+    $app->addAction('init', function () {
+        class_alias(NinjaTables\Framework\Support\Arr::class, 'NinjaTables\Classes\ArrayHelper');
+    });
+}

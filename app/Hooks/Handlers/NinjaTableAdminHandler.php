@@ -114,29 +114,16 @@ class NinjaTableAdminHandler
 
             $page = Arr::get($_GET, 'page', '');
             if ($page == 'ninja_tables') {
-                $class = 'nt_review_notice nt_version_update_notice';
+                $class = 'ntb-version-update-notice';
             } else {
-                $class = 'notice notice-error nt_version_update_notice';
+                $class = 'notice notice-warning';
             }
 
-            echo '<div class="' . $class . '">
-            <p>
-                If you are using the old version of Ninja Tables Pro, please 
-                <a href=' . admin_url('plugins.php?plugin_status=upgrade') . '> <b>update</b> </a>
-                  to the latest version. Otherwise, 
-                <a href=' . admin_url('admin.php?action=deactivateProPlugin&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '> <b>deactivate</b> </a>
-                 the old version, or you will face some issues.  
-            </p>
+            echo '<div style="background: #F9F48F" class="'.$class.'">
+                <p>
+                    Expect a more flexible Ninja Tables from 5 June 2023. If you are a Pro user, make sure to Update the Pro add-on to avoid any issues on your live tables.
+                </p>
         </div>';
-        }
-    }
-
-    public function deactivateProPlugin()
-    {
-        if (isset($_GET['action']) && Sanitizer::sanitizeTextField($_GET['action']) === 'deactivateProPlugin') {
-            ninjaTablesValidateNonce('ninja_table_admin_nonce');
-            deactivate_plugins('ninja-tables-pro/ninja-tables-pro.php');
-            wp_redirect(admin_url('admin.php?page=ninja_tables#home'));
         }
     }
 }
