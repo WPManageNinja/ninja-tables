@@ -90,7 +90,8 @@ class PublicDataHandler
                 return $table->post_content;
                 break;
             case 'last_modified':
-                $lastEditedTime = get_post_meta($table->ID, '_last_edited_time', true);
+                $getLastModifiedTime = get_post_meta($table->ID, '_last_edited_time', true);
+                $lastEditedTime = apply_filters('ninja_tables_last_edited_time', $getLastModifiedTime, $table->ID);
                 if (!$lastEditedTime) {
                     $lastEditedTime = $table->post_modified;
                 }
