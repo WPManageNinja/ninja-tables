@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ninja Tables 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ninja-tables\n"
-"POT-Creation-Date: 2023-01-12 06:34+0000\n"
+"POT-Creation-Date: 2023-06-06 07:05+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,363 +14,383 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "X-Generator: Loco https://localise.biz/"
 
-#: admin/NinjaTablesAdmin.php:566
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/TablesController.php:72
 msgid " successfully."
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:185
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/AdminMenuHandler.php:77
 msgid "<span style=\"color:#f39c12;\">Get Pro</span>"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:112
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:124
 msgid "Accessibility"
 msgstr ""
 
-#: includes/I18nStrings.php:36
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:39
 msgid "Activate Ninja Tables Pro"
 msgstr ""
 
-#: includes/I18nStrings.php:29
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:32
 msgid "Activate Ninja Tables Pro Add-on plugin to unlock this feature"
 msgstr ""
 
-#: includes/I18nStrings.php:51
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:54
 msgid "Add"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:177
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/AdminMenuHandler.php:69
 msgid "Add Chart"
 msgstr ""
 
-#: includes/I18nStrings.php:72
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:75
 msgid "Add Column"
 msgstr ""
 
-#: includes/I18nStrings.php:49
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:52
 msgid "Add Data"
 msgstr ""
 
-#: includes/I18nStrings.php:13 admin/NinjaTablesAdmin.php:88
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:26
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:16
 msgid "Add New Table"
 msgstr ""
 
-#: includes/I18nStrings.php:11 admin/NinjaTablesAdmin.php:87
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:25
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:14
 msgid "Add Table"
 msgstr ""
 
-#: includes/I18nStrings.php:99
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:102
 msgid "Additional CSS"
 msgstr ""
 
-#: admin/table-builder/config/component.php:159
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:177
 msgid "Advanced"
 msgstr ""
 
-#: includes/I18nStrings.php:10 admin/NinjaTablesAdmin.php:1678
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/filters.php:22
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:13
 msgid "All Tables"
 msgstr ""
 
-#: includes/I18nStrings.php:62
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:65
 msgid "Always show in all devices"
 msgstr ""
 
-#: includes/I18nStrings.php:48
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:51
 msgid "Apply"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:159
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:171
 msgid "Apply Inner Border"
 msgstr ""
 
-#: includes/I18nStrings.php:56
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:59
 msgid "Are you sure to delete this?"
 msgstr ""
 
-#: includes/I18nStrings.php:71
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:74
 msgid "Available Columns"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:73
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:73
 msgid "Background"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:142
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:154
 msgid "Border"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:154
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:166
 msgid "Border Color"
 msgstr ""
 
-#: includes/I18nStrings.php:46
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:49
 msgid "Bulk Actions"
 msgstr ""
 
-#: admin/table-builder/config/component.php:31
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:36
 msgid "Button"
 msgstr ""
 
-#: includes/I18nStrings.php:50
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:53
 msgid "Cancel"
 msgstr ""
 
-#: includes/I18nStrings.php:57
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:60
 msgid "cancel"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:147
-#: admin/table-builder/config/responsive.php:163
-#: admin/table-builder/config/setting.php:10
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:147
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:163
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:10
 msgid "Cell Padding"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:32
-#: admin/table-builder/config/responsive.php:79
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:32
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:79
 msgid "Cell Stack Direction"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:165 admin/NinjaTablesAdmin.php:171
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/AdminMenuHandler.php:57
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/AdminMenuHandler.php:63
 msgid "Charts"
 msgstr ""
 
-#: includes/I18nStrings.php:30
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:33
 msgid "Check all"
 msgstr ""
 
-#: includes/libs/TableDrivers/NinjaFooTable.php:67
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/DataProviders/NinjaFooTable.php:75
 msgid "Clear All"
 msgstr ""
 
-#: includes/I18nStrings.php:54
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:57
 msgid "Click here"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:221
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:233
 msgid "Color"
 msgstr ""
 
-#: includes/I18nStrings.php:74
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:77
 msgid "Column Key"
 msgstr ""
 
-#: includes/I18nStrings.php:73
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:76
 msgid "Column Name"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:57
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:63
+msgid "Comparison Table Five"
+msgstr ""
+
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:57
 msgid "Comparison Table Four"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:39
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:39
 msgid "Comparison Table One"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:51
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:51
 msgid "Comparison Table Three"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:45
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:45
 msgid "Comparison Table Two"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:35
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:35
 msgid "Comparison Tables"
 msgstr ""
 
-#: includes/I18nStrings.php:58
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:61
 msgid "confirm"
 msgstr ""
 
-#: includes/I18nStrings.php:20
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:23
 msgid "CSV - Comma-separated values"
 msgstr ""
 
-#: includes/NinjaTableImport.php:288
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:313
 msgid "CSV File is not valid"
 msgstr ""
 
-#: includes/I18nStrings.php:104
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:107
 msgid "CSV Header Structure"
 msgstr ""
 
-#: includes/I18nStrings.php:43
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:46
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:95
 msgid "Custom CSS"
 msgstr ""
 
-#: includes/I18nStrings.php:75
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:101
+msgid "Custom JS"
+msgstr ""
+
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/AdminMenuHandler.php:129
+msgid "Dashboard"
+msgstr ""
+
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:78
 msgid "Data Type"
 msgstr ""
 
-#: includes/I18nStrings.php:68
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:71
 msgid "Date Field"
 msgstr ""
 
-#: includes/I18nStrings.php:78
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:81
 msgid "Date Format"
 msgstr ""
 
-#: includes/I18nStrings.php:33
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:36
 msgid "Deactivate License"
 msgstr ""
 
-#: includes/I18nStrings.php:19
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:22
 msgid "Delete"
 msgstr ""
 
-#: includes/I18nStrings.php:47
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:50
 msgid "Delete Entries"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:26
-#: admin/table-builder/config/responsive.php:73
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:26
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:73
 msgid "Disable Breakpoint"
 msgstr ""
 
-#: includes/I18nStrings.php:39
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:42
 msgid "Documentation"
 msgstr ""
 
-#: includes/I18nStrings.php:37
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:40
 msgid "Documentation and Help"
 msgstr ""
 
-#: includes/I18nStrings.php:105
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:108
 msgid "Download Sample CSV"
 msgstr ""
 
-#: includes/I18nStrings.php:18
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:21
 msgid "Duplicate"
 msgstr ""
 
-#: includes/I18nStrings.php:16 admin/NinjaTablesAdmin.php:89
-#: public/views/frameless/show_ntb_preview.php:31
-#: public/views/frameless/show_preview.php:29
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:27
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:19
+#: Users/csesumonpro/plugins/ninja-tables/app/Views/admin/preview/default-table.php:29
+#: Users/csesumonpro/plugins/ninja-tables/app/Views/admin/preview/drag-and-drop.php:31
 msgid "Edit"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:90 public/views/table_builder_html.php:38
-#: includes/libs/TableDrivers/views/ninja_foo_table.php:44
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:28
+#: Users/csesumonpro/plugins/ninja-tables/app/Views/public/drag-and-drop-html.php:40
+#: Users/csesumonpro/plugins/ninja-tables/app/Views/public/ninja-footable.php:44
 msgid "Edit Table"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:70
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:76
 msgid "Employee Table One"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:82
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:88
 msgid "Employee Table Three"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:76
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:82
 msgid "Employee Table Two"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:66
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:72
 msgid "Employee Tables"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:10
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:10
 msgid "Enable Responsive Table"
 msgstr ""
 
-#: includes/I18nStrings.php:91
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:94
 msgid "Enable sorting of the table by the visitor"
 msgstr ""
 
-#: includes/I18nStrings.php:90
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:93
 msgid "Enable the visitor to filter or search the table."
 msgstr ""
 
-#: includes/I18nStrings.php:35
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:38
 msgid "Enter your license key"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:83
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:83
 msgid "Even Row Background"
 msgstr ""
 
-#: includes/I18nStrings.php:100
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:103
 msgid "Export Table"
 msgstr ""
 
-#: includes/I18nStrings.php:82
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:85
 msgid "Extra Classes"
 msgstr ""
 
-#: includes/I18nStrings.php:95
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:98
 msgid "Extra CSS Class for the table"
 msgstr ""
 
-#: includes/I18nStrings.php:86
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:89
 msgid "Filterable"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:105
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:117
 msgid "First Column Sticky"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:100
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:112
 msgid "First Row Sticky"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:226
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:238
 msgid "Font Family"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:214
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:226
 msgid "Font Size"
 msgstr ""
 
-#: includes/I18nStrings.php:98
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:101
 msgid "Footer Colors"
 msgstr ""
 
-#: includes/I18nStrings.php:38
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:41
 msgid ""
 "For any type of query which was not covered in our documentation, Please "
 "submit a support ticket ticket"
 msgstr ""
 
-#: admin/table-builder/config/component.php:12
-#: admin/table-builder/config/responsive.php:5
-#: admin/table-builder/config/setting.php:5
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:12
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:5
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:5
 msgid "General"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:195
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:207
 msgid "Global Style"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:61
-#: admin/table-builder/config/responsive.php:108
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:61
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:108
 msgid "Group Separator"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:78
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:78
 msgid "Header Background"
 msgstr ""
 
-#: includes/I18nStrings.php:87
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:90
 msgid "Header HTML Content"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:164
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:176
 msgid "Header Inner Border"
 msgstr ""
 
-#: includes/I18nStrings.php:9 admin/NinjaTablesAdmin.php:218
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:12
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/AdminMenuHandler.php:106
 msgid "Help"
 msgstr ""
 
-#: includes/I18nStrings.php:7
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:10
 msgid "Home"
 msgstr ""
 
-#: admin/table-builder/config/component.php:117
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:124
 msgid "HTML"
 msgstr ""
 
-#: includes/I18nStrings.php:66
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:69
 msgid "HTML Field"
 msgstr ""
 
@@ -382,496 +402,503 @@ msgstr ""
 msgid "https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/"
 msgstr ""
 
-#: admin/table-builder/config/component.php:68
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:75
 msgid "Icon"
 msgstr ""
 
-#: admin/table-builder/config/component.php:140
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:157
 msgid "Image"
 msgstr ""
 
-#: includes/I18nStrings.php:23 admin/NinjaTablesAdmin.php:148
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:26
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/AdminMenuHandler.php:40
 msgid "Import"
 msgstr ""
 
-#: includes/I18nStrings.php:44
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:47
 msgid "Import - Export"
 msgstr ""
 
-#: includes/I18nStrings.php:28
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:31
 msgid "Import Format:"
 msgstr ""
 
-#: includes/I18nStrings.php:103
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:106
 msgid "Import from CSV"
 msgstr ""
 
-#: includes/I18nStrings.php:12
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:15
 msgid "Import Table"
 msgstr ""
 
-#: includes/I18nStrings.php:101
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:104
 msgid "Import Table Data"
 msgstr ""
 
-#: includes/I18nStrings.php:59
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:62
 msgid "Initial Hidden Mobile"
 msgstr ""
 
-#: includes/I18nStrings.php:60
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:63
 msgid "Initial Hidden Mobile and Tab"
 msgstr ""
 
-#: includes/I18nStrings.php:61
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:64
 msgid "Initial Hidden Mobile, Tab and Regular Computers"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:169
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:181
 msgid "Inner Border Color"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:174
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:186
 msgid "Inner Border Size"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:1188
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/EditorBlockHandler.php:69
 msgid "Insert Ninja Tables Shortcode"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:1190
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/EditorBlockHandler.php:71
 msgid "Insert Shortcode"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:714
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/TablesController.php:84
 msgid "Invalid Table to Delete"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:53
-#: admin/table-builder/config/responsive.php:100
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:53
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:100
 msgid "Items Per Header"
 msgstr ""
 
-#: includes/I18nStrings.php:22
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:25
 msgid "JSON - Exported From Ninja Tables"
 msgstr ""
 
-#: includes/I18nStrings.php:21
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:24
 msgid "JSON - JavaScript Object Notation"
 msgstr ""
 
-#: includes/I18nStrings.php:25
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:28
 msgid "License"
 msgstr ""
 
-#: includes/I18nStrings.php:34
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:37
 msgid "Licensing"
 msgstr ""
 
-#: admin/table-builder/config/component.php:98
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:105
 msgid "List"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:207
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:219
 msgid "Margin Bottom"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:200
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:212
 msgid "Margin Top"
 msgstr ""
 
-#: includes/I18nStrings.php:83
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:86
 msgid "Max Width"
 msgstr ""
 
-#: includes/I18nStrings.php:84
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:87
 msgid "Maximum Width"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:17
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:17
 msgid "Mode Options"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:91
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:29
 msgid "New Table"
 msgstr ""
 
 #. Name of the plugin
-#: includes/I18nStrings.php:6 admin/NinjaTablesAdmin.php:73
-#: admin/NinjaTablesAdmin.php:84 admin/NinjaTablesAdmin.php:86
-#: admin/NinjaTablesAdmin.php:124
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:11
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:22
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:24
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:9
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/AdminMenuHandler.php:15
 msgid "Ninja Tables"
 msgstr ""
 
-#: includes/I18nStrings.php:26
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:29
 msgid ""
 "NinjaTables can import tables from existing data, like from a CSV or JSON "
 "file. You can also import existing tables from the other WordPress table "
 "plugins."
 msgstr ""
 
-#: includes/NinjaTableImport.php:29
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:46
 msgid "No appropriate driver found for the import format."
 msgstr ""
 
-#: public/dataProviders/FluentFormProvider.php:121
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/FluentFormsController.php:63
 msgid "No fields were selected."
 msgstr ""
 
-#: includes/libs/TableDrivers/NinjaFooTable.php:66
-#: includes/libs/TableDrivers/NinjaFooTable.php:339
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/DataProviders/NinjaFooTable.php:74
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/DataProviders/NinjaFooTable.php:350
 msgid "No Result Found"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:95
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:33
 msgid "No Table Found"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:96
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:34
 msgid "No Table Found in Trash"
 msgstr ""
 
-#: includes/libs/Migrations/NinjaTablesSupsysticTableMigration.php:24
+#: Users/csesumonpro/plugins/ninja-tables/database/Migrations/NinjaTablesSupsysticTableMigration.php:29
 msgid "No Table Found with the selected table"
 msgstr ""
 
-#: includes/libs/Migrations/NinjaTablesUltimateTableMigration.php:21
-msgid "No Ultimate Table Found with the selected table"
-msgstr ""
-
-#: includes/ninja_tables-global-functions.php:1054
+#: Users/csesumonpro/plugins/ninja-tables/boot/ninja-tables-global-function.php:1059
 msgid "Nonce verification failed, please try again."
 msgstr ""
 
-#: includes/I18nStrings.php:67
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:70
 msgid "Numeric Value"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:88
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:88
 msgid "Odd Row Background"
 msgstr ""
 
-#: includes/I18nStrings.php:92
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:95
 msgid "Pagination Items Per Page"
 msgstr ""
 
-#: includes/I18nStrings.php:93
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:96
 msgid "Pagination Position"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:97
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:35
 msgid "Parent Table"
 msgstr ""
 
-#: includes/I18nStrings.php:24
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:27
 msgid "Permission"
 msgstr ""
 
-#: includes/NinjaTableImport.php:299
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:325
 msgid "Please set table configuration first"
 msgstr ""
 
-#: includes/NinjaTableImport.php:125
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:70
 msgid "Please upload valid CSV"
 msgstr ""
 
-#: admin/table-builder/ImportExport.php:33
+#: Users/csesumonpro/plugins/ninja-tables/app/Traits/ImportTrait.php:67
 msgid "Please upload valid CSV or JSON"
 msgstr ""
 
-#: includes/NinjaTableImport.php:313
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:339
 msgid "Please use the provided CSV header structure font face."
 msgstr ""
 
-#: includes/I18nStrings.php:17
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:20
 msgid "Preview"
 msgstr ""
 
-#: public/views/frameless/show_ntb_preview.php:9
-#: public/views/frameless/show_preview.php:9
+#: Users/csesumonpro/plugins/ninja-tables/app/Views/admin/preview/default-table.php:9
+#: Users/csesumonpro/plugins/ninja-tables/app/Views/admin/preview/drag-and-drop.php:9
 msgid "Preview Table"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:27
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:27
 msgid "Pricing Table Four"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:9
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:9
 msgid "Pricing Table One"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:21
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:21
 msgid "Pricing Table Three"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:15
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:15
 msgid "Pricing Table Two"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:5
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:5
 msgid "Pricing Tables"
 msgstr ""
 
-#: admin/table-builder/config/component.php:215
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:233
 msgid "Progress"
 msgstr ""
 
-#: admin/table-builder/config/component.php:82
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:89
 msgid "Rating"
 msgstr ""
 
-#: includes/I18nStrings.php:102
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:105
 msgid "Replace Existing Data"
 msgstr ""
 
-#: includes/I18nStrings.php:76
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:79
 msgid "Responsive Breakpoint"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:138
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:138
 msgid "Responsive Settings"
 msgstr ""
 
-#: admin/table-builder/config/component.php:184
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:202
 msgid "Ribbon"
 msgstr ""
 
-#: includes/I18nStrings.php:94
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:97
 msgid "Row Details (Responsive drawer)"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:95
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:101
 msgid "Schedule Table One"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:107
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:113
 msgid "Schedule Table Three"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:101
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:107
 msgid "Schedule Table Two"
 msgstr ""
 
-#: admin/table-builder/config/templates.php:91
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/templates.php:97
 msgid "Schedule Tables"
 msgstr ""
 
-#: includes/libs/TableDrivers/NinjaFooTable.php:65
-#: includes/libs/TableDrivers/NinjaFooTable.php:337
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/DataProviders/NinjaFooTable.php:73
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/DataProviders/NinjaFooTable.php:348
 msgid "Search"
 msgstr ""
 
-#: includes/libs/TableDrivers/NinjaFooTable.php:64
-#: includes/libs/TableDrivers/NinjaFooTable.php:335
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/DataProviders/NinjaFooTable.php:72
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/DataProviders/NinjaFooTable.php:346
 msgid "Search in"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:94
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:32
 msgid "Search Table"
 msgstr ""
 
-#: includes/I18nStrings.php:80
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:83
 msgid "Select a Format"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:1211
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/EditorBlockHandler.php:92
 msgid "Select a Table"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:1187
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/EditorBlockHandler.php:68
 msgid "Select a Table to insert"
 msgstr ""
 
-#: includes/I18nStrings.php:45
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:48
 msgid "Select bulk action"
 msgstr ""
 
-#: includes/I18nStrings.php:69
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:72
 msgid "Select Field"
 msgstr ""
 
-#: includes/I18nStrings.php:27
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:30
 msgid "Select file:"
 msgstr ""
 
-#: includes/I18nStrings.php:81
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:84
 msgid "Select Items"
 msgstr ""
 
-#: includes/libs/TableDrivers/NinjaFooTable.php:68
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/DataProviders/NinjaFooTable.php:76
 msgid "Selected"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:22
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:22
 msgid "Separate Columns/Rows"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:1620 admin/NinjaTablesAdmin.php:1667
-#: admin/NinjaTablesAdmin.php:1700
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/SettingsController.php:109
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ToolsController.php:29
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ToolsController.php:99
 msgid "Settings successfully updated"
 msgstr ""
 
-#: includes/I18nStrings.php:15
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:18
 msgid "ShortCode"
 msgstr ""
 
-#: admin/table-builder/config/component.php:128
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:140
 msgid "Shortcode"
 msgstr ""
 
-#: includes/I18nStrings.php:89
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:92
 msgid "Show Table Description"
 msgstr ""
 
-#: includes/I18nStrings.php:88
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:91
 msgid "Show Table Title"
 msgstr ""
 
-#: includes/I18nStrings.php:64
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:67
 msgid "Single Line Text Field"
 msgstr ""
 
-#: includes/NinjaTableImport.php:142 admin/table-builder/ImportExport.php:55
+#: Users/csesumonpro/plugins/ninja-tables/app/Traits/ImportTrait.php:89
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:89
 msgid "Something is wrong when parsing the csv"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:27
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:27
 msgid "Space Between Columns"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:34
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:34
 msgid "Space Between Rows"
 msgstr ""
 
-#: includes/I18nStrings.php:79
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:82
 msgid "Standard"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:127
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:127
 msgid "Static Top Row"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:95
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:107
 msgid "Sticky"
 msgstr ""
 
-#: admin/table-builder/config/component.php:163
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:181
 msgid "Stylist List"
 msgstr ""
 
-#: includes/NinjaTableImport.php:162 includes/NinjaTableImport.php:188
-#: includes/NinjaTableImport.php:255
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:110
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:166
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:237
 msgid "Successfully added a table."
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:1041
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/TableItemsController.php:44
 msgid "Successfully deleted data."
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:732
-msgid "Successfully deleted the table."
-msgstr ""
-
-#: admin/NinjaTablesAdmin.php:1325
-msgid "Successfully duplicated table."
-msgstr ""
-
-#: includes/NinjaTableImport.php:77
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:282
 msgid ""
 "Successfully imported. Please go to all tables and review your newly "
 "imported table."
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:945
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/TableItemsController.php:73
 msgid "Successfully saved the data."
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:688
+#: Users/csesumonpro/plugins/ninja-tables/app/Models/Post.php:143
 msgid "Successfully updated configuration."
 msgstr ""
 
-#: includes/NinjaTableImport.php:353
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:381
 msgid "Successfully uploaded data."
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:85
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:23
 msgid "Table"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:154
-#: admin/table-builder/config/responsive.php:170
-#: admin/table-builder/config/setting.php:17
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:154
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:170
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:17
 msgid "Table Alignment"
 msgstr ""
 
-#: includes/I18nStrings.php:97
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:100
 msgid "Table Body Colors"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:147
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:159
 msgid "Table Border"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:57
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:57
 msgid "Table Cell Min Auto Width"
 msgstr ""
 
-#: includes/I18nStrings.php:41
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:44
 msgid "Table Configuration"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:64
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:64
 msgid "Table Container Max Height"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:43
-#: admin/table-builder/config/setting.php:48
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:43
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:48
 msgid "Table Container Max Width"
 msgstr ""
 
-#: includes/I18nStrings.php:42
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/TablesController.php:98
+msgid "Table deleted successfully."
+msgstr ""
+
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:45
 msgid "Table Design"
 msgstr ""
 
-#: includes/I18nStrings.php:96
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/TablesController.php:135
+msgid "Table duplicated successfully."
+msgstr ""
+
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:99
 msgid "Table Header Colors"
 msgstr ""
 
-#: admin/table-builder/config/setting.php:117
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/TablesController.php:90
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/TablesController.php:113
+msgid "Table not found."
+msgstr ""
+
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/setting.php:129
 msgid "Table Role"
 msgstr ""
 
-#: includes/I18nStrings.php:40
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:43
 msgid "Table Rows"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:140
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/AdminMenuHandler.php:31
 msgid "Tables"
 msgstr ""
 
-#: includes/NinjaTableImport.php:266
-#: includes/libs/Migrations/NinjaTablesMigration.php:22
+#: Users/csesumonpro/plugins/ninja-tables/database/Migrations/NinjaTablesMigration.php:32
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:121
 msgid "Temporary table description"
 msgstr ""
 
-#: includes/NinjaTableImport.php:265
-#: includes/libs/Migrations/NinjaTablesMigration.php:19
+#: Users/csesumonpro/plugins/ninja-tables/database/Migrations/NinjaTablesMigration.php:29
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:120
 msgid "Temporary table name"
 msgstr ""
 
-#: admin/table-builder/NinjaTableBuilder.php:259
-#: admin/table-builder/config/component.php:16
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:16
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/DragAndDrop/InitConfig.php:173
 msgid "Text"
 msgstr ""
 
-#: includes/I18nStrings.php:85
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:88
 msgid "Text Align"
 msgstr ""
 
-#: includes/I18nStrings.php:65
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:68
 msgid "Text Area"
 msgstr ""
 
-#: admin/table-builder/config/component.php:233
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/component.php:251
 msgid "Text Icon"
 msgstr ""
 
@@ -881,49 +908,51 @@ msgid ""
 "templates, drag-&-drop live table builder, multiple color scheme, and styles."
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:554
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/TablesController.php:53
 msgid "The name field is required."
 msgstr ""
 
-#: public/dataProviders/FluentFormProvider.php:114
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/FluentFormsController.php:55
 msgid "The title field is required."
 msgstr ""
 
-#: includes/I18nStrings.php:14
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:17
 msgid "Title"
 msgstr ""
 
-#: includes/I18nStrings.php:55
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:58
 msgid "to view the upgrade guide."
 msgstr ""
 
-#: includes/I18nStrings.php:8 admin/NinjaTablesAdmin.php:156
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:11
+#: Users/csesumonpro/plugins/ninja-tables/app/Hooks/Handlers/AdminMenuHandler.php:48
 msgid "Tools"
 msgstr ""
 
-#: admin/table-builder/config/responsive.php:47
-#: admin/table-builder/config/responsive.php:94
-#: admin/table-builder/config/responsive.php:120
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:47
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:94
+#: Users/csesumonpro/plugins/ninja-tables/config/table-builder/responsive.php:120
 msgid "Top Row As Header"
 msgstr ""
 
-#: includes/I18nStrings.php:63
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:66
 msgid "Totally hidden on all devices"
 msgstr ""
 
-#: includes/I18nStrings.php:77
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:80
 msgid "Update"
 msgstr ""
 
-#: includes/I18nStrings.php:70
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:73
 msgid "Update Configuration"
 msgstr ""
 
-#: includes/I18nStrings.php:52
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:55
 msgid "Upgrade Notice"
 msgstr ""
 
-#: admin/NinjaTablesAdmin.php:92 admin/NinjaTablesAdmin.php:93
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:30
+#: Users/csesumonpro/plugins/ninja-tables/app/CPT/NinjaTable.php:31
 msgid "View Table"
 msgstr ""
 
@@ -931,19 +960,19 @@ msgstr ""
 msgid "WPManageNinja LLC"
 msgstr ""
 
-#: includes/NinjaTableImport.php:215
+#: Users/csesumonpro/plugins/ninja-tables/app/Http/Controllers/ImportController.php:193
 msgid "You have a faulty JSON file. Please export a new one."
 msgstr ""
 
-#: includes/I18nStrings.php:31
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:34
 msgid "Your License is Active"
 msgstr ""
 
-#: includes/I18nStrings.php:32
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:35
 msgid "Your license is active! Enjoy Ninja Tables Pro Add On"
 msgstr ""
 
-#: includes/I18nStrings.php:53
+#: Users/csesumonpro/plugins/ninja-tables/app/Modules/I18nStrings.php:56
 msgid ""
 "Your Ninja Tables Pro plugin is outdated. Please upgrade to its latest "
 "version."

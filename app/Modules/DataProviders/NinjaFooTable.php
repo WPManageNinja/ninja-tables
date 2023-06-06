@@ -937,7 +937,5 @@ class NinjaFooTable
             '',
             'all'
         );
-
-        ninjaTablePreloadFont();
     }
 }

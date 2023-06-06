@@ -1047,21 +1047,6 @@ function ninjaTablesGetShortCodeIds($content)
 }
 
 /**
- * Preloads frontend custom font.
- */
-function ninjaTablePreloadFont()
-{
-    add_action('wp_head', function () {
-        $preloadFontUrl = NINJA_TABLES_DIR_URL . "assets/fonts/ninja-tables.woff2";
-        ?>
-        <link rel="preload" as="font" href="<?php
-        echo esc_url($preloadFontUrl) ?>" type="font/woff2"
-              crossorigin="anonymous">
-        <?php
-    }, 99);
-}
-
-/**
  * Validate nonce.
  */
 function ninjaTablesValidateNonce($key = 'ninja_table_admin_nonce')

@@ -1,136 +1,107 @@
-@charset "UTF-8";
-
-@font-face {
-  font-family: "ninja-tables-icons";
-  src: local('ninja-tables-icons'),
-      url("../../fonts/ninja-tables.woff2") format("woff2"),
-      url("../../fonts/ninja-tables.woff") format("woff"),
-      url("../../fonts/ninja-tables.ttf") format("truetype"),
-      url("../../fonts/ninja-tables.eot"),
-      url("../../fonts/ninja-tables.eot?#iefix") format("embedded-opentype"),
-      url("../../fonts/ninja-tables.svg#ninja-tables") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
-
 .footable_parent {
   .fooicon {
-    display: inline-block;
-    font-size: inherit;
-    font-family: "ninja-tables-icons" !important;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 1;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    transform: translate(0, 0);
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 12px; // Adjust the width and height as needed
+      height: 12px;
+      background-repeat: no-repeat;
+    }
   }
-
-  .fooicon:before {
-    font-family: "ninja-tables-icons" !important;
-    content: attr(data-icon);
-    font-style: normal !important;
-    font-weight: normal !important;
-    font-variant: normal !important;
-    text-transform: none !important;
-    speak: none;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  .fooicon-search {
+    &::before {
+      width: 16px;
+      height: 16px;
+      background-image: url('../../libs/icons/search-outline.svg');
+    }
   }
-
-  [class^="fooicon-"]:before,
-  [class*=" fooicon-"]:before,
-  [class*=" footable-"]:before,
-  [class^="footable-"]:before
-  {
-    font-family: "ninja-tables-icons" !important;
-    font-style: normal !important;
-    font-weight: normal !important;
-    font-variant: normal !important;
-    text-transform: none !important;
-    speak: none;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  .fooicon-sort-desc {
+    &::before {
+      background-image: url('../../libs/icons/caret-down-outline.svg');
+    }
   }
-
-  .fooicon-search:before {
-    content: "\f002";
+  .fooicon-sort-asc {
+    &::before {
+      background-image: url('../../libs/icons/caret-up-outline.svg');
+    }
   }
-  .fooicon-sort-desc:before {
-    content: "\f161";
+  .fooicon-sort {
+    &::before {
+      background-image: url('../../libs/icons/caret-up-down-outline.svg');
+    }
   }
-  .fooicon-sort-asc:before {
-    content: "\f160";
+  .fooicon-remove {
+    &::before {
+      background-image: url('../../libs/icons/close-outline.svg');
+    }
   }
-  .fooicon-sort:before {
-    content: "\f0dc";
+  .fooicon-minus {
+    &::before {
+      background-image: url('../../libs/icons/remove-outline.svg');
+    }
   }
-  .fooicon-minus:before {
-    content: "\f068";
+  .fooicon-plus {
+    &::before {
+      background-image: url('../../libs/icons/add-outline.svg');
+    }
   }
-  .fooicon-plus:before {
-    content: "\f067";
+  .fooicon-loader {
+    &::before {
+      width: 24px;
+      height: 24px;
+      background-image: url('../../libs/icons/refresh-outline.svg');
+    }
   }
-  .fooicon-circle-o-notch:before {
-    content: "\e000";
+  .fooicon-delete {
+    &::before {
+      background-image: url('../../libs/icons/trash-sharp.svg');
+    }
   }
-  .fooicon-remove:before {
-    content: "\f00d";
+  .fooicon-pencil {
+    &::before {
+      background-image: url('../../libs/icons/pencil-sharp-white.svg');
+    }
   }
-  .fooicon-loader-alt:before {
-    content: "\f01";
+  .footable-edit {
+    &:hover {
+      .fooicon-pencil {
+        &::before {
+          background-image: url('../../libs/icons/pencil-sharp.svg');
+        }
+      }
+    }
   }
-  .fooicon-refresh:before {
-    content: "\e001";
+  .fooicon-trash {
+    &::before {
+      background-image: url('../../libs/icons/trash-sharp-white.svg');
+    }
   }
-  .fooicon-loader:before {
-    content: "\f01e";
+  .footable-delete {
+    &:hover {
+      .fooicon-trash {
+        &::before {
+          background-image: url('../../libs/icons/trash-sharp.svg');
+        }
+      }
+    }
   }
-  .fooicon-grid:before {
-    content: "\61";
+  .fooicon-remove-1 {
+    &::before {
+      background-image: url('../../libs/icons/close-outline.svg');
+    }
   }
-  .fooicon-pencil:before {
-    content: "\62";
+  .fooicon-bag {
+    &::before {
+      width: 16px;
+      height: 16px;
+      background-image: url('../../libs/icons/bag-handle.svg');
+    }
   }
-  .fooicon-delete:before {
-    content: "\63";
-  }
-  .fooicon-view:before {
-    content: "\64";
-  }
-  .fooicon-edit:before {
-    content: "\65";
-  }
-  .fooicon-bag:before {
-    content: "\66";
-  }
-  .fooicon-basket:before {
-    content: "\67";
-  }
-  .fooicon-star:before {
-    content: "\68";
-  }
-  .fooicon-star-o:before {
-    content: "\69";
-  }
-  .fooicon-check:before {
-    content: "\6a";
-  }
-  .fooicon-heart:before {
-    content: "\6b";
-  }
-  .fooicon-download:before {
-    content: "\6c";
-  }
-  
-  //Extra Duplicate Icons
-  .fooicon-trash:before {
-    content: "\63";
-  }
-  .fooicon-remove-1:before {
-    content: "\f00d";
+  .fooicon-basket {
+    &::before {
+      width: 16px;
+      height: 16px;
+      background-image: url('../../libs/icons/cart-outline.svg');
+    }
   }
 }

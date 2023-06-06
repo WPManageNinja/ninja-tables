@@ -110,21 +110,11 @@
       text-decoration: none !important;
       box-shadow: none;
       &:after {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
         display: inline-block;
-        font-style: normal;
-        font-variant: normal;
-        font-weight: 400;
-        line-height: 1;
-        font-family: 'ninja-tables-icons';
-        font-weight: 900;
-        line-height: inherit;
-        vertical-align: baseline;
-        content: "\67";
-        height: 1em;
-        float: right;
-        line-height: 1.618;
+        content: '';
+        width: 16px;
+        height: 16px;
+        background-image: url('../../libs/icons/cart-outline.svg');
       }
     }
   }

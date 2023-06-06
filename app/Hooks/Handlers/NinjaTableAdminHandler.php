@@ -121,7 +121,7 @@ class NinjaTableAdminHandler
 
             echo '<div style="background: #F9F48F" class="'.$class.'">
                 <p>
-                    Expect a more flexible Ninja Tables from 5 June 2023. If you are a Pro user, make sure to Update the Pro add-on to avoid any issues on your live tables.
+                    Expect a more flexible Ninja Tables from 7 June 2023. If you are a Pro user, make sure to Update the Pro add-on to avoid any issues on your live tables.
                 </p>
         </div>';
         }

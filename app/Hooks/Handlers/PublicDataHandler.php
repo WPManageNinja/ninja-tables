@@ -293,8 +293,6 @@ class PublicDataHandler
                 'all'
             );
 
-            ninjaTablePreloadFont();
-
             // We have the parsed table IDs from the shortcodes.
             // We should prerender the table assets here.
             if (is_array($ids)) {
