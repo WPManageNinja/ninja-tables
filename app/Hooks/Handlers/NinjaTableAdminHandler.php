@@ -110,20 +110,27 @@ class NinjaTableAdminHandler
      */
     public function noticeForProVersion()
     {
+        $page = Arr::get($_GET, 'page', '');
+        if ($page == 'ninja_tables') {
+            $class = 'ntb-version-update-notice';
+        } else {
+            $class = 'notice notice-warning';
+        }
+
         if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '4.3.6', '<')) {
-
-            $page = Arr::get($_GET, 'page', '');
-            if ($page == 'ninja_tables') {
-                $class = 'ntb-version-update-notice';
-            } else {
-                $class = 'notice notice-warning';
-            }
-
-            echo '<div style="background: #F9F48F" class="'.$class.'">
+            echo '<div style="background: #F9F48F" class="' . $class . '">
                 <p>
-                    Expect a more flexible Ninja Tables from 7 June 2023. If you are a Pro user, make sure to Update the Pro add-on to avoid any issues on your live tables.
+                    Unlock the full potential of Ninja Tables! Make sure you have an active license to the pro addon installed.
+                    <a href="https://wpmanageninja.com/?fluentcrm=1&route=smart_url&slug=biml1o8">Check license status</a>
                 </p>
         </div>';
+        } else if ( ! defined('NINJAPROPLUGIN_VERSION')) {
+            echo '<div style="background: #F9F48F" class="' . $class . '">
+                    <p>
+                        Get the Pro add-on and unlock the full potential of Ninja Tables! 
+                        <a href=" https://ninjatables.com/pricing/">Get Pro Now</a>
+                    </p>
+                </div>';
         }
     }
 }

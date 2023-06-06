@@ -57,32 +57,20 @@
       background-image: url('../../libs/icons/trash-sharp.svg');
     }
   }
+  .footable-edit {
+    background-color: #ffffff !important;
+  }
   .fooicon-pencil {
     &::before {
-      background-image: url('../../libs/icons/pencil-sharp-white.svg');
-    }
-  }
-  .footable-edit {
-    &:hover {
-      .fooicon-pencil {
-        &::before {
-          background-image: url('../../libs/icons/pencil-sharp.svg');
-        }
-      }
-    }
-  }
-  .fooicon-trash {
-    &::before {
-      background-image: url('../../libs/icons/trash-sharp-white.svg');
+      background-image: url('../../libs/icons/pencil-sharp.svg');
     }
   }
   .footable-delete {
-    &:hover {
-      .fooicon-trash {
-        &::before {
-          background-image: url('../../libs/icons/trash-sharp.svg');
-        }
-      }
+      background-color: #ffffff !important;
+  }
+  .fooicon-trash {
+    &::before {
+      background-image: url('../../libs/icons/trash-sharp.svg');
     }
   }
   .fooicon-remove-1 {
