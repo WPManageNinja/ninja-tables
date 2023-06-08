@@ -117,7 +117,7 @@ class NinjaTableAdminHandler
             $class = 'notice notice-warning';
         }
 
-        if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '4.3.6', '<')) {
+        if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '5.0.0', '<')) {
             echo '<div style="background: #F9F48F" class="' . $class . '">
                 <p>
                     Unlock the full potential of Ninja Tables! Make sure you have an active license to the pro addon installed.
