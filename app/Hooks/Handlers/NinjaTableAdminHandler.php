@@ -111,26 +111,25 @@ class NinjaTableAdminHandler
     public function noticeForProVersion()
     {
         $page = Arr::get($_GET, 'page', '');
-        if ($page == 'ninja_tables') {
-            $class = 'ntb-version-update-notice';
-        } else {
-            $class = 'notice notice-warning';
-        }
-
-        if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '5.0.0', '<')) {
-            echo '<div style="background: #F9F48F" class="' . $class . '">
+        if ($page === 'ninja_tables') {
+            if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '5.0.0', '<')) {
+                echo '<div style="background: #F9F48F" class="ntb-version-update-notice">
                 <p>
                     Unlock the full potential of Ninja Tables! Make sure you have an active license to the pro addon installed.
                     <a href="https://wpmanageninja.com/?fluentcrm=1&route=smart_url&slug=biml1o8">Check license status</a>
                 </p>
         </div>';
-        } else if ( ! defined('NINJAPROPLUGIN_VERSION')) {
-            echo '<div style="background: #F9F48F" class="' . $class . '">
+            } else if ( ! defined('NINJAPROPLUGIN_VERSION') && $this->isNotice()) {
+                echo '<div style="background: #F9F48F; display: flex; justify-content: space-between; align-items: center;" class="ntb-version-update-notice">
                     <p>
                         Get the Pro add-on and unlock the full potential of Ninja Tables! 
-                        <a href=" https://ninjatables.com/pricing/">Get Pro Now</a>
+                        <a href="https://ninjatables.com/pricing/">Get Pro Now</a>
                     </p>
+                    <a href=' . admin_url('admin.php?action=remindMeLater&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>
+                          <span class="close-icon dashicons dashicons-no"></span>
+                    </a>
                 </div>';
+            }
         }
     }
 }
