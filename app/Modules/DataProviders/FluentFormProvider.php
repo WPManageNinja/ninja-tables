@@ -4,6 +4,7 @@ namespace NinjaTables\App\Modules\DataProviders;
 
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
+use FluentFormPro\Payments\PaymentHelper;
 
 class FluentFormProvider
 {
