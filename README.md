@@ -5,7 +5,7 @@ Tags: wp table builder, table plugin, wpdatatables, wordpress tables, Table buil
 Requires at least: 4.5
 Requires PHP: 5.6
 Tested up to: 6.2
-Stable tag: 5.0.0
+Stable tag: 5.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -265,7 +265,11 @@ Ninja Tables let's you connect Google spreadsheets to the WordPress tables. Chec
 
 == Changelog ==
 We released several updates for Ninja Tables in the years of development. These include improvements to the existing features and some wonderful additions to help you design tables more effectively.
-### What's New on 5.0.0?
+### What's New on 5.0.1?
+
+= 5.0.1 (Date: June 12, 2023) =
+* Added cross sign for delete notice
+* Fixes sorting icon color issue
 
 = 5.0.0 (Date: June 08, 2023) =
 * Added current user post option for wp post table

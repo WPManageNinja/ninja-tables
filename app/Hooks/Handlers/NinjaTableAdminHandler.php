@@ -115,8 +115,8 @@ class NinjaTableAdminHandler
             if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '5.0.0', '<')) {
                 echo '<div style="background: #F9F48F" class="ntb-version-update-notice">
                 <p>
-                    Unlock the full potential of Ninja Tables! Make sure you have an active license to the pro addon installed.
-                    <a href="https://wpmanageninja.com/?fluentcrm=1&route=smart_url&slug=biml1o8">Check license status</a>
+                    Unlock the full potential of Ninja Tables! Make sure you have an active license to the pro addon.
+                    <a href="https://wpmanageninja.com/?fluentcrm=1&route=smart_url&slug=biml1o8">Update Here</a>
                 </p>
         </div>';
             } else if ( ! defined('NINJAPROPLUGIN_VERSION') && $this->isNotice()) {
