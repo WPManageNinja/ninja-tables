@@ -1045,6 +1045,9 @@
                     ${prefix}:not(.hide_all_borders) tr.footable-header th {
                         border-color: ${this.tableSettings.table_color_header_border} !important;
                     }
+                    ${prefix} thead .footable-header th span::before {
+                        background-color: ${this.tableSettings.table_color_header_secondary } !important;
+                    }
                     ${prefix}:not(.hide_all_borders) tbody tr td {
                        border-color: ${this.tableSettings.table_color_border} !important;
                     }

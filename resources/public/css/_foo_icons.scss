@@ -17,17 +17,23 @@
   }
   .fooicon-sort-desc {
     &::before {
-      background-image: url('../../libs/icons/caret-down-outline.svg');
+      mask-image: url('../../libs/icons/caret-down-outline.svg');
+      -webkit-mask-image: url('../../libs/icons/caret-down-outline.svg');
+      background-color: #000000;
     }
   }
   .fooicon-sort-asc {
     &::before {
-      background-image: url('../../libs/icons/caret-up-outline.svg');
+      mask-image: url('../../libs/icons/caret-up-outline.svg');
+      -webkit-mask-image: url('../../libs/icons/caret-up-outline.svg');
+      background-color: #000000;
     }
   }
   .fooicon-sort {
     &::before {
-      background-image: url('../../libs/icons/caret-up-down-outline.svg');
+      mask-image: url('../../libs/icons/caret-up-down-outline.svg');
+      -webkit-mask-image: url('../../libs/icons/caret-up-down-outline.svg');
+      background-color: #000000;
     }
   }
   .fooicon-remove {

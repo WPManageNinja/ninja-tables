@@ -5,6 +5,9 @@
     }
 <?php endif;?>
 <?php if($colors): ?>
+    <?php echo esc_attr($css_prefix);?> thead tr.footable-header th span::before {
+    background-color: <?php echo esc_attr($colors['table_color_header_secondary'])?> !important;
+    }
     <?php echo esc_attr($css_prefix); ?>,
     <?php echo esc_attr($css_prefix); ?> table {
     background-color: <?php echo esc_attr($colors['table_color_primary']); ?> !important;
