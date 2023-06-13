@@ -198,10 +198,10 @@ class AdminMenuHandler
 
         $slug = $app->config->get('app.slug');
 
-        $vendorSrc = "$assets/css/ninja-tables-vendor.css";
+        $vendorSrc = $assets . "css/ninja-tables-vendor.css";
 
         if (is_rtl()) {
-            $vendorSrc = "$assets/css/ninja-tables-vendor-rtl.css";
+            $vendorSrc = $assets . "css/ninja-tables-vendor-rtl.css";
         }
 
         wp_enqueue_style(
@@ -211,7 +211,7 @@ class AdminMenuHandler
 
         wp_enqueue_style(
             $slug,
-            "$assets/css/ninja-tables-admin.css"
+            $assets . "css/ninja-tables-admin.css"
         );
     }
 
@@ -243,7 +243,7 @@ class AdminMenuHandler
 
         wp_enqueue_script(
             $slug . '_admin_app',
-            "$assets/js/ninja-tables-boot.js",
+            $assets . "js/ninja-tables-boot.js",
             array('jquery'),
             '1.0',
             true
@@ -253,7 +253,7 @@ class AdminMenuHandler
 
         wp_enqueue_script(
             $slug,
-            "$assets/js/ninja-tables-admin.js",
+            $assets . "js/ninja-tables-admin.js",
             array('jquery'),
             '1.0',
             true
@@ -330,7 +330,7 @@ class AdminMenuHandler
                 'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
                 'email'     => $currentUser->user_email
             ],
-            'img_url'                  => "$assets/img/",
+            'img_url'                  => $assets . "img/",
             'fluentform_url'           => $fluentUrl,
             'fluent_wp_url'            => 'https://wordpress.org/plugins/fluentform/',
             'fluent_form_icon'         => function_exists('getNinjaFluentFormMenuIcon') ? getNinjaFluentFormMenuIcon() : '',
@@ -344,16 +344,16 @@ class AdminMenuHandler
             'isFluentFormUpdated'      => $isFluentFromUpdated,
             'hasAdvancedFilters'       => class_exists('NinjaTablesPro\App\Hooks\Handlers\CustomFilterHandler'),
             'hasSortable'              => defined('NINJATABLESPRO_SORTABLE'),
-            'ace_path_url'             => "$assets/libs/ace",
+            'ace_path_url'             => $assets . "libs/ace",
             'upgradeGuide'             => 'https://wpmanageninja.com/r/docs/ninja-tables/how-to-install-and-upgrade/#upgrade',
             'hasValidLicense'          => get_option('_ninjatables_pro_license_status'),
             'i18n'                     => I18nStrings::getStrings(),
             'published_tables'         => $totalPublishedTable,
             'preview_required_scripts' => array(
-                "$assets/css/ninjatables-public.css",
-                "$assets/libs/footable/js/footable.min.js",
-                "$assets/libs/moment/moment.min.js",
-                "$assets/js/ninja-tables-footable.js",
+                $assets . "css/ninjatables-public.css",
+                $assets . "libs/footable/js/footable.min.js",
+                $assets . "libs/moment/moment.min.js",
+                $assets . "js/ninja-tables-footable.js",
             ),
             'activated_features'       => $app->applyFilters('ninja_table_activated_features', array(
                 'default_tables'    => true,

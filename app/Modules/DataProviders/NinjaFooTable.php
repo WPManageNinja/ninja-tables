@@ -55,12 +55,12 @@ class NinjaFooTable
         $assets = $app['url.assets'];
 
         wp_enqueue_script('footable',
-            "$assets/libs/footable/js/footable.min.js",
+            $assets . "libs/footable/js/footable.min.js",
             array('jquery'), '3.1.5', true
         );
 
         wp_enqueue_script('footable_init',
-            "$assets/js/ninja-tables-footable.js",
+            $assets . "js/ninja-tables-footable.js",
             array('footable'), self::$version, true
         );
 
