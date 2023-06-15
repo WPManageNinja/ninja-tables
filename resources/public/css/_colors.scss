@@ -58,9 +58,15 @@ table.ninja_table_pro.inverted {
         }
       }
       tr,
-      td,
       th {
         //border-color: rgba(255, 185, 185, 1) !important;
+      }
+      td {
+        span.fooicon-plus, span.fooicon-minus {
+          &:before {
+            background-color: rgba(255, 255, 255, 1) !important;
+          }
+        }
       }
     }
     tfoot {
@@ -122,13 +128,29 @@ table.ninja_table_pro.inverted {
           background-color: rgba(255, 183, 155, 1) !important;
           color: rgba(75, 87, 117, 1) !important;
           border-color: rgba(255, 255, 255, 1) !important;
+
+          td {
+            span.fooicon-plus, span.fooicon-minus {
+              &:before {
+                background-color: rgba(75, 87, 117, 1) !important;
+              }
+            }
+          }
         }
       }
       tr,
-      td,
       th {
         //border-color: rgba(255, 255, 255, 0.35) !important;
       }
+
+      td {
+        span.fooicon-plus, span.fooicon-minus {
+          &:before {
+            background-color: rgba(255, 255, 255, 1) !important;
+          }
+        }
+      }
+
     }
     tfoot {
       .footable-paging {
@@ -192,9 +214,15 @@ table.ninja_table_pro.inverted {
         }
       }
       tr,
-      td,
       th {
         //border-color: rgba(39, 42, 48, 0.05) !important;
+      }
+      td {
+        span.fooicon-plus, span.fooicon-minus {
+          &:before {
+            background-color: rgba(0, 0, 0, 1) !important;
+          }
+        }
       }
     }
     tfoot {
@@ -256,6 +284,14 @@ table.ninja_table_pro.inverted {
           background-color: rgba(145, 162, 39, 1) !important;
           color: rgba(255, 255, 255, 1) !important;
           border-color: rgba(255, 255, 255, 1) !important;
+
+          td {
+            span.fooicon-plus, span.fooicon-minus {
+              &:before {
+                background-color: rgba(255, 255, 255, 1) !important;
+              }
+            }
+          }
         }
       }
       tr,
@@ -323,6 +359,14 @@ table.ninja_table_pro.inverted {
           background-color: rgba(38, 153, 64, 1) !important;
           color: rgba(255, 255, 255, 1) !important;
           border-color: rgba(255, 255, 255, 1) !important;
+
+          td {
+            span.fooicon-plus, span.fooicon-minus {
+              &:before {
+                background-color: rgba(255, 255, 255, 1) !important;
+              }
+            }
+          }
         }
       }
       tr,
@@ -390,6 +434,14 @@ table.ninja_table_pro.inverted {
           background-color: rgba(23, 156, 148, 1) !important;
           color: rgba(255, 255, 255, 1) !important;
           border-color: rgba(255, 255, 255, 1) !important;
+
+          td {
+            span.fooicon-plus, span.fooicon-minus {
+              &:before {
+                background-color: rgba(255, 255, 255, 1) !important;
+              }
+            }
+          }
         }
       }
       tr,
@@ -457,12 +509,26 @@ table.ninja_table_pro.inverted {
           background-color: rgba(31, 105, 162, 1) !important;
           color: rgba(255, 255, 255, 1) !important;
           border-color: rgba(255, 255, 255, 1) !important;
+
+          td {
+            span.fooicon-plus, span.fooicon-minus {
+              &:before {
+                background-color: rgba(255, 255, 255, 1) !important;
+              }
+            }
+          }
         }
       }
       tr,
-      td,
       th {
         //border-color: rgba(255, 255, 255, 0.79) !important;
+      }
+      td {
+        span.fooicon-plus, span.fooicon-minus {
+          &:before {
+            background-color: rgba(255, 255, 255, 1) !important;
+          }
+        }
       }
     }
     tfoot {
@@ -524,12 +590,26 @@ table.ninja_table_pro.inverted {
           background-color: rgba(72, 61, 156, 1) !important;
           color: rgba(255, 255, 255, 1) !important;
           border-color: rgba(255, 255, 255, 1) !important;
+
+          td {
+            span.fooicon-plus, span.fooicon-minus {
+              &:before {
+                background-color: rgba(255, 255, 255, 1) !important;
+              }
+            }
+          }
         }
       }
       tr,
-      td,
       th {
         //border-color: rgba(255, 255, 255, 0.46) !important;
+      }
+      td {
+        span.fooicon-plus, span.fooicon-minus {
+          &:before {
+            background-color: rgba(255, 255, 255, 1) !important;
+          }
+        }
       }
     }
     tfoot {
@@ -591,12 +671,26 @@ table.ninja_table_pro.inverted {
           background-color: rgba(104, 78, 150, 1) !important;
           color: rgba(255, 255, 255, 1) !important;
           border-color: rgba(255, 255, 255, 1) !important;
+
+          td {
+            span.fooicon-plus, span.fooicon-minus {
+              &:before {
+                background-color: rgba(255, 255, 255, 1) !important;
+              }
+            }
+          }
         }
       }
       tr,
-      td,
       th {
         //border-color: rgba(255, 255, 255, 0.46) !important;
+      }
+      td {
+        span.fooicon-plus, span.fooicon-minus {
+          &:before {
+            background-color: rgba(255, 255, 255, 1) !important;
+          }
+        }
       }
     }
     tfoot {
@@ -658,12 +752,26 @@ table.ninja_table_pro.inverted {
           background-color: rgba(208, 98, 137, 1) !important;
           color: rgba(255, 255, 255, 1) !important;
           border-color: rgba(255, 255, 255, 1) !important;
+
+          td {
+            span.fooicon-plus, span.fooicon-minus {
+              &:before {
+                background-color: rgba(255, 255, 255, 1) !important;
+              }
+            }
+          }
         }
       }
       tr,
-      td,
       th {
         //border-color: rgba(255, 255, 255, 0.46) !important;
+      }
+      td {
+        span.fooicon-plus, span.fooicon-minus {
+          &:before {
+            background-color: rgba(255, 255, 255, 1) !important;
+          }
+        }
       }
     }
     tfoot {
@@ -744,12 +852,26 @@ table.ninja_table_pro.inverted {
           background-color: rgba(185, 195, 199, 1) !important;
           color: rgba(56, 61, 63, 1) !important;
           border-color: rgba(255, 255, 255, 1) !important;
+
+          td {
+            span.fooicon-plus, span.fooicon-minus {
+              &:before {
+                background-color: rgba(56, 61, 63, 1) !important;
+              }
+            }
+          }
         }
       }
       tr,
-      td,
       th {
         //border-color: rgba(255, 255, 255, 0.46) !important;
+      }
+      td {
+        span.fooicon-plus, span.fooicon-minus {
+          &:before {
+            background-color: rgba(255, 255, 255, 1) !important;
+          }
+        }
       }
     }
     tfoot {
@@ -813,14 +935,28 @@ table.ninja_table_pro.inverted {
           background-color: rgba(185, 195, 199, 1) !important;
           color: rgba(56, 61, 63, 1) !important;
           border-color: rgba(255, 255, 255, 1) !important;
+          td {
+            span.fooicon-plus, span.fooicon-minus {
+              &:before {
+                background-color: rgba(56, 61, 63, 1) !important;
+              }
+            }
+          }
         }
       }
 
       tr,
-      td,
       th {
         //border-color: rgba(255, 255, 255, 0.46) !important;
       }
+      td {
+        span.fooicon-plus, span.fooicon-minus {
+          &:before {
+            background-color: rgba(255, 255, 255, 1) !important;
+          }
+        }
+      }
+
     }
 
     tfoot {

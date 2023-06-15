@@ -43,12 +43,16 @@
   }
   .fooicon-minus {
     &::before {
-      background-image: url('../../libs/icons/remove-outline.svg');
+      mask-image: url('../../libs/icons/remove-outline.svg');
+      -webkit-mask-image: url('../../libs/icons/remove-outline.svg');
+      background-color: #000000;
     }
   }
   .fooicon-plus {
     &::before {
-      background-image: url('../../libs/icons/add-outline.svg');
+      mask-image: url('../../libs/icons/add-outline.svg');
+      -webkit-mask-image: url('../../libs/icons/add-outline.svg');
+      background-color: #000000;
     }
   }
   .fooicon-loader {

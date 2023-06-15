@@ -4,7 +4,23 @@
     font-size: <?php echo esc_attr($fonts['table_font_size']);?>px;
     }
 <?php endif;?>
+
 <?php if($colors): ?>
+
+    <?php echo esc_attr($css_prefix);?> tbody tr td span.fooicon-plus:before {
+    background-color: <?php echo esc_attr($colors['table_color_secondary']); ?> !important;
+    }
+    <?php echo esc_attr($css_prefix);?> tbody tr td span.fooicon-minus:before {
+    background-color: <?php echo esc_attr($colors['table_color_secondary']); ?> !important;
+    }
+
+    <?php echo esc_attr($css_prefix);?> tbody tr:hover td span.fooicon-plus:before {
+    background-color: <?php echo esc_attr($colors['table_color_secondary_hover']) ?> !important;
+    }
+    <?php echo esc_attr($css_prefix);?> tbody tr:hover td span.fooicon-minus:before {
+    background-color: <?php echo esc_attr($colors['table_color_secondary_hover']) ?> !important;
+    }
+
     <?php echo esc_attr($css_prefix);?> thead tr.footable-header th span::before {
     background-color: <?php echo esc_attr($colors['table_color_header_secondary'])?> !important;
     }
@@ -65,6 +81,34 @@
         }
         <?php echo esc_attr($css_prefix); ?> tbody tr:nth-child(odd):hover {
         background-color: <?php echo esc_attr($colors['table_alt_2_color_hover']); ?> !important;
+        }
+
+        <?php echo esc_attr($css_prefix);?> tbody tr:nth-child(even) td span.fooicon-plus:before {
+        background-color: <?php echo esc_attr($colors['table_alt_color_secondary']) ?> !important;
+        }
+        <?php echo esc_attr($css_prefix);?> tbody tr:nth-child(even) td span.fooicon-minus:before {
+        background-color: <?php echo esc_attr($colors['table_alt_color_secondary']) ?> !important;
+        }
+
+        <?php echo esc_attr($css_prefix);?> tbody tr:nth-child(odd) td span.fooicon-plus:before {
+        background-color: <?php echo esc_attr($colors['table_alt_2_color_secondary']) ?> !important;
+        }
+        <?php echo esc_attr($css_prefix);?> tbody tr:nth-child(odd) td span.fooicon-minus:before {
+        background-color: <?php echo esc_attr($colors['table_alt_2_color_secondary']) ?> !important;
+        }
+
+        <?php echo esc_attr($css_prefix);?> tbody tr:nth-child(even) tr:hover td span.fooicon-plus:before {
+        background-color: <?php echo esc_attr($colors['table_alt_color_secondary']) ?> !important;
+        }
+        <?php echo esc_attr($css_prefix);?> tbody tr:nth-child(even) tr:hover td span.fooicon-minus:before {
+        background-color: <?php echo esc_attr($colors['table_alt_color_secondary']) ?> !important;
+        }
+
+        <?php echo esc_attr($css_prefix);?> tbody tr:nth-child(odd) tr:hover td span.fooicon-plus:before {
+        background-color: <?php echo esc_attr($colors['table_alt_2_color_secondary']) ?> !important;
+        }
+        <?php echo esc_attr($css_prefix);?> tbody tr:nth-child(odd) tr:hover td span.fooicon-minus:before {
+        background-color: <?php echo esc_attr($colors['table_alt_2_color_secondary']) ?> !important;
         }
     <?php endif; ?>
 
