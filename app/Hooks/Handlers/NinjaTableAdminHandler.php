@@ -36,14 +36,14 @@ class NinjaTableAdminHandler
         $this->noticeForProVersion();
 
         // TODO: We need to uncomment this after one release
-//        if ($this->isNotice()) {
+//        if (ninjaTablesIsNotice('review_notice')) {
 //            if (isset($_GET['page']) && Sanitizer::sanitizeTextField($_GET['page']) == 'ninja_tables') {
 //                echo '<div class="nt_review_notice">In love with Ninja Tables?
 //                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Please leave a 5-star review for us! </a>
 //                     It will encourage us to come up with more and more features.
 //                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a> |
-//                     <a href=' . admin_url('admin.php?action=remindMeLater&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>Remind Me Later</a>
-//                     <a href=' . admin_url('admin.php?action=remindMeLater&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>
+//                     <a href=' . admin_url('admin.php?action=remindMeLater&key=review_notice&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>Remind Me Later</a>
+//                     <a href=' . admin_url('admin.php?action=remindMeLater&key=review_notice&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>
 //                        <span class="close-icon dashicons dashicons-no"></span>
 //                    </a>
 //                 </div>';
@@ -53,29 +53,19 @@ class NinjaTableAdminHandler
 
     public function remindMeLater()
     {
-        if (isset($_GET['action']) && Sanitizer::sanitizeTextField($_GET['action']) === 'remindMeLater') {
+        $key = Sanitizer::sanitizeTextField(Arr::get($_GET, 'key', 'admin_notice'));
+        $action = Sanitizer::sanitizeTextField(Arr::get($_GET, 'action', ''));
+        $prefix = 'ninja_tables_';
 
+        if ($key && $action === 'remindMeLater') {
             ninjaTablesValidateNonce('ninja_table_admin_nonce');
-
             setcookie(
-                "nt_review_notice",
+               $prefix.$key,
                 NINJA_TABLES_VERSION,
                 time() + (60 * 60 * 24 * 30)
             );
             wp_redirect(admin_url('admin.php?page=ninja_tables#home'));
         }
-    }
-
-    public function isNotice()
-    {
-        if (isset($_COOKIE['nt_review_notice'])) {
-            $plugin_version = Sanitizer::sanitizeTextField($_COOKIE['nt_review_notice']);
-            if ($plugin_version == NINJA_TABLES_VERSION) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -112,20 +102,24 @@ class NinjaTableAdminHandler
     {
         $page = Arr::get($_GET, 'page', '');
         if ($page === 'ninja_tables') {
-            if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '5.0.0', '<')) {
-                echo '<div style="background: #F9F48F" class="ntb-version-update-notice">
+            if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION, '5.0.0', '<') && ninjaTablesIsNotice('upgrade_to_pro')) {
+                echo '<div class="ntb-version-update-notice">
+                <h3>Update Ninja Tables Pro Plugin</h3>
                 <p>
-                    Unlock the full potential of Ninja Tables! Make sure you have an active license to the pro addon.
-                    <a href="https://wpmanageninja.com/?fluentcrm=1&route=smart_url&slug=biml1o8">Update Here</a>
+                   You are using an outdated version of Ninja Tables Pro. You should update to the latest version; otherwise, some pro features may not work properly.
+                    <a href="' . admin_url('plugins.php?s=ninja-tables-pro&plugin_status=all').'">' . __('Please update to the latest version', 'ninja-tables') . '</a>
                 </p>
+                   <a href=' . admin_url('admin.php?action=remindMeLater&key=upgrade_to_pro&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>
+                          <span class="close-icon dashicons dashicons-no"></span>
+                    </a>
         </div>';
-            } else if ( ! defined('NINJAPROPLUGIN_VERSION') && $this->isNotice()) {
-                echo '<div style="background: #F9F48F; display: flex; justify-content: space-between; align-items: center;" class="ntb-version-update-notice">
+            } else if ( ! defined('NINJAPROPLUGIN_VERSION') && ninjaTablesIsNotice('get_pro')) {
+                echo '<div class="ntb-version-update-notice">
                     <p>
                         Get the Pro add-on and unlock the full potential of Ninja Tables! 
                         <a href="https://ninjatables.com/pricing/">Get Pro Now</a>
                     </p>
-                    <a href=' . admin_url('admin.php?action=remindMeLater&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>
+                    <a href=' . admin_url('admin.php?action=remindMeLater&key=get_pro&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>
                           <span class="close-icon dashicons dashicons-no"></span>
                     </a>
                 </div>';

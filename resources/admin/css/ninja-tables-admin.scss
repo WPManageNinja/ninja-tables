@@ -1493,12 +1493,27 @@ h2.nav-tab-wrapper {
 .ntb-version-update-notice {
   border: 1px solid #c3c4c7;
   box-shadow: 0 1px 1px rgba(0,0,0,.04);
-  margin: 5px 0px 20px -20px;
+  margin: 5px 0 20px -20px;
   padding: 1px 12px;
-  border-left: 4px solid #dba617;
+  border-left: 4px solid #b03c3c;
+  background: #fff;
+  position: relative;
+  > h3 {
+    margin: 10px 0 0;
+  }
+  > a {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-decoration: none;
+  }
   p {
     margin: 0.5em 0;
     padding: 2px;
+    a {
+      position: relative;
+    }
   }
 }
 

@@ -825,14 +825,18 @@ export default {
         if (tableConfig.settings && tableConfig.settings.hide_on_empty) {
             $table.find('tbody tr').each(function () {
                let singleTr = [];
+
                 $(this).find('td[style*="display: none"]').each(function () {
                     singleTr.push($(this).text());
                 });
+
                 const filterSingleTr = singleTr.filter(function (el) {
                     return el !== '';
                 });
 
-                if (filterSingleTr.length === 0 && singleTr.length > 0) {
+                const expandValue = $(this).data('expanded');
+
+                if (filterSingleTr.length === 0 && singleTr.length > 0 && expandValue !== true) {
                     $(this).css('pointer-events', 'none');
                     $(this).find('span.fooicon-plus').remove();
                 }

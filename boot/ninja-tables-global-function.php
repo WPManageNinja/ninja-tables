@@ -1142,6 +1142,21 @@ function ninjaTablesCanUnfilteredHTML()
     return current_user_can('unfiltered_html') || apply_filters('ninja_tables_disable_fields_sanitize', false);
 }
 
+function ninjaTablesIsNotice($key = 'admin_notice') {
+
+    $prefix = 'ninja_tables_';
+
+    if (isset($_COOKIE[$prefix.$key])) {
+        $plugin_version = sanitize_text_field($_COOKIE[$prefix.$key]);
+
+        if ($plugin_version == NINJA_TABLES_VERSION) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 // function only for supported ninja charts
 function ninja_tables_boot()
 {
