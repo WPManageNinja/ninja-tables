@@ -56,9 +56,8 @@ class TablesController extends Controller
 
         $postId = intval(Arr::get($request->all(), 'tableId'));
 
-        if (Arr::get($request->all(), 'table_caption')) {
-            update_post_meta($postId, '_ninja_table_caption', Sanitizer::sanitizeTextField($request->table_caption));
-        }
+        $caption = Arr::get($request->all(), 'table_caption');
+        update_post_meta($postId, '_ninja_table_caption', Sanitizer::sanitizeTextField($caption));
 
         $attributes = array(
             'post_title'   => Sanitizer::sanitizeTextField(Arr::get($request->all(), 'post_title')),
