@@ -31,10 +31,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.49.9",
+    "sass": "^1.63.4",
     "sass-loader": "^12.6.0",
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.14",
-    "vue2-ace-editor": "0.0.10"
+    "vue2-ace-editor": "0.0.10",
+    "webpack": "^5.87.0"
   }
 }
