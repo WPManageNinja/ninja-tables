@@ -113,8 +113,6 @@ class AdminMenuHandler
 
     public function render()
     {
-        $this->enqueueAssets();
-
         $config = App::getInstance('config');
 
         $name = $config->get('app.name');
@@ -375,8 +373,13 @@ class AdminMenuHandler
         // For now I am de-registering their script in ninja-table admin pages.
         wp_deregister_script('elementor-admin-app');
 
+        // These last two line is for dumb devs who enqueue their scripts unversally
+        // People should think what they are writing in their code
+        wp_dequeue_script('vue');
+        wp_dequeue_script('vuejs');
+
         // We are gonna dequeue every other scripts on our pages.
-        $app->addAction('wp_print_scripts', function () {
+        add_action('wp_print_scripts', function () {
             if (is_admin()) {
                 $skip = apply_filters('ninja_table_skip_no_confict', false);
 

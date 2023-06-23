@@ -26,6 +26,8 @@ use NinjaTables\App\Hooks\Handlers\DataProviderHandler;
 
 $app->addAction('admin_menu', [AdminMenuHandler::class, 'add']);
 
+$app->addAction('admin_enqueue_scripts', [AdminMenuHandler::class, 'enqueueAssets']);
+
 $app->addAction('init', [CPTHandler::class, 'registerPostTypes']);
 
 $app->addAction('init', [PublicDataHandler::class, 'registerTableRenderFunctions']);
