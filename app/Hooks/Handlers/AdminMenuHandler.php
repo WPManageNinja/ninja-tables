@@ -143,8 +143,10 @@ class AdminMenuHandler
 
     public function enqueueAssets()
     {
-        $this->enqueueStyles();
-        $this->enqueueScripts();
+        if (isset($_GET['page']) && $_GET['page'] == 'ninja_tables') {
+            $this->enqueueStyles();
+            $this->enqueueScripts();
+        }
     }
 
     protected function getRestInfo($app)
