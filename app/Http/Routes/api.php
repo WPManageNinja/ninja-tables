@@ -49,7 +49,8 @@ $router->withPolicy('UserPolicy')->group(function ($router) {
         $route->get('/permission', [ToolsController::class, 'getAccessRoles']);
         $route->get('/global-settings', [ToolsController::class, 'getGlobalSettings']);
         $route->post('/global-settings', [ToolsController::class, 'updateGlobalSettings']);
-        $route->post('/clear-cache', [ToolsController::class, 'clearTableCache']);
+        $route->post('/clear-table-cache', [ToolsController::class, 'clearTableCache']);
+        $route->post('/clear-external-cache', [ToolsController::class, 'clearExternalTableCache']);
     });
 
     $router->prefix('table-builder')->group(function ($route) {

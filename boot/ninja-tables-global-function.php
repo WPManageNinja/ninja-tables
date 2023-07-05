@@ -100,7 +100,6 @@ if ( ! function_exists('getDefaultNinjaTableSettings')) {
 if ( ! function_exists('ninja_table_admin_role')) {
     function ninja_table_admin_role()
     {
-
         if (current_user_can('administrator')) {
             return 'administrator';
         }
@@ -422,7 +421,6 @@ function ninjaTableSetExternalCacheData($tableId, $data)
 if ( ! function_exists('getNinjaFluentFormMenuIcon')) {
     function getNinjaFluentFormMenuIcon()
     {
-
         $icon = 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><defs><style>.cls-1{fill:#fff;}</style></defs><title>dashboard_icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path class="cls-1" d="M15.57,0H4.43A4.43,4.43,0,0,0,0,4.43V15.57A4.43,4.43,0,0,0,4.43,20H15.57A4.43,4.43,0,0,0,20,15.57V4.43A4.43,4.43,0,0,0,15.57,0ZM12.82,14a2.36,2.36,0,0,1-1.66.68H6.5A2.31,2.31,0,0,1,7.18,13a2.36,2.36,0,0,1,1.66-.68l4.66,0A2.34,2.34,0,0,1,12.82,14Zm3.3-3.46a2.36,2.36,0,0,1-1.66.68H3.21a2.25,2.25,0,0,1,.68-1.64,2.36,2.36,0,0,1,1.66-.68H16.79A2.25,2.25,0,0,1,16.12,10.53Zm0-3.73a2.36,2.36,0,0,1-1.66.68H3.21a2.25,2.25,0,0,1,.68-1.64,2.36,2.36,0,0,1,1.66-.68H16.79A2.25,2.25,0,0,1,16.12,6.81Z"/></g></g></svg>');
 
         return apply_filters('fluent_form_menu_icon', $icon);
@@ -927,8 +925,8 @@ function ninja_table_clear_all_cache($posts = array())
         $tables = $posts;
     } else {
         $tables = \NinjaTables\App\Models\Post::select('ID')
-                 ->where('post_type', 'ninja-table')
-                 ->get();
+                                              ->where('post_type', 'ninja-table')
+                                              ->get();
     }
 
     foreach ($tables as $table) {
@@ -1043,7 +1041,7 @@ function ninjaTablesGetShortCodeIds($content)
         }
     }
 
-    return  $ids;
+    return $ids;
 }
 
 /**
@@ -1142,12 +1140,12 @@ function ninjaTablesCanUnfilteredHTML()
     return current_user_can('unfiltered_html') || apply_filters('ninja_tables_disable_fields_sanitize', false);
 }
 
-function ninjaTablesIsNotice($key = 'admin_notice') {
-
+function ninjaTablesIsNotice($key = 'admin_notice')
+{
     $prefix = 'ninja_tables_';
 
-    if (isset($_COOKIE[$prefix.$key])) {
-        $plugin_version = sanitize_text_field($_COOKIE[$prefix.$key]);
+    if (isset($_COOKIE[$prefix . $key])) {
+        $plugin_version = sanitize_text_field($_COOKIE[$prefix . $key]);
 
         if ($plugin_version == NINJA_TABLES_VERSION) {
             return false;
@@ -1162,3 +1160,63 @@ function ninja_tables_boot()
 {
     return true;
 }
+
+
+function ninjaTablesExternalClearPageCaches()
+{
+    // clear wp lightspeed caches
+    if (defined('LSCWP_V')) {
+        do_action('litespeed_purge', 'ninja_tables_light_speed_clear_cache');
+    }
+
+    // clear wp redis caches
+    if (defined('NGINX_HELPER_BASEURL')) {
+        do_action('rt_nginx_helper_purge_all');
+    }
+
+    // clear wp rocket caches
+    if (function_exists('rocket_clean_domain')) {
+        rocket_clean_domain();
+    }
+
+    // clear godaddy internal caches
+    if (class_exists('\WPaaS\Cache')) {
+        if (has_action('shutdown', ['\WPaaS\Cache', 'ban'])) {
+            return;
+        }
+
+        remove_action('shutdown', ['\WPaaS\Cache', 'purge'], PHP_INT_MAX);
+        add_action('shutdown', ['\WPaaS\Cache', 'ban'], PHP_INT_MAX);
+    }
+
+    // clear wp-fastest caches
+    if (isset($GLOBALS['wp_fastest_cache']) && method_exists($GLOBALS['wp_fastest_cache'], 'deleteCache')) {
+        $GLOBALS['wp_fastest_cache']->deleteCache();
+    }
+
+    // clear wp cache caches
+    if (function_exists('wp_cache_clear_cache')) {
+        wp_cache_clear_cache();
+    }
+
+    // clear autooptimizepress caches
+    if (class_exists('autoptimizeCache')) {
+        \autoptimizeCache::clearall();
+    }
+
+    // clear wp-optimize caches
+    if (class_exists('WPO_Page_Cache')) {
+        (new \WPO_Page_Cache())->purge();
+    }
+
+    // clear SiteGround Optimizer caches
+    if (function_exists('sg_cachepress_purge_cache')) {
+        sg_cachepress_purge_cache();
+    }
+
+    // clear cloudflare caches
+    if (defined('CLOUDFLARE_PLUGIN_DIR') && class_exists('CF\WordPress\Hooks')) {
+        (new \CF\WordPress\Hooks())->purgeCacheEverything();
+    }
+}
+

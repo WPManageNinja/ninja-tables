@@ -47,6 +47,10 @@ class PublicDataHandler
 
         $tableArray = apply_filters('ninja_table_js_config', $tableArray, $shortCodeData['filter']);
 
+        if (defined('LSCWP_V')) {
+            do_action('litespeed_tag_add', 'ninja_tables_light_speed_clear_cache');
+        }
+
         ob_start();
         do_action('ninja_tables-render-table-' . Arr::get($tableArray, 'settings.library'), $tableArray);
 

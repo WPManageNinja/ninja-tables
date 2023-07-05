@@ -17,9 +17,11 @@
         </div>
 
         <div class="ninja_block ninja_heightlight_block">
-            <h3>Clear Table Cache</h3>
-            <p>If you want to clear all the Ninja table cache, please click on the following button</p>
-            <el-button @click="clearCache()" size="small" type="danger">Clear Table Cache</el-button>
+            <h3>Clear Cache</h3>
+            <p>If you want to clear all the Ninja table cache, please click on the "Clear Table Cache" button or if you want to clear the cache by popular external plugins please click "Clear External Caches".</p>
+<!--        It will remove all the cache of "LiteSpeed Cache", "WP Redis", "WP Rocket", "WP Fastest Cache", "Autoptimize", "WP-Optimize", "SiteGround Optimizer", "Cloudflare" if you have at least any one of these. It will also clear Godaddy internal caches and wp-cache caches.-->
+            <el-button @click="clearTableCache" size="small" type="primary">Clear Table Cache</el-button>
+            <el-button @click="clearExternalCache" size="small" type="warning">Clear External Caches</el-button>
         </div>
     </div>
 </template>
@@ -57,8 +59,19 @@
                     })
                     .catch(e => {});
             },
-            clearCache() {
-                this.$post('tables/tools/clear-cache')
+            clearTableCache() {
+                this.$post('tables/tools/clear-table-cache')
+                    .then(response => {
+                        this.$message({
+                            showClose: true,
+                            message: response.data.message,
+                            type: "success"
+                        });
+                    })
+                    .catch(e => {});
+            },
+            clearExternalCache() {
+                this.$post('tables/tools/clear-external-cache')
                     .then(response => {
                         this.$message({
                             showClose: true,
