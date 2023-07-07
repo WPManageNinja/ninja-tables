@@ -228,7 +228,7 @@ class NinjaTableItem extends Model
     private function fixCreatedAtDate($tableId, $refDate, $orderType)
     {
         global $wpdb;
-        $tableName = $wpdb->prefix . ninja_tables_db_table_name();
+        $tableName = $wpdb->prefix . esc_sql(ninja_tables_db_table_name());
         if ($orderType == 'ASC') {
             $query = "UPDATE {$tableName}
                   SET created_at = ADDTIME(created_at, 2)

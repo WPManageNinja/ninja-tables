@@ -84,6 +84,8 @@ class Post extends Model
     public static function makeDuplicate($oldPostId, $newPostId)
     {
         global $wpdb;
+        $oldPostId = (int)$oldPostId;
+        $newPostId = (int)$newPostId;
 
         // Duplicate table settings.
         $postMetas = get_post_meta($oldPostId);
@@ -93,7 +95,7 @@ class Post extends Model
         }
 
         // Duplicate table rows.
-        $itemsTable = $wpdb->prefix . ninja_tables_db_table_name();
+        $itemsTable = $wpdb->prefix . esc_sql(ninja_tables_db_table_name());
 
         $sql = "INSERT INTO $itemsTable (`position`, `table_id`, `owner_id`, `settings`, `attribute`, `value`, `created_at`, `updated_at`)";
         $sql .= " SELECT `position`, $newPostId, `owner_id`, `settings`, `attribute`, `value`, `created_at`, `updated_at` FROM $itemsTable";

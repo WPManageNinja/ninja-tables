@@ -80,7 +80,7 @@ class NinjaTableItemsMigrator
     public static function migrateIdAndTableIdColumn()
     {
         global $wpdb;
-        $tableName = $wpdb->prefix . ninja_tables_db_table_name();
+        $tableName = $wpdb->prefix . esc_sql(ninja_tables_db_table_name());
         $sql       = "SELECT 
             DATA_TYPE
             FROM INFORMATION_SCHEMA.COLUMNS 
@@ -105,7 +105,7 @@ class NinjaTableItemsMigrator
         // sorting the option table would have a flag.
         $option = '_ninja_tables_sorting_migration';
         global $wpdb;
-        $tableName = $wpdb->prefix . ninja_tables_db_table_name();
+        $tableName = $wpdb->prefix . esc_sql(ninja_tables_db_table_name());
 
         // Update the databse to hold the sorting position number.
         $sql = "ALTER TABLE $tableName ADD COLUMN `position` INT(11) AFTER `id`;";
@@ -119,7 +119,7 @@ class NinjaTableItemsMigrator
     private static function migrateSettingColumnIfNeeded()
     {
         global $wpdb;
-        $tableName = $wpdb->prefix . ninja_tables_db_table_name();
+        $tableName = $wpdb->prefix . esc_sql(ninja_tables_db_table_name());
         // Update the databse to hold the sorting position number.
         $sql = "ALTER TABLE $tableName ADD COLUMN `settings` LONGTEXT AFTER `value`;";
         ob_start();
@@ -131,7 +131,7 @@ class NinjaTableItemsMigrator
     private static function migrateOwnerColumnIfNeeded()
     {
         global $wpdb;
-        $tableName = $wpdb->prefix . ninja_tables_db_table_name();
+        $tableName = $wpdb->prefix . esc_sql(ninja_tables_db_table_name());
         // Update the databse to hold the sorting position number.
         $sql = "ALTER TABLE $tableName ADD COLUMN `owner_id` int(11) AFTER `table_id`;";
         ob_start();
