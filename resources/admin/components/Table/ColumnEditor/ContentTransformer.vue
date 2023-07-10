@@ -110,13 +110,15 @@
                     table_settings: this.settings
                 };
                 this.$post('settings/'+this.tableId, data)
-                    .success((res) => {
+                    .then((res) => {
                     })
                     .catch((error) => {
 
                     })
-              this.doingAjax = false;
-              window.ninjaTableBus.$emit('tableDoingAjax', false);
+                    .finally(() => {
+                        window.ninjaTableBus.$emit('tableDoingAjax', false);
+                        this.doingAjax = false;
+                    });
             },
         },
         mounted() {
