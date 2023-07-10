@@ -124,7 +124,7 @@
                             @click.shift="manage ? selectItem(index, header, key, row.rows[header], row, true) : ''"
                             @click.exact="manage ? selectItem(index, header, key, row.rows[header], row, false) : ''"
                             :id="'td_id_'+ tdId(row, header)"
-                            :class="[tdClass(row, header, key), highlightClass(row, header)]"
+                            :class="[tdClass(row, header, key), highlightClass(row, header), 'table-data']"
                             :rowspan="row.rows[header].style.rowspan"
                             :colspan="row.rows[header].style.colspan"
                             :style="[tdInlineStyle(row, header), highlightedColumnStyle(row, header), showInnerBorder ?  innerBorder(index) : '', firstColumnSticky && key === 0 ? stickyColumn() : '']"
@@ -404,6 +404,9 @@ export default {
                 return mergedCellWidth;
             } else {
                 width = row && this.columnWidth(row, header)
+                if(width === 150) {
+                  width = this.setting.general.options.cell_min_auto_width.value;
+                }
             }
             return (width + 1)
         },
