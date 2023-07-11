@@ -24,8 +24,9 @@ class TableBuilderController extends Controller
 
     public function store(Request $request)
     {
-        $table_type = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'data.table_data.table_type'));
-        $table_name = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'data.table_data.table_name'));
+        $data    = json_decode(Arr::get($request->all(), 'data'), true);
+        $table_type = Sanitizer::sanitizeTextField(Arr::get($data, 'table_data.table_type'));
+        $table_name = Sanitizer::sanitizeTextField(Arr::get($data, 'table_data.table_name'));
 
         if (isset($table_type) && $table_type !== '') {
             return $this->generateByTemplateConfig($table_type); // for ready-made table
@@ -34,7 +35,7 @@ class TableBuilderController extends Controller
 
         $initConfig            = new InitConfig();
         $table_id              = $this->wpInsertPost($table_name);
-        $data                  = sanitize_post_field('data', Arr::get($request->all(), 'data'), $table_id, 'db');
+        $data                  = sanitize_post_field('data', $data, $table_id, 'db');
         $table_data            = $data['table_data'];
         $table_data['headers'] = $initConfig->makeTableHeader($table_data);
         $table_data['data']    = $initConfig->makeTableRow($table_data);

@@ -125,7 +125,7 @@ return [
                 "type"    => "custom_html", // (unique)
                 "icon"    => "el-icon-edit",
                 "has_pro" => false,
-                "value"   => "<span style='display: block; text-align: center; line-height: 1.1'>custom html</span>",
+                "value"   => '<span style="display: block; text-align: center; line-height: 1.1">custom html</span>',
                 "style"   => [
                     "margin"  => $default_margin_padding,
                     "padding" => [

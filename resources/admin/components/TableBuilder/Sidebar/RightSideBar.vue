@@ -246,7 +246,7 @@ export default {
             this.initialData.table_data.table_type = type;
           }
           this.$post('table-builder', {
-            data: this.initialData,
+            data: JSON.stringify(this.initialData),
           }).then(response => {
                 this.$message({
                   showClose: true,
