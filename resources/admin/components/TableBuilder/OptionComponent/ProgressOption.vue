@@ -28,7 +28,7 @@
     <slider
         :label="$t('Progressbar Percentage')"
         :max="100"
-        :min="10"
+        :min="1"
         :step="1"
         v-model="item.data.style.percentage"
     ></slider>

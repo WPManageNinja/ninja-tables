@@ -76,6 +76,7 @@
       <checkbox
           :label="$t('Font Style')"
           v-model="item.data.style.fontWeight"
+          :options="fontStyleOptions"
       >
       </checkbox>
     </el-tab-pane>

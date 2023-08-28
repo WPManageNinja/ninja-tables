@@ -178,7 +178,7 @@ return [
         "key"    => "advance", // unique
         "fields" => [
             [
-                "name"    => __("Stylist List", "ninja-tables"),
+                "name"    => __("Styled List", "ninja-tables"),
                 "type"    => "stylist_list", // (unique)
                 "icon"    => "el-icon-notebook-2",
                 "has_pro" => true,

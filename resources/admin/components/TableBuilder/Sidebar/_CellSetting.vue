@@ -54,7 +54,7 @@
       </div>
       <div class="block">
         <span>{{ $t('Column Width') }}</span>
-        <el-slider input-size="mini" @change="changeColumnWidth" v-model="columnWidth" :max="500" :min="100" :step="1" show-input></el-slider>
+        <el-slider input-size="mini" @change="changeColumnWidth" v-model="columnWidth" :max="1000" :min="100" :step="1" show-input></el-slider>
       </div>
     </div>
   </div>
