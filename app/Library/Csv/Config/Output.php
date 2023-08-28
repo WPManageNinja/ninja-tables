@@ -228,6 +228,7 @@ trait Output
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return iterator_to_array($this->convertToUtf8($this->getQueryIterator()), false);
