@@ -1,8 +1,9 @@
 const {__} = wp.i18n;
 const {registerBlockType} = wp.blocks;
 const {
-    SelectControl
+    TextControl,
 } = wp.components;
+const {useState} = wp.element;
 
 registerBlockType('ninja-tables/guten-block', {
     title: __('Ninja Tables'),
@@ -22,13 +23,47 @@ registerBlockType('ninja-tables/guten-block', {
         }
     },
     edit({attributes, setAttributes}) {
+        const [options, setOptions] = useState([]);
         const config = window.ninja_tables_tiny_mce;
+
         const changeEventHandler = (event) => {
-            const data = event.split(',');
+            const data = event.target.value.split(',');
             const tableId = data[0];
             const dataSource = data[1];
             setAttributes({tableId})
             setAttributes({dataSource})
+            setOptions([]);
+        }
+
+        const getTableNameById = (id) => {
+            if (id) {
+                const table = config.tables.find(table => parseInt(table.value) === parseInt(id));
+                return table.text;
+            }
+        }
+
+        const searchTable = (event) => {
+            if (typeof event === 'string') {
+                const search = event;
+                const tables = config.tables.filter(table => table.text.toLowerCase().includes(search.toLowerCase()));
+                const options = tables.map(table => ({
+                    value: [table.value, table.data_source],
+                    label: table.text
+                }));
+
+                setOptions(options);
+
+                if (options.length) {
+                    setAttributes({tableId: ''})
+                }
+            } else {
+                const options = config.tables.map(table => ({
+                    value: [table.value, table.data_source],
+                    label: table.text
+                }));
+
+                setOptions(options);
+            }
         }
 
         return (
@@ -37,24 +72,34 @@ registerBlockType('ninja-tables/guten-block', {
                     <img src={config.logo} alt="ninja-tables-logo"/>
                 </div>
 
-                <SelectControl
-                    label={__("Select a Table")}
-                    value={[attributes.tableId, attributes.dataSource]}
-                    options={config.tables.map(table => ({
-                        value: [table.value, table.data_source],
-                        label: table.text
-                    }))}
-                    onChange={changeEventHandler}
-                />
-
+                <div className='nt-guten-block-select'>
+                    <TextControl
+                        value={getTableNameById(attributes.tableId)}
+                        placeholder={__("Search a Table")}
+                        onClick={searchTable}
+                        onChange={searchTable}
+                    />
+                    {options.length > 0 &&
+                        <ul>
+                            {options.map(option => (
+                                <li key={option.value}>
+                                    <button onClick={changeEventHandler}
+                                            value={option.value}>{option.label}
+                                    </button>
+                                </li>
+                            ))
+                            }
+                        </ul>
+                    }
+                </div>
             </div>
         )
     },
     save({attributes}) {
         if (attributes.dataSource === 'drag_and_drop') {
-            return '[ninja_table_builder id="'+attributes.tableId+'"]'
+            return '[ninja_table_builder id="' + attributes.tableId + '"]'
         } else {
-            return '[ninja_tables id="'+attributes.tableId+'"]'
+            return '[ninja_tables id="' + attributes.tableId + '"]'
         }
     },
 });

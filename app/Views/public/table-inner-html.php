@@ -64,12 +64,12 @@ if ($table_rows && count($table_columns)):
                     if ($hasImageFunction) {
                         $column_value = nt_parse_button_column($column_value, $table_column);
                     }
-                } else {
+                } else if(is_string($column_value)) {
                     $column_value = do_shortcode($column_value);
                 }
                 $colspan = false;
                 if ($index != $columnLength) {
-                    if (strip_tags($column_value) == '#colspan#') {
+                    if ($column_value && strip_tags($column_value) == '#colspan#') {
                         $row = '<td class="ninja_temp_cell"></td>' . $row;
                         $colSpanCounter = $colSpanCounter + 1;
                         // if we get #colspan# value then we are increasing colspan counter by 1 and adding a temp column
