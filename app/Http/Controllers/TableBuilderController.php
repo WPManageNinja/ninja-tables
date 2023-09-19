@@ -107,7 +107,8 @@ class TableBuilderController extends Controller
                     'table_name' => $table_data['table_name'],
                     'data'       => $table_data_info,
                     'headers'    => $table_data['headers'],
-                    'table'      => array_replace_recursive($initConfig->getOtherTableConfig(), $table_data['table'])
+                    'table'      => array_replace_recursive($initConfig->getOtherTableConfig(), $table_data['table']),
+                    'preview_url' => site_url('?ninjatable_builder_preview=' . $table_id)
                 ]
             ]
         ], 200);

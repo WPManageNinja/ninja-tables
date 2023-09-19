@@ -107,7 +107,7 @@ export default {
       return false
     },
     previewURL() {
-      return window.location.origin + "/?ninjatable_builder_preview=" + this.id
+      return this.initialData.table_data && this.initialData.table_data.preview_url;
     }
   }
 };

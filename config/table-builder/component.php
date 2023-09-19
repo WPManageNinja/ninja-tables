@@ -1,10 +1,17 @@
 <?php
 
-$default_margin_padding = [
+$margin = [
+    "top"    => 1,
+    "bottom" => 1,
+    "left"   => 1,
+    "right"  => 1
+];
+
+$padding = [
     "top"    => 0,
     "bottom" => 0,
     "left"   => 0,
-    "right"  => 0,
+    "right"  => 0
 ];
 
 return [
@@ -22,7 +29,7 @@ return [
                     "fontSize"   => 10,
                     "color"      => '',
                     "alignment"  => 'center',
-                    "margin"     => $default_margin_padding,
+                    "margin"     => $margin,
                     "padding"    => [
                         "top"    => 2,
                         "bottom" => 2,
@@ -60,8 +67,8 @@ return [
                     "contentAlignment"     => 'center',
                     "alignment"            => 'center',
                     "fontWeight"           => [],
-                    "margin"               => $default_margin_padding,
-                    "padding"              => $default_margin_padding,
+                    "margin"               => $margin,
+                    "padding"              => $padding,
                     "enableIcon"           => false,
                     "iconColor"            => '',
                     "iconFontSize"         => 10,
@@ -81,8 +88,8 @@ return [
                     "color"     => '#000000',
                     "fontSize"  => 10,
                     "alignment" => 'center',
-                    "margin"    => $default_margin_padding,
-                    "padding"   => $default_margin_padding
+                    "margin"    => $margin,
+                    "padding"   => $padding
                 ],
             ],
             [
@@ -93,12 +100,12 @@ return [
                 "value"   => 5,
                 "style"   => [
                     "color"           => '#F2C009',
-                    "ratingSize"        => 20,
+                    "ratingSize"      => 20,
                     "maxStar"         => 5,
                     "alignment"       => 'center',
                     "showRatingValue" => false,
-                    "margin"          => $default_margin_padding,
-                    "padding"         => $default_margin_padding
+                    "margin"          => $margin,
+                    "padding"         => $padding
                 ],
             ],
             [
@@ -116,8 +123,8 @@ return [
                     "lineHeight"  => 20,
                     'listStyle'   => 'circle',
                     'itemSpacing' => 0,
-                    "margin"      => $default_margin_padding,
-                    "padding"     => $default_margin_padding
+                    "margin"      => $margin,
+                    "padding"     => $padding
                 ]
             ],
             [
@@ -127,7 +134,7 @@ return [
                 "has_pro" => false,
                 "value"   => '<span style="display: block; text-align: center; line-height: 1.1">custom html</span>',
                 "style"   => [
-                    "margin"  => $default_margin_padding,
+                    "margin"  => $margin,
                     "padding" => [
                         "top"    => 4,
                         "bottom" => 4,
@@ -143,7 +150,7 @@ return [
                 "has_pro" => false,
                 "value"   => "[Shortcode]",
                 "style"   => [
-                    "margin"    => $default_margin_padding,
+                    "margin"    => $margin,
                     "padding"   => [
                         "top"    => 4,
                         "bottom" => 4,
@@ -160,15 +167,15 @@ return [
                 "has_pro" => true,
                 "value"   => NINJA_TABLES_DIR_URL . "assets/img/ninja-table-editor-button-2x.png",
                 "style"   => [
-                    'alignment' => 'center',
-                    'size'      => 50,
-                    'shape'     => 'square',
-                    'alt'       => 'Demo Image',
-                    'link'      => 'https://www.example.com/',
+                    'alignment'      => 'center',
+                    'size'           => 50,
+                    'shape'          => 'square',
+                    'alt'            => 'Demo Image',
+                    'link'           => 'https://www.example.com/',
                     'linkAttributes' => [],
-                    'target'    => 'blank',
-                    "margin"    => $default_margin_padding,
-                    "padding"   => $default_margin_padding
+                    'target'         => 'blank',
+                    "margin"         => $margin,
+                    "padding"        => $padding
                 ],
             ],
         ],
@@ -194,8 +201,8 @@ return [
                     "alignment"    => 'center',
                     "fontWeight"   => [],
                     "lineHeight"   => 20,
-                    "margin"       => $default_margin_padding,
-                    "padding"      => $default_margin_padding
+                    "margin"       => $margin,
+                    "padding"      => $padding
                 ]
             ],
             [
@@ -206,8 +213,8 @@ return [
                 "value"   => "Ribbon",
                 "style"   => [
                     'ribbonType'       => 'side',
-                    "margin"           => $default_margin_padding,
-                    "padding"          => $default_margin_padding,
+                    "margin"           => $margin,
+                    "padding"          => $padding,
                     'ribbonPosition'   => 'left',
                     "color"            => '',
                     'fontSize'         => 10,
@@ -243,8 +250,8 @@ return [
                     "alignment"  => 'center',
                     'type'       => 'circle',
                     'fontSize'   => 10,
-                    "margin"     => $default_margin_padding,
-                    "padding"    => $default_margin_padding
+                    "margin"     => $margin,
+                    "padding"    => $padding
                 ],
             ],
             [
@@ -263,8 +270,8 @@ return [
                     "fontSize"     => 10,
                     "alignment"    => 'center',
                     "fontWeight"   => [],
-                    "margin"       => $default_margin_padding,
-                    "padding"      => $default_margin_padding,
+                    "margin"       => $margin,
+                    "padding"      => $padding,
                 ]
             ]
         ],

@@ -1,5 +1,5 @@
 <template>
-    <div :style="[margin, {'margin':'1px'}]" class="ntb-datas-wrapper">
+    <div :style="[margin]" class="ntb-datas-wrapper">
     <span
         contenteditable="true"
         @blur="updateContent"

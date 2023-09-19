@@ -199,7 +199,7 @@
                       }
                     })
                     .catch(error => {
-                      vueNotification.error('Something went wrong, please try again.');
+                      console.log('Something went wrong, please try again.');
                     });
             },
             goToPage(value) {
