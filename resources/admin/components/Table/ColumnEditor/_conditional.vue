@@ -3,7 +3,7 @@
         <div v-if="hasPro" class="conditional-settings-header">
             <div class="conditional-settings-title">
                 Customize your table's appearances based on the cell value. Add as many conditions as you like. <a
-                target="_blank" href="https://wpmanageninja.com/docs/ninja-conditional-column-formatting/">View
+                target="_blank" href="https://ninjatables.com/docs/conditional-formatting/">View
                 Documentation</a>
             </div>
             <el-button size="small" type="info" @click="addCondition" :disabled="!hasPro">

@@ -2,10 +2,10 @@
 Contributors: wpmanageninja, techjewel, adreastrian, heera
 Donate link: https://ninjatables.com/pricing/
 Tags: wp table builder, table plugin, wpdatatables, wordpress tables, Table builder plugin, table grid, charts & graphs maker, wp table, datatables plugin, csv table, tablepress migration, footable plugin, tabular data, stackable table, googlesheet table, WooCommerce table, WooCommerce product table, Amazon affiliate table, bootstrap table, drag-and-drop, wp post table, product tables for WooCommerce, responsive table, mobile table
-Requires at least: 4.5
-Requires PHP: 5.6
-Tested up to: 6.2
-Stable tag: 5.0.2
+Requires at least: 6.0
+Requires PHP: 7.4
+Tested up to: 6.3
+Stable tag: 5.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,12 +136,12 @@ You can watch the following video to learn more about this feature:
 ### Awesome Support
 You can get dedicated support from our excellent support team for this beautiful WordPress table plugin for **free**! All you need to do is create a [support ticket](https://wpmanageninja.com/support-tickets/) here.
 
-Our support team eagerly awaits your feature requests and extended help for customized tables. Don’t hesitate to create a support ticket for the best experiences.
+Our support team eagerly awaits your feature requests and extended help for customized tables. Donâ€™t hesitate to create a support ticket for the best experiences.
 
 ### Create Dynamic WooCommerce Product Tables [Pro Feature]
-With Ninja Tables, you won’t have to worry about [creating WooCommerce product tables](https://ninjatables.com/how-to-create-woocommerce-product-table/) anymore.
+With Ninja Tables, you wonâ€™t have to worry about [creating WooCommerce product tables](https://ninjatables.com/how-to-create-woocommerce-product-table/) anymore.
 
-The table’s Pro integration will let you build dynamic WooCommerce product tables in just a few clicks. This allows your users to buy multiple products from a single page with customizable cart and checkout buttons.
+The tableâ€™s Pro integration will let you build dynamic WooCommerce product tables in just a few clicks. This allows your users to buy multiple products from a single page with customizable cart and checkout buttons.
 
 Purchase [Ninja Tables Pro](https://ninjatables.com/pricing/) to present each WooCommerce product table in a professional manner.
 <iframe width="611" height="360" src="https://www.youtube.com/embed/uIBQoLCFs_M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -166,7 +166,7 @@ A set of [highly useful shortcodes](https://ninjatables.com/docs/advanced-shortc
 
 ### What Users Say About the Best WordPress Table Plugin
 >__BEST and so many features for free!__
->*With almost 500 lines and the need for search and sort by column, I would have had to pay a lot for another plugin’s pro version where Ninja tables nailed it for free. My client is thrilled! (and importing an updated CSV into an existing table is the icing on the cake!)* - By @scwtenor
+>*With almost 500 lines and the need for search and sort by column, I would have had to pay a lot for another pluginâ€™s pro version where Ninja tables nailed it for free. My client is thrilled! (and importing an updated CSV into an existing table is the icing on the cake!)* - By @scwtenor
 
 >__Great plugin and fast helpful support__
 >*Documentation is good as a great start, and the supplemental support so far has been fast and very helpful. Would happily recommend it!* - By @toll02
@@ -179,22 +179,22 @@ A set of [highly useful shortcodes](https://ninjatables.com/docs/advanced-shortc
 >*Compared to TablePress, which is incredibly hard to use to build tables with many columns with different data types, this is a lifesaver. Best table plugin for WordPress so far.* - By Bob (@shallway)
 
 >__Amazing time saver!__
->*This is my Go-To app after years of fat-fingering updates into a spreadsheet, And then working on uploading the information. Ninja Tables is a time/life saver. Very easy to use. I send my client(s) a spreadsheet, they update their rates, and I import/upload these to the site. That’s it. I highly recommend!* - By Tyrell (@rtyrell)
+>*This is my Go-To app after years of fat-fingering updates into a spreadsheet, And then working on uploading the information. Ninja Tables is a time/life saver. Very easy to use. I send my client(s) a spreadsheet, they update their rates, and I import/upload these to the site. Thatâ€™s it. I highly recommend!* - By Tyrell (@rtyrell)
 
 >__Great Plugin, Even Better Support__
 >*This plugin is easily one of the most used plugins for my website. It is very easy to use and is packed with features. The developers are super quick to respond if you encounter any issues. Definitely recommended!* - By @dnobhlrjr
 
 >__The New Supreme Ruler of Table Plugins__
->*It looks good, loads fast, allows for ‘views’ without bogging down the server, It allows for a great deal of customization.* - By @bronzeego
+>*It looks good, loads fast, allows for â€˜viewsâ€™ without bogging down the server, It allows for a great deal of customization.* - By @bronzeego
 
 >__Ninja Tables is still one of the most performant plugins I use.__
 >*Ninja Tables is still one of the most performant plugins I use.
 Many thanks to the support of Ninja Tables.* - By @alcapone65
 
 >__Best and most flexible WP Tables Plugin__
->*We tried a lot of plugins, but “Ninja Tables” was the only one that fits all our needs. It’s no rocket science to create the first table and fill it up with data.*
+>*We tried a lot of plugins, but â€œNinja Tablesâ€ was the only one that fits all our needs. Itâ€™s no rocket science to create the first table and fill it up with data.*
 
->*Additionally, it is so flexible that you can move and change the table without re-creating the whole thing. PS: We’re using the Pro version now, and it's absolutely worth the price – it’s nearly a steal for what you get.
+>*Additionally, it is so flexible that you can move and change the table without re-creating the whole thing. PS: Weâ€™re using the Pro version now, and it's absolutely worth the price â€“ itâ€™s nearly a steal for what you get.
 >5 5-Stars! Great work!* - By @parkscheibe
 
 From the above section, you can see what our users are saying about our WordPress table plugin. Give this plugin a try and explore the powerful features and table styles.
@@ -230,7 +230,7 @@ Ninja Tables is the most beginner-friendly, non-techy and easiest WordPress Tabl
 = Are tables SEO-friendly? =
 Yes! Any kind of table you create with Ninja Tables is SEO-friendly, and all table data are visible to search engines.
 = Who can use Ninja Tables? =
-It’s built for everyone- a newbie or an expert. The easy interface gives anyone the comfort of creating and customize dynamic tables without coding.
+Itâ€™s built for everyone- a newbie or an expert. The easy interface gives anyone the comfort of creating and customize dynamic tables without coding.
 = Can I import tables from my TablePress plugin to Ninja Tables? =
 Yes, absolutely, you can. We have introduced a feature that helps you import tables from your existing TablePress plugin in just a few clicks!
 = Can I import tables from Ultimate Tables Plugin or Data Tables Generator by Supsystic to Ninja Tables? =
@@ -265,7 +265,21 @@ Ninja Tables let's you connect Google spreadsheets to the WordPress tables. Chec
 
 == Changelog ==
 We released several updates for Ninja Tables in the years of development. These include improvements to the existing features and some wonderful additions to help you design tables more effectively.
-### What's New on 5.0.2?
+### What's New on 5.0.3?
+
+= 5.0.3 (Date: Sep 26, 2023) =
+* Adds Searchable Gutenberg block for add tables shortcode
+* Adds Php 8x support
+* Fixes Vue version conflict with other plugins
+* Fixes Excel formula checkbox check & uncheck issue
+* Fixes Fullwidth searcher issue on mobile device
+* Fixes: Table caption update issue
+* Fixes CSS appearance issue in accordion
+* Fixes Force downloaded third party file from any url
+* Fixes Multi-select dropdown filter last item disappear issue on mobile
+* Fixes Drag and drop tables preview and margin issue
+* Improves drag &  drop table progress bar percentage
+* Improves drag &  drop table column width increase 500 to 1000
 
 = 5.0.2 (Date: June 15, 2023) =
 * Added a dismissible option in the admin area for all notices
