@@ -99,7 +99,7 @@ class NinjaFooTable
         $css = self::generateCustomColorCSS($tableArray, $extra_css);
         if ($css) {
             $tableId = $tableArray['table_id'];
-            add_action('wp_head', function () use ($css, $tableId) {
+            add_action('ninja_tables_after_table_print', function () use ($css, $tableId) {
                 ?>
                 <style type="text/css" id='ninja_table_custom_css_<?php echo esc_attr($tableId); ?>'>
                     <?php echo ninjaTablesEscCss($css); ?>

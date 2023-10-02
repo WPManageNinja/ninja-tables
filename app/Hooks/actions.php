@@ -30,7 +30,7 @@ $app->addAction('admin_enqueue_scripts', [AdminMenuHandler::class, 'enqueueAsset
 
 $app->addAction('init', [CPTHandler::class, 'registerPostTypes']);
 
-$app->addAction('init', [PublicDataHandler::class, 'registerTableRenderFunctions'], 20);
+$app->addAction('init', [PublicDataHandler::class, 'registerTableRenderFunctions']);
 $app->addAction('wp_enqueue_scripts', [PublicDataHandler::class, 'enqueueNinjaTableScript'], 100);
 $app->addAction('ninja_tables-render-table-footable', [PublicDataHandler::class, 'runFooTable']);
 $app->addAction('ninja_tables_inside_table_render', [PublicDataHandler::class, 'renderTableInsideTable'], 10, 2);
