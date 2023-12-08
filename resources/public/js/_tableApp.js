@@ -686,7 +686,7 @@ export default {
                 if (key != '____editing____') {
                     const col = _find(columns, ['key', key]);
 
-                    if (col && col.type === 'numeric' && col.original_type !== 'date') {
+                    if (col && col.type === 'numeric' && col.original_type !== 'date' && col.transformed_value !== undefined) {
                         if (col.decimalSeparator === '.') {
                             row[key] = row[key] ? row[key].replace(/\,/g,'') : row[key];
                         } else {
