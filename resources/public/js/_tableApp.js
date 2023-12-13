@@ -5,7 +5,7 @@ import mustache from './_tiny_mustace'
 import unescape from 'lodash/unescape';
 import _find from 'lodash/find';
 import parser from './parser';
-import { euFormat } from "../../common/helpers";
+import {euFormat} from "../../common/helpers";
 
 
 let $ = jQuery;
@@ -24,9 +24,9 @@ let parseImageTag = function (valueOrElement) {
 }
 
 const googleTranslatorPagination = () => {
-    const scripts = document. getElementsByTagName("script");
+    const scripts = document.getElementsByTagName("script");
     let cb = '';
-    for (var i = 0; i < scripts. length; i++) {
+    for (var i = 0; i < scripts.length; i++) {
         if (scripts[i].src) {
             let params = (new URL(scripts[i].src)).searchParams;
             cb = params.get("cb");
@@ -75,9 +75,9 @@ export default {
             }
         })
             .on('postdraw.ft.table', (e, fooTable) => {
-               if (window.google && window.google.translate) {
-                   googleTranslatorPagination();
-               }
+                if (window.google && window.google.translate) {
+                    googleTranslatorPagination();
+                }
                 try {
                     Event.trigger(
                         'ninja-tables-apply-conditional-formatting',
@@ -389,13 +389,12 @@ export default {
                     return valueOrElement;
                 };
                 column.type = 'numeric';
-            }
-            else if (column.type == 'numeric') {
+            } else if (column.type == 'numeric') {
                 column.sortValue = function (valueOrElement) {
                     return that.parseNumberValue(valueOrElement, column);
                 };
                 column.filterValue = function (valueOrElement) {
-                    return  that.parseNumberValue(valueOrElement, column, true);
+                    return that.parseNumberValue(valueOrElement, column, true);
                 };
             } else if (column.type == 'image') {
                 column.sortValue = that.getTextFiltererOrSorter(true);
@@ -589,7 +588,7 @@ export default {
                         $('.pika-single').attr({
                             'aria-label': "Date Picker",
                             'aria-pressed': 'true',
-                            'aria-hidden' : 'false'
+                            'aria-hidden': 'false'
                         });
                         $('select.pika-select.pika-select-month').attr('title', 'Select Month');
                         $('select.pika-select.pika-select-year').attr('title', 'Select Year');
@@ -598,7 +597,7 @@ export default {
                         $('.pika-single').attr({
                             'aria-label': "Date Picker",
                             'aria-pressed': 'false',
-                            'aria-hidden' : 'true'
+                            'aria-hidden': 'true'
                         });
                     }
                 });
@@ -618,7 +617,7 @@ export default {
             .attr('autocorrect', 'off')
             .attr('autocapitalize', 'off');
 
-        $table.on('keyup', '.ninja-custom-filter input, .footable-filtering-search > .input-group > input', function(e) {
+        $table.on('keyup', '.ninja-custom-filter input, .footable-filtering-search > .input-group > input', function (e) {
             if (e.keyCode === 13) {
                 e.preventDefault();
             }
@@ -688,9 +687,9 @@ export default {
 
                     if (col && col.type === 'numeric' && col.original_type !== 'date' && col.transformed_value !== undefined) {
                         if (col.decimalSeparator === '.') {
-                            row[key] = row[key] ? row[key].replace(/\,/g,'') : row[key];
+                            row[key] = row[key] ? row[key].replace(/\,/g, '') : row[key];
                         } else {
-                            row[key] = row[key] ? row[key].replace(/\./g,'').replace(/\,/g,'.') : row[key];
+                            row[key] = row[key] ? row[key].replace(/\./g, '').replace(/\,/g, '.') : row[key];
                         }
                     }
                 }
@@ -741,12 +740,57 @@ export default {
             return '';
         }
     },
+
     parseButtonColumn(value, column) {
-        column = column.original;
         if (!value) {
             return '';
         }
-        return `<a target="${column.link_target}" class="nt_btn ${column.btn_extra_class}" style="color: ${column.btn_text_color}; background-color: ${column.btn_bg_color}; border-color: ${column.btn_border_color}" href='${value}'>${column.button_text}</a>`;
+        column = column['original'];
+
+        let atts = '';
+        if (column.link_target) {
+            atts = 'target="' + column.link_target + '"';
+        }
+
+        let extraClass = '';
+        if (column['btn_extra_class'] && column['btn_extra_class']) {
+            extraClass = column['btn_extra_class'];
+        }
+
+        let styles = '';
+        if (column['btn_text_color']) {
+            styles += 'color: ' + column['btn_text_color'] + ';';
+        }
+
+        if (column['btn_bg_color']) {
+            styles += 'background-color: ' + column['btn_bg_color'] + ';';
+        }
+
+        if (column['btn_border_color']) {
+            styles += 'border-color: ' + column['btn_border_color'] + ';';
+        }
+
+        let btnText = '';
+        if (column['button_text']) {
+            btnText = column['button_text'];
+        }
+
+        let relAttributes = '';
+        if (column['relAttributes']) {
+            relAttributes = column['relAttributes'].join(" ");
+        }
+
+        let forceDownload = '';
+        let url = value;
+        if (column['force_download'] && column['force_download']) {
+            forceDownload = `download`;
+            const siteURL = ninja_footables.site_url;
+            if (!url.includes(siteURL)) {
+                extraClass += ' nt_force_download';
+            }
+        }
+
+        return `<a ${atts} ${forceDownload} class="nt_btn ${extraClass}" style="${styles}" rel="${relAttributes}" href="${url}">${btnText}</a>`;
     },
     getTextFiltererOrSorter(sort = false) {
         return function (valueOrElement) {
@@ -804,9 +848,9 @@ export default {
 
         // for sorting we need to generate the proper number for european value.
         if (valueOrElement && column.decimalSeparator == ',') {
-            valueOrElement = valueOrElement.replace(/\./g,'').replace(/\,/g,'.');
+            valueOrElement = valueOrElement.replace(/\./g, '').replace(/\,/g, '.');
         } else if (column.decimalSeparator == '.') {
-            valueOrElement = valueOrElement.replace(/\,/g,'');
+            valueOrElement = valueOrElement.replace(/\,/g, '');
         }
         let numberValue = Number(valueOrElement);
         if (isNaN(numberValue)) {
@@ -824,7 +868,7 @@ export default {
     hideOnEmptyIcons($table, tableConfig) {
         if (tableConfig.settings && tableConfig.settings.hide_on_empty) {
             $table.find('tbody tr').each(function () {
-               let singleTr = [];
+                let singleTr = [];
 
                 $(this).find('td[style*="display: none"]').each(function () {
                     singleTr.push($(this).text());

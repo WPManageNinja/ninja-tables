@@ -75,7 +75,8 @@ class NinjaFooTable
                 'clear_all'      => __('Clear All', 'ninja-tables'),
                 'caption_format' => __('Selected', 'ninja-tables'),
             ),
-            'ninja_table_public_nonce' => wp_create_nonce('ninja_table_public_nonce')
+            'ninja_table_public_nonce' => wp_create_nonce('ninja_table_public_nonce'),
+            'site_url'                 => site_url(),
         );
 
         if (defined('NINJAPROPLUGIN_VERSION')) {
