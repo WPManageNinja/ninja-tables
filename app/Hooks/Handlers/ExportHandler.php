@@ -1,19 +1,18 @@
 <?php
 
-namespace NinjaTables\App\Http\Controllers;
+namespace NinjaTables\App\Hooks\Handlers;
 
 use NinjaTables\App\Library\Csv\Writer;
 use NinjaTables\App\Models\NinjaTableItem;
-use NinjaTables\Framework\Request\Request;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
 
-class ExportTableController extends Controller
+class ExportHandler
 {
-    public function dragAndDropExport(Request $request)
+    public function dragAndDropExport()
     {
-        $tableId    = intval(Arr::get($request->all(), 'table_id'));
-        $format     = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'format'));
+        $tableId    = intval(Arr::get($_REQUEST, 'table_id'));
+        $format     = Sanitizer::sanitizeTextField(Arr::get($_REQUEST, 'format'));
         $tableTitle = get_the_title($tableId);
         $fileName   = Sanitizer::sanitizeTitle($tableTitle);
         $tableData  = get_post_meta($tableId, '_ninja_table_builder_table_data', true);
@@ -70,10 +69,10 @@ class ExportTableController extends Controller
         static::exportAsJSON($data, $fileName);
     }
 
-    public function defaultExport(Request $request)
+    public function defaultExport()
     {
-        $tableId = intval(Arr::get($request->all(), 'table_id'));
-        $format  = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'format'));
+        $tableId = intval(Arr::get($_REQUEST, 'table_id'));
+        $format  = Sanitizer::sanitizeTextField(Arr::get($_REQUEST, 'format'));
 
         $tableTitle = get_the_title($tableId);
 

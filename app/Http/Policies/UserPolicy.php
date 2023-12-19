@@ -18,16 +18,4 @@ class UserPolicy extends Policy
     {
         return current_user_can(ninja_table_admin_role());
     }
-
-    public function defaultExport(Request $request)
-    {
-//       TODO: Check if the user has logged in; if so, return true; otherwise, return false.
-        return true;
-    }
-
-    public function dragAndDropExport(Request $request)
-    {
-//       TODO: Check if the user has logged in; if so, return true; otherwise, return false.
-        return true;
-    }
 }

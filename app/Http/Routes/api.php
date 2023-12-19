@@ -83,10 +83,5 @@ $router->withPolicy('UserPolicy')->group(function ($router) {
         $route->post('/fluent-forms', [PluginInstallerController::class, 'installFluentForms']);
         $route->post('/ninja-charts', [PluginInstallerController::class, 'installNinjaCharts']);
     });
-
-    $router->prefix('export')->group(function ($app) {
-        $app->get('/default', [ExportTableController::class, 'defaultExport']);
-        $app->get('/drag-and-drop', [ExportTableController::class, 'dragAndDropExport']);
-    });
 });
 

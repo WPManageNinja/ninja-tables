@@ -10,6 +10,7 @@ use NinjaTables\App\Hooks\Handlers\StyleHandler;
 use NinjaTables\App\Hooks\Handlers\DeactivationHandler;
 use NinjaTables\App\Hooks\Handlers\NinjaTableAdminHandler;
 use NinjaTables\App\Hooks\Handlers\DataProviderHandler;
+use NinjaTables\App\Hooks\Handlers\ExportHandler;
 
 /**
  * All registered action's handlers should be in app\Hooks\Handlers,
@@ -79,3 +80,6 @@ if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION,
         class_alias(NinjaTables\Framework\Support\Arr::class, 'NinjaTables\Classes\ArrayHelper');
     });
 }
+
+$app->addAdminAjaxAction('ninja-tables-default-export',  [ExportHandler::class, 'defaultExport']);
+$app->addAdminAjaxAction('ninja-tables-drag-and-drop-export',  [ExportHandler::class, 'dragAndDropExport']);

@@ -45,12 +45,7 @@
         },
         methods: {
             downloadLink(format = 'csv') {
-                const payloadData = {
-                    table_id: this.tableId,
-                    format: format
-                };
-
-                return window.ninja_table_admin.rest.url + '/export/default?' + jQuery.param(payloadData);
+                return `${window.ajaxurl}?action=ninja-tables-default-export&table_id=${this.$route.params.table_id}&format=${format}`;
             },
             doExport() {
                location.href = this.downloadLink(this.selected);
