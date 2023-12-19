@@ -21,12 +21,17 @@ import AddOrEditTable from './components/TableBuilder/TableBuilderHome'
 
 export const routes = [
     {
+        name: 'default',
+        path: '*',
+        redirect: '/'
+    },
+    {
         path: '/',
         component: Home,
         props: true,
         children: [
             {
-                path: 'home',
+                path: '/',
                 name: 'home',
                 component: AllTables
             },

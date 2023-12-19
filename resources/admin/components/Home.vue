@@ -47,7 +47,7 @@
         },
         computed: {
             activeMenu() {
-                return ['home', 'help'].indexOf(this.$route.name) != -1 ? this.$route.name : 'import_tables'
+                return ['home', 'import_tables', 'help'].indexOf(this.$route.name) != -1 ? this.$route.name : 'home'
             }
         },
         methods: {
