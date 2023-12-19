@@ -4,8 +4,8 @@ Donate link: https://ninjatables.com/pricing/
 Tags: wp table builder, table plugin, wpdatatables, wordpress tables, Table builder plugin, table grid, charts & graphs maker, wp table, datatables plugin, csv table, tablepress migration, footable plugin, tabular data, stackable table, googlesheet table, WooCommerce table, WooCommerce product table, Amazon affiliate table, bootstrap table, drag-and-drop, wp post table, product tables for WooCommerce, responsive table, mobile table
 Requires at least: 6.0
 Requires PHP: 7.4
-Tested up to: 6.3
-Stable tag: 5.0.4
+Tested up to: 6.4
+Stable tag: 5.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -265,7 +265,14 @@ Ninja Tables let's you connect Google spreadsheets to the WordPress tables. Chec
 
 == Changelog ==
 We released several updates for Ninja Tables in the years of development. These include improvements to the existing features and some wonderful additions to help you design tables more effectively.
-### What's New on 5.0.4?
+### What's New on 5.0.5?
+
+= 5.0.5 (Date: December 19, 2023) =
+* Fixes: European number range filter issue with the use of transform value
+* Fixes: Fixes external source pdf file download issue
+* Fixes: Fixes text input strict mode filter for latin characters
+* Fixes: Fixes transform value & specific row colors issue in print
+* Fixes: Fixes CSV/JSON export unauthorized access issue
 
 = 5.0.4 (Date: October 04, 2023) =
 * Fixes table colors issue
