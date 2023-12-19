@@ -30,7 +30,7 @@ class AdminMenuHandler
         $submenu['ninja_tables']['all_tables'] = array(
             __('Tables', 'ninja-tables'),
             $capability,
-            'admin.php?page=ninja_tables#/home',
+            'admin.php?page=ninja_tables#/',
             '',
             'ninja_tables_all_tables'
         );
