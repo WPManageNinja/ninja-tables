@@ -79,6 +79,9 @@ class Post extends Model
         delete_post_meta($tableId, '_ninja_table_columns');
         delete_post_meta($tableId, '_ninja_table_settings');
         delete_post_meta($tableId, '_ninja_table_cache_object');
+
+        // Delete the table items
+        NinjaTableItem::where('table_id', $tableId)->delete();
     }
 
     public static function makeDuplicate($oldPostId, $newPostId)
