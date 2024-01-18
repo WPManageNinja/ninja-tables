@@ -171,7 +171,7 @@ return [
                     'size'           => 50,
                     'shape'          => 'square',
                     'alt'            => 'Demo Image',
-                    'link'           => 'https://www.example.com/',
+                    'link'           => '',
                     'linkAttributes' => [],
                     'target'         => 'blank',
                     "margin"         => $margin,

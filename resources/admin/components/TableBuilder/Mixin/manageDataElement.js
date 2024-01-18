@@ -123,11 +123,11 @@ export const manageDataElement = {
             let height = '30px';
 
             if (size === 'S') {
-                width =  '60px';
+                width = '60px';
                 height = '27px';
 
             } else if (size === 'L') {
-                width =  '120px';
+                width = '120px';
                 height = '40px';
             }
 
@@ -141,7 +141,7 @@ export const manageDataElement = {
                 'line-height': 1,
                 'display': 'inline-block',
                 '--padding-dashboard': (isFullWidth === 'true' || isFullWidth === true) ? '10px' : '5px',
-                '--padding-frontend':  (isFullWidth === 'true' || isFullWidth === true) ? '10px' : '0',
+                '--padding-frontend': (isFullWidth === 'true' || isFullWidth === true) ? '10px' : '0',
             }
         },
         justifyContent() {
@@ -281,6 +281,20 @@ export const manageDataElement = {
                 relAsString = rel.join(' ');
             }
             return relAsString;
+        },
+
+        hrefAttribute() {
+            const link = this.item.data.style.link;
+
+            if (!link) {
+                return false;
+            }
+
+            if (link) {
+                return {
+                    href: link
+                }
+            }
         }
     },
     methods: {
