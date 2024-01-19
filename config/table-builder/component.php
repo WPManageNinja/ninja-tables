@@ -173,7 +173,7 @@ return [
                     'alt'            => 'Demo Image',
                     'link'           => '',
                     'linkAttributes' => [],
-                    'target'         => 'blank',
+                    'target'         => false,
                     "margin"         => $margin,
                     "padding"        => $padding
                 ],

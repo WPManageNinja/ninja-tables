@@ -295,6 +295,12 @@ export const manageDataElement = {
                     href: link
                 }
             }
+        },
+
+        targetAttribute() {
+            const target = this.item.data.style.target;
+
+            return target ? { target: '_blank' } : false;
         }
     },
     methods: {

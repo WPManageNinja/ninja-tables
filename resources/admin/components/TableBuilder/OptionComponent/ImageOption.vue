@@ -13,6 +13,7 @@
         ></shape>
         <text-input :label="$t('Image Alternative Text')" v-model="item.data.style.alt"></text-input>
         <text-input :label="$t('Image Link')" v-model="item.data.style.link"></text-input>
+        <switch-input :label="$t('Open in new tab')" v-model="item.data.style.target"></switch-input>
         <checkbox
             :label="$t('Link rel attributes')"
             :options="linkOptions"
@@ -28,6 +29,7 @@ import TextInput from "../SettingComponent/TextInput";
 import SliderInput from "../SettingComponent/SliderInput";
 import Shape from "../SettingComponent/Shape"
 import Checkbox from "../SettingComponent/CheckboxInput";
+import SwitchInput from "../SettingComponent/SwitchInput.vue";
 
 export default {
     name: "ImageOption",
@@ -42,6 +44,7 @@ export default {
         };
     },
     components: {
+        SwitchInput,
         Alignment,
         TextInput,
         SliderInput,

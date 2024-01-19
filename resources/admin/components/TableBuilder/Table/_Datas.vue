@@ -100,8 +100,7 @@
       <a
           class="hover-item"
           @click.prevent
-          target="_blank"
-          v-bind="hrefAttribute"
+          v-bind="[hrefAttribute, targetAttribute]"
           :style="[displayBlock]"
           :rel="linkAttributes"
       >
