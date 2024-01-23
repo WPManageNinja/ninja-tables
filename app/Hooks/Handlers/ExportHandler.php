@@ -11,6 +11,10 @@ class ExportHandler
 {
     public function dragAndDropExport()
     {
+        if ( ! current_user_can(ninja_table_admin_role())) {
+            return;
+        }
+
         $tableId    = intval(Arr::get($_REQUEST, 'table_id'));
         $format     = Sanitizer::sanitizeTextField(Arr::get($_REQUEST, 'format'));
         $tableTitle = get_the_title($tableId);
@@ -71,6 +75,10 @@ class ExportHandler
 
     public function defaultExport()
     {
+        if ( ! current_user_can(ninja_table_admin_role())) {
+            return;
+        }
+
         $tableId = intval(Arr::get($_REQUEST, 'table_id'));
         $format  = Sanitizer::sanitizeTextField(Arr::get($_REQUEST, 'format'));
 
