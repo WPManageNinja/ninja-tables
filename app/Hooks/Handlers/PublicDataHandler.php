@@ -11,7 +11,7 @@ class PublicDataHandler
 {
     public function runFooTable($tableArray)
     {
-       NinjaFooTable::run($tableArray);
+        NinjaFooTable::run($tableArray);
     }
 
     public function registerTableRenderFunctions()
@@ -28,11 +28,18 @@ class PublicDataHandler
 
     public function renderTableShortcode($atts, $content = '')
     {
+        if (is_preview() && is_user_logged_in()) {
+            $role = ninja_table_admin_role();
+            if (!current_user_can($role)) {
+                return '<div class="ninja-tables-preview-message">' . __('Please publish the page/post to see the table', 'ninja-tables') . '</div>';
+            }
+        }
+
         $shortCodeDefaults = [
-            'id' => false,
-            'filter' => false,
+            'id'               => false,
+            'filter'           => false,
             'use_parent_width' => false,
-            'info' => ''
+            'info'             => ''
         ];
 
         $shortCodeDefaults = apply_filters('ninja_tables_shortcode_defaults', $shortCodeDefaults);
@@ -59,8 +66,16 @@ class PublicDataHandler
 
     public function tableInfoShortcode($atts)
     {
+
+        if (is_preview() && is_user_logged_in()) {
+            $role = ninja_table_admin_role();
+            if (!current_user_can($role)) {
+                return '<div class="ninja-tables-preview-message">' . __('Please publish the page/post to see the table', 'ninja-tables') . '</div>';
+            }
+        }
+
         $shortCodeDefaults = [
-            'id' => false,
+            'id'    => false,
             'field' => ''
         ];
         $shortCodeData = shortcode_atts($shortCodeDefaults, $atts);
@@ -132,9 +147,16 @@ class PublicDataHandler
 
     public function tableCellShortcode($atts)
     {
+        if (is_preview() && is_user_logged_in()) {
+            $role = ninja_table_admin_role();
+            if (!current_user_can($role)) {
+                return '<div class="ninja-tables-preview-message">' . __('Please publish the page/post to see the table', 'ninja-tables') . '</div>';
+            }
+        }
+
         $shortCodeDefaults = [
-            'id' => 0,
-            'row' => 0,
+            'id'     => 0,
+            'row'    => 0,
             'column' => '',
             'row_id' => false
         ];
@@ -151,8 +173,8 @@ class PublicDataHandler
 
         if ($row_id) {
             $rowData = NinjaTableItem::where('table_id', $id)
-                                ->where('id', $row_id)
-                                ->first();
+                ->where('id', $row_id)
+                ->first();
             if (!$rowData) {
                 return '';
             }
@@ -215,10 +237,10 @@ class PublicDataHandler
         $tableId = intval($tableId);
 
         $atts = [
-            'id' => $tableId,
-            'filter' => false,
+            'id'               => $tableId,
+            'filter'           => false,
             'use_parent_width' => false,
-            'info' => ''
+            'info'             => ''
         ];
 
         $tableArray = $this->getTableArray($atts, '');
@@ -349,11 +371,11 @@ class PublicDataHandler
         }
 
         return [
-            'table_id' => $table_id,
-            'columns' => $tableColumns,
-            'settings' => $tableSettings,
-            'table' => $table,
-            'content' => $content,
+            'table_id'      => $table_id,
+            'columns'       => $tableColumns,
+            'settings'      => $tableSettings,
+            'table'         => $table,
+            'content'       => $content,
             'shortCodeData' => $shortCodeData
         ];
     }
