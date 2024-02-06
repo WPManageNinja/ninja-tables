@@ -94,7 +94,7 @@
                                 <div class="help_section">
                                     <p>Need help to configure the columns and responsive breakdowns, Please check tutorial with
                                         video <a
-                                                href="https://wpmanageninja.com/r/docs/ninja-tables/configure-responsive-breakdowns-for-table/?utm_source=ninja-tables"
+                                                href="https://ninjatables.com/docs/column-responsive-breakpoints/"
                                                 target="_blank">here</a></p>
                                 </div>
                                 <div v-if="!is_fluent_installed" class="help_section">
