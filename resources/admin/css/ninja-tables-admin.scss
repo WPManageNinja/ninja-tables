@@ -11,6 +11,7 @@
   margin-left: -22px;
   padding-right: 40px;
   height: 60px;
+
   .plugin-name {
     font-size: 16px;
     color: #6e6e6e;
@@ -20,9 +21,11 @@
     img {
       transform: translateY(-27%);
     }
+
     &:focus {
       outline: none;
     }
+
     .pro {
       margin-left: 5px;
       position: absolute;
@@ -110,6 +113,7 @@ label.form_group {
 .editr--toolbar .dashboard {
   box-sizing: border-box;
   padding: 0rem 0.5rem;
+
   .dropzone {
     max-height: 86px;
     min-height: 50px !important;
@@ -125,6 +129,7 @@ label.form_group {
     text-overflow: ellipsis !important;
     overflow: hidden;
     white-space: nowrap;
+
     * {
       text-overflow: ellipsis !important;
       overflow: hidden;
@@ -160,12 +165,14 @@ label.form_group {
 .btn.pag-btn {
   background: #b2ccda;
   color: #fff;
+
   &:hover {
     opacity: .90;
     color: #fff;
     outline: none !important;
     box-shadow: none !important;
   }
+
   &:focus {
     color: #fff;
     outline: none !important;
@@ -203,23 +210,28 @@ label {
   -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
   -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+
   &:focus {
     border-color: #66afe9;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
   }
+
   &::-moz-placeholder {
     color: #999;
     opacity: 1;
   }
+
   &:-ms-input-placeholder, &::-webkit-input-placeholder {
     color: #999;
   }
+
   &::-ms-expand {
     background-color: transparent;
     border: 0;
   }
+
   &[disabled], &[readonly] {
     background-color: #eee;
     opacity: 1;
@@ -242,17 +254,21 @@ textarea.form-control {
 .input-group {
   display: table;
   position: relative;
+
   .form-control, .input-btn {
     display: table-cell;
     vertical-align: middle;
   }
+
   .form-control {
     float: left;
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
   }
+
   .input-btn {
     width: 1%;
+
     .btn {
       border-bottom-left-radius: 0;
       border-top-left-radius: 0;
@@ -266,29 +282,36 @@ textarea.form-control {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
+
   &:before {
     display: table;
     content: " ";
   }
+
   &:after {
     display: table;
     content: " ";
     clear: both;
   }
+
   > li {
     position: relative;
     display: block;
+
     > a {
       position: relative;
       display: block;
       padding: 10px 15px;
+
       &:hover, &:focus {
         text-decoration: none;
         background-color: #eee;
       }
     }
+
     &.disabled > a {
       color: #777;
+
       &:hover, &:focus {
         color: #777;
         text-decoration: none;
@@ -301,28 +324,34 @@ textarea.form-control {
 
 .nav-tabs {
   border-bottom: 1px solid #ddd;
+
   > li {
     float: left;
     margin-bottom: -1px;
+
     > a {
       margin-right: 2px;
       line-height: 1.42857143;
       border: 1px solid transparent;
       border-radius: 4px 4px 0 0;
       text-decoration: none;
+
       &:hover {
         border-color: #eee #eee #ddd;
       }
+
       &:focus {
         box-shadow: none;
       }
     }
+
     &.router-link-exact-active > a {
       color: #555;
       cursor: default;
       background-color: #fff;
       border: 1px solid #ddd;
       border-bottom-color: transparent;
+
       &:hover, &:focus {
         color: #555;
         cursor: default;
@@ -360,6 +389,7 @@ textarea.form-control {
 
 .row_full {
   overflow: hidden;
+
   .pull-left {
     float: left;
   }
@@ -369,11 +399,13 @@ textarea.form-control {
   position: relative;
   margin-top: 0px;
   padding-top: 0px;
+
   input {
     width: 98%;
     font-size: 95%;
     padding-right: 30px;
   }
+
   i {
     position: absolute;
     right: 8px;
@@ -412,10 +444,12 @@ textarea.form-control {
 
 ul.doc_items {
   margin-left: 45px;
+
   li {
     font-size: 14px;
     margin-bottom: 10px;
     list-style: disc;
+
     a {
       text-decoration: none;
     }
@@ -455,6 +489,7 @@ ul.doc_items {
   display: block;
   position: relative;
   width: 100%;
+
   .ninja_suggest {
     overflow: hidden;
     display: block;
@@ -463,21 +498,25 @@ ul.doc_items {
     color: black;
     font-size: 18px;
     margin: 10px 0px;
+
     p {
       font-size: 16px;
       padding: 0px;
       margin: 0px;
     }
   }
+
   .ninja_block {
     p {
       font-size: 16px;
     }
   }
+
   .ninja_export_block {
     display: block;
     margin-top: 25px;
   }
+
   .ninja_block_section {
     margin: 20px 0px;
   }
@@ -492,6 +531,7 @@ ul.doc_items {
   overflow: hidden;
   width: 96%;
   margin-top: 40px;
+
   .ninja_dismiss {
     position: absolute;
     right: 10px;
@@ -512,6 +552,7 @@ ul.doc_items {
       display: block;
       margin-bottom: 10px;
     }
+
     img {
       max-width: 100%;
     }
@@ -524,9 +565,11 @@ ul.doc_items {
   position: relative;
   margin-bottom: 20px;
   overflow: hidden;
+
   > * {
     box-sizing: border-box;
   }
+
   .block_1_3 {
     width: 33.33%;
     float: left;
@@ -539,6 +582,7 @@ ul.doc_items {
       margin-bottom: 30px;
     }
   }
+
   .ff_block {
     .ff_block_box {
       padding: 15px;
@@ -548,12 +592,15 @@ ul.doc_items {
       box-shadow: 0 0 5px rgba(0, 0, 0, .05);
       border-radius: 4px;
       height: 250px;
+
       img.block_icon {
         max-height: 62px;
       }
+
       ul {
         list-style: disc;
         margin-left: 20px;
+
         li a {
           font-size: 14px;
           text-decoration: none;
@@ -561,6 +608,7 @@ ul.doc_items {
         }
       }
     }
+
     .ninja_tables_user_guide {
       height: auto;
     }
@@ -571,14 +619,17 @@ ul.doc_items {
   .el-dialog {
     background: #fdf5f5;
   }
+
   .el-dialog__body {
     padding-top: 0px;
   }
+
   .buy_now_button {
     text-decoration: none;
     font-size: 20px;
     padding: 10px 25px;
   }
+
   .list_features {
     margin-left: 45px;
     list-style: disc;
@@ -605,14 +656,17 @@ ul.doc_items {
   border: 3px solid #cccccc;
   height: 150px;
   overflow: auto;
+
   h4 {
     margin-top: 10px;
   }
+
   &.expand_card {
     width: 30%;
     min-height: 120px;
     padding: 5px 10px;
   }
+
   .selected_ribbon {
     position: absolute;
     right: 0px;
@@ -622,6 +676,7 @@ ul.doc_items {
     color: white;
     font-weight: bold;
   }
+
   &.selected_type {
     border: 5px solid #4CAF50;;
     background: #f6fff7;
@@ -636,12 +691,15 @@ ul.doc_items {
 
 .language_block .form_group {
   margin-bottom: 20px;
+
   &:last-child {
     margin-bottom: 0px;
   }
+
   label {
     display: block;
   }
+
   input {
     height: 32px;
     padding: 5px 10px;
@@ -672,26 +730,32 @@ ul.doc_items {
   width: 100%;
   display: block;
   margin-top: 0px;
+
   .ninja_section_block_header {
     padding: 12px 20px;
     border-bottom: 2px solid #e8e4e4;
     border-top: 2px solid #e8e4e4;
     cursor: pointer;
+
     h3 {
       margin: 0px;
       display: inline-block;
     }
+
     .ninja_header_action {
       display: inline-block;
       float: right;
+
       span {
         cursor: pointer;
       }
     }
   }
+
   .ninja_section_block_body {
     padding: 10px 20px 20px;
     background: #fafafa;
+
     &.ninja_section_hide {
       display: none;
     }
@@ -702,6 +766,7 @@ ul.ninja_render_features li {
   display: inline-block;
   margin-right: 10px;
   list-style: none;
+
   span {
     color: #4caf4f;
   }
@@ -709,6 +774,7 @@ ul.ninja_render_features li {
 
 .ninja_settings_blocks {
   margin-top: 20px;
+
   .ninja_save_button {
     margin-top: 20px;
   }
@@ -740,6 +806,7 @@ ul.ninja_render_features li {
   border: 1px solid #e5e5e5;
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
   box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+
   .title {
     margin: -15px -10px 0;
     border-bottom: 1px solid #f1f1f1;
@@ -749,9 +816,11 @@ ul.ninja_render_features li {
     background: #434d53;
     color: white;
   }
+
   .widget_body {
     padding-top: 10px;
   }
+
   .button-block {
     width: 100%;
   }
@@ -769,15 +838,18 @@ ul.ninja_render_features li {
     background: white;
     overflow: hidden;
     padding: 10px 0;
+
     .title {
       float: left;
       padding: 0px;
       margin: 0px;
     }
+
     .inline_action {
       float: right;
     }
   }
+
   .widget_body {
     background: white;
     padding: 0px;
@@ -787,24 +859,29 @@ ul.ninja_render_features li {
 .drawer {
   display: block;
   border-bottom: 1px solid #434a50;
+
   .drawer_body {
     padding: 10px;
     display: none;
+
     .form_group {
       // padding-right: 20px;
     }
   }
+
   .header {
     padding: 15px 10px;
     background: #535c63;
     color: white;
     //font-weight: bold;
     font-size: 17px;
+
     .edit_icon {
       float: right;
       font-size: 12px;
       cursor: pointer;
     }
+
     .handle {
       cursor: move;
       font-size: 20px;
@@ -818,17 +895,21 @@ ul.ninja_render_features li {
   overflow: hidden;
   margin-bottom: 10px;
   padding-right: 2px;
+
   > label {
     display: block;
   }
+
   .form_control {
     display: block;
     width: 100%;
   }
+
   .normalLabel {
     display: initial;
     font-weight: normal;
   }
+
   .mt5 {
     margin-top: 5px;
   }
@@ -926,12 +1007,15 @@ ul.ninja_render_features li {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
+
   .ninja_column {
     flex: 1 100%;
   }
+
   .ninja_column:first-child {
     margin-right: 15px;
   }
+
   .ninja_column:last-child {
     margin-left: 15px;
   }
@@ -942,23 +1026,28 @@ ul.ninja_render_features li {
   flex-direction: row;
   flex-wrap: nowrap;
   margin-bottom: 10px;
+
   .ninja_color_block {
     flex: 1 100%;
     text-align: center;
     padding: 10px 5px;
     border: 1px solid #cacaca;
     background: #fffafa;
+
     .form_group {
       margin: 0px;
+
       .el-color-picker {
         width: 100%;
         height: 30px;
+
         .el-color-picker__trigger {
           min-width: 100px;
           height: 30px;
         }
       }
     }
+
     label {
       padding: 0px;
       margin: 0;
@@ -988,6 +1077,7 @@ ul.ninja_render_features li {
     display: inline-block;
     margin: 0px;
   }
+
   .ninja_actions_action {
     float: right;
   }
@@ -997,32 +1087,39 @@ ul.ninja_render_features li {
   display: flex;
   padding-bottom: 20px;
   background: white;
+
   .design_controls {
     flex: 1;
     background: #e5e5e5;
     margin: 0px 0px -20px;
     border-left: 1px solid #e5e5e5;
+
     .form_group:not(:last-child) {
       border-bottom: 1px solid rgba(229, 229, 229, 0.45);
       padding-bottom: 10px;
     }
+
     .el-collapse-item__header {
       padding: 0px 0px 0px 15px;
+
       i {
         font-weight: bold;
         padding-top: 18px;
       }
     }
+
     .el-collapse-item__wrap {
       padding: 13px 15px 0px;
       background: #e5e5e5;
       height: auto;
       overflow: scroll;
     }
+
     .el-radio-button--mini .el-radio-button__inner {
       padding: 7px !important;
     }
   }
+
   .design_preview {
     background: white;
     padding: 10px 20px;
@@ -1037,8 +1134,10 @@ ul.ninja_render_features li {
     h3 {
       display: inline-block;
     }
+
     display: inline-block;
   }
+
   button {
     float: right;
     margin-top: 10px;
@@ -1075,8 +1174,10 @@ input.form-control::placeholder {
 .upgrade_box {
   text-align: center;
   margin-top: 10px;
+
   a {
     text-decoration: none;
+
     i {
       margin-top: -5px;
       font-size: 20px;
@@ -1106,6 +1207,7 @@ input.form-control::placeholder {
   padding: 10px 10px;
   background: white;
   border: 1px solid red;
+
   ul.ninja_design_tips_lists {
     margin: 0;
   }
@@ -1114,6 +1216,7 @@ input.form-control::placeholder {
 .el-checkbox-group {
   overflow: hidden;
   width: 100%;
+
   label.el-checkbox {
     display: inline-block;
     margin-left: 0px;
@@ -1156,11 +1259,13 @@ input.form-control::placeholder {
   padding: 10px 15px;
   background: rgb(229, 255, 231);
   margin-top: 20px;
+
   ul {
     margin-left: 30px;
     list-style: disc;
     font-size: 110%;
   }
+
   p {
     margin: 3px 0px;
   }
@@ -1180,15 +1285,18 @@ h2.nav-tab-wrapper {
   display: block;
   overflow: hidden;
   width: 100%;
+
   .form_row_half {
     width: 48%;
     box-sizing: border-box;
     padding-right: 4%;
     float: left;
     display: block;
+
     > label {
       display: block;
     }
+
     &:last-child {
       padding-right: 0;
     }
@@ -1208,6 +1316,7 @@ h2.nav-tab-wrapper {
   padding: 15px 25px;
   display: block;
   overflow: auto;
+
   .ninja_header_editing {
     display: block;
     overflow: hidden;
@@ -1215,39 +1324,48 @@ h2.nav-tab-wrapper {
     padding: 10px 25px;
     border-bottom: 1px solid rgb(234, 231, 231);
     background: rgb(251, 253, 255);
+
     h2 {
       margin: 0;
       padding: 0;
       float: left;
       line-height: 30px;
     }
+
     .heading_actions {
       float: right;
     }
   }
+
   .editing_sub_section {
     display: block;
     margin-bottom: 40px;
+
     .ninja_section_block_header {
       border-bottom: 1px solid rgb(241, 241, 241);
       margin-bottom: 20px;
+
       > h3 {
         margin: 0;
       }
+
       p {
         margin: 5px 0 10px;
       }
     }
   }
+
   .editing_body {
     display: block;
     overflow: hidden;
     width: 100%;
   }
+
   table.ninja_editing_table {
     th {
       font-weight: 500;
     }
+
     tr td, tr th {
       border-bottom: 1px solid rgb(234, 234, 234) !important;
     }
@@ -1257,6 +1375,7 @@ h2.nav-tab-wrapper {
 .el-radio-group.spaced {
   max-width: 100%;
   position: relative;
+
   > label {
     display: inline-block;
   }
@@ -1273,11 +1392,14 @@ h2.nav-tab-wrapper {
   background: #eeeeee;
   margin-top: 20px;
   border-radius: 5px;
+
   h4 {
     margin: 0;
   }
+
   ul {
     margin-left: 30px;
+
     li {
       list-style: disc;
     }
@@ -1300,12 +1422,15 @@ h2.nav-tab-wrapper {
   font-size: 15px;
   position: relative;
   cursor: pointer;
+
   &.nt_nav_active {
     background: #545454;
     color: white;
   }
+
   .nav_card_action {
     float: right;
+
     button {
       font-size: 22px;
       margin-top: -10px;
@@ -1318,6 +1443,7 @@ h2.nav-tab-wrapper {
   margin: 0px 0px 10px;
   box-shadow: 0 2px 6px 0 rgb(195, 195, 195);
   user-select: none;
+
   .nt_nav_body {
     padding: 0px 20px 20px;
     display: block;
@@ -1331,15 +1457,19 @@ h2.nav-tab-wrapper {
   border-bottom: 1px solid #80808026;
   padding-bottom: 10px;
   margin-top: 20px;
+
   &:last-child {
     border-bottom: 0;
   }
+
   .nt_query_header {
     margin-bottom: 15px;
+
     h3 {
       margin: 0 0 5px;
       color: #717070;
     }
+
     p {
       margin: 0;
       color: #6f6f6f;
@@ -1350,20 +1480,25 @@ h2.nav-tab-wrapper {
 .image_selector {
   overflow: hidden;
   display: block;
+
   .image_preview {
     width: 96px;
     display: inline-block;
+
     img {
       max-width: 100%;
     }
   }
+
   .image_select_button {
     display: inline-block;
     vertical-align: top;
   }
+
   .nt_form_group {
     width: 49%;
     float: left;
+
     &.single_form_group {
       width: 100%;
       float: none;
@@ -1377,6 +1512,7 @@ h2.nav-tab-wrapper {
   font-size: 14px;
   text-decoration: none;
   display: inline-block;
+
   &.nt_rounded_btn {
     border-radius: 4px !important;
   }
@@ -1392,6 +1528,7 @@ h2.nav-tab-wrapper {
     width: 100%;
     padding: 4px 7px;
   }
+
   .nt_inline_textarea {
     width: 100%;
     padding: 4px 7px;
@@ -1408,12 +1545,15 @@ h2.nav-tab-wrapper {
 .nt_row_2 {
   width: 100%;
   overflow: hidden;
+
   .form-group {
     width: 48%;
     float: left;
+
     label {
       width: 100%;
     }
+
     input {
       width: 90%;
     }
@@ -1478,6 +1618,7 @@ h2.nav-tab-wrapper {
   margin: 20px 0 30px -20px;
   padding: 12px;
   font-weight: 700;
+
   a {
     .close-icon {
       text-decoration: none;
@@ -1492,15 +1633,17 @@ h2.nav-tab-wrapper {
 
 .ntb-version-update-notice {
   border: 1px solid #c3c4c7;
-  box-shadow: 0 1px 1px rgba(0,0,0,.04);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
   margin: 5px 0 20px -20px;
   padding: 1px 12px;
   border-left: 4px solid #b03c3c;
   background: #fff;
   position: relative;
+
   > h3 {
     margin: 10px 0 0;
   }
+
   > a {
     position: absolute;
     right: 20px;
@@ -1508,9 +1651,11 @@ h2.nav-tab-wrapper {
     transform: translateY(-50%);
     text-decoration: none;
   }
+
   p {
     margin: 0.5em 0;
     padding: 2px;
+
     a {
       position: relative;
     }
@@ -1521,6 +1666,7 @@ h2.nav-tab-wrapper {
   .tablenav {
     margin-bottom: 15px;
   }
+
   .show-meta-data {
     margin: 0;
   }
@@ -1531,10 +1677,127 @@ h2.nav-tab-wrapper {
     .el-transfer-panel__item {
       .el-checkbox__label {
         overflow: hidden;
+
         &:hover {
           overflow: initial;
         }
       }
+    }
+  }
+}
+
+// Help and docs
+.ninja-tables-help {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+
+  .user-guide {
+    background-color: #366F45;
+
+    .column {
+      width: 80%;
+      margin: 0 auto;
+
+      h2, a, p {
+        color: #ffffff;
+      }
+    }
+  }
+
+  .review {
+    background-color: #f1f6f5;
+
+    .column {
+      margin: 10px 0;
+      p {
+        color: #366f45;
+      }
+    }
+  }
+
+  .download {
+    background-color: #ffffff;
+    margin-top: 10px;
+    .column {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .support {
+    background-color: #fff8f2;
+    margin-top: 10px;
+  }
+
+  .product-wrap {
+    margin-top: 10px;
+    .section-title {
+      color: #f67a07;
+    }
+
+    background-color: #ffffff;
+
+    .products {
+      width: 80%;
+      margin: 0 auto;
+
+      .product-box {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin: 10px 0;
+
+        .product-heading {
+          color: #366F45
+        }
+
+        p {
+          color: #828884
+        }
+      }
+    }
+  }
+
+  .button {
+    margin-top: auto;
+    background-color: #366F45;
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+
+  .d-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .col {
+    &-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    &-1 {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  img {
+    &.icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    &.icon-mini {
+      width: 30px;
+      height: 30px;
+    }
+    &.banner-img {
+      width: 600px;
+      height: 300px;
     }
   }
 }
