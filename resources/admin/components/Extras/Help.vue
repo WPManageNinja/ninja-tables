@@ -20,25 +20,37 @@
                 </ul>
             </div>
         </div>
-        <hr>
         <div class="d-grid col-1 review">
             <div class="column text-center">
-                <img class="icon" alt="img icon" :src="imageUrl('heart.png')"/>
+                <img class="review-icon" alt="img icon" :src="imageUrl('heart.png')"/>
                 <p>Love this Plugin? Give us a 5-star review to show love.</p>
-                <a target="_blank" class="button button-primary"
+                <a target="_blank" class="button"
                    href="https://wordpress.org/plugins/ninja-tables/reviews/">Write Review</a>
             </div>
         </div>
         <div class="d-grid download">
             <div class="column">
-                <img class="banner-img" :src="imageUrl('banner_premium.png')"/>
+                <img class="banner-img" :src="imageUrl('help-page-banner.png')"/>
             </div>
             <div class="column">
                 <div>
-                    <p>Have you tried the <strong>Ninja Tables Pro?</strong> Explore limitless possibilities and get the
-                        best table-building experience.</p>
+                    <p>
+                        Have you tried the Ninja Tables Pro?
+                    </p>
+                    <p>Explore limitless possibilities and get the best table-building experience.</p>
+                    <ul>
+                        <li>
+                            24/7 Priority Support
+                        </li>
+                        <li>
+                            Pro-exclusive Perks
+                        </li>
+                        <li>
+                            Integrations & a lot more!
+                        </li>
+                    </ul>
                     <a class="button" href="https://ninjatables.com/pricing/" target="_blank">Download Now</a>
-                    <a class="button" href="https://ninjatables.com/" target="_blank">Explore More</a>
+                    <a class="visit-site" href="https://ninjatables.com/" target="_blank">Visit Site</a>
                 </div>
             </div>
         </div>
@@ -47,7 +59,7 @@
                 <img class="icon" :src="imageUrl('support.png')"/>
                 <h3>Need An Expert Support?</h3>
                 <p>Our experts would like to assist you with your query and any customization.</p>
-                <a target="_blank" class="button button-primary" href="https://wpmanageninja.com/support-tickets/">Contact
+                <a target="_blank" class="button" href="https://wpmanageninja.com/support-tickets/">Contact
                     our Support team</a>
             </div>
             <div class="text-center">
@@ -67,55 +79,44 @@
             <div class="products d-grid col-3">
                 <div class="product-box">
                     <img class="icon" :src="imageUrl('fluentform-logo.png')"/>
-                    <h2 class="product-heading">Try Fluent Forms</h2>
-                    <p><b>Need to build a contact form by drag and drop form builder?</b> Try the modern contact form
-                        plugin with all the necessary input fields, notifications and connect your form with powerful
-                        integrations</p>
-                    <a class="button button-primary" href="https://wordpress.org/plugins/fluentform/">
-                        Download Fluent Forms
+                    <p>Join the 400K+ happy users who use the fastest contact form plugin for their websites.</p>
+                    <a class="button" href="https://wordpress.org/plugins/fluentform/">
+                        Try Fluent Forms for Free
                     </a>
                 </div>
                 <div class="product-box">
                     <img class="icon" :src="imageUrl('fluentcrm-logo.png')"/>
-                    <h2 class="product-heading">Try Fluent CRM</h2>
-                    <p>The easiest and fastest email newsletter, email marketing plugin & CRM solutions for
-                        Wordpress.</p>
-                    <a class="button button-primary" href="https://wordpress.org/plugins/fluent-crm/">
-                        Download FluentCRM
+                    <p>The easiest and fastest email newsletter, email marketing plugin & CRM solutions for WordPress.</p>
+                    <a class="button" href="https://wordpress.org/plugins/fluent-crm/">
+                        Try FluentCRM for Free
                     </a>
                 </div>
                 <div class="product-box">
                     <img class="icon" :src="imageUrl('paymattic-logo.png')"/>
-                    <h2 class="product-heading">Paymattic - Accepts Payment Easily With WordPress Forms</h2>
-                    <p>Do you want to accept payments along with user inputs in WordPress? Then Paymattic is the perfect
-                        plugin for you.</p>
-                    <a class="button button-primary" href="https://wordpress.org/plugins/wp-payment-form/">
-                        Download Paymattic
+                    <p>Get the best payment and donation plugin for your business, fundraising, or membership program.</p>
+                    <a class="button" href="https://wordpress.org/plugins/wp-payment-form/">
+                        Try Paymettic for Free
                     </a>
                 </div>
                 <div class="product-box">
                     <img class="icon" :src="imageUrl('fluentsupport-logo.png')"/>
-                    <h2 class="product-heading">Try Fluent Support</h2>
-                    <p>Transform your support agents into superheroes with WordPress helpdesk plugin.</p>
-                    <a class="button button-primary" href="https://wordpress.org/plugins/fluent-support/">
-                        Download Fluent Support
+                    <p>Transform your support agents into superheroes with the WordPress helpdesk plugin.</p>
+                    <a class="button" href="https://wordpress.org/plugins/fluent-support/">
+                        Download Fluent Support for Free
                     </a>
                 </div>
                 <div class="product-box">
                     <img class="icon" :src="imageUrl('fluentbooking-logo.png')"/>
-                    <h2 class="product-heading">Try Fluent Booking</h2>
-                    <p>The ultimate solution for booking appointments, meetings, webinars, events, sales calls, and
-                        more.</p>
-                    <a class="button button-primary" href="https://fluentbooking.com/">
-                        Download Fluent Booking
+                    <p>The ultimate solution for booking appointments, meetings, webinars, events, sales calls, and more.</p>
+                    <a class="button" href="https://fluentbooking.com/">
+                        Try FluentBooking
                     </a>
                 </div>
                 <div class="product-box">
-                    <img class="icon" :src="imageUrl('socialninja-logo.png')"/>
-                    <h2 class="product-heading">WP Social Ninja</h2>
-                    <p>WordPress social tool that fetches social feeds, user reviews, and social chat widgets.</p>
-                    <a class="button button-primary" href="https://wordpress.org/plugins/wp-social-reviews/">
-                        Download WP Social Ninja
+                    <img class="icon" :src="imageUrl('wpsocialninja-logo.png')"/>
+                    <p>WordPress social tool that fetches social feeds, user reviews, and social chat widgets to your website</p>
+                    <a class="button" href="https://wordpress.org/plugins/wp-social-reviews/">
+                        Try WP Social Ninja for Free
                     </a>
                 </div>
             </div>

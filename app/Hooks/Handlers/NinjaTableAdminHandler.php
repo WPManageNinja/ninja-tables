@@ -35,20 +35,19 @@ class NinjaTableAdminHandler
     {
         $this->noticeForProVersion();
 
-        // TODO: We need to uncomment this after one release
-//        if (ninjaTablesIsNotice('review_notice')) {
-//            if (isset($_GET['page']) && Sanitizer::sanitizeTextField($_GET['page']) == 'ninja_tables') {
-//                echo '<div class="nt_review_notice">In love with Ninja Tables?
-//                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Please leave a 5-star review for us! </a>
-//                     It will encourage us to come up with more and more features.
-//                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a> |
-//                     <a href=' . admin_url('admin.php?action=remindMeLater&key=review_notice&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>Remind Me Later</a>
-//                     <a href=' . admin_url('admin.php?action=remindMeLater&key=review_notice&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>
-//                        <span class="close-icon dashicons dashicons-no"></span>
-//                    </a>
-//                 </div>';
-//            }
-//        }
+        if (ninjaTablesIsNotice('review_notice')) {
+            if (isset($_GET['page']) && Sanitizer::sanitizeTextField($_GET['page']) == 'ninja_tables') {
+                echo '<div class="nt_review_notice">In love with Ninja Tables?
+                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Please leave a 5-star review for us! </a>
+                     It will encourage us to come up with more and more features.
+                     <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a> |
+                     <a href=' . admin_url('admin.php?action=remindMeLater&key=review_notice&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>Remind Me Later</a>
+                     <a href=' . admin_url('admin.php?action=remindMeLater&key=review_notice&ninja_table_admin_nonce=') .wp_create_nonce('ninja_table_admin_nonce'). '>
+                        <span class="close-icon dashicons dashicons-no"></span>
+                    </a>
+                 </div>';
+            }
+        }
     }
 
     public function remindMeLater()
