@@ -14,7 +14,7 @@
              :style="[justifyContent, {display:item.data.style.fullWidth ? 'block' : 'flex'}]">
             <a @click.prevent :href="`${item.data.style.url}`"
                :style="[justifyContent, displayFlex, {'text-decoration':'none'}]"
-               :target="item.data.style.newTab ? '_black' : ''"
+               :target="item.data.style.newTab ? '_blank' : ''"
                :rel="linkAttributes">
                 <el-button
                     class="ntb-el-button"

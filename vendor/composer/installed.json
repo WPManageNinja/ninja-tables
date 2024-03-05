@@ -113,6 +113,6 @@
             "install-path": "../wpfluent/framework"
         }
     ],
-    "dev": true,
+    "dev": false,
     "dev-package-names": []
 }
