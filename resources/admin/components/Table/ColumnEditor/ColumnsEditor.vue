@@ -373,7 +373,7 @@
                                 <p>
                                     Choose responsive breakpoints of your table columns. <br>
                                     For more details check <a
-                                    href="https://wpmanageninja.com/r/docs/ninja-tables/configure-responsive-breakdowns-for-table/?utm_source=ninja-tables">documentation</a>.
+                                    href="https://ninjatables.com/docs/column-responsive-breakpoints">documentation</a>.
                                 </p>
                             </div>
 
