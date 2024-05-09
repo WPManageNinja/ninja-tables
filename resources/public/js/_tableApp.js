@@ -623,6 +623,9 @@ export default {
             }
         });
 
+        if ($table.find('tfoot').text().trim() === '') {
+            $table.find('tfoot').remove();
+        }
     },
     loadCustomPager(ft, $table, tableConfig) {
 
