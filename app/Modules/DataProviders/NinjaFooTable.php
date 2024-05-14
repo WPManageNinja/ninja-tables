@@ -87,30 +87,6 @@ class NinjaFooTable
     }
 
     /**
-     * Set the table header colors.
-     *
-     * @param array $tableArray
-     *
-     * @param string $extra_css
-     *
-     * @return void
-     */
-    private static function addCustomColorCSS($tableArray, $extra_css = '')
-    {
-        $css = self::generateCustomColorCSS($tableArray, $extra_css);
-        if ($css) {
-            $tableId = $tableArray['table_id'];
-            add_action('ninja_tables_after_table_print', function () use ($css, $tableId) {
-                ?>
-                <style type="text/css" id='ninja_table_custom_css_<?php echo esc_attr($tableId); ?>'>
-                    <?php echo ninjaTablesEscCss($css); ?>
-                </style>
-                <?php
-            });
-        }
-    }
-
-    /**
      * Generate custom css for the table.
      *
      * @param array $tableArray
@@ -516,13 +492,6 @@ class NinjaFooTable
 
         self::addInlineVars($table_vars, $table_id, $table_instance_name);
         $foo_table_attributes = self::getFootableAtrributes($table_vars);
-
-        // We have to check if these css already rendered
-        if ( ! isset(static::$tableCssStatuses[$tableArray['table_id']])) {
-            $columnContentCss = static::getColumnsCss($tableArray['table_id'], $columns);
-
-            static::addCustomColorCSS($tableArray, $columnContentCss);
-        }
 
         do_action('ninja_table_before_render_table_source', $table, $table_vars, $tableArray);
         include NINJA_TABLES_DIR_PATH . 'app/Views/public/ninja-footable.php';
