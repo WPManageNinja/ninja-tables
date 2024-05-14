@@ -3,6 +3,7 @@
 namespace NinjaTables\App\Models;
 
 use NinjaTables\Framework\Foundation\App;
+use NinjaTables\Framework\Support\Arr;
 
 class Post extends Model
 {
@@ -11,17 +12,21 @@ class Post extends Model
 
     public static function getPosts($args)
     {
+        $orderByes = ['ID', 'post_title'];
+        $orderBy   = Arr::get($args, 'orderby', 'ID');
+        $orderBy   = in_array($orderBy, $orderByes) ? $orderBy : 'ID';
+
         return Post::where('post_type', self::$cptName)
-                     ->where(function ($query) use ($args) {
-                         if (isset($args['s'])) {
-                             $query->where('post_title', 'like', '%' . $args['s'] . '%')
-                                   ->orWhere('ID', 'like', '%' . $args['s'] . '%');
-                         }
-                     })
-                     ->orderBy('ID', $args['order'])
-                     ->skip($args['offset'])
-                     ->take($args['posts_per_page'])
-                     ->get();
+                   ->where(function ($query) use ($args) {
+                       if (isset($args['s'])) {
+                           $query->where('post_title', 'like', '%' . $args['s'] . '%')
+                                 ->orWhere('ID', 'like', '%' . $args['s'] . '%');
+                       }
+                   })
+                   ->orderBy($orderBy, $args['order'])
+                   ->skip($args['offset'])
+                   ->take($args['posts_per_page'])
+                   ->get();
     }
 
     public static function getTables($perPage, $currentPage, $tables)
@@ -38,7 +43,9 @@ class Post extends Model
             if ($dataSourceType == 'fluent-form') {
                 $fluentFormFormId = get_post_meta($table->ID, '_ninja_tables_data_provider_ff_form_id', true);
                 if ($fluentFormFormId) {
-                    $table->fluentfrom_url = admin_url('admin.php?page=fluent_forms&route=entries&form_id=' . $fluentFormFormId);
+                    $table->fluentfrom_url = admin_url(
+                        'admin.php?page=fluent_forms&route=entries&form_id=' . $fluentFormFormId
+                    );
                 }
             } elseif ($dataSourceType == 'csv' || $dataSourceType == 'google-csv') {
                 $table->remoteURL = get_post_meta($table->ID, '_ninja_tables_data_provider_url', true);
@@ -127,10 +134,18 @@ class Post extends Model
                 }
                 $tableColumns[] = $column;
             }
-            $tableColumns = apply_filters('ninja_table_update_columns_' . ninja_table_get_data_provider($tableId),
-                $tableColumns, $rawColumns, $tableId);
-            do_action('ninja_table_before_update_columns_' . ninja_table_get_data_provider($tableId),
-                $tableColumns, $rawColumns, $tableId);
+            $tableColumns = apply_filters(
+                'ninja_table_update_columns_' . ninja_table_get_data_provider($tableId),
+                $tableColumns,
+                $rawColumns,
+                $tableId
+            );
+            do_action(
+                'ninja_table_before_update_columns_' . ninja_table_get_data_provider($tableId),
+                $tableColumns,
+                $rawColumns,
+                $tableId
+            );
             update_post_meta($tableId, '_ninja_table_columns', $tableColumns);
         }
 
