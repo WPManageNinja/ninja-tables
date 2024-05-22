@@ -23,6 +23,7 @@ class PublicDataHandler
         add_shortcode('ninja_table_info', [$this, 'tableInfoShortcode']);
         add_shortcode('ninja_table_cell', [$this, 'tableCellShortcode']);
         add_shortcode('ninja_table_builder', [$this, 'ninjaTableBuilderShortCode']);
+        add_action('ninja_tables_will_render_table', [$this, 'preRenderTableAssets']);
     }
 
     public function renderTableShortcode($atts, $content = '')
@@ -233,6 +234,8 @@ class PublicDataHandler
      */
     public function preRenderTableAssets($tableId)
     {
+        if (isset(NinjaFooTable::$tableCssStatuses[$tableId])) return;
+
         $tableId = intval($tableId);
 
         $atts = [

@@ -34,7 +34,6 @@ $app->addAction('init', [CPTHandler::class, 'registerPostTypes']);
 $app->addAction('init', [PublicDataHandler::class, 'registerTableRenderFunctions']);
 $app->addAction('wp_enqueue_scripts', [PublicDataHandler::class, 'enqueueNinjaTableScript'], 100);
 $app->addAction('ninja_tables-render-table-footable', [PublicDataHandler::class, 'runFooTable']);
-$app->addAction('ninja_tables_will_render_table', [PublicDataHandler::class, 'preRenderTableAssets']);
 $app->addAction('ninja_tables_inside_table_render', [PublicDataHandler::class, 'renderTableInsideTable'], 10, 2);
 
 $app->addAction('wp_ajax_wp_ajax_ninja_tables_public_action', [AjaxHandler::class, 'registerAjaxRoutes'], 100);
