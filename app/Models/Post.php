@@ -16,20 +16,27 @@ class Post extends Model
         $orderBy   = Arr::get($args, 'orderby', 'ID');
         $orderBy   = in_array($orderBy, $orderByes) ? $orderBy : 'ID';
 
-        return Post::where('post_type', self::$cptName)
-                   ->where(function ($query) use ($args) {
-                       if (isset($args['s'])) {
-                           $query->where('post_title', 'like', '%' . $args['s'] . '%')
-                                 ->orWhere('ID', 'like', '%' . $args['s'] . '%');
-                       }
-                   })
-                   ->orderBy($orderBy, $args['order'])
-                   ->skip($args['offset'])
-                   ->take($args['posts_per_page'])
-                   ->get();
+        $posts = Post::where('post_type', self::$cptName)
+                     ->where(function ($query) use ($args) {
+                         if (isset($args['s'])) {
+                             $query->where('post_title', 'like', '%' . $args['s'] . '%')
+                                   ->orWhere('ID', 'like', '%' . $args['s'] . '%')
+                                   ->orWhere('post_content', 'like', '%' . $args['s'] . '%');
+                         }
+                     });
+        $total = $posts->count();
+        $posts = $posts->orderBy($orderBy, $args['order'])
+                       ->skip($args['offset'])
+                       ->take($args['posts_per_page'])
+                       ->get();
+
+        return [
+            'total' => $total,
+            'data'  => $posts,
+        ];
     }
 
-    public static function getTables($perPage, $currentPage, $tables)
+    public static function getTables($perPage, $currentPage, $tables, $total = 0)
     {
         foreach ($tables as $table) {
             $provider = get_post_meta($table->ID, '_ninja_tables_data_provider', true);
@@ -52,12 +59,10 @@ class Post extends Model
             }
         }
 
-        $total    = wp_count_posts(self::$cptName);
-        $total    = intval($total->publish);
         $lastPage = ceil($total / $perPage);
 
         return [
-            'total'        => $total,
+            'total'        => intval($total),
             'per_page'     => $perPage,
             'current_page' => $currentPage,
             'last_page'    => ($lastPage) ? $lastPage : 1,

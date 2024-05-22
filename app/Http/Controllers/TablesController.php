@@ -36,8 +36,9 @@ class TablesController extends Controller
 
         try {
             $tables    = Post::getPosts($args);
-            $tables    = $this->app->applyFilters('ninja_tables_get_all_tables', $tables);
-            $tablesRes = Post::getTables($perPage, $currentPage, $tables);
+            $total = $tables['total'];
+            $tables    = $this->app->applyFilters('ninja_tables_get_all_tables', $tables['data']);
+            $tablesRes = Post::getTables($perPage, $currentPage, $tables, $total);
             $this->json($tablesRes, 200);
         } catch (\Exception $e) {
             $this->json(array(
