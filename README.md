@@ -1,11 +1,11 @@
 === Ninja Tables - Easiest Data Table Builder ===
-Contributors: wpmanageninja, techjewel, adreastrian, heera
+Contributors: wpmanageninja, techjewel, adreastrian, heera, csesumonpro, sakibmd, naeemhaque
 Donate link: https://ninjatables.com/pricing/
 Tags: Table, Tables, table builder, pricing table, CSV and JSON
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.5
-Stable tag: 5.0.8
+Stable tag: 5.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,7 +170,11 @@ Ninja Tables [customer support](https://wpmanageninja.com/support-tickets/#/) te
 
 == Changelog ==
 We released several updates for Ninja Tables in the years of development. These include improvements to the existing features and some wonderful additions to help you design tables more effectively.
-### What's New on 5.0.8?
+### What's New on 5.0.9?
+
+= 5.0.9 (Date: May 22, 2024) =
+* Fixed: Style loading issue
+* Improved: All table list pagination count
 
 = 5.0.8 (Date: May 16, 2024) =
 * Removed: Empty tfoot tag
