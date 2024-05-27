@@ -28,7 +28,7 @@ class NinjaTableItem extends Model
                           ->orderBy($orderByField, $orderByType)
                           ->get();
 
-            $total = $this->where('table_id', $tableId)->count();
+            $total = $data->count();
 
             $response = array();
 
