@@ -236,7 +236,10 @@ class AdminMenuHandler
             });
             wp_enqueue_editor();
             wp_enqueue_script('thickbox');
+            wp_enqueue_script('editor');
         }
+        wp_enqueue_editor();
+        wp_enqueue_script('editor');
         if (function_exists('wp_enqueue_media')) {
             wp_enqueue_media();
         }

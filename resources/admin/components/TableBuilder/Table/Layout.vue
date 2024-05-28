@@ -2,85 +2,57 @@
     <div class="ninja-tables-layout">
         <div class="table-customize-button" v-if="selectedDevice === ''">
             <el-button-group v-if="activeTab === 'background'" class="button-group" style="margin-top: 0">
-                <el-button
-                    type="primary"
-                    icon="el-icon-s-grid"
-                    size="small"
-                    @click="manageCell(true, 'cells')"
-                >{{ $t('Manage Cells') }}
+                <el-button type="primary" icon="el-icon-s-grid" size="small" @click="manageCell(true, 'cells')">{{
+                    $t('Manage Cells') }}
                 </el-button>
-                <el-button
-                    type="primary"
-                    icon="el-icon-ice-cream-square"
-                    size="small"
-                    @click="manageCell(true, 'background')"
-                >{{ $t('Background') }}
+                <el-button type="primary" icon="el-icon-ice-cream-square" size="small"
+                    @click="manageCell(true, 'background')">{{ $t('Background') }}
                 </el-button>
             </el-button-group>
             <div class="button-group" style="margin-top: 0" v-else>
-                <el-button
-                    type="primary"
-                    icon="el-icon-folder-checked"
-                    size="small"
-                    @click="mergeCell()"
-                    :disabled="tdIds.length < 2 || merge.visible === false"
-                >{{ $t('Merge') }}
+                <el-button type="primary" icon="el-icon-folder-checked" size="small" @click="mergeCell()"
+                    :disabled="tdIds.length < 2 || merge.visible === false">{{ $t('Merge') }}
                 </el-button>
-                <el-button
-                    type="primary"
-                    icon="el-icon-scissors"
-                    size="small"
-                    @click="splitCell"
-                    :disabled="split.visible === false"
-                >{{ $t('Split') }}
+                <el-button type="primary" icon="el-icon-scissors" size="small" @click="splitCell"
+                    :disabled="split.visible === false">{{ $t('Split') }}
                 </el-button>
             </div>
         </div>
-        <div
-            class="ntb_table_wrapper"
-            v-if="setting ?  (setting.general && setting.border && setting.background) : false"
-            id="ninja_tables_builder_id"
-            :style="[tableWrapperStyle, tableWrapperActivePadding]"
-        >
-            <div class="pixel-bar-slider"
-                 v-if="responsiveIsEnabled && showPixelSlider.preview">
-                <el-slider
-                    v-model="pixelBarValue"
-                    :max="showPixelSlider.max"
-                    :min="showPixelSlider.min"
-                    show-input>
+        <div class="ntb_table_wrapper"
+            v-if="setting ? (setting.general && setting.border && setting.background) : false"
+            id="ninja_tables_builder_id" :style="[tableWrapperStyle, tableWrapperActivePadding]">
+            <div class="pixel-bar-slider" v-if="responsiveIsEnabled && showPixelSlider.preview">
+                <el-slider v-model="pixelBarValue" :max="showPixelSlider.max" :min="showPixelSlider.min" show-input>
                 </el-slider>
             </div>
-            <table
-                id="ntb_table"
-                :role="`${setting.accessibility.options.table_role.value}`"
-                :class="'table ninja_tables_builder_class_'+tableData['id'] + ' ntb_' + tableData['id']"
+            <table id="ntb_table" :role="`${setting.accessibility.options.table_role.value}`"
+                :class="'table ninja_tables_builder_class_' + tableData['id'] + ' ntb_' + tableData['id']"
                 :style="[tableMarginTop, tableMarginBottom, tableInlineStyle, tableAlign(selectedDevice)]">
                 <div class="table-header" v-if="manage" :style="tableBorder">
                     <draggable v-model="tableData.headers" tag="tr" @change="dragColumn">
                         <th v-for="(header, index) in tableData.headers" :key="header" scope="col"
-                            :colspan="headerColSpan(header)"
-                            :class="thActiveInactiveClass(header)"
-                            :style="[tdThActiveMargin, thInlineStyle(header)]"
-                        >
+                            :colspan="headerColSpan(header)" :class="thActiveInactiveClass(header)"
+                            :style="[tdThActiveMargin, thInlineStyle(header)]">
                             <template
                                 v-if="(headerName(table.columnIndex) === header) && tdIds.length === 1 && ((!merge.visible) || split.visible)">
                                 <el-dropdown trigger="click" placement="top-start" class="column-options">
-                  <span class="el-dropdown-link">
-                      <i
-                          :class="index === table.columnIndex ? 'i-active': ''"
-                          class="el-icon-caret-bottom el-icon--right"></i>
-                    </span>
+                                    <span class="el-dropdown-link">
+                                        <i :class="index === table.columnIndex ? 'i-active' : ''"
+                                            class="el-icon-caret-bottom el-icon--right"></i>
+                                    </span>
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item @click.native="insertColumnBefore()">{{ $t('Insert column before') }}
                                         </el-dropdown-item>
-                                        <el-dropdown-item @click.native="insertColumnAfter">{{ $t('Insert column after') }}
-                                        </el-dropdown-item>
-                                        <el-dropdown-item @click.native="addLeftColumn">{{ $t('Insert left column') }}</el-dropdown-item>
-                                        <el-dropdown-item @click.native="addRightColumn">{{ $t('Insert right column') }}</el-dropdown-item>
-                                        <el-dropdown-item divided @click.native="duplicateColumn">{{
-                                                $t('Duplicate column')
+                                        <el-dropdown-item @click.native="insertColumnAfter">{{ $t('Insert column after')
                                             }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click.native="addLeftColumn">{{ $t('Insert left column')
+                                            }}</el-dropdown-item>
+                                        <el-dropdown-item @click.native="addRightColumn">{{ $t('Insert right column')
+                                            }}</el-dropdown-item>
+                                        <el-dropdown-item divided @click.native="duplicateColumn">{{
+                                            $t('Duplicate column')
+                                        }}
                                         </el-dropdown-item>
                                         <el-dropdown-item @click.native="removeColumn">
                                             <p style="color:red"> {{ $t('Remove column') }}</p>
@@ -92,25 +64,27 @@
                     </draggable>
                 </div>
                 <draggable v-model="tableData.data" class="tbody" tag="tbody" @change="dragRow"
-                           :style="tdThActiveMargin"
-                           v-if="selectedDevice === '' || selectedDevice === 'desktop' || !responsiveIsEnabled || (selectedDevice === 'mobile' && mobileDeviceBreakpoint) || (selectedDevice === 'tablet' && tabletDeviceBreakpoint)">
-                    <tr
-                        class="desktop-view"
-                        :class="`${table.rowIndex === index && tdIds.length <= 0 ? 'single-row-column' : 'tr_class_'+row.style.trId} ${firstRowSticky & index == 0  ? 'firstRowSticky' : ''}`"
-                        v-for="(row, index) in tableData.data" :key="index"
-                        :id="trId(row.style.trId)"
+                    :style="tdThActiveMargin"
+                    v-if="selectedDevice === '' || selectedDevice === 'desktop' || !responsiveIsEnabled || (selectedDevice === 'mobile' && mobileDeviceBreakpoint) || (selectedDevice === 'tablet' && tabletDeviceBreakpoint)">
+                    <tr class="desktop-view"
+                        :class="`${table.rowIndex === index && tdIds.length <= 0 ? 'single-row-column' : 'tr_class_' + row.style.trId} ${firstRowSticky & index == 0 ? 'firstRowSticky' : ''}`"
+                        v-for="(row, index) in tableData.data" :key="index" :id="trId(row.style.trId)"
                         :style="[trInlineStyle(row, index)]">
                         <td v-if="manage && tdIds.length === 1 && !mergedTdIndexes().includes(index)"
                             :rowspan="tdActiveRowSpan(row.style.trId)" :class="tdActiveInactiveClass(row.style.trId)">
                             <el-dropdown trigger="click" placement="top-start" class="row-options">
-                <span class="el-dropdown-link">
-                  <i class="el-icon-caret-right"></i>
-                </span>
+                                <span class="el-dropdown-link">
+                                    <i class="el-icon-caret-right"></i>
+                                </span>
                                 <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item @click.native="insertRowBefore()">{{ $t('Insert row before') }}</el-dropdown-item>
-                                    <el-dropdown-item @click.native="insertRowAfter">{{ $t('Insert row after') }}</el-dropdown-item>
-                                    <el-dropdown-item @click.native="addTopRow">{{ $t('Insert top row') }}</el-dropdown-item>
-                                    <el-dropdown-item @click.native="addBottomRow">{{ $t('Insert bottom row') }}</el-dropdown-item>
+                                    <el-dropdown-item @click.native="insertRowBefore()">{{ $t('Insert row before')
+                                        }}</el-dropdown-item>
+                                    <el-dropdown-item @click.native="insertRowAfter">{{ $t('Insert row after')
+                                        }}</el-dropdown-item>
+                                    <el-dropdown-item @click.native="addTopRow">{{ $t('Insert top row')
+                                        }}</el-dropdown-item>
+                                    <el-dropdown-item @click.native="addBottomRow">{{ $t('Insert bottom row')
+                                        }}</el-dropdown-item>
                                     <el-dropdown-item divided @click.native="duplicateRow">{{ $t('Duplicate row') }}
                                     </el-dropdown-item>
                                     <el-dropdown-item @click.native="removeRow">
@@ -119,36 +93,28 @@
                                 </el-dropdown-menu>
                             </el-dropdown>
                         </td>
-                        
+
                         <td v-for="(header, key) in tableData.headers" :key="header"
                             @click.shift="manage ? selectItem(index, header, key, row.rows[header], row, true) : ''"
                             @click.exact="manage ? selectItem(index, header, key, row.rows[header], row, false) : ''"
-                            :id="'td_id_'+ tdId(row, header)"
+                            :id="'td_id_' + tdId(row, header)"
                             :class="[tdClass(row, header, key), highlightClass(row, header), 'table-data']"
-                            :rowspan="row.rows[header].style.rowspan"
-                            :colspan="row.rows[header].style.colspan"
-                            :style="[tdInlineStyle(row, header), highlightedColumnStyle(row, header), showInnerBorder ?  innerBorder(index) : '', firstColumnSticky && key === 0 ? stickyColumn() : '']"
-                        >
+                            :rowspan="row.rows[header].style.rowspan" :colspan="row.rows[header].style.colspan"
+                            :style="[tdInlineStyle(row, header), highlightedColumnStyle(row, header), showInnerBorder ? innerBorder(index) : '', firstColumnSticky && key === 0 ? stickyColumn() : '']">
                             <draggable :list="row.rows[header].columns" group="people"
-                                       :id="tdIds.includes( tdId(row, header)) ? 'selected-item': 'td_id_'+tdId(row, header)"
-                                       :move="onMove"
-                            >
-                                <div v-for="(item, ind) in row.rows[header].columns"
-                                     class="single-item"
-                                     :class="[item.id === itemId ? 'item-active' : '', manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon': 'other-item' : 'responsive-mode')]"
-                                     :key="ind">
-                                    <table-data
-                                        :manage="manage"
-                                        :setting="setting"
+                                :id="tdIds.includes(tdId(row, header)) ? 'selected-item' : 'td_id_' + tdId(row, header)"
+                                :move="onMove">
+                                <div v-for="(item, ind) in row.rows[header].columns" class="single-item"
+                                    :class="[item.id === itemId ? 'item-active' : '', manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon' : 'other-item' : 'responsive-mode')]"
+                                    :key="ind">
+                                    <table-data :manage="manage" :setting="setting"
                                         @click.native.exact="!manage && selectedDevice === '' ? styleChange(item, index, key, row.rows[header], row) : ''"
                                         :item="item">
                                     </table-data>
                                     <template v-if="!manage && selectedDevice === ''">
-                                        <div class="icon-style remove-elements"
-                                             :style="iconSpacing(item)">
+                                        <div class="icon-style remove-elements" :style="iconSpacing(item)">
                                             <i class="el-icon-rank"></i>
-                                            <i class="el-icon-copy-document"
-                                               @click="copyItem(index, header, item)"></i>
+                                            <i class="el-icon-copy-document" @click="copyItem(index, header, item)"></i>
                                             <i class="el-icon-delete" @click="deleteItem(index, header, ind)"></i>
                                         </div>
                                     </template>
@@ -158,21 +124,20 @@
                     </tr>
                 </draggable>
                 <tbody v-else>
-                <tr v-for="(item, index) in responsiveInitial.tableData" :key="index"
-                    :class="`${selectedDevice === 'mobile' ? 'mobile-view tr_class_mobile_'+index : 'tablet-view tr_class_tablet_'+index}`"
-                    :id="`${selectedDevice === 'mobile' ? 'tr_id_mobile_'+index : 'tr_id_tablet_'+index}`"
-                    :style="[ responsiveInitial.showHeader ?  bottomBorderResponsive(index, responsiveInitial.cell_direction, responsiveInitial.itemsPerRow, responsive.mode_options.options.devices) : '']">
-                    <td v-for="singleTd in item" v-if="singleTd.style.rowspan > 0 && singleTd.style.colspan > 0"
-                        :id="`td_id_${singleTd.style.tdId}`"
-                        :colspan="calculateColSpan(singleTd.style)"
-                        :rowspan="calculateRowSpan(singleTd.style)"
-                        :style="[ tdInlineStyleResponsive(singleTd.style, singleTd.rowStyle, singleTd.rowIndex, responsiveInitial.showHeader, responsiveInitial.itemsPerRow, selectedDevice, responsiveInitial.cell_direction), innerBorder(singleTd.rowIndex)]">
-            <span v-for="(singleItem, index) in singleTd.columns" :key="index">
-              <table-data class="responsive-mode" :setting="setting" v-if="item.id != itemId"
-                          :item="singleItem"></table-data>
-            </span>
-                    </td>
-                </tr>
+                    <tr v-for="(item, index) in responsiveInitial.tableData" :key="index"
+                        :class="`${selectedDevice === 'mobile' ? 'mobile-view tr_class_mobile_' + index : 'tablet-view tr_class_tablet_' + index}`"
+                        :id="`${selectedDevice === 'mobile' ? 'tr_id_mobile_' + index : 'tr_id_tablet_' + index}`"
+                        :style="[responsiveInitial.showHeader ? bottomBorderResponsive(index, responsiveInitial.cell_direction, responsiveInitial.itemsPerRow, responsive.mode_options.options.devices) : '']">
+                        <td v-for="singleTd in item" v-if="singleTd.style.rowspan > 0 && singleTd.style.colspan > 0"
+                            :id="`td_id_${singleTd.style.tdId}`" :colspan="calculateColSpan(singleTd.style)"
+                            :rowspan="calculateRowSpan(singleTd.style)"
+                            :style="[tdInlineStyleResponsive(singleTd.style, singleTd.rowStyle, singleTd.rowIndex, responsiveInitial.showHeader, responsiveInitial.itemsPerRow, selectedDevice, responsiveInitial.cell_direction), innerBorder(singleTd.rowIndex)]">
+                            <span v-for="(singleItem, index) in singleTd.columns" :key="index">
+                                <table-data class="responsive-mode" :setting="setting" v-if="item.id != itemId"
+                                    :item="singleItem"></table-data>
+                            </span>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -182,9 +147,9 @@
 <script>
 import draggable from "vuedraggable";
 import TableData from "./_Datas"
-import {manageRowColumn} from "../Mixin/manageRowColumn";
-import {manageResponsiveData} from "../Mixin/manageResponsiveData";
-import {helpers} from "../Mixin/helpers";
+import { manageRowColumn } from "../Mixin/manageRowColumn";
+import { manageResponsiveData } from "../Mixin/manageResponsiveData";
+import { helpers } from "../Mixin/helpers";
 
 export default {
     name: "Layout",
@@ -253,7 +218,7 @@ export default {
                 'margin-right': `${item.data.style.margin.right}px`,
                 'width': 'auto'
             }
-            
+
         },
         stickyColumn() {
             return {
@@ -308,12 +273,12 @@ export default {
             const table = document.getElementById('ntb_table');
             const trs = table.getElementsByTagName('tbody');
             const rows = trs[0].rows;
-            
+
             const tableSize = {
                 rows: rows.length,
                 cols: rows[0].getElementsByTagName('td').length - 1
             };
-            
+
             for (var r = 0; r < trs.length; r++) {
                 var tds = trs[r].getElementsByTagName('td');
                 for (var t = 0; t < tds.length; t++) {
@@ -324,7 +289,7 @@ export default {
         manageCell(status, activeTab = 'background') {
             this.isSelectedTdId = true
             this.selectedTdId = null;
-            
+
             if (activeTab === 'cells') {
                 let history = this.tableData.table.merge.history;
                 if (!this.isEmpty(history)) {
@@ -404,8 +369,8 @@ export default {
                 return mergedCellWidth;
             } else {
                 width = row && this.columnWidth(row, header)
-                if(width === 150) {
-                  width = this.setting.general.options.cell_min_auto_width.value;
+                if (width === 150) {
+                    width = this.setting.general.options.cell_min_auto_width.value;
                 }
             }
             return (width + 1)
@@ -467,7 +432,7 @@ export default {
             const isSeparateRowColumn = this.getBoolean(this.setting.general.options.columns_rows_separate.value);
             const colSeparate = this.setting.general.options ? this.setting.general.options.columns_rows_separate.childs.space_between_column.value : 0;
             const rowSeparate = this.setting.general.options ? this.setting.general.options.columns_rows_separate.childs.space_between_row.value : 0;
-            
+
             let calculateSeparate = 0;
             let columnArrow = 0;
             if (isSeparateRowColumn) {
@@ -475,7 +440,7 @@ export default {
             }
             columnArrow = 16 + tableBorderSize + calculateSeparate - columnIndex + (tableOption.inner_border.value ? ((columnIndex + 1) * tableInnerBorderSize) : 0)
             const _marginTop = `${-5 - (isSeparateRowColumn ? rowSeparate : 0)}px`;
-            
+
             return {
                 '--border-color': tableOption.inner_border.childs.inner_border_color.value ? tableOption.inner_border.childs.inner_border_color.value : '#000000',
                 '--border-size': `${tableInnerBorderSize}px`,
@@ -518,7 +483,7 @@ export default {
                 if (newVal) {
                     this.detectChangesInTable();
                 }
-                
+
                 if (this.selectedDevice === 'mobile') {
                     this.responsiveInitial.showHeader = this.getBoolean(newVal.mode_options.options.devices.mobile.top_row_as_header.value);
                     this.responsiveInitial.itemsPerRow = newVal.mode_options.options.devices.mobile.items_per_row.value;
@@ -537,31 +502,30 @@ export default {
 }
 </script>
 <style lang="scss">
-
 .ninja-tables-layout {
     .table-customize-button {
         padding-bottom: 20px;
     }
-    
+
     .sortable-ghost {
         border: 1px dashed grey;
         font-size: 0;
         overflow: hidden;
         width: 100%;
     }
-    
+
     .button-group {
         display: flex !important;
         justify-content: center;
         margin: 5px auto;
     }
-    
+
     .manage-button {
         display: block;
         margin: 0px auto 10px auto;
         padding: 10px 20px;
     }
-    
+
     .ntb_table_wrapper {
         overflow-wrap: break-word;
         position: relative;
@@ -570,7 +534,7 @@ export default {
         overflow: auto;
         padding-top: 5px;
         padding-left: var(--table-wrapper-padding);
-        
+
         .pixel-bar-slider {
             width: 50%;
             margin: 10px auto;
@@ -578,7 +542,7 @@ export default {
             padding: 0 20px;
             border-radius: 10px;
         }
-        
+
         .table {
             .table-header {
                 top: 0;
@@ -588,11 +552,11 @@ export default {
                 margin-left: var(--column-arrow);
                 margin-bottom: var(--margin-bottom);
                 display: table-caption;
-                
+
                 th {
                     //background-color: #ffffff;
                     //border: var(--border-size) solid var(--border-color);
-                    
+
                     .column-options {
                         span {
                             i {
@@ -603,17 +567,17 @@ export default {
                             }
                         }
                     }
-                    
+
                     &.th-active {
                         display: block;
                         background-color: #409EFF;
                         margin-left: var(--td-th-active-margin);
                         margin-top: var(--margin-top);
-                        
+
                         &:hover {
                             cursor: move;
                             background-color: #5f6368;
-                            
+
                             .column-options {
                                 span {
                                     i {
@@ -625,14 +589,14 @@ export default {
                     }
                 }
             }
-            
+
             .tbody {
                 .td-highlight {
                     background: inherit;
                     position: relative;
                     z-index: 9;
                     border: none !important;
-                    
+
                     &:before {
                         content: "";
                         position: absolute;
@@ -645,7 +609,7 @@ export default {
                         box-shadow: var(--offset-x) var(--offset-y) var(--blur-radius) var(--shadow-color);
                     }
                 }
-                
+
                 tr {
                     &:first-child {
                         .td-highlight {
@@ -654,7 +618,7 @@ export default {
                             }
                         }
                     }
-                    
+
                     &:first-child,
                     &:last-child {
                         .td-highlight {
@@ -664,29 +628,29 @@ export default {
                         }
                     }
                 }
-                
+
                 display: block;
                 margin-left: var(--td-th-active-margin);
-                
+
                 tr.firstRowSticky {
                     position: sticky;
                     top: -5px;
                     z-index: 2;
                 }
-                
+
                 tr {
                     position: relative;
-                    
+
                     td {
                         .sortIcon {
                             font-size: 30px;
                         }
-                        
+
                         position: relative;
-                        
+
                         .row-options {
                             top: calc(50% - 10px);
-                            
+
                             span {
                                 i {
                                     color: #000000;
@@ -694,51 +658,51 @@ export default {
                                     font-size: 12px;
                                     opacity: 1
                                 }
-                                
+
                                 span {
                                     color: #000000;
                                 }
                             }
-                            
+
                             &:hover {
                                 i {
                                     opacity: 1;
                                     color: #ffffff;
                                     cursor: pointer;
                                 }
-                                
+
                                 span {
                                     color: #ffffff;
                                     cursor: move;
                                 }
                             }
                         }
-                        
+
                         .row-move {
                             position: absolute;
                             height: 100%;
                             right: -37px;
                             top: 0;
-                            
+
                             .el-button {
                                 width: 30px;
-                                
+
                                 i {
                                     transform: rotate(270deg)
                                 }
-                                
+
                                 .top {
                                     position: absolute;
                                     margin-top: 15px;
                                 }
-                                
+
                                 .bottom {
                                     margin-bottom: 15px;
                                 }
                             }
                         }
                     }
-                    
+
                     .td-active {
                         background-color: #409EFF;
                         position: sticky;
@@ -748,25 +712,25 @@ export default {
                         max-width: 20px;
                         border-bottom: var(--border-size) solid var(--border-color);
                         opacity: 1;
-                        
+
                         .row-options {
                             span {
                                 i {
                                     color: #ffffff;
                                     opacity: 1;
                                 }
-                                
+
                                 span {
                                     color: #ffffff;
                                 }
                             }
                         }
-                        
+
                         &:hover {
                             background-color: #5f6368;
                         }
                     }
-                    
+
                     .td-inactive {
                         opacity: 0;
                         visibility: hidden;
@@ -774,12 +738,12 @@ export default {
                     }
                 }
             }
-            
+
             .single-item {
                 position: relative;
                 display: block;
                 border: 0px solid transparent;
-                
+
                 .icon-style {
                     position: absolute;
                     top: -15px;
@@ -792,11 +756,11 @@ export default {
                     justify-content: flex-end;
                     font-size: 14px;
                     color: #ffffff;
-                    
+
                     .el-icon-rank {
                         cursor: move;
                     }
-                    
+
                     i {
                         background: #3f9eff;
                         padding: 0px 2px;
@@ -804,39 +768,43 @@ export default {
                     }
                 }
             }
-            
+
             .other-item {
                 .hover-item {
                     border: 1px solid transparent;
                 }
+
                 &.item-active {
                     .hover-item {
                         border-color: #3f9eff;
                     }
                 }
+
                 &:hover {
                     cursor: pointer;
-                    
+
                     .hover-item {
                         border-color: #3f9eff;
                     }
-                    
+
                     .icon-style {
                         opacity: 1;
                     }
                 }
             }
-            
+
             .only-ribbon {
                 position: absolute;
-                
+
                 &:hover {
                     cursor: pointer;
-                    
-                    .corner, .bookmark, .side {
+
+                    .corner,
+                    .bookmark,
+                    .side {
                         border: 1px solid #3f9eff;
                     }
-                    
+
                     .icon-style {
                         opacity: 1;
                         justify-content: flex-start;
@@ -845,16 +813,17 @@ export default {
                     }
                 }
             }
-            
+
             @keyframes selected-item-move {
                 0% {
                     background-position: 0% 50%;
                 }
+
                 100% {
                     background-position: 100% 50%;
                 }
             }
-            
+
             #selected-item {
                 background: repeating-linear-gradient(45deg, white, white 5px, #3299d1 5px, #3299d1 10px);
                 background-size: 400% 400%;
@@ -874,5 +843,4 @@ export default {
         cursor: pointer;
     }
 }
-
 </style>
