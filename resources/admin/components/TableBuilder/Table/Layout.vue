@@ -133,7 +133,8 @@
                             :rowspan="calculateRowSpan(singleTd.style)"
                             :style="[tdInlineStyleResponsive(singleTd.style, singleTd.rowStyle, singleTd.rowIndex, responsiveInitial.showHeader, responsiveInitial.itemsPerRow, selectedDevice, responsiveInitial.cell_direction), innerBorder(singleTd.rowIndex)]">
                             <span v-for="(singleItem, index) in singleTd.columns" :key="index">
-                                <table-data class="responsive-mode" :setting="setting" v-if="item.id != itemId"
+                           
+                                <table-data class="responsive-mode" :reference="index" :setting="setting" v-if="item.id != itemId"
                                     :item="singleItem"></table-data>
                             </span>
                         </td>

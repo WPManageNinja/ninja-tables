@@ -120,7 +120,6 @@ class TableBuilderController extends Controller
         $table_html = ninjaTablesEscapeScript(Arr::get($request->all(), 'table_html'));
         $json       = ninjaTablesEscapeScript(Arr::get($request->all(), 'data'));
         $data       = json_decode(htmlspecialchars_decode($json), true);
-
         if ( ! ninjaTablesCanUnfilteredHTML()) {
             ninja_tables_allowed_css_properties();
             $table_html = $this->convertRGBtoHex($table_html);

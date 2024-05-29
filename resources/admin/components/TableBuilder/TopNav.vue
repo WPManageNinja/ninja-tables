@@ -67,7 +67,7 @@ export default {
           });
           return false;
         }
-        console.log(this.initialData)
+        // console.log(this.initialData?.table_data?.data[0]?.rows?.column_0?.columns[0])
         this.$patch(`table-builder/${this.id}`, {
           data: JSON.stringify(this.initialData),
           table_html: innerHTML,

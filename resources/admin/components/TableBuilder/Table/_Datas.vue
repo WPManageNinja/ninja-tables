@@ -1,10 +1,14 @@
 <template>
     <div :style="[margin]" class="ntb-datas-wrapper">
-        <span id="test-k" ref="editor" @click="initializeEditor" contenteditable="true" @blur="updateContent"
+        <div :ref="`editor-${reference}`" class="hover-item" contenteditable="true" v-if="item.data.type === 'text'"
+            :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
+            v-html="item.data.value === '' ? 'Add New' : item.data.value">
+        </div>
+        <!-- <span id="test-k" ref="editor" @click="initializeEditor" contenteditable="true" @blur="updateContent"
             class="hover-item" v-if="item.data.type === 'text'"
             :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
             v-html="item.data.value === '' ? 'Add New' : item.data.value">
-        </span>
+        </span> -->
 
         <div v-else-if="item.data.type === 'button'" class="hover-item"
             :style="[justifyContent, { display: item.data.style.fullWidth ? 'block' : 'flex' }]">
@@ -19,7 +23,7 @@
                             v-if="item.data.style.iconPosition === 'left' && item.data.style.enableIcon"
                             :style="[iconWithOtherComponent, textAlign]">
                         </span>
-                        <span v-html="item.data.value" contenteditable="true" @blur="updateContent" :style="[fontWeight, {
+                        <span v-html="item.data.value" :ref="`editor-${reference}`" contenteditable="true" @blur="updateContent" :style="[fontWeight, {
                             'margin-left': item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing + 'px' : '0px',
                             'margin-right': item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing + 'px' : '0px'
                         }]">
@@ -118,7 +122,7 @@
                         <p contenteditable="true" @blur="updateContent" :style="[fontSize, color, fontWeight, {
                             'margin-top': item.data.style.textYAxis + 'px',
                             'margin-left': item.data.style.textXAxis + 'px'
-                        }]">{{ item.data.value }}</p>
+                        }]" v-html="item.data.value"></p>
                     </div>
                 </div>
             </div>
@@ -133,7 +137,7 @@ import { manageDataElement } from "../Mixin/manageDataElement";
 export default {
     name: "Datas",
     mixins: [manageDataElement],
-    props: ["item", 'manage', 'setting'],
+    props: ["item", 'manage', 'setting', 'reference'],
     methods: {
         updateListContent() {
             this.item.data.value.push('list item');
@@ -144,28 +148,16 @@ export default {
             //     content = $event.target.innerHTML;
             // }
             // this.item.data.value = content;
-            // console.log(content, 'dfdfdf')
             tinymce.init({
-                inline: true,
+                // inline: true,
                 menubar: false,
-                target: this.$refs.editor,
+                target: this.$refs[`editor-${this.reference}`],
+                toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
                 setup: (editor) => {
                     editor.on('blur', () => {
                         console.log(editor.getContent())
                         this.item.data.value = editor.getContent();
 
-                    });
-                },
-            });
-        },
-        initializeEditor(e) {
-            tinymce.init({
-                inline: true,
-                menubar: false,
-                target: this.$refs.editor,
-                setup: (editor) => {
-                    editor.on('blur', () => {
-                        console.log(editor.getContent())
                     });
                 },
             });
@@ -185,8 +177,18 @@ export default {
         },
 
     },
-    mounted(){
-        console.log(this.item.data.value)
+    mounted() {
+        tinymce.init({
+            inline: true,
+            menubar: false,
+            target: this.$refs[`editor-${this.reference}`],
+            setup: (editor) => {
+                editor.on('blur', () => {
+                    console.log(editor.getContent())
+                    this.item.data.value = editor.getContent();
+                });
+            },
+        });
     },
     computed: {
         ratingValue: {
