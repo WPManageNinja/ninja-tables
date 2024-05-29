@@ -107,7 +107,7 @@
                                 <div v-for="(item, ind) in row.rows[header].columns" class="single-item"
                                     :class="[item.id === itemId ? 'item-active' : '', manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon' : 'other-item' : 'responsive-mode')]"
                                     :key="ind">
-                                    <table-data :manage="manage" :setting="setting"
+                                    <table-data :manage="manage" :setting="setting" :reference="ind"
                                         @click.native.exact="!manage && selectedDevice === '' ? styleChange(item, index, key, row.rows[header], row) : ''"
                                         :item="item">
                                     </table-data>

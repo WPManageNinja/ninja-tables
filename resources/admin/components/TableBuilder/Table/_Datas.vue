@@ -1,6 +1,6 @@
 <template>
     <div :style="[margin]" class="ntb-datas-wrapper">
-        <div :ref="`editor-${reference}`" class="hover-item" contenteditable="true" v-if="item.data.type === 'text'"
+        <div :ref="editorRef" class="hover-item" contenteditable="true" v-if="item.data.type === 'text'"
             :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
             v-html="item.data.value === '' ? 'Add New' : item.data.value">
         </div>
@@ -23,10 +23,11 @@
                             v-if="item.data.style.iconPosition === 'left' && item.data.style.enableIcon"
                             :style="[iconWithOtherComponent, textAlign]">
                         </span>
-                        <span v-html="item.data.value" :ref="`editor-${reference}`" contenteditable="true" @blur="updateContent" :style="[fontWeight, {
-                            'margin-left': item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing + 'px' : '0px',
-                            'margin-right': item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing + 'px' : '0px'
-                        }]">
+                        <span v-html="item.data.value" :ref="editorRef" contenteditable="true" @blur="updateContent"
+                            :style="[fontWeight, {
+                                'margin-left': item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing + 'px' : '0px',
+                                'margin-right': item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing + 'px' : '0px'
+                            }]">
                         </span>
                         <span class="svgIcon"
                             v-if="item.data.style.iconPosition === 'right' && item.data.style.enableIcon"
@@ -61,7 +62,8 @@
                 :style="[displayBlock, dBlockAlign, progressBarTextStyle, { 'width': this.item.data.style.type === 'circle' ? item.data.style.width + 'px' : '100%' }]"
                 v-if="Number(item.data.style.percentage)" :width="Number(item.data.style.width)"
                 :percentage="Number(item.data.style.percentage)" :color="[color]"
-                :stroke-width="Number(item.data.style.thickness)"></el-progress>
+                :stroke-width="Number(item.data.style.thickness)">
+            </el-progress>
         </span>
         <span v-else-if="item.data.type === 'image'">
             <a class="hover-item" @click.prevent v-bind="[hrefAttribute, targetAttribute]" :style="[displayBlock]"
@@ -80,11 +82,13 @@
                         <span class="svgIcon" v-if="item.data.type === 'stylist_list'"
                             :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
                         </span>
-
-                        <span v-html="item.data.value[index]" contenteditable="true"
-                            @input="item.data.value[index] = $event.target.innerText" @keyup.enter="updateListContent"
+                        <span :ref="`${editorRef}-${index}`" v-html="item.data.value[index]" contenteditable="true"
                             :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]">
                         </span>
+                        <!-- <span :ref="`ninja-editor-${reference}-${index}`" v-html="item.data.value[index]" contenteditable="true"
+                            @input="item.data.value[index] = $event.target.innerText" @keyup.enter="updateListContent"
+                            :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]">
+                        </span> -->
                     </span>
                     <div class="icon-styles remove-elements" v-if="!manage">
                         <i class="el-icon-copy-document" @click.stop="copyItem(index)">
@@ -114,21 +118,26 @@
 
             </span>
         </span>
-        <template v-if="item.data.type === 'ribbon'" style="position:relative;margin:0;padding:0;width:100%;">
+        <div v-if="item.data.type === 'ribbon'" style="position:relative;margin:0;padding:0;width:100%;">
             <div class="ribbon-wrapper" :style="[{ top: yAxisRibbon, left: xAxisRibbon }]">
                 <div :class="[item.data.style.ribbonType, item.data.style.ribbonType === 'bookmark' ? 'up' : '']">
                     <div :class="['content', item.data.style.ribbonPosition === 'left' ? 'left' : 'right']"
-                        :style="[ribbonSize, backgroundColor, { 'text-align': 'center', padding: item.data.style.ribbonType === 'corner' ? item.data.style.height + 'px 0px' : '' }]">
-                        <p contenteditable="true" @blur="updateContent" :style="[fontSize, color, fontWeight, {
+                        :style="[ribbonSize, backgroundColor, {position:''},  {'text-align': 'center', padding: item.data.style.ribbonType === 'corner' ? item.data.style.height + 'px 0px' : '' }]">
+                        <span contenteditable="true" :ref="editorRef" :style="[fontSize, color, fontWeight, {
                             'margin-top': item.data.style.textYAxis + 'px',
                             'margin-left': item.data.style.textXAxis + 'px'
-                        }]" v-html="item.data.value"></p>
+                        }]" v-html="item.data.value"></span>
+                        <!-- <p contenteditable="true" @blur="updateContent" :style="[fontSize, color, fontWeight, {
+                            'margin-top': item.data.style.textYAxis + 'px',
+                            'margin-left': item.data.style.textXAxis + 'px'
+                        }]" v-html="item.data.value"></p> -->
                     </div>
                 </div>
             </div>
-        </template>
+        </div>
     </div>
 </template>
+
 <script>
 import { manageDataElement } from "../Mixin/manageDataElement";
 
@@ -138,29 +147,21 @@ export default {
     name: "Datas",
     mixins: [manageDataElement],
     props: ["item", 'manage', 'setting', 'reference'],
+    data() {
+        return {
+            editorRef: `ninja-table-editor-${this.reference}`
+        }
+    },
     methods: {
         updateListContent() {
             this.item.data.value.push('list item');
         },
         updateContent($event) {
-            // let content = $event.target.innerText;
-            // if (this.item.data.type === 'custom_html') {
-            //     content = $event.target.innerHTML;
-            // }
-            // this.item.data.value = content;
-            tinymce.init({
-                // inline: true,
-                menubar: false,
-                target: this.$refs[`editor-${this.reference}`],
-                toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-                setup: (editor) => {
-                    editor.on('blur', () => {
-                        console.log(editor.getContent())
-                        this.item.data.value = editor.getContent();
-
-                    });
-                },
-            });
+            let content = $event.target.innerText;
+            if (this.item.data.type === 'custom_html') {
+                content = $event.target.innerHTML;
+            }
+            this.item.data.value = content;
         },
         copyItem(index) {
             this.item.data.value.splice(index + 1, 0, this.item.data.value[index]);
@@ -175,21 +176,52 @@ export default {
                 return ninja_table_admin.ninja_tables_pro_url + '/assets/libs/icons/' + path + '.svg'
             }
         },
+        initializedEditorOnListItem(idx) {
+            return `${this.editorRef}-${idx}`;
+        }
 
     },
     mounted() {
-        tinymce.init({
-            inline: true,
-            menubar: false,
-            target: this.$refs[`editor-${this.reference}`],
-            setup: (editor) => {
-                editor.on('blur', () => {
-                    console.log(editor.getContent())
-                    this.item.data.value = editor.getContent();
+        this.$nextTick(() => {
+            if (this.item.data.type === 'list' || this.item.data.type === 'stylist_list') {
+                Array.isArray(this.item.data?.value) && this.item.data?.value?.forEach((element, idx) => {
+                    const refArray = this.$refs[`${this.editorRef}-${idx}`];
+                    const ref = Array.isArray(refArray) ? refArray[0] : refArray;
+                    if (ref) {
+                        tinymce.init({
+                            inline: true,
+                            menubar: false,
+                            target: ref,
+                            toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
+                            setup: (editor) => {
+                                editor.on('blur', () => {
+                                    this.$set(this.item.data.value, idx, editor.getContent());
+                                });
+                            },
+                        });
+                    }
                 });
-            },
+            } else {
+                const ref = this.$refs[this.editorRef];
+                // console.log(ref)
+                if (ref) {
+                    tinymce.init({
+                        inline: true,
+                        menubar: false,
+                        target: ref,
+                        toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
+                        setup: (editor) => {
+                            editor.on('blur', () => {
+                                this.item.data.value = editor.getContent();
+                            });
+                        },
+                    });
+                }
+            }
         });
     },
+
+
     computed: {
         ratingValue: {
             get() {
