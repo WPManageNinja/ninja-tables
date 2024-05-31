@@ -1220,3 +1220,14 @@ function ninjaTablesExternalClearPageCaches()
     }
 }
 
+function ninjaTablesGetRemoteContent($url)
+{
+    $remoteContent = wp_safe_remote_get($url);
+
+    if (is_wp_error($remoteContent)) {
+        return false;
+    }
+
+    return wp_remote_retrieve_body($remoteContent);
+}
+
