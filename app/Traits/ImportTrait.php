@@ -48,8 +48,9 @@ trait ImportTrait
 
     public static function importFromURL($url)
     {
-        $file_info                  = new \finfo(FILEINFO_MIME_TYPE);
-        $mime_type                  = $file_info->buffer(file_get_contents($url));
+        $file_info     = new \finfo (FILEINFO_MIME_TYPE);
+        $remoteContent = ninjaTablesGetRemoteContent($url);
+        $mime_type                  = $file_info->buffer($remoteContent);
         $_FILES['file']['type']     = $mime_type;
         $_FILES['file']['tmp_name'] = $url;
 
@@ -77,9 +78,9 @@ trait ImportTrait
 
     private static function importCSV()
     {
-        $tmpName = Sanitizer::sanitizeTextField($_FILES['file']['tmp_name']);
-        $data    = file_get_contents($tmpName);
-        $data    = mb_convert_encoding($data, 'UTF-8', 'ISO-8859-1');
+        $tmpName       = Sanitizer::sanitizeTextField($_FILES['file']['tmp_name']);
+        $remoteContent = ninjaTablesGetRemoteContent($tmpName);
+        $data          = mb_convert_encoding($remoteContent, 'UTF-8', 'ISO-8859-1');
 
         try {
             $reader = Reader::createFromString($data)->fetchAll();
@@ -96,7 +97,9 @@ trait ImportTrait
     private static function importJSON()
     {
         $tmpName = Sanitizer::sanitizeTextField($_FILES['file']['tmp_name']);
-        $content = json_decode(file_get_contents($tmpName), true);
+
+        $content = ninjaTablesGetRemoteContent($tmpName);
+        $content = json_decode($content, true);
 
         if (isset($content['table_id']) && isset($content['table_name'])) {
             return [
