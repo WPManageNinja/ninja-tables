@@ -1,9 +1,11 @@
 <template>
     <div :style="[margin]" class="ntb-datas-wrapper">
-        <div :ref="editorRef" class="hover-item" contenteditable="true" v-if="item.data.type === 'text'"
+        <div :ref="editorRef" class="hover-item" contenteditable="true" @input="updateContent"
+            v-if="item.data.type === 'text'"
             :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
             v-html="item.data.value === '' ? 'Add New' : item.data.value">
         </div>
+
         <!-- <span id="test-k" ref="editor" @click="initializeEditor" contenteditable="true" @blur="updateContent"
             class="hover-item" v-if="item.data.type === 'text'"
             :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
@@ -23,7 +25,7 @@
                             v-if="item.data.style.iconPosition === 'left' && item.data.style.enableIcon"
                             :style="[iconWithOtherComponent, textAlign]">
                         </span>
-                        <span v-html="item.data.value" :ref="editorRef" contenteditable="true" @blur="updateContent"
+                        <span v-html="item.data.value" :ref="editorRef" contenteditable="true" @input="updateContent"
                             :style="[fontWeight, {
                                 'margin-left': item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing + 'px' : '0px',
                                 'margin-right': item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing + 'px' : '0px'
@@ -122,7 +124,7 @@
             <div class="ribbon-wrapper" :style="[{ top: yAxisRibbon, left: xAxisRibbon }]">
                 <div :class="[item.data.style.ribbonType, item.data.style.ribbonType === 'bookmark' ? 'up' : '']">
                     <div :class="['content', item.data.style.ribbonPosition === 'left' ? 'left' : 'right']"
-                        :style="[ribbonSize, backgroundColor, {position:''},  {'text-align': 'center', padding: item.data.style.ribbonType === 'corner' ? item.data.style.height + 'px 0px' : '' }]">
+                        :style="[ribbonSize, backgroundColor, { position: '' }, { 'text-align': 'center', padding: item.data.style.ribbonType === 'corner' ? item.data.style.height + 'px 0px' : '' }]">
                         <span contenteditable="true" :ref="editorRef" :style="[fontSize, color, fontWeight, {
                             'margin-top': item.data.style.textYAxis + 'px',
                             'margin-left': item.data.style.textXAxis + 'px'
@@ -139,9 +141,8 @@
 </template>
 
 <script>
+import { restoreCursorPosition, saveCursorPosition } from "../../../utils/cursorSetup";
 import { manageDataElement } from "../Mixin/manageDataElement";
-
-
 
 export default {
     name: "Datas",
@@ -149,19 +150,24 @@ export default {
     props: ["item", 'manage', 'setting', 'reference'],
     data() {
         return {
-            editorRef: `ninja-table-editor-${this.reference}`
+            editorRef: `ninja-table-editor-${this.reference}`,
         }
     },
     methods: {
         updateListContent() {
             this.item.data.value.push('list item');
         },
-        updateContent($event) {
-            let content = $event.target.innerText;
+        updateContent(event) {
+            const element = event.target;
+            const cursorPosition = saveCursorPosition(element);
+            let content = event.target.innerHTML;
             if (this.item.data.type === 'custom_html') {
-                content = $event.target.innerHTML;
+                content = event.target.innerHTML;
             }
             this.item.data.value = content;
+            this.$nextTick(() => {
+                restoreCursorPosition(element, cursorPosition);
+            });
         },
         copyItem(index) {
             this.item.data.value.splice(index + 1, 0, this.item.data.value[index]);
@@ -194,8 +200,19 @@ export default {
                             target: ref,
                             toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
                             setup: (editor) => {
-                                editor.on('blur', () => {
+                                editor.on('change', () => {
+                                    const cursorPosition = saveCursorPosition(ref);
                                     this.$set(this.item.data.value, idx, editor.getContent());
+                                    this.$nextTick(() => {
+                                        restoreCursorPosition(ref, cursorPosition);
+                                    });
+                                });
+
+                                editor.on('click', () => {
+                                    const getEle = document.getElementById('mceu_7');
+                                    getEle.addEventListener('click', function (event) {
+                                        event.stopPropagation();
+                                    });
                                 });
                             },
                         });
@@ -203,7 +220,6 @@ export default {
                 });
             } else {
                 const ref = this.$refs[this.editorRef];
-                // console.log(ref)
                 if (ref) {
                     tinymce.init({
                         inline: true,
@@ -211,8 +227,19 @@ export default {
                         target: ref,
                         toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
                         setup: (editor) => {
-                            editor.on('blur', () => {
+                            editor.on('change', (event) => {
+                                const cursorPosition = saveCursorPosition(ref);
                                 this.item.data.value = editor.getContent();
+                                this.$nextTick(() => {
+                                    restoreCursorPosition(ref, cursorPosition);
+                                });
+
+                            });
+                            editor.on('click', (event) => {
+                                const getEle = document.getElementById('mceu_7');
+                                getEle.addEventListener('click', function (event) {
+                                    event.stopPropagation();
+                                });
                             });
                         },
                     });
