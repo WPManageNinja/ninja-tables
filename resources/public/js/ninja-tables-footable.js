@@ -5,5 +5,7 @@ import diacriticsRemoval from "./diacriticsRemoval";
 window.ninjaTableApp.diacriticsRemoval = diacriticsRemoval;
 
 jQuery(document).ready(function () {
-    ninjaTableApp.initTables();
+    setTimeout(() => {
+        ninjaTableApp.initTables();
+    }, ninja_footables.delay | 0)
 });

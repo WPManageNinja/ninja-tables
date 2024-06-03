@@ -77,6 +77,7 @@ class NinjaFooTable
             ),
             'ninja_table_public_nonce' => wp_create_nonce('ninja_table_public_nonce'),
             'site_url'                 => site_url(),
+            'delay'                    => apply_filters('ninja_tables_footable_init_delay', 0),
         );
 
         if (defined('NINJAPROPLUGIN_VERSION')) {
