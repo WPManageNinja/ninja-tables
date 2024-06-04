@@ -199,11 +199,7 @@ export default {
                             target: ref,
                             toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
                             setup: (editor) => {
-                                editor.on('init', function () {
-                                    editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
-                                    // Set margin to zero for all <p> tags within the editor content
-                                    tinymce.$('p', editor.getBody()).css('margin', '0');
-                                });
+                               
                                 editor.on('change', () => {
                                     const cursorPosition = saveCursorPosition(ref);
                                     this.$set(this.item.data.value, idx, editor.getContent());
@@ -218,6 +214,11 @@ export default {
                                         event.stopPropagation();
                                     });
                                 });
+                                editor.on('init', function () {
+                                    editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
+                                    // Set margin to zero for all <p> tags within the editor content
+                                    tinymce.$('p', editor.getBody()).css('margin', '0');
+                                });
                             },
                         });
                     }
@@ -231,11 +232,7 @@ export default {
                         target: ref,
                         toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
                         setup: (editor) => {
-                            editor.on('init', function () {
-                                editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
-                                // Set margin to zero for all <p> tags within the editor content
-                                tinymce.$('p', editor.getBody()).css('margin', '0');
-                            });
+                            
                             editor.on('change', (event) => {
                                 const cursorPosition = saveCursorPosition(ref);
                                 this.item.data.value = editor.getContent();
@@ -249,6 +246,11 @@ export default {
                                 getEle.addEventListener('click', function (event) {
                                     event.stopPropagation();
                                 });
+                            });
+                            editor.on('init', function () {
+                                editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
+                                // Set margin to zero for all <p> tags within the editor content
+                                tinymce.$('p', editor.getBody()).css('margin', '0');
                             });
                         },
                     });
