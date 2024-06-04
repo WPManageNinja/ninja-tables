@@ -36,7 +36,6 @@
                             :style="[iconWithOtherComponent, textAlign]">
                         </span>
                     </span>
-
                 </el-button>
             </a>
         </div>
@@ -84,7 +83,7 @@
                         <span class="svgIcon" v-if="item.data.type === 'stylist_list'"
                             :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
                         </span>
-                        <span :ref="`${editorRef}-${index}`" v-html="item.data.value[index]" contenteditable="true"
+                        <span :ref="`${editorRef}-${index}`" v-html="item.data.value[index]" contenteditable="true" @input="updateContent"
                             :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]">
                         </span>
                         <!-- <span :ref="`ninja-editor-${reference}-${index}`" v-html="item.data.value[index]" contenteditable="true"
@@ -200,6 +199,11 @@ export default {
                             target: ref,
                             toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
                             setup: (editor) => {
+                                editor.on('init', function () {
+                                    editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
+                                    // Set margin to zero for all <p> tags within the editor content
+                                    tinymce.$('p', editor.getBody()).css('margin', '0');
+                                });
                                 editor.on('change', () => {
                                     const cursorPosition = saveCursorPosition(ref);
                                     this.$set(this.item.data.value, idx, editor.getContent());
@@ -227,6 +231,11 @@ export default {
                         target: ref,
                         toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
                         setup: (editor) => {
+                            editor.on('init', function () {
+                                editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
+                                // Set margin to zero for all <p> tags within the editor content
+                                tinymce.$('p', editor.getBody()).css('margin', '0');
+                            });
                             editor.on('change', (event) => {
                                 const cursorPosition = saveCursorPosition(ref);
                                 this.item.data.value = editor.getContent();

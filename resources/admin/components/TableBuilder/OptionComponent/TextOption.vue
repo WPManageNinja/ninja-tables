@@ -38,7 +38,7 @@ export default {
                 { label: 'Italic', value: 'italic' },
                 { label: 'Underline', value: 'underline' },
             ],
-            visualMode: 'text'
+            visualMode: 'visual'
         };
     },
     methods: {
