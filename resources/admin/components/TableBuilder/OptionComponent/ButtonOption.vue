@@ -1,13 +1,13 @@
 <template>
   <el-tabs v-model="activeName">
     <el-tab-pane :label="$t('General')" name="general" class="component-wrapper">
-      <div
+      <span
           contenteditable="true"
           @input="updateText"
           :placeholder="$t('Enter here')"
           v-html="item.data.value"
           style="width: 100%; margin-bottom: 3px; border: 1px solid lightgray; border-radius: 5px; padding: 9px 12px;"
-      ></div>
+      ></span>
       <color-input
           :label="$t('Background color')"
           v-model="item.data.style.backgroundColor"
