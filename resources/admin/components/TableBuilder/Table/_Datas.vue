@@ -76,20 +76,16 @@
         </span>
         <span v-else-if="item.data.type === 'list' || item.data.type === 'stylist_list'"
             :style="[textAlign, displayFlex, justifyContent]" class="ntb-list hover-item">
-            <component :is="item.data.style.listType" :class="!manage ? 'ntb-list-style' : ''"
+            <component :is="listType" :class="!manage ? 'ntb-list-style' : ''"
                 :style="[listStyle, padding]">
-                <li :key="index" v-for="(val, index) in item.data.value" :style="[color, fontSize, lineHeight]">
-                    <span>
-                        <span class="svgIcon" v-if="item.data.type === 'stylist_list'"
-                            :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
-                        </span>
-                        <span :ref="`${editorRef}-${index}`" v-html="item.data.value[index]" contenteditable="true" @input="updateContent"
-                            :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]">
-                        </span>
-                        <!-- <span :ref="`ninja-editor-${reference}-${index}`" v-html="item.data.value[index]" contenteditable="true"
-                            @input="item.data.value[index] = $event.target.innerText" @keyup.enter="updateListContent"
-                            :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]">
-                        </span> -->
+                <li v-for="(val, index) in item.data.value" :key="index" :ref="`ninja-li-${index}`"
+                    :style="[color, fontSize, lineHeight]">
+                    <span class="svgIcon" v-if="item.data.type === 'stylist_list'"
+                        :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
+                    </span>
+                    <span :ref="`${editorRef}-${index}`" v-html="item.data.value[index]" contenteditable="true"
+                        @input="updateContent"
+                        :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]">
                     </span>
                     <div class="icon-styles remove-elements" v-if="!manage">
                         <i class="el-icon-copy-document" @click.stop="copyItem(index)">
@@ -97,7 +93,6 @@
                         <i class="el-icon-delete" @click.stop="deleteItem(index)"></i>
                     </div>
                 </li>
-
             </component>
         </span>
         <span v-if="item.data.type === 'text_icon'" :style="[displayFlex, justifyContent]" class="hover-item">
@@ -106,7 +101,7 @@
                     :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
                 </span>
 
-                <span v-html="item.data.value" contenteditable="true" @blur="updateContent" :style="`
+                <span v-html="item.data.value" contenteditable="true" :ref="editorRef" @input="updateContent" :style="`
           vertical-align: middle;
           margin-left: ${item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing : 0}px;
           margin-right: ${item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing : 0}px;
@@ -128,10 +123,6 @@
                             'margin-top': item.data.style.textYAxis + 'px',
                             'margin-left': item.data.style.textXAxis + 'px'
                         }]" v-html="item.data.value"></span>
-                        <!-- <p contenteditable="true" @blur="updateContent" :style="[fontSize, color, fontWeight, {
-                            'margin-top': item.data.style.textYAxis + 'px',
-                            'margin-left': item.data.style.textXAxis + 'px'
-                        }]" v-html="item.data.value"></p> -->
                     </div>
                 </div>
             </div>
@@ -150,6 +141,7 @@ export default {
     data() {
         return {
             editorRef: `ninja-table-editor-${this.reference}`,
+            listType: this.item.data.style.listType
         }
     },
     methods: {
@@ -199,7 +191,10 @@ export default {
                             target: ref,
                             toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
                             setup: (editor) => {
-                               
+                                editor.on('init', function () {
+                                    editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
+                                    tinymce.$('p', editor.getBody()).css('margin', '0');
+                                });
                                 editor.on('change', () => {
                                     const cursorPosition = saveCursorPosition(ref);
                                     this.$set(this.item.data.value, idx, editor.getContent());
@@ -209,16 +204,13 @@ export default {
                                 });
 
                                 editor.on('click', () => {
-                                    const getEle = document.getElementById('mceu_7');
+                                    const mceuId = tinymce.activeEditor?.theme?.panel?._id || 'mceu_7';
+                                    const getEle = document.getElementById(mceuId);
                                     getEle.addEventListener('click', function (event) {
                                         event.stopPropagation();
                                     });
                                 });
-                                editor.on('init', function () {
-                                    editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
-                                    // Set margin to zero for all <p> tags within the editor content
-                                    tinymce.$('p', editor.getBody()).css('margin', '0');
-                                });
+
                             },
                         });
                     }
@@ -232,7 +224,10 @@ export default {
                         target: ref,
                         toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
                         setup: (editor) => {
-                            
+                            editor.on('init', function () {
+                                editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
+                                tinymce.$('p', editor.getBody()).css('margin', '0');
+                            });
                             editor.on('change', (event) => {
                                 const cursorPosition = saveCursorPosition(ref);
                                 this.item.data.value = editor.getContent();
@@ -242,15 +237,11 @@ export default {
 
                             });
                             editor.on('click', (event) => {
-                                const getEle = document.getElementById('mceu_7');
+                                const mceuId = tinymce.activeEditor?.theme?.panel?._id || 'mceu_7';
+                                const getEle = document.getElementById(mceuId);
                                 getEle.addEventListener('click', function (event) {
                                     event.stopPropagation();
                                 });
-                            });
-                            editor.on('init', function () {
-                                editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
-                                // Set margin to zero for all <p> tags within the editor content
-                                tinymce.$('p', editor.getBody()).css('margin', '0');
                             });
                         },
                     });

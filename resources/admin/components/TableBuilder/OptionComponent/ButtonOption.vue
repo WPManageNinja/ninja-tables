@@ -1,13 +1,13 @@
 <template>
   <el-tabs v-model="activeName">
     <el-tab-pane :label="$t('General')" name="general" class="component-wrapper">
-      <el-input
-          size="mini"
-          type="text"
+      <div
+          contenteditable="true"
+          @input="updateText"
           :placeholder="$t('Enter here')"
-          v-model="item.data.value"
-          style="width: 96%; margin-bottom: 3px;"
-      ></el-input>
+          v-html="item.data.value"
+          style="width: 100%; margin-bottom: 3px; border: 1px solid lightgray; border-radius: 5px; padding: 9px 12px;"
+      ></div>
       <color-input
           :label="$t('Background color')"
           v-model="item.data.style.backgroundColor"
@@ -181,6 +181,7 @@ import Alignment from "../SettingComponent/Alignment.vue";
 import Icon from "./SplitComponent/Icon";
 import Checkbox from "../SettingComponent/CheckboxInput"
 import RadioButton from "../SettingComponent/RadioButton";
+import { restoreCursorPosition, saveCursorPosition } from "../../../utils/cursorSetup";
 
 export default {
     data() {
@@ -226,6 +227,16 @@ export default {
             const last4 = item.slice(-4);
             return last4.slice(-4) === '.svg' || !last4.includes('.');
         }
+    },
+    methods:{
+        updateText(event) {
+            const element = event.target;
+            const cursorPosition = saveCursorPosition(element);
+            this.item.data.value = element.innerHTML;
+            this.$nextTick(() => {
+                restoreCursorPosition(element, cursorPosition);
+            });
+        },
     }
 };
 </script>
