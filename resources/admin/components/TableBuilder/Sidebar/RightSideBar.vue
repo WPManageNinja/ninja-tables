@@ -149,6 +149,7 @@
             ></table-layout>
         </el-row>
     </div>
+    
 </template>
 <script>
 import draggable from "vuedraggable";

@@ -1,18 +1,12 @@
 <template>
-    <div :style="[margin]" class="ntb-datas-wrapper">
+    <div :style="[margin]" class="ntb-datas-wrapper" :key="editorRef">
         <div :ref="editorRef" class="hover-item" contenteditable="true" @input="updateContent"
             v-if="item.data.type === 'text'"
             :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
             v-html="item.data.value === '' ? 'Add New' : item.data.value">
         </div>
 
-        <!-- <span id="test-k" ref="editor" @click="initializeEditor" contenteditable="true" @blur="updateContent"
-            class="hover-item" v-if="item.data.type === 'text'"
-            :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
-            v-html="item.data.value === '' ? 'Add New' : item.data.value">
-        </span> -->
-
-        <div v-else-if="item.data.type === 'button'" class="hover-item"
+        <span v-else-if="item.data.type === 'button'" class="hover-item"
             :style="[justifyContent, { display: item.data.style.fullWidth ? 'block' : 'flex' }]">
             <a @click.prevent :href="`${item.data.style.url}`"
                 :style="[justifyContent, displayFlex, { 'text-decoration': 'none' }]"
@@ -38,7 +32,7 @@
                     </span>
                 </el-button>
             </a>
-        </div>
+        </span>
 
         <div class="hover-item" v-else-if="item.data.type === 'custom_html'" v-html="item.data.value"
             contenteditable="true" @blur="updateContent" :style="[padding]"></div>
@@ -75,16 +69,13 @@
             </a>
         </span>
         <span v-else-if="item.data.type === 'list' || item.data.type === 'stylist_list'"
-            :style="[textAlign, displayFlex, justifyContent]" class="ntb-list hover-item">
-            <component :is="listType" :class="!manage ? 'ntb-list-style' : ''"
-                :style="[listStyle, padding]">
-                <li v-for="(val, index) in item.data.value" :key="index" :ref="`ninja-li-${index}`"
-                    :style="[color, fontSize, lineHeight]">
+            :style="[textAlign, displayFlex, justifyContent]" class="ntb-list hover-item" :key="editorRef">
+            <component :is="listType" :class="!manage ? 'ntb-list-style' : ''" :style="[listStyle, padding]">
+                <li v-for="(val, index) in item.data.value" :key="index" :style="[color, fontSize, lineHeight]">
                     <span class="svgIcon" v-if="item.data.type === 'stylist_list'"
                         :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
                     </span>
                     <span :ref="`${editorRef}-${index}`" v-html="item.data.value[index]" contenteditable="true"
-                        @input="updateContent"
                         :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]">
                     </span>
                     <div class="icon-styles remove-elements" v-if="!manage">
@@ -95,14 +86,13 @@
                 </li>
             </component>
         </span>
-        <span v-if="item.data.type === 'text_icon'" :style="[displayFlex, justifyContent]" class="hover-item">
+        <span v-else-if="item.data.type === 'text_icon'" :style="[displayFlex, justifyContent]" class="hover-item">
             <span class="icon-text-wrapper" :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color]">
                 <span class="svgIcon" v-if="item.data.style.iconPosition === 'left'"
                     :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
                 </span>
-
-                <span v-html="item.data.value" contenteditable="true" :ref="editorRef" @input="updateContent" :style="`
-          vertical-align: middle;
+                <span :ref="editorRef" v-html="item.data.value" contenteditable="true" @input="updateContent" :style="`
+          vertical-align: middle;display: inline-block;
           margin-left: ${item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing : 0}px;
           margin-right: ${item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing : 0}px;
           `">
@@ -114,39 +104,44 @@
 
             </span>
         </span>
-        <div v-if="item.data.type === 'ribbon'" style="position:relative;margin:0;padding:0;width:100%;">
+        <span v-else-if="item.data.type === 'ribbon'" style="position:relative;margin:0;padding:0;width:100%;">
             <div class="ribbon-wrapper" :style="[{ top: yAxisRibbon, left: xAxisRibbon }]">
                 <div :class="[item.data.style.ribbonType, item.data.style.ribbonType === 'bookmark' ? 'up' : '']">
                     <div :class="['content', item.data.style.ribbonPosition === 'left' ? 'left' : 'right']"
                         :style="[ribbonSize, backgroundColor, { position: '' }, { 'text-align': 'center', padding: item.data.style.ribbonType === 'corner' ? item.data.style.height + 'px 0px' : '' }]">
-                        <span contenteditable="true" :ref="editorRef" :style="[fontSize, color, fontWeight, {
+                        <p contenteditable="true" @blur="updateContent" :style="[fontSize, color, fontWeight, {
                             'margin-top': item.data.style.textYAxis + 'px',
                             'margin-left': item.data.style.textXAxis + 'px'
-                        }]" v-html="item.data.value"></span>
+                        }]">{{ item.data.value }}</p>
+                        <!-- <el-input :style="[fontSize, color, fontWeight, {
+                            'margin-top': item.data.style.textYAxis + 'px',
+                            'margin-left': item.data.style.textXAxis + 'px'
+                        }]" v-model="item.data.value"></el-input> -->
                     </div>
                 </div>
             </div>
-        </div>
+        </span>
     </div>
 </template>
 
 <script>
 import { restoreCursorPosition, saveCursorPosition } from "../../../utils/cursorSetup";
+import { initTinymce } from "../../../utils/tinymceInit";
 import { manageDataElement } from "../Mixin/manageDataElement";
 
 export default {
     name: "Datas",
     mixins: [manageDataElement],
-    props: ["item", 'manage', 'setting', 'reference'],
+    props: ["item", 'manage', 'setting', 'reference', 'row'],
     data() {
         return {
             editorRef: `ninja-table-editor-${this.reference}`,
-            listType: this.item.data.style.listType
+            listType: this.item.data.style.listType || 'ul'
         }
     },
     methods: {
         updateListContent() {
-            this.item.data.value.push('list item');
+            // this.item.data.value.push('list item');
         },
         updateContent(event) {
             const element = event.target;
@@ -173,83 +168,43 @@ export default {
                 return ninja_table_admin.ninja_tables_pro_url + '/assets/libs/icons/' + path + '.svg'
             }
         },
-        initializedEditorOnListItem(idx) {
-            return `${this.editorRef}-${idx}`;
-        }
-
-    },
-    mounted() {
-        this.$nextTick(() => {
-            if (this.item.data.type === 'list' || this.item.data.type === 'stylist_list') {
-                Array.isArray(this.item.data?.value) && this.item.data?.value?.forEach((element, idx) => {
-                    const refArray = this.$refs[`${this.editorRef}-${idx}`];
-                    const ref = Array.isArray(refArray) ? refArray[0] : refArray;
-                    if (ref) {
-                        tinymce.init({
-                            inline: true,
-                            menubar: false,
-                            target: ref,
-                            toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
-                            setup: (editor) => {
-                                editor.on('init', function () {
-                                    editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
-                                    tinymce.$('p', editor.getBody()).css('margin', '0');
-                                });
-                                editor.on('change', () => {
-                                    const cursorPosition = saveCursorPosition(ref);
-                                    this.$set(this.item.data.value, idx, editor.getContent());
-                                    this.$nextTick(() => {
-                                        restoreCursorPosition(ref, cursorPosition);
-                                    });
-                                });
-
-                                editor.on('click', () => {
-                                    const mceuId = tinymce.activeEditor?.theme?.panel?._id || 'mceu_7';
-                                    const getEle = document.getElementById(mceuId);
-                                    getEle.addEventListener('click', function (event) {
-                                        event.stopPropagation();
-                                    });
-                                });
-
-                            },
-                        });
-                    }
-                });
-            } else {
-                const ref = this.$refs[this.editorRef];
-                if (ref) {
-                    tinymce.init({
-                        inline: true,
-                        menubar: false,
-                        target: ref,
-                        toolbar: 'bold italic backcolor underline | alignleft aligncenter alignright alignjustify',
-                        setup: (editor) => {
-                            editor.on('init', function () {
-                                editor.dom.setStyles(editor.getBody(), { 'margin': '0' });
-                                tinymce.$('p', editor.getBody()).css('margin', '0');
-                            });
-                            editor.on('change', (event) => {
-                                const cursorPosition = saveCursorPosition(ref);
-                                this.item.data.value = editor.getContent();
-                                this.$nextTick(() => {
-                                    restoreCursorPosition(ref, cursorPosition);
-                                });
-
-                            });
-                            editor.on('click', (event) => {
-                                const mceuId = tinymce.activeEditor?.theme?.panel?._id || 'mceu_7';
-                                const getEle = document.getElementById(mceuId);
-                                getEle.addEventListener('click', function (event) {
-                                    event.stopPropagation();
-                                });
-                            });
-                        },
+        initTinymceEditor() {
+            this.$nextTick(() => {
+                if (this.item.data.type === 'list' || this.item.data.type === 'stylist_list') {
+                    Array.isArray(this.item.data?.value) && this.item.data?.value?.forEach((element, idx) => {
+                        const refArray = this.$refs[`${this.editorRef}-${idx}`];
+                        const ref = Array.isArray(refArray) ? refArray[0] : refArray;
+                        // console.log(`${this.editorRef}-${idx}`)
+                        initTinymce(this, ref, idx)
                     });
+                } else {
+                    const ref = this.$refs[this.editorRef];
+                    // console.log(this.editorRef, this.item.data.type)
+                    initTinymce(this, ref)
                 }
-            }
-        });
+            });
+        },
     },
 
+    mounted() {
+        this.initTinymceEditor();
+    },
+    watch: {
+        'item.data': {
+            handler(newValue, oldValue) {
+                // console.log('Data type updated:', newValue);
+                this.initTinymceEditor();
+                this.$forceUpdate(); 
+            },
+            immediate: true
+        },
+        // 'item.data.value': {
+        //     handler(newValue, oldValue) {
+        //         this.$forceUpdate(); 
+        //     },
+        //     deep: true
+        // }
+    },
 
     computed: {
         ratingValue: {

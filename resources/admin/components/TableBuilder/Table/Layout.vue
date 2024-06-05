@@ -107,7 +107,7 @@
                                 <div v-for="(item, ind) in row.rows[header].columns" class="single-item"
                                     :class="[item.id === itemId ? 'item-active' : '', manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon' : 'other-item' : 'responsive-mode')]"
                                     :key="ind">
-                                    <table-data :manage="manage" :setting="setting" :reference="ind"
+                                    <table-data :manage="manage" :setting="setting" :reference="`${index}_${key}_${row.rows[header].columns.length-(ind+1)}`"
                                         @click.native="!manage && selectedDevice === '' ? styleChange(item, index, key, row.rows[header], row) : ''"
                                         :item="item">
                                     </table-data>
@@ -123,7 +123,7 @@
                         </td>
                     </tr>
                 </draggable>
-                <tbody v-else>
+                <tbody v-else :key="tableData">
                     <tr v-for="(item, index) in responsiveInitial.tableData" :key="index"
                         :class="`${selectedDevice === 'mobile' ? 'mobile-view tr_class_mobile_' + index : 'tablet-view tr_class_tablet_' + index}`"
                         :id="`${selectedDevice === 'mobile' ? 'tr_id_mobile_' + index : 'tr_id_tablet_' + index}`"
@@ -132,9 +132,8 @@
                             :id="`td_id_${singleTd.style.tdId}`" :colspan="calculateColSpan(singleTd.style)"
                             :rowspan="calculateRowSpan(singleTd.style)"
                             :style="[tdInlineStyleResponsive(singleTd.style, singleTd.rowStyle, singleTd.rowIndex, responsiveInitial.showHeader, responsiveInitial.itemsPerRow, selectedDevice, responsiveInitial.cell_direction), innerBorder(singleTd.rowIndex)]">
-                            <span v-for="(singleItem, index) in singleTd.columns" :key="index">
-                           
-                                <table-data class="responsive-mode" :reference="index" :setting="setting" v-if="item.id != itemId"
+                            <span v-for="(singleItem, idx) in singleTd.columns" :key="idx">
+                                <table-data class="responsive-mode" :reference="`${index}_${idx}`" :setting="setting" v-if="item.id != itemId"
                                     :item="singleItem"></table-data>
                             </span>
                         </td>
@@ -175,7 +174,6 @@ export default {
                 }
             });
         })
-       
     },
     data() {
         return {
@@ -209,8 +207,6 @@ export default {
     methods: {
         handleEdit(data){
             this.$emit('editItem', data)
-
-            console.log('dfdfdf')
         },
         iconSpacing(item) {
             if (item.data.type === 'ribbon') {

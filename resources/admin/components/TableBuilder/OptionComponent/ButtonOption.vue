@@ -6,7 +6,7 @@
           @input="updateText"
           :placeholder="$t('Enter here')"
           v-html="item.data.value"
-          style="width: 100%; margin-bottom: 3px; border: 1px solid lightgray; border-radius: 5px; padding: 9px 12px;"
+          style="width: 90%;display: block; margin-bottom: 3px; border: 1px solid lightgray; border-radius: 5px; padding: 9px 12px;"
       ></span>
       <color-input
           :label="$t('Background color')"

@@ -2,16 +2,9 @@
     <div>
         <el-tabs v-model="activeName">
             <el-tab-pane class="component-wrapper" :label="$t('General')" name="general">
-                <div contenteditable="true" @input="updateText" :placeholder="$t('Enter here')" v-html="item.data.value"
-                    style="width: 100%; margin-bottom: 3px; border: 1px solid lightgray; border-radius: 5px; padding: 9px 12px;">
-                </div>
-                <!-- <el-input
-                    type="textarea"
-                    :autosize="{ minRows: 3 }"
-                    :placeholder="$t('Enter here')"
-                    v-model="item.data.value"
-                >
-                </el-input> -->
+                <span contenteditable="true" @input="updateText" :placeholder="$t('Enter here')" v-html="item.data.value"
+                    style="width: 90%; display: block; margin-bottom: 3px; border: 1px solid lightgray; border-radius: 5px; padding: 9px 12px;">
+                </span>
                 <slider v-model="item.data.style.itemSpacing" :label="$t('Item Spacing')" :max="200" :min="0" :step="1">
                 </slider>
                 <alignment :label="$t('Alignment')" v-model="item.data.style.alignment"></alignment>
