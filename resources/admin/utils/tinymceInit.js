@@ -9,8 +9,8 @@ export const initTinymce = ($this, $ref, idx) => {
     toolbar:
       "bold italic backcolor underline | alignleft aligncenter alignright alignjustify",
     setup: (editor) => {
+      console.log($this.item.data)
       editor.on("init", function () {
-        // editor.dom.setStyles(editor.getBody(), { margin: "0" });
         tinymce.$("p", editor.getBody()).css("margin", "0");
       });
       editor.on("NodeChange", function () {

@@ -1,5 +1,5 @@
 <template>
-    <div :style="[margin]" class="ntb-datas-wrapper" :key="editorRef">
+    <div :style="[margin]" class="ntb-datas-wrapper">
         <div :ref="editorRef" class="hover-item" contenteditable="true" @input="updateContent"
             v-if="item.data.type === 'text'"
             :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
@@ -34,10 +34,16 @@
             </a>
         </span>
 
-        <div class="hover-item" v-else-if="item.data.type === 'custom_html'" v-html="item.data.value"
-            contenteditable="true" @blur="updateContent" :style="[padding]"></div>
-        <div class="ninja_table_builder_shortcode hover-item" v-else-if="item.data.type === 'shortcode'"
-            v-html="item.data.value" contenteditable="true" @blur="updateContent" :style="[textAlign, padding]"></div>
+        <span v-else-if="item.data.type === 'custom_html'" class="hover-item" :style="[padding, {display:'block'}]" contenteditable="true" @input="updateContent" v-if="item.data.type === 'custom_html'"
+            v-html="item.data.value">
+        </span>
+        <!-- <div v-else-if="item.data.type === 'custom_html'" class="hover-item" v-html="item.data.value"
+            contenteditable="true" @input="updateContent" :style="[padding]">
+        </div> -->
+
+        <span class="ninja_table_builder_shortcode hover-item" v-else-if="item.data.type === 'shortcode'"
+            v-html="item.data.value" contenteditable="true" @input="updateContent" :style="[textAlign, padding, {display:'block'}]">
+        </span>
         <span v-else-if="item.data.type === 'star_rating'">
             <el-rate class="ntb-rating hover-item" :score-template="scoreTemplate" v-model="ratingValue" allow-half
                 :show-score="showRatingScore"
@@ -69,7 +75,7 @@
             </a>
         </span>
         <span v-else-if="item.data.type === 'list' || item.data.type === 'stylist_list'"
-            :style="[textAlign, displayFlex, justifyContent]" class="ntb-list hover-item" :key="editorRef">
+            :style="[textAlign, displayFlex, justifyContent]" class="ntb-list hover-item">
             <component :is="listType" :class="!manage ? 'ntb-list-style' : ''" :style="[listStyle, padding]">
                 <li v-for="(val, index) in item.data.value" :key="index" :style="[color, fontSize, lineHeight]">
                     <span class="svgIcon" v-if="item.data.type === 'stylist_list'"
@@ -174,12 +180,10 @@ export default {
                     Array.isArray(this.item.data?.value) && this.item.data?.value?.forEach((element, idx) => {
                         const refArray = this.$refs[`${this.editorRef}-${idx}`];
                         const ref = Array.isArray(refArray) ? refArray[0] : refArray;
-                        // console.log(`${this.editorRef}-${idx}`)
                         initTinymce(this, ref, idx)
                     });
                 } else {
                     const ref = this.$refs[this.editorRef];
-                    // console.log(this.editorRef, this.item.data.type)
                     initTinymce(this, ref)
                 }
             });
@@ -192,18 +196,10 @@ export default {
     watch: {
         'item.data': {
             handler(newValue, oldValue) {
-                // console.log('Data type updated:', newValue);
                 this.initTinymceEditor();
-                this.$forceUpdate(); 
             },
-            immediate: true
+            immediate: true,
         },
-        // 'item.data.value': {
-        //     handler(newValue, oldValue) {
-        //         this.$forceUpdate(); 
-        //     },
-        //     deep: true
-        // }
     },
 
     computed: {
