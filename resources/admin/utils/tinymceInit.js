@@ -6,8 +6,9 @@ export const initTinymce = ($this, $ref, idx) => {
     inline: true,
     menubar: false,
     target: $ref,
+    plugins: 'link',
     toolbar:
-      "bold italic backcolor underline | alignleft aligncenter alignright alignjustify",
+      "bold italic backcolor underline | link",
     setup: (editor) => {
       console.log($this.item.data)
       editor.on("init", function () {
