@@ -1,7 +1,6 @@
 import { restoreCursorPosition, saveCursorPosition } from "./cursorSetup";
 
 export const initTinymce = ($this, $ref, idx) => {
-//  console.log($ref)
   tinymce.init({
     inline: true,
     menubar: false,
@@ -10,7 +9,6 @@ export const initTinymce = ($this, $ref, idx) => {
     toolbar:
       "bold italic backcolor underline | link",
     setup: (editor) => {
-      console.log($this.item.data)
       editor.on("init", function () {
         tinymce.$("p", editor.getBody()).css("margin", "0");
       });

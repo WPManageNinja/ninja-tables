@@ -34,7 +34,7 @@
             </a>
         </span>
 
-        <span v-else-if="item.data.type === 'custom_html'" class="hover-item" :style="[padding, {display:'block'}]" contenteditable="true" @input="updateContent" v-if="item.data.type === 'custom_html'"
+        <span v-else-if="item.data.type === 'custom_html'" class="hover-item" :style="[padding, {display:'block'}]" contenteditable="true" @input="updateContent"
             v-html="item.data.value">
         </span>
         <!-- <div v-else-if="item.data.type === 'custom_html'" class="hover-item" v-html="item.data.value"
@@ -146,16 +146,10 @@ export default {
         }
     },
     methods: {
-        updateListContent() {
-            // this.item.data.value.push('list item');
-        },
         updateContent(event) {
             const element = event.target;
             const cursorPosition = saveCursorPosition(element);
             let content = event.target.innerHTML;
-            if (this.item.data.type === 'custom_html') {
-                content = event.target.innerHTML;
-            }
             this.item.data.value = content;
             this.$nextTick(() => {
                 restoreCursorPosition(element, cursorPosition);
