@@ -73,7 +73,7 @@ class ExportHandler
         static::exportAsJSON($data, $fileName);
     }
 
-    public function defaultExport()
+    public function defaultExport($externalSource = false)
     {
         if ( ! current_user_can(ninja_table_admin_role())) {
             return;
@@ -118,14 +118,12 @@ class ExportHandler
             }
 
             static::exportAsCSV($exportData, $fileName, array_values($header));
-
         } elseif ($format == 'json') {
             $table = get_post($tableId);
 
             $dataProvider = ninja_table_get_data_provider($tableId);
             $rows         = array();
             if ($dataProvider == 'default') {
-
                 $rawRows = NinjaTableItem::selectedRows($tableId);
 
                 foreach ($rawRows as $row) {
@@ -166,6 +164,9 @@ class ExportHandler
                 'original_rows' => $rows
             );
 
+            if ($externalSource) {
+                return $exportData;
+            }
             static::exportAsJSON($exportData, $fileName);
         }
     }
