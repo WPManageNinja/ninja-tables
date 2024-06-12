@@ -23,7 +23,12 @@ class AjaxHandler
 
     public function getAllData()
     {
-        ninjaTablesValidateNonce('ninja_table_public_nonce');
+        if (!isset($_SERVER['HTTP_REFERER']) || strpos(sanitize_text_field($_SERVER['HTTP_REFERER']), site_url()) === false) {
+            wp_send_json_error([
+                'message' => 'You are not allowed to access this page directly.',
+            ], 400);
+        }
+
         $tableId = intval(Arr::get($_REQUEST, 'table_id'));
         do_action('ninja_table_doing_ajax_table_data', $tableId);
         $defaultSorting = sanitize_text_field(Arr::get($_REQUEST, 'default_sorting'));
