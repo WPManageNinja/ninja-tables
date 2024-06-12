@@ -3,6 +3,7 @@
 namespace NinjaTables\App\Modules\DataProviders;
 
 use NinjaTables\App\Models\NinjaTableItem;
+use NinjaTables\Framework\Support\Arr;
 
 class DefaultProvider
 {
@@ -34,6 +35,11 @@ class DefaultProvider
             $advancedQuery = true;
         }
 
+        $settings        = ninja_table_get_table_settings($tableId);
+        $sortingType     = Arr::get($settings, 'sorting_type', 'by_created_at');
+        $sortingColumn   = Arr::get($settings, 'sorting_column');
+        $sortingColumnBy = Arr::get($settings, 'sorting_column_by', 'asc');
+
         // if cached not disabled then return cached data
         if ( ! $advancedQuery && ! $disabledCache = ninja_tables_shouldNotCache($tableId)) {
             $cachedData = get_post_meta($tableId, '_ninja_table_cache_object', true);
@@ -43,12 +49,17 @@ class DefaultProvider
         }
 
         $query = NinjaTableItem::where('table_id', $tableId);
-        if ($defaultSorting == 'new_first') {
-            $query->orderBy('created_at', 'desc');
-        } elseif ($defaultSorting == 'manual_sort') {
-            $query->orderBy('position', 'asc');
+
+        if ($sortingColumn && ($limit || $skip) && $sortingType === 'by_column') {
+            $query->orderByRaw("value->>'$.$sortingColumn' " . $sortingColumnBy);
         } else {
-            $query->orderBy('created_at', 'asc');
+            if ($defaultSorting == 'new_first') {
+                $query->orderBy('created_at', 'desc');
+            } elseif ($defaultSorting == 'manual_sort') {
+                $query->orderBy('position', 'asc');
+            } else {
+                $query->orderBy('created_at', 'asc');
+            }
         }
 
         $skip = intval($skip);
