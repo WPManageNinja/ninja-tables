@@ -23,7 +23,7 @@ class ImportController extends Controller
 
     public function tableBuilderImport(Request $request)
     {
-        return $this->extracted($request);
+        return $this->extracted($request->all());
     }
 
     public function defaultImport(Request $request)
@@ -32,7 +32,7 @@ class ImportController extends Controller
         $doUnicode = Sanitizer::sanitizeTextField(Arr::get($request->all(), 'do_unicode'));
 
         if ($format == 'dragAndDrop') {
-            return $this->extracted($request);
+            return $this->extracted($request->all());
         } else {
             if ($format == 'csv') {
                 $this->uploadTableCsv($doUnicode);
@@ -388,16 +388,16 @@ class ImportController extends Controller
      *
      * @return mixed
      */
-    public function extracted(Request $request)
+    public function extracted($data)
     {
         $fileName = 'Ninja-tables' . date('d-m-Y');
-        $url      = sanitize_url($request->get('url'));
+        $url      = sanitize_url(Arr::get($data, 'url', ''));
 
         if ( ! empty($url)) {
-            static::importFromURL($url);
+            $data = static::importFromURL($url);
+        } else {
+            $data = static::getData();
         }
-
-        $data = static::getData();
 
         $tableId = $this->savedDragAndDropTable($data, $fileName);
 
