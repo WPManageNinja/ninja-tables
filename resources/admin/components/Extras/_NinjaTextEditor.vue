@@ -1,5 +1,5 @@
 <template>
-    <span ref="ninja_table_text_editor" contenteditable="true" v-html="value"
+    <span ref="ninja_table_text_editor" contenteditable="true" v-html="value ==='' ? 'Add New':value"
         @input="updateContent"></span>
 </template>
 <script>
