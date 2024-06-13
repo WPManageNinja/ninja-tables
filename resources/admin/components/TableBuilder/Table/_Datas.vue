@@ -1,6 +1,6 @@
 <template>
     <div :style="[margin]" class="ntb-datas-wrapper">
-        <NinjaTextEditor v-if="item.data.type === 'text'" :value="item.data.value" @input="updateTextContent"
+        <NinjaTextEditor class="hover-item" v-if="item.data.type === 'text'" :value="item.data.value" @input="updateTextContent"
             :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]" />
 
         <span v-else-if="item.data.type === 'button'" class="hover-item"
@@ -16,7 +16,7 @@
                             v-if="item.data.style.iconPosition === 'left' && item.data.style.enableIcon"
                             :style="[iconWithOtherComponent, textAlign]">
                         </span>
-                        <NinjaTextEditor toolbar="bold italic underline" :value="item.data.value"
+                        <NinjaTextEditor class="hover-item" toolbar="bold italic underline" :value="item.data.value"
                             @input="updateTextContent" :style="[fontWeight, {
                                 'margin-left': item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing + 'px' : '0px',
                                 'margin-right': item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing + 'px' : '0px'
@@ -76,11 +76,13 @@
                     </span>
                     <NinjaTextEditor :value="val" @input="updateListItem(index, $event)"
                         :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]" />
+
                     <div class="icon-styles remove-elements" v-if="!manage">
                         <i class="el-icon-copy-document" @click.stop="copyItem(index)">
                         </i>
                         <i class="el-icon-delete" @click.stop="deleteItem(index)"></i>
                     </div>
+
                 </li>
             </component>
         </span>
@@ -89,7 +91,7 @@
                 <span class="svgIcon" v-if="item.data.style.iconPosition === 'left'"
                     :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
                 </span>
-                <NinjaTextEditor :value="item.data.value" @input="updateTextContent"
+                <NinjaTextEditor class="hover-item" :value="item.data.value" @input="updateTextContent"
                     :style="`vertical-align: middle;display: inline-block; margin-left: ${item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing : 0}px; margin-right: ${item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing : 0}px;`" />
                 <span class="svgIcon" v-if="item.data.style.iconPosition === 'right'"
                     :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
@@ -113,11 +115,8 @@
 </template>
 
 <script>
-import { restoreCursorPosition, saveCursorPosition } from "../../../utils/cursorSetup";
 import NinjaTextEditor from "../../Extras/_NinjaTextEditor.vue";
-// Adjust the path as needed
 import { manageDataElement } from "../Mixin/manageDataElement";
-
 export default {
     name: "Datas",
     mixins: [manageDataElement],

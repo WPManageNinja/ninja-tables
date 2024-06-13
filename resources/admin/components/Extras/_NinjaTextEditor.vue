@@ -1,5 +1,5 @@
 <template>
-    <span ref="ninja_table_text_editor" class="hover-item" contenteditable="true" v-html="value"
+    <span ref="ninja_table_text_editor" contenteditable="true" v-html="value"
         @input="updateContent"></span>
 </template>
 <script>
@@ -20,7 +20,7 @@ export default {
         toolbar: {
             type: String,
             default: 'bold italic backcolor underline | link unlink'
-        }
+        },
     },
     mounted() {
         this.initTinymce();
