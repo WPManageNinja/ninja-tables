@@ -132,15 +132,11 @@ export default {
     },
     methods: {
         updateTextContent(newValue, idx) {
-            // const cursorPosition = saveCursorPosition($ref);
             if (idx !== undefined) {
                 this.$set(this.item.data.value, idx, newValue);
             } else {
                 this.item.data.value = newValue;
             }
-            // this.$nextTick(() => {
-            //     restoreCursorPosition($ref, cursorPosition);
-            // });
         },
         copyItem(index) {
             this.item.data.value.splice(index + 1, 0, this.item.data.value[index]);
