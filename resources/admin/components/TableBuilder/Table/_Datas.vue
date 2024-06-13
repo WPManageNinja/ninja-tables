@@ -1,10 +1,7 @@
 <template>
     <div :style="[margin]" class="ntb-datas-wrapper">
-        <div :ref="editorRef" class="hover-item" contenteditable="true" @input="updateContent"
-            v-if="item.data.type === 'text'"
-            :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]"
-            v-html="item.data.value === '' ? 'Add New' : item.data.value">
-        </div>
+        <NinjaTextEditor v-if="item.data.type === 'text'" :value="item.data.value" @input="updateTextContent"
+            :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]" />
 
         <span v-else-if="item.data.type === 'button'" class="hover-item"
             :style="[justifyContent, { display: item.data.style.fullWidth ? 'block' : 'flex' }]">
@@ -19,12 +16,11 @@
                             v-if="item.data.style.iconPosition === 'left' && item.data.style.enableIcon"
                             :style="[iconWithOtherComponent, textAlign]">
                         </span>
-                        <span v-html="item.data.value" :ref="editorRef" contenteditable="true" @input="updateContent"
-                            :style="[fontWeight, {
+                        <NinjaTextEditor toolbar="bold italic underline" :value="item.data.value"
+                            @input="updateTextContent" :style="[fontWeight, {
                                 'margin-left': item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing + 'px' : '0px',
                                 'margin-right': item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing + 'px' : '0px'
-                            }]">
-                        </span>
+                            }]" />
                         <span class="svgIcon"
                             v-if="item.data.style.iconPosition === 'right' && item.data.style.enableIcon"
                             :style="[iconWithOtherComponent, textAlign]">
@@ -34,15 +30,12 @@
             </a>
         </span>
 
-        <span v-else-if="item.data.type === 'custom_html'" class="hover-item" :style="[padding, {display:'block'}]" contenteditable="true" @input="updateContent"
-            v-html="item.data.value">
-        </span>
-        <!-- <div v-else-if="item.data.type === 'custom_html'" class="hover-item" v-html="item.data.value"
-            contenteditable="true" @input="updateContent" :style="[padding]">
-        </div> -->
+        <div class="hover-item" v-else-if="item.data.type === 'custom_html'" v-html="item.data.value"
+            contenteditable="true" @input="updateContent" :style="[padding]"></div>
 
         <span class="ninja_table_builder_shortcode hover-item" v-else-if="item.data.type === 'shortcode'"
-            v-html="item.data.value" contenteditable="true" @input="updateContent" :style="[textAlign, padding, {display:'block'}]">
+            v-html="item.data.value" contenteditable="true" @input="updateContent"
+            :style="[textAlign, padding, { display: 'block' }]">
         </span>
         <span v-else-if="item.data.type === 'star_rating'">
             <el-rate class="ntb-rating hover-item" :score-template="scoreTemplate" v-model="ratingValue" allow-half
@@ -81,9 +74,8 @@
                     <span class="svgIcon" v-if="item.data.type === 'stylist_list'"
                         :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
                     </span>
-                    <span :ref="`${editorRef}-${index}`" v-html="item.data.value[index]" contenteditable="true"
-                        :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]">
-                    </span>
+                    <NinjaTextEditor :value="val" @input="updateListItem(index, $event)"
+                        :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]" />
                     <div class="icon-styles remove-elements" v-if="!manage">
                         <i class="el-icon-copy-document" @click.stop="copyItem(index)">
                         </i>
@@ -97,17 +89,11 @@
                 <span class="svgIcon" v-if="item.data.style.iconPosition === 'left'"
                     :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
                 </span>
-                <span :ref="editorRef" v-html="item.data.value" contenteditable="true" @input="updateContent" :style="`
-          vertical-align: middle;display: inline-block;
-          margin-left: ${item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing : 0}px;
-          margin-right: ${item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing : 0}px;
-          `">
-                </span>
-
+                <NinjaTextEditor :value="item.data.value" @input="updateTextContent"
+                    :style="`vertical-align: middle;display: inline-block; margin-left: ${item.data.style.iconPosition === 'left' ? item.data.style.itemSpacing : 0}px; margin-right: ${item.data.style.iconPosition === 'right' ? item.data.style.itemSpacing : 0}px;`" />
                 <span class="svgIcon" v-if="item.data.style.iconPosition === 'right'"
                     :style="[iconWithOtherComponent, textAlign, verticalAlignMiddle]">
                 </span>
-
             </span>
         </span>
         <span v-else-if="item.data.type === 'ribbon'" style="position:relative;margin:0;padding:0;width:100%;">
@@ -115,14 +101,10 @@
                 <div :class="[item.data.style.ribbonType, item.data.style.ribbonType === 'bookmark' ? 'up' : '']">
                     <div :class="['content', item.data.style.ribbonPosition === 'left' ? 'left' : 'right']"
                         :style="[ribbonSize, backgroundColor, { position: '' }, { 'text-align': 'center', padding: item.data.style.ribbonType === 'corner' ? item.data.style.height + 'px 0px' : '' }]">
-                        <p contenteditable="true" @blur="updateContent" :style="[fontSize, color, fontWeight, {
+                        <p contenteditable="true" @input="updateContent" :style="[fontSize, color, fontWeight, {
                             'margin-top': item.data.style.textYAxis + 'px',
                             'margin-left': item.data.style.textXAxis + 'px'
                         }]">{{ item.data.value }}</p>
-                        <!-- <el-input :style="[fontSize, color, fontWeight, {
-                            'margin-top': item.data.style.textYAxis + 'px',
-                            'margin-left': item.data.style.textXAxis + 'px'
-                        }]" v-model="item.data.value"></el-input> -->
                     </div>
                 </div>
             </div>
@@ -132,70 +114,55 @@
 
 <script>
 import { restoreCursorPosition, saveCursorPosition } from "../../../utils/cursorSetup";
-import { initTinymce } from "../../../utils/tinymceInit";
+import NinjaTextEditor from "../../Extras/_NinjaTextEditor.vue";
+// Adjust the path as needed
 import { manageDataElement } from "../Mixin/manageDataElement";
 
 export default {
     name: "Datas",
     mixins: [manageDataElement],
     props: ["item", 'manage', 'setting', 'reference', 'row'],
+    components: {
+        NinjaTextEditor
+    },
     data() {
         return {
             editorRef: `ninja-table-editor-${this.reference}`,
             listType: this.item.data.style.listType || 'ul'
-        }
+        };
     },
     methods: {
-        updateContent(event) {
-            const element = event.target;
-            const cursorPosition = saveCursorPosition(element);
-            let content = event.target.innerHTML;
-            this.item.data.value = content;
-            this.$nextTick(() => {
-                restoreCursorPosition(element, cursorPosition);
-            });
+        updateTextContent(newValue, idx) {
+            // const cursorPosition = saveCursorPosition($ref);
+            if (idx !== undefined) {
+                this.$set(this.item.data.value, idx, newValue);
+            } else {
+                this.item.data.value = newValue;
+            }
+            // this.$nextTick(() => {
+            //     restoreCursorPosition($ref, cursorPosition);
+            // });
         },
         copyItem(index) {
             this.item.data.value.splice(index + 1, 0, this.item.data.value[index]);
         },
         deleteItem(index) {
-            this.item.data.value.splice(index, 1)
+            this.item.data.value.splice(index, 1);
         },
         getAsset(path) {
             if (path.includes(window.location.origin)) {
                 return path;
             } else {
-                return ninja_table_admin.ninja_tables_pro_url + '/assets/libs/icons/' + path + '.svg'
+                return ninja_table_admin.ninja_tables_pro_url + '/assets/libs/icons/' + path + '.svg';
             }
         },
-        initTinymceEditor() {
-            this.$nextTick(() => {
-                if (this.item.data.type === 'list' || this.item.data.type === 'stylist_list') {
-                    Array.isArray(this.item.data?.value) && this.item.data?.value?.forEach((element, idx) => {
-                        const refArray = this.$refs[`${this.editorRef}-${idx}`];
-                        const ref = Array.isArray(refArray) ? refArray[0] : refArray;
-                        initTinymce(this, ref, idx)
-                    });
-                } else {
-                    const ref = this.$refs[this.editorRef];
-                    initTinymce(this, ref)
-                }
-            });
+        updateListItem(index, newValue) {
+            this.$set(this.item.data.value, index, newValue);
         },
-    },
+        updateContent() {
 
-    mounted() {
-        this.initTinymceEditor();
+        }
     },
-    watch: {
-        'item.data': {
-            handler(newValue, oldValue) {
-                this.initTinymceEditor();
-            },
-            immediate: true,
-        },
-    },
-
     computed: {
         ratingValue: {
             get() {
@@ -207,28 +174,28 @@ export default {
         },
         mouseOver() {
             if (this.item.data.style.isHover === true) {
-                let hoverColor = this.item.data.style.hoverColor
-                let hover = hoverColor === '' ? this.setting.global_styling.options.color.value : hoverColor
+                let hoverColor = this.item.data.style.hoverColor;
+                let hover = hoverColor === '' ? this.setting.global_styling.options.color.value : hoverColor;
                 return [
                     "this.style.background='" + this.item.data.style.hoverBackgroundColor + "'",
                     "this.style.color='" + hover + "'",
                     "this.style.border='" + this.item.data.style.hoverBorderSize + 'px solid' + this.item.data.style.hoverBorderColor + "'",
-                    "this.style.transform='scale(" + this.item.data.style.transition + ")'",
-                ]
+                    "this.style.transform='scale(" + this.item.data.style.transition + ")'"
+                ];
             }
         },
         mouseOut() {
             if (this.item.data.style.isHover === true) {
-                let iconColor = this.item.data.style.iconColor
-                let unHover = (iconColor === '' || iconColor === '#000000') ? this.setting.global_styling.options.color.value : iconColor
+                let iconColor = this.item.data.style.iconColor;
+                let unHover = (iconColor === '' || iconColor === '#000000') ? this.setting.global_styling.options.color.value : iconColor;
                 return [
                     "this.style.background='" + this.item.data.style.backgroundColor + "'",
                     "this.style.color='" + unHover + "'",
                     "this.style.border='" + this.item.data.style.borderSize + 'px solid' + this.item.data.style.borderColor + "'",
-                    "this.style.transform='scale(1)'",
-                ]
+                    "this.style.transform='scale(1)'"
+                ];
             }
-        },
+        }
     }
 };
 </script>
