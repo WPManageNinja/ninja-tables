@@ -22,13 +22,12 @@ class NinjaTableItem extends Model
             if ($search) {
                 $query->where('value', 'LIKE', "%$search%");
             }
+            $total = $query->count();
             $data = $query->take($perPage)
                           ->skip($skip)
                           ->limit($perPage)
                           ->orderBy($orderByField, $orderByType)
                           ->get();
-
-            $total = $this->where('table_id', $tableId)->count();
 
             $response = array();
 

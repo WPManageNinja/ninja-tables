@@ -1,28 +1,19 @@
 <template>
   <div class="ninja-table-dg-wrapper">
     <div class="ninja_main_nav">
-      <top-nav :initialData="initialData"
-               :selectedDevice="selectedDevice"
-               @deviceSelected="deviceSelected"
-               :tableId="$route.params.table_id">
+      <top-nav :initialData="initialData" :selectedDevice="selectedDevice" @deviceSelected="deviceSelected"
+        :tableId="$route.params.table_id">
       </top-nav>
     </div>
     <el-row align="middle" :gutter="20">
       <el-col :xs="24" :sm="10" :md="9" :lg="6" :xl="6" id="leftside">
-        <left-side-bar :singleItem="singleItem"
-                       :initialData="initialData"
-                       :selectedDevice="selectedDevice"
-                       @deviceSelected="deviceSelected"
-        ></left-side-bar>
+        <left-side-bar :singleItem="singleItem" :initialData="initialData" :selectedDevice="selectedDevice"
+          @deviceSelected="deviceSelected"></left-side-bar>
       </el-col>
       <el-col :xs="24" :sm="14" :md="15" :lg="18" :xl="18">
-        <right-side-bar v-if="initialData"
-                        @editItem="editItem"
-                        :table="initialData.table"
-                        :selectedDevice="selectedDevice"
-                        :initialData="initialData"
-                        :tableId="$route.params.table_id"
-                        style="height: auto; padding-bottom: 25px;">
+        <right-side-bar v-if="initialData" @editItem="editItem" :table="initialData.table"
+          :selectedDevice="selectedDevice" :initialData="initialData" :tableId="$route.params.table_id"
+          style="height: auto; padding-bottom: 25px;">
         </right-side-bar>
       </el-col>
     </el-row>
@@ -57,19 +48,19 @@ export default {
       this.singleItem = singleItem
     },
     addOrEditTable() {
-      this.$get(`table-builder/${this.$route.params.table_id}` , {
+      this.$get(`table-builder/${this.$route.params.table_id}`, {
         id: this.$route.params.table_id,
       })
-          .then(response => {
-            this.initialData = response.data;
-          })
-          .catch(error => {
-            this.$message({
-              showClose: true,
-              message: this.$t('Something went wrong, please try again.'),
-              type: 'warning'
-            });
+        .then(response => {
+          this.initialData = response.data;
+        })
+        .catch(error => {
+          this.$message({
+            showClose: true,
+            message: this.$t('Something went wrong, please try again.'),
+            type: 'warning'
           });
+        });
     },
   },
   mounted() {
