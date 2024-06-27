@@ -115,6 +115,7 @@
 </template>
 
 <script>
+import { restoreCursorPosition, saveCursorPosition } from "../../../utils/cursorSetup";
 import NinjaTextEditor from "../../Extras/_NinjaTextEditor.vue";
 import { manageDataElement } from "../Mixin/manageDataElement";
 export default {
@@ -131,19 +132,6 @@ export default {
         };
     },
     methods: {
-        updateTextContent(newValue, idx) {
-            if (idx !== undefined) {
-                this.$set(this.item.data.value, idx, newValue);
-            } else {
-                this.item.data.value = newValue;
-            }
-        },
-        copyItem(index) {
-            this.item.data.value.splice(index + 1, 0, this.item.data.value[index]);
-        },
-        deleteItem(index) {
-            this.item.data.value.splice(index, 1);
-        },
         getAsset(path) {
             if (path.includes(window.location.origin)) {
                 return path;
@@ -151,12 +139,31 @@ export default {
                 return ninja_table_admin.ninja_tables_pro_url + '/assets/libs/icons/' + path + '.svg';
             }
         },
+        updateTextContent(newValue, idx) {
+            if (idx !== undefined) {
+                this.$set(this.item.data.value, idx, newValue);
+            } else {
+                this.item.data.value = newValue;
+            }
+        },
         updateListItem(index, newValue) {
             this.$set(this.item.data.value, index, newValue);
         },
-        updateContent() {
-
-        }
+        updateContent(event) {
+            // const $ref = this.$refs.ninja_table_text_editor;
+            const cursorPosition = saveCursorPosition(event.target);
+            this.item.data.value = event.target.innerHTML;
+            this.$nextTick(() => {
+                restoreCursorPosition(event.target, cursorPosition);
+            });
+            
+        },
+        copyItem(index) {
+            this.item.data.value.splice(index + 1, 0, this.item.data.value[index]);
+        },
+        deleteItem(index) {
+            this.item.data.value.splice(index, 1);
+        },
     },
     computed: {
         ratingValue: {
