@@ -3,7 +3,6 @@
 namespace NinjaTables\App\Http\Controllers;
 
 use NinjaTables\App\App;
-use NinjaTables\App\Models\Import;
 use NinjaTables\App\Traits\ImportTrait;
 use NinjaTables\Database\Migrations\NinjaTablesSupsysticTableMigration;
 use NinjaTables\Database\Migrations\NinjaTablesTablePressMigration;
@@ -114,15 +113,19 @@ class ImportController extends Controller
 
     private function createTable($data = null)
     {
-        return wp_insert_post($data
-            ? $data
-            : array(
+        return wp_insert_post(
+            $data
+                ? $data
+                : array(
                 'post_title'   => __('Temporary table name', 'ninja-tables'),
-                'post_content' => __('Temporary table description',
-                    'ninja-tables'),
+                'post_content' => __(
+                    'Temporary table description',
+                    'ninja-tables'
+                ),
                 'post_type'    => $this->cpt_name,
                 'post_status'  => 'publish'
-            ));
+            )
+        );
     }
 
     private function storeTableConfigWhenImporting($tableId, $header)
@@ -190,8 +193,10 @@ class ImportController extends Controller
         // validation
         if ( ! $content['post'] || ! $content['columns'] || ! $content['settings']) {
             $this->json([
-                'message' => __('You have a faulty JSON file. Please export a new one.',
-                    'ninja-tables')
+                'message' => __(
+                    'You have a faulty JSON file. Please export a new one.',
+                    'ninja-tables'
+                )
             ], 423);
         }
 
@@ -341,20 +346,26 @@ class ImportController extends Controller
             ], 423);
         }
 
-        $data = array();
-
+        $data      = array();
         $userId    = get_current_user_id();
         $timeStamp = time() - (count($reader) * 100);
+
         foreach ($reader as $item) {
-            $itemTemp = array_combine($header, $item);
-            array_push($data, array(
-                'table_id'   => $tableId,
-                'attribute'  => 'value',
-                'owner_id'   => $userId,
-                'value'      => json_encode($itemTemp, JSON_UNESCAPED_UNICODE),
-                'created_at' => date('Y-m-d H:i:s', $timeStamp),
-                'updated_at' => date('Y-m-d H:i:s')
-            ));
+            if (count($header) === count($item)) {
+                $itemTemp = array_combine($header, $item);
+                $data[]   = array(
+                    'table_id'   => $tableId,
+                    'attribute'  => 'value',
+                    'owner_id'   => $userId,
+                    'value'      => json_encode($itemTemp, JSON_UNESCAPED_UNICODE),
+                    'created_at' => date('Y-m-d H:i:s', $timeStamp),
+                    'updated_at' => date('Y-m-d H:i:s')
+                );
+            } else {
+                error_log('Invalid data format in this row' . json_encode($item));
+                continue;
+            }
+
             $timeStamp = $timeStamp + 100;
         }
 
