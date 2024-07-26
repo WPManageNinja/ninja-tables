@@ -51,7 +51,7 @@ class DefaultProvider
         $query = NinjaTableItem::where('table_id', $tableId);
 
         if ($sortingColumn && ($limit || $skip) && $sortingType === 'by_column') {
-            $query->orderByRaw("value->>'$.$sortingColumn' " . $sortingColumnBy);
+            $query->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(value, '$.$sortingColumn')) " . $sortingColumnBy);
         } else {
             if ($defaultSorting == 'new_first') {
                 $query->orderBy('created_at', 'desc');
