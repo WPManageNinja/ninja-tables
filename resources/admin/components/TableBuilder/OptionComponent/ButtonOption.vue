@@ -201,6 +201,7 @@ export default {
                 {label: 'sponsored', value: 'sponsored'},
                 {label: 'nofollow', value: 'nofollow'},
                 {label: 'noreferrer', value: 'noreferrer'},
+                {label: 'noopener', value: 'noopener'}
             ]
             
         };

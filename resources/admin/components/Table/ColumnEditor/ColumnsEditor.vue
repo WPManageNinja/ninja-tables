@@ -348,7 +348,7 @@
                         {{ $t('Link With Rel Attribute') }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
                           <div slot="content">
-                            <h3>Sponsored, Nofollow & NoReferrer</h3>
+                            <h3>Sponsored, Nofollow, NoReferrer & Noopener</h3>
                             <p>
                               Check one or multiple a rel attribute of the column
                             </p>
@@ -357,7 +357,7 @@
                         </el-tooltip>
                       </template>
                       <el-checkbox-group v-model="model.relAttributes" v-if="model.relAttributes">
-                        <el-checkbox v-for="attr in ['sponsored', 'nofollow', 'noreferrer']" :label="attr" :key="attr"></el-checkbox>
+                        <el-checkbox v-for="attr in ['sponsored', 'nofollow', 'noreferrer', 'noopener']" :label="attr" :key="attr"></el-checkbox>
                       </el-checkbox-group>
                     </el-form-item>
                 </template>
