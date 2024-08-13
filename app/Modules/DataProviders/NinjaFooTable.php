@@ -7,6 +7,7 @@ use NinjaTables\App\Models\NinjaTableItem;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTablesPro\App\Modules\DataProviders\CsvProvider;
 use NinjaTablesPro\App\Modules\DataProviders\WoocommercePostsProvider;
+use NinjaTablesPro\App\Modules\DataProviders\WPPostsProvider;
 
 class NinjaFooTable
 {
@@ -535,6 +536,10 @@ class NinjaFooTable
                 $totalSize = count($rows);
             } elseif ($tableArray['provider'] == 'wp_woo') {
                 $woo       = new WoocommercePostsProvider;
+                $rows      = $woo->data([], $table_id, false);
+                $totalSize = count($rows);
+            } elseif ($tableArray['provider'] == 'wp-posts') {
+                $woo       = new WPPostsProvider;
                 $rows      = $woo->data([], $table_id, false);
                 $totalSize = count($rows);
             } else {
