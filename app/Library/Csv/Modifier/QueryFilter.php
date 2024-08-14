@@ -155,7 +155,7 @@ trait QueryFilter
      *
      * @return Iterator
      */
-    protected function getQueryIterator()
+    public function getQueryIterator()
     {
         $normalizedCsv = function ($row) {
             return is_array($row) && $row != [null];

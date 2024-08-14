@@ -239,7 +239,7 @@ trait Output
      *
      * @return Iterator
      */
-    abstract protected function getQueryIterator();
+    abstract public function getQueryIterator();
 
     /**
      * Convert Csv file into UTF-8

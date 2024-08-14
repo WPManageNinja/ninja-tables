@@ -5,7 +5,7 @@ Tags: Table, Tables, table builder, pricing table, CSV and JSON
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.5
-Stable tag: 5.0.11
+Stable tag: 5.0.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,7 +170,11 @@ Ninja Tables [customer support](https://wpmanageninja.com/support-tickets/#/) te
 
 == Changelog ==
 We released several updates for Ninja Tables in the years of development. These include improvements to the existing features and some wonderful additions to help you design tables more effectively.
-### What's New on 5.0.11?
+### What's New on 5.0.12?
+
+= 5.0.12 (Date: July 12, 2024) =
+* Fixed: Csv import for php 8.3 & inside the table
+* Fixed: Ajax table data loading issue
 
 = 5.0.11 (Date: June 13, 2024) =
 * Added: Inline text editor for drag & drop table

@@ -579,6 +579,7 @@ export default {
                     defaultDate: $piker.val(),
                     showTime: $piker.data('show_time'),
                     firstDay: $piker.data('first_day_of_week'),
+                    i18n: ninja_footables.i18n.pikaday,
                     onOpen() {
 
                         $('.pika-lendar .pika-title').attr({

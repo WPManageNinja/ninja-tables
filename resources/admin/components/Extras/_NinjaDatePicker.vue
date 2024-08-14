@@ -16,6 +16,7 @@
                 v-model="new_column[column.key]"
                 :value-format="elementFormat"
                 :format="elementFormat"
+                :picker-options="pickerOptions"
                 placeholder="Pick a day">
         </el-date-picker>
     </div>
@@ -47,6 +48,11 @@
             },
             type() {
                 return this.column.showTime === 'yes' ? 'datetime' : 'date';
+            },
+            pickerOptions() {
+                return {
+                    firstDayOfWeek: parseInt(this.column?.firstDayOfWeek) || 7,
+                };
             }
         },
         methods: {

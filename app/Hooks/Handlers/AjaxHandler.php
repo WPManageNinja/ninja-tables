@@ -23,7 +23,7 @@ class AjaxHandler
 
     public function getAllData()
     {
-        if (!isset($_SERVER['HTTP_REFERER']) || strpos(sanitize_text_field($_SERVER['HTTP_REFERER']), site_url()) === false) {
+        if (!isset($_SERVER['HTTP_REFERER'])) {
             wp_send_json_error([
                 'message' => 'You are not allowed to access this page directly.',
             ], 400);

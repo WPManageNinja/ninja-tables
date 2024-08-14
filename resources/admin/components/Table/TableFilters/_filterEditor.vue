@@ -155,6 +155,31 @@
                     <el-radio label="equal">Equal</el-radio>
                 </el-radio-group>
             </el-form-item>
+            <el-form-item>
+                <template slot="label">
+                    {{ $t('First Day') }}
+
+                    <el-tooltip class="item" placement="bottom-start" effect="light">
+                        <div slot="content">
+                            <h3>First Day</h3>
+
+                            <p>
+                                The first day of the week, e.g. Sunday, Monday, etc.
+                            </p>
+                        </div>
+
+                        <i class="el-icon-info el-text-info"/>
+                    </el-tooltip>
+                </template>
+                <el-select class="nt_column_type_select" size="mini" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
+                    <el-option
+                        v-for="(typeName, typeKey) in weekDays"
+                        :key="typeKey"
+                        :label="typeName"
+                        :value="typeKey">
+                    </el-option>
+                </el-select>
+            </el-form-item>
         </template>
 
         <template v-else-if="activeEditor.type == 'date_range' || activeEditor.type == 'number_range'">
@@ -169,6 +194,31 @@
                     {{ $t('To Placeholder') }}
                 </template>
                 <el-input size="small" placeholder="To Placeholder" v-model="activeEditor.to_placeholder" />
+            </el-form-item>
+            <el-form-item>
+                <template slot="label">
+                    {{ $t('First Day') }}
+
+                    <el-tooltip class="item" placement="bottom-start" effect="light">
+                        <div slot="content">
+                            <h3>First Day</h3>
+
+                            <p>
+                                The first day of the week, e.g. Sunday, Monday, etc.
+                            </p>
+                        </div>
+
+                        <i class="el-icon-info el-text-info"/>
+                    </el-tooltip>
+                </template>
+                <el-select class="nt_column_type_select" size="mini" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
+                    <el-option
+                        v-for="(typeName, typeKey) in weekDays"
+                        :key="typeKey"
+                        :label="typeName"
+                        :value="typeKey">
+                    </el-option>
+                </el-select>
             </el-form-item>
         </template>
 
@@ -227,6 +277,19 @@
             KeyPairOptions
         },
         props: ['activeEditor', 'columnKeyPairs', 'columns'],
+        data() {
+            return {
+                weekDays: {
+                    0: 'Sunday',
+                    1: 'Monday',
+                    2: 'Tuesday',
+                    3: 'Wednesday',
+                    4: 'Thursday',
+                    5: 'Friday',
+                    6: 'Saturday'
+                },
+            }
+        },
         computed: {
             current_columns() {
                 if(this.activeEditor.type == 'date_picker' || this.activeEditor.type == 'date_range') {
