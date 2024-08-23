@@ -979,7 +979,7 @@ class NinjaFooTable
             'footable_styles',
             $styleSrc,
             array(),
-            '',
+            NINJA_TABLES_VERSION,
             'all'
         );
     }

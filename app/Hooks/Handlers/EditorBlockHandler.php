@@ -15,13 +15,16 @@ class EditorBlockHandler
             wp_enqueue_script(
                 'ninja-tables-gutenberg-block',
                 NINJA_TABLES_DIR_URL . 'assets/js/ninja-tables-gutenblock.js',
-                array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor')
+                array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor'),
+                NINJA_TABLES_VERSION,
+                true
             );
 
             wp_enqueue_style(
                 'ninja-tables-gutenberg-block',
                 NINJA_TABLES_DIR_URL . 'assets/css/ninja-tables-gutenblock.css',
-                array('wp-edit-blocks')
+                array('wp-edit-blocks'),
+                NINJA_TABLES_VERSION
             );
         });
     }

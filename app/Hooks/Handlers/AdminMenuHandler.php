@@ -206,12 +206,16 @@ class AdminMenuHandler
 
         wp_enqueue_style(
             $slug . '_admin_app',
-            $vendorSrc
+            $vendorSrc,
+            array(),
+            NINJA_TABLES_VERSION
         );
 
         wp_enqueue_style(
             $slug,
-            $assets . "css/ninja-tables-admin.css"
+            $assets . "css/ninja-tables-admin.css",
+            array(),
+            NINJA_TABLES_VERSION
         );
     }
 
