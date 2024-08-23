@@ -36,6 +36,6 @@ do_action('ninja_tables_drag_and_drop_after_table_print', $table_id);
 ?>
 <?php
 if (is_user_logged_in() && ninja_table_admin_role()): ?>
-    <a href="<?php echo admin_url('admin.php?page=ninja_tables#/table_builder_edit_table/' . $table_id); ?>"
-       class="ntb_edit_table_class_<?php echo $table_id ?>"><?php _e('Edit Table', 'ninja-tables') ?></a>
+    <a href="<?php echo admin_url('admin.php?page=ninja_tables#/table_builder_edit_table/' . intval($table_id)); ?>"
+       class="ntb_edit_table_class_<?php echo esc_attr($table_id) ?>"><?php _e('Edit Table', 'ninja-tables') ?></a>
 <?php endif; ?>

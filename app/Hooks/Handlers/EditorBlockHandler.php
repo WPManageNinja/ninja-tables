@@ -118,7 +118,7 @@ class EditorBlockHandler
             $app     = App::getInstance();
             $app->addAction('wp_head', function () use ($custom_css, $styleId) {
                 ?>
-                <style id="<?php echo $styleId; ?>" type='text/css'>
+                <style id="<?php echo esc_attr($styleId); ?>" type='text/css'>
                     <?php echo ninjaTablesEscCss($custom_css); ?>
                 </style>
                 <?php
