@@ -22,11 +22,11 @@ if (isset($setting['general']['options']['container_max_height']['value'])) {
 }
 ?>
 
-<div class="ntb_table_wrapper" data-responsive='<?php esc_attr_e(json_encode($responsive)); ?>'
-     id='ninja_table_builder_<?php esc_attr_e($table_id); ?>'
+<div class="ntb_table_wrapper" data-responsive='<?php echo esc_attr(json_encode($responsive)); ?>'
+     id='ninja_table_builder_<?php echo esc_attr($table_id); ?>'
      style="
-     <?php esc_attr_e("max-height:$max_height" . "px"); ?>;
-     <?php esc_attr_e($max_width != '' ? "max-width: $max_width" . "px;" . $alignment : 'max-width: 1160px'); ?>;">
+     <?php echo esc_attr("max-height:$max_height" . "px"); ?>;
+     <?php echo esc_attr($max_width != '' ? "max-width: $max_width" . "px;" . $alignment : 'max-width: 1160px'); ?>;">
     <?php
     ninjaTablesPrintSafeVar($ninja_table_builder_html);
     ?>

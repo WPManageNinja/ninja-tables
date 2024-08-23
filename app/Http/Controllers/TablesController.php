@@ -67,9 +67,10 @@ class TablesController extends Controller
             'post_status'  => 'publish'
         );
 
+
         $this->json(array(
             'table_id' => Post::saveTable($attributes, $postId),
-            'message'  => __('Table ' . ($postId ? 'updated' : 'created') . ' successfully.', 'ninja-tables')
+            'message'  => $postId ? __('Table updated successfully', 'ninja-tables') : __('Table saved successfully.', 'ninja-tables')
         ), 200);
     }
 

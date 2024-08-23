@@ -73,8 +73,9 @@ class AdminMenuHandler
         }
 
         if ( ! defined('NINJATABLESPRO')) {
+            $getPro = __('Get Pro', 'ninja-tables');
             $submenu['ninja_tables']['upgrade_pro'] = array(
-                __('<span style="color:#f39c12;">Get Pro</span>', 'ninja-tables'),
+                '<span style="color:#f39c12;">'.$getPro.'</span>',
                 $capability,
                 'https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade_menu',
                 '',
