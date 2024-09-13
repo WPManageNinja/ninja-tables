@@ -2,6 +2,8 @@
 
 namespace NinjaTables\App\Modules;
 
+use NinjaTables\Framework\Support\Arr;
+
 class DynamicConfig
 {
     public static function getTableDataInfo($data_from_db, $updated_column_properties, $updated_row_properties)
@@ -49,8 +51,8 @@ class DynamicConfig
         $border        = $dynamic_setting['border']['options'];
         $global_style  = $dynamic_setting['global_styling']['options'];
 
-        $static_config['custom_css']['value']                                                                        = isset($dynamic_setting['custom_css']['value']) ? $dynamic_setting['custom_css']['value'] : '';
-        $static_config['custom_js']['value']                                                                        = isset($dynamic_setting['custom_js']['value']) ? $dynamic_setting['custom_js']['value'] : '';
+        $static_config['custom_css']['value']                                                                        = Arr::get($dynamic_setting, 'custom_css.value');
+        $static_config['custom_js']['value']                                                                         = Arr::get($dynamic_setting, 'custom_js.value');
         $static_config['general']['options']['cell_padding']['value']                                                = $general['cell_padding']['value'];
         $static_config['general']['options']['table_alignment']['value']                                             = $general['table_alignment']['value'];
         $static_config['general']['options']['cell_min_auto_width']['value']                                         = $general['cell_min_auto_width']['value'];
@@ -79,7 +81,7 @@ class DynamicConfig
         $static_config['border']['options']['inner_border']['childs']['inner_border_size']['value']   = $border['inner_border']['childs']['inner_border_size']['value'];
 
         $static_config['global_styling']['options']['margin_top']['value']    = $global_style['margin_top']['value'];
-        $static_config['global_styling']['options']['margin_bottom']['value'] = isset($global_style['margin_bottom']['value']) ? $global_style['margin_bottom']['value'] : 0;
+        $static_config['global_styling']['options']['margin_bottom']['value'] = Arr::get($global_style, 'margin_bottom.value', 0);
         $static_config['global_styling']['options']['font_size']['value']     = $global_style['font_size']['value'];
         $static_config['global_styling']['options']['color']['value']         = $global_style['color']['value'];
         $static_config['global_styling']['options']['font_family']['value']   = $global_style['font_family']['value'];
@@ -92,28 +94,28 @@ class DynamicConfig
         $general        = $dynamic_responsive['general']['options'];
         $mobile         = $dynamic_responsive['mode_options']['options']['devices']['mobile'];
         $tablet         = $dynamic_responsive['mode_options']['options']['devices']['tablet'];
-        $mobileSettings = isset($dynamic_responsive['responsive_settings']['options']['devices']['mobile']) ? $dynamic_responsive['responsive_settings']['options']['devices']['mobile'] : null;
-        $tabletSettings = isset($dynamic_responsive['responsive_settings']['options']['devices']['tablet']) ? $dynamic_responsive['responsive_settings']['options']['devices']['tablet'] : null;
+        $mobileSettings = Arr::get($dynamic_responsive, 'responsive_settings.options.devices.mobile');
+        $tabletSettings = Arr::get($dynamic_responsive, 'responsive_settings.options.devices.tablet');
 
         $static_config['general']['options']['enable_responsive_table']['value'] = $general['enable_responsive_table']['value'];
 
         $static_config['mode_options']['options']['devices']['mobile']['disable_breakpoint']['value'] = $mobile['disable_breakpoint']['value'];
         $static_config['mode_options']['options']['devices']['mobile']['top_row_as_header']['value']  = $mobile['top_row_as_header']['value'];
-        $static_config['mode_options']['options']['devices']['mobile']['items_per_row']['value']      = isset($mobile['items_per_row']['value']) ? $mobile['items_per_row']['value'] : 1;
-        $static_config['mode_options']['options']['devices']['mobile']['cell_border']['value']        = isset($mobile['cell_border']['value']) ? $mobile['cell_border']['value'] : 5;
-        $static_config['mode_options']['options']['devices']['mobile']['cell_direction']['value']     = isset($mobile['cell_direction']['value']) ? $mobile['cell_direction']['value'] : 'row';
+        $static_config['mode_options']['options']['devices']['mobile']['items_per_row']['value']      = Arr::get($mobile, 'items_per_row.value', 1);
+        $static_config['mode_options']['options']['devices']['mobile']['cell_border']['value']        = Arr::get($mobile, 'cell_border.value', 5);
+        $static_config['mode_options']['options']['devices']['mobile']['cell_direction']['value']     = Arr::get($mobile, 'cell_direction.value', 'row');
 
         $static_config['mode_options']['options']['devices']['tablet']['disable_breakpoint']['value'] = $tablet['disable_breakpoint']['value'];
         $static_config['mode_options']['options']['devices']['tablet']['top_row_as_header']['value']  = $tablet['top_row_as_header']['value'];
-        $static_config['mode_options']['options']['devices']['tablet']['items_per_row']['value']      = isset($tablet['items_per_row']['value)']) ? $tablet['items_per_row']['value'] : 2;
-        $static_config['mode_options']['options']['devices']['tablet']['cell_border']['value']        = isset($tablet['cell_border']['value']) ? $tablet['cell_border']['value'] : 5;
-        $static_config['mode_options']['options']['devices']['tablet']['cell_direction']['value']     = isset($tablet['cell_direction']['value']) ? $tablet['cell_direction']['value'] : 'row';
+        $static_config['mode_options']['options']['devices']['tablet']['items_per_row']['value']      = Arr::get($tablet, 'items_per_row.value', 2);
+        $static_config['mode_options']['options']['devices']['tablet']['cell_border']['value']        = Arr::get($tablet, 'cell_border.value', 5);
+        $static_config['mode_options']['options']['devices']['tablet']['cell_direction']['value']     = Arr::get($tablet, 'cell_direction.value', 'row');
 
-        $static_config['responsive_settings']['options']['devices']['mobile']['mobile_table_alignment']['value'] = isset($mobileSettings['mobile_table_alignment']['value']) ? $mobileSettings['mobile_table_alignment']['value'] : 'center';
-        $static_config['responsive_settings']['options']['devices']['mobile']['mobile_cell_padding']['value']    = isset($mobileSettings['mobile_cell_padding']['value']) ? $mobileSettings['mobile_cell_padding']['value'] : 10;
+        $static_config['responsive_settings']['options']['devices']['mobile']['mobile_table_alignment']['value'] = Arr::get($mobileSettings, 'mobile_table_alignment.value', 'center');
+        $static_config['responsive_settings']['options']['devices']['mobile']['mobile_cell_padding']['value']    = Arr::get($mobileSettings, 'mobile_cell_padding.value', 10);
 
-        $static_config['responsive_settings']['options']['devices']['tablet']['tablet_table_alignment']['value'] = isset($tabletSettings['tablet_table_alignment']['value']) ? $tabletSettings['tablet_table_alignment']['value'] : 'center';
-        $static_config['responsive_settings']['options']['devices']['tablet']['tablet_cell_padding']['value']    = isset($tabletSettings['tablet_cell_padding']['value']) ? $tabletSettings['tablet_cell_padding']['value'] : 10;
+        $static_config['responsive_settings']['options']['devices']['tablet']['tablet_table_alignment']['value'] = Arr::get($tabletSettings, 'tablet_table_alignment.value', 'center');
+        $static_config['responsive_settings']['options']['devices']['tablet']['tablet_cell_padding']['value']    = Arr::get($tabletSettings, 'tablet_cell_padding.value', 10);
 
         return $static_config;
     }
