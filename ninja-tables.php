@@ -2,7 +2,7 @@
 
 defined('ABSPATH') or die;
 
-/*
+/**
 Plugin Name: Ninja Tables
 Description: The Easiest & Fastest Responsive Table Plugin on WordPress. Multiple templates, drag-&-drop live table builder, multiple color scheme, and styles.
 Version: 5.0.13
