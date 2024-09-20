@@ -24,9 +24,12 @@ class AjaxHandler
     public function getAllData()
     {
         if (!isset($_SERVER['HTTP_REFERER'])) {
-            wp_send_json_error([
-                'message' => 'You are not allowed to access this page directly.',
-            ], 400);
+            $isAllowed = apply_filters('ninja_tables_allow_public_ajax', true);
+            if (!$isAllowed) {
+                wp_send_json([
+                    'message' => 'You are not allowed to access this page directly.',
+                ], 400);
+            }
         }
 
         $tableId = intval(Arr::get($_REQUEST, 'table_id'));
@@ -41,14 +44,14 @@ class AjaxHandler
 
         $is_ajax_table = apply_filters('ninja_table_is_public_ajax_table', $is_ajax_table, $tableId);
 
-        if ( ! $tableSettings || ! $is_ajax_table) {
+        if (!$tableSettings || !$is_ajax_table) {
             wp_send_json_success([], 200);
         }
 
         $skip  = Arr::get($_REQUEST, 'skip_rows', 0);
         $limit = Arr::get($_REQUEST, 'limit_rows', false);
 
-        if ( ! $limit && ! $skip && isset($_REQUEST['chunk_number'])) {
+        if (!$limit && !$skip && isset($_REQUEST['chunk_number'])) {
             $chunkNumber = Arr::get($_REQUEST, 'chunk_number', 0);
             $perChunk    = ninjaTablePerChunk($tableId);
             $skip        = $chunkNumber * $perChunk;
@@ -62,8 +65,15 @@ class AjaxHandler
         }
 
         $tableColumns   = ninja_table_get_table_columns($tableId);
-        $formatted_data = ninjaTablesGetTablesDataByID($tableId, $tableColumns, $defaultSorting, false, $limit, $skip,
-            $ownOnly);
+        $formatted_data = ninjaTablesGetTablesDataByID(
+            $tableId,
+            $tableColumns,
+            $defaultSorting,
+            false,
+            $limit,
+            $skip,
+            $ownOnly
+        );
 
         $formatted_data = apply_filters('ninja_tables_get_public_data', $formatted_data, $tableId);
 
@@ -74,7 +84,6 @@ class AjaxHandler
             $counter       = $skip;
             foreach ($formatted_data as $index => $datum) {
                 $datum           = array_map(function ($value) {
-
                     if (is_string($value)) {
                         return do_shortcode($value);
                     }
