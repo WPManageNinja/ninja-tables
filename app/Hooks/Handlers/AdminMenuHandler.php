@@ -11,6 +11,10 @@ class AdminMenuHandler
     {
         global $submenu;
         $capability = ninja_table_admin_role();
+
+        if (!$capability) {
+            return;
+        }
         // Top-level page
         $menuName = __('Ninja Tables', 'ninja-tables');
         if (defined('NINJATABLESPRO')) {
@@ -52,7 +56,7 @@ class AdminMenuHandler
             'ninja_table_tools_menu'
         );
 
-        if ( ! defined('NINJA_CHARTS_VERSION')) {
+        if (!defined('NINJA_CHARTS_VERSION')) {
             $submenu['ninja_tables']['ninja_charts'] = array(
                 __('Charts', 'ninja-tables'),
                 $capability,
@@ -72,10 +76,10 @@ class AdminMenuHandler
             );
         }
 
-        if ( ! defined('NINJATABLESPRO')) {
-            $getPro = __('Get Pro', 'ninja-tables');
+        if (!defined('NINJATABLESPRO')) {
+            $getPro                                 = __('Get Pro', 'ninja-tables');
             $submenu['ninja_tables']['upgrade_pro'] = array(
-                '<span style="color:#f39c12;">'.$getPro.'</span>',
+                '<span style="color:#f39c12;">' . $getPro . '</span>',
                 $capability,
                 'https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade_menu',
                 '',
@@ -167,7 +171,8 @@ class AdminMenuHandler
     protected function getMenuIcon()
     {
         return 'data:image/svg+xml;base64,'
-               . base64_encode('<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+               . base64_encode(
+                   '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
               viewBox="0 0 80 80" xml:space="preserve">
                   <g>
                      <g>
@@ -183,7 +188,8 @@ class AdminMenuHandler
                         <path d="M18.4,79.3L18.4,79.3v-11H1.5v0.1c2.2,6.4,8.5,11,15.9,11L18.4,79.3L18.4,79.3z" fill="#ffffff"/>
                         <path d="M78.6,68.3h-58v11v0.1h42.1C70.1,79.4,76.4,74.8,78.6,68.3C78.6,68.4,78.6,68.4,78.6,68.3" fill="#ffffff"/>
                   </g>
-                </svg>');
+                </svg>'
+               );
     }
 
     /**
@@ -293,7 +299,7 @@ class AdminMenuHandler
             $leadStatus = $app->applyFilters('ninja_tables_show_lead', $leadStatus);
         }
 
-        if ($tableCount && $publish > 2 && ! $leadStatus) {
+        if ($tableCount && $publish > 2 && !$leadStatus) {
             $reviewOptinStatus = $app->applyFilters('ninja_tables_show_review_optin', $reviewOptinStatus);
         }
 
@@ -339,7 +345,8 @@ class AdminMenuHandler
             'img_url'                  => $assets . "img/",
             'fluentform_url'           => $fluentUrl,
             'fluent_wp_url'            => 'https://wordpress.org/plugins/fluentform/',
-            'fluent_form_icon'         => function_exists('getNinjaFluentFormMenuIcon') ? getNinjaFluentFormMenuIcon() : '',
+            'fluent_form_icon'         => function_exists('getNinjaFluentFormMenuIcon') ? getNinjaFluentFormMenuIcon(
+            ) : '',
             'dismissed'                => $dismissed,
             'show_lead_pop_up'         => $leadStatus,
             'show_review_dialog'       => $reviewOptinStatus,
@@ -371,7 +378,9 @@ class AdminMenuHandler
             'prefered_thumb'           => $app->applyFilters('ninja_table_prefered_thumb', 'medium'),
             'has_woocommerce'          => defined('WC_PLUGIN_FILE'),
             'license_status'           => get_option('_ninjatables_pro_license_status'),
-            'ninja_charts_url'         => defined('NINJA_CHARTS_VERSION') ? self_admin_url('admin.php?page=ninja-charts#/chart-list') : null,
+            'ninja_charts_url'         => defined('NINJA_CHARTS_VERSION') ? self_admin_url(
+                'admin.php?page=ninja-charts#/chart-list'
+            ) : null,
             'ninja_table_admin_nonce'  => wp_create_nonce('ninja_table_admin_nonce'),
             'ninja_tables_pro_url'     => defined('NINJATABLESPRO') ? NINJAPROPLUGIN_URL : null
         ));
@@ -400,7 +409,7 @@ class AdminMenuHandler
                 foreach ($wp_scripts->queue as $script) {
                     $src = $wp_scripts->registered[$script]->src;
 
-                    if (strpos($src, $pluginUrl) !== false && ! strpos($src, 'ninja-tables') !== false) {
+                    if (strpos($src, $pluginUrl) !== false && !strpos($src, 'ninja-tables') !== false) {
                         wp_dequeue_script($wp_scripts->registered[$script]->handle);
                     }
                 }
