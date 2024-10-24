@@ -20,7 +20,7 @@ class PreviewHandler
                 do_action('ninja_tables_will_render_table', $tableId);
 
                 wp_enqueue_style('ninja-tables-preview',
-                    NINJA_TABLES_DIR_URL . "assets/css/ninja-tables-preview.css");
+                    NINJA_TABLES_DIR_URL . "assets/css/ninja-tables-preview.css", [], NINJA_TABLES_VERSION);
 
                 NinjaFooTable::enqueuePublicCss();
                 $table = get_post($tableId);
@@ -45,7 +45,7 @@ class PreviewHandler
                 do_action('ninja_tables_will_render_table', $tableId);
 
                 wp_enqueue_style('ninja-tables-preview',
-                    NINJA_TABLES_DIR_URL . "assets/css/ninja-tables-preview.css");
+                    NINJA_TABLES_DIR_URL . "assets/css/ninja-tables-preview.css", [], NINJA_TABLES_VERSION);
 
                 $table   = get_post($tableId);
 

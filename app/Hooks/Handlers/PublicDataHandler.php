@@ -317,7 +317,7 @@ class PublicDataHandler
                 'footable_styles',
                 $styleSrc,
                 [],
-                '',
+                NINJA_TABLES_VERSION,
                 'all'
             );
 
@@ -389,7 +389,7 @@ class PublicDataHandler
             'ninja_table_builder_js',
             $styleSrc,
             ['jquery'],
-            '',
+            NINJA_TABLES_VERSION,
             'all'
         );
         $styleSrc = NINJA_TABLES_DIR_URL . "assets/css/ninja-table-builder-public.css";
@@ -397,7 +397,7 @@ class PublicDataHandler
             'ninja_table_builder_style',
             $styleSrc,
             [],
-            '',
+            NINJA_TABLES_VERSION,
             'all'
         );
     }

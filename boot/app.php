@@ -8,8 +8,8 @@ return function($file) {
 
     $app = new Application($file);
 
-    register_activation_hook($file, function() use ($app) {
-        ($app->make(ActivationHandler::class))->handle();
+    register_activation_hook($file, function($netWorkWide) use ($app) {
+        ($app->make(ActivationHandler::class))->handle($netWorkWide);
     });
 
     register_deactivation_hook($file, function() use ($app) {
