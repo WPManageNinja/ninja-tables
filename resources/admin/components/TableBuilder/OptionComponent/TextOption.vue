@@ -5,7 +5,6 @@
                 @click="visualMode = 'visual'">Visual</button>
             <button :class="`visual-mode ${visualMode === 'text' && 'active-visual'}`"
                 @click="visualMode = 'text'">Text</button>
-
         </div>
         <el-input v-if="visualMode === 'text'" type="textarea" :autosize="{ minRows: 3 }"
             :placeholder="$t('Enter here')" v-model="item.data.value" />

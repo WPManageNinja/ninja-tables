@@ -1,6 +1,15 @@
 <template>
-    <span ref="ninja_table_text_editor" contenteditable="true" v-html="value ==='' ? 'Add New':value"
-        @input="updateContent"></span>
+<!--    <pre>{{value}}</pre>-->
+   <span
+       ref="ninja_table_text_editor"
+       contenteditable="true"
+       v-html="value"
+       data-placeholder="Add New"
+       @keyup="updateContent"
+       :class="{'placeholder': !value}"
+       @keydown.delete="handleDelete"
+       @input="updateContent"
+   ></span>
 </template>
 <script>
 
@@ -11,7 +20,6 @@ export default {
     props: {
         value: {
             type: String,
-            default: 'Add New'
         },
         idx: {
             type: [Number, String],
@@ -31,6 +39,14 @@ export default {
         }
     },
     methods: {
+        handleDelete(event) {
+            const $ref = this.$refs.ninja_table_text_editor;
+            const content = $ref.innerHTML;
+            if (content.length <= 1 || content === 'Add New') {
+                event.preventDefault();
+                this.$emit('input', '');
+            }
+        },
         initTinymce() {
             const $this = this;
             const $ref = this.$refs.ninja_table_text_editor;
@@ -78,7 +94,36 @@ export default {
             this.$nextTick(() => {
                 restoreCursorPosition($ref, cursorPosition);
             });
+            const content = event.target.innerHTML;
+            const finalContent = content === 'Add New' ? '' : content;
+
+            if (this.idx !== undefined) {
+                this.$emit('input', finalContent, this.idx);
+            } else {
+                this.$emit('input', finalContent);
+            }
+
+            this.$nextTick(() => {
+                restoreCursorPosition($ref, cursorPosition);
+            });
         }
     }
 };
 </script>
+
+<style scoped>
+.placeholder {
+    position: relative;
+    color: transparent;
+}
+
+.placeholder::before {
+    content: attr(data-placeholder);
+    position: absolute;
+    left: 25%;
+    top: 0;
+    color: gray;
+    opacity: 0.6;
+    pointer-events: none;
+}
+</style>
