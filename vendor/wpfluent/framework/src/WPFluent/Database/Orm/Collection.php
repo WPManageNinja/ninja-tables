@@ -4,17 +4,21 @@ namespace NinjaTables\Framework\Database\Orm;
 
 use LogicException;
 use NinjaTables\Framework\Support\Arr;
-use NinjaTables\Framework\Support\QueueableCollectionInterface;
+use NinjaTables\Framework\Support\Str;
+use NinjaTables\Framework\Support\ArrayableInterface;
 use NinjaTables\Framework\Support\Collection as BaseCollection;
+use NinjaTables\Framework\Database\Orm\Relations\Concerns\InteractsWithDictionary;
 
-class Collection extends BaseCollection implements QueueableCollectionInterface
+class Collection extends BaseCollection
 {
+    use InteractsWithDictionary;
+
     /**
      * Find a model in the collection by key.
      *
      * @param  mixed  $key
      * @param  mixed  $default
-     * @return \NinjaTables\Framework\Database\Orm\Model
+     * @return \NinjaTables\Framework\Database\Orm\Model|static|null
      */
     public function find($key, $default = null)
     {
@@ -22,25 +26,35 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
             $key = $key->getKey();
         }
 
-        return Arr::first($this->items, function ($itemKey, $model) use ($key) {
-            return $model->getKey() == $key;
-        }, $default);
+        if ($key instanceof ArrayableInterface) {
+            $key = $key->toArray();
+        }
+
+        if (is_array($key)) {
+            if ($this->isEmpty()) {
+                return new static;
+            }
+
+            return $this->whereIn($this->first()->getKeyName(), $key);
+        }
+
+        return Arr::first($this->items, fn ($model) => $model->getKey() == $key, $default);
     }
 
     /**
      * Load a set of relationships onto the collection.
      *
-     * @param  mixed  $relations
+     * @param  array|string  $relations
      * @return $this
      */
     public function load($relations)
     {
-        if (count($this->items) > 0) {
+        if ($this->isNotEmpty()) {
             if (is_string($relations)) {
                 $relations = func_get_args();
             }
 
-            $query = $this->first()->newQuery()->with($relations);
+            $query = $this->first()->newQueryWithoutRelationships()->with($relations);
 
             $this->items = $query->eagerLoadRelations($this->items);
         }
@@ -49,14 +63,223 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
     }
 
     /**
-     * Add an item to the collection.
+     * Load a set of aggregations over relationship's column onto the collection.
      *
-     * @param  mixed  $item
+     * @param  array|string  $relations
+     * @param  string  $column
+     * @param  string  $function
      * @return $this
      */
-    public function add($item)
+    public function loadAggregate($relations, $column, $function = null)
     {
-        $this->items[] = $item;
+        if ($this->isEmpty()) {
+            return $this;
+        }
+
+        $models = $this->first()->newModelQuery()
+            ->whereKey($this->modelKeys())
+            ->select($this->first()->getKeyName())
+            ->withAggregate($relations, $column, $function)
+            ->get()
+            ->keyBy($this->first()->getKeyName());
+
+        $attributes = Arr::except(
+            array_keys($models->first()->getAttributes()),
+            $models->first()->getKeyName()
+        );
+
+        $this->each(function ($model) use ($models, $attributes) {
+            $extraAttributes = Arr::only($models->get($model->getKey())->getAttributes(), $attributes);
+
+            $model->forceFill($extraAttributes)
+                ->syncOriginalAttributes($attributes)
+                ->mergeCasts($models->get($model->getKey())->getCasts());
+        });
+
+        return $this;
+    }
+
+    /**
+     * Load a set of relationship counts onto the collection.
+     *
+     * @param  array|string  $relations
+     * @return $this
+     */
+    public function loadCount($relations)
+    {
+        return $this->loadAggregate($relations, '*', 'count');
+    }
+
+    /**
+     * Load a set of relationship's max column values onto the collection.
+     *
+     * @param  array|string  $relations
+     * @param  string  $column
+     * @return $this
+     */
+    public function loadMax($relations, $column)
+    {
+        return $this->loadAggregate($relations, $column, 'max');
+    }
+
+    /**
+     * Load a set of relationship's min column values onto the collection.
+     *
+     * @param  array|string  $relations
+     * @param  string  $column
+     * @return $this
+     */
+    public function loadMin($relations, $column)
+    {
+        return $this->loadAggregate($relations, $column, 'min');
+    }
+
+    /**
+     * Load a set of relationship's column summations onto the collection.
+     *
+     * @param  array|string  $relations
+     * @param  string  $column
+     * @return $this
+     */
+    public function loadSum($relations, $column)
+    {
+        return $this->loadAggregate($relations, $column, 'sum');
+    }
+
+    /**
+     * Load a set of relationship's average column values onto the collection.
+     *
+     * @param  array|string  $relations
+     * @param  string  $column
+     * @return $this
+     */
+    public function loadAvg($relations, $column)
+    {
+        return $this->loadAggregate($relations, $column, 'avg');
+    }
+
+    /**
+     * Load a set of related existences onto the collection.
+     *
+     * @param  array|string  $relations
+     * @return $this
+     */
+    public function loadExists($relations)
+    {
+        return $this->loadAggregate($relations, '*', 'exists');
+    }
+
+    /**
+     * Load a set of relationships onto the collection if they are not already eager loaded.
+     *
+     * @param  array|string  $relations
+     * @return $this
+     */
+    public function loadMissing($relations)
+    {
+        if (is_string($relations)) {
+            $relations = func_get_args();
+        }
+
+        foreach ($relations as $key => $value) {
+            if (is_numeric($key)) {
+                $key = $value;
+            }
+
+            $segments = explode('.', explode(':', $key)[0]);
+
+            if (Str::contains($key, ':')) {
+                $segments[count($segments) - 1] .= ':'.explode(':', $key)[1];
+            }
+
+            $path = [];
+
+            foreach ($segments as $segment) {
+                $path[] = [$segment => $segment];
+            }
+
+            if (is_callable($value)) {
+                $path[count($segments) - 1][end($segments)] = $value;
+            }
+
+            $this->loadMissingRelation($this, $path);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Load a relationship path if it is not already eager loaded.
+     *
+     * @param  \NinjaTables\Framework\Database\Orm\Collection  $models
+     * @param  array  $path
+     * @return void
+     */
+    protected function loadMissingRelation(self $models, array $path)
+    {
+        $relation = array_shift($path);
+
+        $name = explode(':', key($relation))[0];
+
+        if (is_string(reset($relation))) {
+            $relation = reset($relation);
+        }
+
+        $models->filter(function ($model) use ($name) {
+            return ! is_null($model) && ! $model->relationLoaded($name);
+        })->load($relation);
+
+        if (empty($path)) {
+            return;
+        }
+
+        $models = $models->pluck($name)->whereNotNull();
+
+        if ($models->first() instanceof BaseCollection) {
+            $models = $models->collapse();
+        }
+
+        $this->loadMissingRelation(new static($models), $path);
+    }
+
+    /**
+     * Load a set of relationships onto the mixed relationship collection.
+     *
+     * @param  string  $relation
+     * @param  array  $relations
+     * @return $this
+     */
+    public function loadMorph($relation, $relations)
+    {
+        $this->pluck($relation)
+            ->filter()
+            ->groupBy(function ($model) {
+                return get_class($model);
+            })
+            ->each(function ($models, $className) use ($relations) {
+                static::make($models)->load($relations[$className] ?? []);
+            });
+
+        return $this;
+    }
+
+    /**
+     * Load a set of relationship counts onto the mixed relationship collection.
+     *
+     * @param  string  $relation
+     * @param  array  $relations
+     * @return $this
+     */
+    public function loadMorphCount($relation, $relations)
+    {
+        $this->pluck($relation)
+            ->filter()
+            ->groupBy(function ($model) {
+                return get_class($model);
+            })
+            ->each(function ($models, $className) use ($relations) {
+                static::make($models)->loadCount($relations[$className] ?? []);
+            });
 
         return $this;
     }
@@ -65,23 +288,24 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
      * Determine if a key exists in the collection.
      *
      * @param  mixed  $key
+     * @param  mixed  $operator
      * @param  mixed  $value
      * @return bool
      */
-    public function contains($key, $value = null)
+    public function contains($key, $operator = null, $value = null)
     {
-        if (func_num_args() == 2) {
-            return parent::contains($key, $value);
+        if (func_num_args() > 1 || $this->useAsCallable($key)) {
+            return parent::contains(...func_get_args());
         }
 
-        if ($this->useAsCallable($key)) {
-            return parent::contains($key);
+        if ($key instanceof Model) {
+            return parent::contains(function ($model) use ($key) {
+                return $model->is($key);
+            });
         }
 
-        $key = $key instanceof Model ? $key->getKey() : $key;
-
-        return parent::contains(function ($k, $m) use ($key) {
-            return $m->getKey() == $key;
+        return parent::contains(function ($model) use ($key) {
+            return $model->getKey() == $key;
         });
     }
 
@@ -92,8 +316,8 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
      */
     public function modelKeys()
     {
-        return array_map(function ($m) {
-            return $m->getKey();
+        return array_map(function ($model) {
+            return $model->getKey();
         }, $this->items);
     }
 
@@ -108,10 +332,70 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
         $dictionary = $this->getDictionary();
 
         foreach ($items as $item) {
-            $dictionary[$item->getKey()] = $item;
+            $dictionary[$this->getDictionaryKey($item->getKey())] = $item;
         }
 
         return new static(array_values($dictionary));
+    }
+
+    /**
+     * Run a map over each of the items.
+     *
+     * @param  callable  $callback
+     * @return \NinjaTables\Framework\Support\Collection|static
+     */
+    public function map(callable $callback)
+    {
+        $result = parent::map($callback);
+
+        return $result->contains(function ($item) {
+            return ! $item instanceof Model;
+        }) ? $result->toBase() : $result;
+    }
+
+    /**
+     * Run an associative map over each of the items.
+     *
+     * The callback should return an associative array with a single key / value pair.
+     *
+     * @param  callable  $callback
+     * @return \NinjaTables\Framework\Support\Collection|static
+     */
+    public function mapWithKeys(callable $callback)
+    {
+        $result = parent::mapWithKeys($callback);
+
+        return $result->contains(function ($item) {
+            return ! $item instanceof Model;
+        }) ? $result->toBase() : $result;
+    }
+
+    /**
+     * Reload a fresh model instance from the database for all the entities.
+     *
+     * @param  array|string  $with
+     * @return static
+     */
+    public function fresh($with = [])
+    {
+        if ($this->isEmpty()) {
+            return new static;
+        }
+
+        $model = $this->first();
+
+        $freshModels = $model->newQueryWithoutScopes()
+            ->with(is_string($with) ? func_get_args() : $with)
+            ->whereIn($model->getKeyName(), $this->modelKeys())
+            ->get()
+            ->getDictionary();
+
+        return $this->filter(function ($model) use ($freshModels) {
+            return $model->exists && isset($freshModels[$model->getKey()]);
+        })
+        ->map(function ($model) use ($freshModels) {
+            return $freshModels[$model->getKey()];
+        });
     }
 
     /**
@@ -127,7 +411,7 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
         $dictionary = $this->getDictionary($items);
 
         foreach ($this->items as $item) {
-            if (! isset($dictionary[$item->getKey()])) {
+            if (! isset($dictionary[$this->getDictionaryKey($item->getKey())])) {
                 $diff->add($item);
             }
         }
@@ -145,10 +429,14 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
     {
         $intersect = new static;
 
+        if (empty($items)) {
+            return $intersect;
+        }
+
         $dictionary = $this->getDictionary($items);
 
         foreach ($this->items as $item) {
-            if (isset($dictionary[$item->getKey()])) {
+            if (isset($dictionary[$this->getDictionaryKey($item->getKey())])) {
                 $intersect->add($item);
             }
         }
@@ -160,12 +448,13 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
      * Return only unique items from the collection.
      *
      * @param  string|callable|null  $key
+     * @param  bool  $strict
      * @return static
      */
-    public function unique($key = null)
+    public function unique($key = null, $strict = false)
     {
         if (! is_null($key)) {
-            return parent::unique($key);
+            return parent::unique($key, $strict);
         }
 
         return new static(array_values($this->getDictionary()));
@@ -179,7 +468,14 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
      */
     public function only($keys)
     {
-        $dictionary = Arr::only($this->getDictionary(), $keys);
+        if (is_null($keys)) {
+            return new static($this->items);
+        }
+
+        $dictionary = Arr::only($this->getDictionary(), array_map(
+            fn($value) => $this->getDictionaryKey($value),
+            (array) $keys)
+        );
 
         return new static(array_values($dictionary));
     }
@@ -192,7 +488,14 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
      */
     public function except($keys)
     {
-        $dictionary = Arr::except($this->getDictionary(), $keys);
+        if (is_null($keys)) {
+            return new static($this->items);
+        }
+
+        $dictionary = Arr::except($this->getDictionary(), array_map(
+            fn($value) => $this->getDictionaryKey($value),
+            (array) $keys)
+        );
 
         return new static(array_values($dictionary));
     }
@@ -205,9 +508,7 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
      */
     public function makeHidden($attributes)
     {
-        return $this->each(function ($model) use ($attributes) {
-            $model->addHidden($attributes);
-        });
+        return $this->each->makeHidden($attributes);
     }
 
     /**
@@ -218,22 +519,40 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
      */
     public function makeVisible($attributes)
     {
-        return $this->each(function ($model) use ($attributes) {
-            $model->makeVisible($attributes);
-        });
+        return $this->each->makeVisible($attributes);
     }
 
     /**
-     * Make the given, typically hidden, attributes visible across the entire collection.
+     * Set the visible attributes across the entire collection.
+     *
+     * @param  array<int, string>  $visible
+     * @return $this
+     */
+    public function setVisible($visible)
+    {
+        return $this->each->setVisible($visible);
+    }
+
+    /**
+     * Set the hidden attributes across the entire collection.
+     *
+     * @param  array<int, string>  $hidden
+     * @return $this
+     */
+    public function setHidden($hidden)
+    {
+        return $this->each->setHidden($hidden);
+    }
+
+    /**
+     * Append an attribute across the entire collection.
      *
      * @param  array|string  $attributes
      * @return $this
-     *
-     * @deprecated since version 5.2. Use the "makeVisible" method directly.
      */
-    public function withHidden($attributes)
+    public function append($attributes)
     {
-        return $this->makeVisible($attributes);
+        return $this->each->append($attributes);
     }
 
     /**
@@ -249,10 +568,21 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
         $dictionary = [];
 
         foreach ($items as $value) {
-            $dictionary[$value->getKey()] = $value;
+            $dictionary[$this->getDictionaryKey($value->getKey())] = $value;
         }
 
         return $dictionary;
+    }
+
+    /**
+     * Count the number of items in the collection by a field or using a callback.
+     *
+     * @param  (callable(TModel, TKey): array-key)|string|null  $countBy
+     * @return \NinjaTables\Framework\Support\Collection<array-key, int>
+     */
+    public function countBy($countBy = null)
+    {
+        return $this->toBase()->countBy($countBy);
     }
 
     /**
@@ -262,13 +592,24 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
     /**
      * Get an array with the values of a given key.
      *
-     * @param  string  $value
+     * @param  string|array  $value
      * @param  string|null  $key
      * @return \NinjaTables\Framework\Support\Collection
      */
     public function pluck($value, $key = null)
     {
         return $this->toBase()->pluck($value, $key);
+    }
+
+    /**
+     * Get the comparison function to detect duplicates.
+     *
+     * @param  bool  $strict
+     * @return callable(TModel, TModel): bool
+     */
+    protected function duplicateComparator($strict)
+    {
+        return fn ($a, $b) => $a->is($b);
     }
 
     /**
@@ -284,12 +625,12 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
     /**
      * Zip the collection together with one or more arrays.
      *
-     * @param  mixed ...$items
+     * @param  mixed  ...$items
      * @return \NinjaTables\Framework\Support\Collection
      */
     public function zip($items)
     {
-        return call_user_func_array([$this->toBase(), 'zip'], func_get_args());
+        return $this->toBase()->zip(...func_get_args());
     }
 
     /**
@@ -324,44 +665,40 @@ class Collection extends BaseCollection implements QueueableCollectionInterface
     }
 
     /**
-     * Get the type of the entities being queued.
+     * Pad collection to the specified length with a value.
      *
-     * @return string|null
-     */
-    public function getQueueableClass()
-    {
-        if ($this->count() === 0) {
-            return;
-        }
-
-        $class = get_class($this->first());
-
-        $this->each(function ($model) use ($class) {
-            if (get_class($model) !== $class) {
-                throw new LogicException('Queueing collections with multiple model types is not supported.');
-            }
-        });
-
-        return $class;
-    }
-
-    /**
-     * Get the identifiers for all of the entities.
-     *
-     * @return array
-     */
-    public function getQueueableIds()
-    {
-        return $this->modelKeys();
-    }
-
-    /**
-     * Get a base Support collection instance from this collection.
-     *
+     * @param  int  $size
+     * @param  mixed  $value
      * @return \NinjaTables\Framework\Support\Collection
      */
-    public function toBase()
+    public function pad($size, $value)
     {
-        return new BaseCollection($this->items);
+        return $this->toBase()->pad($size, $value);
+    }
+
+    /**
+     * Get the Orm query builder from the collection.
+     *
+     * @return \NinjaTables\Framework\Database\Orm\Builder
+     *
+     * @throws \LogicException
+     */
+    public function toQuery()
+    {
+        $model = $this->first();
+
+        if (! $model) {
+            throw new LogicException('Unable to create query for empty collection.');
+        }
+
+        $class = get_class($model);
+
+        if ($this->filter(function ($model) use ($class) {
+            return ! $model instanceof $class;
+        })->isNotEmpty()) {
+            throw new LogicException('Unable to create query for collection with mixed types.');
+        }
+
+        return $model->newModelQuery()->whereKey($this->modelKeys());
     }
 }

@@ -2,17 +2,24 @@
 
 namespace NinjaTables\Framework\Database\Orm\Relations;
 
-use NinjaTables\Framework\Support\Arr;
+use Closure;
+use InvalidArgumentException;
 use NinjaTables\Framework\Support\Str;
+use NinjaTables\Framework\Support\Helper;
 use NinjaTables\Framework\Database\Orm\Model;
 use NinjaTables\Framework\Database\Orm\Builder;
 use NinjaTables\Framework\Database\Orm\Collection;
-use NinjaTables\Framework\Database\Orm\ModelHelperTrait;
+use NinjaTables\Framework\Database\Query\MySqlGrammar;
+use NinjaTables\Framework\Support\ArrayableInterface;
 use NinjaTables\Framework\Database\Orm\ModelNotFoundException;
+use NinjaTables\Framework\Database\Orm\Relations\Concerns\AsPivot;
+use NinjaTables\Framework\Database\UniqueConstraintViolationException;
+use NinjaTables\Framework\Database\Orm\Relations\Concerns\InteractsWithDictionary;
+use NinjaTables\Framework\Database\Orm\Relations\Concerns\InteractsWithPivotTable;
 
 class BelongsToMany extends Relation
 {
-    use ModelHelperTrait;
+    use InteractsWithDictionary, InteractsWithPivotTable;
 
     /**
      * The intermediate table for the relation.
@@ -26,14 +33,28 @@ class BelongsToMany extends Relation
      *
      * @var string
      */
-    protected $foreignKey;
+    protected $foreignPivotKey;
 
     /**
      * The associated key of the relation.
      *
      * @var string
      */
-    protected $otherKey;
+    protected $relatedPivotKey;
+
+    /**
+     * The key name of the parent model.
+     *
+     * @var string
+     */
+    protected $parentKey;
+
+    /**
+     * The key name of the related model.
+     *
+     * @var string
+     */
+    protected $relatedKey;
 
     /**
      * The "name" of the relationship.
@@ -45,7 +66,7 @@ class BelongsToMany extends Relation
     /**
      * The pivot table columns to retrieve.
      *
-     * @var array
+     * @var array<string|\NinjaTables\Framework\Database\Query\Expression>
      */
     protected $pivotColumns = [];
 
@@ -64,6 +85,27 @@ class BelongsToMany extends Relation
     protected $pivotWhereIns = [];
 
     /**
+     * Any pivot table restrictions for whereNull clauses.
+     *
+     * @var array
+     */
+    protected $pivotWhereNulls = [];
+
+    /**
+     * The default values for the pivot columns.
+     *
+     * @var array
+     */
+    protected $pivotValues = [];
+
+    /**
+     * Indicates if timestamps are available on the pivot table.
+     *
+     * @var bool
+     */
+    public $withTimestamps = false;
+
+    /**
      * The custom pivot table column for the created_at timestamp.
      *
      * @var string
@@ -78,82 +120,319 @@ class BelongsToMany extends Relation
     protected $pivotUpdatedAt;
 
     /**
-     * The count of self joins.
+     * The class name of the custom pivot model to use for the relationship.
      *
-     * @var int
+     * @var string
      */
-    protected static $selfJoinCount = 0;
+    protected $using;
+
+    /**
+     * The name of the accessor to use for the "pivot" relationship.
+     *
+     * @var string
+     */
+    protected $accessor = 'pivot';
 
     /**
      * Create a new belongs to many relationship instance.
      *
-     * @param  \NinjaTables\Framework\Database\Orm\Builder  $query
-     * @param  \NinjaTables\Framework\Database\Orm\Model  $parent
-     * @param  string  $table
-     * @param  string  $foreignKey
-     * @param  string  $otherKey
-     * @param  string  $relationName
+     * @param  \NinjaTables\Framework\Database\Eloquent\Builder<TRelatedModel>  $query
+     * @param  TDeclaringModel  $parent
+     * @param  string|class-string<TRelatedModel>  $table
+     * @param  string  $foreignPivotKey
+     * @param  string  $relatedPivotKey
+     * @param  string  $parentKey
+     * @param  string  $relatedKey
+     * @param  string|null  $relationName
      * @return void
      */
-    public function __construct(Builder $query, Model $parent, $table, $foreignKey, $otherKey, $relationName = null)
-    {
-        $this->table = $table;
-        $this->otherKey = $otherKey;
-        $this->foreignKey = $foreignKey;
+    public function __construct(
+        Builder $query,
+        Model $parent,
+        $table,
+        $foreignPivotKey,
+        $relatedPivotKey,
+        $parentKey,
+        $relatedKey,
+        $relationName = null
+    ) {
+        $this->parentKey = $parentKey;
+        $this->relatedKey = $relatedKey;
         $this->relationName = $relationName;
+        $this->relatedPivotKey = $relatedPivotKey;
+        $this->foreignPivotKey = $foreignPivotKey;
+        $this->table = $this->resolveTableName($table);
 
         parent::__construct($query, $parent);
     }
 
     /**
-     * Get the results of the relationship.
+     * Attempt to resolve the intermediate table name from the given string.
      *
-     * @return mixed
+     * @param  string  $table
+     * @return string
      */
-    public function getResults()
+    protected function resolveTableName($table)
     {
-        return $this->get();
+        if (! str_contains($table, '\\') || ! class_exists($table)) {
+            return $table;
+        }
+
+        $model = new $table;
+
+        if (! $model instanceof Model) {
+            return $table;
+        }
+
+        if (in_array(AsPivot::class, static::classUsesRecursive($model))) {
+            $this->using($table);
+        }
+
+        return $model->getTable();
+    }
+
+    /**
+     * Set the base constraints on the relation query.
+     *
+     * @return void
+     */
+    public function addConstraints()
+    {
+        $this->performJoin();
+
+        if (static::$constraints) {
+            $this->addWhereConstraints();
+        }
+    }
+
+    /**
+     * Set the join clause for the relation query.
+     *
+     * @param  \NinjaTables\Framework\Database\Eloquent\Builder<TRelatedModel>|null  $query
+     * @return $this
+     */
+    protected function performJoin($query = null)
+    {
+        $query = $query ?: $this->query;
+
+        // We need to join to the intermediate table on the related model's primary
+        // key column with the intermediate table's foreign key for the related
+        // model instance. Then we can set the "where" for the parent models.
+        $query->join(
+            $this->table,
+            $this->getQualifiedRelatedKeyName(),
+            '=',
+            $this->getQualifiedRelatedPivotKeyName()
+        );
+
+        return $this;
+    }
+
+    /**
+     * Set the where clause for the relation query.
+     *
+     * @return $this
+     */
+    protected function addWhereConstraints()
+    {
+        $this->query->where(
+            $this->getQualifiedForeignPivotKeyName(), '=', $this->parent->{$this->parentKey}
+        );
+
+        return $this;
+    }
+
+    /** @inheritDoc */
+    public function addEagerConstraints(array $models)
+    {
+        $whereIn = $this->whereInMethod($this->parent, $this->parentKey);
+
+        $this->whereInEager(
+            $whereIn,
+            $this->getQualifiedForeignPivotKeyName(),
+            $this->getKeys($models, $this->parentKey)
+        );
+    }
+
+    /** @inheritDoc */
+    public function initRelation(array $models, $relation)
+    {
+        foreach ($models as $model) {
+            $model->setRelation($relation, $this->related->newCollection());
+        }
+
+        return $models;
+    }
+
+    /** @inheritDoc */
+    public function match(array $models, Collection $results, $relation)
+    {
+        $dictionary = $this->buildDictionary($results);
+
+        // Once we have an array dictionary of child objects we can easily match the
+        // children back to their parent using the dictionary and the keys on the
+        // parent models. Then we should return these hydrated models back out.
+        foreach ($models as $model) {
+            $key = $this->getDictionaryKey($model->{$this->parentKey});
+
+            if (isset($dictionary[$key])) {
+                $model->setRelation(
+                    $relation, $this->related->newCollection($dictionary[$key])
+                );
+            }
+        }
+
+        return $models;
+    }
+
+    /**
+     * Build model dictionary keyed by the relation's foreign key.
+     *
+     * @param  \NinjaTables\Framework\Database\Eloquent\Collection<int, TRelatedModel>  $results
+     * @return array<array<string, TRelatedModel>>
+     */
+    protected function buildDictionary(Collection $results)
+    {
+        // First we'll build a dictionary of child models keyed by the foreign key
+        // of the relation so that we will easily and quickly match them to the
+        // parents without having a possibly slow inner loop for every model.
+        $dictionary = [];
+
+        foreach ($results as $result) {
+            $value = $this->getDictionaryKey($result->{$this->accessor}->{$this->foreignPivotKey});
+
+            $dictionary[$value][] = $result;
+        }
+
+        return $dictionary;
+    }
+
+    /**
+     * Get the class being used for pivot models.
+     *
+     * @return string
+     */
+    public function getPivotClass()
+    {
+        return $this->using ?? Pivot::class;
+    }
+
+    /**
+     * Specify the custom pivot model to use for the relationship.
+     *
+     * @param  string  $class
+     * @return $this
+     */
+    public function using($class)
+    {
+        $this->using = $class;
+
+        return $this;
+    }
+
+    /**
+     * Specify the custom pivot accessor to use for the relationship.
+     *
+     * @param  string  $accessor
+     * @return $this
+     */
+    public function as($accessor)
+    {
+        $this->accessor = $accessor;
+
+        return $this;
     }
 
     /**
      * Set a where clause for a pivot table column.
      *
-     * @param  string  $column
-     * @param  string  $operator
-     * @param  mixed   $value
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
      * @param  string  $boolean
-     * @return \NinjaTables\Framework\Database\Orm\Relations\BelongsToMany
+     * @return $this
      */
     public function wherePivot($column, $operator = null, $value = null, $boolean = 'and')
     {
         $this->pivotWheres[] = func_get_args();
 
-        return $this->where($this->table.'.'.$column, $operator, $value, $boolean);
+        return $this->where($this->qualifyPivotColumn($column), $operator, $value, $boolean);
+    }
+
+    /**
+     * Set a "where between" clause for a pivot table column.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  array  $values
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function wherePivotBetween($column, array $values, $boolean = 'and', $not = false)
+    {
+        return $this->whereBetween($this->qualifyPivotColumn($column), $values, $boolean, $not);
+    }
+
+    /**
+     * Set a "or where between" clause for a pivot table column.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  array  $values
+     * @return $this
+     */
+    public function orWherePivotBetween($column, array $values)
+    {
+        return $this->wherePivotBetween($column, $values, 'or');
+    }
+
+    /**
+     * Set a "where pivot not between" clause for a pivot table column.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  array  $values
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function wherePivotNotBetween($column, array $values, $boolean = 'and')
+    {
+        return $this->wherePivotBetween($column, $values, $boolean, true);
+    }
+
+    /**
+     * Set a "or where not between" clause for a pivot table column.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  array  $values
+     * @return $this
+     */
+    public function orWherePivotNotBetween($column, array $values)
+    {
+        return $this->wherePivotBetween($column, $values, 'or', true);
     }
 
     /**
      * Set a "where in" clause for a pivot table column.
      *
-     * @param  string  $column
-     * @param  mixed   $values
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  mixed  $values
      * @param  string  $boolean
-     * @param  bool    $not
-     * @return \NinjaTables\Framework\Database\Orm\Relations\BelongsToMany
+     * @param  bool  $not
+     * @return $this
      */
     public function wherePivotIn($column, $values, $boolean = 'and', $not = false)
     {
         $this->pivotWhereIns[] = func_get_args();
 
-        return $this->whereIn($this->table.'.'.$column, $values, $boolean, $not);
+        return $this->whereIn($this->qualifyPivotColumn($column), $values, $boolean, $not);
     }
 
     /**
      * Set an "or where" clause for a pivot table column.
      *
-     * @param  string  $column
-     * @param  string  $operator
-     * @param  mixed   $value
-     * @return \NinjaTables\Framework\Database\Orm\Relations\BelongsToMany
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return $this
      */
     public function orWherePivot($column, $operator = null, $value = null)
     {
@@ -161,11 +440,41 @@ class BelongsToMany extends Relation
     }
 
     /**
+     * Set a where clause for a pivot table column.
+     *
+     * In addition, new pivot records will receive this value.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression|array<string, string>  $column
+     * @param  mixed  $value
+     * @return $this
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function withPivotValue($column, $value = null)
+    {
+        if (is_array($column)) {
+            foreach ($column as $name => $value) {
+                $this->withPivotValue($name, $value);
+            }
+
+            return $this;
+        }
+
+        if (is_null($value)) {
+            throw new InvalidArgumentException('The provided value may not be null.');
+        }
+
+        $this->pivotValues[] = compact('column', 'value');
+
+        return $this->wherePivot($column, '=', $value);
+    }
+
+    /**
      * Set an "or where in" clause for a pivot table column.
      *
      * @param  string  $column
-     * @param  mixed   $values
-     * @return \NinjaTables\Framework\Database\Orm\Relations\BelongsToMany
+     * @param  mixed  $values
+     * @return $this
      */
     public function orWherePivotIn($column, $values)
     {
@@ -173,10 +482,322 @@ class BelongsToMany extends Relation
     }
 
     /**
+     * Set a "where not in" clause for a pivot table column.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  mixed  $values
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function wherePivotNotIn($column, $values, $boolean = 'and')
+    {
+        return $this->wherePivotIn($column, $values, $boolean, true);
+    }
+
+    /**
+     * Set an "or where not in" clause for a pivot table column.
+     *
+     * @param  string  $column
+     * @param  mixed  $values
+     * @return $this
+     */
+    public function orWherePivotNotIn($column, $values)
+    {
+        return $this->wherePivotNotIn($column, $values, 'or');
+    }
+
+    /**
+     * Set a "where null" clause for a pivot table column.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function wherePivotNull($column, $boolean = 'and', $not = false)
+    {
+        $this->pivotWhereNulls[] = func_get_args();
+
+        return $this->whereNull($this->qualifyPivotColumn($column), $boolean, $not);
+    }
+
+    /**
+     * Set a "where not null" clause for a pivot table column.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function wherePivotNotNull($column, $boolean = 'and')
+    {
+        return $this->wherePivotNull($column, $boolean, true);
+    }
+
+    /**
+     * Set a "or where null" clause for a pivot table column.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  bool  $not
+     * @return $this
+     */
+    public function orWherePivotNull($column, $not = false)
+    {
+        return $this->wherePivotNull($column, 'or', $not);
+    }
+
+    /**
+     * Set a "or where not null" clause for a pivot table column.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @return $this
+     */
+    public function orWherePivotNotNull($column)
+    {
+        return $this->orWherePivotNull($column, true);
+    }
+
+    /**
+     * Add an "order by" clause for a pivot table column.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  string  $direction
+     * @return $this
+     */
+    public function orderByPivot($column, $direction = 'asc')
+    {
+        return $this->orderBy($this->qualifyPivotColumn($column), $direction);
+    }
+
+    /**
+     * Find a related model by its primary key or return a new instance of the related model.
+     *
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return ($id is (\NinjaTables\Framework\Support\ArrayableInterface<array-key, mixed>|array<mixed>) ? \NinjaTables\Framework\Database\Eloquent\Collection<int, TRelatedModel> : TRelatedModel)
+     */
+    public function findOrNew($id, $columns = ['*'])
+    {
+        if (is_null($instance = $this->find($id, $columns))) {
+            $instance = $this->related->newInstance();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Get the first related model record matching the attributes or instantiate it.
+     *
+     * @param  array  $attributes
+     * @param  array  $values
+     * @return TRelatedModel
+     */
+    public function firstOrNew(array $attributes = [], array $values = [])
+    {
+        if (is_null($instance = $this->related->where($attributes)->first())) {
+            $instance = $this->related->newInstance(array_merge($attributes, $values));
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Get the first record matching the attributes. If the record is not found, create it.
+     *
+     * @param  array  $attributes
+     * @param  array  $values
+     * @param  array  $joining
+     * @param  bool  $touch
+     * @return TRelatedModel
+     */
+    public function firstOrCreate(array $attributes = [], array $values = [], array $joining = [], $touch = true)
+    {
+        if (is_null($instance = (clone $this)->where($attributes)->first())) {
+            if (is_null($instance = $this->related->where($attributes)->first())) {
+                $instance = $this->createOrFirst($attributes, $values, $joining, $touch);
+            } else {
+                try {
+                    $this->getQuery()->withSavepointIfNeeded(fn () => $this->attach($instance, $joining, $touch));
+                } catch (UniqueConstraintViolationException $e) {
+                    // Nothing to do, the model was already attached...
+                }
+            }
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Attempt to create the record. If a unique constraint violation occurs, attempt to find the matching record.
+     *
+     * @param  array  $attributes
+     * @param  array  $values
+     * @param  array  $joining
+     * @param  bool  $touch
+     * @return TRelatedModel
+     */
+    public function createOrFirst(array $attributes = [], array $values = [], array $joining = [], $touch = true)
+    {
+        try {
+            return $this->getQuery()->withSavePointIfNeeded(fn () => $this->create(array_merge($attributes, $values), $joining, $touch));
+        } catch (UniqueConstraintViolationException $e) {
+            // ...
+        }
+
+        try {
+            if (!($instance = $this->related->where($attributes)->first())) {
+                throw $e;
+            }
+
+            return Helper::tap($instance, function ($instance) use ($joining, $touch) {
+                $this->getQuery()->withSavepointIfNeeded(fn () => $this->attach($instance, $joining, $touch));
+            });
+        } catch (UniqueConstraintViolationException $e) {
+            if ($first = (clone $this)->useWritePdo()->where($attributes)->first()) {
+                return $first;
+            } throw $e;
+        }
+    }
+
+    /**
+     * Create or update a related record matching the attributes, and fill it with values.
+     *
+     * @param  array  $attributes
+     * @param  array  $values
+     * @param  array  $joining
+     * @param  bool  $touch
+     * @return TRelatedModel
+     */
+    public function updateOrCreate(array $attributes, array $values = [], array $joining = [], $touch = true)
+    {
+        return Helper::tap($this->firstOrCreate($attributes, $values, $joining, $touch), function ($instance) use ($values) {
+            if (! $instance->wasRecentlyCreated) {
+                $instance->fill($values);
+
+                $instance->save(['touch' => false]);
+            }
+        });
+    }
+
+    /**
+     * Find a related model by its primary key.
+     *
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return ($id is (\NinjaTables\Framework\Support\ArrayableInterface<array-key, mixed>|array<mixed>) ? \NinjaTables\Framework\Database\Eloquent\Collection<int, TRelatedModel> : TRelatedModel|null)
+     */
+    public function find($id, $columns = ['*'])
+    {
+        if (! $id instanceof Model && (is_array($id) || $id instanceof ArrayableInterface)) {
+            return $this->findMany($id, $columns);
+        }
+
+        return $this->where(
+            $this->getRelated()->getQualifiedKeyName(), '=', $this->parseId($id)
+        )->first($columns);
+    }
+
+    /**
+     * Find multiple related models by their primary keys.
+     *
+     * @param  \NinjaTables\Framework\Support\ArrayableInterface|array  $ids
+     * @param  array  $columns
+     * @return \NinjaTables\Framework\Database\Eloquent\Collection<int, TRelatedModel>
+     */
+    public function findMany($ids, $columns = ['*'])
+    {
+        $ids = $ids instanceof ArrayableInterface ? $ids->toArray() : $ids;
+
+        if (empty($ids)) {
+            return $this->getRelated()->newCollection();
+        }
+
+        return $this->whereKey(
+            $this->parseIds($ids)
+        )->get($columns);
+    }
+
+    /**
+     * Find a related model by its primary key or throw an exception.
+     *
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return ($id is (\NinjaTables\Framework\Support\ArrayableInterface<array-key, mixed>|array<mixed>) ? \NinjaTables\Framework\Database\Eloquent\Collection<int, TRelatedModel> : TRelatedModel)
+     *
+     * @throws \NinjaTables\Framework\Database\Eloquent\ModelNotFoundException<TRelatedModel>
+     */
+    public function findOrFail($id, $columns = ['*'])
+    {
+        $result = $this->find($id, $columns);
+
+        $id = $id instanceof ArrayableInterface ? $id->toArray() : $id;
+
+        if (is_array($id)) {
+            if (count($result) === count(array_unique($id))) {
+                return $result;
+            }
+        } elseif (! is_null($result)) {
+            return $result;
+        }
+
+        throw (new ModelNotFoundException)->setModel(get_class($this->related), $id);
+    }
+
+    /**
+     * Find a related model by its primary key or call a callback.
+     *
+     * @template TValue
+     *
+     * @param  mixed  $id
+     * @param  (\Closure(): TValue)|list<string>|string  $columns
+     * @param  (\Closure(): TValue)|null  $callback
+     * @return (
+     *     $id is (\NinjaTables\Framework\Support\ArrayableInterface<array-key, mixed>|array<mixed>)
+     *     ? \NinjaTables\Framework\Database\Eloquent\Collection<int, TRelatedModel>|TValue
+     *     : TRelatedModel|TValue
+     * )
+     */
+    public function findOr($id, $columns = ['*'], Closure $callback = null)
+    {
+        if ($columns instanceof Closure) {
+            $callback = $columns;
+
+            $columns = ['*'];
+        }
+
+        $result = $this->find($id, $columns);
+
+        $id = $id instanceof ArrayableInterface ? $id->toArray() : $id;
+
+        if (is_array($id)) {
+            if (count($result) === count(array_unique($id))) {
+                return $result;
+            }
+        } elseif (! is_null($result)) {
+            return $result;
+        }
+
+        return $callback();
+    }
+
+    /**
+     * Add a basic where clause to the query, and return the first result.
+     *
+     * @param  \Closure|string|array  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @return TRelatedModel|null
+     */
+    public function firstWhere($column, $operator = null, $value = null, $boolean = 'and')
+    {
+        return $this->where($column, $operator, $value, $boolean)->first();
+    }
+
+    /**
      * Execute the query and get the first result.
      *
-     * @param  array   $columns
-     * @return mixed
+     * @param  array  $columns
+     * @return TRelatedModel|null
      */
     public function first($columns = ['*'])
     {
@@ -189,9 +810,9 @@ class BelongsToMany extends Relation
      * Execute the query and get the first result or throw an exception.
      *
      * @param  array  $columns
-     * @return \NinjaTables\Framework\Database\Orm\Model|static
+     * @return TRelatedModel
      *
-     * @throws \NinjaTables\Framework\Database\Orm\ModelNotFoundException
+     * @throws \NinjaTables\Framework\Database\Eloquent\ModelNotFoundException<TRelatedModel>
      */
     public function firstOrFail($columns = ['*'])
     {
@@ -199,27 +820,54 @@ class BelongsToMany extends Relation
             return $model;
         }
 
-        throw (new ModelNotFoundException)->setModel(get_class($this->parent));
+        throw (new ModelNotFoundException)->setModel(get_class($this->related));
     }
 
     /**
-     * Execute the query as a "select" statement.
+     * Execute the query and get the first result or call a callback.
      *
-     * @param  array  $columns
-     * @return \NinjaTables\Framework\Database\Orm\Collection
+     * @template TValue
+     *
+     * @param  (\Closure(): TValue)|list<string>  $columns
+     * @param  (\Closure(): TValue)|null  $callback
+     * @return TRelatedModel|TValue
      */
+    public function firstOr($columns = ['*'], Closure $callback = null)
+    {
+        if ($columns instanceof Closure) {
+            $callback = $columns;
+
+            $columns = ['*'];
+        }
+
+        if (! is_null($model = $this->first($columns))) {
+            return $model;
+        }
+
+        return $callback();
+    }
+
+    /** @inheritDoc */
+    public function getResults()
+    {
+        return ! is_null($this->parent->{$this->parentKey})
+                ? $this->get()
+                : $this->related->newCollection();
+    }
+
+    /** @inheritDoc */
     public function get($columns = ['*'])
     {
         // First we'll add the proper select columns onto the query so it is run with
-        // the proper columns. Then, we will get the results and hydrate out pivot
+        // the proper columns. Then, we will get the results and hydrate our pivot
         // models with the result of those columns as a separate model relation.
-        $columns = $this->query->getQuery()->columns ? [] : $columns;
-
-        $select = $this->getSelectColumns($columns);
-
         $builder = $this->query->applyScopes();
 
-        $models = $builder->addSelect($select)->getModels();
+        $columns = $builder->getQuery()->columns ? [] : $columns;
+
+        $models = $builder->addSelect(
+            $this->shouldSelect($columns)
+        )->getModels();
 
         $this->hydratePivotRelation($models);
 
@@ -230,46 +878,94 @@ class BelongsToMany extends Relation
             $models = $builder->eagerLoadRelations($models);
         }
 
-        return $this->related->newCollection($models);
+        return $this->query->applyAfterQueryCallbacks(
+            $this->related->newCollection($models)
+        );
+    }
+
+    /**
+     * Get the select columns for the relation query.
+     *
+     * @param  array  $columns
+     * @return array
+     */
+    protected function shouldSelect(array $columns = ['*'])
+    {
+        if ($columns == ['*']) {
+            $columns = [$this->related->getTable().'.*'];
+        }
+
+        return array_merge($columns, $this->aliasedPivotColumns());
+    }
+
+    /**
+     * Get the pivot columns for the relation.
+     *
+     * "pivot_" is prefixed at each column for easy removal later.
+     *
+     * @return array
+     */
+    protected function aliasedPivotColumns()
+    {
+        $defaults = [$this->foreignPivotKey, $this->relatedPivotKey];
+
+        return Helper::collect(array_merge($defaults, $this->pivotColumns))->map(function ($column) {
+            return $this->qualifyPivotColumn($column).' as pivot_'.$column;
+        })->unique()->all();
     }
 
     /**
      * Get a paginator for the "select" statement.
      *
-     * @param  int  $perPage
+     * @param  int|null  $perPage
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \NinjaTables\Framework\Contracts\Pagination\LengthAwarePaginator
+     * @return \NinjaTables\Framework\Pagination\LengthAwarePaginator
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        $this->query->addSelect($this->getSelectColumns($columns));
+        $this->query->addSelect($this->shouldSelect($columns));
 
-        $paginator = $this->query->paginate($perPage, $columns, $pageName, $page);
-
-        $this->hydratePivotRelation($paginator->items());
-
-        return $paginator;
+        return Helper::tap($this->query->paginate($perPage, $columns, $pageName, $page), function ($paginator) {
+            $this->hydratePivotRelation($paginator->items());
+        });
     }
 
     /**
      * Paginate the given query into a simple paginator.
      *
-     * @param  int  $perPage
+     * @param  int|null  $perPage
      * @param  array  $columns
      * @param  string  $pageName
-     * @return \NinjaTables\Framework\Contracts\Pagination\Paginator
+     * @param  int|null  $page
+     * @return \NinjaTables\Framework\Pagination\Paginator
      */
-    public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page')
+    public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        $this->query->addSelect($this->getSelectColumns($columns));
+        $this->query->addSelect($this->shouldSelect($columns));
 
-        $paginator = $this->query->simplePaginate($perPage, $columns, $pageName);
+        return Helper::tap($this->query->simplePaginate($perPage, $columns, $pageName, $page), function ($paginator) {
+            $this->hydratePivotRelation($paginator->items());
+        });
+    }
 
-        $this->hydratePivotRelation($paginator->items());
+    /**
+     * Paginate the given query into a cursor paginator.
+     *
+     * @param  int|null  $perPage
+     * @param  array  $columns
+     * @param  string  $cursorName
+     * @param  string|null  $cursor
+     * @return \NinjaTables\Framework\Pagination\CursorPaginator
+     */
+    public function cursorPaginate($perPage = null, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
+    {
+        $this->query->addSelect($this->shouldSelect($columns));
 
-        return $paginator;
+        return Helper::tap($this->query->cursorPaginate($perPage, $columns, $cursorName, $cursor), function ($paginator) {
+            $this->hydratePivotRelation($paginator->items());
+        });
     }
 
     /**
@@ -281,40 +977,214 @@ class BelongsToMany extends Relation
      */
     public function chunk($count, callable $callback)
     {
-        $this->query->addSelect($this->getSelectColumns());
-
-        return $this->query->chunk($count, function ($results) use ($callback) {
+        return $this->prepareQueryBuilder()->chunk($count, function ($results, $page) use ($callback) {
             $this->hydratePivotRelation($results->all());
 
-            return $callback($results);
+            return $callback($results, $page);
         });
+    }
+
+    /**
+     * Chunk the results of a query by comparing numeric IDs.
+     *
+     * @param  int  $count
+     * @param  callable  $callback
+     * @param  string|null  $column
+     * @param  string|null  $alias
+     * @return bool
+     */
+    public function chunkById($count, callable $callback, $column = null, $alias = null)
+    {
+        return $this->orderedChunkById($count, $callback, $column, $alias);
+    }
+
+    /**
+     * Chunk the results of a query by comparing IDs in descending order.
+     *
+     * @param  int  $count
+     * @param  callable  $callback
+     * @param  string|null  $column
+     * @param  string|null  $alias
+     * @return bool
+     */
+    public function chunkByIdDesc($count, callable $callback, $column = null, $alias = null)
+    {
+        return $this->orderedChunkById($count, $callback, $column, $alias, true);
+    }
+
+    /**
+     * Execute a callback over each item while chunking by ID.
+     *
+     * @param  callable  $callback
+     * @param  int  $count
+     * @param  string|null  $column
+     * @param  string|null  $alias
+     * @return bool
+     */
+    public function eachById(callable $callback, $count = 1000, $column = null, $alias = null)
+    {
+        return $this->chunkById($count, function ($results, $page) use ($callback, $count) {
+            foreach ($results as $key => $value) {
+                if ($callback($value, (($page - 1) * $count) + $key) === false) {
+                    return false;
+                }
+            }
+        }, $column, $alias);
+    }
+
+    /**
+     * Chunk the results of a query by comparing IDs in a given order.
+     *
+     * @param  int  $count
+     * @param  callable  $callback
+     * @param  string|null  $column
+     * @param  string|null  $alias
+     * @param  bool  $descending
+     * @return bool
+     */
+    public function orderedChunkById($count, callable $callback, $column = null, $alias = null, $descending = false)
+    {
+        $column ??= $this->getRelated()->qualifyColumn(
+            $this->getRelatedKeyName()
+        );
+
+        $alias ??= $this->getRelatedKeyName();
+
+        return $this->prepareQueryBuilder()->orderedChunkById($count, function ($results, $page) use ($callback) {
+            $this->hydratePivotRelation($results->all());
+
+            return $callback($results, $page);
+        }, $column, $alias, $descending);
+    }
+
+    /**
+     * Execute a callback over each item while chunking.
+     *
+     * @param  callable  $callback
+     * @param  int  $count
+     * @return bool
+     */
+    public function each(callable $callback, $count = 1000)
+    {
+        return $this->chunk($count, function ($results) use ($callback) {
+            foreach ($results as $key => $value) {
+                if ($callback($value, $key) === false) {
+                    return false;
+                }
+            }
+        });
+    }
+
+    /**
+     * Query lazily, by chunks of the given size.
+     *
+     * @param  int  $chunkSize
+     * @return \NinjaTables\Framework\Support\LazyCollection<int, TRelatedModel>
+     */
+    public function lazy($chunkSize = 1000)
+    {
+        return $this->prepareQueryBuilder()->lazy($chunkSize)->map(function ($model) {
+            $this->hydratePivotRelation([$model]);
+
+            return $model;
+        });
+    }
+
+    /**
+     * Query lazily, by chunking the results of a query by comparing IDs.
+     *
+     * @param  int  $chunkSize
+     * @param  string|null  $column
+     * @param  string|null  $alias
+     * @return \NinjaTables\Framework\Support\LazyCollection<int, TRelatedModel>
+     */
+    public function lazyById($chunkSize = 1000, $column = null, $alias = null)
+    {
+        $column ??= $this->getRelated()->qualifyColumn(
+            $this->getRelatedKeyName()
+        );
+
+        $alias ??= $this->getRelatedKeyName();
+
+        return $this->prepareQueryBuilder()->lazyById($chunkSize, $column, $alias)->map(function ($model) {
+            $this->hydratePivotRelation([$model]);
+
+            return $model;
+        });
+    }
+
+    /**
+     * Query lazily, by chunking the results of a query by comparing IDs in descending order.
+     *
+     * @param  int  $chunkSize
+     * @param  string|null  $column
+     * @param  string|null  $alias
+     * @return \NinjaTables\Framework\Support\LazyCollection<int, TRelatedModel>
+     */
+    public function lazyByIdDesc($chunkSize = 1000, $column = null, $alias = null)
+    {
+        $column ??= $this->getRelated()->qualifyColumn(
+            $this->getRelatedKeyName()
+        );
+
+        $alias ??= $this->getRelatedKeyName();
+
+        return $this->prepareQueryBuilder()->lazyByIdDesc($chunkSize, $column, $alias)->map(function ($model) {
+            $this->hydratePivotRelation([$model]);
+
+            return $model;
+        });
+    }
+
+    /**
+     * Get a lazy collection for the given query.
+     *
+     * @return \NinjaTables\Framework\Support\LazyCollection<int, TRelatedModel>
+     */
+    public function cursor()
+    {
+        return $this->prepareQueryBuilder()->cursor()->map(function ($model) {
+            $this->hydratePivotRelation([$model]);
+
+            return $model;
+        });
+    }
+
+    /**
+     * Prepare the query builder for query execution.
+     *
+     * @return \NinjaTables\Framework\Database\Eloquent\Builder<TRelatedModel>
+     */
+    protected function prepareQueryBuilder()
+    {
+        return $this->query->addSelect($this->shouldSelect());
     }
 
     /**
      * Hydrate the pivot table relationship on the models.
      *
-     * @param  array  $models
+     * @param  array<int, TRelatedModel>  $models
      * @return void
      */
     protected function hydratePivotRelation(array $models)
     {
         // To hydrate the pivot relationship, we will just gather the pivot attributes
         // and create a new Pivot model, which is basically a dynamic model that we
-        // will set the attributes, table, and connections on so it they be used.
+        // will set the attributes, table, and connections on it so it will work.
         foreach ($models as $model) {
-            $pivot = $this->newExistingPivot($this->cleanPivotAttributes($model));
-
-            $model->setRelation('pivot', $pivot);
+            $model->setRelation($this->accessor, $this->newExistingPivot(
+                $this->migratePivotAttributes($model)
+            ));
         }
     }
 
     /**
      * Get the pivot attributes from a model.
      *
-     * @param  \NinjaTables\Framework\Database\Orm\Model  $model
+     * @param  TRelatedModel  $model
      * @return array
      */
-    protected function cleanPivotAttributes(Model $model)
+    protected function migratePivotAttributes(Model $model)
     {
         $values = [];
 
@@ -322,7 +1192,7 @@ class BelongsToMany extends Relation
             // To get the pivots attributes we will just take any of the attributes which
             // begin with "pivot_" and add those to this arrays, as well as unsetting
             // them from the parent's models since they exist in a different table.
-            if (strpos($key, 'pivot_') === 0) {
+            if (str_starts_with($key, 'pivot_')) {
                 $values[substr($key, 6)] = $value;
 
                 unset($model->$key);
@@ -330,786 +1200,6 @@ class BelongsToMany extends Relation
         }
 
         return $values;
-    }
-
-    /**
-     * Set the base constraints on the relation query.
-     *
-     * @return void
-     */
-    public function addConstraints()
-    {
-        $this->setJoin();
-
-        if (static::$constraints) {
-            $this->setWhere();
-        }
-    }
-
-    /**
-     * Add the constraints for a relationship query.
-     *
-     * @param  \NinjaTables\Framework\Database\Orm\Builder  $query
-     * @param  \NinjaTables\Framework\Database\Orm\Builder  $parent
-     * @param  array|mixed  $columns
-     * @return \NinjaTables\Framework\Database\Orm\Builder
-     */
-    public function getRelationQuery(Builder $query, Builder $parent, $columns = ['*'])
-    {
-        if ($parent->getQuery()->from == $query->getQuery()->from) {
-            return $this->getRelationQueryForSelfJoin($query, $parent, $columns);
-        }
-
-        $this->setJoin($query);
-
-        return parent::getRelationQuery($query, $parent, $columns);
-    }
-
-    /**
-     * Add the constraints for a relationship query on the same table.
-     *
-     * @param  \NinjaTables\Framework\Database\Orm\Builder  $query
-     * @param  \NinjaTables\Framework\Database\Orm\Builder  $parent
-     * @param  array|mixed  $columns
-     * @return \NinjaTables\Framework\Database\Orm\Builder
-     */
-    public function getRelationQueryForSelfJoin(Builder $query, Builder $parent, $columns = ['*'])
-    {
-        $query->select($columns);
-
-        $query->from($this->related->getTable().' as '.$hash = $this->getRelationCountHash());
-
-        $this->related->setTable($hash);
-
-        $this->setJoin($query);
-
-        return parent::getRelationQuery($query, $parent, $columns);
-    }
-
-    /**
-     * Get a relationship join table hash.
-     *
-     * @return string
-     */
-    public function getRelationCountHash()
-    {
-        return 'laravel_reserved_'.static::$selfJoinCount++;
-    }
-
-    /**
-     * Set the select clause for the relation query.
-     *
-     * @param  array  $columns
-     * @return \NinjaTables\Framework\Database\Orm\Relations\BelongsToMany
-     */
-    protected function getSelectColumns(array $columns = ['*'])
-    {
-        if ($columns == ['*']) {
-            $columns = [$this->related->getTable().'.*'];
-        }
-
-        return array_merge($columns, $this->getAliasedPivotColumns());
-    }
-
-    /**
-     * Get the pivot columns for the relation.
-     *
-     * @return array
-     */
-    protected function getAliasedPivotColumns()
-    {
-        $defaults = [$this->foreignKey, $this->otherKey];
-
-        // We need to alias all of the pivot columns with the "pivot_" prefix so we
-        // can easily extract them out of the models and put them into the pivot
-        // relationships when they are retrieved and hydrated into the models.
-        $columns = [];
-
-        foreach (array_merge($defaults, $this->pivotColumns) as $column) {
-            $columns[] = $this->table.'.'.$column.' as pivot_'.$column;
-        }
-
-        return array_unique($columns);
-    }
-
-    /**
-     * Determine whether the given column is defined as a pivot column.
-     *
-     * @param  string  $column
-     * @return bool
-     */
-    protected function hasPivotColumn($column)
-    {
-        return in_array($column, $this->pivotColumns);
-    }
-
-    /**
-     * Set the join clause for the relation query.
-     *
-     * @param  \NinjaTables\Framework\Database\Orm\Builder|null  $query
-     * @return $this
-     */
-    protected function setJoin($query = null)
-    {
-        $query = $query ?: $this->query;
-
-        // We need to join to the intermediate table on the related model's primary
-        // key column with the intermediate table's foreign key for the related
-        // model instance. Then we can set the "where" for the parent models.
-        $baseTable = $this->related->getTable();
-
-        $key = $baseTable.'.'.$this->related->getKeyName();
-
-        $query->join($this->table, $key, '=', $this->getOtherKey());
-
-        return $this;
-    }
-
-    /**
-     * Set the where clause for the relation query.
-     *
-     * @return $this
-     */
-    protected function setWhere()
-    {
-        $foreign = $this->getForeignKey();
-
-        $this->query->where($foreign, '=', $this->parent->getKey());
-
-        return $this;
-    }
-
-    /**
-     * Set the constraints for an eager load of the relation.
-     *
-     * @param  array  $models
-     * @return void
-     */
-    public function addEagerConstraints(array $models)
-    {
-        $this->query->whereIn($this->getForeignKey(), $this->getKeys($models));
-    }
-
-    /**
-     * Initialize the relation on a set of models.
-     *
-     * @param  array   $models
-     * @param  string  $relation
-     * @return array
-     */
-    public function initRelation(array $models, $relation)
-    {
-        foreach ($models as $model) {
-            $model->setRelation($relation, $this->related->newCollection());
-        }
-
-        return $models;
-    }
-
-    /**
-     * Match the eagerly loaded results to their parents.
-     *
-     * @param  array   $models
-     * @param  \NinjaTables\Framework\Database\Orm\Collection  $results
-     * @param  string  $relation
-     * @return array
-     */
-    public function match(array $models, Collection $results, $relation)
-    {
-        $dictionary = $this->buildDictionary($results);
-
-        // Once we have an array dictionary of child objects we can easily match the
-        // children back to their parent using the dictionary and the keys on the
-        // the parent models. Then we will return the hydrated models back out.
-        foreach ($models as $model) {
-            if (isset($dictionary[$key = $model->getKey()])) {
-                $collection = $this->related->newCollection($dictionary[$key]);
-
-                $model->setRelation($relation, $collection);
-            }
-        }
-
-        return $models;
-    }
-
-    /**
-     * Build model dictionary keyed by the relation's foreign key.
-     *
-     * @param  \NinjaTables\Framework\Database\Orm\Collection  $results
-     * @return array
-     */
-    protected function buildDictionary(Collection $results)
-    {
-        $foreign = $this->foreignKey;
-
-        // First we will build a dictionary of child models keyed by the foreign key
-        // of the relation so that we will easily and quickly match them to their
-        // parents without having a possibly slow inner loops for every models.
-        $dictionary = [];
-
-        foreach ($results as $result) {
-            $dictionary[$result->pivot->$foreign][] = $result;
-        }
-
-        return $dictionary;
-    }
-
-    /**
-     * Touch all of the related models for the relationship.
-     *
-     * E.g.: Touch all roles associated with this user.
-     *
-     * @return void
-     */
-    public function touch()
-    {
-        $key = $this->getRelated()->getKeyName();
-
-        $columns = $this->getRelatedFreshUpdate();
-
-        // If we actually have IDs for the relation, we will run the query to update all
-        // the related model's timestamps, to make sure these all reflect the changes
-        // to the parent models. This will help us keep any caching synced up here.
-        $ids = $this->getRelatedIds();
-
-        if (count($ids) > 0) {
-            $this->getRelated()->newQuery()->whereIn($key, $ids)->update($columns);
-        }
-    }
-
-    /**
-     * Get all of the IDs for the related models.
-     *
-     * @return \NinjaTables\Framework\Support\Collection
-     */
-    public function getRelatedIds()
-    {
-        $related = $this->getRelated();
-
-        $fullKey = $related->getQualifiedKeyName();
-
-        return $this->getQuery()->select($fullKey)->pluck($related->getKeyName());
-    }
-
-    /**
-     * Save a new model and attach it to the parent model.
-     *
-     * @param  \NinjaTables\Framework\Database\Orm\Model  $model
-     * @param  array  $joining
-     * @param  bool   $touch
-     * @return \NinjaTables\Framework\Database\Orm\Model
-     */
-    public function save(Model $model, array $joining = [], $touch = true)
-    {
-        $model->save(['touch' => false]);
-
-        $this->attach($model->getKey(), $joining, $touch);
-
-        return $model;
-    }
-
-    /**
-     * Save an array of new models and attach them to the parent model.
-     *
-     * @param  \NinjaTables\Framework\Support\Collection|array  $models
-     * @param  array  $joinings
-     * @return array
-     */
-    public function saveMany($models, array $joinings = [])
-    {
-        foreach ($models as $key => $model) {
-            $this->save($model, (array) Arr::get($joinings, $key), false);
-        }
-
-        $this->touchIfTouching();
-
-        return $models;
-    }
-
-    /**
-     * Find a related model by its primary key.
-     *
-     * @param  mixed  $id
-     * @param  array  $columns
-     * @return \NinjaTables\Framework\Database\Orm\Model|\NinjaTables\Framework\Database\Orm\Collection|null
-     */
-    public function find($id, $columns = ['*'])
-    {
-        if (is_array($id)) {
-            return $this->findMany($id, $columns);
-        }
-
-        $this->where($this->getRelated()->getQualifiedKeyName(), '=', $id);
-
-        return $this->first($columns);
-    }
-
-    /**
-     * Find multiple related models by their primary keys.
-     *
-     * @param  mixed  $ids
-     * @param  array  $columns
-     * @return \NinjaTables\Framework\Database\Orm\Collection
-     */
-    public function findMany($ids, $columns = ['*'])
-    {
-        if (empty($ids)) {
-            return $this->getRelated()->newCollection();
-        }
-
-        $this->whereIn($this->getRelated()->getQualifiedKeyName(), $ids);
-
-        return $this->get($columns);
-    }
-
-    /**
-     * Find a related model by its primary key or throw an exception.
-     *
-     * @param  mixed  $id
-     * @param  array  $columns
-     * @return \NinjaTables\Framework\Database\Orm\Model|\NinjaTables\Framework\Database\Orm\Collection
-     *
-     * @throws \NinjaTables\Framework\Database\Orm\ModelNotFoundException
-     */
-    public function findOrFail($id, $columns = ['*'])
-    {
-        $result = $this->find($id, $columns);
-
-        if (is_array($id)) {
-            if (count($result) == count(array_unique($id))) {
-                return $result;
-            }
-        } elseif (! is_null($result)) {
-            return $result;
-        }
-
-        throw (new ModelNotFoundException)->setModel(get_class($this->parent));
-    }
-
-    /**
-     * Find a related model by its primary key or return new instance of the related model.
-     *
-     * @param  mixed  $id
-     * @param  array  $columns
-     * @return \NinjaTables\Framework\Support\Collection|\NinjaTables\Framework\Database\Orm\Model
-     */
-    public function findOrNew($id, $columns = ['*'])
-    {
-        if (is_null($instance = $this->find($id, $columns))) {
-            $instance = $this->getRelated()->newInstance();
-        }
-
-        return $instance;
-    }
-
-    /**
-     * Get the first related model record matching the attributes or instantiate it.
-     *
-     * @param  array  $attributes
-     * @return \NinjaTables\Framework\Database\Orm\Model
-     */
-    public function firstOrNew(array $attributes)
-    {
-        if (is_null($instance = $this->where($attributes)->first())) {
-            $instance = $this->related->newInstance($attributes);
-        }
-
-        return $instance;
-    }
-
-    /**
-     * Get the first related record matching the attributes or create it.
-     *
-     * @param  array  $attributes
-     * @param  array  $joining
-     * @param  bool   $touch
-     * @return \NinjaTables\Framework\Database\Orm\Model
-     */
-    public function firstOrCreate(array $attributes, array $joining = [], $touch = true)
-    {
-        if (is_null($instance = $this->where($attributes)->first())) {
-            $instance = $this->create($attributes, $joining, $touch);
-        }
-
-        return $instance;
-    }
-
-    /**
-     * Create or update a related record matching the attributes, and fill it with values.
-     *
-     * @param  array  $attributes
-     * @param  array  $values
-     * @param  array  $joining
-     * @param  bool   $touch
-     * @return \NinjaTables\Framework\Database\Orm\Model
-     */
-    public function updateOrCreate(array $attributes, array $values = [], array $joining = [], $touch = true)
-    {
-        if (is_null($instance = $this->where($attributes)->first())) {
-            return $this->create($values, $joining, $touch);
-        }
-
-        $instance->fill($values);
-
-        $instance->save(['touch' => false]);
-
-        return $instance;
-    }
-
-    /**
-     * Create a new instance of the related model.
-     *
-     * @param  array  $attributes
-     * @param  array  $joining
-     * @param  bool   $touch
-     * @return \NinjaTables\Framework\Database\Orm\Model
-     */
-    public function create(array $attributes, array $joining = [], $touch = true)
-    {
-        $instance = $this->related->newInstance($attributes);
-
-        // Once we save the related model, we need to attach it to the base model via
-        // through intermediate table so we'll use the existing "attach" method to
-        // accomplish this which will insert the record and any more attributes.
-        $instance->save(['touch' => false]);
-
-        $this->attach($instance->getKey(), $joining, $touch);
-
-        return $instance;
-    }
-
-    /**
-     * Create an array of new instances of the related models.
-     *
-     * @param  array  $records
-     * @param  array  $joinings
-     * @return array
-     */
-    public function createMany(array $records, array $joinings = [])
-    {
-        $instances = [];
-
-        foreach ($records as $key => $record) {
-            $instances[] = $this->create($record, (array) Arr::get($joinings, $key), false);
-        }
-
-        $this->touchIfTouching();
-
-        return $instances;
-    }
-
-    /**
-     * Sync the intermediate tables with a list of IDs without detaching.
-     *
-     * @param  \NinjaTables\Framework\Database\Orm\Collection|array  $ids
-     * @return array
-     */
-    public function syncWithoutDetaching($ids)
-    {
-        return $this->sync($ids, false);
-    }
-
-    /**
-     * Sync the intermediate tables with a list of IDs or collection of models.
-     *
-     * @param  \NinjaTables\Framework\Database\Orm\Collection|array  $ids
-     * @param  bool   $detaching
-     * @return array
-     */
-    public function sync($ids, $detaching = true)
-    {
-        $changes = [
-            'attached' => [], 'detached' => [], 'updated' => [],
-        ];
-
-        if ($ids instanceof Collection) {
-            $ids = $ids->modelKeys();
-        }
-
-        // First we need to attach any of the associated models that are not currently
-        // in this joining table. We'll spin through the given IDs, checking to see
-        // if they exist in the array of current ones, and if not we will insert.
-        $current = $this->newPivotQuery()->pluck($this->otherKey);
-
-        $records = $this->formatSyncList($ids);
-
-        $detach = array_diff($current, array_keys($records));
-
-        // Next, we will take the differences of the currents and given IDs and detach
-        // all of the entities that exist in the "current" array but are not in the
-        // array of the new IDs given to the method which will complete the sync.
-        if ($detaching && count($detach) > 0) {
-            $this->detach($detach);
-
-            $changes['detached'] = (array) array_map(function ($v) {
-                return is_numeric($v) ? (int) $v : (string) $v;
-            }, $detach);
-        }
-
-        // Now we are finally ready to attach the new records. Note that we'll disable
-        // touching until after the entire operation is complete so we don't fire a
-        // ton of touch operations until we are totally done syncing the records.
-        $changes = array_merge(
-            $changes, $this->attachNew($records, $current, false)
-        );
-
-        if (count($changes['attached']) || count($changes['updated'])) {
-            $this->touchIfTouching();
-        }
-
-        return $changes;
-    }
-
-    /**
-     * Format the sync list so that it is keyed by ID.
-     *
-     * @param  array  $records
-     * @return array
-     */
-    protected function formatSyncList(array $records)
-    {
-        $results = [];
-
-        foreach ($records as $id => $attributes) {
-            if (! is_array($attributes)) {
-                list($id, $attributes) = [$attributes, []];
-            }
-
-            $results[$id] = $attributes;
-        }
-
-        return $results;
-    }
-
-    /**
-     * Attach all of the IDs that aren't in the current array.
-     *
-     * @param  array  $records
-     * @param  array  $current
-     * @param  bool   $touch
-     * @return array
-     */
-    protected function attachNew(array $records, array $current, $touch = true)
-    {
-        $changes = ['attached' => [], 'updated' => []];
-
-        foreach ($records as $id => $attributes) {
-            // If the ID is not in the list of existing pivot IDs, we will insert a new pivot
-            // record, otherwise, we will just update this existing record on this joining
-            // table, so that the developers will easily update these records pain free.
-            if (! in_array($id, $current)) {
-                $this->attach($id, $attributes, $touch);
-
-                $changes['attached'][] = is_numeric($id) ? (int) $id : (string) $id;
-            }
-
-            // Now we'll try to update an existing pivot record with the attributes that were
-            // given to the method. If the model is actually updated we will add it to the
-            // list of updated pivot records so we return them back out to the consumer.
-            elseif (count($attributes) > 0 &&
-                $this->updateExistingPivot($id, $attributes, $touch)) {
-                $changes['updated'][] = is_numeric($id) ? (int) $id : (string) $id;
-            }
-        }
-
-        return $changes;
-    }
-
-    /**
-     * Update an existing pivot record on the table.
-     *
-     * @param  mixed  $id
-     * @param  array  $attributes
-     * @param  bool   $touch
-     * @return int
-     */
-    public function updateExistingPivot($id, array $attributes, $touch = true)
-    {
-        if (in_array($this->updatedAt(), $this->pivotColumns)) {
-            $attributes = $this->setTimestampsOnAttach($attributes, true);
-        }
-
-        $updated = $this->newPivotStatementForId($id)->update($attributes);
-
-        if ($touch) {
-            $this->touchIfTouching();
-        }
-
-        return $updated;
-    }
-
-    /**
-     * Attach a model to the parent.
-     *
-     * @param  mixed  $id
-     * @param  array  $attributes
-     * @param  bool   $touch
-     * @return void
-     */
-    public function attach($id, array $attributes = [], $touch = true)
-    {
-        if ($id instanceof Model) {
-            $id = $id->getKey();
-        }
-
-        if ($id instanceof Collection) {
-            $id = $id->modelKeys();
-        }
-
-        $query = $this->newPivotStatement();
-
-        $query->insert($this->createAttachRecords((array) $id, $attributes));
-
-        if ($touch) {
-            $this->touchIfTouching();
-        }
-    }
-
-    /**
-     * Create an array of records to insert into the pivot table.
-     *
-     * @param  array  $ids
-     * @param  array  $attributes
-     * @return array
-     */
-    protected function createAttachRecords($ids, array $attributes)
-    {
-        $records = [];
-
-        $timed = ($this->hasPivotColumn($this->createdAt()) ||
-                  $this->hasPivotColumn($this->updatedAt()));
-
-        // To create the attachment records, we will simply spin through the IDs given
-        // and create a new record to insert for each ID. Each ID may actually be a
-        // key in the array, with extra attributes to be placed in other columns.
-        foreach ($ids as $key => $value) {
-            $records[] = $this->attacher($key, $value, $attributes, $timed);
-        }
-
-        return $records;
-    }
-
-    /**
-     * Create a full attachment record payload.
-     *
-     * @param  int    $key
-     * @param  mixed  $value
-     * @param  array  $attributes
-     * @param  bool   $timed
-     * @return array
-     */
-    protected function attacher($key, $value, $attributes, $timed)
-    {
-        list($id, $extra) = $this->getAttachId($key, $value, $attributes);
-
-        // To create the attachment records, we will simply spin through the IDs given
-        // and create a new record to insert for each ID. Each ID may actually be a
-        // key in the array, with extra attributes to be placed in other columns.
-        $record = $this->createAttachRecord($id, $timed);
-
-        return array_merge($record, $extra);
-    }
-
-    /**
-     * Get the attach record ID and extra attributes.
-     *
-     * @param  mixed  $key
-     * @param  mixed  $value
-     * @param  array  $attributes
-     * @return array
-     */
-    protected function getAttachId($key, $value, array $attributes)
-    {
-        if (is_array($value)) {
-            return [$key, array_merge($value, $attributes)];
-        }
-
-        return [$value, $attributes];
-    }
-
-    /**
-     * Create a new pivot attachment record.
-     *
-     * @param  int   $id
-     * @param  bool  $timed
-     * @return array
-     */
-    protected function createAttachRecord($id, $timed)
-    {
-        $record[$this->foreignKey] = $this->parent->getKey();
-
-        $record[$this->otherKey] = $id;
-
-        // If the record needs to have creation and update timestamps, we will make
-        // them by calling the parent model's "freshTimestamp" method which will
-        // provide us with a fresh timestamp in this model's preferred format.
-        if ($timed) {
-            $record = $this->setTimestampsOnAttach($record);
-        }
-
-        return $record;
-    }
-
-    /**
-     * Set the creation and update timestamps on an attach record.
-     *
-     * @param  array  $record
-     * @param  bool   $exists
-     * @return array
-     */
-    protected function setTimestampsOnAttach(array $record, $exists = false)
-    {
-        $fresh = $this->parent->freshTimestamp();
-
-        if (! $exists && $this->hasPivotColumn($this->createdAt())) {
-            $record[$this->createdAt()] = $fresh;
-        }
-
-        if ($this->hasPivotColumn($this->updatedAt())) {
-            $record[$this->updatedAt()] = $fresh;
-        }
-
-        return $record;
-    }
-
-    /**
-     * Detach models from the relationship.
-     *
-     * @param  mixed  $ids
-     * @param  bool  $touch
-     * @return int
-     */
-    public function detach($ids = [], $touch = true)
-    {
-        if ($ids instanceof Model) {
-            $ids = $ids->getKey();
-        }
-
-        if ($ids instanceof Collection) {
-            $ids = $ids->modelKeys();
-        }
-
-        $query = $this->newPivotQuery();
-
-        // If associated IDs were passed to the method we will only delete those
-        // associations, otherwise all of the association ties will be broken.
-        // We'll return the numbers of affected rows when we do the deletes.
-        $ids = (array) $ids;
-
-        if (count($ids) > 0) {
-            $query->whereIn($this->otherKey, $ids);
-        }
-
-        // Once we have all of the conditions set on the statement, we are ready
-        // to run the delete on the pivot table. Then, if the touch parameter
-        // is true, we will go ahead and touch all related models to sync.
-        $results = $query->delete();
-
-        if ($touch) {
-            $this->touchIfTouching();
-        }
-
-        return $results;
     }
 
     /**
@@ -1145,92 +1235,231 @@ class BelongsToMany extends Relation
      */
     protected function guessInverseRelation()
     {
-        return Str::camel(
-            Str::plural(
-                static::classBasename($this->getParent())
-            )
-        );
+        return Str::camel(Str::pluralStudly(static::classBasename($this->getParent())));
     }
 
     /**
-     * Create a new query builder for the pivot table.
+     * Touch all of the related models for the relationship.
      *
-     * @return \NinjaTables\Framework\Database\Query\Builder
+     * E.g.: Touch all roles associated with this user.
+     *
+     * @return void
      */
-    protected function newPivotQuery()
+    public function touch()
     {
-        $query = $this->newPivotStatement();
-
-        foreach ($this->pivotWheres as $whereArgs) {
-            call_user_func_array([$query, 'where'], $whereArgs);
+        if ($this->related->isIgnoringTouch()) {
+            return;
         }
 
-        foreach ($this->pivotWhereIns as $whereArgs) {
-            call_user_func_array([$query, 'whereIn'], $whereArgs);
+        $columns = [
+            $this->related->getUpdatedAtColumn() => $this->related->freshTimestampString(),
+        ];
+
+        // If we actually have IDs for the relation, we will run the query to update all
+        // the related model's timestamps, to make sure these all reflect the changes
+        // to the parent models. This will help us keep any caching synced up here.
+        if (count($ids = $this->allRelatedIds()) > 0) {
+            $this->getRelated()->newQueryWithoutRelationships()->whereKey($ids)->update($columns);
+        }
+    }
+
+    /**
+     * Get all of the IDs for the related models.
+     *
+     * @return \NinjaTables\Framework\Support\Collection<int, int|string>
+     */
+    public function allRelatedIds()
+    {
+        return $this->newPivotQuery()->pluck($this->relatedPivotKey);
+    }
+
+    /**
+     * Save a new model and attach it to the parent model.
+     *
+     * @param  TRelatedModel  $model
+     * @param  array  $pivotAttributes
+     * @param  bool  $touch
+     * @return TRelatedModel
+     */
+    public function save(Model $model, array $pivotAttributes = [], $touch = true)
+    {
+        $model->save(['touch' => false]);
+
+        $this->attach($model, $pivotAttributes, $touch);
+
+        return $model;
+    }
+
+    /**
+     * Save a new model without raising any events and attach it to the parent model.
+     *
+     * @param  TRelatedModel  $model
+     * @param  array  $pivotAttributes
+     * @param  bool  $touch
+     * @return TRelatedModel
+     */
+    public function saveQuietly(Model $model, array $pivotAttributes = [], $touch = true)
+    {
+        return Model::withoutEvents(function () use ($model, $pivotAttributes, $touch) {
+            return $this->save($model, $pivotAttributes, $touch);
+        });
+    }
+
+    /**
+     * Save an array of new models and attach them to the parent model.
+     *
+     * @template TContainer of \NinjaTables\Framework\Support\Collection<array-key, TRelatedModel>|array<array-key, TRelatedModel>
+     *
+     * @param  TContainer  $models
+     * @param  array  $pivotAttributes
+     * @return TContainer
+     */
+    public function saveMany($models, array $pivotAttributes = [])
+    {
+        foreach ($models as $key => $model) {
+            $this->save($model, (array) ($pivotAttributes[$key] ?? []), false);
         }
 
-        return $query->where($this->foreignKey, $this->parent->getKey());
+        $this->touchIfTouching();
+
+        return $models;
     }
 
     /**
-     * Get a new plain query builder for the pivot table.
+     * Save an array of new models without raising any events and attach them to the parent model.
      *
-     * @return \NinjaTables\Framework\Database\Query\Builder
-     */
-    public function newPivotStatement()
-    {
-        return $this->query->getQuery()->newQuery()->from($this->table);
-    }
-
-    /**
-     * Get a new pivot statement for a given "other" ID.
+     * @template TContainer of \NinjaTables\Framework\Support\Collection<array-key, TRelatedModel>|array<array-key, TRelatedModel>
      *
-     * @param  mixed  $id
-     * @return \NinjaTables\Framework\Database\Query\Builder
+     * @param  TContainer  $models
+     * @param  array  $pivotAttributes
+     * @return TContainer
      */
-    public function newPivotStatementForId($id)
+    public function saveManyQuietly($models, array $pivotAttributes = [])
     {
-        return $this->newPivotQuery()->where($this->otherKey, $id);
+        return Model::withoutEvents(function () use ($models, $pivotAttributes) {
+            return $this->saveMany($models, $pivotAttributes);
+        });
     }
 
     /**
-     * Create a new pivot model instance.
+     * Create a new instance of the related model.
      *
      * @param  array  $attributes
-     * @param  bool   $exists
-     * @return \NinjaTables\Framework\Database\Orm\Relations\Pivot
+     * @param  array  $joining
+     * @param  bool  $touch
+     * @return TRelatedModel
      */
-    public function newPivot(array $attributes = [], $exists = false)
+    public function create(array $attributes = [], array $joining = [], $touch = true)
     {
-        $pivot = $this->related->newPivot($this->parent, $attributes, $this->table, $exists);
+        $instance = $this->related->newInstance($attributes);
 
-        return $pivot->setPivotKeys($this->foreignKey, $this->otherKey);
+        // Once we save the related model, we need to attach it to the base model via
+        // through intermediate table so we'll use the existing "attach" method to
+        // accomplish this which will insert the record and any more attributes.
+        $instance->save(['touch' => false]);
+
+        $this->attach($instance, $joining, $touch);
+
+        return $instance;
     }
 
     /**
-     * Create a new existing pivot model instance.
+     * Create an array of new instances of the related models.
      *
-     * @param  array  $attributes
-     * @return \NinjaTables\Framework\Database\Orm\Relations\Pivot
+     * @param  iterable  $records
+     * @param  array  $joinings
+     * @return array<int, TRelatedModel>
      */
-    public function newExistingPivot(array $attributes = [])
+    public function createMany(iterable $records, array $joinings = [])
     {
-        return $this->newPivot($attributes, true);
+        $instances = [];
+
+        foreach ($records as $key => $record) {
+            $instances[] = $this->create($record, (array) ($joinings[$key] ?? []), false);
+        }
+
+        $this->touchIfTouching();
+
+        return $instances;
+    }
+
+    /** @inheritDoc */
+    public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
+    {
+        if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
+            return $this->getRelationExistenceQueryForSelfJoin($query, $parentQuery, $columns);
+        }
+
+        $this->performJoin($query);
+
+        return parent::getRelationExistenceQuery($query, $parentQuery, $columns);
     }
 
     /**
-     * Set the columns on the pivot table to retrieve.
+     * Add the constraints for a relationship query on the same table.
      *
+     * @param  \NinjaTables\Framework\Database\Eloquent\Builder<TRelatedModel>  $query
+     * @param  \NinjaTables\Framework\Database\Eloquent\Builder<TDeclaringModel>  $parentQuery
      * @param  array|mixed  $columns
+     * @return \NinjaTables\Framework\Database\Eloquent\Builder<TRelatedModel>
+     */
+    public function getRelationExistenceQueryForSelfJoin(Builder $query, Builder $parentQuery, $columns = ['*'])
+    {
+        $query->select($columns);
+
+        $query->from($this->related->getTable().' as '.$hash = $this->getRelationCountHash());
+
+        $this->related->setTable($hash);
+
+        $this->performJoin($query);
+
+        return parent::getRelationExistenceQuery($query, $parentQuery, $columns);
+    }
+
+    /**
+     * Alias to set the "limit" value of the query.
+     *
+     * @param  int  $value
      * @return $this
      */
-    public function withPivot($columns)
+    public function take($value)
     {
-        $columns = is_array($columns) ? $columns : func_get_args();
+        return $this->limit($value);
+    }
 
-        $this->pivotColumns = array_merge($this->pivotColumns, $columns);
+    /**
+     * Set the "limit" value of the query.
+     *
+     * @param  int  $value
+     * @return $this
+     */
+    public function limit($value)
+    {
+        if ($this->parent->exists) {
+            $this->query->limit($value);
+        } else {
+            $column = $this->getExistenceCompareKey();
+
+            $grammar = $this->query->getQuery()->getGrammar();
+
+            if ($grammar instanceof MySqlGrammar && $grammar->useLegacyGroupLimit($this->query->getQuery())) {
+                $column = 'pivot_'.last(explode('.', $column));
+            }
+
+            $this->query->groupLimit($value, $column);
+        }
 
         return $this;
+    }
+
+    /**
+     * Get the key for comparing against the parent key in "has" query.
+     *
+     * @return string
+     */
+    public function getExistenceCompareKey()
+    {
+        return $this->getQualifiedForeignPivotKeyName();
     }
 
     /**
@@ -1238,10 +1467,12 @@ class BelongsToMany extends Relation
      *
      * @param  mixed  $createdAt
      * @param  mixed  $updatedAt
-     * @return \NinjaTables\Framework\Database\Orm\Relations\BelongsToMany
+     * @return $this
      */
     public function withTimestamps($createdAt = null, $updatedAt = null)
     {
+        $this->withTimestamps = true;
+
         $this->pivotCreatedAt = $createdAt;
         $this->pivotUpdatedAt = $updatedAt;
 
@@ -1269,23 +1500,13 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Get the related model's updated at column name.
+     * Get the foreign key for the relation.
      *
      * @return string
      */
-    public function getRelatedFreshUpdate()
+    public function getForeignPivotKeyName()
     {
-        return [$this->related->getUpdatedAtColumn() => $this->related->freshTimestampString()];
-    }
-
-    /**
-     * Get the key for comparing against the parent key in "has" query.
-     *
-     * @return string
-     */
-    public function getHasCompareKey()
-    {
-        return $this->getForeignKey();
+        return $this->foreignPivotKey;
     }
 
     /**
@@ -1293,19 +1514,69 @@ class BelongsToMany extends Relation
      *
      * @return string
      */
-    public function getForeignKey()
+    public function getQualifiedForeignPivotKeyName()
     {
-        return $this->table.'.'.$this->foreignKey;
+        return $this->qualifyPivotColumn($this->foreignPivotKey);
     }
 
     /**
-     * Get the fully qualified "other key" for the relation.
+     * Get the "related key" for the relation.
      *
      * @return string
      */
-    public function getOtherKey()
+    public function getRelatedPivotKeyName()
     {
-        return $this->table.'.'.$this->otherKey;
+        return $this->relatedPivotKey;
+    }
+
+    /**
+     * Get the fully qualified "related key" for the relation.
+     *
+     * @return string
+     */
+    public function getQualifiedRelatedPivotKeyName()
+    {
+        return $this->qualifyPivotColumn($this->relatedPivotKey);
+    }
+
+    /**
+     * Get the parent key for the relationship.
+     *
+     * @return string
+     */
+    public function getParentKeyName()
+    {
+        return $this->parentKey;
+    }
+
+    /**
+     * Get the fully qualified parent key name for the relation.
+     *
+     * @return string
+     */
+    public function getQualifiedParentKeyName()
+    {
+        return $this->parent->qualifyColumn($this->parentKey);
+    }
+
+    /**
+     * Get the related key for the relationship.
+     *
+     * @return string
+     */
+    public function getRelatedKeyName()
+    {
+        return $this->relatedKey;
+    }
+
+    /**
+     * Get the fully qualified related key name for the relation.
+     *
+     * @return string
+     */
+    public function getQualifiedRelatedKeyName()
+    {
+        return $this->related->qualifyColumn($this->relatedKey);
     }
 
     /**
@@ -1326,5 +1597,42 @@ class BelongsToMany extends Relation
     public function getRelationName()
     {
         return $this->relationName;
+    }
+
+    /**
+     * Get the name of the pivot accessor for this relationship.
+     *
+     * @return string
+     */
+    public function getPivotAccessor()
+    {
+        return $this->accessor;
+    }
+
+    /**
+     * Get the pivot columns for this relationship.
+     *
+     * @return array
+     */
+    public function getPivotColumns()
+    {
+        return $this->pivotColumns;
+    }
+
+    /**
+     * Qualify the given column name by the pivot table.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @return string|\NinjaTables\Framework\Database\Query\Expression
+     */
+    public function qualifyPivotColumn($column)
+    {
+        if ($this->query->getQuery()->getGrammar()->isExpression($column)) {
+            return $column;
+        }
+
+        return str_contains($column, '.')
+                    ? $column
+                    : $this->table.'.'.$column;
     }
 }

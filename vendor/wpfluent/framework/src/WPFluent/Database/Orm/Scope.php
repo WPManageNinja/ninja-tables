@@ -5,7 +5,7 @@ namespace NinjaTables\Framework\Database\Orm;
 interface Scope
 {
     /**
-     * Apply the scope to a given Eloquent query builder.
+     * Apply the scope to a given Orm query builder.
      *
      * @param  \NinjaTables\Framework\Database\Orm\Builder  $builder
      * @param  \NinjaTables\Framework\Database\Orm\Model  $model

@@ -1,93 +1,29 @@
 {
     "packages": [
         {
-            "name": "league/csv",
-            "version": "8.2.0",
-            "version_normalized": "8.2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/csv.git",
-                "reference": "ef7eef710810c8bd0cf9371582ccd0123ff96d4b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/csv/zipball/ef7eef710810c8bd0cf9371582ccd0123ff96d4b",
-                "reference": "ef7eef710810c8bd0cf9371582ccd0123ff96d4b",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^1.9",
-                "phpunit/phpunit": "^4.0"
-            },
-            "time": "2017-01-25T13:32:07+00:00",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "8.2-dev"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "League\\Csv\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ignace Nyamagana Butera",
-                    "email": "nyamsprod@gmail.com",
-                    "homepage": "https://github.com/nyamsprod/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Csv data manipulation made easy in PHP",
-            "homepage": "http://csv.thephpleague.com",
-            "keywords": [
-                "csv",
-                "export",
-                "filter",
-                "import",
-                "read",
-                "write"
-            ],
-            "support": {
-                "forum": "https://groups.google.com/forum/#!forum/thephpleague",
-                "issues": "https://github.com/thephpleague/csv/issues",
-                "source": "https://github.com/thephpleague/csv/tree/master"
-            },
-            "install-path": "../league/csv"
-        },
-        {
             "name": "wpfluent/framework",
-            "version": "1.2.1",
-            "version_normalized": "1.2.1.0",
+            "version": "2.10.29",
+            "version_normalized": "2.10.29.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpfluent/framework.git",
-                "reference": "7359c1eba0b440896cef1aa2d6ce89767c5cd96f"
+                "reference": "3ced8ed44144fe4213c6bc7180e81725fa2ed84a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpfluent/framework/zipball/7359c1eba0b440896cef1aa2d6ce89767c5cd96f",
-                "reference": "7359c1eba0b440896cef1aa2d6ce89767c5cd96f",
+                "url": "https://api.github.com/repos/wpfluent/framework/zipball/3ced8ed44144fe4213c6bc7180e81725fa2ed84a",
+                "reference": "3ced8ed44144fe4213c6bc7180e81725fa2ed84a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+                "ext-json": "*",
+                "php": "^7.3|^8.0"
             },
-            "time": "2022-11-12T01:25:08+00:00",
+            "time": "2024-10-26T12:27:30+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "installation-source": "dist",
@@ -107,12 +43,12 @@
             ],
             "description": "A lightweight rest api based framework to build WordPress plugins.",
             "support": {
-                "source": "https://github.com/wpfluent/framework/tree/1.2.1",
+                "source": "https://github.com/wpfluent/framework/tree/2.10.29",
                 "issues": "https://github.com/wpfluent/framework/issues"
             },
             "install-path": "../wpfluent/framework"
         }
     ],
-    "dev": false,
+    "dev": true,
     "dev-package-names": []
 }

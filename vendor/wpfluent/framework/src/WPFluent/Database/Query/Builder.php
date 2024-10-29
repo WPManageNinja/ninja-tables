@@ -3,60 +3,72 @@
 namespace NinjaTables\Framework\Database\Query;
 
 use Closure;
+use DateTimePeriod;
+use LogicException;
 use RuntimeException;
+use DateTimeInterface;
+use InvalidArgumentException;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Str;
-use BadMethodCallException;
 use NinjaTables\Framework\Support\Helper;
-use InvalidArgumentException;
+use NinjaTables\Framework\Support\MacroableTrait;
 use NinjaTables\Framework\Support\Collection;
 use NinjaTables\Framework\Pagination\Paginator;
+use NinjaTables\Framework\Support\ForwardsCalls;
+use NinjaTables\Framework\Support\LazyCollection;
 use NinjaTables\Framework\Database\Query\Grammar;
-use NinjaTables\Framework\Support\MacroableTrait;
 use NinjaTables\Framework\Database\Query\Processor;
+use NinjaTables\Framework\Database\Query\Expression;
+use NinjaTables\Framework\Database\Query\ConditionExpression;
 use NinjaTables\Framework\Support\ArrayableInterface;
 use NinjaTables\Framework\Database\ConnectionInterface;
-use NinjaTables\Framework\Pagination\LengthAwarePaginator;
+use NinjaTables\Framework\Database\Concerns\BuildsQueries;
+use NinjaTables\Framework\Database\Concerns\ExplainsQueries;
+use NinjaTables\Framework\Database\Orm\Relations\Relation;
+use NinjaTables\Framework\Database\Orm\Builder as OrmBuilder;
 
 class Builder
 {
-    use MacroableTrait {
+    use BuildsQueries, ExplainsQueries, ForwardsCalls, MacroableTrait {
         __call as macroCall;
     }
 
     /**
      * The database connection instance.
      *
-     * @var \NinjaTables\Framework\Database\Query\WPDBConnection
+     * @var \NinjaTables\Framework\Database\ConnectionInterface
      */
-    protected $connection;
+    public $connection;
 
     /**
      * The database query grammar instance.
      *
      * @var \NinjaTables\Framework\Database\Query\Grammar
      */
-    protected $grammar;
+    public $grammar;
 
     /**
      * The database query post processor instance.
      *
      * @var \NinjaTables\Framework\Database\Query\Processor
      */
-    protected $processor;
+    public $processor;
 
     /**
      * The current query value bindings.
      *
      * @var array
      */
-    protected $bindings = [
+    public $bindings = [
         'select' => [],
-        'join'   => [],
-        'where'  => [],
+        'from' => [],
+        'join' => [],
+        'where' => [],
+        'groupBy' => [],
         'having' => [],
-        'order'  => [],
-        'union'  => [],
+        'order' => [],
+        'union' => [],
+        'unionOrder' => [],
     ];
 
     /**
@@ -76,7 +88,9 @@ class Builder
     /**
      * Indicates if the query returns distinct results.
      *
-     * @var bool
+     * Occasionally contains the columns that should be distinct.
+     *
+     * @var bool|array
      */
     public $distinct = false;
 
@@ -86,6 +100,13 @@ class Builder
      * @var string
      */
     public $from;
+
+    /**
+     * The index hint for the query.
+     *
+     * @var \NinjaTables\Framework\Database\Query\IndexHint
+     */
+    public $indexHint;
 
     /**
      * The table joins for the query.
@@ -130,6 +151,13 @@ class Builder
     public $limit;
 
     /**
+     * The maximum number of records to return per group.
+     *
+     * @var array
+     */
+    public $groupLimit;
+
+    /**
      * The number of records to skip.
      *
      * @var int
@@ -172,52 +200,69 @@ class Builder
     public $lock;
 
     /**
-     * The field backups currently in use.
+     * The callbacks that should be invoked before the query is executed.
      *
      * @var array
      */
-    protected $backups = [];
+    public $beforeQueryCallbacks = [];
 
     /**
-     * The binding backups currently in use.
+     * The callbacks that should be invoked after retrieving data from the database.
      *
      * @var array
      */
-    protected $bindingBackups = [];
+    protected $afterQueryCallbacks = [];
 
     /**
      * All of the available clause operators.
      *
-     * @var array
+     * @var string[]
      */
-    protected $operators = [
-        '=', '<', '>', '<=', '>=', '<>', '!=',
-        'like', 'like binary', 'not like', 'between', 'ilike',
-        '&', '|', '^', '<<', '>>',
-        'rlike', 'regexp', 'not regexp',
+    public $operators = [
+        '=', '<', '>', '<=', '>=', '<>', '!=', '<=>',
+        'like', 'like binary', 'not like', 'ilike',
+        '&', '|', '^', '<<', '>>', '&~', 'is', 'is not',
+        'rlike', 'not rlike', 'regexp', 'not regexp',
         '~', '~*', '!~', '!~*', 'similar to',
         'not similar to', 'not ilike', '~~*', '!~~*',
     ];
 
     /**
-     * Whether use write pdo for select.
+     * All of the available bitwise operators.
+     *
+     * @var string[]
+     */
+    public $bitwiseOperators = [
+        '&', '|', '^', '<<', '>>', '&~',
+    ];
+
+    /**
+     * Whether to use write pdo for the select.
      *
      * @var bool
      */
-    protected $useWritePdo = false;
+    public $useWritePdo = false;
+
+    /**
+     * Allow dynamic property injection.
+     * 
+     * @var array
+     */
+    protected $dynamicProperties = [];
 
     /**
      * Create a new query builder instance.
      *
      * @param  \NinjaTables\Framework\Database\ConnectionInterface  $connection
-     * @param  \NinjaTables\Framework\Database\Query\Grammar  $grammar
-     * @param  \NinjaTables\Framework\Database\Query\Processor  $processor
+     * @param  \NinjaTables\Framework\Database\Query\Grammar|null  $grammar
+     * @param  \NinjaTables\Framework\Database\Query\Processor|null  $processor
      * @return void
      */
-    public function __construct(ConnectionInterface $connection,
-                                Grammar $grammar = null,
-                                Processor $processor = null)
-    {
+    public function __construct(
+        ConnectionInterface $connection,
+        Grammar $grammar = null,
+        Processor $processor = null
+    ) {
         $this->connection = $connection;
         $this->grammar = $grammar ?: $connection->getQueryGrammar();
         $this->processor = $processor ?: $connection->getPostProcessor();
@@ -231,17 +276,46 @@ class Builder
      */
     public function select($columns = ['*'])
     {
-        $this->columns = is_array($columns) ? $columns : func_get_args();
+        $this->columns = [];
+        $this->bindings['select'] = [];
+
+        $columns = is_array($columns) ? $columns : func_get_args();
+
+        foreach ($columns as $as => $column) {
+            if (is_string($as) && $this->isQueryable($column)) {
+                $this->selectSub($column, $as);
+            } else {
+                $this->columns[] = $column;
+            }
+        }
 
         return $this;
+    }
+
+    /**
+     * Add a subselect expression to the query.
+     *
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Orm\Builder|string  $query
+     * @param  string  $as
+     * @return $this
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function selectSub($query, $as)
+    {
+        [$query, $bindings] = $this->createSub($query);
+
+        return $this->selectRaw(
+            '('.$query.') as '.$this->grammar->wrap($as), $bindings
+        );
     }
 
     /**
      * Add a new "raw" select expression to the query.
      *
      * @param  string  $expression
-     * @param  array   $bindings
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  array  $bindings
+     * @return $this
      */
     public function selectRaw($expression, array $bindings = [])
     {
@@ -255,33 +329,98 @@ class Builder
     }
 
     /**
-     * Add a subselect expression to the query.
+     * Makes "from" fetch from a subquery.
      *
-     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|string $query
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|string  $query
      * @param  string  $as
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      *
      * @throws \InvalidArgumentException
      */
-    public function selectSub($query, $as)
+    public function fromSub($query, $as)
     {
+        [$query, $bindings] = $this->createSub($query);
+
+        return $this->fromRaw('('.$query.') as '.$this->grammar->wrapTable($as), $bindings);
+    }
+
+    /**
+     * Add a raw from clause to the query.
+     *
+     * @param  string  $expression
+     * @param  mixed  $bindings
+     * @return $this
+     */
+    public function fromRaw($expression, $bindings = [])
+    {
+        $this->from = new Expression($expression);
+
+        $this->addBinding($bindings, 'from');
+
+        return $this;
+    }
+
+    /**
+     * Creates a subquery and parse it.
+     *
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|string  $query
+     * @return array
+     */
+    protected function createSub($query)
+    {
+        // If the given query is a Closure, we will execute it while passing in a new
+        // query instance to the Closure. This will give the developer a chance to
+        // format and work with the query before we cast it to a raw SQL string.
         if ($query instanceof Closure) {
             $callback = $query;
 
-            $callback($query = $this->newQuery());
+            $callback($query = $this->forSubQuery());
         }
 
-        if ($query instanceof self) {
-            $bindings = $query->getBindings();
+        return $this->parseSub($query);
+    }
 
-            $query = $query->toSql();
+    /**
+     * Parse the subquery into SQL and bindings.
+     *
+     * @param  mixed  $query
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function parseSub($query)
+    {
+        if ($query instanceof self || $query instanceof OrmBuilder || $query instanceof Relation) {
+            $query = $this->prependDatabaseNameIfCrossDatabaseQuery($query);
+
+            return [$query->toSql(), $query->getBindings()];
         } elseif (is_string($query)) {
-            $bindings = [];
+            return [$query, []];
         } else {
-            throw new InvalidArgumentException;
+            throw new InvalidArgumentException(
+                'A subquery must be a query builder instance, a Closure, or a string.'
+            );
+        }
+    }
+
+    /**
+     * Prepend the database name if the given query is on another database.
+     *
+     * @param  mixed  $query
+     * @return mixed
+     */
+    protected function prependDatabaseNameIfCrossDatabaseQuery($query)
+    {
+        if ($query->getConnection()->getDatabaseName() !==
+            $this->getConnection()->getDatabaseName()) {
+            $databaseName = $query->getConnection()->getDatabaseName();
+
+            if (! str_starts_with($query->from, $databaseName) && ! str_contains($query->from, '.')) {
+                $query->from($databaseName.'.'.$query->from);
+            }
         }
 
-        return $this->selectRaw('('.$query.') as '.$this->grammar->wrap($as), $bindings);
+        return $query;
     }
 
     /**
@@ -292,9 +431,23 @@ class Builder
      */
     public function addSelect($column)
     {
-        $column = is_array($column) ? $column : func_get_args();
+        $columns = is_array($column) ? $column : func_get_args();
 
-        $this->columns = array_merge((array) $this->columns, $column);
+        foreach ($columns as $as => $column) {
+            if (is_string($as) && $this->isQueryable($column)) {
+                if (is_null($this->columns)) {
+                    $this->select($this->from.'.*');
+                }
+
+                $this->selectSub($column, $as);
+            } else {
+                if (is_array($this->columns) && in_array($column, $this->columns, true)) {
+                    continue;
+                }
+
+                $this->columns[] = $column;
+            }
+        }
 
         return $this;
     }
@@ -302,11 +455,18 @@ class Builder
     /**
      * Force the query to only return distinct results.
      *
+     * @param  mixed  ...$distinct
      * @return $this
      */
     public function distinct()
     {
-        $this->distinct = true;
+        $columns = func_get_args();
+
+        if (count($columns) > 0) {
+            $this->distinct = is_array($columns[0]) || is_bool($columns[0]) ? $columns[0] : $columns;
+        } else {
+            $this->distinct = true;
+        }
 
         return $this;
     }
@@ -314,12 +474,56 @@ class Builder
     /**
      * Set the table which the query is targeting.
      *
-     * @param  string  $table
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|string  $table
+     * @param  string|null  $as
      * @return $this
      */
-    public function from($table)
+    public function from($table, $as = null)
     {
-        $this->from = $table;
+        if ($this->isQueryable($table)) {
+            return $this->fromSub($table, $as);
+        }
+
+        $this->from = $as ? "{$table} as {$as}" : $table;
+
+        return $this;
+    }
+
+    /**
+     * Add an index hint to suggest a query index.
+     *
+     * @param  string  $index
+     * @return $this
+     */
+    public function useIndex($index)
+    {
+        $this->indexHint = new IndexHint('hint', $index);
+
+        return $this;
+    }
+
+    /**
+     * Add an index hint to force a query index.
+     *
+     * @param  string  $index
+     * @return $this
+     */
+    public function forceIndex($index)
+    {
+        $this->indexHint = new IndexHint('force', $index);
+
+        return $this;
+    }
+
+    /**
+     * Add an index hint to ignore a query index.
+     *
+     * @param  string  $index
+     * @return $this
+     */
+    public function ignoreIndex($index)
+    {
+        $this->indexHint = new IndexHint('ignore', $index);
 
         return $this;
     }
@@ -328,39 +532,37 @@ class Builder
      * Add a join clause to the query.
      *
      * @param  string  $table
-     * @param  string  $one
-     * @param  string  $operator
-     * @param  string  $two
+     * @param  \Closure|string  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
      * @param  string  $type
-     * @param  bool    $where
+     * @param  bool  $where
      * @return $this
      */
-    public function join($table, $one, $operator = null, $two = null, $type = 'inner', $where = false)
+    public function join($table, $first, $operator = null, $second = null, $type = 'inner', $where = false)
     {
+        $join = $this->newJoinClause($this, $type, $table);
+
         // If the first "column" of the join is really a Closure instance the developer
         // is trying to build a join with a complex "on" clause containing more than
         // one condition, so we'll add the join and call a Closure with the query.
-        if ($one instanceof Closure) {
-            $join = new JoinClause($type, $table);
-
-            call_user_func($one, $join);
+        if ($first instanceof Closure) {
+            $first($join);
 
             $this->joins[] = $join;
 
-            $this->addBinding($join->bindings, 'join');
+            $this->addBinding($join->getBindings(), 'join');
         }
 
         // If the column is simply a string, we can assume the join simply has a basic
         // "on" clause with a single condition. So we will just build the join with
         // this simple join clauses attached to it. There is not a join callback.
         else {
-            $join = new JoinClause($type, $table);
+            $method = $where ? 'where' : 'on';
 
-            $this->joins[] = $join->on(
-                $one, $operator, $two, 'and', $where
-            );
+            $this->joins[] = $join->$method($first, $operator, $second);
 
-            $this->addBinding($join->bindings, 'join');
+            $this->addBinding($join->getBindings(), 'join');
         }
 
         return $this;
@@ -370,25 +572,83 @@ class Builder
      * Add a "join where" clause to the query.
      *
      * @param  string  $table
-     * @param  string  $one
+     * @param  \Closure|string  $first
      * @param  string  $operator
-     * @param  string  $two
+     * @param  string  $second
      * @param  string  $type
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      */
-    public function joinWhere($table, $one, $operator, $two, $type = 'inner')
+    public function joinWhere($table, $first, $operator, $second, $type = 'inner')
     {
-        return $this->join($table, $one, $operator, $two, $type, true);
+        return $this->join($table, $first, $operator, $second, $type, true);
+    }
+
+    /**
+     * Add a subquery join clause to the query.
+     *
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Orm\Builder|string  $query
+     * @param  string  $as
+     * @param  \Closure|string  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
+     * @param  string  $type
+     * @param  bool  $where
+     * @return $this
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function joinSub($query, $as, $first, $operator = null, $second = null, $type = 'inner', $where = false)
+    {
+        [$query, $bindings] = $this->createSub($query);
+
+        $expression = '('.$query.') as '.$this->grammar->wrapTable($as);
+
+        $this->addBinding($bindings, 'join');
+
+        return $this->join(new Expression($expression), $first, $operator, $second, $type, $where);
+    }
+
+    /**
+     * Add a lateral join clause to the query.
+     *
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Orm\Builder|string  $query
+     * @param  string  $as
+     * @param  string  $type
+     * @return $this
+     */
+    public function joinLateral($query, string $as, string $type = 'inner')
+    {
+        [$query, $bindings] = $this->createSub($query);
+
+        $expression = '('.$query.') as '.$this->grammar->wrapTable($as);
+
+        $this->addBinding($bindings, 'join');
+
+        $this->joins[] = $this->newJoinLateralClause($this, $type, new Expression($expression));
+
+        return $this;
+    }
+
+    /**
+     * Add a lateral left join to the query.
+     *
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Orm\Builder|string  $query
+     * @param  string  $as
+     * @return $this
+     */
+    public function leftJoinLateral($query, string $as)
+    {
+        return $this->joinLateral($query, $as, 'left');
     }
 
     /**
      * Add a left join to the query.
      *
      * @param  string  $table
-     * @param  string  $first
-     * @param  string  $operator
-     * @param  string  $second
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  \Closure|string  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
+     * @return $this
      */
     public function leftJoin($table, $first, $operator = null, $second = null)
     {
@@ -399,24 +659,39 @@ class Builder
      * Add a "join where" clause to the query.
      *
      * @param  string  $table
-     * @param  string  $one
+     * @param  \Closure|string  $first
      * @param  string  $operator
-     * @param  string  $two
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  string  $second
+     * @return $this
      */
-    public function leftJoinWhere($table, $one, $operator, $two)
+    public function leftJoinWhere($table, $first, $operator, $second)
     {
-        return $this->joinWhere($table, $one, $operator, $two, 'left');
+        return $this->joinWhere($table, $first, $operator, $second, 'left');
+    }
+
+    /**
+     * Add a subquery left join to the query.
+     *
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Orm\Builder|string  $query
+     * @param  string  $as
+     * @param  \Closure|string  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
+     * @return $this
+     */
+    public function leftJoinSub($query, $as, $first, $operator = null, $second = null)
+    {
+        return $this->joinSub($query, $as, $first, $operator, $second, 'left');
     }
 
     /**
      * Add a right join to the query.
      *
      * @param  string  $table
-     * @param  string  $first
-     * @param  string  $operator
-     * @param  string  $second
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  \Closure|string  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
+     * @return $this
      */
     public function rightJoin($table, $first, $operator = null, $second = null)
     {
@@ -427,24 +702,39 @@ class Builder
      * Add a "right join where" clause to the query.
      *
      * @param  string  $table
-     * @param  string  $one
+     * @param  \Closure|string  $first
      * @param  string  $operator
-     * @param  string  $two
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  string  $second
+     * @return $this
      */
-    public function rightJoinWhere($table, $one, $operator, $two)
+    public function rightJoinWhere($table, $first, $operator, $second)
     {
-        return $this->joinWhere($table, $one, $operator, $two, 'right');
+        return $this->joinWhere($table, $first, $operator, $second, 'right');
+    }
+
+    /**
+     * Add a subquery right join to the query.
+     *
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Orm\Builder|string  $query
+     * @param  string  $as
+     * @param  \Closure|string  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
+     * @return $this
+     */
+    public function rightJoinSub($query, $as, $first, $operator = null, $second = null)
+    {
+        return $this->joinSub($query, $as, $first, $operator, $second, 'right');
     }
 
     /**
      * Add a "cross join" clause to the query.
      *
      * @param  string  $table
-     * @param  string  $first
-     * @param  string  $operator
-     * @param  string  $second
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  \Closure|string|null  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
+     * @return $this
      */
     public function crossJoin($table, $first = null, $operator = null, $second = null)
     {
@@ -452,42 +742,94 @@ class Builder
             return $this->join($table, $first, $operator, $second, 'cross');
         }
 
-        $this->joins[] = new JoinClause('cross', $table);
+        $this->joins[] = $this->newJoinClause($this, 'cross', $table);
 
         return $this;
     }
 
     /**
-     * Apply the callback's query changes if the given "value" is true.
+     * Add a subquery cross join to the query.
      *
-     * @param  bool  $value
-     * @param  \Closure  $callback
-     * @return \NinjaTables\Framework\Database\Query\Builder
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|string  $query
+     * @param  string  $as
+     * @return $this
      */
-    public function when($value, $callback)
+    public function crossJoinSub($query, $as)
     {
-        $builder = $this;
+        [$query, $bindings] = $this->createSub($query);
 
-        if ($value) {
-            $builder = call_user_func($callback, $builder);
-        }
+        $expression = '('.$query.') as '.$this->grammar->wrapTable($as);
 
-        return $builder;
+        $this->addBinding($bindings, 'join');
+
+        $this->joins[] = $this->newJoinClause($this, 'cross', new Expression($expression));
+
+        return $this;
+    }
+
+    /**
+     * Get a new join clause.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $parentQuery
+     * @param  string  $type
+     * @param  string  $table
+     * @return \NinjaTables\Framework\Database\Query\JoinClause
+     */
+    protected function newJoinClause(self $parentQuery, $type, $table)
+    {
+        return new JoinClause($parentQuery, $type, $table);
+    }
+
+    /**
+     * Get a new join lateral clause.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $parentQuery
+     * @param  string  $type
+     * @param  string  $table
+     * @return \NinjaTables\Framework\Database\Query\JoinLateralClause
+     */
+    protected function newJoinLateralClause(self $parentQuery, $type, $table)
+    {
+        return new JoinLateralClause($parentQuery, $type, $table);
+    }
+
+    /**
+     * Merge an array of where clauses and bindings.
+     *
+     * @param  array  $wheres
+     * @param  array  $bindings
+     * @return void
+     */
+    public function mergeWheres($wheres, $bindings)
+    {
+        $this->wheres = array_merge($this->wheres, (array) $wheres);
+
+        $this->bindings['where'] = array_values(
+            array_merge($this->bindings['where'], (array) $bindings)
+        );
+
+        return $this;
     }
 
     /**
      * Add a basic where clause to the query.
      *
-     * @param  string|array|\Closure  $column
-     * @param  string  $operator
-     * @param  mixed   $value
+     * @param  \Closure|string|array  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
      * @param  string  $boolean
      * @return $this
-     *
-     * @throws \InvalidArgumentException
      */
     public function where($column, $operator = null, $value = null, $boolean = 'and')
     {
+        if ($column instanceof ConditionExpression) {
+            $type = 'Expression';
+
+            $this->wheres[] = compact('type', 'column', 'boolean');
+
+            return $this;
+        }
+
         // If the column is an array, we will assume it is an array of key-value pairs
         // and can add them each as a where clause. We will maintain the boolean we
         // received when the method was called and pass it into the nested where.
@@ -498,31 +840,38 @@ class Builder
         // Here we will make some assumptions about the operator. If only 2 values are
         // passed to the method, we will assume that the operator is an equals sign
         // and keep going. Otherwise, we'll require the operator to be passed in.
-        if (func_num_args() == 2) {
-            list($value, $operator) = [$operator, '='];
-        } elseif ($this->invalidOperatorAndValue($operator, $value)) {
-            throw new InvalidArgumentException('Illegal operator and value combination.');
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        // If the column is actually a Closure instance, we will assume the developer
+        // wants to begin a nested where statement which is wrapped in parentheses.
+        // We will add that Closure to the query and return back out immediately.
+        if ($column instanceof Closure && is_null($operator)) {
+            return $this->whereNested($column, $boolean);
         }
 
-        // If the columns is actually a Closure instance, we will assume the developer
-        // wants to begin a nested where statement which is wrapped in parenthesis.
-        // We'll add that Closure to the query then return back out immediately.
-        if ($column instanceof Closure) {
-            return $this->whereNested($column, $boolean);
+        // If the column is a Closure instance and there is an operator value, we will
+        // assume the developer wants to run a subquery and then compare the result
+        // of that subquery with the given value that was provided to the method.
+        if ($this->isQueryable($column) && ! is_null($operator)) {
+            [$sub, $bindings] = $this->createSub($column);
+
+            return $this->addBinding($bindings, 'where')
+                ->where(new Expression('('.$sub.')'), $operator, $value, $boolean);
         }
 
         // If the given operator is not found in the list of valid operators we will
         // assume that the developer is just short-cutting the '=' operators and
         // we will set the operators to '=' and set the values appropriately.
-        if (! in_array(strtolower($operator), $this->operators, true) &&
-            ! in_array(strtolower($operator), $this->grammar->getOperators(), true)) {
-            list($value, $operator) = [$operator, '='];
+        if ($this->invalidOperator($operator)) {
+            [$value, $operator] = [$operator, '='];
         }
 
         // If the value is a Closure, it means the developer is performing an entire
         // sub-select within the query and we will need to compile the sub-select
         // within the where clause to get the appropriate query record results.
-        if ($value instanceof Closure) {
+        if ($this->isQueryable($value)) {
             return $this->whereSub($column, $operator, $value, $boolean);
         }
 
@@ -530,22 +879,39 @@ class Builder
         // where null clause to the query. So, we will allow a short-cut here to
         // that method for convenience so the developer doesn't have to check.
         if (is_null($value)) {
-            return $this->whereNull($column, $boolean, $operator != '=');
+            return $this->whereNull($column, $boolean, $operator !== '=');
+        }
+
+        $type = 'Basic';
+
+        $columnString = ($column instanceof Expression)
+            ? $this->grammar->getValue($column)
+            : $column;
+
+        // If the column is making a JSON reference we'll check to see if the value
+        // is a boolean. If it is, we'll add the raw boolean string as an actual
+        // value to the query to ensure this is properly handled by the query.
+        if (str_contains($columnString, '->') && is_bool($value)) {
+            $value = new Expression($value ? 'true' : 'false');
+
+            if (is_string($column)) {
+                $type = 'JsonBoolean';
+            }
+        }
+
+        if ($this->isBitwiseOperator($operator)) {
+            $type = 'Bitwise';
         }
 
         // Now that we are working with just a simple query we can put the elements
         // in our array and add the query binding to our array of bindings that
         // will be bound to each SQL statements when it is finally executed.
-        $type = 'Basic';
-
-        if (Str::contains($column, '->') && is_bool($value)) {
-            $value = new Expression($value ? 'true' : 'false');
-        }
-
-        $this->wheres[] = compact('type', 'column', 'operator', 'value', 'boolean');
+        $this->wheres[] = compact(
+            'type', 'column', 'operator', 'value', 'boolean'
+        );
 
         if (! $value instanceof Expression) {
-            $this->addBinding($value, 'where');
+            $this->addBinding($this->flattenValue($value), 'where');
         }
 
         return $this;
@@ -561,19 +927,44 @@ class Builder
      */
     protected function addArrayOfWheres($column, $boolean, $method = 'where')
     {
-        return $this->whereNested(function ($query) use ($column, $method) {
+        return $this->whereNested(function ($query) use ($column, $method, $boolean) {
             foreach ($column as $key => $value) {
                 if (is_numeric($key) && is_array($value)) {
-                    call_user_func_array([$query, $method], $value);
+                    $query->{$method}(...array_values($value));
                 } else {
-                    $query->$method($key, '=', $value);
+                    $query->{$method}($key, '=', $value, $boolean);
                 }
             }
         }, $boolean);
     }
 
     /**
+     * Prepare the value and operator for a where clause.
+     *
+     * @param  string  $value
+     * @param  string  $operator
+     * @param  bool  $useDefault
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function prepareValueAndOperator($value, $operator, $useDefault = false)
+    {
+        if ($useDefault) {
+            return [$operator, '='];
+        } elseif ($this->invalidOperatorAndValue($operator, $value)) {
+            throw new InvalidArgumentException(
+                'Illegal operator and value combination.'
+            );
+        }
+
+        return [$value, $operator];
+    }
+
+    /**
      * Determine if the given operator and value combination is legal.
+     *
+     * Prevents using Null values with invalid operators.
      *
      * @param  string  $operator
      * @param  mixed  $value
@@ -581,38 +972,86 @@ class Builder
      */
     protected function invalidOperatorAndValue($operator, $value)
     {
-        $isOperator = in_array($operator, $this->operators);
-
-        return is_null($value) && $isOperator && ! in_array($operator, ['=', '<>', '!=']);
+        return is_null($value) && in_array($operator, $this->operators) &&
+             ! in_array($operator, ['=', '<>', '!=']);
     }
 
     /**
-     * Set a "where not" constraint on the query.
+     * Determine if the given operator is supported.
      *
-     * @param  string  $column
-     * @param  array|string  $value
-     * @return $this
+     * @param  string  $operator
+     * @return bool
      */
-    public function whereNot($column, $value)
+    protected function invalidOperator($operator)
     {
-        if (is_array($value)) {
-            return $this->whereNotIn($column, $value);
-        }
+        return ! is_string($operator) || (! in_array(strtolower($operator), $this->operators, true) &&
+               ! in_array(strtolower($operator), $this->grammar->getOperators(), true));
+    }
 
-        return $this->where($column, '!'.$value);
+    /**
+     * Determine if the operator is a bitwise operator.
+     *
+     * @param  string  $operator
+     * @return bool
+     */
+    protected function isBitwiseOperator($operator)
+    {
+        return in_array(strtolower($operator), $this->bitwiseOperators, true) ||
+               in_array(strtolower($operator), $this->grammar->getBitwiseOperators(), true);
     }
 
     /**
      * Add an "or where" clause to the query.
      *
-     * @param  string  $column
-     * @param  string  $operator
-     * @param  mixed   $value
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  \Closure|string|array  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return $this
      */
     public function orWhere($column, $operator = null, $value = null)
     {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
         return $this->where($column, $operator, $value, 'or');
+    }
+
+    /**
+     * Add a basic "where not" clause to the query.
+     *
+     * @param  \Closure|string|array|\NinjaTables\Framework\Contracts\Database\Query\Expression  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereNot(
+        $column,
+        $operator = null,
+        $value = null,
+        $boolean = 'and'
+    ) {
+        if (is_array($column)) {
+            return $this->whereNested(function ($query) use ($column, $operator, $value, $boolean) {
+                $query->where($column, $operator, $value, $boolean);
+            }, $boolean.' not');
+        }
+
+        return $this->where($column, $operator, $value, $boolean.' not');
+    }
+
+    /**
+     * Add an "or where not" clause to the query.
+     *
+     * @param  \Closure|string|array|\NinjaTables\Framework\Contracts\Database\Query\Expression  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function orWhereNot($column, $operator = null, $value = null)
+    {
+        return $this->whereNot($column, $operator, $value, 'or');
     }
 
     /**
@@ -622,7 +1061,7 @@ class Builder
      * @param  string|null  $operator
      * @param  string|null  $second
      * @param  string|null  $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      */
     public function whereColumn($first, $operator = null, $second = null, $boolean = 'and')
     {
@@ -636,14 +1075,18 @@ class Builder
         // If the given operator is not found in the list of valid operators we will
         // assume that the developer is just short-cutting the '=' operators and
         // we will set the operators to '=' and set the values appropriately.
-        if (! in_array(strtolower($operator), $this->operators, true) &&
-            ! in_array(strtolower($operator), $this->grammar->getOperators(), true)) {
-            list($second, $operator) = [$operator, '='];
+        if ($this->invalidOperator($operator)) {
+            [$second, $operator] = [$operator, '='];
         }
 
+        // Finally, we will add this where clause into this array of clauses that we
+        // are building for the query. All of them will be compiled via a grammar
+        // once the query is about to be executed and run against the database.
         $type = 'Column';
 
-        $this->wheres[] = compact('type', 'first', 'operator', 'second', 'boolean');
+        $this->wheres[] = compact(
+            'type', 'first', 'operator', 'second', 'boolean'
+        );
 
         return $this;
     }
@@ -654,7 +1097,7 @@ class Builder
      * @param  string|array  $first
      * @param  string|null  $operator
      * @param  string|null  $second
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      */
     public function orWhereColumn($first, $operator = null, $second = null)
     {
@@ -665,17 +1108,15 @@ class Builder
      * Add a raw where clause to the query.
      *
      * @param  string  $sql
-     * @param  array   $bindings
+     * @param  mixed  $bindings
      * @param  string  $boolean
      * @return $this
      */
-    public function whereRaw($sql, array $bindings = [], $boolean = 'and')
+    public function whereRaw($sql, $bindings = [], $boolean = 'and')
     {
-        $type = 'raw';
+        $this->wheres[] = ['type' => 'raw', 'sql' => $sql, 'boolean' => $boolean];
 
-        $this->wheres[] = compact('type', 'sql', 'boolean');
-
-        $this->addBinding($bindings, 'where');
+        $this->addBinding((array) $bindings, 'where');
 
         return $this;
     }
@@ -684,19 +1125,283 @@ class Builder
      * Add a raw or where clause to the query.
      *
      * @param  string  $sql
-     * @param  array   $bindings
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  mixed  $bindings
+     * @return $this
      */
-    public function orWhereRaw($sql, array $bindings = [])
+    public function orWhereRaw($sql, $bindings = [])
     {
         return $this->whereRaw($sql, $bindings, 'or');
     }
 
     /**
-     * Add a where between statement to the query.
+     * Add a "where like" clause to the query.
+     *
+     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression|string  $column
+     * @param  string  $value
+     * @param  bool  $caseSensitive
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function whereLike(
+        $column,
+        $value,
+        $caseSensitive = false,
+        $boolean = 'and',
+        $not = false
+    ) {
+        $type = 'Like';
+
+        $this->wheres[] = compact('type', 'column', 'value', 'caseSensitive', 'boolean', 'not');
+
+        if (method_exists($this->grammar, 'prepareWhereLikeBinding')) {
+            $value = $this->grammar->prepareWhereLikeBinding($value, $caseSensitive);
+        }
+
+        $this->addBinding($value);
+
+        return $this;
+    }
+
+    /**
+     * Add an "or where like" clause to the query.
+     *
+     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression|string  $column
+     * @param  string  $value
+     * @param  bool  $caseSensitive
+     * @return $this
+     */
+    public function orWhereLike($column, $value, $caseSensitive = false)
+    {
+        return $this->whereLike($column, $value, $caseSensitive, 'or', false);
+    }
+
+    /**
+     * Add a "where not like" clause to the query.
+     *
+     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression|string  $column
+     * @param  string  $value
+     * @param  bool  $caseSensitive
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereNotLike(
+        $column,
+        $value,
+        $caseSensitive = false,
+        $boolean = 'and'
+    ) {
+        return $this->whereLike($column, $value, $caseSensitive, $boolean, true);
+    }
+
+    /**
+     * Add an "or where not like" clause to the query.
+     *
+     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression|string  $column
+     * @param  string  $value
+     * @param  bool  $caseSensitive
+     * @return $this
+     */
+    public function orWhereNotLike($column, $value, $caseSensitive = false)
+    {
+        return $this->whereNotLike($column, $value, $caseSensitive, 'or');
+    }
+
+    /**
+     * Add a "where in" clause to the query.
      *
      * @param  string  $column
-     * @param  array   $values
+     * @param  mixed  $values
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function whereIn($column, $values, $boolean = 'and', $not = false)
+    {
+        $type = $not ? 'NotIn' : 'In';
+
+        // If the value is a query builder instance we will assume the developer wants to
+        // look for any values that exists within this given query. So we will add the
+        // query accordingly so that this query is properly executed when it is run.
+        if ($this->isQueryable($values)) {
+            [$query, $bindings] = $this->createSub($values);
+
+            $values = [new Expression($query)];
+
+            $this->addBinding($bindings, 'where');
+        }
+
+        // Next, if the value is ArrayableInterface we need to cast it to its raw array form so we
+        // have the underlying array value instead of an Arrayable object which is not
+        // able to be added as a binding, etc. We will then add to the wheres array.
+        if ($values instanceof ArrayableInterface) {
+            $values = $values->toArray();
+        }
+
+        $this->wheres[] = compact('type', 'column', 'values', 'boolean');
+
+        if (count($values) !== count(Arr::flatten($values, 1))) {
+            throw new InvalidArgumentException('Nested arrays may not be passed to whereIn method.');
+        }
+
+        // Finally, we'll add a binding for each value unless that value is an
+        // expression in which case we will just skip over it since it will
+        // be the query as a raw string and not as a parameterized
+        // place-holder to be replaced by the PDO.
+        $this->addBinding($this->cleanBindings($values), 'where');
+
+        return $this;
+    }
+
+    /**
+     * Add an "or where in" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $values
+     * @return $this
+     */
+    public function orWhereIn($column, $values)
+    {
+        return $this->whereIn($column, $values, 'or');
+    }
+
+    /**
+     * Add a "where not in" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $values
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereNotIn($column, $values, $boolean = 'and')
+    {
+        return $this->whereIn($column, $values, $boolean, true);
+    }
+
+    /**
+     * Add an "or where not in" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $values
+     * @return $this
+     */
+    public function orWhereNotIn($column, $values)
+    {
+        return $this->whereNotIn($column, $values, 'or');
+    }
+
+    /**
+     * Add a "where in raw" clause for integer values to the query.
+     *
+     * @param  string  $column
+     * @param  \NinjaTables\Framework\Support\ArrayableInterface|array  $values
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function whereIntegerInRaw($column, $values, $boolean = 'and', $not = false)
+    {
+        $type = $not ? 'NotInRaw' : 'InRaw';
+
+        if ($values instanceof Arrayable) {
+            $values = $values->toArray();
+        }
+
+        $values = Arr::flatten($values);
+
+        foreach ($values as &$value) {
+            $value = (int) ($value instanceof BackedEnum ? $value->value : $value);
+        }
+
+        $this->wheres[] = compact('type', 'column', 'values', 'boolean');
+
+        return $this;
+    }
+
+    /**
+     * Add an "or where in raw" clause for integer values to the query.
+     *
+     * @param  string  $column
+     * @param  \NinjaTables\Framework\Support\ArrayableInterface|array  $values
+     * @return $this
+     */
+    public function orWhereIntegerInRaw($column, $values)
+    {
+        return $this->whereIntegerInRaw($column, $values, 'or');
+    }
+
+    /**
+     * Add a "where not in raw" clause for integer values to the query.
+     *
+     * @param  string  $column
+     * @param  \NinjaTables\Framework\Support\ArrayableInterface|array  $values
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereIntegerNotInRaw($column, $values, $boolean = 'and')
+    {
+        return $this->whereIntegerInRaw($column, $values, $boolean, true);
+    }
+
+    /**
+     * Add an "or where not in raw" clause for integer values to the query.
+     *
+     * @param  string  $column
+     * @param  \NinjaTables\Framework\Support\ArrayableInterface|array  $values
+     * @return $this
+     */
+    public function orWhereIntegerNotInRaw($column, $values)
+    {
+        return $this->whereIntegerNotInRaw($column, $values, 'or');
+    }
+
+    /**
+     * Add a "where null" clause to the query.
+     *
+     * @param  string|array  $columns
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function whereNull($columns, $boolean = 'and', $not = false)
+    {
+        $type = $not ? 'NotNull' : 'Null';
+
+        foreach (Arr::wrap($columns) as $column) {
+            $this->wheres[] = compact('type', 'column', 'boolean');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add an "or where null" clause to the query.
+     *
+     * @param  string|array  $column
+     * @return $this
+     */
+    public function orWhereNull($column)
+    {
+        return $this->whereNull($column, 'or');
+    }
+
+    /**
+     * Add a "where not null" clause to the query.
+     *
+     * @param  string|array  $columns
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereNotNull($columns, $boolean = 'and')
+    {
+        return $this->whereNull($columns, $boolean, true);
+    }
+
+    /**
+     * Add a where between statement to the query.
+     *
+     * @param  string|\NinjaTables\Framework\Database\Query\Expression  $column
+     * @param  array  $values
      * @param  string  $boolean
      * @param  bool  $not
      * @return $this
@@ -705,9 +1410,41 @@ class Builder
     {
         $type = 'between';
 
-        $this->wheres[] = compact('column', 'type', 'boolean', 'not');
+        $type = 'between';
 
-        $this->addBinding($values, 'where');
+        if ($values instanceof DateTimePeriod) {
+            $values = [$values->getStartDate(), $values->getEndDate()];
+        }
+
+        $this->wheres[] = compact('type', 'column', 'values', 'boolean', 'not');
+
+        $this->addBinding(
+            array_slice(
+                $this->cleanBindings(Arr::flatten($values)), 0, 2
+            ), 'where'
+        );
+
+        return $this;
+    }
+
+    /**
+     * Add a where between statement using columns to the query.
+     *
+     * @param  string  $column
+     * @param  array  $values
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function whereBetweenColumns(
+        $column,
+        array $values,
+        $boolean = 'and',
+        $not = false
+    ) {
+        $type = 'betweenColumns';
+
+        $this->wheres[] = compact('type', 'column', 'values', 'boolean', 'not');
 
         return $this;
     }
@@ -716,8 +1453,8 @@ class Builder
      * Add an or where between statement to the query.
      *
      * @param  string  $column
-     * @param  array   $values
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  array  $values
+     * @return $this
      */
     public function orWhereBetween($column, array $values)
     {
@@ -725,42 +1462,322 @@ class Builder
     }
 
     /**
+     * Add an or where between statement using columns to the query.
+     *
+     * @param  string  $column
+     * @param  array  $values
+     * @return $this
+     */
+    public function orWhereBetweenColumns($column, array $values)
+    {
+        return $this->whereBetweenColumns($column, $values, 'or');
+    }
+
+    /**
      * Add a where not between statement to the query.
      *
      * @param  string  $column
-     * @param  array   $values
+     * @param  array  $values
      * @param  string  $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      */
-    public function whereNotBetween($column, array $values, $boolean = 'and')
+    public function whereNotBetween($column, iterable $values, $boolean = 'and')
     {
         return $this->whereBetween($column, $values, $boolean, true);
+    }
+
+    /**
+     * Add a where not between statement using columns to the query.
+     *
+     * @param  string  $column
+     * @param  array  $values
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereNotBetweenColumns($column, array $values, $boolean = 'and')
+    {
+        return $this->whereBetweenColumns($column, $values, $boolean, true);
     }
 
     /**
      * Add an or where not between statement to the query.
      *
      * @param  string  $column
-     * @param  array   $values
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  array  $values
+     * @return $this
      */
-    public function orWhereNotBetween($column, array $values)
+    public function orWhereNotBetween($column, iterable $values)
     {
         return $this->whereNotBetween($column, $values, 'or');
     }
 
     /**
+     * Add an or where not between statement using columns to the query.
+     *
+     * @param  string  $column
+     * @param  array  $values
+     * @return $this
+     */
+    public function orWhereNotBetweenColumns($column, array $values)
+    {
+        return $this->whereNotBetweenColumns($column, $values, 'or');
+    }
+
+    /**
+     * Add an "or where not null" clause to the query.
+     *
+     * @param  string  $column
+     * @return $this
+     */
+    public function orWhereNotNull($column)
+    {
+        return $this->whereNotNull($column, 'or');
+    }
+
+    /**
+     * Add a "where date" statement to the query.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Expression|string  $column
+     * @param  string  $operator
+     * @param  \DateTimeInterface|string|null  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereDate($column, $operator, $value = null, $boolean = 'and')
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        $value = $this->flattenValue($value);
+
+        if ($value instanceof DateTimeInterface) {
+            $value = $value->format('Y-m-d');
+        }
+
+        return $this->addDateBasedWhere('Date', $column, $operator, $value, $boolean);
+    }
+
+    /**
+     * Add an "or where date" statement to the query.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  \DateTimeInterface|string|null  $value
+     * @return $this
+     */
+    public function orWhereDate($column, $operator, $value = null)
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        return $this->whereDate($column, $operator, $value, 'or');
+    }
+
+    /**
+     * Add a "where time" statement to the query.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  \DateTimeInterface|string|null  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereTime($column, $operator, $value = null, $boolean = 'and')
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        $value = $this->flattenValue($value);
+
+        if ($value instanceof DateTimeInterface) {
+            $value = $value->format('H:i:s');
+        }
+
+        return $this->addDateBasedWhere('Time', $column, $operator, $value, $boolean);
+    }
+
+    /**
+     * Add an "or where time" statement to the query.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  \DateTimeInterface|string|null  $value
+     * @return $this
+     */
+    public function orWhereTime($column, $operator, $value = null)
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        return $this->whereTime($column, $operator, $value, 'or');
+    }
+
+    /**
+     * Add a "where day" statement to the query.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  \DateTimeInterface|string|null  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereDay($column, $operator, $value = null, $boolean = 'and')
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        $value = $this->flattenValue($value);
+
+        if ($value instanceof DateTimeInterface) {
+            $value = $value->format('d');
+        }
+
+        if (! $value instanceof Expression) {
+            $value = sprintf('%02d', $value);
+        }
+
+        return $this->addDateBasedWhere('Day', $column, $operator, $value, $boolean);
+    }
+
+    /**
+     * Add an "or where day" statement to the query.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  \DateTimeInterface|string|null  $value
+     * @return $this
+     */
+    public function orWhereDay($column, $operator, $value = null)
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        return $this->whereDay($column, $operator, $value, 'or');
+    }
+
+    /**
+     * Add a "where month" statement to the query.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  \DateTimeInterface|string|null  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereMonth($column, $operator, $value = null, $boolean = 'and')
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        $value = $this->flattenValue($value);
+
+        if ($value instanceof DateTimeInterface) {
+            $value = $value->format('m');
+        }
+
+        if (! $value instanceof Expression) {
+            $value = sprintf('%02d', $value);
+        }
+
+        return $this->addDateBasedWhere('Month', $column, $operator, $value, $boolean);
+    }
+
+    /**
+     * Add an "or where month" statement to the query.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  \DateTimeInterface|string|null  $value
+     * @return $this
+     */
+    public function orWhereMonth($column, $operator, $value = null)
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        return $this->whereMonth($column, $operator, $value, 'or');
+    }
+
+    /**
+     * Add a "where year" statement to the query.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  \DateTimeInterface|string|int|null  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereYear($column, $operator, $value = null, $boolean = 'and')
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        $value = $this->flattenValue($value);
+
+        if ($value instanceof DateTimeInterface) {
+            $value = $value->format('Y');
+        }
+
+        return $this->addDateBasedWhere('Year', $column, $operator, $value, $boolean);
+    }
+
+    /**
+     * Add an "or where year" statement to the query.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  \DateTimeInterface|string|int|null  $value
+     * @return $this
+     */
+    public function orWhereYear($column, $operator, $value = null)
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        return $this->whereYear($column, $operator, $value, 'or');
+    }
+
+    /**
+     * Add a date based (year, month, day, time) statement to the query.
+     *
+     * @param  string  $type
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    protected function addDateBasedWhere($type, $column, $operator, $value, $boolean = 'and')
+    {
+        $this->wheres[] = compact('column', 'type', 'boolean', 'operator', 'value');
+
+        if (! $value instanceof Expression) {
+            $this->addBinding($value, 'where');
+        }
+
+        return $this;
+    }
+
+    /**
      * Add a nested where statement to the query.
      *
-     * @param  \Closure $callback
-     * @param  string   $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  \Closure  $callback
+     * @param  string  $boolean
+     * @return $this
      */
     public function whereNested(Closure $callback, $boolean = 'and')
     {
-        $query = $this->forNestedWhere();
-
-        call_user_func($callback, $query);
+        $callback($query = $this->forNestedWhere());
 
         return $this->addNestedWhereQuery($query, $boolean);
     }
@@ -772,15 +1789,13 @@ class Builder
      */
     public function forNestedWhere()
     {
-        $query = $this->newQuery();
-
-        return $query->from($this->from);
+        return $this->newQuery()->from($this->from);
     }
 
     /**
      * Add another query builder as a nested where to the query builder.
      *
-     * @param  \NinjaTables\Framework\Database\Query\Builder|static $query
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
      * @param  string  $boolean
      * @return $this
      */
@@ -791,7 +1806,7 @@ class Builder
 
             $this->wheres[] = compact('type', 'query', 'boolean');
 
-            $this->addBinding($query->getBindings(), 'where');
+            $this->addBinding($query->getRawBindings()['where'], 'where');
         }
 
         return $this;
@@ -800,24 +1815,28 @@ class Builder
     /**
      * Add a full sub-select to the query.
      *
-     * @param  string   $column
-     * @param  string   $operator
-     * @param  \Closure $callback
-     * @param  string   $boolean
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  \Closure  $callback
+     * @param  string  $boolean
      * @return $this
      */
-    protected function whereSub($column, $operator, Closure $callback, $boolean)
+    protected function whereSub($column, $operator, $callback, $boolean)
     {
         $type = 'Sub';
 
-        $query = $this->newQuery();
+        if ($callback instanceof Closure) {
+            // Once we have the query instance we can simply execute it so it can add all
+            // of the sub-select's conditions to itself, and then we can cache it off
+            // in the array of where clauses for the "main" parent query instance.
+            $callback($query = $this->forSubQuery());
+        } else {
+            $query = $callback instanceof OrmBuilder ? $callback->toBase() : $callback;
+        }
 
-        // Once we have the query instance we can simply execute it so it can add all
-        // of the sub-select's conditions to itself, and then we can cache it off
-        // in the array of where clauses for the "main" parent query instance.
-        call_user_func($callback, $query);
-
-        $this->wheres[] = compact('type', 'column', 'operator', 'query', 'boolean');
+        $this->wheres[] = compact(
+            'type', 'column', 'operator', 'query', 'boolean'
+        );
 
         $this->addBinding($query->getBindings(), 'where');
 
@@ -827,19 +1846,23 @@ class Builder
     /**
      * Add an exists clause to the query.
      *
-     * @param  \Closure $callback
-     * @param  string   $boolean
-     * @param  bool     $not
+     * @param  \Closure  $callback
+     * @param  string  $boolean
+     * @param  bool  $not
      * @return $this
      */
     public function whereExists(Closure $callback, $boolean = 'and', $not = false)
     {
-        $query = $this->newQuery();
+        if ($callback instanceof Closure) {
+            $query = $this->forSubQuery();
 
-        // Similar to the sub-select clause, we will create a new query instance so
-        // the developer may cleanly specify the entire exists query and we will
-        // compile the whole thing in the grammar and insert it into the SQL.
-        call_user_func($callback, $query);
+            // Similar to the sub-select clause, we will create a new query instance so
+            // the developer may cleanly specify the entire exists query and we will
+            // compile the whole thing in the grammar and insert it into the SQL.
+            $callback($query);
+        } else {
+            $query = $callback instanceof OrmBuilder ? $callback->toBase() : $callback;
+        }
 
         return $this->addWhereExistsQuery($query, $boolean, $not);
     }
@@ -847,11 +1870,11 @@ class Builder
     /**
      * Add an or exists clause to the query.
      *
-     * @param  \Closure $callback
-     * @param  bool     $not
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  \Closure  $callback
+     * @param  bool  $not
+     * @return $this
      */
-    public function orWhereExists(Closure $callback, $not = false)
+    public function orWhereExists($callback, $not = false)
     {
         return $this->whereExists($callback, 'or', $not);
     }
@@ -859,11 +1882,11 @@ class Builder
     /**
      * Add a where not exists clause to the query.
      *
-     * @param  \Closure $callback
-     * @param  string   $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  \Closure  $callback
+     * @param  string  $boolean
+     * @return $this
      */
-    public function whereNotExists(Closure $callback, $boolean = 'and')
+    public function whereNotExists($callback, $boolean = 'and')
     {
         return $this->whereExists($callback, $boolean, true);
     }
@@ -872,9 +1895,9 @@ class Builder
      * Add a where not exists clause to the query.
      *
      * @param  \Closure  $callback
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      */
-    public function orWhereNotExists(Closure $callback)
+    public function orWhereNotExists($callback)
     {
         return $this->orWhereExists($callback, true);
     }
@@ -882,12 +1905,12 @@ class Builder
     /**
      * Add an exists clause to the query.
      *
-     * @param  \NinjaTables\Framework\Database\Query\Builder $query
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
      * @param  string  $boolean
      * @param  bool  $not
      * @return $this
      */
-    public function addWhereExistsQuery(Builder $query, $boolean = 'and', $not = false)
+    public function addWhereExistsQuery(self $query, $boolean = 'and', $not = false)
     {
         $type = $not ? 'NotExists' : 'Exists';
 
@@ -899,302 +1922,274 @@ class Builder
     }
 
     /**
-     * Add a "where in" clause to the query.
+     * Adds a where condition using row values.
      *
-     * @param  string  $column
-     * @param  mixed   $values
-     * @param  string  $boolean
-     * @param  bool    $not
-     * @return $this
-     */
-    public function whereIn($column, $values, $boolean = 'and', $not = false)
-    {
-        $type = $not ? 'NotIn' : 'In';
-
-        if ($values instanceof static) {
-            return $this->whereInExistingQuery(
-                $column, $values, $boolean, $not
-            );
-        }
-
-        // If the value of the where in clause is actually a Closure, we will assume that
-        // the developer is using a full sub-select for this "in" statement, and will
-        // execute those Closures, then we can re-construct the entire sub-selects.
-        if ($values instanceof Closure) {
-            return $this->whereInSub($column, $values, $boolean, $not);
-        }
-
-        if ($values instanceof ArrayableInterface) {
-            $values = $values->toArray();
-        }
-
-        $this->wheres[] = compact('type', 'column', 'values', 'boolean');
-
-        $this->addBinding($values, 'where');
-
-        return $this;
-    }
-
-    /**
-     * Add an "or where in" clause to the query.
-     *
-     * @param  string  $column
-     * @param  mixed   $values
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function orWhereIn($column, $values)
-    {
-        return $this->whereIn($column, $values, 'or');
-    }
-
-    /**
-     * Add a "where not in" clause to the query.
-     *
-     * @param  string  $column
-     * @param  mixed   $values
-     * @param  string  $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function whereNotIn($column, $values, $boolean = 'and')
-    {
-        return $this->whereIn($column, $values, $boolean, true);
-    }
-
-    /**
-     * Add an "or where not in" clause to the query.
-     *
-     * @param  string  $column
-     * @param  mixed   $values
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function orWhereNotIn($column, $values)
-    {
-        return $this->whereNotIn($column, $values, 'or');
-    }
-
-    /**
-     * Add a where in with a sub-select to the query.
-     *
-     * @param  string   $column
-     * @param  \Closure $callback
-     * @param  string   $boolean
-     * @param  bool     $not
-     * @return $this
-     */
-    protected function whereInSub($column, Closure $callback, $boolean, $not)
-    {
-        $type = $not ? 'NotInSub' : 'InSub';
-
-        // To create the exists sub-select, we will actually create a query and call the
-        // provided callback with the query so the developer may set any of the query
-        // conditions they want for the in clause, then we'll put it in this array.
-        call_user_func($callback, $query = $this->newQuery());
-
-        $this->wheres[] = compact('type', 'column', 'query', 'boolean');
-
-        $this->addBinding($query->getBindings(), 'where');
-
-        return $this;
-    }
-
-    /**
-     * Add a external sub-select to the query.
-     *
-     * @param  string   $column
-     * @param  \NinjaTables\Framework\Database\Query\Builder|static  $query
-     * @param  string   $boolean
-     * @param  bool     $not
-     * @return $this
-     */
-    protected function whereInExistingQuery($column, $query, $boolean, $not)
-    {
-        $type = $not ? 'NotInSub' : 'InSub';
-
-        $this->wheres[] = compact('type', 'column', 'query', 'boolean');
-
-        $this->addBinding($query->getBindings(), 'where');
-
-        return $this;
-    }
-
-    /**
-     * Add a "where null" clause to the query.
-     *
-     * @param  string  $column
-     * @param  string  $boolean
-     * @param  bool    $not
-     * @return $this
-     */
-    public function whereNull($column, $boolean = 'and', $not = false)
-    {
-        $type = $not ? 'NotNull' : 'Null';
-
-        $this->wheres[] = compact('type', 'column', 'boolean');
-
-        return $this;
-    }
-
-    /**
-     * Add an "or where null" clause to the query.
-     *
-     * @param  string  $column
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function orWhereNull($column)
-    {
-        return $this->whereNull($column, 'or');
-    }
-
-    /**
-     * Add a "where not null" clause to the query.
-     *
-     * @param  string  $column
-     * @param  string  $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function whereNotNull($column, $boolean = 'and')
-    {
-        return $this->whereNull($column, $boolean, true);
-    }
-
-    /**
-     * Add an "or where not null" clause to the query.
-     *
-     * @param  string  $column
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function orWhereNotNull($column)
-    {
-        return $this->whereNotNull($column, 'or');
-    }
-
-    /**
-     * Add a "where date" statement to the query.
-     *
-     * @param  string  $column
-     * @param  string   $operator
-     * @param  int   $value
-     * @param  string   $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function whereDate($column, $operator, $value, $boolean = 'and')
-    {
-        return $this->addDateBasedWhere('Date', $column, $operator, $value, $boolean);
-    }
-
-    /**
-     * Add an "or where date" statement to the query.
-     *
-     * @param  string  $column
-     * @param  string   $operator
-     * @param  int   $value
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function orWhereDate($column, $operator, $value)
-    {
-        return $this->whereDate($column, $operator, $value, 'or');
-    }
-
-    /**
-     * Add a "where time" statement to the query.
-     *
-     * @param  string  $column
-     * @param  string   $operator
-     * @param  int   $value
-     * @param  string   $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function whereTime($column, $operator, $value, $boolean = 'and')
-    {
-        return $this->addDateBasedWhere('Time', $column, $operator, $value, $boolean);
-    }
-
-    /**
-     * Add an "or where time" statement to the query.
-     *
-     * @param  string  $column
-     * @param  string   $operator
-     * @param  int   $value
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function orWhereTime($column, $operator, $value)
-    {
-        return $this->whereTime($column, $operator, $value, 'or');
-    }
-
-    /**
-     * Add a "where day" statement to the query.
-     *
-     * @param  string  $column
-     * @param  string   $operator
-     * @param  int   $value
-     * @param  string   $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function whereDay($column, $operator, $value, $boolean = 'and')
-    {
-        return $this->addDateBasedWhere('Day', $column, $operator, $value, $boolean);
-    }
-
-    /**
-     * Add a "where month" statement to the query.
-     *
-     * @param  string  $column
-     * @param  string   $operator
-     * @param  int   $value
-     * @param  string   $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function whereMonth($column, $operator, $value, $boolean = 'and')
-    {
-        return $this->addDateBasedWhere('Month', $column, $operator, $value, $boolean);
-    }
-
-    /**
-     * Add a "where year" statement to the query.
-     *
-     * @param  string  $column
-     * @param  string   $operator
-     * @param  int   $value
-     * @param  string   $boolean
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
-     */
-    public function whereYear($column, $operator, $value, $boolean = 'and')
-    {
-        return $this->addDateBasedWhere('Year', $column, $operator, $value, $boolean);
-    }
-
-    /**
-     * Add a date based (year, month, day, time) statement to the query.
-     *
-     * @param  string  $type
-     * @param  string  $column
+     * @param  array  $columns
      * @param  string  $operator
-     * @param  int  $value
+     * @param  array  $values
+     * @param  string  $boolean
+     * @return $this
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function whereRowValues($columns, $operator, $values, $boolean = 'and')
+    {
+        if (count($columns) !== count($values)) {
+            throw new InvalidArgumentException('The number of columns must match the number of values');
+        }
+
+        $type = 'RowValues';
+
+        $this->wheres[] = compact('type', 'columns', 'operator', 'values', 'boolean');
+
+        $this->addBinding($this->cleanBindings($values));
+
+        return $this;
+    }
+
+    /**
+     * Adds an or where condition using row values.
+     *
+     * @param  array  $columns
+     * @param  string  $operator
+     * @param  array  $values
+     * @return $this
+     */
+    public function orWhereRowValues($columns, $operator, $values)
+    {
+        return $this->whereRowValues($columns, $operator, $values, 'or');
+    }
+
+    /**
+     * Add a "where JSON contains" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function whereJsonContains($column, $value, $boolean = 'and', $not = false)
+    {
+        $type = 'JsonContains';
+
+        $this->wheres[] = compact('type', 'column', 'value', 'boolean', 'not');
+
+        if (! $value instanceof Expression) {
+            $this->addBinding($this->grammar->prepareBindingForJsonContains($value));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add an "or where JSON contains" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function orWhereJsonContains($column, $value)
+    {
+        return $this->whereJsonContains($column, $value, 'or');
+    }
+
+    /**
+     * Add a "where JSON not contains" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $value
      * @param  string  $boolean
      * @return $this
      */
-    protected function addDateBasedWhere($type, $column, $operator, $value, $boolean = 'and')
+    public function whereJsonDoesntContain($column, $value, $boolean = 'and')
     {
-        $this->wheres[] = compact('column', 'type', 'boolean', 'operator', 'value');
+        return $this->whereJsonContains($column, $value, $boolean, true);
+    }
 
-        $this->addBinding($value, 'where');
+    /**
+     * Add an "or where JSON not contains" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function orWhereJsonDoesntContain($column, $value)
+    {
+        return $this->whereJsonDoesntContain($column, $value, 'or');
+    }
+
+    /**
+     * Add a "where JSON overlaps" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function whereJsonOverlaps($column, $value, $boolean = 'and', $not = false)
+    {
+        $type = 'JsonOverlaps';
+
+        $this->wheres[] = compact('type', 'column', 'value', 'boolean', 'not');
+
+        if (! $value instanceof Expression) {
+            $this->addBinding($this->grammar->prepareBindingForJsonContains($value));
+        }
 
         return $this;
+    }
+
+    /**
+     * Add an "or where JSON overlaps" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function orWhereJsonOverlaps($column, $value)
+    {
+        return $this->whereJsonOverlaps($column, $value, 'or');
+    }
+
+    /**
+     * Add a "where JSON not overlap" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereJsonDoesntOverlap($column, $value, $boolean = 'and')
+    {
+        return $this->whereJsonOverlaps($column, $value, $boolean, true);
+    }
+
+    /**
+     * Add an "or where JSON not overlap" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function orWhereJsonDoesntOverlap($column, $value)
+    {
+        return $this->whereJsonDoesntOverlap($column, $value, 'or');
+    }
+
+    /**
+     * Add a clause that determines if a JSON path exists to the query.
+     *
+     * @param  string  $column
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function whereJsonContainsKey($column, $boolean = 'and', $not = false)
+    {
+        $type = 'JsonContainsKey';
+
+        $this->wheres[] = compact('type', 'column', 'boolean', 'not');
+
+        return $this;
+    }
+
+    /**
+     * Add an "or" clause that determines if a JSON path exists to the query.
+     *
+     * @param  string  $column
+     * @return $this
+     */
+    public function orWhereJsonContainsKey($column)
+    {
+        return $this->whereJsonContainsKey($column, 'or');
+    }
+
+    /**
+     * Add a clause that determines if a JSON path does not exist to the query.
+     *
+     * @param  string  $column
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereJsonDoesntContainKey($column, $boolean = 'and')
+    {
+        return $this->whereJsonContainsKey($column, $boolean, true);
+    }
+
+    /**
+     * Add an "or" clause that determines if a JSON path does not exist to the query.
+     *
+     * @param  string  $column
+     * @return $this
+     */
+    public function orWhereJsonDoesntContainKey($column)
+    {
+        return $this->whereJsonDoesntContainKey($column, 'or');
+    }
+
+    /**
+     * Add a "where JSON length" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereJsonLength(
+        $column,
+        $operator,
+        $value = null,
+        $boolean = 'and'
+    ) {
+        $type = 'JsonLength';
+
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        $this->wheres[] = compact('type', 'column', 'operator', 'value', 'boolean');
+
+        if (! $value instanceof Expression) {
+            $this->addBinding((int) $this->flattenValue($value));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add an "or where JSON length" clause to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function orWhereJsonLength($column, $operator, $value = null)
+    {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        return $this->whereJsonLength($column, $operator, $value, 'or');
     }
 
     /**
      * Handles dynamic "where" clauses to the query.
      *
      * @param  string  $method
-     * @param  string  $parameters
+     * @param  array  $parameters
      * @return $this
      */
     public function dynamicWhere($method, $parameters)
     {
         $finder = substr($method, 5);
 
-        $segments = preg_split('/(And|Or)(?=[A-Z])/', $finder, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $segments = preg_split(
+            '/(And|Or)(?=[A-Z])/', $finder, -1, PREG_SPLIT_DELIM_CAPTURE
+        );
 
         // The connector variable will determine which connector will be used for the
         // query condition. We will change it as we come across new boolean values
@@ -1207,7 +2202,7 @@ class Builder
             // If the segment is not a boolean connector, we can assume it is a column's name
             // and we will add it to the query as a new constraint as a where clause, then
             // we can keep iterating through the dynamic method string's segments again.
-            if ($segment != 'And' && $segment != 'Or') {
+            if ($segment !== 'And' && $segment !== 'Or') {
                 $this->addDynamic($segment, $connector, $parameters, $index);
 
                 $index++;
@@ -1229,8 +2224,8 @@ class Builder
      *
      * @param  string  $segment
      * @param  string  $connector
-     * @param  array   $parameters
-     * @param  int     $index
+     * @param  array  $parameters
+     * @param  int  $index
      * @return void
      */
     protected function addDynamic($segment, $connector, $parameters, $index)
@@ -1244,16 +2239,181 @@ class Builder
     }
 
     /**
-     * Add a "group by" clause to the query.
+     * Add a "where fulltext" clause to the query.
      *
-     * @param  array|string  $column,...
+     * @param  string|string[]  $columns
+     * @param  string  $value
+     * @param  string  $boolean
      * @return $this
      */
-    public function groupBy()
+    public function whereFullText(
+        $columns,
+        $value,
+        array $options = [],
+        $boolean = 'and'
+    ) {
+        $type = 'Fulltext';
+
+        $columns = (array) $columns;
+
+        $this->wheres[] = compact('type', 'columns', 'value', 'options', 'boolean');
+
+        $this->addBinding($value);
+
+        return $this;
+    }
+
+    /**
+     * Add a "or where fulltext" clause to the query.
+     *
+     * @param  string|string[]  $columns
+     * @param  string  $value
+     * @return $this
+     */
+    public function orWhereFullText($columns, $value, array $options = [])
     {
-        foreach (func_get_args() as $arg) {
-            $this->groups = array_merge((array) $this->groups, is_array($arg) ? $arg : [$arg]);
+        return $this->whereFulltext($columns, $value, $options, 'or');
+    }
+
+    /**
+     * Add a "where" clause to the query for multiple columns with "and" conditions between them.
+     *
+     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereAll(
+        $columns,
+        $operator = null,
+        $value = null,
+        $boolean = 'and'
+    ) {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        $this->whereNested(function ($query) use ($columns, $operator, $value) {
+            foreach ($columns as $column) {
+                $query->where($column, $operator, $value, 'and');
+            }
+        }, $boolean);
+
+        return $this;
+    }
+
+    /**
+     * Add an "or where" clause to the query for multiple columns with "and" conditions between them.
+     *
+     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function orWhereAll($columns, $operator = null, $value = null)
+    {
+        return $this->whereAll($columns, $operator, $value, 'or');
+    }
+
+    /**
+     * Add a "where" clause to the query for multiple columns with "or" conditions between them.
+     *
+     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereAny(
+        $columns,
+        $operator = null,
+        $value = null,
+        $boolean = 'and'
+    ) {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        $this->whereNested(function ($query) use ($columns, $operator, $value) {
+            foreach ($columns as $column) {
+                $query->where($column, $operator, $value, 'or');
+            }
+        }, $boolean);
+
+        return $this;
+    }
+
+    /**
+     * Add an "or where" clause to the query for multiple columns with "or" conditions between them.
+     *
+     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function orWhereAny($columns, $operator = null, $value = null)
+    {
+        return $this->whereAny($columns, $operator, $value, 'or');
+    }
+
+    /**
+     * Add a "where not" clause to the query for multiple columns where none of the conditions should be true.
+     *
+     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereNone($columns, $operator = null, $value = null, $boolean = 'and')
+    {
+        return $this->whereAny($columns, $operator, $value, $boolean.' not');
+    }
+
+    /**
+     * Add an "or where not" clause to the query for multiple columns where none of the conditions should be true.
+     *
+     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function orWhereNone($columns, $operator = null, $value = null)
+    {
+        return $this->whereNone($columns, $operator, $value, 'or');
+    }
+
+    /**
+     * Add a "group by" clause to the query.
+     *
+     * @param  array|string  ...$groups
+     * @return $this
+     */
+    public function groupBy(...$groups)
+    {
+        foreach ($groups as $group) {
+            $this->groups = array_merge(
+                (array) $this->groups,
+                Arr::wrap($group)
+            );
         }
+
+        return $this;
+    }
+
+    /**
+     * Add a raw groupBy clause to the query.
+     *
+     * @param  string  $sql
+     * @param  array  $bindings
+     * @return $this
+     */
+    public function groupByRaw($sql, array $bindings = [])
+    {
+        $this->groups[] = new Expression($sql);
+
+        $this->addBinding($bindings, 'groupBy');
 
         return $this;
     }
@@ -1262,48 +2422,193 @@ class Builder
      * Add a "having" clause to the query.
      *
      * @param  string  $column
-     * @param  string  $operator
-     * @param  string  $value
+     * @param  string|null  $operator
+     * @param  string|null  $value
      * @param  string  $boolean
      * @return $this
      */
     public function having($column, $operator = null, $value = null, $boolean = 'and')
     {
-        $type = 'basic';
+        $type = 'Basic';
+
+        if ($column instanceof ConditionExpression) {
+            $type = 'Expression';
+
+            $this->havings[] = compact('type', 'column', 'boolean');
+
+            return $this;
+        }
+
+        // Here we will make some assumptions about the operator. If only 2 values are
+        // passed to the method, we will assume that the operator is an equals sign
+        // and keep going. Otherwise, we'll require the operator to be passed in.
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
+        if ($column instanceof Closure && is_null($operator)) {
+            return $this->havingNested($column, $boolean);
+        }
+
+        // If the given operator is not found in the list of valid operators we will
+        // assume that the developer is just short-cutting the '=' operators and
+        // we will set the operators to '=' and set the values appropriately.
+        if ($this->invalidOperator($operator)) {
+            [$value, $operator] = [$operator, '='];
+        }
+
+        if ($this->isBitwiseOperator($operator)) {
+            $type = 'Bitwise';
+        }
 
         $this->havings[] = compact('type', 'column', 'operator', 'value', 'boolean');
 
         if (! $value instanceof Expression) {
-            $this->addBinding($value, 'having');
+            $this->addBinding($this->flattenValue($value), 'having');
         }
 
         return $this;
     }
 
     /**
-     * Add a "or having" clause to the query.
+     * Add an "or having" clause to the query.
      *
      * @param  string  $column
-     * @param  string  $operator
-     * @param  string  $value
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  string|null  $operator
+     * @param  string|null  $value
+     * @return $this
      */
     public function orHaving($column, $operator = null, $value = null)
     {
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
+        );
+
         return $this->having($column, $operator, $value, 'or');
+    }
+
+    /**
+     * Add a nested having statement to the query.
+     *
+     * @param  \Closure  $callback
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function havingNested(Closure $callback, $boolean = 'and')
+    {
+        $callback($query = $this->forNestedWhere());
+
+        return $this->addNestedHavingQuery($query, $boolean);
+    }
+
+    /**
+     * Add another query builder as a nested having to the query builder.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function addNestedHavingQuery($query, $boolean = 'and')
+    {
+        if (count($query->havings)) {
+            $type = 'Nested';
+
+            $this->havings[] = compact('type', 'query', 'boolean');
+
+            $this->addBinding($query->getRawBindings()['having'], 'having');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add a "having null" clause to the query.
+     *
+     * @param  string|array  $columns
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function havingNull($columns, $boolean = 'and', $not = false)
+    {
+        $type = $not ? 'NotNull' : 'Null';
+
+        foreach (Arr::wrap($columns) as $column) {
+            $this->havings[] = compact('type', 'column', 'boolean');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add an "or having null" clause to the query.
+     *
+     * @param  string  $column
+     * @return $this
+     */
+    public function orHavingNull($column)
+    {
+        return $this->havingNull($column, 'or');
+    }
+
+    /**
+     * Add a "having not null" clause to the query.
+     *
+     * @param  string|array  $columns
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function havingNotNull($columns, $boolean = 'and')
+    {
+        return $this->havingNull($columns, $boolean, true);
+    }
+
+    /**
+     * Add an "or having not null" clause to the query.
+     *
+     * @param  string  $column
+     * @return $this
+     */
+    public function orHavingNotNull($column)
+    {
+        return $this->havingNotNull($column, 'or');
+    }
+
+    /**
+     * Add a "having between " clause to the query.
+     *
+     * @param  string  $column
+     * @param  array  $values
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function havingBetween($column, array $values, $boolean = 'and', $not = false)
+    {
+        $type = 'between';
+
+        if ($values instanceof DateTimePeriod) {
+            $values = [$values->getStartDate(), $values->getEndDate()];
+        }
+
+        $this->havings[] = compact('type', 'column', 'values', 'boolean', 'not');
+
+        $this->addBinding(array_slice($this->cleanBindings(Arr::flatten($values)), 0, 2), 'having');
+
+        return $this;
     }
 
     /**
      * Add a raw having clause to the query.
      *
      * @param  string  $sql
-     * @param  array   $bindings
+     * @param  array  $bindings
      * @param  string  $boolean
      * @return $this
      */
     public function havingRaw($sql, array $bindings = [], $boolean = 'and')
     {
-        $type = 'raw';
+        $type = 'Raw';
 
         $this->havings[] = compact('type', 'sql', 'boolean');
 
@@ -1316,8 +2621,8 @@ class Builder
      * Add a raw or having clause to the query.
      *
      * @param  string  $sql
-     * @param  array   $bindings
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  array  $bindings
+     * @return $this
      */
     public function orHavingRaw($sql, array $bindings = [])
     {
@@ -1327,25 +2632,52 @@ class Builder
     /**
      * Add an "order by" clause to the query.
      *
-     * @param  string  $column
+     * @param  \Closure|\NinjaTables\Framework\Database\Orm\Builder|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Query\Expression|string  $column
      * @param  string  $direction
      * @return $this
+     *
+     * @throws \InvalidArgumentException
      */
     public function orderBy($column, $direction = 'asc')
     {
+        if ($this->isQueryable($column)) {
+            [$query, $bindings] = $this->createSub($column);
+
+            $column = new Expression('('.$query.')');
+
+            $this->addBinding($bindings, $this->unions ? 'unionOrder' : 'order');
+        }
+
+        $direction = strtolower($direction);
+
+        if (! in_array($direction, ['asc', 'desc'], true)) {
+            throw new InvalidArgumentException('Order direction must be "asc" or "desc".');
+        }
+
         $this->{$this->unions ? 'unionOrders' : 'orders'}[] = [
             'column' => $column,
-            'direction' => strtolower($direction) == 'asc' ? 'asc' : 'desc',
+            'direction' => $direction,
         ];
 
         return $this;
     }
 
     /**
+     * Add a descending "order by" clause to the query.
+     *
+     * @param  \Closure|\NinjaTables\Framework\Database\Orm\Builder|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Query\Expression|string  $column
+     * @return $this
+     */
+    public function orderByDesc($column)
+    {
+        return $this->orderBy($column, 'desc');
+    }
+
+    /**
      * Add an "order by" clause for a timestamp to the query.
      *
-     * @param  string  $column
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  \Closure|\NinjaTables\Framework\Database\Orm\Builder|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Query\Expression|string  $column
+     * @return $this
      */
     public function latest($column = 'created_at')
     {
@@ -1355,8 +2687,8 @@ class Builder
     /**
      * Add an "order by" clause for a timestamp to the query.
      *
-     * @param  string  $column
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  \Closure|\NinjaTables\Framework\Database\Orm\Builder|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Query\Expression|string  $column
+     * @return $this
      */
     public function oldest($column = 'created_at')
     {
@@ -1383,15 +2715,24 @@ class Builder
      */
     public function orderByRaw($sql, $bindings = [])
     {
-        $property = $this->unions ? 'unionOrders' : 'orders';
+        $type = 'Raw';
 
-        $type = 'raw';
+        $this->{$this->unions ? 'unionOrders' : 'orders'}[] = compact('type', 'sql');
 
-        $this->{$property}[] = compact('type', 'sql');
-
-        $this->addBinding($bindings, 'order');
+        $this->addBinding($bindings, $this->unions ? 'unionOrder' : 'order');
 
         return $this;
+    }
+
+    /**
+     * Alias to set the "offset" value of the query.
+     *
+     * @param  int  $value
+     * @return $this
+     */
+    public function skip($value)
+    {
+        return $this->offset($value);
     }
 
     /**
@@ -1404,20 +2745,20 @@ class Builder
     {
         $property = $this->unions ? 'unionOffset' : 'offset';
 
-        $this->$property = max(0, $value);
+        $this->$property = max(0, (int) $value);
 
         return $this;
     }
 
     /**
-     * Alias to set the "offset" value of the query.
+     * Alias to set the "limit" value of the query.
      *
      * @param  int  $value
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      */
-    public function skip($value)
+    public function take($value)
     {
-        return $this->offset($value);
+        return $this->limit($value);
     }
 
     /**
@@ -1431,21 +2772,26 @@ class Builder
         $property = $this->unions ? 'unionLimit' : 'limit';
 
         if ($value >= 0) {
-            $this->$property = $value;
+            $this->$property = ! is_null($value) ? (int) $value : null;
         }
 
         return $this;
     }
 
     /**
-     * Alias to set the "limit" value of the query.
+     * Add a "group limit" clause to the query.
      *
      * @param  int  $value
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @param  string  $column
+     * @return $this
      */
-    public function take($value)
+    public function groupLimit($value, $column)
     {
-        return $this->limit($value);
+        if ($value >= 0) {
+            $this->groupLimit = compact('value', 'column');
+        }
+
+        return $this;
     }
 
     /**
@@ -1453,31 +2799,87 @@ class Builder
      *
      * @param  int  $page
      * @param  int  $perPage
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      */
     public function forPage($page, $perPage = 15)
     {
-        return $this->skip(($page - 1) * $perPage)->take($perPage);
+        return $this->offset(($page - 1) * $perPage)->limit($perPage);
+    }
+
+    /**
+     * Constrain the query to the previous "page" of results before a given ID.
+     *
+     * @param  int  $perPage
+     * @param  int|null  $lastId
+     * @param  string  $column
+     * @return $this
+     */
+    public function forPageBeforeId($perPage = 15, $lastId = 0, $column = 'id')
+    {
+        $this->orders = $this->removeExistingOrdersFor($column);
+
+        if (! is_null($lastId)) {
+            $this->where($column, '<', $lastId);
+        }
+
+        return $this->orderBy($column, 'desc')
+                    ->limit($perPage);
     }
 
     /**
      * Constrain the query to the next "page" of results after a given ID.
      *
      * @param  int  $perPage
-     * @param  int  $lastId
+     * @param  int|null  $lastId
      * @param  string  $column
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      */
     public function forPageAfterId($perPage = 15, $lastId = 0, $column = 'id')
     {
-        $this->orders = Collection::make($this->orders)
-                ->reject(function ($order) use ($column) {
-                    return $order['column'] === $column;
-                })->values()->all();
+        $this->orders = $this->removeExistingOrdersFor($column);
 
-        return $this->where($column, '>', $lastId)
-                    ->orderBy($column, 'asc')
-                    ->take($perPage);
+        if (! is_null($lastId)) {
+            $this->where($column, '>', $lastId);
+        }
+
+        return $this->orderBy($column, 'asc')
+                    ->limit($perPage);
+    }
+
+    /**
+     * Remove all existing orders and optionally add a new order.
+     *
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Query\Expression|string|null  $column
+     * @param  string  $direction
+     * @return $this
+     */
+    public function reorder($column = null, $direction = 'asc')
+    {
+        $this->orders = null;
+        $this->unionOrders = null;
+        $this->bindings['order'] = [];
+        $this->bindings['unionOrder'] = [];
+
+        if ($column) {
+            return $this->orderBy($column, $direction);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get an array with all orders with a given column removed.
+     *
+     * @param  string  $column
+     * @return array
+     */
+    protected function removeExistingOrdersFor($column)
+    {
+        return Collection::make($this->orders)
+                    ->reject(function ($order) use ($column) {
+                        return isset($order['column'])
+                               ? $order['column'] === $column : false;
+                    })->values()->all();
     }
 
     /**
@@ -1485,12 +2887,12 @@ class Builder
      *
      * @param  \NinjaTables\Framework\Database\Query\Builder|\Closure  $query
      * @param  bool  $all
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      */
     public function union($query, $all = false)
     {
         if ($query instanceof Closure) {
-            call_user_func($query, $query = $this->newQuery());
+            $query($query = $this->newQuery());
         }
 
         $this->unions[] = compact('query', 'all');
@@ -1504,7 +2906,7 @@ class Builder
      * Add a union all statement to the query.
      *
      * @param  \NinjaTables\Framework\Database\Query\Builder|\Closure  $query
-     * @return \NinjaTables\Framework\Database\Query\Builder|static
+     * @return $this
      */
     public function unionAll($query)
     {
@@ -1514,14 +2916,14 @@ class Builder
     /**
      * Lock the selected rows in the table.
      *
-     * @param  bool  $value
+     * @param  string|bool  $value
      * @return $this
      */
     public function lock($value = true)
     {
         $this->lock = $value;
 
-        if ($this->lock) {
+        if (! is_null($this->lock)) {
             $this->useWritePdo();
         }
 
@@ -1549,25 +2951,119 @@ class Builder
     }
 
     /**
+     * Register a closure to be invoked before the query is executed.
+     *
+     * @param  callable  $callback
+     * @return $this
+     */
+    public function beforeQuery(callable $callback)
+    {
+        $this->beforeQueryCallbacks[] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Invoke the "before query" modification callbacks.
+     *
+     * @return void
+     */
+    public function applyBeforeQueryCallbacks()
+    {
+        foreach ($this->beforeQueryCallbacks as $callback) {
+            $callback($this);
+        }
+
+        $this->beforeQueryCallbacks = [];
+    }
+
+    /**
+     * Register a closure to be invoked after the query is executed.
+     *
+     * @param  \Closure  $callback
+     * @return $this
+     */
+    public function afterQuery(Closure $callback)
+    {
+        $this->afterQueryCallbacks[] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Invoke the "after query" modification callbacks.
+     *
+     * @param  mixed  $result
+     * @return mixed
+     */
+    public function applyAfterQueryCallbacks($result)
+    {
+        foreach ($this->afterQueryCallbacks as $afterQueryCallback) {
+            $result = $afterQueryCallback($result) ?: $result;
+        }
+
+        return $result;
+    }
+
+    /**
      * Get the SQL representation of the query.
      *
      * @return string
      */
     public function toSql()
     {
+        $this->applyBeforeQueryCallbacks();
+
         return $this->grammar->compileSelect($this);
+    }
+
+    /**
+     * Get the raw SQL representation of the query with embedded bindings.
+     *
+     * @return string
+     */
+    public function toRawSql()
+    {
+        return $this->grammar->substituteBindingsIntoRawSql(
+            $this->toSql(), $this->connection->prepareBindings($this->getBindings())
+        );
     }
 
     /**
      * Execute a query for a single record by ID.
      *
-     * @param  int    $id
+     * @param  int|string  $id
      * @param  array  $columns
      * @return mixed|static
      */
     public function find($id, $columns = ['*'])
     {
         return $this->where('id', '=', $id)->first($columns);
+    }
+
+    /**
+     * Execute a query for a single record by ID or call a callback.
+     *
+     * @template TValue
+     *
+     * @param  mixed  $id
+     * @param  (\Closure(): TValue)|list<string>|string  $columns
+     * @param  (\Closure(): TValue)|null  $callback
+     * @return object|TValue
+     */
+    public function findOr($id, $columns = ['*'], Closure $callback = null)
+    {
+        if ($columns instanceof Closure) {
+            $callback = $columns;
+
+            $columns = ['*'];
+        }
+
+        if (! is_null($data = $this->find($id, $columns))) {
+            return $data;
+        }
+
+        return $callback();
     }
 
     /**
@@ -1584,37 +3080,50 @@ class Builder
     }
 
     /**
-     * Execute the query and get the first result.
+     * Get a single expression value from the first result of a query.
      *
-     * @param  array   $columns
-     * @return mixed|static
+     * @param  string  $expression
+     * @param  array  $bindings
+     * @return mixed
      */
-    public function first($columns = ['*'])
+    public function rawValue(string $expression, array $bindings = [])
     {
-        $results = $this->take(1)->get($columns);
+        $result = (array) $this->selectRaw($expression, $bindings)->first();
 
-        return count($results) > 0 ? reset($results) : null;
+        return count($result) > 0 ? reset($result) : null;
+    }
+
+    /**
+     * Get a single column's value from the first result of a query if it's the sole matching record.
+     *
+     * @param  string  $column
+     * @return mixed
+     *
+     * @throws \NinjaTables\Framework\Database\RecordsNotFoundException
+     * @throws \NinjaTables\Framework\Database\MultipleRecordsFoundException
+     */
+    public function soleValue($column)
+    {
+        $result = (array) $this->sole([$column]);
+
+        return reset($result);
     }
 
     /**
      * Execute the query as a "select" statement.
      *
-     * @param  array  $columns
-     * @return array|static[]
+     * @param  array|string  $columns
+     * @return \NinjaTables\Framework\Support\Collection
      */
     public function get($columns = ['*'])
     {
-        $original = $this->columns;
+        $items = Helper::collect($this->onceWithColumns(Arr::wrap($columns), function () {
+            return $this->processor->processSelect($this, $this->runSelect());
+        }));
 
-        if (is_null($original)) {
-            $this->columns = $columns;
-        }
-
-        $results = $this->processor->processSelect($this, $this->runSelect());
-
-        $this->columns = $original;
-
-        return $results;
+        return $this->applyAfterQueryCallbacks(
+            isset($this->groupLimit) ? $this->withoutGroupLimitKeys($items) : $items
+        );
     }
 
     /**
@@ -1624,7 +3133,35 @@ class Builder
      */
     protected function runSelect()
     {
-        return $this->connection->select($this->toSql(), $this->getBindings(), ! $this->useWritePdo);
+        return $this->connection->select(
+            $this->toSql(), $this->getBindings(), ! $this->useWritePdo
+        );
+    }
+
+    /**
+     * Remove the group limit keys from the results in the collection.
+     *
+     * @param  \NinjaTables\Framework\Support\Collection  $items
+     * @return \NinjaTables\Framework\Support\Collection
+     */
+    protected function withoutGroupLimitKeys($items)
+    {
+        $keysToRemove = ['laravel_row'];
+
+        if (is_string($this->groupLimit['column'])) {
+            $column = Helper::last(explode('.', $this->groupLimit['column']));
+
+            $keysToRemove[] = '@laravel_group := '.$this->grammar->wrap($column);
+            $keysToRemove[] = '@laravel_group := '.$this->grammar->wrap('pivot_'.$column);
+        }
+
+        $items->each(function ($item) use ($keysToRemove) {
+            foreach ($keysToRemove as $key) {
+                unset($item->$key);
+            }
+        });
+
+        return $items;
     }
 
     /**
@@ -1636,15 +3173,22 @@ class Builder
      * @param  int|null  $page
      * @return \NinjaTables\Framework\Pagination\LengthAwarePaginatorInterface
      */
-    public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
-    {
+    public function paginate(
+        $perPage = 15,
+        $columns = ['*'],
+        $pageName = 'page',
+        $page = null,
+        $total = null
+    ) {
         $page = $page ?: Paginator::resolveCurrentPage($pageName);
 
-        $total = $this->getCountForPagination($columns);
+        $total = Helper::value($total) ?? $this->getCountForPagination();
 
-        $results = $total ? $this->forPage($page, $perPage)->get($columns) : [];
+        $perPage = $perPage instanceof Closure ? $perPage($total) : $perPage;
 
-        return new LengthAwarePaginator($results, $total, $perPage, $page, [
+        $results = $total ? $this->forPage($page, $perPage)->get($columns) : Helper::collect();
+
+        return $this->paginator($results, $total, $perPage, $page, [
             'path' => Paginator::resolveCurrentPath(),
             'pageName' => $pageName,
         ]);
@@ -1665,12 +3209,62 @@ class Builder
     {
         $page = $page ?: Paginator::resolveCurrentPage($pageName);
 
-        $this->skip(($page - 1) * $perPage)->take($perPage + 1);
+        $this->offset(($page - 1) * $perPage)->limit($perPage + 1);
 
-        return new Paginator($this->get($columns), $perPage, $page, [
+        return $this->simplePaginator($this->get($columns), $perPage, $page, [
             'path' => Paginator::resolveCurrentPath(),
             'pageName' => $pageName,
         ]);
+    }
+
+    /**
+     * Get a paginator only supporting simple next and previous links.
+     *
+     * This is more efficient on larger data-sets, etc.
+     *
+     * @param  int|null  $perPage
+     * @param  array  $columns
+     * @param  string  $cursorName
+     * @param  \NinjaTables\Framework\Pagination\Cursor|string|null  $cursor
+     * @return \NinjaTables\Framework\Pagination\CursorPaginatorInterface
+     */
+    public function cursorPaginate($perPage = 15, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
+    {
+        return $this->paginateUsingCursor($perPage, $columns, $cursorName, $cursor);
+    }
+
+    /**
+     * Ensure the proper order by required for cursor pagination.
+     *
+     * @param  bool  $shouldReverse
+     * @return \NinjaTables\Framework\Support\Collection
+     */
+    protected function ensureOrderForCursorPagination($shouldReverse = false)
+    {
+        if (empty($this->orders) && empty($this->unionOrders)) {
+            $this->enforceOrderBy();
+        }
+
+        $reverseDirection = function ($order) {
+            if (! isset($order['direction'])) {
+                return $order;
+            }
+
+            $order['direction'] = $order['direction'] === 'asc' ? 'desc' : 'asc';
+
+            return $order;
+        };
+
+        if ($shouldReverse) {
+            $this->orders = collect($this->orders)->map($reverseDirection)->toArray();
+            $this->unionOrders = collect($this->unionOrders)->map($reverseDirection)->toArray();
+        }
+
+        $orders = ! empty($this->unionOrders) ? $this->unionOrders : $this->orders;
+
+        return Helper::collect($orders)
+            ->filter(fn ($order) => Arr::has($order, 'direction'))
+            ->values();
     }
 
     /**
@@ -1681,41 +3275,59 @@ class Builder
      */
     public function getCountForPagination($columns = ['*'])
     {
-        $this->backupFieldsForCount();
+        $results = $this->runPaginationCountQuery($columns);
 
-        $this->aggregate = ['function' => 'count', 'columns' => $this->clearSelectAliases($columns)];
-
-        $results = $this->get();
-
-        $this->aggregate = null;
-
-        $this->restoreFieldsForCount();
-
-        if (isset($this->groups)) {
-            return count($results);
+        // Once we have run the pagination count query, we will get the resulting count and
+        // take into account what type of query it was. When there is a group by we will
+        // just return the count of the entire results set since that will be correct.
+        if (! isset($results[0])) {
+            return 0;
+        } elseif (is_object($results[0])) {
+            return (int) $results[0]->aggregate;
         }
 
-        return isset($results[0]) ? (int) array_change_key_case((array) $results[0])['aggregate'] : 0;
+        return (int) array_change_key_case((array) $results[0])['aggregate'];
     }
 
     /**
-     * Backup some fields for the pagination count.
+     * Run a pagination count query.
      *
-     * @return void
+     * @param  array  $columns
+     * @return array
      */
-    protected function backupFieldsForCount()
+    protected function runPaginationCountQuery($columns = ['*'])
     {
-        foreach (['orders', 'limit', 'offset', 'columns'] as $field) {
-            $this->backups[$field] = $this->{$field};
+        if ($this->groups || $this->havings) {
+            $clone = $this->cloneForPaginationCount();
 
-            $this->{$field} = null;
+            if (is_null($clone->columns) && ! empty($this->joins)) {
+                $clone->select($this->from.'.*');
+            }
+
+            return $this->newQuery()
+                ->from(new Expression('('.$clone->toSql().') as '.$this->grammar->wrap('aggregate_table')))
+                ->mergeBindings($clone)
+                ->setAggregate('count', $this->withoutSelectAliases($columns))
+                ->get()->all();
         }
 
-        foreach (['order', 'select'] as $key) {
-            $this->bindingBackups[$key] = $this->bindings[$key];
+        $without = $this->unions ? ['unionOrders', 'unionLimit', 'unionOffset'] : ['columns', 'orders', 'limit', 'offset'];
 
-            $this->bindings[$key] = [];
-        }
+        return $this->cloneWithout($without)
+                    ->cloneWithoutBindings($this->unions ? ['unionOrder'] : ['select', 'order'])
+                    ->setAggregate('count', $this->withoutSelectAliases($columns))
+                    ->get()->all();
+    }
+
+    /**
+     * Clone the existing query instance for usage in a pagination subquery.
+     *
+     * @return self
+     */
+    protected function cloneForPaginationCount()
+    {
+        return $this->cloneWithout(['orders', 'limit', 'offset'])
+                    ->cloneWithoutBindings(['order']);
     }
 
     /**
@@ -1724,37 +3336,18 @@ class Builder
      * @param  array  $columns
      * @return array
      */
-    protected function clearSelectAliases(array $columns)
+    protected function withoutSelectAliases(array $columns)
     {
         return array_map(function ($column) {
-            return is_string($column) && ($aliasPosition = strpos(strtolower($column), ' as ')) !== false
+            return is_string($column) && ($aliasPosition = stripos($column, ' as ')) !== false
                     ? substr($column, 0, $aliasPosition) : $column;
         }, $columns);
     }
 
     /**
-     * Restore some fields after the pagination count.
+     * Get a lazy collection for the given query.
      *
-     * @return void
-     */
-    protected function restoreFieldsForCount()
-    {
-        foreach (['orders', 'limit', 'offset', 'columns'] as $field) {
-            $this->{$field} = $this->backups[$field];
-        }
-
-        foreach (['order', 'select'] as $key) {
-            $this->bindings[$key] = $this->bindingBackups[$key];
-        }
-
-        $this->backups = [];
-        $this->bindingBackups = [];
-    }
-
-    /**
-     * Get a generator for the given query.
-     *
-     * @return \Generator
+     * @return \NinjaTables\Framework\Support\LazyCollection
      */
     public function cursor()
     {
@@ -1762,125 +3355,66 @@ class Builder
             $this->columns = ['*'];
         }
 
-        return $this->connection->cursor(
-            $this->toSql(), $this->getBindings(), ! $this->useWritePdo
-        );
+        return (new LazyCollection(function () {
+            yield from $this->connection->cursor(
+                $this->toSql(), $this->getBindings(), ! $this->useWritePdo
+            );
+        }))->map(function ($item) {
+            return $this->applyAfterQueryCallbacks(Helper::collect([$item]))->first();
+        })->reject(fn ($item) => is_null($item));
     }
 
     /**
-     * Chunk the results of the query.
+     * Throw an exception if the query doesn't have an orderBy clause.
      *
-     * @param  int  $count
-     * @param  callable  $callback
-     * @return  bool
-     */
-    public function chunk($count, callable $callback)
-    {
-        $results = $this->forPage($page = 1, $count)->get();
-
-        while (count($results) > 0) {
-            // On each chunk result set, we will pass them to the callback and then let the
-            // developer take care of everything within the callback, which allows us to
-            // keep the memory low for spinning through large result sets for working.
-            if (call_user_func($callback, $results) === false) {
-                return false;
-            }
-
-            $page++;
-
-            $results = $this->forPage($page, $count)->get();
-        }
-
-        return true;
-    }
-
-    /**
-     * Chunk the results of a query by comparing numeric IDs.
-     *
-     * @param  int  $count
-     * @param  callable  $callback
-     * @param  string  $column
-     * @param  string  $alias
-     * @return bool
-     */
-    public function chunkById($count, callable $callback, $column = 'id', $alias = null)
-    {
-        $lastId = null;
-
-        $alias = $alias ?: $column;
-
-        $results = $this->forPageAfterId($count, 0, $column)->get();
-
-        while (! empty($results)) {
-            if (call_user_func($callback, $results) === false) {
-                return false;
-            }
-
-            $lastId = Helper::last($results)->{$alias};
-
-            $results = $this->forPageAfterId($count, $lastId, $column)->get();
-        }
-
-        return true;
-    }
-
-    /**
-     * Execute a callback over each item while chunking.
-     *
-     * @param  callable  $callback
-     * @param  int  $count
-     * @return bool
+     * @return void
      *
      * @throws \RuntimeException
      */
-    public function each(callable $callback, $count = 1000)
+    protected function enforceOrderBy()
     {
-        if (is_null($this->orders) && is_null($this->unionOrders)) {
-            throw new RuntimeException('You must specify an orderBy clause when using the "each" function.');
+        if (empty($this->orders) && empty($this->unionOrders)) {
+            throw new RuntimeException('You must specify an orderBy clause when using this function.');
         }
-
-        return $this->chunk($count, function ($results) use ($callback) {
-            foreach ($results as $key => $value) {
-                if ($callback($value, $key) === false) {
-                    return false;
-                }
-            }
-        });
     }
 
     /**
-     * Get an array with the values of a given column.
+     * Get a collection instance containing the values of a given column.
      *
      * @param  string  $column
      * @param  string|null  $key
-     * @return array
+     * @return \NinjaTables\Framework\Support\Collection
      */
     public function pluck($column, $key = null)
     {
-        $results = $this->get(is_null($key) ? [$column] : [$column, $key]);
+        // First, we will need to select the results of the query accounting for the
+        // given columns / key. Once we have the results, we will be able to take
+        // the results and get the exact data that was requested for the query.
+        $queryResult = $this->onceWithColumns(
+            is_null($key) ? [$column] : [$column, $key],
+            function () {
+                return $this->processor->processSelect(
+                    $this, $this->runSelect()
+                );
+            }
+        );
+
+        if (empty($queryResult)) {
+            return Helper::collect();
+        }
 
         // If the columns are qualified with a table or have an alias, we cannot use
         // those directly in the "pluck" operations since the results from the DB
         // are only keyed by the column itself. We'll strip the table out here.
-        return Arr::pluck(
-            $results,
-            $this->stripTableForPluck($column),
-            $this->stripTableForPluck($key)
-        );
-    }
+        $column = $this->stripTableForPluck($column);
 
-    /**
-     * Alias for the "pluck" method.
-     *
-     * @param  string  $column
-     * @param  string|null  $key
-     * @return array
-     *
-     * @deprecated since version 5.2. Use the "pluck" method directly.
-     */
-    public function lists($column, $key = null)
-    {
-        return $this->pluck($column, $key);
+        $key = $this->stripTableForPluck($key);
+
+        return $this->applyAfterQueryCallbacks(
+            is_array($queryResult[0])
+                    ? $this->pluckFromArrayColumn($queryResult, $column, $key)
+                    : $this->pluckFromObjectColumn($queryResult, $column, $key)
+        );
     }
 
     /**
@@ -1891,8 +3425,67 @@ class Builder
      */
     protected function stripTableForPluck($column)
     {
-        $array = preg_split('~\.| ~', $column);
-        return is_null($column) ? $column : end($array);
+        if (is_null($column)) {
+            return $column;
+        }
+
+        $columnString = $column instanceof ExpressionContract
+            ? $this->grammar->getValue($column)
+            : $column;
+
+        $separator = str_contains(strtolower($columnString), ' as ') ? ' as ' : '\.';
+
+        return Helper::last(preg_split('~'.$separator.'~i', $columnString));
+    }
+
+    /**
+     * Retrieve column values from rows represented as objects.
+     *
+     * @param  array  $queryResult
+     * @param  string  $column
+     * @param  string  $key
+     * @return \NinjaTables\Framework\Support\Collection
+     */
+    protected function pluckFromObjectColumn($queryResult, $column, $key)
+    {
+        $results = [];
+
+        if (is_null($key)) {
+            foreach ($queryResult as $row) {
+                $results[] = $row->$column;
+            }
+        } else {
+            foreach ($queryResult as $row) {
+                $results[$row->$key] = $row->$column;
+            }
+        }
+
+        return Helper::collect($results);
+    }
+
+    /**
+     * Retrieve column values from rows represented as arrays.
+     *
+     * @param  array  $queryResult
+     * @param  string  $column
+     * @param  string  $key
+     * @return \NinjaTables\Framework\Support\Collection
+     */
+    protected function pluckFromArrayColumn($queryResult, $column, $key)
+    {
+        $results = [];
+
+        if (is_null($key)) {
+            foreach ($queryResult as $row) {
+                $results[] = $row[$column];
+            }
+        } else {
+            foreach ($queryResult as $row) {
+                $results[$row[$key]] = $row[$column];
+            }
+        }
+
+        return Helper::collect($results);
     }
 
     /**
@@ -1904,7 +3497,7 @@ class Builder
      */
     public function implode($column, $glue = '')
     {
-        return implode($glue, $this->pluck($column));
+        return $this->pluck($column)->implode($glue);
     }
 
     /**
@@ -1914,10 +3507,15 @@ class Builder
      */
     public function exists()
     {
-        $sql = $this->grammar->compileExists($this);
+        $this->applyBeforeQueryCallbacks();
 
-        $results = $this->connection->select($sql, $this->getBindings(), ! $this->useWritePdo);
+        $results = $this->connection->select(
+            $this->grammar->compileExists($this), $this->getBindings(), ! $this->useWritePdo
+        );
 
+        // If the results has rows, we will get the row and see if the exists column is a
+        // boolean true. If there is no results for this query we will return false as
+        // there are no rows for this query at all and we can return that info here.
         if (isset($results[0])) {
             $results = (array) $results[0];
 
@@ -1928,6 +3526,38 @@ class Builder
     }
 
     /**
+     * Determine if no rows exist for the current query.
+     *
+     * @return bool
+     */
+    public function doesntExist()
+    {
+        return ! $this->exists();
+    }
+
+    /**
+     * Execute the given callback if no rows exist for the current query.
+     *
+     * @param  \Closure  $callback
+     * @return mixed
+     */
+    public function existsOr(Closure $callback)
+    {
+        return $this->exists() ? true : $callback();
+    }
+
+    /**
+     * Execute the given callback if rows exist for the current query.
+     *
+     * @param  \Closure  $callback
+     * @return mixed
+     */
+    public function doesntExistOr(Closure $callback)
+    {
+        return $this->doesntExist() ? true : $callback();
+    }
+
+    /**
      * Retrieve the "count" result of the query.
      *
      * @param  string  $columns
@@ -1935,11 +3565,7 @@ class Builder
      */
     public function count($columns = '*')
     {
-        if (! is_array($columns)) {
-            $columns = [$columns];
-        }
-
-        return (int) $this->aggregate(__FUNCTION__, $columns);
+        return (int) $this->aggregate(__FUNCTION__, Arr::wrap($columns));
     }
 
     /**
@@ -1972,7 +3598,9 @@ class Builder
      */
     public function sum($column)
     {
-        return $this->aggregate(__FUNCTION__, [$column]);
+        $result = $this->aggregate(__FUNCTION__, [$column]);
+
+        return $result ?: 0;
     }
 
     /**
@@ -2001,34 +3629,17 @@ class Builder
      * Execute an aggregate function on the database.
      *
      * @param  string  $function
-     * @param  array   $columns
+     * @param  array  $columns
      * @return mixed
      */
     public function aggregate($function, $columns = ['*'])
     {
-        $this->aggregate = compact('function', 'columns');
+        $results = $this->cloneWithout($this->unions || $this->havings ? [] : ['columns'])
+                        ->cloneWithoutBindings($this->unions || $this->havings ? [] : ['select'])
+                        ->setAggregate($function, $columns)
+                        ->get($columns);
 
-        $previousColumns = $this->columns;
-
-        // We will also back up the select bindings since the select clause will be
-        // removed when performing the aggregate function. Once the query is run
-        // we will add the bindings back onto this query so they can get used.
-        $previousSelectBindings = $this->bindings['select'];
-
-        $this->bindings['select'] = [];
-
-        $results = $this->get($columns);
-
-        // Once we have executed the query, we will reset the aggregate property so
-        // that more select queries can be executed against the database without
-        // the aggregate value getting in the way when the grammar builds it.
-        $this->aggregate = null;
-
-        $this->columns = $previousColumns;
-
-        $this->bindings['select'] = $previousSelectBindings;
-
-        if (isset($results[0])) {
+        if (! $results->isEmpty()) {
             return array_change_key_case((array) $results[0])['aggregate'];
         }
     }
@@ -2037,13 +3648,16 @@ class Builder
      * Execute a numeric aggregate function on the database.
      *
      * @param  string  $function
-     * @param  array   $columns
+     * @param  array  $columns
      * @return float|int
      */
     public function numericAggregate($function, $columns = ['*'])
     {
         $result = $this->aggregate($function, $columns);
 
+        // If there is no result, we can obviously just return 0 here. Next, we will check
+        // if the result is an integer or float. If it is already one of these two data
+        // types we can just return the result as-is, otherwise we will convert this.
         if (! $result) {
             return 0;
         }
@@ -2052,72 +3666,139 @@ class Builder
             return $result;
         }
 
-        if (strpos((string) $result, '.') === false) {
-            return (int) $result;
-        }
-
-        return (float) $result;
+        // If the result doesn't contain a decimal place, we will assume it is an int then
+        // cast it to one. When it does we will cast it to a float since it needs to be
+        // cast to the expected data type for the developers out of pure convenience.
+        return ! str_contains((string) $result, '.')
+                ? (int) $result : (float) $result;
     }
 
     /**
-     * Insert a new record into the database.
+     * Set the aggregate property without running the query.
+     *
+     * @param  string  $function
+     * @param  array  $columns
+     * @return $this
+     */
+    protected function setAggregate($function, $columns)
+    {
+        $this->aggregate = compact('function', 'columns');
+
+        if (empty($this->groups)) {
+            $this->orders = null;
+
+            $this->bindings['order'] = [];
+        }
+
+        return $this;
+    }
+
+    /**
+     * Execute the given callback while selecting the given columns.
+     *
+     * After running the callback, the columns are reset to the original value.
+     *
+     * @param  array  $columns
+     * @param  callable  $callback
+     * @return mixed
+     */
+    protected function onceWithColumns($columns, $callback)
+    {
+        $original = $this->columns;
+
+        if (is_null($original)) {
+            $this->columns = $columns;
+        }
+
+        $result = $callback();
+
+        $this->columns = $original;
+
+        return $result;
+    }
+
+    /**
+     * Insert new records into the database.
      *
      * @param  array  $values
      * @return bool
      */
     public function insert(array $values)
     {
+        // Since every insert gets treated like a batch insert, we will make sure the
+        // bindings are structured in a way that is convenient when building these
+        // inserts statements by verifying these elements are actually an array.
         if (empty($values)) {
             return true;
         }
 
-        // Since every insert gets treated like a batch insert, we will make sure the
-        // bindings are structured in a way that is convenient for building these
-        // inserts statements by verifying the elements are actually an array.
         if (! is_array(reset($values))) {
             $values = [$values];
         }
 
-        // Since every insert gets treated like a batch insert, we will make sure the
-        // bindings are structured in a way that is convenient for building these
-        // inserts statements by verifying the elements are actually an array.
+        // Here, we will sort the insert keys for every record so that each insert is
+        // in the same order for the record. We need to make sure this is the case
+        // so there are not any errors or problems when inserting these records.
         else {
             foreach ($values as $key => $value) {
                 ksort($value);
+
                 $values[$key] = $value;
             }
         }
 
-        // We'll treat every insert like a batch insert so we can easily insert each
-        // of the records into the database consistently. This will make it much
-        // easier on the grammars to just handle one type of record insertion.
-        $bindings = [];
+        $this->applyBeforeQueryCallbacks();
 
-        foreach ($values as $record) {
-            foreach ($record as $value) {
-                $bindings[] = $value;
+        // Finally, we will run this query against the database connection and return
+        // the results. We will need to also flatten these bindings before running
+        // the query so they are all in one huge, flattened array for execution.
+        return $this->connection->insert(
+            $this->grammar->compileInsert($this, $values),
+            $this->cleanBindings(Arr::flatten($values, 1))
+        );
+    }
+
+    /**
+     * Insert new records into the database while ignoring errors.
+     *
+     * @param  array  $values
+     * @return int
+     */
+    public function insertOrIgnore(array $values)
+    {
+        if (empty($values)) {
+            return 0;
+        }
+
+        if (! is_array(reset($values))) {
+            $values = [$values];
+        } else {
+            foreach ($values as $key => $value) {
+                ksort($value);
+
+                $values[$key] = $value;
             }
         }
 
-        $sql = $this->grammar->compileInsert($this, $values);
+        $this->applyBeforeQueryCallbacks();
 
-        // Once we have compiled the insert statement's SQL we can execute it on the
-        // connection and return a result as a boolean success indicator as that
-        // is the same type of result returned by the raw connection instance.
-        $bindings = $this->cleanBindings($bindings);
-
-        return $this->connection->insert($sql, $bindings);
+        return $this->connection->affectingStatement(
+            $this->grammar->compileInsertOrIgnore($this, $values),
+            $this->cleanBindings(Arr::flatten($values, 1))
+        );
     }
 
     /**
      * Insert a new record and get the value of the primary key.
      *
-     * @param  array   $values
-     * @param  string  $sequence
+     * @param  array  $values
+     * @param  string|null  $sequence
      * @return int
      */
     public function insertGetId(array $values, $sequence = null)
     {
+        $this->applyBeforeQueryCallbacks();
+
         $sql = $this->grammar->compileInsertGetId($this, $values, $sequence);
 
         $values = $this->cleanBindings($values);
@@ -2126,19 +3807,88 @@ class Builder
     }
 
     /**
-     * Update a record in the database.
+     * Insert new records into the table using a subquery.
+     *
+     * @param  array  $columns
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|string  $query
+     * @return int
+     */
+    public function insertUsing(array $columns, $query)
+    {
+        $this->applyBeforeQueryCallbacks();
+
+        [$sql, $bindings] = $this->createSub($query);
+
+        return $this->connection->affectingStatement(
+            $this->grammar->compileInsertUsing($this, $columns, $sql),
+            $this->cleanBindings($bindings)
+        );
+    }
+
+    /**
+     * Insert new records into the table using a subquery while ignoring errors.
+     *
+     * @param  array  $columns
+     * @param  \Closure|\NinjaTables\Framework\Database\Query\Builder|\NinjaTables\Framework\Database\Eloquent\Builder<*>|string  $query
+     * @return int
+     */
+    public function insertOrIgnoreUsing(array $columns, $query)
+    {
+        $this->applyBeforeQueryCallbacks();
+
+        [$sql, $bindings] = $this->createSub($query);
+
+        return $this->connection->affectingStatement(
+            $this->grammar->compileInsertOrIgnoreUsing($this, $columns, $sql),
+            $this->cleanBindings($bindings)
+        );
+    }
+
+    /**
+     * Update records in the database.
      *
      * @param  array  $values
      * @return int
      */
     public function update(array $values)
     {
-        $bindings = array_values(array_merge($values, $this->getBindings()));
+        $this->applyBeforeQueryCallbacks();
 
-        $sql = $this->grammar->compileUpdate($this, $values);
+        $values = Helper::collect($values)->map(function ($value) {
+            if (! $value instanceof Builder) {
+                return ['value' => $value, 'bindings' => $value];
+            }
+
+            [$query, $bindings] = $this->parseSub($value);
+
+            return ['value' => new Expression("({$query})"), 'bindings' => fn () => $bindings];
+        });
+
+        $sql = $this->grammar->compileUpdate($this, $values->map(fn ($value) => $value['value'])->all());
 
         return $this->connection->update($sql, $this->cleanBindings(
-            $this->grammar->prepareBindingsForUpdate($bindings, $values)
+            $this->grammar->prepareBindingsForUpdate($this->bindings, $values->map(fn ($value) => $value['bindings'])->all())
+        ));
+    }
+
+    /**
+     * Update records in a PostgreSQL database using the update from syntax.
+     *
+     * @param  array  $values
+     * @return int
+     */
+    public function updateFrom(array $values)
+    {
+        if (! method_exists($this->grammar, 'compileUpdateFrom')) {
+            throw new LogicException('This database engine does not support the updateFrom method.');
+        }
+
+        $this->applyBeforeQueryCallbacks();
+
+        $sql = $this->grammar->compileUpdateFrom($this, $values);
+
+        return $this->connection->update($sql, $this->cleanBindings(
+            $this->grammar->prepareBindingsForUpdateFrom($this->bindings, $values)
         ));
     }
 
@@ -2149,22 +3899,79 @@ class Builder
      * @param  array  $values
      * @return bool
      */
-    public function updateOrInsert(array $attributes, array $values = [])
+    public function updateOrInsert(array $attributes, $values = [])
     {
-        if (! $this->where($attributes)->exists()) {
+        $exists = $this->where($attributes)->exists();
+
+        if ($values instanceof Closure) {
+            $values = $values($exists);
+        }
+
+        if (! $exists) {
             return $this->insert(array_merge($attributes, $values));
         }
 
-        return (bool) $this->where($attributes)->take(1)->update($values);
+        if (empty($values)) {
+            return true;
+        }
+
+        return (bool) $this->limit(1)->update($values);
+    }
+
+    /**
+     * Insert new records or update the existing ones.
+     *
+     * @param  array  $values
+     * @param  array|string  $uniqueBy
+     * @param  array|null  $update
+     * @return int
+     */
+    public function upsert(array $values, $uniqueBy, $update = null)
+    {
+        if (empty($values)) {
+            return 0;
+        } elseif ($update === []) {
+            return (int) $this->insert($values);
+        }
+
+        if (! is_array(reset($values))) {
+            $values = [$values];
+        } else {
+            foreach ($values as $key => $value) {
+                ksort($value);
+
+                $values[$key] = $value;
+            }
+        }
+
+        if (is_null($update)) {
+            $update = array_keys(reset($values));
+        }
+
+        $this->applyBeforeQueryCallbacks();
+
+        $bindings = $this->cleanBindings(array_merge(
+            Arr::flatten($values, 1),
+            Helper::collect($update)->reject(function ($value, $key) {
+                return is_int($key);
+            })->all()
+        ));
+
+        return $this->connection->affectingStatement(
+            $this->grammar->compileUpsert($this, $values, (array) $uniqueBy, $update),
+            $bindings
+        );
     }
 
     /**
      * Increment a column's value by a given amount.
      *
      * @param  string  $column
-     * @param  int     $amount
-     * @param  array   $extra
+     * @param  float|int  $amount
+     * @param  array  $extra
      * @return int
+     *
+     * @throws \InvalidArgumentException
      */
     public function increment($column, $amount = 1, array $extra = [])
     {
@@ -2172,20 +3979,42 @@ class Builder
             throw new InvalidArgumentException('Non-numeric value passed to increment method.');
         }
 
-        $wrapped = $this->grammar->wrap($column);
+        return $this->incrementEach([$column => $amount], $extra);
+    }
 
-        $columns = array_merge([$column => $this->raw("$wrapped + $amount")], $extra);
+    /**
+     * Increment the given column's values by the given amounts.
+     *
+     * @param  array<string, float|int|numeric-string>  $columns
+     * @param  array<string, mixed>  $extra
+     * @return int
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function incrementEach(array $columns, array $extra = [])
+    {
+        foreach ($columns as $column => $amount) {
+            if (! is_numeric($amount)) {
+                throw new InvalidArgumentException("Non-numeric value passed as increment amount for column: '$column'.");
+            } elseif (! is_string($column)) {
+                throw new InvalidArgumentException('Non-associative array passed to incrementEach method.');
+            }
 
-        return $this->update($columns);
+            $columns[$column] = $this->raw("{$this->grammar->wrap($column)} + $amount");
+        }
+
+        return $this->update(array_merge($columns, $extra));
     }
 
     /**
      * Decrement a column's value by a given amount.
      *
      * @param  string  $column
-     * @param  int     $amount
-     * @param  array   $extra
+     * @param  float|int  $amount
+     * @param  array  $extra
      * @return int
+     *
+     * @throws \InvalidArgumentException
      */
     public function decrement($column, $amount = 1, array $extra = [])
     {
@@ -2193,31 +4022,55 @@ class Builder
             throw new InvalidArgumentException('Non-numeric value passed to decrement method.');
         }
 
-        $wrapped = $this->grammar->wrap($column);
-
-        $columns = array_merge([$column => $this->raw("$wrapped - $amount")], $extra);
-
-        return $this->update($columns);
+        return $this->decrementEach([$column => $amount], $extra);
     }
 
     /**
-     * Delete a record from the database.
+     * Decrement the given column's values by the given amounts.
+     *
+     * @param  array<string, float|int|numeric-string>  $columns
+     * @param  array<string, mixed>  $extra
+     * @return int
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function decrementEach(array $columns, array $extra = [])
+    {
+        foreach ($columns as $column => $amount) {
+            if (! is_numeric($amount)) {
+                throw new InvalidArgumentException("Non-numeric value passed as decrement amount for column: '$column'.");
+            } elseif (! is_string($column)) {
+                throw new InvalidArgumentException('Non-associative array passed to decrementEach method.');
+            }
+
+            $columns[$column] = $this->raw("{$this->grammar->wrap($column)} - $amount");
+        }
+
+        return $this->update(array_merge($columns, $extra));
+    }
+
+    /**
+     * Delete records from the database.
      *
      * @param  mixed  $id
      * @return int
      */
     public function delete($id = null)
     {
-        // If an ID is passed to the method, we will set the where clause to check
-        // the ID to allow developers to simply and quickly remove a single row
-        // from their database without manually specifying the where clauses.
+        // If an ID is passed to the method, we will set the where clause to check the
+        // ID to let developers to simply and quickly remove a single row from this
+        // database without manually specifying the "where" clauses on the query.
         if (! is_null($id)) {
-            $this->where('id', '=', $id);
+            $this->where($this->from.'.id', '=', $id);
         }
 
-        $sql = $this->grammar->compileDelete($this);
+        $this->applyBeforeQueryCallbacks();
 
-        return $this->connection->delete($sql, $this->getBindings());
+        return $this->connection->delete(
+            $this->grammar->compileDelete($this), $this->cleanBindings(
+                $this->grammar->prepareBindingsForDelete($this->bindings)
+            )
+        );
     }
 
     /**
@@ -2227,6 +4080,8 @@ class Builder
      */
     public function truncate()
     {
+        $this->applyBeforeQueryCallbacks();
+
         foreach ($this->grammar->compileTruncate($this) as $sql => $bindings) {
             $this->connection->statement($sql, $bindings);
         }
@@ -2243,30 +4098,25 @@ class Builder
     }
 
     /**
-     * Merge an array of where clauses and bindings.
+     * Create a new query instance for a sub-query.
      *
-     * @param  array  $wheres
-     * @param  array  $bindings
-     * @return void
+     * @return \NinjaTables\Framework\Database\Query\Builder
      */
-    public function mergeWheres($wheres, $bindings)
+    protected function forSubQuery()
     {
-        $this->wheres = array_merge((array) $this->wheres, (array) $wheres);
-
-        $this->bindings['where'] = array_values(array_merge($this->bindings['where'], (array) $bindings));
+        return $this->newQuery();
     }
 
     /**
-     * Remove all of the expressions from a list of bindings.
+     * Get all of the query builder's columns in a text-only array with all expressions evaluated.
      *
-     * @param  array  $bindings
      * @return array
      */
-    protected function cleanBindings(array $bindings)
+    public function getColumns()
     {
-        return array_values(array_filter($bindings, function ($binding) {
-            return ! $binding instanceof Expression;
-        }));
+        return ! is_null($this->columns)
+                ? array_map(fn ($column) => $this->grammar->getValue($column), $this->columns)
+                : [];
     }
 
     /**
@@ -2278,6 +4128,18 @@ class Builder
     public function raw($value)
     {
         return $this->connection->raw($value);
+    }
+
+    /**
+     * Get the query builder instances that are used in the union of the query.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    protected function getUnionBuilders()
+    {
+        return isset($this->unions)
+            ? Helper::collect($this->unions)->pluck('query')
+            : Helper::collect();
     }
 
     /**
@@ -2303,7 +4165,7 @@ class Builder
     /**
      * Set the bindings on the query builder.
      *
-     * @param  array   $bindings
+     * @param  array  $bindings
      * @param  string  $type
      * @return $this
      *
@@ -2323,7 +4185,7 @@ class Builder
     /**
      * Add a binding to the query.
      *
-     * @param  mixed   $value
+     * @param  mixed  $value
      * @param  string  $type
      * @return $this
      *
@@ -2336,12 +4198,32 @@ class Builder
         }
 
         if (is_array($value)) {
-            $this->bindings[$type] = array_values(array_merge($this->bindings[$type], $value));
+            $this->bindings[$type] = array_values(array_map(
+                [$this, 'castBinding'],
+                array_merge($this->bindings[$type], $value),
+            ));
         } else {
-            $this->bindings[$type][] = $value;
+            $this->bindings[$type][] = $this->castBinding($value);
         }
 
         return $this;
+    }
+
+    /**
+     * Cast the given binding value.
+     *
+     * @param  mixed  $value
+     * @return mixed
+     */
+    public function castBinding($value)
+    {
+        if (function_exists('enum_exists')) {
+            if ($value instanceof \BackedEnum) {
+                return $value->value;
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -2350,11 +4232,49 @@ class Builder
      * @param  \NinjaTables\Framework\Database\Query\Builder  $query
      * @return $this
      */
-    public function mergeBindings(Builder $query)
+    public function mergeBindings(self $query)
     {
         $this->bindings = array_merge_recursive($this->bindings, $query->bindings);
 
         return $this;
+    }
+
+    /**
+     * Remove all of the expressions from a list of bindings.
+     *
+     * @param  array  $bindings
+     * @return array
+     */
+    public function cleanBindings(array $bindings)
+    {
+        return Helper::collect($bindings)
+                    ->reject(function ($binding) {
+                        return $binding instanceof Expression;
+                    })
+                    ->map([$this, 'castBinding'])
+                    ->values()
+                    ->all();
+    }
+
+    /**
+     * Get a scalar type value from an unknown type of input.
+     *
+     * @param  mixed  $value
+     * @return mixed
+     */
+    protected function flattenValue($value)
+    {
+        return is_array($value) ? Helper::head(Arr::flatten($value)) : $value;
+    }
+
+    /**
+     * Get the default key name of the table.
+     *
+     * @return string
+     */
+    protected function defaultKeyName()
+    {
+        return 'id';
     }
 
     /**
@@ -2400,10 +4320,64 @@ class Builder
     }
 
     /**
+     * Determine if the value is a query builder instance or a Closure.
+     *
+     * @param  mixed  $value
+     * @return bool
+     */
+    protected function isQueryable($value)
+    {
+        return $value instanceof self ||
+               $value instanceof OrmBuilder ||
+               $value instanceof Relation ||
+               $value instanceof Closure;
+    }
+
+    /**
+     * Clone the query.
+     *
+     * @return static
+     */
+    public function clone()
+    {
+        return clone $this;
+    }
+
+    /**
+     * Clone the query without the given properties.
+     *
+     * @param  array  $properties
+     * @return static
+     */
+    public function cloneWithout(array $properties)
+    {
+        return Helper::tap($this->clone(), function ($clone) use ($properties) {
+            foreach ($properties as $property) {
+                $clone->{$property} = null;
+            }
+        });
+    }
+
+    /**
+     * Clone the query without the given bindings.
+     *
+     * @param  array  $except
+     * @return static
+     */
+    public function cloneWithoutBindings(array $except)
+    {
+        return Helper::tap($this->clone(), function ($clone) use ($except) {
+            foreach ($except as $type) {
+                $clone->bindings[$type] = [];
+            }
+        });
+    }
+
+    /**
      * Handle dynamic method calls into the method.
      *
      * @param  string  $method
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return mixed
      *
      * @throws \BadMethodCallException
@@ -2418,8 +4392,28 @@ class Builder
             return $this->dynamicWhere($method, $parameters);
         }
 
-        $className = static::class;
+        static::throwBadMethodCallException($method);
+    }
 
-        throw new BadMethodCallException("Call to undefined method {$className}::{$method}()");
+    /**
+     * Set a dynamic property.
+     * 
+     * @param string $key
+     * @param mixed $value
+     */
+    public function __set($key, $value)
+    {
+        $this->dynamicProperties[$key] = $value;
+    }
+
+    /**
+     * Get dynamically injected value.
+     * 
+     * @param  string $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this->dynamicProperties[$key] ?? null;
     }
 }

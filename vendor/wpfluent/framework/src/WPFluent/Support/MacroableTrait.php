@@ -3,6 +3,8 @@
 namespace NinjaTables\Framework\Support;
 
 use Closure;
+use ReflectionClass;
+use ReflectionMethod;
 use BadMethodCallException;
 
 trait MacroableTrait
@@ -17,13 +19,36 @@ trait MacroableTrait
     /**
      * Register a custom macro.
      *
-     * @param  string    $name
-     * @param  callable  $macro
+     * @param  string  $name
+     * @param  object|callable  $macro
      * @return void
      */
-    public static function macro($name, callable $macro)
+    public static function macro($name, $macro)
     {
         static::$macros[$name] = $macro;
+    }
+
+    /**
+     * Mix another object into the class.
+     *
+     * @param  object  $mixin
+     * @param  bool  $replace
+     * @return void
+     *
+     * @throws \ReflectionException
+     */
+    public static function mixin($mixin, $replace = true)
+    {
+        $methods = (new ReflectionClass($mixin))->getMethods(
+            ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED
+        );
+
+        foreach ($methods as $method) {
+            if ($replace || ! static::hasMacro($method->name)) {
+                $method->setAccessible(true);
+                static::macro($method->name, $method->invoke($mixin));
+            }
+        }
     }
 
     /**
@@ -38,10 +63,20 @@ trait MacroableTrait
     }
 
     /**
+     * Flush the existing macros.
+     *
+     * @return void
+     */
+    public static function flushMacros()
+    {
+        static::$macros = [];
+    }
+
+    /**
      * Dynamically handle calls to the class.
      *
      * @param  string  $method
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return mixed
      *
      * @throws \BadMethodCallException
@@ -49,21 +84,25 @@ trait MacroableTrait
     public static function __callStatic($method, $parameters)
     {
         if (! static::hasMacro($method)) {
-            throw new BadMethodCallException("Method {$method} does not exist.");
+            throw new BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.', static::class, $method
+            ));
         }
 
-        if (static::$macros[$method] instanceof Closure) {
-            return call_user_func_array(Closure::bind(static::$macros[$method], null, static::class), $parameters);
+        $macro = static::$macros[$method];
+
+        if ($macro instanceof Closure) {
+            $macro = $macro->bindTo(null, static::class);
         }
 
-        return call_user_func_array(static::$macros[$method], $parameters);
+        return $macro(...$parameters);
     }
 
     /**
      * Dynamically handle calls to the class.
      *
      * @param  string  $method
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return mixed
      *
      * @throws \BadMethodCallException
@@ -71,13 +110,17 @@ trait MacroableTrait
     public function __call($method, $parameters)
     {
         if (! static::hasMacro($method)) {
-            throw new BadMethodCallException("Method {$method} does not exist.");
+            throw new BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.', static::class, $method
+            ));
         }
 
-        if (static::$macros[$method] instanceof Closure) {
-            return call_user_func_array(static::$macros[$method]->bindTo($this, static::class), $parameters);
+        $macro = static::$macros[$method];
+
+        if ($macro instanceof Closure) {
+            $macro = $macro->bindTo($this, static::class);
         }
 
-        return call_user_func_array(static::$macros[$method], $parameters);
+        return $macro(...$parameters);
     }
 }

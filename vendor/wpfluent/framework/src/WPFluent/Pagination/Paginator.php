@@ -9,10 +9,9 @@ use IteratorAggregate;
 use NinjaTables\Framework\Support\Collection;
 use NinjaTables\Framework\Support\JsonableInterface;
 use NinjaTables\Framework\Support\ArrayableInterface;
-use NinjaTables\Framework\Pagination\Presenter;
-use NinjaTables\Framework\Pagination\PaginatorInterface as PaginatorContract;
+use NinjaTables\Framework\Pagination\PaginatorInterface;
 
-class Paginator extends AbstractPaginator implements ArrayableInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, JsonableInterface, PaginatorContract
+class Paginator extends AbstractPaginator implements ArrayableInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, JsonableInterface, PaginatorInterface
 {
     /**
      * Determine if there are more items in the data source.
@@ -27,21 +26,22 @@ class Paginator extends AbstractPaginator implements ArrayableInterface, ArrayAc
      * @param  mixed  $items
      * @param  int  $perPage
      * @param  int|null  $currentPage
-     * @param  array  $options (path, query, fragment, pageName)
+     * @param  array  $options  (path, query, fragment, pageName)
      * @return void
      */
     public function __construct($items, $perPage, $currentPage = null, array $options = [])
     {
+        $this->options = $options;
+
         foreach ($options as $key => $value) {
             $this->{$key} = $value;
         }
 
         $this->perPage = $perPage;
         $this->currentPage = $this->setCurrentPage($currentPage);
-        $this->path = $this->path != '/' ? rtrim($this->path, '/') : $this->path;
-        $this->items = $items instanceof Collection ? $items : Collection::make($items);
+        $this->path = $this->path !== '/' ? rtrim($this->path, '/') : $this->path;
 
-        $this->checkForMorePages();
+        $this->setItems($items);
     }
 
     /**
@@ -58,13 +58,16 @@ class Paginator extends AbstractPaginator implements ArrayableInterface, ArrayAc
     }
 
     /**
-     * Check for more pages. The last item will be sliced off.
+     * Set the items for the paginator.
      *
+     * @param  mixed  $items
      * @return void
      */
-    protected function checkForMorePages()
+    protected function setItems($items)
     {
-        $this->hasMore = count($this->items) > ($this->perPage);
+        $this->items = $items instanceof Collection ? $items : Collection::make($items);
+
+        $this->hasMore = $this->items->count() > $this->perPage;
 
         $this->items = $this->items->slice(0, $this->perPage);
     }
@@ -82,6 +85,19 @@ class Paginator extends AbstractPaginator implements ArrayableInterface, ArrayAc
     }
 
     /**
+     * Manually indicate that the paginator does have more pages.
+     *
+     * @param  bool  $hasMore
+     * @return $this
+     */
+    public function hasMorePagesWhen($hasMore = true)
+    {
+        $this->hasMore = $hasMore;
+
+        return $this;
+    }
+
+    /**
      * Determine if there are more items in the data source.
      *
      * @return bool
@@ -92,34 +108,6 @@ class Paginator extends AbstractPaginator implements ArrayableInterface, ArrayAc
     }
 
     /**
-     * Render the paginator using the given presenter.
-     *
-     * @param  \NinjaTables\Framework\Pagination\Presenter|null  $presenter
-     * @return string
-     */
-    public function links(Presenter $presenter = null)
-    {
-        return $this->render($presenter);
-    }
-
-    /**
-     * Render the paginator using the given presenter.
-     *
-     * @param  \NinjaTables\Framework\Pagination\Presenter|null  $presenter
-     * @return string
-     */
-    public function render(Presenter $presenter = null)
-    {
-        // if (is_null($presenter) && static::$presenterResolver) {
-        //     $presenter = call_user_func(static::$presenterResolver, $this);
-        // }
-
-        // $presenter = $presenter ?: new SimpleBootstrapThreePresenter($this);
-
-        // return $presenter->render();
-    }
-
-    /**
      * Get the instance as an array.
      *
      * @return array
@@ -127,10 +115,15 @@ class Paginator extends AbstractPaginator implements ArrayableInterface, ArrayAc
     public function toArray()
     {
         return [
-            'per_page' => $this->perPage(), 'current_page' => $this->currentPage(),
-            'next_page_url' => $this->nextPageUrl(), 'prev_page_url' => $this->previousPageUrl(),
-            'from' => $this->firstItem(), 'to' => $this->lastItem(),
+            'current_page' => $this->currentPage(),
             'data' => $this->items->toArray(),
+            'first_page_url' => $this->url(1),
+            'from' => $this->firstItem(),
+            'next_page_url' => $this->nextPageUrl(),
+            'path' => $this->path(),
+            'per_page' => $this->perPage(),
+            'prev_page_url' => $this->previousPageUrl(),
+            'to' => $this->lastItem(),
         ];
     }
 
@@ -139,6 +132,7 @@ class Paginator extends AbstractPaginator implements ArrayableInterface, ArrayAc
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->toArray();

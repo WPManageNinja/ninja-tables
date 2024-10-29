@@ -9,8 +9,6 @@ use IteratorAggregate;
 use NinjaTables\Framework\Support\Collection;
 use NinjaTables\Framework\Support\JsonableInterface;
 use NinjaTables\Framework\Support\ArrayableInterface;
-use NinjaTables\Framework\Pagination\Presenter;
-use NinjaTables\Framework\Pagination\Paginator;
 use NinjaTables\Framework\Pagination\AbstractPaginator;
 use NinjaTables\Framework\Pagination\LengthAwarePaginatorInterface;
 
@@ -37,20 +35,22 @@ class LengthAwarePaginator extends AbstractPaginator implements ArrayableInterfa
      * @param  int  $total
      * @param  int  $perPage
      * @param  int|null  $currentPage
-     * @param  array  $options (path, query, fragment, pageName)
+     * @param  array  $options  (path, query, fragment, pageName)
      * @return void
      */
     public function __construct($items, $total, $perPage, $currentPage = null, array $options = [])
     {
+        $this->options = $options;
+
         foreach ($options as $key => $value) {
             $this->{$key} = $value;
         }
 
         $this->total = $total;
         $this->perPage = $perPage;
-        $this->lastPage = (int) ceil($total / $perPage);
-        $this->path = $this->path != '/' ? rtrim($this->path, '/') : $this->path;
-        $this->currentPage = $this->setCurrentPage($currentPage, $this->lastPage);
+        $this->lastPage = max((int) ceil($total / $perPage), 1);
+        $this->path = $this->path !== '/' ? rtrim($this->path, '/') : $this->path;
+        $this->currentPage = $this->setCurrentPage($currentPage, $this->pageName);
         $this->items = $items instanceof Collection ? $items : Collection::make($items);
     }
 
@@ -58,36 +58,62 @@ class LengthAwarePaginator extends AbstractPaginator implements ArrayableInterfa
      * Get the current page for the request.
      *
      * @param  int  $currentPage
-     * @param  int  $lastPage
+     * @param  string  $pageName
      * @return int
      */
-    protected function setCurrentPage($currentPage, $lastPage)
+    protected function setCurrentPage($currentPage, $pageName)
     {
-        $currentPage = $currentPage ?: static::resolveCurrentPage();
+        $currentPage = $currentPage ?: static::resolveCurrentPage($pageName);
 
         return $this->isValidPageNumber($currentPage) ? (int) $currentPage : 1;
     }
 
     /**
-     * Get the URL for the next page.
+     * Get the paginator links as a collection (for JSON responses).
      *
-     * @return string|null
+     * @return \NinjaTables\Framework\Support\Collection
      */
-    public function nextPageUrl()
+    public function linkCollection()
     {
-        if ($this->lastPage() > $this->currentPage()) {
-            return $this->url($this->currentPage() + 1);
-        }
+        return Collection::make($this->elements())->flatMap(function ($item) {
+            if (! is_array($item)) {
+                return [['url' => null, 'label' => '...', 'active' => false]];
+            }
+
+            return Collection::make($item)->map(function ($url, $page) {
+                return [
+                    'url' => $url,
+                    'label' => (string) $page,
+                    'active' => $this->currentPage() === $page,
+                ];
+            });
+        })->prepend([
+            'url' => $this->previousPageUrl(),
+            'label' => function_exists('__') ? __('pagination.previous') : 'Previous',
+            'active' => false,
+        ])->push([
+            'url' => $this->nextPageUrl(),
+            'label' => function_exists('__') ? __('pagination.next') : 'Next',
+            'active' => false,
+        ]);
     }
 
     /**
-     * Determine if there are more items in the data source.
+     * Get the array of elements to pass to the view.
      *
-     * @return bool
+     * @return array
      */
-    public function hasMorePages()
+    protected function elements()
     {
-        return $this->currentPage() < $this->lastPage();
+        $window = UrlWindow::make($this);
+
+        return array_filter([
+            $window['first'],
+            is_array($window['slider']) ? '...' : null,
+            $window['slider'],
+            is_array($window['last']) ? '...' : null,
+            $window['last'],
+        ]);
     }
 
     /**
@@ -101,6 +127,28 @@ class LengthAwarePaginator extends AbstractPaginator implements ArrayableInterfa
     }
 
     /**
+     * Determine if there are more items in the data source.
+     *
+     * @return bool
+     */
+    public function hasMorePages()
+    {
+        return $this->currentPage() < $this->lastPage();
+    }
+
+    /**
+     * Get the URL for the next page.
+     *
+     * @return string|null
+     */
+    public function nextPageUrl()
+    {
+        if ($this->hasMorePages()) {
+            return $this->url($this->currentPage() + 1);
+        }
+    }
+
+    /**
      * Get the last page.
      *
      * @return int
@@ -111,34 +159,6 @@ class LengthAwarePaginator extends AbstractPaginator implements ArrayableInterfa
     }
 
     /**
-     * Render the paginator using the given presenter.
-     *
-     * @param  \NinjaTables\Framework\Pagination\Presenter|null  $presenter
-     * @return string
-     */
-    public function links(Presenter $presenter = null)
-    {
-        return $this->render($presenter);
-    }
-
-    /**
-     * Render the paginator using the given presenter.
-     *
-     * @param  \NinjaTables\Framework\Pagination\Presenter|null  $presenter
-     * @return string
-     */
-    public function render(Presenter $presenter = null)
-    {
-        // if (is_null($presenter) && static::$presenterResolver) {
-        //     $presenter = call_user_func(static::$presenterResolver, $this);
-        // }
-
-        // $presenter = $presenter ?: new BootstrapThreePresenter($this);
-
-        // return $presenter->render();
-    }
-
-    /**
      * Get the instance as an array.
      *
      * @return array
@@ -146,15 +166,19 @@ class LengthAwarePaginator extends AbstractPaginator implements ArrayableInterfa
     public function toArray()
     {
         return [
-            'total'         => $this->total(),
-            'per_page'      => $this->perPage(),
-            'current_page'  => $this->currentPage(),
-            'last_page'     => $this->lastPage(),
+            'current_page' => $this->currentPage(),
+            'data' => $this->items->toArray(),
+            'first_page_url' => $this->url(1),
+            'from' => $this->firstItem(),
+            'last_page' => $this->lastPage(),
+            'last_page_url' => $this->url($this->lastPage()),
+            'links' => $this->linkCollection()->toArray(),
             'next_page_url' => $this->nextPageUrl(),
+            'path' => $this->path(),
+            'per_page' => $this->perPage(),
             'prev_page_url' => $this->previousPageUrl(),
-            'from'          => $this->firstItem(),
-            'to'            => $this->lastItem(),
-            'data'          => $this->items->toArray(),
+            'to' => $this->lastItem(),
+            'total' => $this->total(),
         ];
     }
 
@@ -163,6 +187,7 @@ class LengthAwarePaginator extends AbstractPaginator implements ArrayableInterfa
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->toArray();

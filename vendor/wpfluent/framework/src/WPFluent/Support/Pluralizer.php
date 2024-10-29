@@ -204,17 +204,17 @@ class Pluralizer {
      * @param  array   $irregular
      * @return string
      */
-    protected static function inflect($value, $source, $irregular)
+    protected static function inflect($value, $source, $irregulars)
     {
         if (static::uncountable($value)) return $value;
 
         // Next, we will check the "irregular" patterns which contain words that are
         // not easily summarized in regular expression rules, like "children" and
         // "teeth", both of which cannot get inflected using our typical rules.
-        foreach ($irregular as $irregular => $pattern)
-        {
-            if (preg_match($pattern = '/'.$pattern.'$/i', $value))
-            {
+        foreach ($irregulars as $irregular => $pattern) {
+            
+            if (preg_match($pattern = '/'.$pattern.'$/i', $value)) {
+
                 $irregular = static::matchCase($irregular, $value);
 
                 return preg_replace($pattern, $irregular, $value);

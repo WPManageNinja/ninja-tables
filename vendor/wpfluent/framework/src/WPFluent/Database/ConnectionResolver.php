@@ -8,14 +8,76 @@ use NinjaTables\Framework\Database\ConnectionResolverInterface;
 class ConnectionResolver implements ConnectionResolverInterface
 {
     /**
+     * All of the registered connections.
+     *
+     * @var array
+     */
+    protected $connections = [];
+
+    /**
+     * The default connection name.
+     *
+     * @var string
+     */
+    protected $default;
+
+    /**
+     * Create a new connection resolver instance.
+     *
+     * @param  array  $connections
+     * @return void
+     */
+    public function __construct(array $connections = [])
+    {
+        foreach ($connections as $name => $connection) {
+            $this->addConnection($name, $connection);
+        }
+    }
+
+    /**
      * Get a database connection instance.
      *
-     * @param  string  $name
+     * @param  string|null  $name
      * @return \NinjaTables\Framework\Database\ConnectionInterface
      */
     public function connection($name = null)
     {
-        return App::getInstance('db');
+        if ($name instanceof ConnectionInterface) {
+            return $name;
+        }
+
+        if (is_null($name)) {
+            return $this->getDefaultConnection();
+        }
+
+        if (isset($this->connections[$name])) {
+            return $this->connections[$name];
+        }
+
+        return $this->getDefaultConnection();
+    }
+
+    /**
+     * Add a connection to the resolver.
+     *
+     * @param  string  $name
+     * @param  \NinjaTables\Framework\Database\ConnectionInterface  $connection
+     * @return void
+     */
+    public function addConnection($name, ConnectionInterface $connection)
+    {
+        $this->connections[$name] = $connection;
+    }
+
+    /**
+     * Check if a connection has been registered.
+     *
+     * @param  string  $name
+     * @return bool
+     */
+    public function hasConnection($name)
+    {
+        return isset($this->connections[$name]);
     }
 
     /**
@@ -25,7 +87,7 @@ class ConnectionResolver implements ConnectionResolverInterface
      */
     public function getDefaultConnection()
     {
-        // Pass
+        return $this->default ?: App::getInstance('db');
     }
 
     /**
@@ -36,6 +98,6 @@ class ConnectionResolver implements ConnectionResolverInterface
      */
     public function setDefaultConnection($name)
     {
-        // Pass
+        $this->default = $name;
     }
 }

@@ -21,8 +21,7 @@
         }
     ],
     "require": {
-        "wpfluent/framework": "^1.0",
-        "league/csv": "8.2"
+        "wpfluent/framework": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -36,7 +35,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "2.0.x-dev"
         },
         "wpfluent": {
             "namespace": {

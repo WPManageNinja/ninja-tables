@@ -2,6 +2,12 @@
 
 namespace NinjaTables\Framework\Validator;
 
+use Closure;
+use NinjaTables\Framework\Framework\Support\Arr;
+use NinjaTables\Framework\Validator\Rules\Exists;
+use NinjaTables\Framework\Validator\Rules\Unique;
+use NinjaTables\Framework\Validator\Rules\ConditionalRules;
+
 class ValidationRuleParser
 {
     /**
@@ -66,11 +72,72 @@ class ValidationRuleParser
      */
     protected function explodeExplicitRule($rule)
     {
-        if (is_string($rule)) {
-            return explode('|', $rule);
+        $rules = $conditionals = [];
+
+        $ruleArray = is_array($rule) ? $rule : [$rule];
+        
+        foreach ($ruleArray as  $key => $rule) {
+
+            if ($rule instanceof ConditionalRules) {
+                $conditionals = $this->parseConditionalRules($rule);
+            } elseif($rule instanceof Closure) {
+                $rules[$key] = $rule;
+            } else {
+                if (
+                    ($rule instanceof Exists && $rule->queryCallbacks()) ||
+                    ($rule instanceof Unique && $rule->queryCallbacks())
+                ) {
+                    $rules[] = $rule;
+                } else {
+                    $rules[] = (string) $rule;
+                }
+            }
         }
 
-        var_dump('check laravel');
+        $rules = array_merge($rules, $conditionals);
+
+        // Now, we'll check if there is any string rule
+        // given inside the array using the | sign, i.e:
+        // required|alpha, if any, we'll convert it to array.
+
+        $result = [];
+
+        foreach ($rules as $key => $value) {
+            if (is_string($value)) {
+                $result = array_merge($result, explode('|', $value));
+            } else {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Parse conditional rules.
+     * 
+     * @param  \NinjaTables\Framework\Validator\Rules\ConditionalRules $rule
+     * @return array
+     */
+    protected function parseConditionalRules($rule)
+    {
+        $rules = [];
+
+        $conditionals = $rule->passes($this->data)
+                                ? array_filter($rule->rules())
+                                : array_filter($rule->defaultRules());
+                
+        if ($conditionals) {
+            foreach ($conditionals as $conditional) {
+                if (is_object($conditional) && method_exists($conditional, '__toString')) {
+                    $rules[] = (string) $conditional;
+                } elseif (is_string($conditional)) {
+                    $rules[] = $conditional;
+                }
+            }
+        }
+
+        return $rules;
     }
 
     /**
@@ -91,7 +158,7 @@ class ValidationRuleParser
         foreach ($data as $key => $value) {
             if (substr($key, 0, strlen($attribute)) === $attribute || (bool) preg_match('/^'.$pattern.'\z/', $key)) {
                 foreach ((array) $rules as $rule) {
-                    $results = $this->mergeRules($results, $key, $rule);
+                    $results = $this->mergeRules($results, $key, $rule, $attribute);
                 }
             }
         }
@@ -105,21 +172,22 @@ class ValidationRuleParser
      * @param array $results
      * @param string|array $attribute
      * @param string|array $rules
+     * @param string|null $ $originalRuleKey
      *
      * @return array
      */
-    public function mergeRules($results, $attribute, $rules = [])
+    public function mergeRules($results, $attribute, $rules = [], $originalRuleKey = null)
     {
         if (is_array($attribute)) {
             foreach ((array) $attribute as $innerAttribute => $innerRules) {
-                $results = $this->mergeRulesForAttribute($results, $innerAttribute, $innerRules);
+                $results = $this->mergeRulesForAttribute($results, $innerAttribute, $innerRules, $originalRuleKey);
             }
 
             return $results;
         }
 
         return $this->mergeRulesForAttribute(
-            $results, $attribute, $rules
+            $results, $attribute, $rules , $originalRuleKey
         );
     }
 
@@ -129,17 +197,24 @@ class ValidationRuleParser
      * @param array $results
      * @param string $attribute
      * @param string|array $rules
+     * @param string|null $ $originalRuleKey
      *
      * @return array
      */
-    protected function mergeRulesForAttribute($results, $attribute, $rules)
+    protected function mergeRulesForAttribute($results, $attribute, $rules, $originalRuleKey = null)
     {
         $array = $this->explodeRules([$rules]);
 
         $merge = reset($array);
 
+        if(!empty($originalRuleKey)){
+            $merge['rule_key'] = $originalRuleKey;
+        }
+
         $results[$attribute] = array_merge(
-            isset($results[$attribute]) ? $this->explodeExplicitRule($results[$attribute]) : [], $merge
+            isset($results[$attribute]) ?
+            $this->explodeExplicitRule($results[$attribute])
+            : [], $merge
         );
 
         return $results;
@@ -154,6 +229,10 @@ class ValidationRuleParser
      */
     public static function parse($rule)
     {
+        if ($rule instanceof Closure) {
+            return [$rule, []];
+        }
+
         $parameters = [];
 
         if (strpos($rule, ':') !== false) {

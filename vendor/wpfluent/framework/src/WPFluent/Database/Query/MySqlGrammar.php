@@ -3,59 +3,295 @@
 namespace NinjaTables\Framework\Database\Query;
 
 use NinjaTables\Framework\Support\Str;
-use NinjaTables\Framework\Database\Query\Grammar;
+use NinjaTables\Framework\Support\Helper;
 use NinjaTables\Framework\Database\Query\Builder;
-use NinjaTables\Framework\Database\Query\JsonExpression;
+use NinjaTables\Framework\Database\Query\JoinLateralClause;
+
 
 class MySqlGrammar extends Grammar
 {
     /**
-     * The components that make up a select clause.
+     * The grammar specific operators.
      *
-     * @var array
+     * @var string[]
      */
-    protected $selectComponents = [
-        'aggregate',
-        'columns',
-        'from',
-        'joins',
-        'wheres',
-        'groups',
-        'havings',
-        'orders',
-        'limit',
-        'offset',
-        'lock',
-    ];
+    protected $operators = ['sounds like'];
 
     /**
-     * Compile a select query into SQL.
+     * Compile a "where like" clause.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    protected function whereLike(Builder $query, $where)
+    {
+        $where['operator'] = $where['not'] ? 'not ' : '';
+
+        $where['operator'] .= $where['caseSensitive'] ? 'like binary' : 'like';
+
+        return $this->whereBasic($query, $where);
+    }
+
+    /**
+     * Add a "where null" clause to the query.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    protected function whereNull(Builder $query, $where)
+    {
+        $columnValue = (string) $this->getValue($where['column']);
+
+        if ($this->isJsonSelector($columnValue)) {
+            [$field, $path] = $this->wrapJsonFieldAndPath($columnValue);
+
+            return '(json_extract('.$field.$path.') is null OR json_type(json_extract('.$field.$path.')) = \'NULL\')';
+        }
+
+        return parent::whereNull($query, $where);
+    }
+
+    /**
+     * Add a "where not null" clause to the query.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    protected function whereNotNull(Builder $query, $where)
+    {
+        $columnValue = (string) $this->getValue($where['column']);
+
+        if ($this->isJsonSelector($columnValue)) {
+            [$field, $path] = $this->wrapJsonFieldAndPath($columnValue);
+
+            return '(json_extract('.$field.$path.') is not null AND json_type(json_extract('.$field.$path.')) != \'NULL\')';
+        }
+
+        return parent::whereNotNull($query, $where);
+    }
+
+    /**
+     * Compile a "where fulltext" clause.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    public function whereFullText(Builder $query, $where)
+    {
+        $columns = $this->columnize($where['columns']);
+
+        $value = $this->parameter($where['value']);
+
+        $mode = ($where['options']['mode'] ?? []) === 'boolean'
+            ? ' in boolean mode'
+            : ' in natural language mode';
+
+        $expanded = ($where['options']['expanded'] ?? []) && ($where['options']['mode'] ?? []) !== 'boolean'
+            ? ' with query expansion'
+            : '';
+
+        return "match ({$columns}) against (".$value."{$mode}{$expanded})";
+    }
+
+    /**
+     * Compile the index hints for the query.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  \NinjaTables\Framework\Database\Query\IndexHint  $indexHint
+     * @return string
+     */
+    protected function compileIndexHint(Builder $query, $indexHint)
+    {
+        switch ($indexHint->type) {
+            case 'hint':
+                return "use index ({$indexHint->index})";
+            case 'force':
+                return "force index ({$indexHint->index})";
+            default:
+                return "ignore index ({$indexHint->index})";
+        }
+    }
+
+    /**
+     * Compile a group limit clause.
      *
      * @param  \NinjaTables\Framework\Database\Query\Builder  $query
      * @return string
      */
-    public function compileSelect(Builder $query)
+    protected function compileGroupLimit(Builder $query)
     {
-        $sql = parent::compileSelect($query);
-
-        if ($query->unions) {
-            $sql = '('.$sql.') '.$this->compileUnions($query);
-        }
-
-        return $sql;
+        return $this->useLegacyGroupLimit($query)
+            ? $this->compileLegacyGroupLimit($query)
+            : parent::compileGroupLimit($query);
     }
 
     /**
-     * Compile a single union statement.
+     * Determine whether to use a legacy group limit clause for MySQL < 8.0.
      *
-     * @param  array  $union
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @return bool
+     */
+    public function useLegacyGroupLimit(Builder $query)
+    {
+        $version = $query->getConnection()->getServerVersion();
+
+        return ! $query->getConnection()->isMaria() && version_compare(
+            $version, '8.0.11'
+        ) < 0;
+    }
+
+    /**
+     * Compile a group limit clause for MySQL < 8.0.
+     *
+     * Derived from https://softonsofa.com/tweaking-eloquent-relations-how-to-get-n-related-models-per-parent/.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
      * @return string
      */
-    protected function compileUnion(array $union)
+    protected function compileLegacyGroupLimit(Builder $query)
     {
-        $joiner = $union['all'] ? ' union all ' : ' union ';
+        $limit = (int) $query->groupLimit['value'];
+        $offset = $query->offset;
 
-        return $joiner.'('.$union['query']->toSql().')';
+        if (isset($offset)) {
+            $offset = (int) $offset;
+            $limit += $offset;
+
+            $query->offset = null;
+        }
+
+        $column = Helper::last(explode('.', $query->groupLimit['column']));
+        $column = $this->wrap($column);
+
+        $partition = ', @laravel_row := if(@laravel_group = '.$column.', @laravel_row + 1, 1) as `laravel_row`';
+        $partition .= ', @laravel_group := '.$column;
+
+        $orders = (array) $query->orders;
+
+        array_unshift($orders, [
+            'column' => $query->groupLimit['column'],
+            'direction' => 'asc',
+        ]);
+
+        $query->orders = $orders;
+
+        $components = $this->compileComponents($query);
+
+        $sql = $this->concatenate($components);
+
+        $from = '(select @laravel_row := 0, @laravel_group := 0) as `laravel_vars`, ('.$sql.') as `laravel_table`';
+
+        $sql = 'select `laravel_table`.*'.$partition.' from '.$from.' having `laravel_row` <= '.$limit;
+
+        if (isset($offset)) {
+            $sql .= ' and `laravel_row` > '.$offset;
+        }
+
+        return $sql.' order by `laravel_row`';
+    }
+
+    /**
+     * Compile an insert ignore statement into SQL.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  array  $values
+     * @return string
+     */
+    public function compileInsertOrIgnore(Builder $query, array $values)
+    {
+        return Str::replaceFirst(
+            'insert', 'insert ignore', $this->compileInsert($query, $values)
+        );
+    }
+
+    /**
+     * Compile an insert ignore statement using a subquery into SQL.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  array  $columns
+     * @param  string  $sql
+     * @return string
+     */
+    public function compileInsertOrIgnoreUsing(
+        Builder $query,
+        array $columns,
+        string $sql
+    ) {
+        return Str::replaceFirst(
+            'insert', 'insert ignore',
+            $this->compileInsertUsing($query, $columns, $sql)
+        );
+    }
+
+    /**
+     * Compile a "JSON contains" statement into SQL.
+     *
+     * @param  string  $column
+     * @param  string  $value
+     * @return string
+     */
+    protected function compileJsonContains($column, $value)
+    {
+        [$field, $path] = $this->wrapJsonFieldAndPath($column);
+
+        return 'json_contains('.$field.', '.$value.$path.')';
+    }
+
+    /**
+     * Compile a "JSON overlaps" statement into SQL.
+     *
+     * @param  string  $column
+     * @param  string  $value
+     * @return string
+     */
+    protected function compileJsonOverlaps($column, $value)
+    {
+        [$field, $path] = $this->wrapJsonFieldAndPath($column);
+
+        return 'json_overlaps('.$field.', '.$value.$path.')';
+    }
+
+    /**
+     * Compile a "JSON contains key" statement into SQL.
+     *
+     * @param  string  $column
+     * @return string
+     */
+    protected function compileJsonContainsKey($column)
+    {
+        [$field, $path] = $this->wrapJsonFieldAndPath($column);
+
+        return 'ifnull(json_contains_path('.$field.', \'one\''.$path.'), 0)';
+    }
+
+    /**
+     * Compile a "JSON length" statement into SQL.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  string  $value
+     * @return string
+     */
+    protected function compileJsonLength($column, $operator, $value)
+    {
+        [$field, $path] = $this->wrapJsonFieldAndPath($column);
+
+        return 'json_length('.$field.$path.') '.$operator.' '.$value;
+    }
+
+    /**
+     * Compile a "JSON value cast" statement into SQL.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function compileJsonValueCast($value)
+    {
+        return 'cast('.$value.' as json)';
     }
 
     /**
@@ -78,58 +314,135 @@ class MySqlGrammar extends Grammar
      */
     protected function compileLock(Builder $query, $value)
     {
-        if (is_string($value)) {
-            return $value;
+        if (! is_string($value)) {
+            return $value ? 'for update' : 'lock in share mode';
         }
 
-        return $value ? 'for update' : 'lock in share mode';
+        return $value;
     }
 
     /**
-     * Compile an update statement into SQL.
+     * Compile an insert statement into SQL.
      *
      * @param  \NinjaTables\Framework\Database\Query\Builder  $query
      * @param  array  $values
      * @return string
      */
-    public function compileUpdate(Builder $query, $values)
+    public function compileInsert(Builder $query, array $values)
     {
-        $table = $this->wrapTable($query->from);
+        if (empty($values)) {
+            $values = [[]];
+        }
 
-        $columns = [];
+        return parent::compileInsert($query, $values);
+    }
 
-        // Each one of the columns in the update statements needs to be wrapped in the
-        // keyword identifiers, also a place-holder needs to be created for each of
-        // the values in the list of bindings so we can make the sets statements.
-        foreach ($values as $key => $value) {
+    /**
+     * Compile the columns for an update statement.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  array  $values
+     * @return string
+     */
+    protected function compileUpdateColumns(Builder $query, array $values)
+    {
+        return Helper::collect($values)->map(function ($value, $key) {
             if ($this->isJsonSelector($key)) {
-                $columns[] = $this->compileJsonUpdateColumn(
-                    $key, new JsonExpression($value)
-                );
-            } else {
-                $columns[] = $this->wrap($key).' = '.$this->parameter($value);
+                return $this->compileJsonUpdateColumn($key, $value);
             }
+
+            return $this->wrap($key).' = '.$this->parameter($value);
+        })->implode(', ');
+    }
+
+    /**
+     * Compile an "upsert" statement into SQL.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  array  $values
+     * @param  array  $uniqueBy
+     * @param  array  $update
+     * @return string
+     */
+    public function compileUpsert(
+        Builder $query,
+        array $values,
+        array $uniqueBy,
+        array $update
+    ) {
+        $useUpsertAlias = $query->connection->getConfig('use_upsert_alias');
+
+        $sql = $this->compileInsert($query, $values);
+
+        if ($useUpsertAlias) {
+            $sql .= ' as laravel_upsert_alias';
         }
 
-        $columns = implode(', ', $columns);
+        $sql .= ' on duplicate key update ';
 
-        // If the query has any "join" clauses, we will setup the joins on the builder
-        // and compile them so we can attach them to this update, as update queries
-        // can get join statements to attach to other tables when they're needed.
-        if (isset($query->joins)) {
-            $joins = ' '.$this->compileJoins($query, $query->joins);
+        $columns = Helper::collect($update)->map(function ($value, $key) use ($useUpsertAlias) {
+            if (! is_numeric($key)) {
+                return $this->wrap($key).' = '.$this->parameter($value);
+            }
+
+            return $useUpsertAlias
+                ? $this->wrap($value).' = '.$this->wrap('laravel_upsert_alias').'.'.$this->wrap($value)
+                : $this->wrap($value).' = values('.$this->wrap($value).')';
+        })->implode(', ');
+
+        return $sql.$columns;
+    }
+
+    /**
+     * Compile a "lateral join" clause.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\JoinLateralClause  $join
+     * @param  string  $expression
+     * @return string
+     */
+    public function compileJoinLateral(
+        JoinLateralClause $join,
+        string $expression
+    ) {
+        return trim("{$join->type} join lateral {$expression} on true");
+    }
+
+    /**
+     * Prepare a JSON column being updated using the JSON_SET function.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return string
+     */
+    protected function compileJsonUpdateColumn($key, $value)
+    {
+        if (is_bool($value)) {
+            $value = $value ? 'true' : 'false';
+        } elseif (is_array($value)) {
+            $value = 'cast(? as json)';
         } else {
-            $joins = '';
+            $value = $this->parameter($value);
         }
 
-        // Of course, update queries may also be constrained by where clauses so we'll
-        // need to compile the where clauses and attach it to the query so only the
-        // intended records are updated by the SQL statements we generate to run.
-        $where = $this->compileWheres($query);
+        [$field, $path] = $this->wrapJsonFieldAndPath($key);
 
-        $sql = rtrim("update {$table}{$joins} set $columns $where");
+        return "{$field} = json_set({$field}{$path}, {$value})";
+    }
 
-        if (isset($query->orders)) {
+    /**
+     * Compile an update statement without joins into SQL.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  string  $table
+     * @param  string  $columns
+     * @param  string  $where
+     * @return string
+     */
+    protected function compileUpdateWithoutJoins(Builder $query, $table, $columns, $where)
+    {
+        $sql = parent::compileUpdateWithoutJoins($query, $table, $columns, $where);
+
+        if (! empty($query->orders)) {
             $sql .= ' '.$this->compileOrders($query, $query->orders);
         }
 
@@ -137,29 +450,13 @@ class MySqlGrammar extends Grammar
             $sql .= ' '.$this->compileLimit($query, $query->limit);
         }
 
-        return rtrim($sql);
-    }
-
-    /**
-     * Prepares a JSON column being updated using the JSON_SET function.
-     *
-     * @param  string  $key
-     * @param  \NinjaTables\Framework\Database\Query\JsonExpression  $value
-     * @return string
-     */
-    protected function compileJsonUpdateColumn($key, JsonExpression $value)
-    {
-        $path = explode('->', $key);
-
-        $field = $this->wrapValue(array_shift($path));
-
-        $accessor = '"$.'.implode('.', $path).'"';
-
-        return "{$field} = json_set({$field}, {$accessor}, {$value->getValue()})";
+        return $sql;
     }
 
     /**
      * Prepare the bindings for an update statement.
+     *
+     * Booleans, integers, and doubles are inserted into JSON updates as raw values.
      *
      * @param  array  $bindings
      * @param  array  $values
@@ -167,48 +464,49 @@ class MySqlGrammar extends Grammar
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
-        $index = 0;
+        $values = Helper::collect($values)->reject(function ($value, $column) {
+            return $this->isJsonSelector($column) && is_bool($value);
+        })->map(function ($value) {
+            return is_array($value) ? json_encode($value) : $value;
+        })->all();
 
-        foreach ($values as $column => $value) {
-            if ($this->isJsonSelector($column) && is_bool($value)) {
-                unset($bindings[$index]);
-            }
-
-            $index++;
-        }
-
-        return $bindings;
+        return parent::prepareBindingsForUpdate($bindings, $values);
     }
 
     /**
-     * Compile a delete statement into SQL.
+     * Compile a delete query that does not use joins.
      *
      * @param  \NinjaTables\Framework\Database\Query\Builder  $query
+     * @param  string  $table
+     * @param  string  $where
      * @return string
      */
-    public function compileDelete(Builder $query)
+    protected function compileDeleteWithoutJoins(Builder $query, $table, $where)
     {
-        $table = $this->wrapTable($query->from);
+        $sql = parent::compileDeleteWithoutJoins($query, $table, $where);
 
-        $where = is_array($query->wheres) ? $this->compileWheres($query) : '';
+        // When using MySQL, delete statements may contain order by statements and limits
+        // so we will compile both of those here. Once we have finished compiling this
+        // we will return the completed SQL statement so it will be executed for us.
+        if (! empty($query->orders)) {
+            $sql .= ' '.$this->compileOrders($query, $query->orders);
+        }
 
-        if (isset($query->joins)) {
-            $joins = ' '.$this->compileJoins($query, $query->joins);
-
-            $sql = trim("delete $table from {$table}{$joins} $where");
-        } else {
-            $sql = trim("delete from $table $where");
-
-            if (isset($query->orders)) {
-                $sql .= ' '.$this->compileOrders($query, $query->orders);
-            }
-
-            if (isset($query->limit)) {
-                $sql .= ' '.$this->compileLimit($query, $query->limit);
-            }
+        if (isset($query->limit)) {
+            $sql .= ' '.$this->compileLimit($query, $query->limit);
         }
 
         return $sql;
+    }
+
+    /**
+     * Compile a query to get the number of open connections for a database.
+     *
+     * @return string
+     */
+    public function compileThreadCount()
+    {
+        return 'select variable_value as `Value` from performance_schema.session_status where variable_name = \'threads_connected\'';
     }
 
     /**
@@ -219,15 +517,7 @@ class MySqlGrammar extends Grammar
      */
     protected function wrapValue($value)
     {
-        if ($value === '*') {
-            return $value;
-        }
-
-        if ($this->isJsonSelector($value)) {
-            return $this->wrapJsonSelector($value);
-        }
-
-        return '`'.str_replace('`', '``', $value).'`';
+        return $value === '*' ? $value : '`'.str_replace('`', '``', $value).'`';
     }
 
     /**
@@ -238,21 +528,21 @@ class MySqlGrammar extends Grammar
      */
     protected function wrapJsonSelector($value)
     {
-        $path = explode('->', $value);
+        [$field, $path] = $this->wrapJsonFieldAndPath($value);
 
-        $field = $this->wrapValue(array_shift($path));
-
-        return $field.'->'.'"$.'.implode('.', $path).'"';
+        return 'json_unquote(json_extract('.$field.$path.'))';
     }
 
     /**
-     * Determine if the given string is a JSON selector.
+     * Wrap the given JSON selector for boolean values.
      *
      * @param  string  $value
-     * @return bool
+     * @return string
      */
-    protected function isJsonSelector($value)
+    protected function wrapJsonBooleanSelector($value)
     {
-        return Str::contains($value, '->');
+        [$field, $path] = $this->wrapJsonFieldAndPath($value);
+
+        return 'json_extract('.$field.$path.')';
     }
 }

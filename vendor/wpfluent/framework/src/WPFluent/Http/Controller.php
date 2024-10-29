@@ -9,17 +9,47 @@ use NinjaTables\Framework\Validator\ValidationException;
 
 abstract class Controller
 {
+    /**
+     * Application Instance
+     * @var \NinjaTables\Framework\Foundation\Application
+     */
     protected $app = null;
+
+    /**
+     * Request Instane
+     * @var \NinjaTables\Framework\Request\Request
+     */
     protected $request = null;
+
+    /**
+     * Response Instane
+     * @var \NinjaTables\Framework\Response\Response
+     */
     protected $response = null;
 
-    public function __construct()
+    /**
+     * Validated data after validation has been passed
+     * @var array
+     */
+    private $__validated = [];
+
+    /**
+     * Construct the controller instance
+     */
+    public function __construct($app = null)
     {
-        $this->app = App::getInstance();
+        $this->app = $app ?: App::getInstance();
         $this->request = $this->app['request'];
         $this->response = $this->app['response'];
     }
 
+    /**
+     * Validate the request data
+     * @param  array $data
+     * @param  array $rules
+     * @param  array  $messages
+     * @return array     
+     */
     public function validate($data, $rules, $messages = [])
     {
         try {
@@ -30,6 +60,8 @@ abstract class Controller
                     'Unprocessable Entity!', 422, null, $validator->errors()
                 );
             }
+
+            $this->__validated = $this->request->validated($validator->validated());
 
             return $data;
 
@@ -43,26 +75,77 @@ abstract class Controller
         }
     }
 
-    public function json($data = null, $code = 200)
+    /**
+     * Get the valid data after validation has been passed.
+     *
+     * @return array
+     */
+    public function validated()
+    {
+        return (array) $this->__validated;
+    }
+
+    /**
+     * Send json response
+     * @param  array  $data
+     * @param  integer $code
+     * @return string|false The JSON encoded string, or false if it cannot be encoded.
+     */
+    public function json($data = [], $code = 200)
     {
         return $this->response->json($data, $code);
     }
 
-    public function send($data = null, $code = 200)
+    /**
+     * Send json response
+     * @param  array  $data
+     * @param  integer $code
+     * @return \WP_REST_Response
+     */
+    public function response($data = [], $code = 200)
+    {
+        return $this->send($data, $code);
+    }
+
+    /**
+     * Send json response
+     * @param  array  $data
+     * @param  integer $code
+     * @return \WP_REST_Response
+     */
+    public function send($data = [], $code = 200)
     {
         return $this->response->send($data, $code);
     }
 
-    public function sendSuccess($data = null, $code = null)
+    /**
+     * Send a success json response
+     * @param  array  $data
+     * @param  integer $code
+     * @return \WP_REST_Response
+     */
+    public function sendSuccess($data = [])
     {
-        return $this->response->sendSuccess($data, $code);
+        return $this->response->sendSuccess($data, 200);
     }
 
-    public function sendError($data = null, $code = null)
+    /**
+     * Send an error json response
+     * @param  array  $data
+     * @param  integer $code
+     * @return \WP_REST_Response
+     */
+    public function sendError($data = [], $code = 422)
     {
         return $this->response->sendError($data, $code);
     }
 
+    /**
+     * Dynamically Access components from container
+     * @param  string $key
+     * @return mixed
+     * @throws ReflectionException
+     */
     public function __get($key)
     {
         try {
@@ -71,10 +154,5 @@ abstract class Controller
             $class = get_class($this);
             wp_die("Undefined property {$key} in $class");
         }
-    }
-
-    public function response($data, $code = 200)
-    {
-        return new WP_REST_Response($data, $code);
     }
 }

@@ -3,53 +3,115 @@
 namespace NinjaTables\Framework\Foundation;
 
 use NinjaTables\Framework\Foundation\App;
-use NinjaTables\Framework\Validator\Validator;
 use NinjaTables\Framework\Validator\ValidationException;
 
 abstract class RequestGuard
 {
+    /**
+     * Retrive the validation rules
+     * @return array
+     */
     public function rules()
     {
         return [];
     }
 
+    /**
+     * Retrive the validation messages set by the developer
+     * @return array
+     */
     public function messages()
     {
         return [];
     }
 
+    /**
+     * Allow the developer tinker with data before the validation.
+     * @return array
+     */
     public function beforeValidation()
     {
         return [];
     }
 
-    public function afterValidation()
+    /**
+     * Allow the developer tinker with data after the validation.
+     * @return array
+     */
+    public function afterValidation($validator)
     {
         return [];
     }
 
-    public function validate(Validator $validator)
+    /**
+     * Validate the request.
+     * 
+     * @param  array $rules Optional
+     * @param  array $messages Optional
+     * @return array Request Data
+     * @throws NinjaTables\Framework\Validator\ValidationException
+     */
+    public function validate($rules = [], $messages = [])
     {
         try {
+            return App::make('request')->validate(
+                $rules ?: (array) $this->rules(),
+                $messages ?: (array) $this->messages()
+            );
+        } catch (ValidationException $e) {
+            
+            $validator = App::make('validator');
+            
+            $validator->addError($e->errors());
 
-            if (!($rules = (array) $this->rules())) return;
+            $after = $this->afterValidation($validator);
 
-            $validator = $validator->make($data = $this->all(), $rules, (array) $this->messages());
-
-            if ($validator->validate()->fails()) {
-                throw new ValidationException('Unprocessable Entity!', 422, null, $validator->errors());
+            if (!($errors = $validator->errors())) {
+                return;
             }
 
-            return $data;
+            $e = new ValidationException(
+                'Unprocessable Entity!', 422, null, $e->errors()
+            );
 
-        } catch (ValidationException $e) {
-
-            if (defined('REST_REQUEST') && REST_REQUEST) {
+            if ($this->shouldThrowException()) {
                 throw $e;
             } else {
-                App::getInstance()->doCustomAction('handle_exception', $e);
+                App::make()->doCustomAction('handle_exception', $e);
             }
         }
+    }
+
+    /**
+     * Check if exceptions should be thrown.
+     * 
+     * @return bool
+     */
+    protected function shouldThrowException()
+    {
+        $isTrue = $this->isRest();
+        $isTrue = $isTrue || str_contains('test', App::make()->env());
+        $isTrue = $isTrue || str_contains(strtolower(php_sapi_name()), 'cli');
+        return $isTrue;
+    }
+
+    /**
+     * Handles validation including before and after calls
+     *
+     * @throws NinjaTables\Framework\Validator\ValidationException
+     * @return null
+     */
+    public static function applyValidation()
+    {
+        $instance = new static;
+
+        $request = App::getInstance('request');
+
+        $request->merge($instance->beforeValidation());
+
+        $instance->validate();
+
+        $request->merge($instance->afterValidation());
     }
 
     /**
@@ -63,10 +125,16 @@ abstract class RequestGuard
         return $this->get($key);
     }
 
+    /**
+     * Handle the dynamic method calls
+     * @param  string $method
+     * @param  array $params
+     * @return mixed
+     */
     public function __call($method, $params)
     {
         return call_user_func_array(
-            [App::getInstance('request'), $method], $params
+            [App::make('request'), $method], $params
         );
     }
 }

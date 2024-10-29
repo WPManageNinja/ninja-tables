@@ -3,69 +3,147 @@
 namespace NinjaTables\Framework\Foundation;
 
 use InvalidArgumentException;
+use NinjaTables\Framework\Support\Arr;
+use NinjaTables\Framework\Http\Client;
 use NinjaTables\Framework\Foundation\Config;
-use NinjaTables\Framework\Foundation\Container;
+use NinjaTables\Framework\Container\Container;
 use NinjaTables\Framework\Foundation\ComponentBinder;
 use NinjaTables\Framework\Foundation\FoundationTrait;
-use NinjaTables\Framework\Foundation\AsyncRequestTrait;
-use NinjaTables\Framework\Foundation\CronTaskSchedulerTrait;
 
 class Application extends Container
 {
     use FoundationTrait;
-    use AsyncRequestTrait;
-    use CronTaskSchedulerTrait;
 
+    /**
+     * Main plugin file's absolute path
+     * 
+     * @var string
+     */
     protected $file = null;
+
+    /**
+     * Plugin's base url
+     * 
+     * @var string
+     */
     protected $baseUrl = null;
+
+    /**
+     * Plugin's base path
+     * 
+     * @var string
+     */
     protected $basePath = null;
+
+    /**
+     * Default namespace for hook's handlers
+     * 
+     * @var string
+     */
     protected $handlerNamespace = null;
+
+    /**
+     * Default namespace for controllers
+     * 
+     * @var string
+     */
     protected $controllerNamespace = null;
+
+    /**
+     * Default namespace for policy handlers
+     * 
+     * @var string
+     */
     protected $permissionNamespace = null;
 
+    /**
+     * Composer JSON
+     * 
+     * @var null|array
+     */
+    protected static $composer = null;
+
+    /**
+     * Ready event handlers
+     * 
+     * @var array
+     */
+    protected $onReady = [];
+
+    /**
+     * Construct the application instance
+     * 
+     * @param string $file The main plugin file's absolute path
+     * @return null
+     */
     public function __construct($file = null)
     {
         $this->init($file);
         $this->setAppLevelNamespace();
         $this->bootstrapApplication();
+        $this->callPluginReadyCallbacks();
     }
 
+    /**
+     * Init the application instance
+     * 
+     * @param string $file The main plugin file's absolute path
+     * 
+     * @return null
+     */
     protected function init($file)
     {
-        $this->file = $this->pluginFilePath($file);
+        $this['__pluginfile__'] = $this->file = $file;
         $this->basePath = plugin_dir_path($this->file);
         $this->baseUrl = plugin_dir_url($this->file);
     }
 
-    protected function pluginFilePath($file)
-    {
-        $file = $file ?: realpath(__DIR__ . '/../../../plugin.php');
-        
-        return $file;
-    }
-
+    /**
+     * Set the default application level namespaces to resolve
+     * the controllers, policies and various hook handlers.
+     *
+     * @return null
+     */
     protected function setAppLevelNamespace()
     {
-        $autoload = $this->getComposer('autoload');
+        $composer = $this->getComposer();
 
-        $psr4 = array_flip($autoload['psr-4']);
+        $psr4 = array_flip($composer['autoload']['psr-4']);
 
         $this->policyNamespace = $psr4['app/'] . 'Http\Policies';
 
         $this->handlerNamespace = $psr4['app/'] . 'Hooks\Handlers';
         
         $this->controllerNamespace = $psr4['app/'] . 'Http\Controllers';
+
+        $this['__namespace__'] = $composer['extra']['wpfluent']['namespace']['current'];
     }
 
-    protected function getComposer($section = null)
+    /**
+     * Get the composer data as an array
+     * 
+     * @param  string $section Specific key
+     * 
+     * @return array partial or full composer data array
+     */
+    public function getComposer($section = null)
     {
-        $data = json_decode(
-            file_get_contents($this->basePath . 'composer.json'), true
-        );
+        if (is_null(static::$composer)) {
+            static::$composer = json_decode(
+                file_get_contents($this->basePath . 'composer.json'), true
+            );
+        }
 
-        return $section ? $data[$section] : $data;
+        return $section ? Arr::get(
+            static::$composer, $section
+        ) : static::$composer;
     }
 
+    /**
+     * Bootstrap the application.
+     * 
+     * @return null
+     */
     protected function bootstrapApplication()
     {
         $this->bindAppInstance();
@@ -73,29 +151,50 @@ class Application extends Container
         $this->loadConfigIfExists();
         $this->registerTextdomain();
         $this->bindCoreComponents();
-        $this->requireCommonFiles($this);
         $this->registerAsyncActions();
+        $this->requireCommonFiles($this);
         $this->addRestApiInitAction($this);
     }
 
+    /**
+     * Bind application instance in the container.
+     * 
+     * @return null
+     */
     protected function bindAppInstance()
     {
         App::setInstance($this);
         $this->instance('app', $this);
         $this->instance(__CLASS__, $this);
+        $this->instance('endpoints', []);
     }
 
+    /**
+     * Bind the paths and urls
+     * 
+     * @return null
+     */
     protected function bindPathsAndUrls()
     {
         $this->bindUrls();
         $this->basePaths();
     }
 
+    /**
+     * Bind urls
+     * 
+     * @return null
+     */
     protected function bindUrls()
     {
         $this['url.assets'] = $this->baseUrl . 'assets/';
     }
 
+    /**
+     * Bind paths
+     * 
+     * @return null
+     */
     protected function basePaths()
     {
         $this['path'] = $this->basePath;
@@ -109,40 +208,96 @@ class Application extends Container
         $this['path.views'] = $this['path.app'] . 'Views/';
     }
 
+    /**
+     * Load application's config and set
+     * the data in the Config instance.
+     * 
+     * @return null
+     */
     protected function loadConfigIfExists()
     {
         $data = [];
 
         if (is_dir($this['path.config'])) {
             foreach (glob($this['path.config'] . '*.php') as $file) {
-                $data[basename($file, '.php')] = require_once($file);
+                $data[basename($file, '.php')] = require($file);
             }
         }
 
         $this->instance('config', new Config($data));
     }
 
+    /**
+     * Resolve the given type from the container.
+     *
+     * @param  string  $abstract
+     * @param  array   $parameters
+     * @return mixed
+     */
+    public function make($abstract, $parameters = [])
+    {
+        if (str_starts_with($abstract, '_NS')) {
+            
+            $namespace = $this->getComposer(
+                'extra.wpfluent.namespace.current'
+            );
+
+            $abstract = str_replace('_NS', $namespace, $abstract);
+        }
+        
+        return parent::make($abstract, $parameters);
+    }
+
+    /**
+     * Register plugin's text domain
+     * 
+     * @return null
+     */
     protected function registerTextdomain()
     {
         $this->addAction('init', function() {
             load_plugin_textdomain(
-                $this->config->get('app.text_domain'), false, $this->textDomainPath()
+                $this->config->get(
+                    'app.text_domain'
+                ), false, $this->textDomainPath()
             );
         });
     }
 
+    /**
+     * Resolve the text domain path.
+     * 
+     * @return null
+     */
     protected function textDomainPath()
     {
         return basename($this['path']) . $this->config->get('app.domain_path');
     }
 
+    /**
+     * Bind the components of the framework into the container so
+     * they'll be available throughout the application life cycle.
+     * 
+     * @return null
+     */
     protected function bindCoreComponents()
     {
         (new ComponentBinder($this))->bindComponents();
     }
 
+    /**
+     * Load (include) the files where hooks are registered.
+     * 
+     * @param self $app
+     * 
+     * @return null
+     */
     protected function requireCommonFiles($app)
     {
+        $this->addFilter(
+            'rest_pre_serve_request', [$this, 'preServeRequest'], 10, 4
+        );
+
         require_once $this->basePath . 'app/Hooks/actions.php';
         require_once $this->basePath . 'app/Hooks/filters.php';
 
@@ -151,6 +306,134 @@ class Application extends Container
         }
     }
 
+    /**
+     * Handler for rest_pre_serve_request filter.
+     * 
+     * @param  bool $served  (default: false)
+     * @param  \WP_Rest_Response $result
+     * @param  \WP_Rest_Request  $request
+     * @param  \WP_Rest_Server   $server
+     * @return bool (false to intercept, otherwise true)
+     */
+    public function preServeRequest($served, $result, $request, $server)
+    {
+        if ($result->get_status() === 404) {
+            $route = $request->get_route();
+            $slug = $this->config->get('app.slug');
+            
+            if ($this->isRequestOfPlugin($route, $slug)) {
+                if ($this->isRequestForEndpoints($route)) {
+                    status_header(200);
+                    $result->set_status(200);
+                    $result->set_data($this->endpoints);
+                } else {
+                    $result->set_data(
+                        $this->customizeNotFoundResponse(
+                            $result, $request
+                        )
+                    );
+                }
+            }
+        }
+
+        return $served;
+    }
+
+    /**
+     * Determines whether the request is madse by plugin.
+     * 
+     * @param  string  $route (Rest route|Full URL)
+     * @param  string  $slug  (Plugin's slug)
+     * @return bool
+     */
+    public function isRequestOfPlugin($route = '', $slug = '')
+    {
+        $slug = $slug ?: $this->config->get('app.slug');
+
+        if (!$route) {
+            if (get_option('permalink_structure')) {
+                $route = $this->request->url();
+            } else {
+                $route = $this->request->query('rest_route');
+            }
+        }
+
+        // For web routing (If web-routing is installed)
+        if (!$route && !$this->request->isRest()) {
+            $route = $this->request->url();
+        }
+
+        $parsedUrl = parse_url($route ?? '');
+        
+        $path = str_replace('/wp-json', '', $parsedUrl['path'] ?? '');
+
+        if (is_admin()) {
+            $page = $this->request->query('page');
+            if ($slug === $page) {
+                $path = $page;
+            }
+        } 
+
+        return str_starts_with(ltrim($path, '/'), $slug);
+    }
+
+    /**
+     * Determines if the request is made for endpoints.
+     * 
+     * @param  string  $route (Rest route|Full URL)
+
+     * @return bool
+     */
+    protected function isRequestForEndpoints($route)
+    {
+        return str_ends_with($route, '__endpoints');
+    }
+
+    /**
+     * Prepare a custom not found response.
+     * 
+     * @param  \WP_Rest_Response $result
+     * @param  \WP_Rest_Request  $request
+     * 
+     * @return array
+     */
+    public function customizeNotFoundResponse($result, $request)
+    {
+        $response = $result->get_data();
+        
+        if ($this->env() === 'dev') {
+            $response['data']['wpfluent'] = [
+                'env' => $this->env(),
+                'method' => $request->get_method(),
+                'request_url' => $this->request->url(),
+                'route_params' => $request->get_url_params(),
+                'query_params' => $request->get_query_params(),
+                'body_params' => $request->get_body_params(),
+            ];
+        } else {
+            $response['data']['wpfluent'] = [
+                'env' => $this->env()
+            ];
+        }
+
+        return $response;
+    }
+
+    /**
+     * Check if running unit test.
+     * 
+     * @return boolean
+     */
+    public function isUnitTesting()
+    {
+        return getenv('ENV') === 'testing';
+    }
+
+    /**
+     * Register the rest api init actions and routes
+     * 
+     * @param self $app
+     */
     protected function addRestApiInitAction($app)
     {
         $this->addAction('rest_api_init', function($wpRestServer) use ($app) {
@@ -164,6 +447,13 @@ class Application extends Container
         });
     }
 
+    /**
+     * Register rest routes.
+     * 
+     * @param \NinjaTables\Framework\Http\Router $router
+     * 
+     * @return null
+     */
     protected function registerRestRoutes($router)
     {
         $router->registerRoutes(
@@ -171,8 +461,48 @@ class Application extends Container
         );
     }
 
+    /**
+     * Load (include) routes
+     * 
+     * @param \NinjaTables\Framework\Http\Router $router
+     * @return null
+     */
     protected function requireRouteFile($router)
     {
-        require_once $this['path.http'] . 'Routes/api.php';
+        require_once $this['path.http'] . 'Routes/routes.php';
+    }
+
+    /**
+     * Register plugin booted callbacks.
+     * 
+     * @param  callable $callback
+     * @return void
+     */
+    protected function ready(callable $callback)
+    {
+        $this->onReady[] = $callback;
+    }
+
+    /**
+     * Register Async Actions.
+     * 
+     * @return void
+     */
+    protected function registerAsyncActions()
+    {
+        Client::registerAsyncRequestHandler();
+    }
+
+    /**
+     * Execute plugin booted callbacks.
+     * 
+     * @param  callable $callback
+     * @return void
+     */
+    protected function callPluginReadyCallbacks()
+    {
+        while ($callback = array_shift($this->onReady)) {
+            $callback($this);
+        }
     }
 }

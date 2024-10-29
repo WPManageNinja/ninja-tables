@@ -7,9 +7,12 @@ use NinjaTables\Framework\Support\Helper;
 use NinjaTables\Framework\Database\Orm\Model;
 use NinjaTables\Framework\Database\Orm\Builder;
 use NinjaTables\Framework\Database\Orm\Collection;
+use NinjaTables\Framework\Database\Orm\Relations\Concerns\InteractsWithDictionary;
 
 class MorphTo extends BelongsTo
 {
+    use InteractsWithDictionary;
+
     /**
      * The type of the polymorphic relation.
      *
@@ -39,35 +42,42 @@ class MorphTo extends BelongsTo
     protected $macroBuffer = [];
 
     /**
+     * A map of relations to load for each individual morph type.
+     *
+     * @var array
+     */
+    protected $morphableEagerLoads = [];
+
+    /**
+     * A map of relationship counts to load for each individual morph type.
+     *
+     * @var array
+     */
+    protected $morphableEagerLoadCounts = [];
+
+    /**
+     * A map of constraints to apply for each individual morph type.
+     *
+     * @var array
+     */
+    protected $morphableConstraints = [];
+
+    /**
      * Create a new morph to relationship instance.
      *
      * @param  \NinjaTables\Framework\Database\Orm\Builder  $query
      * @param  \NinjaTables\Framework\Database\Orm\Model  $parent
      * @param  string  $foreignKey
-     * @param  string  $otherKey
+     * @param  string  $ownerKey
      * @param  string  $type
      * @param  string  $relation
      * @return void
      */
-    public function __construct(Builder $query, Model $parent, $foreignKey, $otherKey, $type, $relation)
+    public function __construct(Builder $query, Model $parent, $foreignKey, $ownerKey, $type, $relation)
     {
         $this->morphType = $type;
 
-        parent::__construct($query, $parent, $foreignKey, $otherKey, $relation);
-    }
-
-    /**
-     * Get the results of the relationship.
-     *
-     * @return mixed
-     */
-    public function getResults()
-    {
-        if (! $this->otherKey) {
-            return;
-        }
-
-        return $this->query->first();
+        parent::__construct($query, $parent, $foreignKey, $ownerKey, $relation);
     }
 
     /**
@@ -91,57 +101,18 @@ class MorphTo extends BelongsTo
     {
         foreach ($models as $model) {
             if ($model->{$this->morphType}) {
-                $this->dictionary[$model->{$this->morphType}][$model->{$this->foreignKey}][] = $model;
+                $morphTypeKey = $this->getDictionaryKey($model->{$this->morphType});
+                $foreignKeyKey = $this->getDictionaryKey($model->{$this->foreignKey});
+
+                $this->dictionary[$morphTypeKey][$foreignKeyKey][] = $model;
             }
         }
     }
 
     /**
-     * Match the eagerly loaded results to their parents.
-     *
-     * @param  array   $models
-     * @param  \NinjaTables\Framework\Database\Orm\Collection  $results
-     * @param  string  $relation
-     * @return array
-     */
-    public function match(array $models, Collection $results, $relation)
-    {
-        return $models;
-    }
-
-    /**
-     * Associate the model instance to the given parent.
-     *
-     * @param  \NinjaTables\Framework\Database\Orm\Model  $model
-     * @return \NinjaTables\Framework\Database\Orm\Model
-     */
-    public function associate($model)
-    {
-        $this->parent->setAttribute($this->foreignKey, $model->getKey());
-
-        $this->parent->setAttribute($this->morphType, $model->getMorphClass());
-
-        return $this->parent->setRelation($this->relation, $model);
-    }
-
-    /**
-     * Dissociate previously associated model from the given parent.
-     *
-     * @return \NinjaTables\Framework\Database\Orm\Model
-     */
-    public function dissociate()
-    {
-        $this->parent->setAttribute($this->foreignKey, null);
-
-        $this->parent->setAttribute($this->morphType, null);
-
-        return $this->parent->setRelation($this->relation, null);
-    }
-
-    /**
      * Get the results of the relationship.
      *
-     * Called via eager load method of Eloquent query builder.
+     * Called via eager load method of Orm query builder.
      *
      * @return mixed
      */
@@ -155,24 +126,6 @@ class MorphTo extends BelongsTo
     }
 
     /**
-     * Match the results for a given type to their parents.
-     *
-     * @param  string  $type
-     * @param  \NinjaTables\Framework\Database\Orm\Collection  $results
-     * @return void
-     */
-    protected function matchToMorphParents($type, Collection $results)
-    {
-        foreach ($results as $result) {
-            if (isset($this->dictionary[$type][$result->getKey()])) {
-                foreach ($this->dictionary[$type][$result->getKey()] as $model) {
-                    $model->setRelation($this->relation, $result);
-                }
-            }
-        }
-    }
-
-    /**
      * Get all of the relation results for a type.
      *
      * @param  string  $type
@@ -182,28 +135,43 @@ class MorphTo extends BelongsTo
     {
         $instance = $this->createModelByType($type);
 
-        $key = $instance->getTable().'.'.$instance->getKeyName();
+        $ownerKey = $this->ownerKey ?? $instance->getKeyName();
 
         $query = $this->replayMacros($instance->newQuery())
-            ->mergeModelDefinedRelationConstraints($this->getQuery())
-            ->with($this->getQuery()->getEagerLoads());
+                            ->mergeConstraintsFrom($this->getQuery())
+                            ->with(array_merge(
+                                $this->getQuery()->getEagerLoads(),
+                                (array) ($this->morphableEagerLoads[get_class($instance)] ?? [])
+                            ))
+                            ->withCount(
+                                (array) ($this->morphableEagerLoadCounts[get_class($instance)] ?? [])
+                            );
 
-        return $query->whereIn($key, $this->gatherKeysByType($type)->all())->get();
+        if ($callback = ($this->morphableConstraints[get_class($instance)] ?? null)) {
+            $callback($query);
+        }
+
+        $whereIn = $this->whereInMethod($instance, $ownerKey);
+
+        return $query->{$whereIn}(
+            $instance->getTable().'.'.$ownerKey, $this->gatherKeysByType($type, $instance->getKeyType())
+        )->get();
     }
 
     /**
      * Gather all of the foreign keys for a given type.
      *
      * @param  string  $type
+     * @param  string  $keyType
      * @return array
      */
-    protected function gatherKeysByType($type)
+    protected function gatherKeysByType($type, $keyType)
     {
-        $foreign = $this->foreignKey;
-
-        return Helper::collect($this->dictionary[$type])->map(function ($models) use ($foreign) {
-            return Helper::head($models)->{$foreign};
-        })->values()->unique();
+        return $keyType !== 'string'
+                    ? array_keys($this->dictionary[$type])
+                    : array_map(function ($modelId) {
+                        return (string) $modelId;
+                    }, array_filter(array_keys($this->dictionary[$type])));
     }
 
     /**
@@ -214,9 +182,108 @@ class MorphTo extends BelongsTo
      */
     public function createModelByType($type)
     {
-        $class = $this->parent->getActualClassNameForMorph($type);
+        $class = Model::getActualClassNameForMorph($type);
 
-        return new $class;
+        return Helper::tap(new $class, function ($instance) {
+            if (! $instance->getConnectionName()) {
+                $instance->setConnection($this->getConnection()->getName());
+            }
+        });
+    }
+
+    /**
+     * Match the eagerly loaded results to their parents.
+     *
+     * @param  array  $models
+     * @param  \NinjaTables\Framework\Database\Orm\Collection  $results
+     * @param  string  $relation
+     * @return array
+     */
+    public function match(array $models, Collection $results, $relation)
+    {
+        return $models;
+    }
+
+    /**
+     * Match the results for a given type to their parents.
+     *
+     * @param  string  $type
+     * @param  \NinjaTables\Framework\Database\Orm\Collection  $results
+     * @return void
+     */
+    protected function matchToMorphParents($type, Collection $results)
+    {
+        foreach ($results as $result) {
+            $ownerKey = ! is_null($this->ownerKey) ? $this->getDictionaryKey($result->{$this->ownerKey}) : $result->getKey();
+
+            if (isset($this->dictionary[$type][$ownerKey])) {
+                foreach ($this->dictionary[$type][$ownerKey] as $model) {
+                    $model->setRelation($this->relationName, $result);
+                }
+            }
+        }
+    }
+
+    /**
+     * Associate the model instance to the given parent.
+     *
+     * @param  \NinjaTables\Framework\Database\Orm\Model  $model
+     * @return \NinjaTables\Framework\Database\Orm\Model
+     */
+    public function associate($model)
+    {
+        if ($model instanceof Model) {
+            $foreignKey = $this->ownerKey && $model->{$this->ownerKey}
+                            ? $this->ownerKey
+                            : $model->getKeyName();
+        }
+
+        $this->parent->setAttribute(
+            $this->foreignKey, $model instanceof Model ? $model->{$foreignKey} : null
+        );
+
+        $this->parent->setAttribute(
+            $this->morphType, $model instanceof Model ? $model->getMorphClass() : null
+        );
+
+        return $this->parent->setRelation($this->relationName, $model);
+    }
+
+    /**
+     * Dissociate previously associated model from the given parent.
+     *
+     * @return \NinjaTables\Framework\Database\Orm\Model
+     */
+    public function dissociate()
+    {
+        $this->parent->setAttribute($this->foreignKey, null);
+
+        $this->parent->setAttribute($this->morphType, null);
+
+        return $this->parent->setRelation($this->relationName, null);
+    }
+
+    /**
+     * Touch all of the related models for the relationship.
+     *
+     * @return void
+     */
+    public function touch()
+    {
+        if (! is_null($this->child->{$this->foreignKey})) {
+            parent::touch();
+        }
+    }
+
+    /**
+     * Make a new related instance for the given model.
+     *
+     * @param  \NinjaTables\Framework\Database\Orm\Model  $parent
+     * @return \NinjaTables\Framework\Database\Orm\Model
+     */
+    protected function newRelatedInstanceFor(Model $parent)
+    {
+        return $parent->{$this->getRelationName()}()->getRelated()->newInstance();
     }
 
     /**
@@ -240,15 +307,111 @@ class MorphTo extends BelongsTo
     }
 
     /**
+     * Specify which relations to load for a given morph type.
+     *
+     * @param  array  $with
+     * @return \NinjaTables\Framework\Database\Orm\Relations\MorphTo
+     */
+    public function morphWith(array $with)
+    {
+        $this->morphableEagerLoads = array_merge(
+            $this->morphableEagerLoads, $with
+        );
+
+        return $this;
+    }
+
+    /**
+     * Specify which relationship counts to load for a given morph type.
+     *
+     * @param  array  $withCount
+     * @return \NinjaTables\Framework\Database\Orm\Relations\MorphTo
+     */
+    public function morphWithCount(array $withCount)
+    {
+        $this->morphableEagerLoadCounts = array_merge(
+            $this->morphableEagerLoadCounts, $withCount
+        );
+
+        return $this;
+    }
+
+    /**
+     * Specify constraints on the query for a given morph type.
+     *
+     * @param  array  $callbacks
+     * @return \NinjaTables\Framework\Database\Orm\Relations\MorphTo
+     */
+    public function constrain(array $callbacks)
+    {
+        $this->morphableConstraints = array_merge(
+            $this->morphableConstraints, $callbacks
+        );
+
+        return $this;
+    }
+
+    /**
+     * Indicate that soft deleted models should be included in the results.
+     *
+     * @return $this
+     */
+    public function withTrashed()
+    {
+        $callback = fn ($query) => $query->hasMacro('withTrashed') ? $query->withTrashed() : $query;
+
+        $this->macroBuffer[] = [
+            'method' => 'when',
+            'parameters' => [true, $callback],
+        ];
+
+        return $this->when(true, $callback);
+    }
+
+    /**
+     * Indicate that soft deleted models should not be included in the results.
+     *
+     * @return $this
+     */
+    public function withoutTrashed()
+    {
+        $callback = fn ($query) => $query->hasMacro('withoutTrashed') ? $query->withoutTrashed() : $query;
+
+        $this->macroBuffer[] = [
+            'method' => 'when',
+            'parameters' => [true, $callback],
+        ];
+
+        return $this->when(true, $callback);
+    }
+
+    /**
+     * Indicate that only soft deleted models should be included in the results.
+     *
+     * @return $this
+     */
+    public function onlyTrashed()
+    {
+        $callback = fn ($query) => $query->hasMacro('onlyTrashed') ? $query->onlyTrashed() : $query;
+
+        $this->macroBuffer[] = [
+            'method' => 'when',
+            'parameters' => [true, $callback],
+        ];
+
+        return $this->when(true, $callback);
+    }
+
+    /**
      * Replay stored macro calls on the actual related instance.
      *
-     * @param \NinjaTables\Framework\Database\Orm\Builder $query
+     * @param  \NinjaTables\Framework\Database\Orm\Builder  $query
      * @return \NinjaTables\Framework\Database\Orm\Builder
      */
     protected function replayMacros(Builder $query)
     {
         foreach ($this->macroBuffer as $macro) {
-            call_user_func_array([$query, $macro['method']], $macro['parameters']);
+            $query->{$macro['method']}(...$macro['parameters']);
         }
 
         return $query;
@@ -258,13 +421,19 @@ class MorphTo extends BelongsTo
      * Handle dynamic method calls to the relationship.
      *
      * @param  string  $method
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return mixed
      */
     public function __call($method, $parameters)
     {
         try {
-            return parent::__call($method, $parameters);
+            $result = parent::__call($method, $parameters);
+
+            if (in_array($method, ['select', 'selectRaw', 'selectSub', 'addSelect', 'withoutGlobalScopes'])) {
+                $this->macroBuffer[] = compact('method', 'parameters');
+            }
+
+            return $result;
         }
 
         // If we tried to call a method that does not exist on the parent Builder instance,

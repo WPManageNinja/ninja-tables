@@ -9,5 +9,4 @@ return array(
     'WPFluent\\' => array($vendorDir . '/wpfluent/framework/src/WPFluent'),
     'NinjaTables\\Framework\\' => array($vendorDir . '/wpfluent/framework/src/WPFluent'),
     'NinjaTables\\App\\' => array($baseDir . '/app'),
-    'League\\Csv\\' => array($vendorDir . '/league/csv/src'),
 );

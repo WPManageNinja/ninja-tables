@@ -30,7 +30,7 @@ interface PaginatorInterface
     public function fragment($fragment = null);
 
     /**
-     * The the URL for the next page, or null.
+     * The URL for the next page, or null.
      *
      * @return string|null
      */
@@ -86,11 +86,18 @@ interface PaginatorInterface
     public function hasPages();
 
     /**
-     * Determine if there is more items in the data store.
+     * Determine if there are more items in the data store.
      *
      * @return bool
      */
     public function hasMorePages();
+
+    /**
+     * Get the base path for paginator generated URLs.
+     *
+     * @return string|null
+     */
+    public function path();
 
     /**
      * Determine if the list of items is empty or not.
@@ -100,10 +107,9 @@ interface PaginatorInterface
     public function isEmpty();
 
     /**
-     * Render the paginator using a given Presenter.
+     * Determine if the list of items is not empty.
      *
-     * @param  \NinjaTables\Framework\Pagination\Presenter|null  $presenter
-     * @return string
+     * @return bool
      */
-    public function render(Presenter $presenter = null);
+    public function isNotEmpty();
 }
