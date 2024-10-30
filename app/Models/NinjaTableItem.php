@@ -2,6 +2,7 @@
 
 namespace NinjaTables\App\Models;
 
+use NinjaTables\App\Models\Casts\CustomDateCast;
 use NinjaTables\Framework\Support\Sanitizer;
 
 class NinjaTableItem extends Model
@@ -9,7 +10,7 @@ class NinjaTableItem extends Model
     protected $primaryKey = 'id';
     protected $table = 'ninja_table_items';
     protected $casts = [
-        'created_at' => 'datetime:Y-m-d H:i:s'
+        'created_at' => CustomDateCast::class,
     ];
 
     protected function getItems($tableId, $perPage, $currentPage, $skip, $search, $dataSourceType)
