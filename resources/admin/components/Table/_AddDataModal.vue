@@ -1,12 +1,12 @@
 <template>
     <el-dialog
         :title="title"
-        :visible.sync="show"
+        :visible.sync="showModal"
         top="50px"
         :close-on-click-modal="false"
         :append-to-body="true"
         @close="closeModal">
-        <div v-if="show">
+        <div v-if="showModal">
             <div v-for="column in columns" :key="column.key" class="form-group">
                 <label :for="slugify(column.key)">{{ column.name || column.key }}</label>
                 <div v-if="column.data_type == 'textarea'">
@@ -142,6 +142,7 @@
         props: ['title', 'show', 'columns', 'table_id', 'item', 'manualSort', 'insertAfterPosition', 'insertAfterId', 'type'],
         data() {
             return {
+                showModal: this.show,
                 row_config: false,
                 editorOption: {
                     modules: {

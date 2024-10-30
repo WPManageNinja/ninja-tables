@@ -29,9 +29,9 @@
 </template>
 
 <script type="text/babel">
-    import each from 'lodash/each';
+import each from 'lodash/each';
 
-    export default {
+export default {
         name: 'maybe_multi_select',
         props: ['newColumn', 'column', 'adding_counter'],
         data() {
@@ -44,13 +44,11 @@
         },
         watch: {
             adding_counter() {
-                console.log(this.adding_counter);
-                let data = {
+                this.newColumn[this.column.key] = {
                     permalink: '',
                     image_thumb: '',
                     image_full: ''
-                }
-                this.newColumn[this.column.key] = data;
+                };
                 this.data = this.newColumn[this.column.key];
             }
         },
@@ -63,13 +61,12 @@
                 return false;
             },
             handleAvatarSuccess(res, file) {
-                console.log(res);
+                // console.log(res);
             },
             initUploader(event) {
                 var that = this;
                 var send_attachment_bkp = wp.media.editor.send.attachment;
                 wp.media.editor.send.attachment = function (props, attachment) {
-                    console.log(attachment);
                     that.newColumn[that.column.key]['alt_text'] = attachment.alt || attachment.title;
                     that.newColumn[that.column.key]['image_full'] = attachment.url;
                     that.newColumn[that.column.key]['image_thumb'] = that.getThumb(attachment);
