@@ -382,6 +382,8 @@
                     }
                 }
 
+                this.config.settings.sorting_type = newVal === true ? 'manual_sort' : '';
+                this.storeSortingSetting(this.config.settings);
                 this.toggleSorting(newVal);
             },
             'new_column.name': function () {
@@ -409,6 +411,19 @@
             }
         },
         methods: {
+            storeSortingSetting (settings) {
+                let data = {
+                    table_settings: settings
+                };
+
+                this.$post(`settings/${this.tableId}`, data)
+                    .then((res) => {})
+                    .catch((error) => {})
+                    .finally(() => {
+                        this.savingSettings = false;
+                    });
+            },
+
             getData() {
                 let data = {
                     table_id: this.tableId,
@@ -807,6 +822,9 @@
             this.getData();
             this.tableWidth = jQuery('.wrap').width() + 'px';
             this.setNewColumn();
+            if (this.config.settings.sorting_type === 'manual_sort') {
+                this.sorting = true;
+            }
         }
     }
 </script>
