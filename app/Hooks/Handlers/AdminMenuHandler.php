@@ -114,6 +114,8 @@ class AdminMenuHandler
             '',
             'ninja_tables_help'
         );
+
+        $submenu = apply_filters('ninja_tables/add_submenu', $submenu, $capability);
     }
 
     public function render()
