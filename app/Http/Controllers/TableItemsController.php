@@ -59,7 +59,7 @@ class TableItemsController extends Controller
         $formattedRow = array();
 
         foreach ($row as $key => $item) {
-            $formattedRow[$key] = wp_unslash($item);
+            $formattedRow[$key] = $item;
         }
 
         $created_at    = Arr::get($request->all(), 'created_at');
@@ -89,7 +89,7 @@ class TableItemsController extends Controller
         }
 
         $columnKey   = Sanitizer::sanitizeTextField($data['column_key']);
-        $columnValue = wp_unslash($data['column_value']);
+        $columnValue = $data['column_value'];
 
         NinjaTableItem::editSingleCell($rowId, $row, $columnKey, $columnValue);
 
