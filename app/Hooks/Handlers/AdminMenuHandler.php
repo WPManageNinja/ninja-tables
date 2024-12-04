@@ -77,7 +77,7 @@ class AdminMenuHandler
         }
 
         if (!defined('NINJATABLESPRO')) {
-            $getPro                                 = __('Get Pro', 'ninja-tables');
+            $getPro = __('Get Pro', 'ninja-tables');
             $submenu['ninja_tables']['upgrade_pro'] = array(
                 '<span style="color:#f39c12;">' . $getPro . '</span>',
                 $capability,
