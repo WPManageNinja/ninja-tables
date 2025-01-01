@@ -75,6 +75,8 @@ class ImportController extends Controller
         $fileName = Sanitizer::sanitizeTextField($_FILES['file']['name']);
 
         $data = file_get_contents($tmpName);
+        $data = wp_kses($data, ninja_tables_allowed_html_tags());
+
         if ($doUnicode && $doUnicode == 'yes') {
             $data = utf8_encode($data);
         }
@@ -305,6 +307,8 @@ class ImportController extends Controller
         $tmpName = $_FILES['file']['tmp_name'];
 
         $data = file_get_contents($tmpName);
+        $data = wp_kses($data, ninja_tables_allowed_html_tags());
+
         if (Arr::get($request->all(), 'do_unicode') && $request->do_unicode == 'yes') {
             $data = utf8_encode($data);
         }
