@@ -51,7 +51,6 @@ trait ImportTrait
     {
         $file_info     = new \finfo (FILEINFO_MIME_TYPE);
         $remoteContent = ninjaTablesGetRemoteContent($url);
-        $remoteContent = wp_kses($remoteContent, ninja_tables_allowed_html_tags());
         $fileType      = $file_info->buffer($remoteContent);
 
         if ( ! in_array($fileType, static::$mimeTypes)) {
