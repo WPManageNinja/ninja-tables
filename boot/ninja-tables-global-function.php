@@ -887,6 +887,8 @@ function ninjaTableInsertDataToTable($tableId, $values, $header)
             );
         }
 
+        $itemTemp = ninja_tables_sanitize_array($itemTemp);
+
         $data = array(
             'table_id'   => $tableId,
             'attribute'  => 'value',

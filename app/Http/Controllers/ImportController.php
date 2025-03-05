@@ -75,6 +75,7 @@ class ImportController extends Controller
         $fileName = Sanitizer::sanitizeTextField($_FILES['file']['name']);
 
         $data = file_get_contents($tmpName);
+
         if ($doUnicode && $doUnicode == 'yes') {
             $data = utf8_encode($data);
         }
@@ -305,6 +306,7 @@ class ImportController extends Controller
         $tmpName = $_FILES['file']['tmp_name'];
 
         $data = file_get_contents($tmpName);
+
         if (Arr::get($request->all(), 'do_unicode') && $request->do_unicode == 'yes') {
             $data = utf8_encode($data);
         }
@@ -353,6 +355,7 @@ class ImportController extends Controller
         foreach ($reader as $item) {
             if (count($header) === count($item)) {
                 $itemTemp = array_combine($header, $item);
+                $itemTemp = ninja_tables_sanitize_array($itemTemp);
                 $data[]   = array(
                     'table_id'   => $tableId,
                     'attribute'  => 'value',
@@ -409,6 +412,8 @@ class ImportController extends Controller
         } else {
             $data = static::getData();
         }
+
+        $data = ninja_tables_sanitize_array($data);
 
         $tableId = $this->savedDragAndDropTable($data, $fileName);
 
