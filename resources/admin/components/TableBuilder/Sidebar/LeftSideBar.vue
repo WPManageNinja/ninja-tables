@@ -24,7 +24,7 @@
       v-if="item?.data?.type && !manageCell.active && showOptions">
       <el-collapse v-model="activeOption" accordion @change="accorDianChange" class="accordions">
         <el-collapse-item :title="$t(ucWords(item.data.type) + ' Options')" name="1">
-          <text-option v-if="item.data.type === 'text'" :item="item"></text-option>
+          <text-option v-if="item.data.type === 'text'" :item="item"/>
           <button-option v-else-if="item.data.type === 'button'" :item="item"></button-option>
           <star-rating v-else-if="item.data.type === 'star_rating'" :item="item"></star-rating>
           <icon-option v-else-if="item.data.type === 'icon'" :item="item"></icon-option>
