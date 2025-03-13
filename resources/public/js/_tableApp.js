@@ -227,7 +227,7 @@ export default {
 
         this.ninjaFooTablesInstance[tableConfig.instance_name] = $tableInstance;
 
-        if (tableConfig.render_type != 'ajax_table') {
+        if (tableConfig.render_type != 'ajax_table' && !tableConfig?.editing?.enabled) {
             $table.find("td:contains('#colspan#')").remove();
         }
     },
