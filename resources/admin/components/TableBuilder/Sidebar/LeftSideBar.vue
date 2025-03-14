@@ -224,6 +224,10 @@ export default {
       return `${window.ajaxurl}?action=ninja-tables-drag-and-drop-export&table_id=${this.$route.params.table_id}&format=${format}`;
     },
     maximumWidth(tdId) {
+      if (jQuery('td#' + tdId).length === 0) {
+         return;
+      }
+
       let width = jQuery('td#' + tdId).attr('style').split(';')[1];
       return width.split(' ')[2].split('px')[0];
     },

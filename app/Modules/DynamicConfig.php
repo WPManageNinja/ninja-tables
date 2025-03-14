@@ -44,12 +44,6 @@ class DynamicConfig
 
     public static function getSetting($dynamic_setting, $static_config)
     {
-//        $general       = $dynamic_setting['general']['options'];
-//        $background    = $dynamic_setting['background']['options'];
-//        $sticky        = $dynamic_setting['sticky']['options'];
-//        $accessibility = $dynamic_setting['accessibility']['options'];
-//        $border        = $dynamic_setting['border']['options'];
-//        $global_style  = $dynamic_setting['global_styling']['options'];
         $general       = Arr::get($dynamic_setting, 'general.options');
         $background    = Arr::get($dynamic_setting, 'background.options');
         $sticky        = Arr::get($dynamic_setting, 'sticky.options');
