@@ -871,11 +871,38 @@ export default {
     },
     hideOnEmptyIcons($table, tableConfig) {
         if (tableConfig.settings && tableConfig.settings.hide_on_empty) {
+            // Get columns that are always hidden
+            const alwaysHiddenColumns = [];
+            if (tableConfig.columns) {
+                tableConfig.columns.forEach((column, index) => {
+                    if (column?.breakpoints === "hidden") {
+                        alwaysHiddenColumns.push(index);
+                    }
+                });
+            }
+
             $table.find('tbody tr').each(function () {
                 let singleTr = [];
+                let hiddenCellIndices = [];
 
-                $(this).find('td[style*="display: none"]').each(function () {
-                    singleTr.push($(this).text());
+                // Get indices of hidden cells
+                $(this).find('td').each(function (index) {
+                    if ($(this).css('display') === 'none') {
+                        hiddenCellIndices.push(index);
+                    }
+                });
+
+                // Filter out always-hidden columns
+                const responsiveHiddenIndices = hiddenCellIndices.filter(index =>
+                    !alwaysHiddenColumns.includes(index)
+                );
+
+                // Check content of cells that are hidden due to responsive behavior
+                $(this).find('td[style*="display: none"]').each(function (index) {
+                    const cellIndex = $(this).index();
+                    if (!alwaysHiddenColumns.includes(cellIndex)) {
+                        singleTr.push($(this).text());
+                    }
                 });
 
                 const filterSingleTr = singleTr.filter(function (el) {
@@ -884,11 +911,13 @@ export default {
 
                 const expandValue = $(this).data('expanded');
 
-                if (filterSingleTr.length === 0 && singleTr.length > 0 && expandValue !== true) {
+                // Only remove expand icon if responsive hidden cells are all empty
+                // and there are some responsive hidden cells
+                if (filterSingleTr.length === 0 && responsiveHiddenIndices.length > 0 && expandValue !== true) {
                     $(this).css('pointer-events', 'none');
                     $(this).find('span.fooicon-plus').remove();
                 }
-            })
+            });
         }
     },
 
