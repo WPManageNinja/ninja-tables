@@ -912,9 +912,7 @@ export default {
                 const expandValue = $(this).data('expanded');
 
                 // Only remove expand icon if responsive hidden cells are all empty
-                // and there are some responsive hidden cells
                 if (filterSingleTr.length === 0 && responsiveHiddenIndices.length > 0 && expandValue !== true) {
-                    $(this).css('pointer-events', 'none');
                     $(this).find('span.fooicon-plus').remove();
                 }
             });
