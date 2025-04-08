@@ -66,7 +66,6 @@ export default {
     border: none;
     border-bottom: 1px solid lightgray;
     margin: 0 2px;
-    border-radius: 0;
     cursor: pointer;
 }
 
