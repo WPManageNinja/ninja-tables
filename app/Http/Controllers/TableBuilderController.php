@@ -117,9 +117,14 @@ class TableBuilderController extends Controller
     public function update(Request $request, $id)
     {
         $table_id   = intval(Arr::get($request->all(), 'table_id'));
+
         $table_html = ninjaTablesEscapeScript(Arr::get($request->all(), 'table_html'));
         $json       = ninjaTablesEscapeScript(Arr::get($request->all(), 'data'));
-        $data       = json_decode(htmlspecialchars_decode($json), true);
+        $data = json_decode($json, true);
+        if ($data === null) {
+            $data = json_decode(htmlspecialchars_decode($json), true);
+        }
+
         if ( ! ninjaTablesCanUnfilteredHTML()) {
             ninja_tables_allowed_css_properties();
             $table_html = $this->convertRGBtoHex($table_html);
@@ -131,6 +136,7 @@ class TableBuilderController extends Controller
         $table_responsive      = Arr::get($data, 'responsive');
         $table_data            = Arr::get($data, 'table_data');
         $table_data['headers'] = Arr::get($data, 'table_data.headers');
+
 
         $this->wpUpdatePost($table_id, $table_name);
 
