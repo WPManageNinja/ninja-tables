@@ -2,6 +2,8 @@
 
 namespace NinjaTables\Framework\Foundation;
 
+use NinjaTables\Framework\Http\Request\WPUserProxy;
+
 trait FoundationTrait
 {
     use HooksRemovalTrait;
@@ -474,6 +476,16 @@ trait FoundationTrait
     }
 
     /**
+     * Get the current user.
+     * 
+     * @return \NinjaTables\Framework\Http\Request\WPUserProxy
+     */
+    public function user()
+    {
+        return new WPUserProxy(wp_get_current_user());
+    }
+
+    /**
      * Add ajax action
      * @param string $action
      * @param string|Clousure $handler
@@ -482,6 +494,8 @@ trait FoundationTrait
      */
     private function addAjaxAction($action, $handler, $priority, $scope)
     {
+        $action = $this->config->get('app.hook_prefix').'.'.$action;
+        
         if ($scope == 'admin') {
             return add_action(
                 'wp_ajax_'.$action,

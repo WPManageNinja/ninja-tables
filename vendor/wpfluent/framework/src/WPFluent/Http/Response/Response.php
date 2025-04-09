@@ -6,6 +6,7 @@ use DateTime;
 use WP_Error;
 use DateTimeInterface;
 use WP_REST_Response;
+use NinjaTables\Framework\App\App;
 use InvalidArgumentException;
 use NinjaTables\Framework\Http\Request\File;
 
@@ -84,6 +85,9 @@ class Response
      */
     public function send($data = null, $code = 200, $headers = [])
     {   
+        // disable litespeed cache
+        do_action( 'litespeed_control_set_nocache', 'fluent plugin api request' );
+
         $response = new WP_REST_Response($data, $code, $headers);
 
         return $this->maybeMergeHeaders(
@@ -341,5 +345,34 @@ class Response
             readfile($filePath);
             exit;
         }
+    }
+
+    /**
+     * Send a redirect response.
+     * 
+     * @param  string  $route
+     * @param  integer $status
+     * @return \WP_REST_Response
+     */
+    public static function redirect($route, $status = 303)
+    {
+        [$ns, $ver] = App::config()->only('rest_namespace', 'rest_version');
+        
+        $baseUrl = rest_url("{$ns}/{$ver}");
+
+        $parsedUrl = parse_url($route);
+
+        $path = trim($parsedUrl['path'] ?? '', '/');
+        
+        parse_str($parsedUrl['query'] ?? '', $queryParams);
+
+        $queryParams['x_redirect_to'] = $path;
+        $queryParams['x_redirected_from'] = App::request()->url();
+
+        $location = "{$baseUrl}/{$path}?" . http_build_query($queryParams);
+
+        return new WP_REST_Response(null, $status, [
+            'Location' => $location
+        ]);
     }
 }

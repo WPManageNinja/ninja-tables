@@ -8,7 +8,7 @@ namespace NinjaTables\Framework\Http;
  * Handles HTTP responses for HTTP Client class,
  * providing methods to access response data.
  */
-class Response
+class Response implements \JsonSerializable
 {
     /**
      * The HTTP response data.
@@ -35,6 +35,17 @@ class Response
     public function toArray()
     {
         return $this->response;
+    }
+
+    /**
+     * Convert the response object to an array.
+     *
+     * @return array
+     */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 
     /**

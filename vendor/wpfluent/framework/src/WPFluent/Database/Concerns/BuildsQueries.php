@@ -188,7 +188,7 @@ trait BuildsQueries
                 return false;
             }
 
-            $lastId = data_get($results->last(), $alias);
+            $lastId = Helper::dataGet($results->last(), $alias);
 
             if ($lastId === null) {
                 throw new RuntimeException("The chunkById operation was aborted because the [{$alias}] column is not present in the query result.");
@@ -233,7 +233,9 @@ trait BuildsQueries
     public function lazy($chunkSize = 1000)
     {
         if ($chunkSize < 1) {
-            throw new InvalidArgumentException('The chunk size should be at least 1');
+            throw new InvalidArgumentException(
+                'The chunk size should be at least 1'
+            );
         }
 
         $this->enforceOrderBy();
@@ -299,7 +301,9 @@ trait BuildsQueries
     protected function orderedLazyById($chunkSize = 1000, $column = null, $alias = null, $descending = false)
     {
         if ($chunkSize < 1) {
-            throw new InvalidArgumentException('The chunk size should be at least 1');
+            throw new InvalidArgumentException(
+                'The chunk size should be at least 1'
+            );
         }
 
         $column ??= $this->defaultKeyName();

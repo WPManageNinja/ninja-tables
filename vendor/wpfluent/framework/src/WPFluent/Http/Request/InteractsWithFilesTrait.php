@@ -4,7 +4,7 @@ namespace NinjaTables\Framework\Http\Request;
 
 use NinjaTables\Framework\Support\Helper;
 
-trait FileHandler
+trait InteractsWithFilesTrait
 {
     /**
      * Prepares HTTP files for Request
@@ -133,5 +133,27 @@ trait FileHandler
     public function file($key = null, $default = null)
     {
         return Helper::dataGet($this->files(), $key, $default);
+    }
+
+    /**
+     * Get the files array from the request.
+     *
+     * @return array
+     */
+    public function files($asCollection = false)
+    {
+        return $asCollection ? Helper::collect(
+            $this->files
+        ) : $this->files;
+    }
+
+    /**
+     * Get the files as collection from the request.
+     *
+     * @return array
+     */
+    public function fileCollection()
+    {
+        return $this->files(true);
     }
 }

@@ -290,7 +290,7 @@ class Cache
      */
     protected static function store($key, $payload)
     {
-        if (!is_readable(static::$cacheDir)) {
+        if (!static::$cacheDir || !is_readable(static::$cacheDir)) {
             static::init();
         }
 

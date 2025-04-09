@@ -30,14 +30,14 @@ class JoinClause extends Builder
     /**
      * The grammar of the parent query builder.
      *
-     * @var \NinjaTables\Framework\Database\Query\Grammar
+     * @var \NinjaTables\Framework\Database\Query\Grammars\Grammar
      */
     protected $parentGrammar;
 
     /**
      * The processor of the parent query builder.
      *
-     * @var \NinjaTables\Framework\Database\Query\Processor
+     * @var \NinjaTables\Framework\Database\Query\Processors\Processor
      */
     protected $parentProcessor;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace NinjaTables\Framework\Database\Query;
+namespace NinjaTables\Framework\Database\Query\Grammars;
 
 use RuntimeException;
 use NinjaTables\Framework\Support\Arr;
@@ -882,9 +882,9 @@ class Grammar extends BaseGrammar
 
         $column = $this->wrap($having['column']);
 
-        $min = $this->parameter(head($having['values']));
+        $min = $this->parameter(Helper::head($having['values']));
 
-        $max = $this->parameter(last($having['values']));
+        $max = $this->parameter(Helper::last($having['values']));
 
         return $column.' '.$between.' '.$min.' and '.$max;
     }
@@ -998,11 +998,18 @@ class Grammar extends BaseGrammar
      *
      * @param  \NinjaTables\Framework\Database\Query\Builder  $query
      * @param  int  $limit
+     * @param  int|null  $offset
      * @return string
      */
-    protected function compileLimit(Builder $query, $limit)
+    protected function compileLimit(Builder $query, $limit, $offset = null)
     {
-        return 'limit '.(int) $limit;
+        $sql = 'LIMIT ' . (int) $limit;
+
+        if ($offset !== null) {
+            $sql .= ' OFFSET ' . (int) $offset;
+        }
+
+        return $sql;
     }
 
     /**
@@ -1395,7 +1402,7 @@ class Grammar extends BaseGrammar
      */
     protected function compileDeleteWithJoins(Builder $query, $table, $where)
     {
-        $alias = last(explode(' as ', $table));
+        $alias = Helper::last(explode(' as ', $table));
 
         $joins = $this->compileJoins($query, $query->joins);
 

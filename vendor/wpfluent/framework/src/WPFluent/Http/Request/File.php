@@ -2,12 +2,14 @@
 
 namespace NinjaTables\Framework\Http\Request;
 
+use SplFileInfo;
+use JsonSerializable;
 use RuntimeException;
 use NinjaTables\Framework\Support\Util;
 use NinjaTables\Framework\Foundation\App;
 use NinjaTables\Framework\Validator\Contracts\File as Contract;
 
-class File extends \SplFileInfo implements Contract
+class File extends SplFileInfo implements Contract, JsonSerializable
 {
     /**
      * Original file name.
@@ -24,7 +26,7 @@ class File extends \SplFileInfo implements Contract
     private $mimeType;
 
     /**
-     * File size in kilobyte.
+     * File size in bytes.
      *
      * @var int|null $size
      */
@@ -53,11 +55,23 @@ class File extends \SplFileInfo implements Contract
         $size = null,
         $error = null
     ) {
+        $this->init($path, $size, $error);
         $this->originalName = $this->getName($originalName);
-        $this->mimeType = $mimeType ?: 'application/octet-stream';
-        $this->size = $size;
-        $this->error = $error ?: UPLOAD_ERR_OK;
+        $this->mimeType = $this->getFileMimeType($mimeType);
+    }
 
+    /**
+     * Init the file object with size and error.
+     * 
+     * @param  string $path
+     * @param  int|null $size
+     * @param  string|nill $error
+     * @return void
+     */
+    protected function init($path, $size, $error)
+    {
+        $this->size = $size ?: @filesize($path);
+        $this->error = $error ?: UPLOAD_ERR_OK;
         parent::__construct($path);
     }
 
@@ -73,12 +87,31 @@ class File extends \SplFileInfo implements Contract
     public function getName($name)
     {
         $originalName = str_replace('\\', '/', $name);
+        
         $pos = strrpos($originalName, '/');
+        
         $originalName = false === $pos ? $originalName : substr(
             $originalName, $pos + 1
         );
 
-        return $originalName;
+        return sanitize_file_name($originalName);
+    }
+
+    public function getFileMimeType($mimeType)
+    {
+        $mimeType = $mimeType ?: $this->getMimeType();
+
+        if (!$mimeType) {
+            $path = $this->getPathname() ?: $this->getRealPath();
+            if ($handle = @fopen($path, 'rb')) {
+                $data = fread($handle, 8192);
+                $finfo = new \finfo(FILEINFO_MIME_TYPE);
+                $mimeType = $finfo->buffer($data);
+                fclose($handle);
+            }
+        }
+
+        return $mimeType ?: 'application/octet-stream';
     }
 
     /**
@@ -133,13 +166,7 @@ class File extends \SplFileInfo implements Contract
      */
     public function guessExtension()
     {
-        static $defaultExtensions;
-
-        if (is_null($defaultExtensions)) {
-            $defaultExtensions = require(__DIR__ . '/FileMimeTypes.php');
-        }
-
-        return $defaultExtensions[$this->getMimeType()] ?? null;
+        return $this->getMimeTypeAndExtension()['ext'];
     }
 
     /**
@@ -149,31 +176,50 @@ class File extends \SplFileInfo implements Contract
      */
     public function getMimeType()
     {
+        return $this->getMimeTypeAndExtension()['type'];
+    }
+
+    /**
+     * Take an educated guess of the file's mime type and ext
+     * based on the WordsPress' get_allowed_mime_types.
+     *
+     * @return array
+     * @see https://developer.wordpress.org/reference/functions/get_allowed_mime_types
+     * @see https://developer.wordpress.org/reference/functions/wp_get_mime_types
+     */
+    public function getMimeTypeAndExtension()
+    {
         $path = $this->getPathname();
 
         if(!function_exists('wp_check_filetype_and_ext')) {
             require_once ABSPATH .'wp-admin/includes/file.php';
         }
 
-        $typeInfo = wp_check_filetype_and_ext($path, $this->originalName);
-        
-        return $typeInfo['type'];
+        return wp_check_filetype_and_ext($path, $this->originalName);
     }
 
     /**
-     * Get original HTTP file array
-     *
-     * @return array
+     * Get the file name.
+     * 
+     * @return string
      */
-    public function toArray()
+    public function getSavedFileName()
     {
-        return [
-            'name'     => $this->originalName,
-            'type'     => $this->mimeType,
-            'tmp_name' => $this->getPathname(),
-            'error'    => $this->error,
-            'size'     => $this->size
-        ];
+        if ($name = $this->originalName) {
+            return $name;
+        }
+
+        return basename($this->getPathname());
+    }
+
+    /**
+     * Get the url from path.
+     * 
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url($this->getPathname());
     }
 
     /**
@@ -302,7 +348,7 @@ class File extends \SplFileInfo implements Contract
             'app.file_upload_path', function() use ($config) {
                 $slug = $config->get('app.slug');
                 $uploadDir = wp_upload_dir()['basedir'];
-                $uploadDir .= DIRECTORY_SEPARATOR .  'wpf_' . $slug;
+                $uploadDir .= DIRECTORY_SEPARATOR . $slug;
                 return $uploadDir;
             }
         );
@@ -385,5 +431,32 @@ class File extends \SplFileInfo implements Contract
         );
 
         return new self($target, false);
+    }
+
+    /**
+     * Get original HTTP file array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'type'          => $this->mimeType,
+            'size_in_bytes' => $this->size,
+            'size'          => size_format($this->size),
+            'name'          => $this->getSavedFileName(),
+            'path'          => $this->getPathname(),
+            'url'           => $this->getUrl(),
+        ];
+    }
+
+    /**
+     * JsonSerialize implementation
+     * @return array
+     */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }

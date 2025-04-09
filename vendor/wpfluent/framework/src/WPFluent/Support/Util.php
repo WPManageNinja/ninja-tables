@@ -54,4 +54,15 @@ class Util
 
         return esc_url_raw($url);
     }
+
+	/**
+	 * Get the user locale.
+	 * 
+	 * @param  int|null $userId
+	 * @return \NinjaTables\Framework\Support\UserLocale
+	 */
+	public static function getLocale($userId = null)
+	{
+		return Locale::init($userId);
+	}
 }

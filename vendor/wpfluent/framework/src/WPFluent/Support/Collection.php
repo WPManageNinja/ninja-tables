@@ -15,6 +15,16 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     use EnumeratesValues, MacroableTrait;
 
     /**
+     * Pass only key to any callback.
+     */
+    const USE_KEY = 1;
+
+    /**
+     * Pass both key/value to any callback.
+     */
+    const USE_BOTH = 2;
+
+    /**
      * The items contained in the collection.
      *
      * @var array
@@ -30,6 +40,17 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     public function __construct($items = [])
     {
         $this->items = $this->getArrayableItems($items);
+    }
+
+    /**
+     * Create a new collection instance.
+     * 
+     * @param  array $items
+     * @return static
+     */
+    public static function of($items)
+    {
+        return new static($items);
     }
 
     /**
@@ -348,6 +369,23 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     }
 
     /**
+     * Filter the collection using SQL like where.
+     * 
+     * @param  string $key
+     * @param  string|null $operator
+     * @param  mixed $value
+     * @return static
+     */
+    public function where($key, $operator = null, $value = null)
+    {
+        return $this->filter(
+            is_callable($key) ? $key : $this->operatorForWhere(
+                ...func_get_args()
+            )
+        );
+    }
+
+    /**
      * Run a filter over each of the items.
      *
      * @param  callable|null  $callback
@@ -360,6 +398,20 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
         }
 
         return new static(array_filter($this->items));
+    }
+
+    /**
+     * Pass the items through a series of callbacks.
+     * 
+     * @param  array   $callbacks
+     * @param  integer $mode
+     * @return self
+     */
+    public function passThrough(array $callbacks, $mode = 0)
+    {
+        return new static(
+            Arr::passThrough($this->items, $callbacks, $mode)
+        );
     }
 
     /**

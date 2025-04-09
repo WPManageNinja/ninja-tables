@@ -290,6 +290,17 @@ class Stringable implements JsonSerializable
     }
 
     /**
+     * Replace consecutive instances of a given character with a single character.
+     *
+     * @param  string  $character
+     * @return static
+     */
+    public function deduplicate(string $character = ' ')
+    {
+        return new static(Str::deduplicate($this->value, $character));
+    }
+
+    /**
      * Get the parent directory's path.
      *
      * @param  int  $levels
@@ -585,6 +596,39 @@ class Stringable implements JsonSerializable
     public function parseCallback($default = null)
     {
         return Str::parseCallback($this->value, $default);
+    }
+
+    /**
+     * Parse an integer from a string.
+     * 
+     * @param  string $value
+     * @return int|null
+     */
+    public static function parseInt($value)
+    {
+        return Str::parseInt($value);
+    }
+
+    /**
+     * Parse a floasting point number from a string.
+     * 
+     * @param  string $value
+     * @return float|null
+     */
+    public static function parseFloat($value)
+    {
+        return Str::parseFloat($value);
+    }
+
+    /**
+     * Remove all non-numeric characters from a string.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public static function parseNumber($value)
+    {
+        return Str::parseNumber($value);
     }
 
     /**

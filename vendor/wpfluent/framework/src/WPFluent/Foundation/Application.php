@@ -4,6 +4,7 @@ namespace NinjaTables\Framework\Foundation;
 
 use InvalidArgumentException;
 use NinjaTables\Framework\Support\Arr;
+use NinjaTables\Framework\Support\Env;
 use NinjaTables\Framework\Http\Client;
 use NinjaTables\Framework\Foundation\Config;
 use NinjaTables\Framework\Container\Container;
@@ -79,6 +80,7 @@ class Application extends Container
     public function __construct($file = null)
     {
         $this->init($file);
+        $this->loadEnvironmentVars();
         $this->setAppLevelNamespace();
         $this->bootstrapApplication();
         $this->callPluginReadyCallbacks();
@@ -96,6 +98,13 @@ class Application extends Container
         $this['__pluginfile__'] = $this->file = $file;
         $this->basePath = plugin_dir_path($this->file);
         $this->baseUrl = plugin_dir_url($this->file);
+    }
+
+    protected function loadEnvironmentVars($path = null)
+    {
+        $path = $path ?: $this->basePath . '.env';
+
+        is_readable($path) && Env::load($path);
     }
 
     /**
@@ -151,7 +160,7 @@ class Application extends Container
         $this->loadConfigIfExists();
         $this->registerTextdomain();
         $this->bindCoreComponents();
-        $this->registerAsyncActions();
+        // $this->registerAsyncActions();
         $this->requireCommonFiles($this);
         $this->addRestApiInitAction($this);
     }
@@ -488,10 +497,10 @@ class Application extends Container
      * 
      * @return void
      */
-    protected function registerAsyncActions()
-    {
-        Client::registerAsyncRequestHandler();
-    }
+    // protected function registerAsyncActions()
+    // {
+    //     Client::registerAsyncRequestHandler();
+    // }
 
     /**
      * Execute plugin booted callbacks.
