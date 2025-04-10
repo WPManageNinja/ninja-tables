@@ -2,6 +2,8 @@
 
 namespace NinjaTables\Framework\Support;
 
+use NinjaTables\Framework\Support\Str;
+
 /**
  * Class File
  * 
@@ -92,6 +94,27 @@ class File
     public static function read($path)
     {
         return static::get($path);
+    }
+
+    /**
+     * Read the contents of a file.
+     * 
+     * @param string $path
+     * @return string
+     */
+    public static function getJson($path, $asArray = true)
+    {
+        $content = static::get($path);
+
+        $data = json_decode($content, $asArray);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \RuntimeException(
+                'Invalid JSON: ' . json_last_error_msg()
+            );
+        }
+
+        return $data;
     }
 
     /**
@@ -520,7 +543,19 @@ class File
             return false;
         }
 
-        return wp_read_image_metadata($path) ?: false;
+        $image_info = getimagesize($path);
+        
+        if ($image_info === false) {
+            return false;
+        }
+
+        $metadata = wp_read_image_metadata($path);
+
+        return array_merge([
+            'width' => $image_info[0],
+            'height' => $image_info[1],
+            'type' => $image_info['mime'],
+        ], $metadata ?: []);
     }
 
     /**

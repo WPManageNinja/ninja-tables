@@ -12,6 +12,7 @@ use InvalidArgumentException;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Pipeline;
 use NinjaTables\Framework\Http\Request\Request;
+use NinjaTables\Framework\Http\Middleware\RateLimiter;
 use NinjaTables\Framework\Validator\ValidationException;
 use NinjaTables\Framework\Database\Orm\ModelNotFoundException;
 use NinjaTables\Framework\Response\Response as WPFluentResponse;
@@ -477,11 +478,70 @@ class Route
         $this->namespace = implode('\\', $ns);
     }
 
+    /**
+     *  Sign the route.
+     *  
+     * @return $this
+     */
     public function signed()
     {
         $this->signed = true;
 
         return $this;
+    }
+
+    /**
+     *  Apply rate limit to the route.
+     *  
+     *  @param int $limit Number of allowed requests.
+     *  @param int $interval Time interval in seconds.
+     *  
+     * @return $this
+     */
+    public function rateLimit($limit, $interval)
+    {
+        // Since the rate limiter is applied twice because
+        // WordPress sends an extra request for every
+        // request, so we need to double the limit.
+
+        $rateLimiter = new RateLimiter($limit * 2, $interval);
+
+        $this->middleware('before', $rateLimiter);
+
+        return $this;
+    }
+
+    /**
+     * Apply a rate limit to the route for per minute.
+     *
+     * @param int $limit The maximum number of requests allowed per minute.
+     * @return $this
+     */
+    public function rateLimitPerMinute($limit)
+    {
+        return $this->rateLimit($limit, MINUTE_IN_SECONDS);
+    }
+
+    /**
+     * Apply an hourly rate limit to the route.
+     *
+     * @param int $limit The maximum number of requests allowed per hour.
+     * @return $this
+     */
+    public function rateLimitHourly($limit)
+    {
+        return $this->rateLimit($limit, HOUR_IN_SECONDS);
+    }
+
+    /**
+     * Apply a daily basis (24 hours) rate limit to the route.
+     *
+     * @param int $limit The maximum number of requests allowed per day.
+     * @return $this
+     */
+    public function rateLimitDaily($limit)
+    {
+        return $this->rateLimit($limit, DAY_IN_SECONDS);
     }
 
     /**
@@ -514,39 +574,21 @@ class Route
                 'permission_callback' => [$this, 'permissionCallback'],
                 'args' => [],
             ],
-            'schema' => $this->getSchema(),
+            'schema' => [$this, 'getSchema'],
         ];
     }
 
-    protected function getSchema()
+    /**
+     * Generate and return the schema for the route.
+     * 
+     * @return \Closure
+     * @see https://developer.wordpress.org/rest-api/extending-the-rest-api/schema
+     */
+    public function getSchema()
     {
         return function () {
             return [];
         };
-
-        // return function () {
-        //     return [
-        //         '$schema'    => 'http://json-schema.org/draft-04/schema#',
-        //         'title'      => 'comment',
-        //         'type'       => 'object',
-        //         'properties' => [
-        //             'id' => [
-        //                 'description' => esc_html__( 'Unique identifier for the object.', 'my-textdomain' ),
-        //                 'type'        => 'integer',
-        //                 'context'     => ['view', 'edit', 'embed'],
-        //                 'readonly'    => true,
-        //             ],
-        //             'author' => [
-        //                 'description' => esc_html__( 'The ID of the user object, if author was a user.', 'my-textdomain' ),
-        //                 'type'        => 'integer',
-        //             ],
-        //             'content' => [
-        //                 'description' => esc_html__( 'The content for the object.', 'my-textdomain' ),
-        //                 'type'        => 'string',
-        //             ],
-        //         ],
-        //     ];
-        // };
     }
 
     /**

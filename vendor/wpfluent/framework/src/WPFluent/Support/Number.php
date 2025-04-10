@@ -17,7 +17,20 @@ class Number
 	 */
 	public static function format($value, $dec = 0)
 	{
-		return number_format_i18n($value, $dec);
+		$locale = Locale::init();
+
+		if (isset($locale)) {
+			$formatted = number_format(
+				$value,
+				absint($dec),
+				$locale->number_format['decimal_point'],
+				$locale->number_format['thousands_sep']
+			);
+		} else {
+			$formatted = number_format($value, absint($dec));
+		}
+
+		return $formatted;
 	}
 
 	/**
@@ -63,8 +76,9 @@ class Number
 	 */
 	public static function toCurrency($value, $options = [])
 	{
+		$locale = Locale::init();
+
 	    $defaults = [
-	        'locale' => get_locale(),
 	        'currency_symbol' => '$',
 	        'number_of_decimals' => 2,
 	        'space_with_currency' => 0,
@@ -73,15 +87,11 @@ class Number
 
 	    $args = wp_parse_args($options, $defaults);
 
-	    // Switch to the specified locale
-	    $originalLocale = get_locale();
-	    switch_to_locale($args['locale']);
-
-	    // Format the number with the specified number of decimals
-	    $formattedNumber = static::format($value, $args['number_of_decimals']);
-	    
-	    // Switch back to the original locale
-	    switch_to_locale($originalLocale);
+	    // Format the number with the
+	    // specified number of decimals
+	    $formattedNumber = static::format(
+	    	$value, $args['number_of_decimals']
+	    );
 
 	    // Prepare the currency symbol and spacing
 	    $symbol = $args['currency_symbol'];
@@ -278,13 +288,6 @@ class Number
 	public static function inWords($number, $options = [])
 	{
 		return (new NumberToWords)->inWords($number, $options);
-	}
-
-	public static function toWord($number)
-	{
-		$numberToWords = new NumberToWords();
-
-		return $numberToWords->toWord($number);
 	}
 
 	/**

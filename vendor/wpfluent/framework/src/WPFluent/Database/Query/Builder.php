@@ -3,7 +3,7 @@
 namespace NinjaTables\Framework\Database\Query;
 
 use Closure;
-use DateTimePeriod;
+use DatePeriod;
 use LogicException;
 use RuntimeException;
 use DateTimeInterface;
@@ -16,9 +16,9 @@ use NinjaTables\Framework\Support\Collection;
 use NinjaTables\Framework\Pagination\Paginator;
 use NinjaTables\Framework\Support\ForwardsCalls;
 use NinjaTables\Framework\Support\LazyCollection;
-use NinjaTables\Framework\Database\Query\Grammar;
-use NinjaTables\Framework\Database\Query\Processor;
 use NinjaTables\Framework\Database\Query\Expression;
+use NinjaTables\Framework\Database\Query\Grammars\Grammar;
+use NinjaTables\Framework\Database\Query\Processors\Processor;
 use NinjaTables\Framework\Database\Query\ConditionExpression;
 use NinjaTables\Framework\Support\ArrayableInterface;
 use NinjaTables\Framework\Database\ConnectionInterface;
@@ -43,14 +43,14 @@ class Builder
     /**
      * The database query grammar instance.
      *
-     * @var \NinjaTables\Framework\Database\Query\Grammar
+     * @var \NinjaTables\Framework\Database\Query\Grammars\Grammar
      */
     public $grammar;
 
     /**
      * The database query post processor instance.
      *
-     * @var \NinjaTables\Framework\Database\Query\Processor
+     * @var \NinjaTables\Framework\Database\Query\Processors\Processor
      */
     public $processor;
 
@@ -254,8 +254,8 @@ class Builder
      * Create a new query builder instance.
      *
      * @param  \NinjaTables\Framework\Database\ConnectionInterface  $connection
-     * @param  \NinjaTables\Framework\Database\Query\Grammar|null  $grammar
-     * @param  \NinjaTables\Framework\Database\Query\Processor|null  $processor
+     * @param  \NinjaTables\Framework\Database\Query\Grammars\Grammar|null  $grammar
+     * @param  \NinjaTables\Framework\Database\Query\Processors\Processor|null  $processor
      * @return void
      */
     public function __construct(
@@ -798,7 +798,7 @@ class Builder
      *
      * @param  array  $wheres
      * @param  array  $bindings
-     * @return void
+     * @return $this
      */
     public function mergeWheres($wheres, $bindings)
     {
@@ -1020,7 +1020,7 @@ class Builder
     /**
      * Add a basic "where not" clause to the query.
      *
-     * @param  \Closure|string|array|\NinjaTables\Framework\Contracts\Database\Query\Expression  $column
+     * @param  \Closure|string|array|\NinjaTables\Framework\Database\Query\Expression  $column
      * @param  mixed  $operator
      * @param  mixed  $value
      * @param  string  $boolean
@@ -1044,7 +1044,7 @@ class Builder
     /**
      * Add an "or where not" clause to the query.
      *
-     * @param  \Closure|string|array|\NinjaTables\Framework\Contracts\Database\Query\Expression  $column
+     * @param  \Closure|string|array|\NinjaTables\Framework\Database\Query\Expression  $column
      * @param  mixed  $operator
      * @param  mixed  $value
      * @return $this
@@ -1136,7 +1136,7 @@ class Builder
     /**
      * Add a "where like" clause to the query.
      *
-     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression|string  $column
+     * @param  \NinjaTables\Framework\Database\Query\Expression|string  $column
      * @param  string  $value
      * @param  bool  $caseSensitive
      * @param  string  $boolean
@@ -1152,10 +1152,18 @@ class Builder
     ) {
         $type = 'Like';
 
-        $this->wheres[] = compact('type', 'column', 'value', 'caseSensitive', 'boolean', 'not');
+        $this->wheres[] = compact(
+            'type', 'column', 'value', 'caseSensitive', 'boolean', 'not'
+        );
 
         if (method_exists($this->grammar, 'prepareWhereLikeBinding')) {
-            $value = $this->grammar->prepareWhereLikeBinding($value, $caseSensitive);
+            $value = $this->grammar->prepareWhereLikeBinding(
+                $value, $caseSensitive
+            );
+        }
+
+        if (!str_contains($value, '%')) {
+            $value = '%'.$value.'%';
         }
 
         $this->addBinding($value);
@@ -1166,7 +1174,7 @@ class Builder
     /**
      * Add an "or where like" clause to the query.
      *
-     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression|string  $column
+     * @param  \NinjaTables\Framework\Database\Query\Expression|string  $column
      * @param  string  $value
      * @param  bool  $caseSensitive
      * @return $this
@@ -1179,7 +1187,7 @@ class Builder
     /**
      * Add a "where not like" clause to the query.
      *
-     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression|string  $column
+     * @param  \NinjaTables\Framework\Database\Query\Expression|string  $column
      * @param  string  $value
      * @param  bool  $caseSensitive
      * @param  string  $boolean
@@ -1197,7 +1205,7 @@ class Builder
     /**
      * Add an "or where not like" clause to the query.
      *
-     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression|string  $column
+     * @param  \NinjaTables\Framework\Database\Query\Expression|string  $column
      * @param  string  $value
      * @param  bool  $caseSensitive
      * @return $this
@@ -1205,6 +1213,50 @@ class Builder
     public function orWhereNotLike($column, $value, $caseSensitive = false)
     {
         return $this->whereNotLike($column, $value, $caseSensitive, 'or');
+    }
+
+    /**
+     * Add a "where like" clause to the query.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Expression|string  $column
+     * @param  string  $value
+     * @param  bool  $caseSensitive
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function whereStartsLike(
+        $column,
+        $value,
+        $caseSensitive = false,
+        $boolean = 'and',
+        $not = false
+    ) {
+        return $this->whereLike(
+            $column, $value.'%', $caseSensitive, $boolean, $not
+        );
+    }
+
+    /**
+     * Add a "where like" clause to the query.
+     *
+     * @param  \NinjaTables\Framework\Database\Query\Expression|string  $column
+     * @param  string  $value
+     * @param  bool  $caseSensitive
+     * @param  string  $boolean
+     * @param  bool  $not
+     * @return $this
+     */
+    public function whereEndsLike(
+        $column,
+        $value,
+        $caseSensitive = false,
+        $boolean = 'and',
+        $not = false
+    ) {
+        return $this->whereLike(
+            $column, '%'.$value, $caseSensitive, $boolean, $not
+        );
     }
 
     /**
@@ -1231,9 +1283,10 @@ class Builder
             $this->addBinding($bindings, 'where');
         }
 
-        // Next, if the value is ArrayableInterface we need to cast it to its raw array form so we
-        // have the underlying array value instead of an Arrayable object which is not
-        // able to be added as a binding, etc. We will then add to the wheres array.
+        // Next, if the value is ArrayableInterface we need to cast it to its raw 
+        // array form so we have the underlying array value instead of an 
+        // Arrayable object which is not able to be added as a binding,
+        // etc. We will then add to the wheres array.
         if ($values instanceof ArrayableInterface) {
             $values = $values->toArray();
         }
@@ -1303,7 +1356,7 @@ class Builder
     {
         $type = $not ? 'NotInRaw' : 'InRaw';
 
-        if ($values instanceof Arrayable) {
+        if ($values instanceof ArrayableInterface) {
             $values = $values->toArray();
         }
 
@@ -1412,7 +1465,7 @@ class Builder
 
         $type = 'between';
 
-        if ($values instanceof DateTimePeriod) {
+        if ($values instanceof DatePeriod) {
             $values = [$values->getStartDate(), $values->getEndDate()];
         }
 
@@ -2278,7 +2331,7 @@ class Builder
     /**
      * Add a "where" clause to the query for multiple columns with "and" conditions between them.
      *
-     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  \NinjaTables\Framework\Database\Query\Expression[]|string[]  $columns
      * @param  mixed  $operator
      * @param  mixed  $value
      * @param  string  $boolean
@@ -2306,7 +2359,7 @@ class Builder
     /**
      * Add an "or where" clause to the query for multiple columns with "and" conditions between them.
      *
-     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  \NinjaTables\Framework\Database\Query\Expression[]|string[]  $columns
      * @param  mixed  $operator
      * @param  mixed  $value
      * @return $this
@@ -2319,7 +2372,7 @@ class Builder
     /**
      * Add a "where" clause to the query for multiple columns with "or" conditions between them.
      *
-     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  \NinjaTables\Framework\Database\Query\Expression[]|string[]  $columns
      * @param  mixed  $operator
      * @param  mixed  $value
      * @param  string  $boolean
@@ -2347,7 +2400,7 @@ class Builder
     /**
      * Add an "or where" clause to the query for multiple columns with "or" conditions between them.
      *
-     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  \NinjaTables\Framework\Database\Query\Expression[]|string[]  $columns
      * @param  mixed  $operator
      * @param  mixed  $value
      * @return $this
@@ -2360,7 +2413,7 @@ class Builder
     /**
      * Add a "where not" clause to the query for multiple columns where none of the conditions should be true.
      *
-     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  \NinjaTables\Framework\Database\Query\Expression[]|string[]  $columns
      * @param  mixed  $operator
      * @param  mixed  $value
      * @param  string  $boolean
@@ -2374,7 +2427,7 @@ class Builder
     /**
      * Add an "or where not" clause to the query for multiple columns where none of the conditions should be true.
      *
-     * @param  \NinjaTables\Framework\Contracts\Database\Query\Expression[]|string[]  $columns
+     * @param  \NinjaTables\Framework\Database\Query\Expression[]|string[]  $columns
      * @param  mixed  $operator
      * @param  mixed  $value
      * @return $this
@@ -2587,7 +2640,7 @@ class Builder
     {
         $type = 'between';
 
-        if ($values instanceof DateTimePeriod) {
+        if ($values instanceof DatePeriod) {
             $values = [$values->getStartDate(), $values->getEndDate()];
         }
 
@@ -3256,8 +3309,8 @@ class Builder
         };
 
         if ($shouldReverse) {
-            $this->orders = collect($this->orders)->map($reverseDirection)->toArray();
-            $this->unionOrders = collect($this->unionOrders)->map($reverseDirection)->toArray();
+            $this->orders = Helper::collect($this->orders)->map($reverseDirection)->toArray();
+            $this->unionOrders = Helper::collect($this->unionOrders)->map($reverseDirection)->toArray();
         }
 
         $orders = ! empty($this->unionOrders) ? $this->unionOrders : $this->orders;
@@ -3429,7 +3482,7 @@ class Builder
             return $column;
         }
 
-        $columnString = $column instanceof ExpressionContract
+        $columnString = $column instanceof Expression
             ? $this->grammar->getValue($column)
             : $column;
 
@@ -4290,7 +4343,7 @@ class Builder
     /**
      * Get the database query processor instance.
      *
-     * @return \NinjaTables\Framework\Database\Query\Processor
+     * @return \NinjaTables\Framework\Database\Query\Processors\Processor
      */
     public function getProcessor()
     {
@@ -4300,7 +4353,7 @@ class Builder
     /**
      * Get the query grammar instance.
      *
-     * @return \NinjaTables\Framework\Database\Query\Grammar
+     * @return \NinjaTables\Framework\Database\Query\Grammars\Grammar
      */
     public function getGrammar()
     {

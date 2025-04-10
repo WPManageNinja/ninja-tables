@@ -731,6 +731,10 @@ class NinjaFooTable
             $tableCassClasses[] = 'nt_search_full_width';
         }
 
+        if (Arr::get($settings, 'sticky_first_column') == 'yes') {
+            $tableCassClasses[] = 'nt_sticky_first_column';
+        }
+
         $tableCassClasses[] = 'nt_type_' . Arr::get($settings, 'render_type');
 
         $definedClasses = Arr::get($settings, 'css_classes', array());

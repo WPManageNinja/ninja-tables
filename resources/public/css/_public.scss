@@ -123,3 +123,11 @@ body.ninja_tables_modal_open {
     display: none !important;
   }
 }
+
+.nt_sticky_first_column {
+  tbody td:first-child, .footable-header th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+  }
+}

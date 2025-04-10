@@ -24,6 +24,13 @@ class Encrypter
     protected $cipher;
 
     /**
+     * The plugin slug key.
+     *
+     * @var string
+     */
+    protected $slug;
+
+    /**
      * The supported cipher algorithms and their properties.
      *
      * @var array

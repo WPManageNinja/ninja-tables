@@ -1,6 +1,6 @@
 <?php
 
-namespace NinjaTables\Framework\Database\Query;
+namespace NinjaTables\Framework\Database\Query\Grammars;
 
 use NinjaTables\Framework\Support\Str;
 use NinjaTables\Framework\Support\Helper;

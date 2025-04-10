@@ -45,14 +45,6 @@ trait SubstituteRouteParametersTrait
             return !class_exists(Reflector::getParameterClassName($param) ?: '');
         });
 
-        $params = count($signatureParameters);
-
-        if ($params && $params != count($routeParameters)) {
-            throw new InvalidArgumentException(
-                'Route parameters doesn\'t match with method signature.'
-            );
-        }
-
         foreach ($routeParameters as $param) {
             if ($dep = array_shift($signatureParameters)) {
                 $remainingParams[$dep->getName()] = $param;

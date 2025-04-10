@@ -11,7 +11,7 @@ use NinjaTables\Framework\Database\Orm\Model;
 use NinjaTables\Framework\Database\Orm\ModelNotFoundException;
 use NinjaTables\Framework\Database\Orm\Relations\Concerns\InteractsWithDictionary;
 use NinjaTables\Framework\Database\Orm\SoftDeletes;
-use NinjaTables\Framework\Database\Query\MySqlGrammar;
+use NinjaTables\Framework\Database\Query\Grammars\MySqlGrammar;
 use NinjaTables\Framework\Database\UniqueConstraintViolationException;
 
 /**

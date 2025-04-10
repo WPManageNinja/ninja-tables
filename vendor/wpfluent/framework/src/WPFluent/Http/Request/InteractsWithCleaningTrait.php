@@ -2,7 +2,7 @@
 
 namespace NinjaTables\Framework\Http\Request;
 
-trait Cleaner
+trait InteractsWithCleaningTrait
 {
     /**
      * Clean up the request data.

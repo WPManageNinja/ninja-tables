@@ -102,7 +102,7 @@
                             :rowspan="row.rows[header].style.rowspan" :colspan="row.rows[header].style.colspan"
                             :style="[tdInlineStyle(row, header), highlightedColumnStyle(row, header), showInnerBorder ? innerBorder(index) : '', firstColumnSticky && key === 0 ? stickyColumn() : '']">
                             <draggable :list="row.rows[header].columns" group="people"
-                                :id="tdIds.includes(tdId(row, header)) ? 'selected-item' : '_cell-' + tdId(row, header)"
+                                :id="tdIds.includes(tdId(row, header)) ? 'selected-item' : 'td_id_' + tdId(row, header)"
                                 :move="onMove">
                                 <div v-for="(item, ind) in row.rows[header].columns" class="single-item"
                                     :class="[item.id === itemId ? 'item-active' : '', manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon' : 'other-item' : 'responsive-mode')]"
@@ -156,7 +156,6 @@ export default {
     mixins: [manageRowColumn, manageResponsiveData, helpers],
     props: ["setting", "tableData", "responsive", "selectedDevice", "initialData"],
     mounted() {
-        console.log('Sumon pro')
         this.$nextTick(() => {
             jQuery('body').click((e) => {
                 const a = document.querySelector('.tbody');

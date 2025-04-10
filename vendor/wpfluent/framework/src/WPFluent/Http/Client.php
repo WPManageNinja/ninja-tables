@@ -18,6 +18,7 @@ use NinjaTables\Framework\Http\Request\File;
  * @method Client asyncPut(string $url, $params = []) Send an async PUT request.
  * @method Client asyncDelete(string $url, $params = []) Send an async DELETE request.
  * @method File download(string|File $url) Download a remote file.
+ * @method mixed upload(string $url, string $path, string $name = 'file') upload a file to a remote server.
  */
 class Client
 {
@@ -237,6 +238,8 @@ class Client
 
 	    $params = wp_parse_args(reset($params), $defaultParams);
 
+	    $options = array_merge($this->options, $params['options'] ?? []);
+
 	    if ($callback) {
 	    	$params['callback'] = $callback;
 	    }
@@ -249,8 +252,7 @@ class Client
 	    	'callback' => $params['callback'] ?? null,
 	    ];
 
-	    $options = array_merge($this->options, $params['options'] ?? []);
-
+	    
 	    foreach($options as $key => $value) {
 	        $params[$key] = $value;
 	    }
@@ -263,7 +265,7 @@ class Client
 	 * 
 	 * @param  string $url
 	 * @param  array  $args
-	 * @return Response object from anonymous class.
+	 * @return \NinjaTables\Framework\Http\Response
 	 */
 	protected function request($url, $args = [])
 	{
@@ -290,7 +292,7 @@ class Client
 	 * 
 	 * @param  string $url
 	 * @param  array  $args
-	 * @return Response object from anonymous class.
+	 * @return \NinjaTables\Framework\Http\Response
 	 */
 	protected function asyncRequest($url, $args = [])
 	{
@@ -315,43 +317,34 @@ class Client
 	 * @param  callable $callback
 	 * @return void
 	 */
-	public function then($callback)
-	{
-		if ($callback instanceof \Closure) {
-			throw new Exception(
-				'The callback must not be a closure', 500
-			);
-		}
+	// public function then($callback)
+	// {
+	// 	// Normalize [ClassName::class, 'method'] to 'ClassName@method'
+	// 	if (
+	// 		is_array($callback) &&
+	// 		count($callback) === 2 &&
+	// 		is_string($callback[0]) &&
+	// 		is_string($callback[1])
+	// 	) {
+	// 		$callback = implode('@', $callback);
+	// 	}
 
-		if (is_string($callback) && function_exists($callback)) {
-			throw new Exception(
-				'The callback must not be a function', 500
-			);
-		}
+	// 	if (is_string($callback) && function_exists($callback)) {
+	// 		throw new Exception(
+	// 			'The callback must not be a function', 500
+	// 		);
+	// 	}
 
-		// Normalize [Example::class, method] to 'Example@method'
-		if (is_array($callback) && is_string(reset($callback))) {
-			$callback = implode('@', $callback);
-		}
+	// 	if (!is_string($callback) || !str_contains($callback, '@')) {
+	// 		throw new Exception(
+	// 			'The callback must be a string in the format Class@method', 500
+	// 		);
+	// 	}
 
-		if (is_string($callback)) {
-			if (str_contains($callback, '@')) {
-				[$class, $method] = explode('@', $callback);
-				$callback = [App::make($class), $method];
-			} elseif (method_exists($callback, '__invoke')) {
-				$callback = App::make($callback);
-			}
-		}
+	// 	$this->args['callback'] = $callback;
 
-		if (!is_callable($callback)) {
-			throw new Exception('Callback must be callable', 500);
-		}
-
-		if (is_callable($callback)) {
-			$this->args['callback'] = $callback;
-			$this->registerShutdownHandler($this->args);
-		}
-	}
+	// 	$this->registerShutdownHandler($this->args);
+	// }
 
 	/**
 	 * Register the shutdown handler.
@@ -359,23 +352,23 @@ class Client
 	 * @param  array $args
 	 * @return void
 	 */
-	protected function registerShutdownHandler($args)
-	{
-		$this->serializeCallback($args);
+	// protected function registerShutdownHandler($args)
+	// {
+	// 	$this->serializeCallback($args);
 
-		add_action('shutdown', function() use ($args) {
-			$action = static::makeAsyncRequestAction();
-		    wp_remote_post(admin_url('admin-post.php'), [
-		        'timeout'   => 1,
-		        'blocking'  => false,
-		        'sslverify' => false,
-		        'body'      => [
-		            'args'   => $args,
-		            'action' => $action
-		        ],
-		    ]);
-		});
-	}
+	// 	add_action('shutdown', function() use ($args) {
+	// 		$action = static::makeAsyncRequestAction();
+	// 	    wp_remote_post(admin_url('admin-post.php'), [
+	// 	        'timeout'   => 1,
+	// 	        'blocking'  => false,
+	// 	        'sslverify' => false,
+	// 	        'body'      => [
+	// 	            'args'   => $args,
+	// 	            'action' => $action
+	// 	        ],
+	// 	    ]);
+	// 	});
+	// }
 
 	/**
 	 * Serializes the callback.
@@ -385,7 +378,7 @@ class Client
 	 */
 	protected function serializeCallback(&$args)
 	{
-		$args['callback'] = base64_encode(serialize($args['callback']));
+		$args['callback'] = base64_encode(json_encode($args['callback']));
 	}
 
 	/**
@@ -396,11 +389,34 @@ class Client
 	 */
 	protected static function getCallback(&$params)
 	{
-		$callback = unserialize(base64_decode($params['callback']));
+		$callback = json_decode(
+			base64_decode($params['callback']), true
+		);
+
+		if (!is_string($callback) || !str_contains($callback, '@')) {
+			throw new Exception('Invalid callback.');
+		}
 
 		unset($params['callback']);
 
-		return $callback;
+		[$class, $method] = explode('@', $callback, 2);
+
+		if (!class_exists($class)) {
+			throw new Exception("Class {$class} not found.");
+		}
+
+		$instance = App::make($class);
+
+		if (
+			!method_exists($instance, $method) ||
+			!is_callable([$instance, $method])
+		) {
+			throw new Exception(
+				"Method {$method} not callable on {$class}."
+			);
+		}
+
+		return [$instance, $method];
 	}
 
 	/**
@@ -408,38 +424,38 @@ class Client
 	 * 
 	 * @return void
 	 */
-	public static function registerAsyncRequestHandler()
-	{
-		$action = static::makeAsyncRequestAction();
+	// public static function registerAsyncRequestHandler()
+	// {
+	// 	$action = static::makeAsyncRequestAction();
 
-		App::addAction("admin_post_nopriv_{$action}", function() {
+	// 	App::addAction("admin_post_nopriv_{$action}", function() {
 			
-			$request = App::make('request');
+	// 		$request = App::make('request');
 			
-			$requestUrl = $request->get('args.url');
+	// 		$requestUrl = $request->get('args.url');
 			
-			$requestMethod = $request->get('args.method');
+	// 		$requestMethod = $request->get('args.method');
 			
-			$client = Client::make($requestUrl);
+	// 		$client = Client::make($requestUrl);
 			
-			$params = $request->except(
-				'action', 'args.url', 'args.method',
-			)['args'];
+	// 		$params = $request->except(
+	// 			'action', 'args.url', 'args.method',
+	// 		)['args'];
 
 			
-			$callback = static::getCallback($params);
+	// 		$callback = static::getCallback($params);
 
-			$response = $client->{$requestMethod}('', $params);
+	// 		$response = $client->{$requestMethod}('', $params);
 
-			if (is_wp_error($response)) {
-				$exception = new Exception(
-					$response->get_error_message(), 500
-				);
-			}
+	// 		if (is_wp_error($response)) {
+	// 			$exception = new Exception(
+	// 				$response->get_error_message(), 500
+	// 			);
+	// 		}
 
-			return $callback($response, $exception ?? null);
-		});
-	}
+	// 		return $callback($response, $exception ?? null);
+	// 	});
+	// }
 
 	/**
 	 * Make the action for async request.
@@ -490,10 +506,61 @@ class Client
 	}
 
 	/**
+	 * Upload  a file to a remote server.
+	 * 
+	 * @param  string $url
+	 * @param  string $path
+	 * @param  array  $fields
+	 * @param  string $name
+	 * @return \WpAgent\Http\Response
+	 */
+	public function uploadFile($url, $path, $fields = [], $name = 'file')
+	{
+	    $path = $path instanceof File ? $path->getPathname() : $path;
+
+	    if (!file_exists($path)) {
+	        throw new Exception('File does not exist.', 500);
+	    }
+
+	    $boundary = wp_generate_password(24, false);
+
+	    $headers = [
+	        'Accept'       => '*/*',
+	        'Content-Type' => 'multipart/form-data; boundary=' . $boundary,
+	    ];
+
+	    $fileName = basename($path);
+	    $content = file_get_contents($path);
+	    $mime = mime_content_type($path);
+
+	    $body = '';
+
+	    foreach ($fields as $key => $value) {
+	        $body .= "--" . $boundary . "\r\n";
+	        $body .= 'Content-Disposition: form-data; name="' . $key . '"' . "\r\n\r\n";
+	        $body .= $value . "\r\n";
+	    }
+
+	    $body .= "--" . $boundary . "\r\n";
+	    $body .= 'Content-Disposition: form-data; name="'.$name.'"; filename="' . $fileName . '"' . "\r\n";
+	    $body .= 'Content-Type: ' . $mime . "\r\n\r\n";
+	    $body .= $content . "\r\n";
+	    $body .= "--" . $boundary . "--\r\n";
+
+	    $response = wp_remote_post($url, [
+	        'headers' => $headers,
+	        'body'    => $body,
+	        'timeout' => 60,
+	    ]);
+
+	    return $this->makeResponse($response);
+	}
+
+	/**
 	 * Build a response object from an anonymous class.
 	 * 
 	 * @param  array $response
-	 * @return @return Response object from anonymous class.
+	 * @return @return \NinjaTables\Framework\Http\Response
 	 */
 	protected function makeResponse($response)
 	{

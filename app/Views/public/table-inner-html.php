@@ -70,7 +70,7 @@ if ($table_rows && count($table_columns)):
                 $colspan = false;
                 if ($index != $columnLength) {
                     if ($column_value && strip_tags($column_value) == '#colspan#') {
-                        $row = '<td class="ninja_temp_cell"></td>' . $row;
+                        $row = '<td class="ninja_temp_cell">#colspan#</td>' . $row;
                         $colSpanCounter = $colSpanCounter + 1;
                         // if we get #colspan# value then we are increasing colspan counter by 1 and adding a temp column
                         continue;

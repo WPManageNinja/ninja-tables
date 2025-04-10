@@ -2,8 +2,12 @@
 
 namespace NinjaTables\Framework\Database;
 
+use NinjaTables\Framework\Database\Concerns\MaintainsDatabase;
+
 class Schema
 {
+	use MaintainsDatabase;
+
 	/**
 	 * Get the global $wpdb instance
 	 * 
@@ -191,7 +195,7 @@ class Schema
         $collate = static::db()->get_charset_collate();
 
         return static::callDBDelta(
-        	$table, "CREATE TABLE $table (
+        	"CREATE TABLE $table (
         		".PHP_EOL.trim(trim($sql), ',').PHP_EOL."
         	) $collate;"
         );
@@ -422,6 +426,33 @@ class Schema
 	}
 
 	/**
+	 * Retrieves the list of all available built-in tables from
+	 * the database using WordPress' $wpdb->tables native method.
+	 * 
+	 * @param  string  $scope
+	 * @param  boolean $prefix
+	 * @param  integer $blogId
+	 * @return string[] WP Table names. When a prefix is requested,
+	 * the key is the unprefixed table name.
+	 * @see https://developer.wordpress.org/reference/classes/wpdb/tables/
+	 */
+	public static function tables($scope = 'all', $prefix = true, $blogId = 0)
+	{
+		return static::db()->tables($scope, $prefix, $blogId);
+	}
+
+	/**
+	 * Retrieves the list of all available tables from the database.
+	 * 
+	 * @param  string $dbname optional
+	 * @return array
+	 */
+	public static function getTables($dbname = null)
+	{
+		return static::getTableList($dbname);
+	}
+
+	/**
 	 * Retrieves the list of all available tables in the database.
 	 * 
 	 * @param  string $dbname optional
@@ -432,9 +463,45 @@ class Schema
 		$dbname = $dbname ?: static::db()->dbname;
 		$sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
 		$sql .= " WHERE TABLE_SCHEMA = '".$dbname."'";
+		
 		return array_map(function($i) {
 			return $i->TABLE_NAME;
 		}, static::db()->get_results($sql));
+	}
+
+	/**
+     * Determine if the connected database is a sqlite database.
+     *
+     * @return bool
+     */
+    public static function isSqlite()
+    {
+        return defined('DB_ENGINE') && DB_ENGINE === 'sqlite';
+    }
+
+    /**
+     * Determine if the connected database is a mariadb database.
+     *
+     * @return bool
+     */
+    public static function isMaria()
+    {
+        return str_contains(
+        	static::db()->get_var('SELECT VERSION()'), 'MariaDB'
+        );
+    }
+
+	/**
+	 * Retrieve the current database engine name.
+	 * 
+	 * @param  string $table
+	 * @return string
+	 */
+	public static function getEngine($table)
+	{
+		return static::db()->get_var(
+            'SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = "' . static::table($table) . '"'
+        );
 	}
 
 	/**
@@ -443,7 +510,7 @@ class Schema
 	 * @param  string $sql
 	 * @return mixed
 	 */
-	protected static function callDBDelta($table, $sql)
+	public static function callDBDelta($sql)
 	{
 		if (!function_exists('dbDelta')) {
 			require (ABSPATH . 'wp-admin/includes/upgrade.php');

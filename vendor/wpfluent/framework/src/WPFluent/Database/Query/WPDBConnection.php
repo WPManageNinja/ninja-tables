@@ -12,12 +12,14 @@ use DateTimeInterface;
 use NinjaTables\Framework\Foundation\App;
 use NinjaTables\Framework\Database\Schema;
 use NinjaTables\Framework\Database\QueryException;
-use NinjaTables\Framework\Database\Query\Processor;
-use NinjaTables\Framework\Database\Query\Expression;
 use NinjaTables\Framework\Database\ConnectionInterface;
 use NinjaTables\Framework\Database\Events\QueryExecuted;
+use NinjaTables\Framework\Database\Query\Expression;
+use NinjaTables\Framework\Database\Query\Processors\MySqlProcessor;
+use NinjaTables\Framework\Database\Query\Processors\SQLiteProcessor;
 use NinjaTables\Framework\Database\Query\Builder as QueryBuilder;
-use NinjaTables\Framework\Database\Query\MySqlGrammar as QueryGrammar;
+use NinjaTables\Framework\Database\Query\Grammars\MySqlGrammar;
+use NinjaTables\Framework\Database\Query\Grammars\SQLiteGrammar;
 
 class WPDBConnection implements ConnectionInterface
 {
@@ -51,14 +53,14 @@ class WPDBConnection implements ConnectionInterface
     /**
      * The query grammar implementation.
      *
-     * @var \NinjaTables\Framework\Database\Query\Grammar
+     * @var \NinjaTables\Framework\Database\Query\Grammars\Grammar
      */
     protected $queryGrammar;
 
     /**
      * The query post processor implementation.
      *
-     * @var \NinjaTables\Framework\Database\Query\Processor
+     * @var \NinjaTables\Framework\Database\Query\Processors\Processor
      */
     protected $postProcessor;
 
@@ -138,11 +140,11 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Get the default query grammar instance.
      *
-     * @return \NinjaTables\Framework\Database\Query\Grammar
+     * @return \NinjaTables\Framework\Database\Query\Grammars\Grammar
      */
     protected function getDefaultQueryGrammar()
     {
-        return new QueryGrammar;
+        return $this->isSqlite() ? new SQLiteGrammar : new MySqlGrammar;
     }
 
     /**
@@ -158,11 +160,11 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Get the default post processor instance.
      *
-     * @return \NinjaTables\Framework\Database\Query\Processor
+     * @return \NinjaTables\Framework\Database\Query\Processors\Processor
      */
     protected function getDefaultPostProcessor()
     {
-        return new Processor;
+        return $this->isSqlite() ? new SQLiteProcessor : new MySqlProcessor;
     }
 
     /**
@@ -235,7 +237,9 @@ class WPDBConnection implements ConnectionInterface
         $record = (array)$record;
 
         if (count($record) > 1) {
-            throw new MultipleColumnsSelectedException;
+            throw new MultipleColumnsSelectedException(
+                'The query returned more than one column.'
+            );
         }
 
         return reset($record);
@@ -422,9 +426,7 @@ class WPDBConnection implements ConnectionInterface
 
         if ($statement->error || $statement->errno) {
 
-            $this->wpdb->last_error = __(
-                $statement->error || 'Mysqli Error No: ' . $statement->errno
-            );
+            $this->wpdb->last_error = $statement->error || 'Mysqli Error No: ' . $statement->errno;
 
             throw new QueryException(
                 $query, $bindings, new Exception(
@@ -593,11 +595,11 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Get the query grammar used by the connection.
      *
-     * @return \NinjaTables\Framework\Database\Query\Grammar
+     * @return \NinjaTables\Framework\Database\Query\Grammars\Grammar
      */
     public function getQueryGrammar()
     {
-        $this->queryGrammar->setTablePrefix($this->wpdb->prefix);
+        $this->queryGrammar->setTablePrefix($this->wpdb);
 
         return $this->queryGrammar;
     }
@@ -605,7 +607,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Set the query grammar used by the connection.
      *
-     * @param \NinjaTables\Framework\Database\Query\Grammar $grammar
+     * @param \NinjaTables\Framework\Database\Query\Grammars\Grammar $grammar
      * @return $this
      */
     public function setQueryGrammar(Grammar $grammar)
@@ -618,7 +620,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Get the query post processor used by the connection.
      *
-     * @return \NinjaTables\Framework\Database\Query\Processor
+     * @return \NinjaTables\Framework\Database\Query\Processors\Processor
      */
     public function getPostProcessor()
     {
@@ -628,7 +630,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Set the query post processor used by the connection.
      *
-     * @param \NinjaTables\Framework\Database\Query\Processor $processor
+     * @param \NinjaTables\Framework\Database\Query\Processors\Processor $processor
      * @return $this
      */
     public function setPostProcessor(Processor $processor)
@@ -806,26 +808,23 @@ class WPDBConnection implements ConnectionInterface
     }
 
     /**
-     * Determine if the connected database is a MariaDB database.
-     *
-     * @return bool
-     */
-    public function isMaria()
-    {
-        return str_contains(
-            $this->getWPDB()->db_server_info(), 'MariaDB'
-        );
-    }
-
-
-    /**
      * Determine if the connected database is a sqlite database.
      *
      * @return bool
      */
     public function isSqlite()
     {
-        return defined('DB_ENGINE') && DB_ENGINE === 'sqlite';
+        return Schema::isSqlite();
+    }
+
+    /**
+     * Determine if the connected database is a mariadb database.
+     *
+     * @return bool
+     */
+    public function isMaria()
+    {
+        return Schema::isMaria();
     }
 
     /**
