@@ -81,5 +81,5 @@ if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION,
     });
 }
 
-$app->addAdminAjaxAction('ninja-tables-default-export',  [ExportHandler::class, 'defaultExport']);
-$app->addAdminAjaxAction('ninja-tables-drag-and-drop-export',  [ExportHandler::class, 'dragAndDropExport']);
+$app->addAction('wp_ajax_ninja-tables-default-export', [ExportHandler::class, 'defaultExport']);
+$app->addAction('wp_ajax_ninja-tables-drag-and-drop-export', [ExportHandler::class, 'dragAndDropExport']);
