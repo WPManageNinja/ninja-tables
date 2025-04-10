@@ -447,6 +447,7 @@ class File extends SplFileInfo implements Contract, JsonSerializable
             'name'          => $this->getSavedFileName(),
             'path'          => $this->getPathname(),
             'url'           => $this->getUrl(),
+            'tmp_name'      => $this->getPathname(),
         ];
     }
 
