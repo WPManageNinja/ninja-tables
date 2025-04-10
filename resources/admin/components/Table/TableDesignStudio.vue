@@ -595,10 +595,10 @@
 </template>
 
 <script type="text/babel">
-    import {tableLibs} from '../../data/data'
-    import get from 'lodash/get'
-    import size from 'lodash/size'
-    import forEach from 'lodash/forEach'
+    import {tableLibs} from '../../data/data';
+    import get from 'lodash/get';
+    import size from 'lodash/size';
+    import forEach from 'lodash/forEach';
     import intersection from 'lodash/intersection';
     import SortableUpgradeNotice from '../includes/SortableUpgradeNotice.vue';
     import NinjaColorPicker from '../Extras/ColorPicker';
@@ -608,7 +608,7 @@
         name: 'table_preview',
         props: ['config'],
         components: {
-          GetPro,
+            GetPro,
             SortableUpgradeNotice,
             NinjaColorPicker
         },

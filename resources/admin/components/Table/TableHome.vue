@@ -105,6 +105,8 @@
                         if (Object.prototype.toString.call(response.columns) == '[object Object]') {
                             response.columns = toArray(response.columns);
                         }
+                        response.settings.pagination_position = response.settings.pagination_position || 'right';
+                        response.settings.search_position = response.settings.search_position || 'right';
                         this.config = response;
                         this.table = response.table;
                         this.preview_url = response.preview_url;
