@@ -203,7 +203,7 @@ class ImportController extends Controller
 
 
         $tableAttributes = array(
-            'post_title'   => Sanitizer::sanitizeTitle($content['post']['post_title']),
+            'post_title'   => Sanitizer::ksesPost($content['post']['post_title']),
             'post_content' => wp_kses_post($content['post']['post_content']),
             'post_type'    => $this->cpt_name,
             'post_status'  => 'publish'

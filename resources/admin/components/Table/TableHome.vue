@@ -4,8 +4,9 @@
 
         <div class="settings_header">
             <div style="display: inline-block; margin-top: 8px;">
-                <el-button class="ninja_mini" size="mini" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button> <span
-                    class="section_title">{{ table.post_title }}</span>
+                <el-button class="ninja_mini" size="mini" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button>
+                 <span
+                    class="section_title">{{$t(table.post_title)}}</span>
                 <el-tooltip effect="dark"
                             content="Click to copy shortcode"
                             title="Click to copy shortcode"
