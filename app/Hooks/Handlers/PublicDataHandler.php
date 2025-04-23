@@ -284,6 +284,11 @@ class PublicDataHandler
         if (!$table || $table->post_type != 'ninja-table') {
             return;
         }
+
+        static $tableBuilderInstances = [];
+        $tableInstance = 'ninja_table_builder_instance_' . count($tableBuilderInstances);
+        $tableBuilderInstances[] = $tableInstance;
+
         $ninja_table_builder_html = get_post_meta($table->ID, '_ninja_table_builder_table_html', true);
         $ninja_table_builder_table_data = get_post_meta($table->ID, '_ninja_table_builder_table_data', true);
         $ninja_table_builder_setting = get_post_meta($table->ID, '_ninja_table_builder_table_settings', true);
@@ -300,7 +305,8 @@ class PublicDataHandler
             'table_data'               => $ninja_table_builder_table_data,
             'setting'                  => $ninja_table_builder_setting,
             'responsive'               => $ninja_table_builder_responsive,
-            'table_id'                 => $table_id
+            'table_id'                 => $table_id,
+            'ntb_instance' => $tableInstance
         ]);
     }
 

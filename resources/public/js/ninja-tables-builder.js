@@ -14,6 +14,8 @@
         $(findEditClass).attr('style', ' margin-left: ' + marginLeft + 'px !important');
     }
 
+    const timeoutLimit = 300;
+
     $(document).ready(function ($) {
         $('.ntb_table_wrapper').each(function () {
             let mainTable = $(this)[0]
@@ -233,8 +235,12 @@
                  * @return {void}
                  */
                 function rowWiseStaticRowDesign(itemsPerRow, deviceName, cellPadding) {
-                    let wrapperWidth = $('.ntb_table_wrapper').width() * .9;
-                    let tdWidth = (wrapperWidth / itemsPerRow) + 'px';
+                    let tdWidth = '';
+                    setTimeout(function() {
+                        const dynamicWrapper = mainTable.dataset.ninja_table_builder_instance;
+                        let wrapperWidth = $('.' + dynamicWrapper).width() * 0.9;
+                        tdWidth = (wrapperWidth / itemsPerRow) + 'px';
+                    }, timeoutLimit);
 
                     // Data restructured for static row design by row direction
                     // let rowWiseData = rowWiseStaticRowDesignData();
@@ -279,8 +285,12 @@
                  * @return {void}
                  */
                 function columnWiseStaticRowDesign(itemsPerRow, deviceName, cellPadding) {
-                    let wrapperWidth = $('.ntb_table_wrapper').width() * .9;
-                    let tdWidth = (wrapperWidth / itemsPerRow) + 'px';
+                    let tdWidth = '';
+                    setTimeout(function() {
+                        const dynamicWrapper = mainTable.dataset.ninja_table_builder_instance;
+                        let wrapperWidth = $('.' + dynamicWrapper).width() * 0.9;
+                        tdWidth = (wrapperWidth / itemsPerRow) + 'px';
+                    }, timeoutLimit);
 
                     // Data restructured for static row design by column direction
                     let columnWiseData = columnWiseSerialDataStructure(totalData, headerLen);
@@ -325,8 +335,12 @@
                  * @return {void}
                  */
                 function rowWiseTopRowHeaderDesign(itemsPerRow, deviceName, cellBorder, cellPadding) {
-                    let wrapperWidth = $('.ntb_table_wrapper').width() * .9;
-                    let tdWidth = (wrapperWidth / (itemsPerRow + 1)) + 'px';
+                    let tdWidth = '';
+                    setTimeout(function() {
+                        const dynamicWrapper = mainTable.dataset.ninja_table_builder_instance;
+                        let wrapperWidth = $('.' + dynamicWrapper).width() * 0.9;
+                        tdWidth = (wrapperWidth / (itemsPerRow + 1)) + 'px';
+                    }, timeoutLimit);
 
                     //Row wise Data restructured as user requirement
                     let rowWiseData = rowWiseTopRowHeaderData(itemsPerRow);
@@ -379,10 +393,12 @@
                  * @return {void}
                  */
                 function columnWiseTopRowHeaderDesign(itemsPerRow, deviceName, cellBorder, cellPadding) {
-
-                    // let tdWidth = (width / headerLen) + 'px';
-                    let wrapperWidth = $('.ntb_table_wrapper').width() * .9;
-                    let tdWidth = (wrapperWidth / headerLen) + 'px';
+                    let tdWidth = '';
+                    setTimeout(function() {
+                        const dynamicWrapper = mainTable.dataset.ninja_table_builder_instance;
+                        let wrapperWidth = $('.' + dynamicWrapper).width() * 0.9;
+                        tdWidth = (wrapperWidth / headerLen) + 'px';
+                    }, timeoutLimit);
 
                     let totalHeader = Math.ceil(dataLen / (itemsPerRow * headerLen))
                     let dataIndex = 0;
