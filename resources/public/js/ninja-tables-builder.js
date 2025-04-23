@@ -21,9 +21,9 @@
             let mainTable = $(this)[0]
             let desktopFormat = mainTable.innerHTML
 
-            // Get responsive information from data-responsive attr,
-            let responsive = JSON.parse(mainTable.dataset.responsive)
-            let isResponsive = responsive.general.options.enable_responsive_table.value
+            let ntb_instance = mainTable.dataset.ninja_table_builder_instance;
+            let responsive = window[ntb_instance].responsive;
+            let isResponsive = responsive.general.options.enable_responsive_table.value;
 
             // Get responsive settings devices
             let settingsDevices = responsive.responsive_settings.options.devices;
