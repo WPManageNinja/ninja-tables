@@ -30,12 +30,13 @@
 
             if (isResponsive === true || isResponsive === 'true') {
 
-                const tableId = mainTable.id
-                const rows = $('#' + tableId + ' table')[0].rows
+                // const tableId = mainTable.id
+                const tableClass = ntb_instance; // here this class is unique
+                const rows = $('.' + tableClass + ' table')[0].rows
 
                 // Get the length of th, td
-                const columnLength = $('#' + tableId + ' table').find('tr').length
-                const totalData = $('#' + tableId + ' table tr').find('td').length
+                const columnLength = $('.' + tableClass + ' table').find('tr').length
+                const totalData = $('.' + tableClass + ' table tr').find('td').length
                 const headerLen = Math.ceil(totalData / columnLength)
                 const dataLen = totalData - headerLen
 
@@ -103,7 +104,7 @@
                         const mobileTableAlign = settingsDevices.mobile.mobile_table_alignment.value;
 
                         if (breakpoint === 'false' || breakpoint === false) {
-                            $('#' + tableId + ' table tbody').empty()
+                            $('.' + tableClass + ' table tbody').empty()
                             if (cellDirection === 'row') {
                                 if (Object.keys(rows).length > 1) {
                                     rowWiseTopRowHeaderDesign(itemsPerRow, deviceName, cellBorder, mobileCellPadding);
@@ -166,7 +167,7 @@
                         const tabletTableAlign = settingsDevices.tablet.tablet_table_alignment.value;
 
                         if (breakpoint === 'false' || breakpoint === false) {
-                            $('#' + tableId + ' table tbody').empty()
+                            $('.' + tableClass + ' table tbody').empty()
                             if (cellDirection === 'row') {
                                 if (Object.keys(rows).length > 1) {
                                     rowWiseTopRowHeaderDesign(itemsPerRow, deviceName, cellBorder, tabletCellPadding);
@@ -215,7 +216,7 @@
                         mob = false
                         tab = false
                         desk = true
-                        $('#' + tableId)[0].innerHTML = desktopFormat
+                        $('.' + tableClass)[0].innerHTML = desktopFormat
                     }
 
                     /*
@@ -249,8 +250,8 @@
                     let numberOfRow = Math.ceil(rowSerialData.tdCounter / itemsPerRow)
                     let td = 0;
                     for (let row = 0; row < numberOfRow; row++) {
-                        $('#' + tableId + ' table tbody').append('<tr></tr>')
-                        let tableRow = $('#' + tableId + ' table tbody tr')
+                        $('.' + tableClass + ' table tbody').append('<tr></tr>')
+                        let tableRow = $('.' + tableClass + ' table tbody tr')
                         $(tableRow[row]).addClass('tr_class_' + deviceName + '_' + row)
                         $(tableRow[row]).prop('id', 'tr_id_' + deviceName + '_' + row)
 
@@ -299,8 +300,8 @@
 
                     // Reconstruct the table with restructured data
                     for (let row = 0; row < numberOfRow; row++) {
-                        $('#' + tableId + ' table tbody').append('<tr></tr>')
-                        let tableRow = $('#' + tableId + ' table tbody tr')
+                        $('.' + tableClass + ' table tbody').append('<tr></tr>')
+                        let tableRow = $('.' + tableClass + ' table tbody tr')
                         $(tableRow[row]).addClass('tr_class_' + deviceName + '_' + row)
                         $(tableRow[row]).prop('id', 'tr_id_' + deviceName + '_' + row)
                         let addedClass = tableRow.addClass('staticRow')
@@ -347,8 +348,8 @@
 
                     // Reconstruct table with respect to restructured data
                     for (let [indTr, tRows] of Object.entries(rowWiseData.td)) {
-                        $('#' + tableId + ' table tbody').append('<tr></tr>')
-                        let tableRow = $('#' + tableId + ' table tbody tr')
+                        $('.' + tableClass + ' table tbody').append('<tr></tr>')
+                        let tableRow = $('.' + tableClass + ' table tbody tr')
                         $(tableRow[indTr]).addClass('tr_class_' + deviceName + '_' + indTr)
                         $(tableRow[indTr]).prop('id', 'tr_id_' + deviceName + '_' + indTr)
                         let addedClass = tableRow.addClass('topRowAsHeader')
@@ -415,8 +416,8 @@
                                 let isLastRow = false;
 
                                 // row per group including header
-                                $('#' + tableId + ' table tbody').append('<tr></tr>')
-                                let tableRow = $('#' + tableId + ' table tbody tr')
+                                $('.' + tableClass + ' table tbody').append('<tr></tr>')
+                                let tableRow = $('.' + tableClass + ' table tbody tr')
                                 $(tableRow[singleRow]).addClass('tr_class_' + deviceName + '_' + singleRow)
                                 $(tableRow[singleRow]).prop('id', 'tr_id_' + deviceName + '_' + singleRow)
                                 let addedClass = tableRow.addClass('topRowAsHeader')
@@ -683,17 +684,17 @@
                  */
                 function responsiveTableAlign(alignment) {
                     if (alignment === "left") {
-                        $('#' + tableId + ' table').css({
+                        $('.' + tableClass + ' table').css({
                             "margin-left": " 0",
                             "margin-right": "auto"
                         })
                     } else if (alignment === "right") {
-                        $('#' + tableId + ' table').css({
+                        $('.' + tableClass + ' table').css({
                             "margin-left": "auto",
                             "margin-right": "0"
                         })
                     } else {
-                        $('#' + tableId + ' table').css({
+                        $('.' + tableClass + ' table').css({
                             "margin-left": "auto",
                             "margin-right": "auto"
                         })
