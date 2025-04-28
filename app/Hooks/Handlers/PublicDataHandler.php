@@ -298,8 +298,8 @@ class PublicDataHandler
         add_action('wp_footer', function () use ($tableInstance, $table_id, $ninja_table_builder_responsive, $ninja_table_builder_setting) {
             ?>
             <script type="text/javascript">
-                window.<?php echo esc_js($tableInstance); ?> = {
-                    tableId: <?php echo esc_js($table_id); ?>,
+                window.<?php echo $tableInstance; ?> = {
+                    tableId: <?php echo $table_id; ?>,
                     responsive: <?php echo wp_json_encode($ninja_table_builder_responsive); ?>,
                     settings: <?php echo wp_json_encode($ninja_table_builder_setting); ?>
                 };
@@ -310,6 +310,7 @@ class PublicDataHandler
         $html = do_shortcode($ninja_table_builder_html);
         $this->enqueueNinjaTableBuilderScript();
 
+        do_action('ninja_table_builder_before_render', $table_id);
         do_action('ninja_table_builder_before_render', $table_id);
 
         $app = App::getInstance();
