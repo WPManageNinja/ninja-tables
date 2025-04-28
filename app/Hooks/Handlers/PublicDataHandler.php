@@ -311,7 +311,6 @@ class PublicDataHandler
         $this->enqueueNinjaTableBuilderScript();
 
         do_action('ninja_table_builder_before_render', $table_id);
-        do_action('ninja_table_builder_before_render', $table_id);
 
         $app = App::getInstance();
 
