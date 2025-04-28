@@ -428,8 +428,7 @@
 
                                     if (row === 0) {
 
-                                        const dataStyle = columnTopRowData.tableHeader.tdStyles[headerIndex] + columnTopRowData.tableHeader.trStyles[headerIndex];
-
+                                        const dataStyle =  columnTopRowData.tableHeader.trStyles[headerIndex] + columnTopRowData.tableHeader.tdStyles[headerIndex];
                                         insertedTd.innerHTML = columnTopRowData.tableHeader.innerHtml[headerIndex];
                                         $(insertedTd).prop('id', columnTopRowData.tableHeader.tdIds[headerIndex]);
                                         $(insertedTd).addClass(columnTopRowData.tableHeader.tdClasses[headerIndex]);
