@@ -1,3 +1,7 @@
+/**
+ * Ninja Tables Block for Gutenberg
+ */
+
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { InspectorControls, useBlockProps } = wp.blockEditor || wp.editor;
@@ -50,7 +54,6 @@ registerBlockType('ninja-tables/table-block', {
             loadTablePreview(tableId);
         }, [tableId]);
 
-        // Function to load table preview
         const loadTablePreview = async (id) => {
             if (!id) return;
 
@@ -65,7 +68,20 @@ registerBlockType('ninja-tables/table-block', {
                 });
 
                 if (response && response.success && response.html) {
+                    // Clean up previous instances
+                    if (window.resetNinjaTableState) {
+                        window.resetNinjaTableState();
+                    }
+
+                    // Set new HTML
                     setTableHtml(response.html);
+
+                    // Initialize FooTable after HTML is set
+                    setTimeout(() => {
+                        if (window.initNinjaTableFootable) {
+                            window.initNinjaTableFootable(id);
+                        }
+                    }, 300);
                 } else {
                     setError(__('Failed to load table preview.'));
                 }
@@ -77,17 +93,19 @@ registerBlockType('ninja-tables/table-block', {
             }
         };
 
-        // Initialize Footable after HTML is loaded - ONLY ONCE
-        useEffect(() => {
-            if (tableHtml && !isLoading && !error && window.initNinjaTableFootable) {
-                // Use a single timeout to initialize - nothing else
-                const timer = setTimeout(() => {
-                    window.initNinjaTableFootable();
-                }, 300);
+        // Handle table reload button click
+        const handleReloadTable = () => {
+            if (tableId) {
+                // Reset state if function exists
+                if (window.resetNinjaTableState) {
+                    window.resetNinjaTableState(tableId);
+                }
 
-                return () => clearTimeout(timer);
+                // Force reload
+                setTableHtml('');
+                loadTablePreview(tableId);
             }
-        }, [tableHtml]);
+        };
 
         return (
             <div {...blockProps}>
@@ -103,14 +121,8 @@ registerBlockType('ninja-tables/table-block', {
                         {tableId && (
                             <div style={{ marginTop: '10px' }}>
                                 <Button
-                                    isSecondary
-                                    onClick={() => {
-                                        if (window.initNinjaTableFootable) {
-                                            // Force reload by clearing state and reloading
-                                            setTableHtml('');
-                                            loadTablePreview(tableId);
-                                        }
-                                    }}
+                                    isPrimary
+                                    onClick={handleReloadTable}
                                 >
                                     {__('Reload Table')}
                                 </Button>
@@ -141,7 +153,7 @@ registerBlockType('ninja-tables/table-block', {
                         <div className="ninja-tables-error">
                             <p>{error}</p>
                             <Button
-                                isSecondary
+                                isPrimary
                                 onClick={() => loadTablePreview(tableId)}
                             >
                                 {__('Retry')}
