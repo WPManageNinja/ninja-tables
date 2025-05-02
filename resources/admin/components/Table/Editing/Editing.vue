@@ -148,7 +148,7 @@
                                                    v-model="required_items[column.key]"></el-switch>
                                     </td>
                                     <td>
-                                        <el-input :placeholder="'Default Value for '+column.name" size="mini"
+                                        <el-input :placeholder="'Default Value for '+column.name" size="small"
                                                   v-model="default_values[column.key]"></el-input>
                                     </td>
                                 </tr>
@@ -183,7 +183,7 @@
                                         <i class="el-icon-info el-text-info"></i>
                                     </el-tooltip>
                                 </label>
-                                <el-input size="mini" placeholder="eg: New row" v-model="appearance_settings.addText"></el-input>
+                                <el-input size="small" placeholder="eg: New row" v-model="appearance_settings.addText"></el-input>
                             </div>
                             <div class="form_group form_row_half">
                                 <label>
@@ -192,7 +192,7 @@
                                         <i class="el-icon-info el-text-info"></i>
                                     </el-tooltip>
                                 </label>
-                                <el-input size="mini" placeholder="eg: Edit rows" v-model="appearance_settings.showText"></el-input>
+                                <el-input size="small" placeholder="eg: Edit rows" v-model="appearance_settings.showText"></el-input>
                             </div>
                         </div>
 
@@ -204,7 +204,7 @@
                                         <i class="el-icon-info el-text-info"></i>
                                     </el-tooltip>
                                 </label>
-                                <el-input size="mini" placeholder="eg: Add Data" v-model="appearance_settings.addModalLabel"></el-input>
+                                <el-input size="small" placeholder="eg: Add Data" v-model="appearance_settings.addModalLabel"></el-input>
                             </div>
                             <div class="form_group form_row_half">
                                 <label>
@@ -213,7 +213,7 @@
                                         <i class="el-icon-info el-text-info"></i>
                                     </el-tooltip>
                                 </label>
-                                <el-input size="mini" placeholder="eg: Edit Data" v-model="appearance_settings.editModalLabel"></el-input>
+                                <el-input size="small" placeholder="eg: Edit Data" v-model="appearance_settings.editModalLabel"></el-input>
                             </div>
                         </div>
 
@@ -225,7 +225,7 @@
                                 </el-tooltip>
                             </label>
                             <br/>
-                            <el-radio-group size="mini" v-model="appearance_settings.position">
+                            <el-radio-group size="small" v-model="appearance_settings.position">
                                 <el-radio-button label="left">Left</el-radio-button>
                                 <el-radio-button label="right">Right</el-radio-button>
                             </el-radio-group>

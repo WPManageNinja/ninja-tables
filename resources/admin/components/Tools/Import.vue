@@ -136,7 +136,7 @@
                             fixed="right"
                     >
                         <template slot-scope="scope">
-                            <el-button type="primary" size="mini"
+                            <el-button type="primary" size="small"
                                        @click="importThisTable(scope.row, scope.$index)"
                             >{{ $t('Import') }}
                             </el-button>

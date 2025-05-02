@@ -26,7 +26,7 @@
         <div class="nt_each_selection">
             <label>
                 Initial Order By
-                <el-select size="mini" v-model="query_conditions.order_by" placeholder="Order By">
+                <el-select size="small" v-model="query_conditions.order_by" placeholder="Order By">
                     <el-option
                         v-for="(item,item_key) in product_orders"
                         :key="item_key"
@@ -36,7 +36,7 @@
                 </el-select>
                 <el-select
                     v-show="query_conditions.order_by && query_conditions.order_by != 'random'"
-                    size="mini"
+                    size="small"
                     v-model="query_conditions.order_by_type"
                     placeholder="Order By Type">
                     <el-option

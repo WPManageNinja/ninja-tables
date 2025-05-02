@@ -53,7 +53,7 @@
                             <el-button
                                 @click="createTable('default')"
                                 type="primary"
-                                size="mini"
+                                size="small"
                             >Create
                             </el-button
                             >
@@ -92,7 +92,7 @@
                             :loading="loading"
                             @click="importCJ"
                             type="primary"
-                            size="mini"
+                            size="small"
                         >Import
                         </el-button>
                     </div>
@@ -122,7 +122,7 @@
                                 />
                                 <div class="ready-made-table-button">
                                     <el-button
-                                        size="mini"
+                                        size="small"
                                         @click="createTable(item.key, item)"
                                         type="primary"
                                     >

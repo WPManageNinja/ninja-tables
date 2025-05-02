@@ -9,7 +9,7 @@
                 Never miss an important update - opt in to our security & feature updates notifications. We will never
                 spam / share your data, We will only send emails about important updates</p>
             <el-button @click="optin('yes')" type="success">Opt-in and Continue</el-button>
-            <el-button @click="optin('no')" class="pull-right" size="mini">Skip</el-button>
+            <el-button @click="optin('no')" class="pull-right" size="small">Skip</el-button>
 
             <div class="ninja_permissions">
                 <a @click.prevent="showPermission = !showPermission" href="#">What permissions are being granted?</a>

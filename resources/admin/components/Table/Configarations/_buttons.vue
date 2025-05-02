@@ -22,7 +22,7 @@
                 <template v-if="table_buttons.csv.status == 'yes'">
                     <div style="max-width: 500px" class="form_group">
                         <label>Button Label</label>
-                        <el-input size="mini" placeholder="Button Text" v-model="table_buttons.csv.label"/>
+                        <el-input size="small" placeholder="Button Text" v-model="table_buttons.csv.label"/>
                     </div>
                     <div class="form_group">
                         <label>Button Background Color</label>
@@ -68,7 +68,7 @@
 
                     <div style="max-width: 500px" class="form_group">
                         <label>Button Label</label>
-                        <el-input size="mini" placeholder="Button Text" v-model="table_buttons.print.label"/>
+                        <el-input size="small" placeholder="Button Text" v-model="table_buttons.print.label"/>
                     </div>
                     <div class="form_group form_row_full">
                         <div class="form_row_half">

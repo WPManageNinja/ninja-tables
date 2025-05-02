@@ -23,7 +23,7 @@
                 <icon :item="item" setValue="iconName"></icon>
                 <div>
                     <span>{{ $t('Icon Position') }}</span><br>
-                    <el-select v-model="item.data.style.iconPosition" placeholder="Select" size="mini">
+                    <el-select v-model="item.data.style.iconPosition" placeholder="Select" size="small">
                         <el-option v-for="item in ['left', 'right']" :key="item" :label="item" :value="item">
                         </el-option>
                     </el-select>

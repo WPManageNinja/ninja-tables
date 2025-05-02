@@ -4,7 +4,7 @@
 
         <div class="settings_header">
             <div style="display: inline-block; margin-top: 8px;">
-                <el-button class="ninja_mini" size="mini" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button> <span
+                <el-button class="ninja_mini" size="small" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button> <span
                     class="section_title">{{ table.post_title }}</span>
                 <el-tooltip effect="dark"
                             content="Click to copy shortcode"
@@ -25,7 +25,7 @@
                 <a v-if="!has_pro"
                    href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                    target="_blank">
-                    <el-button type="danger" size="Small">{{ $t('Get Pro') }}</el-button>
+                    <el-button type="danger" size="small">{{ $t('Get Pro') }}</el-button>
                 </a>
             </span>
         </div>

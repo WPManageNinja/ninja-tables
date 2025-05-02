@@ -2,7 +2,7 @@
     <div class="block nt-checkbox-group">
         <span>{{ label }}</span>
         <el-checkbox-group
-            size="mini"
+            size="small"
             :value="value"
             @input="$emit('update', $event)">
             <el-checkbox v-for="option in options" :key="option.value" :label="option.value">{{ option.value }}</el-checkbox>

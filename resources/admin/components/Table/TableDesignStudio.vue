@@ -3,7 +3,7 @@
         <div class="ninja_title_section">
             <div class="ninja_title">
                 <h3 style="margin-right: 15px;">Table Style Customization</h3>
-                <el-radio-group class="ninja_resp_tabs" size="mini" v-model="showingDevice">
+                <el-radio-group class="ninja_resp_tabs" size="small" v-model="showingDevice">
                     <el-radio-button label="desktop"><span class="dashicons dashicons-desktop"></span> Desktop
                     </el-radio-button>
                     <el-radio-button label="tablet"><span class="dashicons dashicons-tablet"></span> Tablet
@@ -65,7 +65,7 @@
                     <el-tab-pane label="Styling" name="features">
                         <div class="form_group">
                             <h3 class="ninja_inner_title">Select Styling Library</h3>
-                            <el-radio-group size="mini" v-model="tableSettings.css_lib">
+                            <el-radio-group size="small" v-model="tableSettings.css_lib">
                                 <el-radio-button
                                     v-for="(tableLib, libKey) in currentTableLibs"
                                     :key="libKey"
@@ -189,7 +189,7 @@
                     <el-tab-pane label="Table Colors" name="color_customization">
                         <div class="form_group">
                             <h3 class="ninja_inner_title">Select Color Scheme</h3>
-                            <el-radio-group size="mini" v-model="tableSettings.table_color_type">
+                            <el-radio-group size="small" v-model="tableSettings.table_color_type">
                                 <el-radio-button label="pre_defined_color">Pre Defined Scheme</el-radio-button>
                                 <el-radio-button label="custom_color">Custom Scheme</el-radio-button>
                             </el-radio-group>
@@ -389,7 +389,7 @@
                             <label>{{ $t('Pagination Position') }}</label>
                             <el-radio-group
                                 :disabled="tableSettings.show_all == true || tableSettings.show_all == '1'"
-                                size="mini" v-model="tableSettings.pagination_position">
+                                size="small" v-model="tableSettings.pagination_position">
                                 <el-radio-button label="left">Left</el-radio-button>
                                 <el-radio-button label="center">Center</el-radio-button>
                                 <el-radio-button label="right">Right</el-radio-button>
@@ -424,7 +424,7 @@
                             <label>{{ $t('Search Bar Position') }}</label>
                             <el-radio-group
                                 :disabled="!has_pro"
-                                size="mini" v-model="tableSettings.search_position">
+                                size="small" v-model="tableSettings.search_position">
                                 <el-radio-button label="left">Left</el-radio-button>
                                 <el-radio-button label="center">Center</el-radio-button>
                                 <el-radio-button label="right">Right</el-radio-button>
@@ -442,7 +442,7 @@
 
                         <div class="form_group">
                             <label>Select Sorting Method</label>
-                            <el-radio-group size="mini" v-model="tableSettings.sorting_type">
+                            <el-radio-group size="small" v-model="tableSettings.sorting_type">
                                 <el-radio-button :disabled="!config.table.isCreatedSortable" label="by_created_at">By
                                     Created at
                                 </el-radio-button>
@@ -478,7 +478,7 @@
                                     checkbox to sort the data using drag and drop feature</p>
                             </div>
 
-                            <el-button v-if="tableSettings.sorting_type" size="mini"
+                            <el-button v-if="tableSettings.sorting_type" size="small"
                                        @click="tableSettings.sorting_type = ''">reset
                             </el-button>
 
@@ -487,7 +487,7 @@
                         <div class="form_group">
                             <label>{{ $t('Row Details (Responsive drawer)') }} <span
                                 v-show="!has_pro">(PRO)</span></label>
-                            <el-radio-group size="mini" v-model="tableSettings.expand_type">
+                            <el-radio-group size="small" v-model="tableSettings.expand_type">
                                 <el-radio-button label="default">
                                     Default
                                     <el-tooltip placement="top-end" effect="light"
@@ -514,7 +514,7 @@
 
                         <div class="form_group">
                             <label>{{ $t('Toggle Position') }}</label>
-                            <el-radio-group size="mini" v-model="tableSettings.togglePosition">
+                            <el-radio-group size="small" v-model="tableSettings.togglePosition">
                                 <el-radio-button label="first">
                                     First Column
                                     <el-tooltip placement="top-end" effect="light"

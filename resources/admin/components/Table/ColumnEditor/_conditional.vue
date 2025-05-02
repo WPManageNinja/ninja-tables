@@ -149,7 +149,7 @@
 
                 <div class="conditional_color_block" v-show="shouldShowColorPicker(condition)">
                     <ninja-color-picker
-                        size="mini"
+                        size="small"
                         v-model="condition.targetValueColor"
                         :disabled="!hasPro"
                     ></ninja-color-picker>
@@ -158,7 +158,7 @@
 
             <el-col :sm="1" :md="1">
                 <el-button
-                    size="mini"
+                    size="small"
                     type="danger"
                     icon="el-icon-minus"
                     @click="removeCondition(index)"

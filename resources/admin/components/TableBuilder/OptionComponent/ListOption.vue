@@ -47,7 +47,7 @@
                 <div>
                     <p>{{ $t('List Icon') }}</p>
                     <el-select
-                        size="mini"
+                        size="small"
                         v-model="item.data.style.listStyle"
                         :placeholder="$t('List Icon')">
                         <el-option

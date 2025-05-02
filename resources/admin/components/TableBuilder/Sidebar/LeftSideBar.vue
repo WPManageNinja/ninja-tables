@@ -103,7 +103,7 @@
       <el-collapse v-model="activeNames" class="accordions" @change="handleChange">
         <el-collapse-item :title="$t('Export Table')" class="export">
           <select-input :items="exports.items" v-model="exports.format" :label="$t('Select Format')"></select-input>
-          <el-button @click="exportTable" type="primary" size="mini">Export</el-button>
+          <el-button @click="exportTable" type="primary" size="small">Export</el-button>
         </el-collapse-item>
       </el-collapse>
     </el-tab-pane>

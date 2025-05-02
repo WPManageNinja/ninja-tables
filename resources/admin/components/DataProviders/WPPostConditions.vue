@@ -124,7 +124,7 @@
                         <i class="el-icon-info el-text-info"/>
                     </el-tooltip>
                 </label>
-                <el-select size="mini" v-model="config.table.query_extra.order_by_column">
+                <el-select size="small" v-model="config.table.query_extra.order_by_column">
                     <el-option v-for="field in orderByFields"  :value="field" :key="field" :label="field"></el-option>
                 </el-select>
             </div>
@@ -141,7 +141,7 @@
                         <i class="el-icon-info el-text-info"/>
                     </el-tooltip>
                 </label>
-                <el-select size="mini" v-model="config.table.query_extra.order_by">
+                <el-select size="small" v-model="config.table.query_extra.order_by">
                     <el-option value="ASC" label="Ascending"></el-option>
                     <el-option value="DESC" label="Descending"></el-option>
                 </el-select>

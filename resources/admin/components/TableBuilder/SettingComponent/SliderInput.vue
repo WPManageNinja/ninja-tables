@@ -7,7 +7,7 @@
     </el-tooltip>
     <el-slider :value="mainValue" :max="maxValue" :min="minValue" :step="stepValue" @input="$emit('update', $event)"
                show-input
-               input-size="mini"
+               input-size="small"
                :disabled="disableResponsive || enableResponsiveNClickDesktop || mobileDisableBreakpoint || tabletDisableBreakpoint || disableSlider"
                 style="margin-right: 10px"></el-slider>
   </div>

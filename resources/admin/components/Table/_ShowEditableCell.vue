@@ -3,7 +3,7 @@
         <div v-if="is_editing && cell_editable" class="cell_editing">
             <may-be-select
                 @blur="maybeSave('blur')"
-                size="mini"
+                size="small"
                 v-if="column.data_type == 'selection'"
                 :newColumn="row['values']"
                 :column="column"></may-be-select>
