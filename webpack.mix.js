@@ -5,7 +5,10 @@ const assetVersion = '3.1.0';
 mix.setPublicPath('assets');
 mix.setResourceRoot('../');
 
-mix.js('resources/admin/gutenblock.js', `assets/js/ninja-tables-gutenblock.js`).react();
+mix
+    .js('resources/admin/gutenblock.js', `assets/js/ninja-tables-gutenblock.js`)
+    .js('resources/admin/gutenberg/gutenberg-table-block.js', `assets/gutenberg/gutenberg-table-block.js`)
+    .react();
 
 mix.js('resources/admin/Boot.js', `assets/js/ninja-tables-boot.js`)
     .js('resources/admin/main.js', `assets/js/ninja-tables-admin.js`)
