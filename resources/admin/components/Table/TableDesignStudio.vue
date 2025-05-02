@@ -152,7 +152,7 @@
                             </h3>
 
                             <div class="form_group">
-                                <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="tableSettings.stackable">
+                                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="tableSettings.stackable">
                                     Enable Stackable Table
                                 </el-checkbox>
                                 <template v-if="tableSettings.stackable == 'yes'">
@@ -540,11 +540,11 @@
 
                         <div class="form_group">
                             <label>{{ $t('Sticky First Column') }} <span v-if="!has_pro">(Pro)</span></label>
-                            <el-checkbox :disabled="!has_pro" :true-label="'yes'" :false-label="'no'"
+                            <el-checkbox :disabled="!has_pro" :true-value="'yes'" :false-value="'no'"
                                          v-model="tableSettings.sticky_first_column">Enable first column sticky for table
                             </el-checkbox>
                             <label>{{ $t('Sticky Header') }} <span v-if="!has_pro">(Pro)</span></label>
-                            <el-checkbox :disabled="!has_pro" :true-label="'yes'" :false-label="'no'"
+                            <el-checkbox :disabled="!has_pro" :true-value="'yes'" :false-value="'no'"
                                          v-model="tableSettings.sticky_header">Enable sticky header for table
                             </el-checkbox>
                             <template v-if="tableSettings.sticky_header == 'yes'">
@@ -559,7 +559,7 @@
                                 <small>Please give positive/negative number or you can provide jquery element object
                                 </small>
 
-                                <el-checkbox :disabled="!has_pro" :true-label="'yes'" :false-label="'no'"
+                                <el-checkbox :disabled="!has_pro" :true-value="'yes'" :false-value="'no'"
                                              v-model="tableSettings.disable_sticky_on_mobile">Disable Sticky header for mobile devices
                                 </el-checkbox>
 

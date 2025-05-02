@@ -13,7 +13,7 @@
                     </div>
 
                     <div class="form-group">
-                        <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="do_unicode">Convert to UTF-8 format ( Check this if your csv is non-unicode format )</el-checkbox>
+                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="do_unicode">Convert to UTF-8 format ( Check this if your csv is non-unicode format )</el-checkbox>
                     </div>
 
                     <div class="form-group">

@@ -17,8 +17,8 @@
         </div>
         <div class="nt_each_selection">
             <el-checkbox
-                :true-label="'yes'"
-                :false-label="'no'"
+                :true-value="'yes'"
+                :false-value="'no'"
                 v-model="query_conditions.hide_out_of_stock">
                 Hide <b>out of stocks</b> items
             </el-checkbox>

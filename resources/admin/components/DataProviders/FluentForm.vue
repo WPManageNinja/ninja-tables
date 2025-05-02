@@ -101,7 +101,7 @@
                 </el-row>
                 <template v-if="config && config.table">
                     <br />
-                    <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="config.table.current_user_entry_only">Show current user submissions only at frontend</el-checkbox>
+                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="config.table.current_user_entry_only">Show current user submissions only at frontend</el-checkbox>
                 </template>
             </div>
             <hr>
