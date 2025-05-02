@@ -25,7 +25,12 @@
                 </div>
 
                 <div v-if="capability && capability.length" class="form-group">
-                    <el-checkbox true-label="yes" false-label="no" v-model="sql_permission">Enable SQL-Module Permission for selected user roles</el-checkbox>
+                    <el-checkbox
+                        :true-label="'yes'"
+                        :false-label="'no'"
+                        v-model="sql_permission">
+                        Enable SQL-Module Permission for selected user roles
+                    </el-checkbox>
                 </div>
 
                 <div class="form-group">

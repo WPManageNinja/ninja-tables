@@ -8,9 +8,9 @@
             <div class="ninja_block">
                 <h3>Global Javascript Error Handling</h3>
                 <el-radio-group class="spaced_new_line" v-model="ninja_suppress_error">
-                    <el-radio label="log_silently">Console Log JS Errors Silently</el-radio>
-                    <el-radio label="yes">Handle Error But don't Log</el-radio>
-                    <el-radio label="no">Don't Handle Global Javascript Errors (Default)</el-radio>
+                    <el-radio :value="'log_silently'">Console Log JS Errors Silently</el-radio>
+                    <el-radio :value="'yes'">Handle Error But don't Log</el-radio>
+                    <el-radio :value="'no'">Don't Handle Global Javascript Errors (Default)</el-radio>
                 </el-radio-group>
             </div>
             <el-button @click="storeSettings()" size="small" type="primary">Update Global Settings</el-button>
