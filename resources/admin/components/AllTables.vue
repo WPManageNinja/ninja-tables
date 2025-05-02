@@ -62,7 +62,9 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
+    import { onMounted } from 'vue';
+    import { useEventBus } from '../composables/useEventBus';
     import Welcome from './Welcome';
     import ListAllTables from './_ListAllTables.vue';
     import AddTableModal from './_AddTable.vue';
@@ -77,9 +79,19 @@
             'add-table-modal': AddTableModal,
             'lead-modal': leadModal,
             NinjaReviewDialog
-            //    BulkActions
         },
         props: ['hasPro'],
+        setup() {
+            const { on } = useEventBus();
+
+            onMounted(() => {
+                on('addedTable', () => {
+                    if (!this.published_tables) {
+                        window.ninja_table_admin.published_tables = 1;
+                    }
+                });
+            });
+        },
         data() {
             return {
                 modalVisible: false,
@@ -88,7 +100,7 @@
                 searchString: '',
                 selected: [],
                 review_option: window.ninja_table_admin.show_review_dialog
-            }
+            };
         },
         methods: {
             addTableAction(tableId) {
@@ -123,15 +135,8 @@
                     });
                 }
             }
-        },
-        mounted: function () {
-            window.ninjaTableBus.$on('addedTable', () => {
-                if (!this.published_tables) {
-                    window.ninja_table_admin.published_tables = 1;
-                }
-            });
         }
-    }
+    };
 </script>
 
 <style lang="scss">

@@ -1,18 +1,19 @@
-import Vue from './elements';
-import Router from 'vue-router';
+import ElementPlus from './elements';
+import { createRouter } from 'vue-router';
 import Rest from "./Bits/Rest";
-Vue.use(Router);
-
 import { applyFilters, addFilter, addAction, doAction } from '@wordpress/hooks';
 
 export default class NINJATABLE {
     constructor() {
+        // WordPress hooks
         this.applyFilters = applyFilters;
         this.addFilter = addFilter;
         this.addAction = addAction;
         this.doAction = doAction;
-        this.Vue = Vue;
-        this.Router = Router;
+
+        // Vue related properties
+        this.ElementPlus = ElementPlus;
+        this.createRouter = createRouter;
     }
 
     registerBlock(blockLocation, blockName, block) {

@@ -1,43 +1,43 @@
 {
   "scripts": {
-    "dev": "mix",
-    "watch": "mix watch",
-    "watch-poll": "mix watch -- --watch-options-poll=1000",
-    "hot": "mix watch --hot",
-    "hots": "mix watch --hots",
-    "production": "mix --production"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@wordpress/hooks": "^3.4.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "clipboard": "^2.0.10",
+    "codemirror-editor-vue3": "^2.3.0",
     "copy-to-clipboard": "^3.0.6",
-    "element-ui": "^2.15.6",
+    "element-plus": "^2.9.9",
     "es6-object-assign": "^1.1.0",
     "lodash": "^4.17.21",
     "rtlcss": "^3.5.0",
-    "sortablejs": "^1.7.0",
-    "vue": "^2.6.14",
-    "vue-codemirror-lite": "^1.0.4",
-    "vue-router": "^3.5.3",
-    "vuedraggable": "^2.16.0"
+    "sortablejs": "^1.15.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.0-rc.0",
-    "babel-preset-react": "^6.24.1",
+    "@vitejs/plugin-react": "^4.0.0",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/compiler-sfc": "^3.4.15",
+    "ace-builds": "^1.32.3",
     "cross-env": "^7.0.3",
-    "laravel-mix": "^6.0.43",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-refresh": "^0.14.2",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.63.4",
-    "sass-loader": "^12.6.0",
-    "vue-loader": "^15.9.8",
-    "vue-template-compiler": "^2.6.14",
-    "vue2-ace-editor": "0.0.10",
+    "rtlcss": "^4.1.0",
+    "sass": "^1.62.1",
+    "sass-loader": "^13.3.2",
+    "vite": "^4.3.5",
+    "vue": "^3.4.15",
+    "vue-loader": "^17.2.2",
     "webpack": "^5.87.0"
   }
 }

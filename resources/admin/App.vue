@@ -1,7 +1,7 @@
 <template>
     <div class="wrap">
         <el-alert
-            v-for="(notice,noticeKey) in admin_notices"
+            v-for="(notice, noticeKey) in admin_notices"
             :type="notice.type"
             :key="noticeKey"
             :closable="notice.closable"
@@ -12,8 +12,9 @@
         <router-view></router-view>
         <div class="pro_feature_dialog">
             <el-dialog
-                    title="NinjaTable Pro Features"
-                    :visible.sync="addVisible">
+                title="NinjaTable Pro Features"
+                v-model="addVisible"
+                destroy-on-close>
                 <div class="add_content">
                     <ul class="list_features">
                         <li>Use Unlimited Colors in Your Tables</li>
@@ -30,50 +31,73 @@
                         <li>And Many More feature</li>
                     </ul>
                 </div>
-                <span slot="footer" class="dialog-footer">
+                <template #footer>
                     <get-pro/>
-                </span>
+                </template>
             </el-dialog>
         </div>
 
-        <div style="margin-top: 90px;color: rgb(236, 62, 62);font-size: 16px;margin-bottom: 30px;" v-if="integrity == 'nope'">
-            <b>Notice:</b> Ninja Tables Pro integrity is not valid. You may downloaded from other sources. Please download ninja tables pro from <a href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?integrity=1">WPManageNinja</a> to keep it upto date.
+        <div 
+            v-if="integrity === 'nope'"
+            style="margin-top: 90px;color: rgb(236, 62, 62);font-size: 16px;margin-bottom: 30px;">
+            <b>Notice:</b> Ninja Tables Pro integrity is not valid. You may downloaded from other sources. 
+            Please download ninja tables pro from 
+            <a href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?integrity=1">WPManageNinja</a> 
+            to keep it upto date.
         </div>
     </div>
 </template>
 
-<script type="text/babel">
-    import GetPro from "./components/Tools/GetPro";
-    export default {
-        name: 'TableApp',
-      components: {GetPro},
-      data() {
-            return {
-                addVisible: false,
-                integrity: window.ninja_table_admin.nt_integrity,
-                admin_notices: window.ninja_table_admin.admin_notices
-            }
-        },
-        mounted() {
-            window.ninjaTableBus.$on('show_pro_popup', (val) => {
-                this.addVisible = true;
-            });
+<script>
+import { onMounted, ref } from 'vue'
+import GetPro from "./components/Tools/GetPro.vue"
+import { useEventBus } from './composables/useEventBus'
 
-            jQuery('.update-nag,.notice, #wpbody-content > .updated, #wpbody-content > .error').remove();
+export default {
+    name: 'TableApp',
+    components: { GetPro },
+    setup() {
+        const addVisible = ref(false)
+        const integrity = ref(window.ninja_table_admin.nt_integrity)
+        const admin_notices = ref(window.ninja_table_admin.admin_notices)
+        const { on } = useEventBus()
 
-        },
+        onMounted(() => {
+            on('show_pro_popup', () => {
+                addVisible.value = true
+            })
+
+            // Remove WordPress notices
+            jQuery('.update-nag,.notice, #wpbody-content > .updated, #wpbody-content > .error').remove()
+        })
+
+        return {
+            addVisible,
+            integrity,
+            admin_notices
+        }
     }
+}
 </script>
 
 <style lang="scss">
-    .el-message {
-        z-index: 999999 !important;
-        top: 5px;
-    }
+.el-message {
+    z-index: 999999 !important;
+    top: 5px;
+}
 
-    .pro_feature_dialog {
-        .el-dialog__wrapper {
-            z-index: 10000 !important;
-        }
+.pro_feature_dialog {
+    .el-dialog__wrapper {
+        z-index: 10000 !important;
     }
+}
+
+.list_features {
+    list-style: disc;
+    padding-left: 20px;
+    
+    li {
+        margin-bottom: 8px;
+    }
+}
 </style>

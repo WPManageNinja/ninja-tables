@@ -4,9 +4,31 @@ namespace NinjaTables\App\Hooks\Handlers;
 
 use NinjaTables\App\App;
 use NinjaTables\App\Modules\I18nStrings;
+use NinjaTables\App\Utils\Vite;
 
 class AdminMenuHandler
 {
+    protected function getViteAsset($entry) 
+    {
+        $devServer = 'http://localhost:5173';
+        $isDevelopment = defined('NINJA_TABLES_DEVELOPMENT') && NINJA_TABLES_DEVELOPMENT;
+        
+        if ($isDevelopment) {
+            return $devServer . '/' . $entry;
+        }
+
+        static $manifest = null;
+        if ($manifest === null) {
+            $manifestPath = NINJA_TABLES_DIR_PATH . 'assets/manifest.json';
+            $manifest = file_exists($manifestPath) ? json_decode(file_get_contents($manifestPath), true) : [];
+        }
+
+        $entry = ltrim($entry, '/');
+        return isset($manifest[$entry]) 
+            ? NINJA_TABLES_DIR_URL . 'assets/' . $manifest[$entry]['file'] 
+            : '';
+    }
+
     public function add()
     {
         global $submenu;
@@ -120,32 +142,16 @@ class AdminMenuHandler
 
     public function render()
     {
-        $config = App::getInstance('config');
+        // Debug output
+        echo '<!-- NinjaTables Debug: Rendering admin page -->';
+        
+        echo '<div class="wrap ninja-tables-wrapper">';
+        echo '  <!-- NinjaTables Mount Point -->';
+        echo '  <div id="data-tables-app"></div>';
+        echo '</div>';
 
-        $name = $config->get('app.name');
-
-        $slug = $config->get('app.slug');
-
-        $baseUrl = apply_filters('fluent_connector_base_url', admin_url('admin.php?page=' . $slug . '#/'));
-
-        $menuItems = [
-            [
-                'key'       => 'dashboard',
-                'label'     => __('Dashboard', 'ninja-tables'),
-                'permalink' => $baseUrl
-            ]
-        ];
-
-        $app    = App::getInstance();
-        $assets = $app['url.assets'];
-
-        App::make('view')->render('admin.menu', [
-            'name'      => $name,
-            'slug'      => $slug,
-            'menuItems' => $menuItems,
-            'baseUrl'   => $baseUrl,
-            'logo'      => $assets . 'images/logo.svg',
-        ]);
+        // Debug output
+        echo '<script>console.log("NinjaTables mount point rendered:", document.getElementById("data-tables-app"));</script>';
     }
 
     public function enqueueAssets()
@@ -202,28 +208,32 @@ class AdminMenuHandler
     public function enqueueStyles()
     {
         $app = App::getInstance();
-
-        $assets = $app['url.assets'];
-
         $slug = $app->config->get('app.slug');
 
-        $vendorSrc = $assets . "css/ninja-tables-vendor.css";
+        // Enqueue Element Plus styles
+        wp_enqueue_style(
+            $slug . '_element_plus',
+            'https://unpkg.com/element-plus/dist/index.css',
+            [],
+            NINJA_TABLES_VERSION
+        );
 
+        $vendorSrc = $this->getViteAsset('resources/admin/css/vendor.scss');
         if (is_rtl()) {
-            $vendorSrc = $assets . "css/ninja-tables-vendor-rtl.css";
+            $vendorSrc = NINJA_TABLES_DIR_URL . 'assets/css/ninja-tables-vendor-rtl.css';
         }
 
         wp_enqueue_style(
             $slug . '_admin_app',
             $vendorSrc,
-            array(),
+            [],
             NINJA_TABLES_VERSION
         );
 
         wp_enqueue_style(
             $slug,
-            $assets . "css/ninja-tables-admin.css",
-            array(),
+            $this->getViteAsset('resources/admin/css/ninja-tables-admin.scss'),
+            [],
             NINJA_TABLES_VERSION
         );
     }
@@ -236,193 +246,37 @@ class AdminMenuHandler
     public function enqueueScripts()
     {
         $app = App::getInstance();
-
-        $assets = $app['url.assets'];
-
         $slug = $app->config->get('app.slug');
 
-        $plugin_url = NINJA_TABLES_DIR_URL;
+        // Enqueue jQuery first
+        wp_enqueue_script('jquery');
 
-        if (function_exists('wp_enqueue_editor')) {
-            $app->addFilter('user_can_richedit', function ($status) {
-                return true;
-            });
-            wp_enqueue_editor();
-            wp_enqueue_script('thickbox');
-            wp_enqueue_script('editor');
+        // Add jQuery to window
+        wp_add_inline_script('jquery', 'window.jQuery = jQuery; window.$ = jQuery;', 'after');
+
+        // Add admin data before Vue app loads
+        wp_add_inline_script('jquery', 'window.ninja_table_admin = ' . wp_json_encode([
+            'i18n' => (new I18nStrings())->getStrings(),
+            'rest' => $this->getRestInfo($app),
+            'asset_url' => Vite::getAssetsUrl(),
+            'pro_enabled' => defined('NINJATABLESPRO'),
+            'integrity' => $this->getIntegrity(),
+            'nonce' => wp_create_nonce($slug),
+        ]), 'after');
+
+        // Debug info
+        if (defined('NINJA_TABLES_DEVELOPMENT') && NINJA_TABLES_DEVELOPMENT) {
+            wp_add_inline_script('jquery', 'console.log("NinjaTables Admin Data:", window.ninja_table_admin);', 'after');
         }
-        if (function_exists('wp_enqueue_media')) {
-            wp_enqueue_media();
-        }
 
-        wp_enqueue_script(
-            $slug . '_admin_app',
-            $assets . "js/ninja-tables-boot.js",
-            array('jquery'),
-            '1.0',
-            true
-        );
-
-        $app->doAction('ninja_tables_loaded_boot_script');
-
-        wp_enqueue_script(
+        // Enqueue main app script as module
+        Vite::enqueueScript(
             $slug,
-            $assets . "js/ninja-tables-admin.js",
-            array('jquery'),
-            '1.0',
+            'admin/main.js',
+            ['jquery'],
+            NINJA_TABLES_VERSION,
             true
         );
-
-        $fluentUrl = admin_url('plugin-install.php?s=FluentForm&tab=search&type=term');
-
-        $isInstalled   = defined('FLUENTFORM') || defined('NINJATABLESPRO');
-        $dismissed     = false;
-        $dismissedTime = get_option('_ninja_tables_plugin_suggest_dismiss');
-
-        if ($dismissedTime) {
-            if ((time() - intval($dismissedTime)) < 518400) {
-                $dismissed = true;
-            }
-        } else {
-            $dismissed = true;
-            update_option('_ninja_tables_plugin_suggest_dismiss', time() - 345600);
-        }
-
-        $currentUser = wp_get_current_user();
-
-        $leadStatus          = false;
-        $reviewOptinStatus   = false;
-        $cptName             = 'ninja-table';
-        $tableCount          = wp_count_posts($cptName);
-        $totalPublishedTable = 0;
-        $publish             = property_exists($tableCount, "publish") ? $tableCount->publish : 0;
-
-        if ($tableCount && $publish > 1) {
-            $leadStatus = $app->applyFilters('ninja_tables_show_lead', $leadStatus);
-        }
-
-        if ($tableCount && $publish > 2 && !$leadStatus) {
-            $reviewOptinStatus = $app->applyFilters('ninja_tables_show_review_optin', $reviewOptinStatus);
-        }
-
-        if ($tableCount && $publish > 0) {
-            $totalPublishedTable = $publish;
-        }
-
-        $hasFluentFrom       = defined('FLUENTFORM_VERSION');
-        $isFluentFromUpdated = false;
-
-        // check for right version
-        if ($hasFluentFrom) {
-            if ($fluentVersionCompare = version_compare(FLUENTFORM_VERSION, '1.7.4') >= 1) {
-                $isFluentFromUpdated = true;
-            }
-        }
-
-        // Let's deregister existing vuejs by other devs
-        // Other devs should not regis
-        $app->addAction('admin_print_scripts', function () {
-            wp_dequeue_script('vuejs');
-            wp_dequeue_script('vue');
-        });
-
-        if (current_user_can('manage_options')) {
-            $isAdmin = 'yes';
-        } else {
-            $isAdmin = 'no';
-        }
-
-
-        wp_localize_script($slug . '_admin_app', 'ninja_table_admin', array(
-            'slug'                     => $slug,
-            'nonce'                    => wp_create_nonce($slug),
-            'rest'                     => $this->getRestInfo($app),
-            'brand_logo'               => $this->getMenuIcon(),
-            'asset_url'                => $assets,
-            'me'                       => [
-                'id'        => $currentUser->ID,
-                'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
-                'email'     => $currentUser->user_email
-            ],
-            'img_url'                  => $assets . "img/",
-            'fluentform_url'           => $fluentUrl,
-            'fluent_wp_url'            => 'https://wordpress.org/plugins/fluentform/',
-            'fluent_form_icon'         => function_exists('getNinjaFluentFormMenuIcon') ? getNinjaFluentFormMenuIcon(
-            ) : '',
-            'dismissed'                => $dismissed,
-            'show_lead_pop_up'         => $leadStatus,
-            'show_review_dialog'       => $reviewOptinStatus,
-            'current_user_name'        => $currentUser->display_name,
-            'isInstalled'              => $isInstalled,
-            'hasPro'                   => defined('NINJATABLESPRO'),
-            'hasFluentForm'            => $hasFluentFrom,
-            'isFluentFormUpdated'      => $isFluentFromUpdated,
-            'hasAdvancedFilters'       => class_exists('NinjaTablesPro\App\Hooks\Handlers\CustomFilterHandler'),
-            'hasSortable'              => defined('NINJATABLESPRO_SORTABLE'),
-            'ace_path_url'             => $assets . "libs/ace",
-            'upgradeGuide'             => 'https://wpmanageninja.com/r/docs/ninja-tables/how-to-install-and-upgrade/#upgrade',
-            'hasValidLicense'          => get_option('_ninjatables_pro_license_status'),
-            'i18n'                     => I18nStrings::getStrings(),
-            'published_tables'         => $totalPublishedTable,
-            'preview_required_scripts' => array(
-                $assets . "css/ninjatables-public.css",
-                $assets . "libs/footable/js/footable.min.js",
-                $assets . "libs/moment/moment.min.js",
-                $assets . "js/ninja-tables-footable.js",
-            ),
-            'activated_features'       => $app->applyFilters('ninja_table_activated_features', array(
-                'default_tables'    => true,
-                'fluentform_tables' => true
-            )),
-            'nt_integrity'             => $this->getIntegrity(),
-            'admin_notices'            => $app->applyFilters('ninja_dashboard_notices', []),
-            'has_sql_permission'       => $app->applyFilters('ninja_table_sql_permission', $isAdmin),
-            'prefered_thumb'           => $app->applyFilters('ninja_table_prefered_thumb', 'medium'),
-            'has_woocommerce'          => defined('WC_PLUGIN_FILE'),
-            'license_status'           => get_option('_ninjatables_pro_license_status'),
-            'ninja_charts_url'         => defined('NINJA_CHARTS_VERSION') ? self_admin_url(
-                'admin.php?page=ninja-charts#/chart-list'
-            ) : null,
-            'ninja_table_admin_nonce'  => wp_create_nonce('ninja_table_admin_nonce'),
-            'ninja_tables_pro_url'     => defined('NINJATABLESPRO') ? NINJAPROPLUGIN_URL : null
-        ));
-
-        // Elementor plugin have a bug where they throw error to parse #url, and I really don't know why they want to parse
-        // other plugin's page's uri. They should fix it.
-        // For now I am de-registering their script in ninja-table admin pages.
-        wp_deregister_script('elementor-admin-app');
-
-        // These last two line is for dumb devs who enqueue their scripts unversally
-        // People should think what they are writing in their code
-        wp_dequeue_script('vue');
-        wp_dequeue_script('vuejs');
-
-        // We are gonna dequeue every other scripts on our pages.
-        add_action('wp_print_scripts', function () {
-            if (is_admin()) {
-                $skip = apply_filters('ninja_table_skip_no_confict', false);
-
-                if ($skip) {
-                    return;
-                }
-
-                global $wp_scripts;
-                $pluginUrl = plugins_url();
-                foreach ($wp_scripts->queue as $script) {
-                    $src = $wp_scripts->registered[$script]->src;
-
-                    if (strpos($src, $pluginUrl) !== false && !strpos($src, 'ninja-tables') !== false) {
-                        wp_dequeue_script($wp_scripts->registered[$script]->handle);
-                    }
-                }
-            }
-        }, 1);
-
-        /*
-         * This script only for resolve the conflict of lodash and underscore js
-         * Resolved the issue of media uploader specially for image upload
-         */
-        wp_add_inline_script($slug, $this->getInlineScript(), 'after');
     }
 
     private function getIntegrity()

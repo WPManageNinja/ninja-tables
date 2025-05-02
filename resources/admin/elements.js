@@ -1,125 +1,127 @@
-import Vue from 'vue';
-
 import {
-    Button,
-    Table,
-    TableColumn,
-    Dialog,
-    Popover,
-    Loading,
-    Message,
-    MessageBox,
-    Icon,
-    Tooltip,
-    Pagination,
-    Collapse,
-    CollapseItem,
-    Container,
-    Aside,
-    Main,
-    Menu,
-    MenuItem,
-    Header,
-    ColorPicker,
-    Form,
-    FormItem,
-    Input,
-    Checkbox,
-    RadioGroup,
-    Radio,
-    Select,
-    Option,
-    OptionGroup,
-    Switch,
-    CheckboxGroup,
-    RadioButton,
-    TabPane,
-    Tabs,
-    Steps,
-    Step,
-    Alert,
-    Row,
-    Col,
-    Transfer,
-    Upload,
-    DatePicker,
-// Below files are used in table builder
-    InputNumber,
-    Slider,
-    Card,
-    Rate,
-    Progress,
-    ButtonGroup,
-    Dropdown,
-    DropdownMenu,
-    DropdownItem,
-    Avatar,
-    Badge,
-    Tag
-} from 'element-ui';
+    ElButton,
+    ElTable,
+    ElTableColumn,
+    ElDialog,
+    ElPopover,
+    ElLoading,
+    ElMessage,
+    ElMessageBox,
+    ElIcon,
+    ElTooltip,
+    ElPagination,
+    ElCollapse,
+    ElCollapseItem,
+    ElContainer,
+    ElAside,
+    ElMain,
+    ElMenu,
+    ElMenuItem,
+    ElHeader,
+    ElColorPicker,
+    ElForm,
+    ElFormItem,
+    ElInput,
+    ElCheckbox,
+    ElRadioGroup,
+    ElRadio,
+    ElSelect,
+    ElOption,
+    ElOptionGroup,
+    ElSwitch,
+    ElCheckboxGroup,
+    ElRadioButton,
+    ElTabPane,
+    ElTabs,
+    ElSteps,
+    ElStep,
+    ElAlert,
+    ElRow,
+    ElCol,
+    ElTransfer,
+    ElUpload,
+    ElDatePicker,
+    // Table builder components
+    ElInputNumber,
+    ElSlider,
+    ElCard,
+    ElRate,
+    ElProgress,
+    ElButtonGroup,
+    ElDropdown,
+    ElDropdownMenu,
+    ElDropdownItem,
+    ElAvatar,
+    ElBadge,
+    ElTag
+} from 'element-plus'
+import 'element-plus/dist/index.css'
+import { createApp } from 'vue'
 
-Vue.use(Button);
-Vue.use(Upload);
-Vue.use(DatePicker);
-Vue.use(Table);
-Vue.use(ColorPicker);
-Vue.use(Pagination);
-Vue.use(TableColumn);
-Vue.use(Popover);
-Vue.use(Menu);
-Vue.use(Header);
-Vue.use(MenuItem);
-Vue.use(Loading);
-Vue.use(Icon);
-Vue.use(Tooltip);
-Vue.use(Container);
-Vue.use(Aside);
-Vue.use(Main);
-Vue.use(Collapse);
-Vue.use(CollapseItem);
-Vue.use(Dialog);
-Vue.use(Form);
-Vue.use(FormItem);
-Vue.use(Input);
-Vue.use(Select);
-Vue.use(Option);
-Vue.use(OptionGroup);
-Vue.use(Checkbox);
-Vue.use(RadioGroup);
-Vue.use(Radio);
-Vue.use(RadioButton);
-Vue.use(Switch);
-Vue.use(CheckboxGroup);
-Vue.use(Tabs);
-Vue.use(TabPane);
-Vue.use(Steps);
-Vue.use(Step);
-Vue.use(Alert);
-Vue.use(Row);
-Vue.use(Col);
-Vue.use(Transfer);
-// Below files are used in table builder
-Vue.use(Slider);
-Vue.use(Card);
-Vue.use(InputNumber);
-Vue.use(Rate);
-Vue.use(Progress);
-Vue.use(ButtonGroup);
-Vue.use(Dropdown);
-Vue.use(DropdownMenu);
-Vue.use(DropdownItem);
-Vue.use(Avatar);
-Vue.use(Badge);
-Vue.use(Tag);
+// Create a plugin to install all Element Plus components
+const ElementPlus = {
+    install(app) {
+        // Register components
+        app.use(ElButton)
+        app.use(ElUpload)
+        app.use(ElDatePicker)
+        app.use(ElTable)
+        app.use(ElColorPicker)
+        app.use(ElPagination)
+        app.use(ElTableColumn)
+        app.use(ElPopover)
+        app.use(ElMenu)
+        app.use(ElHeader)
+        app.use(ElMenuItem)
+        app.use(ElLoading)
+        app.use(ElIcon)
+        app.use(ElTooltip)
+        app.use(ElContainer)
+        app.use(ElAside)
+        app.use(ElMain)
+        app.use(ElCollapse)
+        app.use(ElCollapseItem)
+        app.use(ElDialog)
+        app.use(ElForm)
+        app.use(ElFormItem)
+        app.use(ElInput)
+        app.use(ElSelect)
+        app.use(ElOption)
+        app.use(ElOptionGroup)
+        app.use(ElCheckbox)
+        app.use(ElRadioGroup)
+        app.use(ElRadio)
+        app.use(ElRadioButton)
+        app.use(ElSwitch)
+        app.use(ElCheckboxGroup)
+        app.use(ElTabs)
+        app.use(ElTabPane)
+        app.use(ElSteps)
+        app.use(ElStep)
+        app.use(ElAlert)
+        app.use(ElRow)
+        app.use(ElCol)
+        app.use(ElTransfer)
+        app.use(ElSlider)
+        app.use(ElCard)
+        app.use(ElInputNumber)
+        app.use(ElRate)
+        app.use(ElProgress)
+        app.use(ElButtonGroup)
+        app.use(ElDropdown)
+        app.use(ElDropdownMenu)
+        app.use(ElDropdownItem)
+        app.use(ElAvatar)
+        app.use(ElBadge)
+        app.use(ElTag)
 
-Vue.prototype.$message = Message;
-Vue.prototype.$msgbox = MessageBox;
-Vue.prototype.$alert = MessageBox.alert;
-Vue.prototype.$confirm = MessageBox.confirm;
-Vue.prototype.$prompt = MessageBox.prompt;
+        // Register global methods
+        app.config.globalProperties.$message = ElMessage
+        app.config.globalProperties.$msgbox = ElMessageBox
+        app.config.globalProperties.$alert = ElMessageBox.alert
+        app.config.globalProperties.$confirm = ElMessageBox.confirm
+        app.config.globalProperties.$prompt = ElMessageBox.prompt
+    }
+}
 
-locale.use(lang);
-import lang from 'element-ui/lib/locale/lang/en';
-import locale from 'element-ui/lib/locale';
-
-export default Vue;
+export default ElementPlus

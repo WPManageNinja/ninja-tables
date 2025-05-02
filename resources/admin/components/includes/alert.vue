@@ -1,5 +1,5 @@
 <template>
-    <div class="alert" :class="'alert-'+alertClass" v-else="">
+    <div class="alert" :class="'alert-'+alertClass">
         <slot></slot>
     </div>
 </template>

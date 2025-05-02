@@ -20,8 +20,8 @@
   </div>
 </template>
 <script>
-import TopNav from "./TopNav";
-import LeftSideBar from "./Sidebar/LeftSideBar";
+import TopNav from "./TopNav.vue";
+import LeftSideBar from "./Sidebar/LeftSideBar.vue";
 import RightSideBar from "./Sidebar/RightSideBar";
 
 export default {
