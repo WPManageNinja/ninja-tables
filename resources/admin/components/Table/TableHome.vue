@@ -20,12 +20,12 @@
             <span style="margin-right: 20px" class="pull-right">
                 <router-link class="doc_link" :to="{ name: 'help' }">{{ $t('Documentation') }}</router-link>
                 <a :href="preview_url" target="_blank">
-                    <el-button size="mini">{{ $t('Preview') }}</el-button>
+                    <el-button size="small">{{ $t('Preview') }}</el-button>
                 </a>
                 <a v-if="!has_pro"
                    href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                    target="_blank">
-                    <el-button type="danger" size="mini">{{ $t('Get Pro') }}</el-button>
+                    <el-button type="danger" size="Small">{{ $t('Get Pro') }}</el-button>
                 </a>
             </span>
         </div>

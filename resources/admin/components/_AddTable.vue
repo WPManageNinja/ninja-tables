@@ -158,7 +158,7 @@
     import RawSqlForm from './DataProviders/RawSqlForm'
     import PremiumNotice from './includes/PremiumNotice';
     import RightSideBar from "./TableBuilder/Sidebar/RightSideBar";
-
+    import { useEventBus } from '../composables/useEventBus';
 
     export default {
         name: 'add_table',
@@ -247,25 +247,40 @@
                         message: response.message,
                         type: 'success'
                       });
-                      window.ninjaTableBus.$emit('addedTable');
+
+                      const { emit } = useEventBus();
+                      emit('addedTable');
+
                       if (this.table.ID) {
                         this.closeModal();
                       } else {
-                        this.fireTableCreated(response.table_id);
+                        // Check if response has table_id directly or in data property
+                        const tableId = response.table_id || (response.data && response.data.table_id);
+                        if (tableId) {
+                          this.fireTableCreated(tableId);
+                        } else {
+                          console.error('No table_id found in response:', response);
+                        }
                       }
                       this.btnLoading = false;
                   })
                   .catch(error => {
-                      if (error.responseJSON.data.message) {
+                      if (error.responseJSON && error.responseJSON.data && error.responseJSON.data.message) {
                         this.$message({
                           showClose: true,
                           message: error.responseJSON.data.message,
                           type: 'error'
                         });
-                      } else {
+                      } else if (error.responseText) {
                         this.$message({
                           showClose: true,
                           message: error.responseText,
+                          type: 'error'
+                        });
+                      } else {
+                        this.$message({
+                          showClose: true,
+                          message: 'An error occurred while creating the table',
                           type: 'error'
                         });
                       }
