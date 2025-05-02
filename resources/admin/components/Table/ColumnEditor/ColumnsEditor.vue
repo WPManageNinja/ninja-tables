@@ -569,7 +569,7 @@
                                 <i class="el-icon-info el-text-info"/>
                             </el-tooltip>
                         </template>
-                        <el-checkbox :disabled="!hasPro" v-model="model.unfilterable" true-label="yes" false-label="no"
+                        <el-checkbox :disabled="!hasPro" v-model="model.unfilterable" :true-label="'yes'" :false-label="'no'"
                                      value="yes" label="Disable frontend search for this column data"></el-checkbox>
                     </el-form-item>
 
@@ -589,7 +589,7 @@
                                 <i class="el-icon-info el-text-info"/>
                             </el-tooltip>
                         </template>
-                        <el-checkbox :disabled="!hasPro" v-model="model.unsortable" true-label="yes" false-label="no"
+                        <el-checkbox :disabled="!hasPro" v-model="model.unsortable" :true-label="'yes'" :false-label="'no'"
                                      value="yes" label="Disable frontend sorting for this column"></el-checkbox>
                     </el-form-item>
 

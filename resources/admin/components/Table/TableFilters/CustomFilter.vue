@@ -61,7 +61,7 @@
                     </template>
 
                     <h3>Progressive Filter</h3>
-                    <el-checkbox true-label="yes" false-label="no" v-model="filter_styling.progressive">Enable Progressive filter for dynamic filter options</el-checkbox>
+                    <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="filter_styling.progressive">Enable Progressive filter for dynamic filter options</el-checkbox>
 
                     <div style="margin-top: 20px" class="form_group">
                         <el-button :loading="saving" size="small" type="primary" @click="saveFilters">Update Settings</el-button>
