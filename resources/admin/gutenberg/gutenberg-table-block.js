@@ -1,9 +1,9 @@
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { InspectorControls, useBlockProps } = wp.blockEditor || wp.editor; // Fallback for older WordPress versions
-const { PanelBody, SelectControl, Placeholder, Spinner } = wp.components;
-const { useState, useEffect } = wp.element;
-const { apiFetch } = wp.apiFetch ? wp : wp.components; // Ensure apiFetch is available
+const { InspectorControls, useBlockProps } = wp.blockEditor || wp.editor;
+const { PanelBody, SelectControl, Placeholder, Spinner, Button } = wp.components;
+const { useState, useEffect, useRef } = wp.element;
+const { apiFetch } = wp.apiFetch ? wp : wp.components;
 
 // Register the Ninja Tables block
 registerBlockType('ninja-tables/table-block', {
@@ -15,29 +15,28 @@ registerBlockType('ninja-tables/table-block', {
         tableId: {
             type: 'string',
             default: ''
-        },
-        customClassName: {
-            type: 'string',
-            default: ''
         }
     },
 
     edit: function(props) {
-        const { attributes, setAttributes, className } = props;
+        const { attributes, setAttributes } = props;
         const { tableId } = attributes;
+        const blockRef = useRef(null);
 
-        // Add customClassName to attributes for additional styling
-        setAttributes({ customClassName: className });
-
-        // State for tracking table preview
+        // State for tracking preview loading
         const [tableHtml, setTableHtml] = useState('');
         const [isLoading, setIsLoading] = useState(false);
         const [error, setError] = useState(null);
 
-        // Get block props
-        const blockProps = useBlockProps ? useBlockProps() : { className };
+        // Get block props with ref
+        const blockProps = useBlockProps ? useBlockProps({
+            ref: blockRef
+        }) : {
+            className: props.className,
+            ref: blockRef
+        };
 
-        // Get available tables from data passed via wp_localize_script
+        // Get available tables
         const availableTables = window.ninjaTablesGutenberg ?
             window.ninjaTablesGutenberg.availableTables : [];
 
@@ -78,6 +77,18 @@ registerBlockType('ninja-tables/table-block', {
             }
         };
 
+        // Initialize Footable after HTML is loaded - ONLY ONCE
+        useEffect(() => {
+            if (tableHtml && !isLoading && !error && window.initNinjaTableFootable) {
+                // Use a single timeout to initialize - nothing else
+                const timer = setTimeout(() => {
+                    window.initNinjaTableFootable();
+                }, 300);
+
+                return () => clearTimeout(timer);
+            }
+        }, [tableHtml]);
+
         return (
             <div {...blockProps}>
                 <InspectorControls>
@@ -85,12 +96,26 @@ registerBlockType('ninja-tables/table-block', {
                         <SelectControl
                             label={__('Select Table')}
                             value={tableId}
-                            options={[
-                                { label: __('-- Select a Table --'), value: '' },
-                                ...availableTables
-                            ]}
+                            options={availableTables}
                             onChange={(value) => setAttributes({ tableId: value })}
                         />
+
+                        {tableId && (
+                            <div style={{ marginTop: '10px' }}>
+                                <Button
+                                    isSecondary
+                                    onClick={() => {
+                                        if (window.initNinjaTableFootable) {
+                                            // Force reload by clearing state and reloading
+                                            setTableHtml('');
+                                            loadTablePreview(tableId);
+                                        }
+                                    }}
+                                >
+                                    {__('Reload Table')}
+                                </Button>
+                            </div>
+                        )}
                     </PanelBody>
                 </InspectorControls>
 
@@ -103,10 +128,7 @@ registerBlockType('ninja-tables/table-block', {
                         >
                             <SelectControl
                                 value={tableId}
-                                options={[
-                                    { label: __('-- Select a Table --'), value: '' },
-                                    ...availableTables
-                                ]}
+                                options={availableTables}
                                 onChange={(value) => setAttributes({ tableId: value })}
                             />
                         </Placeholder>
@@ -118,15 +140,18 @@ registerBlockType('ninja-tables/table-block', {
                     ) : error ? (
                         <div className="ninja-tables-error">
                             <p>{error}</p>
-                            <button
-                                className="components-button is-secondary"
+                            <Button
+                                isSecondary
                                 onClick={() => loadTablePreview(tableId)}
                             >
                                 {__('Retry')}
-                            </button>
+                            </Button>
                         </div>
                     ) : (
-                        <div className="ninja-tables-preview" dangerouslySetInnerHTML={{ __html: tableHtml }} />
+                        <div
+                            className="ninja-tables-preview"
+                            dangerouslySetInnerHTML={{ __html: tableHtml }}
+                        />
                     )}
                 </div>
             </div>
@@ -137,21 +162,4 @@ registerBlockType('ninja-tables/table-block', {
         // Return null to use the render_callback for server-side rendering
         return null;
     }
-});
-
-// Initialize Footable tables in the editor preview after block updates
-wp.data.subscribe(() => {
-    setTimeout(() => {
-        // Check if jQuery and Footable plugin are available
-        if (window.jQuery && typeof window.jQuery.fn.footable !== 'undefined') {
-            // Find footable tables in the editor and initialize them
-            window.jQuery('.ninja-tables-preview table.footable').each(function() {
-                try {
-                    window.jQuery(this).footable();
-                } catch(e) {
-                    console.warn('Error initializing Footable in Gutenberg editor:', e);
-                }
-            });
-        }
-    }, 500); // Small delay to ensure DOM is updated
 });
