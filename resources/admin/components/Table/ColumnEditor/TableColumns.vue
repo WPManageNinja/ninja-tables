@@ -219,7 +219,7 @@
                             message: res.message,
                             type: 'success'
                         });
-                        this.$set(this.config, 'columns', this.columns);
+                        this.config.columns = this.columns;
                       this.bus.emit('tableDoingAjax', false);
                     })
                     .catch((error) => {

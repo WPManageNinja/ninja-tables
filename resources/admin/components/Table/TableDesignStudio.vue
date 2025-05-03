@@ -1096,7 +1096,7 @@
                 jQuery('#table_designer_css').html(css);
             },
             changeColor(color, element) {
-                this.$set(this.tableSettings, element, color);
+                this.tableSettings[element] = color;
             },
             checkColorPro() {
                 if (this.has_pro) {
@@ -1181,13 +1181,13 @@
             this.loadRequiredScripts();
             if (!this.tableSettings.table_color_type) {
                 if (this.tableSettings.table_color == 'ninja_table_custom_color') {
-                    this.$set(this.tableSettings, 'table_color_type', 'custom_color');
+                    this.tableSettings.table_color_type = 'custom_color';
                 } else {
-                    this.$set(this.tableSettings, 'table_color_type', 'pre_defined_color');
+                    this.tableSettings.table_color_type = 'pre_defined_color';
                 }
             }
             if (this.tableSettings.alternate_color_status === undefined) {
-                this.$set(this.tableSettings, 'alternate_color_status', 'no');
+                this.tableSettings.alternate_color_status = 'no';
             }
             jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
             jQuery(window).on('resize', function () {

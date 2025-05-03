@@ -224,13 +224,13 @@
         watch: {
             'column.wp_post_custom_data_source_type': function () {
                 // Find selected type
-                this.$set(this.column, 'source_type', this.selectedField.source_type);
+                this.column.source_type = this.selectedField.source_type;
 
                 if(this.selectedField.source_type == 'tax_data') {
-                    this.$set(this.column, 'taxonomy_separator', ', ');
+                    this.column.taxonomy_separator = ', ';
                 }
 
-                this.$set(this.column, 'wp_post_custom_data_key', '');
+                this.column.wp_post_custom_data_key = '';
             }
         },
         computed: {

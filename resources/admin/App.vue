@@ -60,10 +60,10 @@ export default {
         const addVisible = ref(false)
         const integrity = ref(window.ninja_table_admin.nt_integrity)
         const admin_notices = ref(window.ninja_table_admin.admin_notices)
-        const { on } = useEventBus();
+        const bus = useEventBus();
 
         onMounted(() => {
-            on('show_pro_popup', () => {
+            bus.on('show_pro_popup', () => {
                 addVisible.value = true
             })
 

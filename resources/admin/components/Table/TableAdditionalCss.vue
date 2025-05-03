@@ -92,7 +92,7 @@
                             message: response.data.message,
                             type: 'success'
                         } );
-                        this.$set(this.config.table, 'custom_css', this.custom_css );
+                        this.config.table.custom_css = this.custom_css;
                     })
                     .catch(error => {
                         console.log(error);
