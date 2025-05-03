@@ -142,16 +142,10 @@ class AdminMenuHandler
 
     public function render()
     {
-        // Debug output
-        echo '<!-- NinjaTables Debug: Rendering admin page -->';
         
         echo '<div class="wrap ninja-tables-wrapper">';
-        echo '  <!-- NinjaTables Mount Point -->';
         echo '  <div id="data-tables-app"></div>';
         echo '</div>';
-
-        // Debug output
-        echo '<script>console.log("NinjaTables mount point rendered:", document.getElementById("data-tables-app"));</script>';
     }
 
     public function enqueueAssets()
@@ -211,31 +205,33 @@ class AdminMenuHandler
         $slug = $app->config->get('app.slug');
 
         // Enqueue Element Plus styles
-        wp_enqueue_style(
-            $slug . '_element_plus',
-            'https://unpkg.com/element-plus/dist/index.css',
-            [],
-            NINJA_TABLES_VERSION
+        // wp_enqueue_style(
+        //     $slug . '_element_plus',
+        //     'https://unpkg.com/element-plus/dist/index.css',
+        //     [],
+        //     NINJA_TABLES_VERSION
+        // );
+
+        // Enqueue main admin styles
+        Vite::enqueueStyle(
+            $slug . '_admin',
+            'admin/css/ninja-tables-admin.scss'
         );
 
-        $vendorSrc = $this->getViteAsset('resources/admin/css/vendor.scss');
+        // Enqueue vendor styles with RTL support
         if (is_rtl()) {
-            $vendorSrc = NINJA_TABLES_DIR_URL . 'assets/css/ninja-tables-vendor-rtl.css';
+            wp_enqueue_style(
+                $slug . '_admin_vendor',
+                NINJA_TABLES_DIR_URL . 'assets/css/ninja-tables-vendor-rtl.css',
+                [],
+                NINJA_TABLES_VERSION
+            );
+        } else {
+            Vite::enqueueStyle(
+                $slug . '_admin_vendor',
+                'admin/css/vendor.scss'
+            );
         }
-
-        wp_enqueue_style(
-            $slug . '_admin_app',
-            $vendorSrc,
-            [],
-            NINJA_TABLES_VERSION
-        );
-
-        wp_enqueue_style(
-            $slug,
-            $this->getViteAsset('resources/admin/css/ninja-tables-admin.scss'),
-            [],
-            NINJA_TABLES_VERSION
-        );
     }
 
     /**
@@ -248,32 +244,23 @@ class AdminMenuHandler
         $app = App::getInstance();
         $slug = $app->config->get('app.slug');
 
-        // Enqueue jQuery first
-        wp_enqueue_script('jquery');
-
-        // Add jQuery to window
-        wp_add_inline_script('jquery', 'window.jQuery = jQuery; window.$ = jQuery;', 'after');
-
-        // Add admin data before Vue app loads
-        wp_add_inline_script('jquery', 'window.ninja_table_admin = ' . wp_json_encode([
+        // Add admin data
+        wp_register_script('ninja-tables-data', '', [], '', true);
+        wp_enqueue_script('ninja-tables-data');
+        wp_add_inline_script('ninja-tables-data', 'window.ninja_table_admin = ' . wp_json_encode([
             'i18n' => (new I18nStrings())->getStrings(),
             'rest' => $this->getRestInfo($app),
             'asset_url' => Vite::getAssetsUrl(),
             'pro_enabled' => defined('NINJATABLESPRO'),
             'integrity' => $this->getIntegrity(),
             'nonce' => wp_create_nonce($slug),
-        ]), 'after');
+        ]));
 
-        // Debug info
-        if (defined('NINJA_TABLES_DEVELOPMENT') && NINJA_TABLES_DEVELOPMENT) {
-            wp_add_inline_script('jquery', 'console.log("NinjaTables Admin Data:", window.ninja_table_admin);', 'after');
-        }
-
-        // Enqueue main app script as module
+        // Enqueue main app script
         Vite::enqueueScript(
             $slug,
             'admin/main.js',
-            ['jquery'],
+            ['ninja-tables-data'],
             NINJA_TABLES_VERSION,
             true
         );
