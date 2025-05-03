@@ -55,7 +55,7 @@
               v-if="setting.key === 'global_styling' || setting.key === 'sticky' || setting.key === 'ace_editor_js'"
               placement="top-start" effect="light">
 
-              <template slot="content">
+              <template #content>
                 <h3>{{ setting.name }}</h3>
 
                 <p v-if="setting.key === 'sticky' || setting.key === 'ace_editor_js'">

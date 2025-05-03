@@ -1,13 +1,13 @@
 <template>
     <el-form ref="form" :model="activeEditor" label-width="250px" class="form-wrapper">
         <el-form-item>
-            <template slot="label">
+            <template #label>
                 {{ $t('Filter Title') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content>
                         <h3>Filter Title</h3>
                         <p>Just a Name to identify your Filter</p>
-                    </div>
+                    </template>
                     <i class="el-icon-info el-text-info"></i>
                 </el-tooltip>
             </template>
@@ -15,13 +15,13 @@
         </el-form-item>
 
         <el-form-item v-if="activeEditor.type != 'reset_filter'">
-            <template slot="label">
+            <template #label>
                 {{ $t('Filter Label') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content>
                         <h3>Prefix</h3>
                         <p>This will show on your Table Filter</p>
-                    </div>
+                    </template>
                     <i class="el-icon-info el-text-info"></i>
                 </el-tooltip>
             </template>
@@ -30,13 +30,13 @@
         </el-form-item>
 
         <el-form-item>
-            <template slot="label">
+            <template #label>
                 {{ $t('Filter UI Type') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content>
                         <h3>Filter UI</h3>
                         <p>Select the filter type that you want to show the filter in the frontend</p>
-                    </div>
+                    </template>
                     <i class="el-icon-info el-text-info"></i>
                 </el-tooltip>
             </template>
@@ -53,13 +53,13 @@
         </el-form-item>
 
         <el-form-item v-if="need_placeholder">
-            <template slot="label">
+            <template #label>
                 {{ $t('Placeholder') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content>
                       <h3>Default Placeholder</h3>
                         <p>This will show on as default placeholder to reset the label ( Ex: All )</p>
-                    </div>
+                    </template>
                     <i class="el-icon-info el-text-info"></i>
                 </el-tooltip>
             </template>
@@ -68,13 +68,13 @@
 
         <template v-if="activeEditor.type == 'select'">
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t('Value Type') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                           <h3>Value</h3>
                             <p>Select How the value will be populated to the select dropdown</p>
-                        </div>
+                        </template>
                         <i class="el-icon-info el-text-info"></i>
                     </el-tooltip>
                 </template>
@@ -86,13 +86,13 @@
 
             <template v-if="!is_manual_select_options && activeEditor.select_value_type">
                 <el-form-item>
-                    <template slot="label">
+                    <template #label>
                         {{ $t('Target Column') }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
-                            <div slot="content">
+                            <template #content>
                               <h3>Column</h3>
                                 <p>Select Column That you want to populate data</p>
-                            </div>
+                            </template>
                             <i class="el-icon-info el-text-info"></i>
                         </el-tooltip>
                     </template>
@@ -130,13 +130,13 @@
         </template>
         <template v-if="has_filter_option || is_manual_select_options">
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t('Filter Options') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Options</h3>
                             <p>Provide the values that you want to show on the frontend. Your values should match your table cell data</p>
-                        </div>
+                        </template>
                         <i class="el-icon-info el-text-info"></i>
                     </el-tooltip>
                 </template>
@@ -146,7 +146,7 @@
 
         <template v-if="activeEditor.type == 'date_picker'">
             <el-form-item >
-                <template slot="label">
+                <template #label>
                     {{ $t('Date Filter Operator') }}
                 </template>
                 <el-radio-group v-model="activeEditor.filter_operator">
@@ -156,17 +156,17 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t('First Day') }}
 
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>First Day</h3>
 
                             <p>
                                 The first day of the week, e.g. Sunday, Monday, etc.
                             </p>
-                        </div>
+                        </template>
 
                         <i class="el-icon-info el-text-info"/>
                     </el-tooltip>
@@ -184,29 +184,29 @@
 
         <template v-else-if="activeEditor.type == 'date_range' || activeEditor.type == 'number_range'">
             <el-form-item >
-                <template slot="label">
+                <template #label>
                     {{ $t('From Placeholder') }}
                 </template>
                 <el-input size="small" placeholder="From Placeholder" v-model="activeEditor.from_placeholder" />
             </el-form-item>
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t('To Placeholder') }}
                 </template>
                 <el-input size="small" placeholder="To Placeholder" v-model="activeEditor.to_placeholder" />
             </el-form-item>
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t('First Day') }}
 
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>First Day</h3>
 
                             <p>
                                 The first day of the week, e.g. Sunday, Monday, etc.
                             </p>
-                        </div>
+                        </template>
 
                         <i class="el-icon-info el-text-info"/>
                     </el-tooltip>
@@ -223,13 +223,13 @@
         </template>
 
         <el-form-item v-if="activeEditor.type == 'text_input'">
-            <template slot="label">
+            <template #label>
                 {{ $t('Filter Prefix') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content>
                         <h3>Filter Prefix</h3>
                         <p>You can use filter prefix to append the value of user inputed value. It will join with the value and perform the search</p>
-                    </div>
+                    </template>
                     <i class="el-icon-info el-text-info"></i>
                 </el-tooltip>
             </template>
@@ -237,13 +237,13 @@
         </el-form-item>
 
         <el-form-item v-if="need_filter_columns">
-            <template slot="label">
+            <template #label>
                 {{ $t('Filter Columns') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content>
                         <h3>Columns</h3>
                         <p>Select the columns that you want to apply this filter</p>
-                    </div>
+                    </template>
                     <i class="el-icon-info el-text-info"></i>
                 </el-tooltip>
             </template>
@@ -256,7 +256,7 @@
         </el-form-item>
 
         <el-form-item v-if="activeEditor.type == 'reset_filter'">
-            <template slot="label">
+            <template #label>
                 {{ $t('Button Text') }}
             </template>
             <el-input size="small" v-model="activeEditor.placeholder" />

@@ -50,12 +50,12 @@
                     <h3>
                         Disable Caching
                         <el-tooltip placement="right" effect="light">
-                            <div slot="content">
+                            <template #content>
                               <h3>Disable Caching</h3>
                                 To optimize and load faster, we cache the table <br>
                                 contents. It's not recommended to disable <br>
                                 caching unless you know what you are doing
-                            </div>
+                            </template>
                             <i class="el-icon-info el-text-info"></i>
                         </el-tooltip>
                     </h3>
@@ -77,11 +77,11 @@
                     <h3>
                         Caching Interval
                         <el-tooltip placement="right" effect="light">
-                            <div slot="content">
+                            <template #content>
                               <h3>Caching Interval</h3>
                                 To optimize and load faster, You can cache the table data for certain minutes <br/>
                                 so the data will load from cached data. Please Provide the value in minutes.
-                            </div>
+                            </template>
                             <i class="el-icon-info el-text-info"></i>
                         </el-tooltip>
                     </h3>
@@ -99,11 +99,11 @@
                     <h3>
                         Enable Full HTML Cache
                         <el-tooltip placement="right" effect="light">
-                            <div slot="content">
+                            <template #content>
                               <h3>HTML Cache</h3>
                                 If you enable this then ninja tables will cache the full html of the table and<br/>
                                 render that without interact with database. You can set the time how many minutes it will cache each iteration.
-                            </div>
+                            </template>
                             <i class="el-icon-info el-text-info"></i>
                         </el-tooltip>
                     </h3>

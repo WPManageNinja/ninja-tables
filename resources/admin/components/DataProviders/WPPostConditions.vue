@@ -99,12 +99,12 @@
             <div class="ninja_form_group">
                 <label>{{ $t('Query Limit for Frontend') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Query Limit</h3>
                             <p>
                                 Please specify how many posts/CPTs you want to show in total, Leave blank to show all
                             </p>
-                        </div>
+                        </template>
                         <i class="el-icon-info el-text-info"/>
                     </el-tooltip>
                 </label>
@@ -115,12 +115,12 @@
             <div class="ninja_form_group">
                 <label>{{ $t('Order By Column') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Order By Column</h3>
                             <p>
                                 Please specify order by column. The script will order by with the selected column
                             </p>
-                        </div>
+                        </template>
                         <i class="el-icon-info el-text-info"/>
                     </el-tooltip>
                 </label>
@@ -132,12 +132,12 @@
             <div style="margin-top: 20px" class="ninja_form_group">
                 <label>{{ $t('Order By Type') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Order By Type</h3>
                             <p>
                                 Please specify order by type. The script will order with your selected type
                             </p>
-                        </div>
+                        </template>
                         <i class="el-icon-info el-text-info"/>
                     </el-tooltip>
                 </label>
@@ -215,9 +215,9 @@
 
                 condition.operators = [...this.common_operators];
 
-                if (column == 'comment_count') {
+                if (column === 'comment_count') {
                     condition.operators.map((operator, i) => {
-                        if (operator.key == '!=') {
+                        if (operator.key === '!=') {
                             condition.operators.splice(i, 1);
                         }
                     });

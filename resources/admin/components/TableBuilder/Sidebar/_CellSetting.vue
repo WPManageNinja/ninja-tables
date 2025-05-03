@@ -15,7 +15,7 @@
         <div class="component-spacing">
           <span>{{ $t('Highlight Column') }}</span>
           <el-tooltip placement="top-start" effect="light">
-            <template slot="content">
+            <template #content>
               <h3>{{ $t('Highlight Column') }}</h3>
               <p>This is a Pro feature.
                 <get-pro></get-pro>

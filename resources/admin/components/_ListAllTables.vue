@@ -84,10 +84,10 @@
                     <strong v-else>{{ dataSourceType(scope.row) }}</strong>
                     <template v-if="scope.row.remoteURL">
                         <el-tooltip class="item" effect="light" :content="scope.row.remoteURL" placement="top-start">
-                          <div slot="content">
+                          <template #content>
                             <h3>Source of data</h3>
                             <p>{{scope.row.remoteURL}}</p>
-                          </div>
+                          </template>
                           <i class="el-icon-info el-text-info"/>
                         </el-tooltip>
                     </template>

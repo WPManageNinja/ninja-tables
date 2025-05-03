@@ -4,13 +4,13 @@
         <hr />
         <template v-if="column.source_type == 'custom'">
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t("Field Type") }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Field Type</h3>
                             <p>Select The field type you want to populate for each row</p>
-                        </div>
+                        </template>
 
                         <i class="el-icon-info el-text-info" />
                     </el-tooltip>
@@ -31,13 +31,13 @@
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t("Field Value") }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Field Value</h3>
                             <p>Provide the column value for your corresponding value type select</p>
-                        </div>
+                        </template>
 
                         <i class="el-icon-info el-text-info" />
                     </el-tooltip>
@@ -80,15 +80,15 @@
 
         <template v-if="column.source_type == 'post_data' || (column.source_type == 'custom' && column.wp_post_custom_data_type == 'featured_image')">
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t("Link") }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Link to Post/Author Permalink</h3>
                             <p>
                                 Enable this if you want to link to post/Author permalink
                             </p>
-                        </div>
+                        </template>
                         <i class="el-icon-info el-text-info" />
                     </el-tooltip>
                 </template>
@@ -100,15 +100,15 @@
 
             <template v-if="column.permalinked == 'yes'">
                 <el-form-item v-if="column.original_name == 'post_author'">
-                    <template slot="label">
+                    <template #label>
                         {{ $t("Permalink Action") }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
-                            <div slot="content">
+                            <template #content>
                                 <h3>Permalink Action Type</h3>
                                 <p>
                                     Enable this if you want to make the author as table filter action. So when user click on those filters then they will see only the selected author posts.
                                 </p>
-                            </div>
+                            </template>
                             <i class="el-icon-info el-text-info" />
                         </el-tooltip>
                     </template>
@@ -117,15 +117,15 @@
                 </el-form-item>
 
                 <el-form-item v-if="column.filter_permalinked != 'yes'">
-                    <template slot="label">
+                    <template #label>
                         {{ $t("Open Link To New tab") }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
-                            <div slot="content">
+                            <template #content>
                                 <h3>Open Link To New tab</h3>
                                 <p>
                                     Enable this if you want to open the links to new tab
                                 </p>
-                            </div>
+                            </template>
                             <i class="el-icon-info el-text-info" />
                         </el-tooltip>
                     </template>
@@ -137,15 +137,15 @@
 
         <template v-else-if="column.source_type == 'tax_data'">
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t("Link") }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Link to Taxonomy Permalink</h3>
                             <p>
                                 Enable this if you want to link to Taxonomy permalink
                             </p>
-                        </div>
+                        </template>
                         <i class="el-icon-info el-text-info" />
                     </el-tooltip>
                 </template>
@@ -154,13 +154,13 @@
             </el-form-item>
 
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t("Taxonomy Separator") }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Taxonomy Separator</h3>
                             <p>Taxonomy Separator for Multiple Items</p>
-                        </div>
+                        </template>
 
                         <i class="el-icon-info el-text-info" />
                     </el-tooltip>
@@ -175,30 +175,30 @@
 
             <template v-if="column.permalinked == 'yes'">
                 <el-form-item>
-                    <template slot="label">
+                    <template #label>
                         {{ $t("Permalink Action") }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
-                            <div slot="content">
+                            <template #content>
                                 <h3>Permalink Action Type</h3>
                                 <p>
                                     Enable this if you want to make the taxonomies as table filter action. So when user click on those filters then they will see only those type of posts.
                                 </p>
-                            </div>
+                            </template>
                             <i class="el-icon-info el-text-info" />
                         </el-tooltip>
                     </template>
                     <el-checkbox v-model="column.filter_permalinked" :true-value="'yes'" :false-value="'no'">Make Taxonomies as Table Filter</el-checkbox>
                 </el-form-item>
                 <el-form-item v-if="column.filter_permalinked != 'yes'">
-                    <template slot="label">
+                    <template #label>
                         {{ $t("Open Link To New tab") }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
-                            <div slot="content">
+                            <template #content>
                                 <h3>Open Link To New tab</h3>
                                 <p>
                                     Enable this if you want to open the links to new tab
                                 </p>
-                            </div>
+                            </template>
                             <i class="el-icon-info el-text-info" />
                         </el-tooltip>
                     </template>
