@@ -151,7 +151,7 @@
                         />
                     </template>
 
-                    <template #header="scope">
+                    <template #header>
                         <span>
                             {{ column.name || column.key }}<i class="el-icon-setting nt-column-config" @click="showColumnConfigModal(column)"/>
                         </span>
@@ -180,7 +180,7 @@
                         label="Actions"
                         class-name="actions"
                         width="120">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             <a v-if="has_pro" @click="addAfter(scope)">
                                 <el-tooltip placement="top-end" effect="light" content="Add Data after this row"
                                             :open-delay="500">

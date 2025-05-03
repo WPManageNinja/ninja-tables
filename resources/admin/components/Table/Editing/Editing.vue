@@ -35,7 +35,7 @@
             </div>
             <div class="editing_body">
                 <div class="editing_sub_section">
-                    <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="settings.allow_frontend">
+                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="settings.allow_frontend">
                         Enable Frontend editing
                         <el-tooltip placement="top-start" effect="light" content="Allow editing table from the frontend">
                             <i class="el-icon-info el-text-info"></i>
@@ -91,7 +91,7 @@
                                 </el-tooltip>
                             </label>
                             <div class="form-group">
-                                <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="settings.own_data_only">
+                                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="settings.own_data_only">
                                     Users can see and edit/delete only own data
                                 </el-checkbox>
                             </div>
@@ -166,7 +166,7 @@
                         </div>
 
                         <div class="form-group">
-                            <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="appearance_settings.alwaysShow">
+                            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance_settings.alwaysShow">
                                 Always Show Edit Icons
                                 <el-tooltip placement="top-start" effect="light" content="If you enable this then, Selected user roles can always see the edit buttons, Otherwise they will see a button to initialize editing">
                                     <i class="el-icon-info el-text-info"></i>

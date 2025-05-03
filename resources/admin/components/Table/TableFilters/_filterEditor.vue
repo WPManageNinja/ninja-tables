@@ -101,10 +101,10 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item>
-                    <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="activeEditor.parse_comma_separated"> Parse Comma Separated Words</el-checkbox>
+                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.parse_comma_separated"> Parse Comma Separated Words</el-checkbox>
                 </el-form-item>
                 <el-form-item>
-                    <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="activeEditor.disable_auto_sorting"> Disable automatic filter value sorting</el-checkbox>
+                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.disable_auto_sorting"> Disable automatic filter value sorting</el-checkbox>
                 </el-form-item>
 
                 <template v-if="activeEditor.disable_auto_sorting != 'yes'">
@@ -124,7 +124,7 @@
             </template>
 
             <el-form-item>
-                <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="activeEditor.is_multi_select">Enable Multi-Select</el-checkbox>
+                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.is_multi_select">Enable Multi-Select</el-checkbox>
             </el-form-item>
 
         </template>
@@ -263,7 +263,7 @@
         </el-form-item>
 
         <el-form-item>
-            <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="activeEditor.strict">Enable Strict Mode (If Enable, Ninja Table will try to match exact value)</el-checkbox>
+            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.strict">Enable Strict Mode (If Enable, Ninja Table will try to match exact value)</el-checkbox>
         </el-form-item>
     </el-form>
 </template>

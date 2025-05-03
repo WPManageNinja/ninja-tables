@@ -93,9 +93,9 @@
                     </el-tooltip>
                 </template>
 
-                <el-checkbox v-if="column.original_name == 'post_author'" v-model="column.permalinked" true-label="yes" false-label="no" value="yes" label="Link to Author Permalink"></el-checkbox>
+                <el-checkbox v-if="column.original_name == 'post_author'" v-model="column.permalinked" :true-value="'yes'" :false-value="'no'">Link to Author Permalink</el-checkbox>
 
-                <el-checkbox v-else="column.original_name != 'post_author'" v-model="column.permalinked" true-label="yes" false-label="no" value="yes" label="Link to post permalink"></el-checkbox>
+                <el-checkbox v-else="column.original_name != 'post_author'" v-model="column.permalinked" :true-value="'yes'" :false-value="'no'">Link to post permalink</el-checkbox>
             </el-form-item>
 
             <template v-if="column.permalinked == 'yes'">
@@ -113,7 +113,7 @@
                         </el-tooltip>
                     </template>
 
-                    <el-checkbox v-model="column.filter_permalinked" true-label="yes" false-label="no" value="yes" label="Make Taxonomies as Table Filter"></el-checkbox>
+                    <el-checkbox v-model="column.filter_permalinked" :true-value="'yes'" :false-value="'no'">Make Taxonomies as Table Filter</el-checkbox>
                 </el-form-item>
 
                 <el-form-item v-if="column.filter_permalinked != 'yes'">
@@ -130,7 +130,7 @@
                         </el-tooltip>
                     </template>
 
-                    <el-checkbox v-model="column.permalink_target" true-label="_blank" false-label="" value="_blank" label="Open link to new tab"></el-checkbox>
+                    <el-checkbox v-model="column.permalink_target" :true-value="'_blank'" :false-value="''">Open link to new tab</el-checkbox>
                 </el-form-item>
             </template>
         </template>
@@ -150,7 +150,7 @@
                     </el-tooltip>
                 </template>
 
-                <el-checkbox v-model="column.permalinked" true-label="yes" false-label="no" value="yes" label="Link to Taxonomy"></el-checkbox>
+                <el-checkbox v-model="column.permalinked" :true-value="'yes'" :false-value="'no'">Link to Taxonomy</el-checkbox>
             </el-form-item>
 
             <el-form-item>
@@ -187,7 +187,7 @@
                             <i class="el-icon-info el-text-info" />
                         </el-tooltip>
                     </template>
-                    <el-checkbox v-model="column.filter_permalinked" true-label="yes" false-label="" value="yes" label="Make Taxonomies as Table Filter"></el-checkbox>
+                    <el-checkbox v-model="column.filter_permalinked" :true-value="'yes'" :false-value="'no'">Make Taxonomies as Table Filter</el-checkbox>
                 </el-form-item>
                 <el-form-item v-if="column.filter_permalinked != 'yes'">
                     <template slot="label">
@@ -202,7 +202,7 @@
                             <i class="el-icon-info el-text-info" />
                         </el-tooltip>
                     </template>
-                    <el-checkbox v-model="column.permalink_target" true-label="_blank" false-label="" value="_blank" label="Open link to new tab"></el-checkbox>
+                    <el-checkbox v-model="column.permalink_target" :true-value="'_blank'" :false-value="''">Open link to new tab</el-checkbox>
                 </el-form-item>
             </template>
         </template>
