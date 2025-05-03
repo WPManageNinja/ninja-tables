@@ -291,6 +291,7 @@
     import WooNavEdit from '../TableNav/WooNavEdit';
 
     import ShowEditableCell from './_ShowEditableCell'
+    import { useEventBus } from '../../eventBus';
 
     export default {
         name: 'TableDataItems',
@@ -311,6 +312,7 @@
         props: ['config', 'getColumnSettings', 'hasPro'],
         data() {
             return {
+                bus : useEventBus(),
                 columnModal: false,
                 show_meta: false,
                 new_column: {},
@@ -369,7 +371,7 @@
                 if (newVal) {
                     if (!this.has_pro) {
                         this.sorting = false;
-                        window.ninjaTableBus.$emit('show_pro_popup');
+                        this.bus.emit('show_pro_popup');
 
                         return;
                     }
@@ -680,7 +682,7 @@
                     this.loading = true;
 
                     let promise = new Promise((resolve, reject) => {
-                        window.ninjaTableBus.$emit('initManualSorting', {
+                        this.bus.emit('initManualSorting', {
                             table_id: this.tableId,
                             page: this.paginate.current_page,
                             per_page: this.paginate.per_page,
@@ -763,7 +765,7 @@
                 this.showColumnEditor = true;
             },
             storeSettings() {
-                window.ninjaTableBus.$emit('updateTableColumns', () => {
+                this.bus.emit('updateTableColumns', () => {
                     this.showColumnEditor = false;
                     this.currentEditingColumn = false;
                     if (this.dataSource && this.dataSource != 'default') {

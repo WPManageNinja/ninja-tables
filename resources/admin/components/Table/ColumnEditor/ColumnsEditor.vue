@@ -720,7 +720,12 @@
     import DynamicWooColumn from '../../TableNav/_WPWooDynamicColumn';
     import NinjaColorPicker from '../../Extras/ColorPicker'
     import GetPro from "../../Tools/GetPro";
+<<<<<<< Updated upstream
     import { useEventBus } from '../../../composables/useEventBus';
+=======
+    import { useEventBus } from './../../../eventBus';
+
+>>>>>>> Stashed changes
 
     export default {
         name: "ColumnsEditor",
@@ -768,6 +773,7 @@
         },
         data() {
             return {
+                bus : useEventBus(),
                 hideDelete: false,
                 dataTypesOptions: {
                     text: this.$t("Single Line Text Field"),
@@ -894,7 +900,7 @@
             },
             showProPopUp() {
                 if (!this.hasPro) {
-                    window.ninjaTableBus.$emit('show_pro_popup', 1);
+                    this.bus.emit('show_pro_popup', 1);
                 }
             },
             changeDecimalStyle() {
@@ -937,6 +943,7 @@
             if (!this.model.timeFormat) {
                 this.model.timeFormat = '';
             }
+<<<<<<< Updated upstream
             if (!this.model.relAttributes) {
                 this.model.relAttributes = [];
             }
@@ -944,6 +951,15 @@
                 this.model.force_download = '';
             }
             this.on('tableDoingAjax', (status) => {
+=======
+          if (!this.model.relAttributes) {
+            this.$set(this.model, 'relAttributes', []);
+          }
+          if (!this.model.force_download) {
+            this.$set(this.model, 'force_download', '');
+          }
+            this.bus.on('tableDoingAjax', (status) => {
+>>>>>>> Stashed changes
                 this.doingAjax = status;
             });
         },

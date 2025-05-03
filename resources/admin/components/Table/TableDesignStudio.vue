@@ -607,6 +607,7 @@
     import SortableUpgradeNotice from '../includes/SortableUpgradeNotice.vue';
     import NinjaColorPicker from '../Extras/ColorPicker';
     import GetPro from "../Tools/GetPro";
+    import {useEventBus} from './../../eventBus';
 
     export default {
         name: 'table_preview',
@@ -634,7 +635,8 @@
                 showingDevice: 'desktop',
                 hasSortable: !!window.ninja_table_admin.hasSortable,
                 sortableUpgradeNotice: false,
-                columnCss: ''
+                columnCss: '',
+                bus : useEventBus()
             }
         },
         computed: {
@@ -828,7 +830,7 @@
                 if (new_val != 'default') {
                     if (!this.has_pro) {
                         this.tableSettings.expand_type = 'default';
-                        window.ninjaTableBus.$emit('show_pro_popup', 1);
+                        this.bus.emit('show_pro_popup', 1);
                         return;
                     }
                 }
@@ -840,7 +842,7 @@
                 if (newVal === 'manual_sort') {
                     if (!this.has_pro) {
                         this.tableSettings.sorting_type = oldVal;
-                        window.ninjaTableBus.$emit('show_pro_popup', 1);
+                        this.bus.emit('show_pro_popup', 1);
                     } else if (!this.hasSortable) {
                         if (!this.hasSortable) {
                             this.tableSettings.sorting_type = oldVal;
@@ -868,7 +870,7 @@
             },
             initManualSorting() {
                 let promise = new Promise((resolve, reject) => {
-                    window.ninjaTableBus.$emit('initManualSorting', {
+                    this.bus.emit('initManualSorting', {
                         table_id: this.tableId,
                         noData: true
                     }, resolve, reject);

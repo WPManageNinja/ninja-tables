@@ -127,11 +127,14 @@
 </template>
 
 <script type="text/babel">
+    import {useEventBus} from "../../../eventBus";
+
     export default {
         name: 'ninja-rendering_settings',
         props: ['tableSettings', 'config'],
         data() {
             return {
+                bus : useEventBus(),
                 hasPro: !!window.ninja_table_admin.hasPro,
             }
         },
@@ -141,7 +144,7 @@
             },
             changeTableType(tableType) {
                 if(!this.hasPro && tableType == 'legacy_table') {
-                    window.ninjaTableBus.$emit('show_pro_popup', 1);
+                    this.bus.emit('show_pro_popup', 1);
                     this.tableSettings.render_type = 'ajax_table';
                     return;
                 }

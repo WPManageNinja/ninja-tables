@@ -23,11 +23,13 @@
 import TopNav from "./TopNav.vue";
 import LeftSideBar from "./Sidebar/LeftSideBar.vue";
 import RightSideBar from "./Sidebar/RightSideBar";
+import { useEventBus } from '../../../admin/eventBus';
 
 export default {
   name: "TableBuilderHome",
   data() {
     return {
+      bus : useEventBus(),
       tableId: '',
       initialData: {},
       singleItem: {},
@@ -81,14 +83,14 @@ export default {
     }
   },
   created() {
-    window.ninjaTableBus.$on("somethingChanged", () => {
+    this.bus.on("somethingChanged", () => {
       this.changeSomething = true;
       window.onbeforeunload = function () {
         return true;
       }
     });
 
-    window.ninjaTableBus.$on("saveData", () => {
+    this.bus.on("saveData", () => {
       this.changeSomething = false;
       window.onbeforeunload = null;
     });

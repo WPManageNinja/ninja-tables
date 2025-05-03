@@ -141,6 +141,7 @@
     import NinjaLanguageSettings from '../Configarations/_LanguageSettings'
     import NinjaRenderingSettings from '../Configarations/_RenderingSettings'
     import NinjaButtonSettings from '../Configarations/_buttons'
+    import { useEventBus } from '../../../eventBus';
 
     import { tableLibs } from '../../../data/data'
 
@@ -157,6 +158,7 @@
         props: ['config'],
         data() {
             return {
+                bus : useEventBus(),
                 hasPro: !!window.ninja_table_admin.hasPro,
                 active_menu: 'columns',
                 table_color_primary: '#000',
@@ -203,7 +205,7 @@
         },
         methods: {
             storeSettings() {
-                window.ninjaTableBus.$emit('tableDoingAjax', true);
+                this.bus.emit('tableDoingAjax', true);
 
                 let data = {
                     table_id: this.tableId,
@@ -218,10 +220,10 @@
                             type: 'success'
                         });
                         this.$set(this.config, 'columns', this.columns);
-                      window.ninjaTableBus.$emit('tableDoingAjax', false);
+                      this.bus.emit('tableDoingAjax', false);
                     })
                     .catch((error) => {
-                      window.ninjaTableBus.$emit('tableDoingAjax', false);
+                      this.bus.emit('tableDoingAjax', false);
                     })
 
             },
@@ -273,13 +275,13 @@
             },
             showProAd(title) {
                 this.addVisible = true;
-                window.ninjaTableBus.$emit('show_pro_popup', 1);
+                this.bus.emit('show_pro_popup', 1);
             },
             size,
             get,
             initManualSorting() {
                 let promise = new Promise((resolve, reject) => {
-                    window.ninjaTableBus.$emit('initManualSorting', {
+                    this.bus.emit('initManualSorting', {
                         table_id: this.tableId,
                         noData: true
                     }, resolve, reject);

@@ -150,6 +150,7 @@ import TableData from "./_Datas"
 import { manageRowColumn } from "../Mixin/manageRowColumn";
 import { manageResponsiveData } from "../Mixin/manageResponsiveData";
 import { helpers } from "../Mixin/helpers";
+import { useEventBus } from './../../../eventBus';
 
 export default {
     name: "Layout",
@@ -177,6 +178,7 @@ export default {
     },
     data() {
         return {
+            bus : useEventBus(),
             countChangeContent: 0,
             initialTableInfo: {
                 tempTableData: null,
@@ -232,7 +234,7 @@ export default {
         },
         onMove($event) {
             if ($event && $event.to.id) {
-                window.ninjaTableBus.$emit('singleTdId', $event.to.id)
+                this.bus.emit('singleTdId', $event.to.id)
             }
         },
         thInlineStyle(header) {
@@ -312,7 +314,7 @@ export default {
                 active: status,
                 activeTab: activeTab
             }
-            window.ninjaTableBus.$emit('manage-cell', items);
+            this.bus.emit('manage-cell', items);
         },
         styleChange(item, rowIndex, columnIndex, column, row) {
             this.selectedTdId = item.id;
@@ -325,7 +327,7 @@ export default {
                         item: item
                     }
                     this.$emit('editItem', data)
-                    window.ninjaTableBus.$emit('singleTdId', 'td_id_' + column.style.tdId);
+                    this.bus.emit('singleTdId', 'td_id_' + column.style.tdId);
                     this.itemId = item.id;
                 }
             } else {
@@ -381,18 +383,18 @@ export default {
         detectChangesInTable() {
             if (this.countChangeContent > 3 && this.initialTableInfo.tempTableData === JSON.stringify(this.tableData.data) && this.initialTableInfo.tempSetting === JSON.stringify(this.setting) && this.initialTableInfo.tempResponsive === JSON.stringify(this.responsive)) {
                 this.countChangeContent = 3;
-                window.ninjaTableBus.$emit('saveData');
+                this.bus.emit('saveData');
                 return;
             }
             if (this.countChangeContent > 4) {
                 return;
             }
             this.countChangeContent++;
-            this.countChangeContent === 4 ? window.ninjaTableBus.$emit('somethingChanged') : '';
+            this.countChangeContent === 4 ? this.bus.emit('somethingChanged') : '';
         },
     },
     created() {
-        window.ninjaTableBus.$on('manageCell', () => {
+        this.bus.on('manageCell', () => {
             this.table.columnIndex = null
             this.table.rowIndex = null
             this.selectedTdId = null

@@ -51,7 +51,7 @@
 <script>
 import { onMounted, ref } from 'vue'
 import GetPro from "./components/Tools/GetPro.vue"
-import { useEventBus } from './composables/useEventBus'
+import { useEventBus } from './eventBus'
 
 export default {
     name: 'TableApp',

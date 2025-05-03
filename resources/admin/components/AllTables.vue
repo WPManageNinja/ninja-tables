@@ -68,7 +68,7 @@
     import AddTableModal from './_AddTable.vue';
     import leadModal from './Extras/lead';
     import NinjaReviewDialog from './Extras/_ReviewDialog';
-    import { useEventBus } from '../composables/useEventBus';
+    import { useEventBus } from './../eventBus';
 
     export default {
         name: 'all_tables',
@@ -91,7 +91,6 @@
             };
         },
         mounted() {
-            // Use the event bus from the composable
             const { on } = useEventBus();
 
             on('addedTable', () => {

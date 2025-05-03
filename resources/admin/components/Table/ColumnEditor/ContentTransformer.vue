@@ -57,6 +57,7 @@
     import ninja_alert from '../../includes/alert';
     import NinjaPremiumNotice from '../../includes/PremiumNotice';
     import parser from '../../../../public/js/parser';
+    import { useEventBus } from '../../../eventBus';
 
 
     export default {
@@ -85,6 +86,7 @@
         },
         data() {
             return {
+                bus : useEventBus(),
                 hasPro: !!window.ninja_table_admin.hasPro,
                 tableId: this.$route.params.table_id,
                 doingAjax: false,
@@ -103,7 +105,7 @@
         },
         methods: {
             storeSettings() {
-                window.ninjaTableBus.$emit('tableDoingAjax', true);
+                this.bus.emit('tableDoingAjax', true);
                 this.doingAjax = true;
                 let data = {
                     table_id: this.tableId,
@@ -116,7 +118,7 @@
 
                     })
                     .finally(() => {
-                        window.ninjaTableBus.$emit('tableDoingAjax', false);
+                        this.bus.emit('tableDoingAjax', false);
                         this.doingAjax = false;
                     });
             },

@@ -158,7 +158,7 @@
     import RawSqlForm from './DataProviders/RawSqlForm'
     import PremiumNotice from './includes/PremiumNotice';
     import RightSideBar from "./TableBuilder/Sidebar/RightSideBar";
-    import { useEventBus } from '../composables/useEventBus';
+    import { useEventBus } from '../eventBus';
 
     export default {
         name: 'add_table',

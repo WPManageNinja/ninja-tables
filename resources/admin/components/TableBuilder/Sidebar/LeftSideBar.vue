@@ -168,6 +168,8 @@ import CellSetting from "./_CellSetting";
 import SelectInput from "../SettingComponent/SelectInput";
 import { helpers } from "../Mixin/helpers";
 import GetPro from "../../Tools/GetPro";
+import { useEventBus } from './../../../eventBus';
+
 
 export default {
   name: "LeftSideBar",
@@ -199,6 +201,7 @@ export default {
   },
   data() {
     return {
+      bus : useEventBus(),
       activeName: "elements",
       activeNames: ["general"],
       deviceActiveName: 'desktop',
@@ -257,7 +260,7 @@ export default {
       }
 
       if (tab.$options.propsData.name !== 'options') {
-        window.ninjaTableBus.$emit('manageCell');
+        this.bus.emit('manageCell');
       }
     },
     handleChange(val) {
@@ -283,7 +286,7 @@ export default {
       this.activeOption = val
     },
     manageRowColumns() {
-      window.ninjaTableBus.$on("manage-cell", (items) => {
+      this.bus.on("manage-cell", (items) => {
         // received event from layout component
         if (items.active) {
           this.manageCell = items
@@ -296,7 +299,7 @@ export default {
     closeCellEditing() {
       this.manageCell = false
       this.activeName = "elements";
-      window.ninjaTableBus.$emit('manageCell');
+      this.bus.emit('manageCell');
     },
     handleUpdateItem(updatedItem) {
       this.item = updatedItem;
@@ -305,11 +308,11 @@ export default {
   created() {
     this.manageRowColumns();
 
-    window.ninjaTableBus.$on("closeManageCell", () => {
+    this.bus.on("closeManageCell", () => {
       this.closeCellEditing();
     });
 
-    window.ninjaTableBus.$on('singleTdId', (tdId) => {
+    this.bus.on('singleTdId', (tdId) => {
       this.maxWidth = this.maximumWidth(tdId)
     });
   },
