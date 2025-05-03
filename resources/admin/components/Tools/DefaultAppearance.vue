@@ -16,11 +16,11 @@
                 <div class="ninja_block">
                     <div class="form_group">
                         <h3>Default Styling Library</h3>
-                        <el-radio-group size="mini" v-model="default_settings.css_lib">
+                        <el-radio-group size="small" v-model="default_settings.css_lib">
                             <el-radio-button
                                     v-for="(tableLib, libKey) in table_styles"
                                     :key="libKey"
-                                    :label="libKey">
+                                    :value="libKey">
                                 {{ tableLib.title }}
                                 <el-tooltip placement="top-end" effect="light" :content="tableLib.description">
                                     <i class="el-icon-info el-text-info"></i>

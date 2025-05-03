@@ -8,12 +8,12 @@
             border
             aria-label="all-tables"
             @sort-change="handleTableSort"
-            style="100%">
+            style="width: 100%">
 
             <!-- <el-table-column type="selection" fixed width="55" /> -->
 
             <el-table-column :label="$t('ID')" width="90" prop="ID" sortable="custom">
-              <template slot-scope="scope">
+              <template #default="scope">
                 <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
                   {{ scope.row.ID }}
                 </router-link>
@@ -24,7 +24,7 @@
             </el-table-column>
 
             <el-table-column :label="$t('Title')" prop="post_title" sortable="custom">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <strong>
                         <template v-if="shouldBeVisible(scope.row)">
                           <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
@@ -73,13 +73,13 @@
             </el-table-column>
 
             <el-table-column :label="$t('Description')" class-name="description">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <div class="nt_cell" v-html="scope.row.post_content"/>
                 </template>
             </el-table-column>
 
             <el-table-column width="190" :label="$t('Data Source')">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <strong v-if="scope.row.dataSourceType === 'drag_and_drop'">{{$t('Drag & Drop Table')}}</strong>
                     <strong v-else>{{ dataSourceType(scope.row) }}</strong>
                     <template v-if="scope.row.remoteURL">
@@ -95,7 +95,7 @@
             </el-table-column>
 
             <el-table-column width="250" :label="$t('ShortCode')">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <el-tooltip effect="dark"
                                 content="Click to copy shortcode"
                                 title="Click to copy shortcode"

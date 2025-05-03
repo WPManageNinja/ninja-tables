@@ -15,14 +15,14 @@
             <div style="max-width: 800px" class="section_block">
                 <h3>CSV Export Button Settings</h3>
                 <div class="form_group">
-                    <el-checkbox true-label="yes" false-label="no" v-model="table_buttons.csv.status">
+                    <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="table_buttons.csv.status">
                         Enable CSV Export Button
                     </el-checkbox>
                 </div>
                 <template v-if="table_buttons.csv.status == 'yes'">
                     <div style="max-width: 500px" class="form_group">
                         <label>Button Label</label>
-                        <el-input size="mini" placeholder="Button Text" v-model="table_buttons.csv.label"/>
+                        <el-input size="small" placeholder="Button Text" v-model="table_buttons.csv.label"/>
                     </div>
                     <div class="form_group">
                         <label>Button Background Color</label>
@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="form_group">
-                        <el-checkbox true-label="yes" false-label="no" v-model="table_buttons.csv.plainText">
+                        <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="table_buttons.csv.plainText">
                             Export as Plain Text
                         </el-checkbox>
                     </div>
@@ -49,7 +49,7 @@
                 <hr/>
                 <h3>Print Button Settings</h3>
                 <div class="form_group">
-                    <el-checkbox true-label="yes" false-label="no" v-model="table_buttons.print.status">Enable Print
+                    <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="table_buttons.print.status">Enable Print
                         Button
                     </el-checkbox>
                 </div>
@@ -61,14 +61,14 @@
                     */
                     -->
 <!--                    <div class="form_group">-->
-<!--                        <el-checkbox true-label="yes" false-label="no" v-model="table_buttons.print.includeFilter">-->
+<!--                        <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="table_buttons.print.includeFilter">-->
 <!--                            Include Filter or Search-->
 <!--                        </el-checkbox>-->
 <!--                    </div>-->
 
                     <div style="max-width: 500px" class="form_group">
                         <label>Button Label</label>
-                        <el-input size="mini" placeholder="Button Text" v-model="table_buttons.print.label"/>
+                        <el-input size="small" placeholder="Button Text" v-model="table_buttons.print.label"/>
                     </div>
                     <div class="form_group form_row_full">
                         <div class="form_row_half">

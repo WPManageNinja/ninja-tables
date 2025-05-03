@@ -243,6 +243,38 @@ class AdminMenuHandler
     {
         $app = App::getInstance();
         $slug = $app->config->get('app.slug');
+        $assets = Vite::getAssetsUrl();
+    
+        // Get current user
+        $currentUser = wp_get_current_user();
+        
+        // Initialize variables
+        $isAdmin = current_user_can('manage_options') ? 'yes' : 'no';
+        $isInstalled = defined('FLUENTFORM') || defined('NINJATABLESPRO');
+        $hasFluentFrom = defined('FLUENTFORM_VERSION');
+        $isFluentFromUpdated = false;
+        
+        // Check FluentForm version
+        if ($hasFluentFrom) {
+            $isFluentFromUpdated = version_compare(FLUENTFORM_VERSION, '1.7.4', '>=');
+        }
+        
+        // Initialize review and lead status
+        $leadStatus = false;
+        $reviewOptinStatus = false;
+        $dismissed = false;
+        
+        // Check for plugin suggestion dismissal
+        $dismissedTime = get_option('_ninja_tables_plugin_suggest_dismiss');
+        if ($dismissedTime) {
+            $dismissed = (time() - intval($dismissedTime)) < 518400;
+        } else {
+            $dismissed = true;
+            update_option('_ninja_tables_plugin_suggest_dismiss', time() - 345600);
+        }
+        
+        // FluentForm URL
+        $fluentUrl = admin_url('plugin-install.php?s=FluentForm&tab=search&type=term');
 
         // Add admin data
         wp_register_script('ninja-tables-data', '', [], '', true);
@@ -251,9 +283,60 @@ class AdminMenuHandler
             'i18n' => (new I18nStrings())->getStrings(),
             'rest' => $this->getRestInfo($app),
             'asset_url' => Vite::getAssetsUrl(),
-            'pro_enabled' => defined('NINJATABLESPRO'),
-            'integrity' => $this->getIntegrity(),
+            // 'pro_enabled' => defined('NINJATABLESPRO'),
+            // 'integrity' => $this->getIntegrity(),
             'nonce' => wp_create_nonce($slug),
+            'published_tables' => $this->getPublishedTablesCount(),
+            'slug'                     => $slug,
+            'brand_logo'               => $this->getMenuIcon(),
+            'fluent_wp_url'            => 'https://wordpress.org/plugins/fluentform/',
+            'hasPro'                   => defined('NINJATABLESPRO'),
+            'fluent_form_icon'         => function_exists('getNinjaFluentFormMenuIcon') ? getNinjaFluentFormMenuIcon(
+                ) : '',
+            'hasAdvancedFilters'       => class_exists('NinjaTablesPro\App\Hooks\Handlers\CustomFilterHandler'),
+            'hasSortable'              => defined('NINJATABLESPRO_SORTABLE'),
+            'upgradeGuide'             => 'https://wpmanageninja.com/r/docs/ninja-tables/how-to-install-and-upgrade/#upgrade',
+            'hasValidLicense'          => get_option('_ninjatables_pro_license_status'),
+            'activated_features'       => $app->applyFilters('ninja_table_activated_features', array(
+                'default_tables'    => true,
+                'fluentform_tables' => true
+            )),
+            'nt_integrity'             => $this->getIntegrity(),
+            'admin_notices'            => $app->applyFilters('ninja_dashboard_notices', []),
+            'prefered_thumb'           => $app->applyFilters('ninja_table_prefered_thumb', 'medium'),
+            'has_woocommerce'          => defined('WC_PLUGIN_FILE'),
+            'license_status'           => get_option('_ninjatables_pro_license_status'),
+            'ninja_charts_url'         => defined('NINJA_CHARTS_VERSION') ? self_admin_url(
+                'admin.php?page=ninja-charts#/chart-list'
+            ) : null,
+            'ninja_table_admin_nonce'  => wp_create_nonce('ninja_table_admin_nonce'),
+            'ninja_tables_pro_url'     => defined('NINJATABLESPRO') ? NINJAPROPLUGIN_URL : null,
+            'me'                       => [
+                'id'        => $currentUser->ID,
+                'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
+                'email'     => $currentUser->user_email
+            ],
+            'img_url'                  => $assets . "img/",
+            'fluentform_url'           => $fluentUrl,
+            'dismissed'                => $dismissed,
+            'show_lead_pop_up'         => $leadStatus,
+            'show_review_dialog'       => $reviewOptinStatus,
+            'current_user_name'        => $currentUser->display_name,
+            'isInstalled'              => $isInstalled,
+            
+            'hasFluentForm'            => $hasFluentFrom,
+            'isFluentFormUpdated'      => $isFluentFromUpdated,
+
+            'ace_path_url'             => $assets . "libs/ace",
+        
+            'preview_required_scripts' => array(
+                $assets . "css/ninjatables-public.css",
+                $assets . "libs/footable/js/footable.min.js",
+                $assets . "libs/moment/moment.min.js",
+                $assets . "js/ninja-tables-footable.js",
+            ),
+
+            'has_sql_permission'       => $app->applyFilters('ninja_table_sql_permission', $isAdmin),
         ]));
 
         // Enqueue main app script
@@ -264,6 +347,39 @@ class AdminMenuHandler
             NINJA_TABLES_VERSION,
             true
         );
+        $this->handleScriptConflicts();
+    }
+
+    private function handleScriptConflicts()
+    {
+        // Remove conflicting scripts
+        add_action('admin_print_scripts', function () {
+            wp_dequeue_script('vuejs');
+            wp_dequeue_script('vue');
+            wp_deregister_script('elementor-admin-app');
+        });
+
+        // No conflict mode
+        add_action('wp_print_scripts', function () {
+            if (!is_admin() || apply_filters('ninja_table_skip_no_confict', false)) {
+                return;
+            }
+
+            global $wp_scripts;
+            $pluginUrl = plugins_url();
+            foreach ($wp_scripts->queue as $script) {
+                $src = $wp_scripts->registered[$script]->src;
+                if (strpos($src, $pluginUrl) !== false && !strpos($src, 'ninja-tables') !== false) {
+                    wp_dequeue_script($wp_scripts->registered[$script]->handle);
+                }
+            }
+        }, 1);
+    }
+
+    private function getPublishedTablesCount()
+    {
+        $tableCount = wp_count_posts('ninja-table');
+        return property_exists($tableCount, 'publish') ? intval($tableCount->publish) : 0;
     }
 
     private function getIntegrity()

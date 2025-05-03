@@ -28,33 +28,33 @@
         <div v-if="hcActive" class="component-wrapper">
           <div>
             <span>{{ $t('Highlighted Column Height') }}</span><br>
-            <el-slider input-size="mini" v-model="manageCell.data.table.column.style.highlighted.height" @input="changeHcHeight" :max="40" :min="1" :step="1" show-input></el-slider>
+            <el-slider input-size="small" v-model="manageCell.data.table.column.style.highlighted.height" @input="changeHcHeight" :max="40" :min="1" :step="1" show-input></el-slider>
           </div>
           <div class="space-between">
             <span>{{ $t('Shadow Color') }}</span>
-            <el-color-picker size="mini" v-model="manageCell.data.table.column.style.highlighted.shadowColor" @active-change="changeHcShadowColor" @change="changeHcShadowColor" :predefine="predefineColors"></el-color-picker>
+            <el-color-picker size="small" v-model="manageCell.data.table.column.style.highlighted.shadowColor" @active-change="changeHcShadowColor" @change="changeHcShadowColor" :predefine="predefineColors"></el-color-picker>
           </div>
           <div>
             <span>{{ $t('Shadow Effect (X-Axis)') }}</span><br>
-            <el-slider input-size="mini" v-model="manageCell.data.table.column.style.highlighted.offset_x" @input="changeHcOffsetX" :max="30" :min="-30" :step="1" show-input></el-slider>
+            <el-slider input-size="small" v-model="manageCell.data.table.column.style.highlighted.offset_x" @input="changeHcOffsetX" :max="30" :min="-30" :step="1" show-input></el-slider>
           </div>
           <div>
             <span>{{ $t('Shadow Effect (Y-Axis)') }}</span><br>
-            <el-slider input-size="mini" v-model="manageCell.data.table.column.style.highlighted.offset_y" @input="changeHcOffsetY" :max="30" :min="1" :step="1" show-input></el-slider>
+            <el-slider input-size="small" v-model="manageCell.data.table.column.style.highlighted.offset_y" @input="changeHcOffsetY" :max="30" :min="1" :step="1" show-input></el-slider>
           </div>
           <div>
             <span>{{ $t('Shadow Effect (Blur Radius)') }}</span><br>
-            <el-slider input-size="mini" v-model="manageCell.data.table.column.style.highlighted.blur_radius" @input="changeHcBlurRadius" :max="30" :min="10" :step="1" show-input></el-slider>
+            <el-slider input-size="small" v-model="manageCell.data.table.column.style.highlighted.blur_radius" @input="changeHcBlurRadius" :max="30" :min="10" :step="1" show-input></el-slider>
           </div>
         </div>
       </div>
       <div class="block">
         <span>{{ $t('Row height') }}</span>
-        <el-slider input-size="mini" v-model="rowHeight" :max="500" :min="50" :step="1" show-input></el-slider>
+        <el-slider input-size="small" v-model="rowHeight" :max="500" :min="50" :step="1" show-input></el-slider>
       </div>
       <div class="block">
         <span>{{ $t('Column Width') }}</span>
-        <el-slider input-size="mini" @change="changeColumnWidth" v-model="columnWidth" :max="1000" :min="100" :step="1" show-input></el-slider>
+        <el-slider input-size="small" @change="changeColumnWidth" v-model="columnWidth" :max="1000" :min="100" :step="1" show-input></el-slider>
       </div>
     </div>
   </div>

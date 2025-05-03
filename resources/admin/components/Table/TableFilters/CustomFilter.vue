@@ -38,9 +38,9 @@
                                     </code>
                                 </td>
                                 <td>
-                                    <el-button @click="edit(table_filter)" size="mini" type="primary"
+                                    <el-button @click="edit(table_filter)" size="small" type="primary"
                                                icon="el-icon-edit"></el-button>
-                                    <el-button size="mini" @click="deleteFilter(filter_index)" type="danger"
+                                    <el-button size="small" @click="deleteFilter(filter_index)" type="danger"
                                                icon="el-icon-delete"></el-button>
                                 </td>
                             </tr>
@@ -53,7 +53,7 @@
                     </el-radio-group>
                     <template v-if="filter_styling.filter_display_type == 'columns'">
                         <h3>Filter Columns</h3>
-                        <el-radio-group size="mini" v-model="filter_styling.filter_columns">
+                        <el-radio-group size="small" v-model="filter_styling.filter_columns">
                             <el-radio-button label="columns_2">Two Columns</el-radio-button>
                             <el-radio-button label="columns_3">Three Columns</el-radio-button>
                             <el-radio-button label="columns_4">Four Columns</el-radio-button>
@@ -61,7 +61,7 @@
                     </template>
 
                     <h3>Progressive Filter</h3>
-                    <el-checkbox true-label="yes" false-label="no" v-model="filter_styling.progressive">Enable Progressive filter for dynamic filter options</el-checkbox>
+                    <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="filter_styling.progressive">Enable Progressive filter for dynamic filter options</el-checkbox>
 
                     <div style="margin-top: 20px" class="form_group">
                         <el-button :loading="saving" size="small" type="primary" @click="saveFilters">Update Settings</el-button>

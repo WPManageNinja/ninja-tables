@@ -4,7 +4,7 @@
 
         <div class="settings_header">
             <div style="display: inline-block; margin-top: 8px;">
-                <el-button class="ninja_mini" size="mini" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button> <span
+                <el-button class="ninja_mini" size="small" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button> <span
                     class="section_title">{{ table.post_title }}</span>
                 <el-tooltip effect="dark"
                             content="Click to copy shortcode"
@@ -20,12 +20,12 @@
             <span style="margin-right: 20px" class="pull-right">
                 <router-link class="doc_link" :to="{ name: 'help' }">{{ $t('Documentation') }}</router-link>
                 <a :href="preview_url" target="_blank">
-                    <el-button size="mini">{{ $t('Preview') }}</el-button>
+                    <el-button size="small">{{ $t('Preview') }}</el-button>
                 </a>
                 <a v-if="!has_pro"
                    href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                    target="_blank">
-                    <el-button type="danger" size="mini">{{ $t('Get Pro') }}</el-button>
+                    <el-button type="danger" size="small">{{ $t('Get Pro') }}</el-button>
                 </a>
             </span>
         </div>
@@ -44,7 +44,7 @@
                 title="Update Table Info"
                 :visible.sync="editTableModalShow"
                 top="50px"
-                :append-to-body="true"
+                :append-to-body="true"x
         >
             <edit_table v-if="editTableModalShow" :table="table" @modal_close="editTableModalShow = !editTableModalShow"></edit_table>
         </el-dialog>

@@ -13,11 +13,11 @@
         <ninja-premium-notice v-if="!hasPro" highlight="Transform Column Value"></ninja-premium-notice>
 
         <div class="ninja_instruction">
-            <el-checkbox :disabled="!hasPro" true-label="yes" false-label="no" v-model="settings.formula_support">Enable Excel Formula support for Transform Value</el-checkbox>
+            <el-checkbox :disabled="!hasPro" :true-label="'yes'" :false-label="'no'" v-model="settings.formula_support">Enable Excel Formula support for Transform Value</el-checkbox>
             <div v-show="settings.formula_support == 'yes'">
                 <p>Note: Excel formuala is an experimental feature so all formulas may not work. We are improving this feature day by day so please don't be mad if some formulas don't work properly.</p>
 
-                <el-button size="mini" @click="show_formulas = true">Show Formulas</el-button>
+                <el-button size="small" @click="show_formulas = true">Show Formulas</el-button>
                 <el-dialog
                     title="Supported Excel Formullas"
                     :visible.sync="show_formulas"

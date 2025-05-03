@@ -3,13 +3,13 @@
 
         <el-tabs type="border-card">
             <el-tab-pane label="Appearance" class="nt-appearance">
-                <el-checkbox true-label="yes" false-label="no" v-model="appearance.show_cart_before_table">Show Cart Details Before Table</el-checkbox>
+                <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="appearance.show_cart_before_table">Show Cart Details Before Table</el-checkbox>
                 <br />
-                <el-checkbox true-label="yes" false-label="no" v-model="appearance.show_cart_after_table">Show Cart Details After Table</el-checkbox>
+                <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="appearance.show_cart_after_table">Show Cart Details After Table</el-checkbox>
                 <br />
-                <el-checkbox true-label="yes" false-label="no" v-model="appearance.show_cart_button">Show Go to Cart Button</el-checkbox>
+                <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="appearance.show_cart_button">Show Go to Cart Button</el-checkbox>
                 <br />
-                <el-checkbox true-label="yes" false-label="no" v-model="appearance.show_checkout_button">Show Checkout Button</el-checkbox>
+                <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="appearance.show_checkout_button">Show Checkout Button</el-checkbox>
                 <br />
                 <div class="nt-form-group">
                     <label for="cartBtnText">

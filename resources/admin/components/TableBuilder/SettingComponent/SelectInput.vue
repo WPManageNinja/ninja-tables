@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <span>{{ label }}</span><br>
-    <el-select :value="mainValue" @change="$emit('update', $event)" placeholder="Select" size="mini"
+    <el-select :value="mainValue" @change="$emit('update', $event)" placeholder="Select" size="small"
                :disabled="disableResponsive || mobileDisableBreakpoint || tabletDisableBreakpoint">
       <el-option
           v-for="item in items"

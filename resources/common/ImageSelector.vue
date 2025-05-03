@@ -7,12 +7,12 @@
                     <div v-if="data.image_thumb" class="image_preview">
                         <img :src="data.image_thumb" />
                     </div>
-                    <el-button class="image_select_button" @click="initUploader" size="mini" type="info">
+                    <el-button class="image_select_button" @click="initUploader" size="small" type="info">
                         <span v-if="data.image_thumb">Change Image</span>
                         <span v-else>Upload Image</span>
                     </el-button>
 
-                    <el-button v-if="data.image_thumb" @click="remove" class="image_select_button" size="mini" type="warning">
+                    <el-button v-if="data.image_thumb" @click="remove" class="image_select_button" size="small" type="warning">
                         Remove Image
                     </el-button>
                 </div>
@@ -21,7 +21,7 @@
                 <label v-if="column.link_type == 'iframe_ligtbox'">Iframe URL (Only The URL)</label>
                 <label v-else>Target URL</label>
                 <div class="nt_form_input">
-                    <el-input type="url" size="mini" placeholder="Permalink" v-model="data.permalink" />
+                    <el-input type="url" size="small" placeholder="Permalink" v-model="data.permalink" />
                 </div>
             </div>
         </template>

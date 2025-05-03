@@ -34,12 +34,24 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import react from '@vitejs/plugin-react'
 import path from 'path'
-import { exec } from 'child_process'
 
 export default defineConfig({
     plugins: [
-        vue(),
-        react(),
+        vue({
+            template: {
+                transformAssetUrls: {
+                    base: null,
+                    includeAbsolute: false,
+                }
+            }
+        }),
+        react({
+            // Enable JSX
+            jsxRuntime: 'automatic',
+            babel: {
+                plugins: ['@babel/plugin-transform-react-jsx']
+            }
+        })
     ],
     base: '',
     build: {
@@ -47,7 +59,15 @@ export default defineConfig({
         outDir: 'assets',
         rollupOptions: {
             input: {
-                // Admin scripts
+                // main: path.resolve(__dirname, 'resources/admin/main.js'),
+                // boot: path.resolve(__dirname, 'resources/admin/Boot.js'),
+                // gutenblock: path.resolve(__dirname, 'resources/admin/gutenblock.js'),
+                // tinymce: path.resolve(__dirname, 'resources/admin/ninja-table-tinymce-button.js'),
+                
+                // // Public scripts
+                // footable: path.resolve(__dirname, 'resources/public/js/ninja-tables-footable.js'),
+                // builder: path.resolve(__dirname, 'resources/public/js/ninja-tables-builder.js')
+                // // Admin scripts
                 boot: 'resources/admin/Boot.js',
                 main: 'resources/admin/main.js',
                 gutenblock: 'resources/admin/gutenblock.js',
@@ -98,7 +118,17 @@ export default defineConfig({
             '@public': path.resolve(__dirname, 'resources/public')
         }
     },
+    esbuild: {
+        loader: 'jsx',
+        include: /src\/.*\.jsx?$/,
+        exclude: [],
+    },
     optimizeDeps: {
+        esbuildOptions: {
+            loader: {
+                '.js': 'jsx'
+            }
+        },
         include: ['vue', 'element-plus']
-    }
+    },
 })

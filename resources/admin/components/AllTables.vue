@@ -1,6 +1,6 @@
 <template>
     <div>
-        <welcome v-if="!published_tables" @create="modalVisible = !modalVisible"/>
+        <welcome v-if="!published_tables" @create="openCreateModal"/>
 
         <template v-else>
             <div class="row clearfix" style="margin-top: 10px">
@@ -26,7 +26,7 @@
                         </el-button>
                     </router-link>
 
-                    <el-button @click="modalVisible = !modalVisible" size="small" type="primary">
+                    <el-button @click="openCreateModal" size="small" type="primary">
                         {{ $t( 'Add Table' ) }}
                     </el-button>
 
@@ -47,7 +47,7 @@
         <el-dialog
             :close-on-click-modal="false"
             :title="$t('How would you like to create your table?')"
-            :visible.sync="modalVisible"
+            v-model="modalVisible"
             top="50px"
             width="75%"
             :append-to-body="true"
@@ -63,13 +63,12 @@
 </template>
 
 <script>
-    import { onMounted } from 'vue';
-    import { useEventBus } from '../composables/useEventBus';
     import Welcome from './Welcome';
     import ListAllTables from './_ListAllTables.vue';
     import AddTableModal from './_AddTable.vue';
     import leadModal from './Extras/lead';
     import NinjaReviewDialog from './Extras/_ReviewDialog';
+    import { useEventBus } from '../composables/useEventBus';
 
     export default {
         name: 'all_tables',
@@ -81,28 +80,31 @@
             NinjaReviewDialog
         },
         props: ['hasPro'],
-        setup() {
-            const { on } = useEventBus();
-
-            onMounted(() => {
-                on('addedTable', () => {
-                    if (!this.published_tables) {
-                        window.ninja_table_admin.published_tables = 1;
-                    }
-                });
-            });
-        },
         data() {
             return {
                 modalVisible: false,
-                published_tables: parseInt(window.ninja_table_admin.published_tables),
+                published_tables: window.ninja_table_admin.published_tables ? Boolean(parseInt(window.ninja_table_admin.published_tables)) : false,
                 searchAction: 0,
                 searchString: '',
                 selected: [],
                 review_option: window.ninja_table_admin.show_review_dialog
             };
         },
+        mounted() {
+            // Use the event bus from the composable
+            const { on } = useEventBus();
+
+            on('addedTable', () => {
+                if (!this.published_tables) {
+                    window.ninja_table_admin.published_tables = 1;
+                    this.published_tables = true;
+                }
+            });
+        },
         methods: {
+            openCreateModal() {
+                this.modalVisible = true;
+            },
             addTableAction(tableId) {
                 this.$router.push({name: 'data_items', params: {table_id: tableId}});
                 this.modalVisible = false;

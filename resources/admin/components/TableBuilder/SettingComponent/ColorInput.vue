@@ -2,7 +2,7 @@
   <div class="block space-between">
     <span >{{ label }}</span>
     <el-color-picker
-        size="mini"
+        size="small"
         :value="value"
         @change="colorUpdate"
         @active-change="colorUpdate"

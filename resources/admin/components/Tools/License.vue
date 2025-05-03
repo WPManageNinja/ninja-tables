@@ -20,7 +20,7 @@
         <div v-loading="checkingLicense" class="ninja_content">
             <div v-if="is_valid == 'valid'"  class="license_success">
                 <h3>{{ $t('Your license is active! Enjoy Ninja Tables Pro Add On') }}</h3>
-                <el-button v-loading="doing_ajax" @click="deactivateLicense()" class="license_submit" type="default" size="mini">{{ $t('Deactivate License') }}</el-button>
+                <el-button v-loading="doing_ajax" @click="deactivateLicense()" class="license_submit" type="default" size="small">{{ $t('Deactivate License') }}</el-button>
                 <p v-if="renewHtml" v-html="renewHtml"></p>
             </div>
             <div v-loading="checkingLicense" v-else-if="is_valid == 'expired'" class="license_form">

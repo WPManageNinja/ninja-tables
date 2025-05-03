@@ -55,7 +55,7 @@
                             <i class="el-icon-info el-text-info"/>
                         </el-tooltip>
                     </template>
-                    <el-select class="nt_column_type_select" size="mini" v-model="model.data_type" placeholder="Select Data Type of this column">
+                    <el-select class="nt_column_type_select" size="small" v-model="model.data_type" placeholder="Select Data Type of this column">
                         <el-option
                             v-for="(typeName, typeKey) in dataTypesOptions"
                             :key="typeKey"
@@ -149,7 +149,7 @@
                                 <i class="el-icon-info el-text-info"/>
                             </el-tooltip>
                         </template>
-                        <el-select class="nt_column_type_select" size="mini" v-model="model.firstDayOfWeek" placeholder="Select first day of the week">
+                        <el-select class="nt_column_type_select" size="small" v-model="model.firstDayOfWeek" placeholder="Select first day of the week">
                             <el-option
                                     v-for="(typeName, typeKey) in weekDays"
                                     :key="typeKey"
@@ -381,7 +381,7 @@
                         </el-tooltip>
                     </template>
 
-                    <el-select size="mini" v-model="model.breakpoints" placeholder="Select Responsive Breakpoint">
+                    <el-select size="small" v-model="model.breakpoints" placeholder="Select Responsive Breakpoint">
                         <el-option
                             v-for="(option, optionKey) in breakPointsOptions"
                             :key="optionKey"
@@ -494,7 +494,7 @@
                                 <i class="el-icon-info el-text-info"/>
                             </el-tooltip>
                         </template>
-                        <el-select size="mini" v-model="model.textAlign" placeholder="Text Align">
+                        <el-select size="small" v-model="model.textAlign" placeholder="Text Align">
                             <el-option
                                 v-for="(alignmentLabel, alignmentVal) in alignmentOptions"
                                 :key="alignmentVal"
@@ -519,7 +519,7 @@
                         </template>
 
 
-                        <el-select size="mini" v-model="model.contentAlign" placeholder="Content Alignment">
+                        <el-select size="small" v-model="model.contentAlign" placeholder="Content Alignment">
                             <el-option
                                 v-for="(alignmentLabel, alignmentVal) in contentAlignmentOptions"
                                 :key="alignmentVal"
@@ -569,7 +569,7 @@
                                 <i class="el-icon-info el-text-info"/>
                             </el-tooltip>
                         </template>
-                        <el-checkbox :disabled="!hasPro" v-model="model.unfilterable" true-label="yes" false-label="no"
+                        <el-checkbox :disabled="!hasPro" v-model="model.unfilterable" :true-label="'yes'" :false-label="'no'"
                                      value="yes" label="Disable frontend search for this column data"></el-checkbox>
                     </el-form-item>
 
@@ -589,7 +589,7 @@
                                 <i class="el-icon-info el-text-info"/>
                             </el-tooltip>
                         </template>
-                        <el-checkbox :disabled="!hasPro" v-model="model.unsortable" true-label="yes" false-label="no"
+                        <el-checkbox :disabled="!hasPro" v-model="model.unsortable" :true-label="'yes'" :false-label="'no'"
                                      value="yes" label="Disable frontend sorting for this column"></el-checkbox>
                     </el-form-item>
 
@@ -682,14 +682,14 @@
                             <div style="text-align: right; margin: 0">
                                 <el-button
                                     type="text"
-                                    size="mini"
+                                    size="small"
                                     @click="showConfirm = false"
                                 >cancel
                                 </el-button>
 
                                 <el-button
                                     type="primary"
-                                    size="mini"
+                                    size="small"
                                     @click="deleteColumn"
                                 >confirm
                                 </el-button>

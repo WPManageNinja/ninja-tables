@@ -22,7 +22,7 @@
           <div class="block space-between">
             <span>{{ $t('Selected Cell Column Background') }}</span>
             <el-color-picker
-                size="mini"
+                size="small"
                 @active-change="changeTdBackground"
                 @change="changeTdBackground"
                 v-model="cellBackground"
@@ -35,7 +35,7 @@
       <div class="block component-spacing space-between" v-if="manageCell.data.tdIds.length >= 1">
         <span>{{ $t('Selected Cell Background') }}</span>
         <el-color-picker
-            size="mini"
+            size="small"
             @active-change="changeSelectedCellBackground"
             @change="changeSelectedCellBackground"
             v-model="cellBackground"

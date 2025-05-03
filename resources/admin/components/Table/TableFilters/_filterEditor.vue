@@ -78,7 +78,7 @@
                         <i class="el-icon-info el-text-info"></i>
                     </el-tooltip>
                 </template>
-                <el-radio-group size="mini" v-model="activeEditor.select_value_type">
+                <el-radio-group size="small" v-model="activeEditor.select_value_type">
                     <el-radio-button label="manual">Manual Data</el-radio-button>
                     <el-radio-button label="dynamic_data">Dynamic Data from Table Column</el-radio-button>
                 </el-radio-group>
@@ -101,10 +101,10 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item>
-                    <el-checkbox true-label="yes" false-label="no" v-model="activeEditor.parse_comma_separated"> Parse Comma Separated Words</el-checkbox>
+                    <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="activeEditor.parse_comma_separated"> Parse Comma Separated Words</el-checkbox>
                 </el-form-item>
                 <el-form-item>
-                    <el-checkbox true-label="yes" false-label="no" v-model="activeEditor.disable_auto_sorting"> Disable automatic filter value sorting</el-checkbox>
+                    <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="activeEditor.disable_auto_sorting"> Disable automatic filter value sorting</el-checkbox>
                 </el-form-item>
 
                 <template v-if="activeEditor.disable_auto_sorting != 'yes'">
@@ -124,7 +124,7 @@
             </template>
 
             <el-form-item>
-                <el-checkbox true-label="yes" false-label="no" v-model="activeEditor.is_multi_select">Enable Multi-Select</el-checkbox>
+                <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="activeEditor.is_multi_select">Enable Multi-Select</el-checkbox>
             </el-form-item>
 
         </template>
@@ -171,7 +171,7 @@
                         <i class="el-icon-info el-text-info"/>
                     </el-tooltip>
                 </template>
-                <el-select class="nt_column_type_select" size="mini" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
+                <el-select class="nt_column_type_select" size="small" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
                     <el-option
                         v-for="(typeName, typeKey) in weekDays"
                         :key="typeKey"
@@ -211,7 +211,7 @@
                         <i class="el-icon-info el-text-info"/>
                     </el-tooltip>
                 </template>
-                <el-select class="nt_column_type_select" size="mini" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
+                <el-select class="nt_column_type_select" size="small" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
                     <el-option
                         v-for="(typeName, typeKey) in weekDays"
                         :key="typeKey"
@@ -259,11 +259,11 @@
             <template slot="label">
                 {{ $t('Button Text') }}
             </template>
-            <el-input size="mini" v-model="activeEditor.placeholder" />
+            <el-input size="small" v-model="activeEditor.placeholder" />
         </el-form-item>
 
         <el-form-item>
-            <el-checkbox true-label="yes" false-label="no" v-model="activeEditor.strict">Enable Strict Mode (If Enable, Ninja Table will try to match exact value)</el-checkbox>
+            <el-checkbox :true-label="'yes'" :false-label="'no'" v-model="activeEditor.strict">Enable Strict Mode (If Enable, Ninja Table will try to match exact value)</el-checkbox>
         </el-form-item>
     </el-form>
 </template>

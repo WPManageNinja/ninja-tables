@@ -24,7 +24,7 @@
       },
       size: {
         type: String,
-        default: 'mini'
+        default: 'small'
       }
     }
   }

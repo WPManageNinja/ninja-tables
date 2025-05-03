@@ -6,15 +6,20 @@
       <hr>
         <el-container>
             <el-aside width="200px">
-                <el-menu background-color="#545c64"
-                         :default-active="active_menu"
-                         text-color="#fff"
+                <el-menu :default-active="active_menu"
                          :router="true"
+                         background-color="#545c64"
+                         text-color="#fff"
                          active-text-color="#ffd04b">
-                    <el-menu-item v-for="menuItem in menuItems" v-if="menuItem.status" :key="menuItem.route" :index="menuItem.route" :route="{ name: menuItem.route }">
-                        <i :class="menuItem.icon_class"></i>
-                        <span>{{menuItem.title}}</span>
-                    </el-menu-item>
+                    <template v-for="menuItem in menuItems" :key="menuItem.route">
+                        <el-menu-item 
+                            v-if="menuItem.status"
+                            :index="menuItem.route" 
+                            :route="{ name: menuItem.route }">
+                            <i :class="menuItem.icon_class"></i>
+                            <span>{{ menuItem.title }}</span>
+                        </el-menu-item>
+                    </template>
                 </el-menu>
             </el-aside>
             <el-main>
