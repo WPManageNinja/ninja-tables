@@ -852,13 +852,13 @@
             'model.data_type': function () {
                 if(this.model.data_type == 'image') {
                     if(!this.model.link_type) {
-                        this.$set(this.model, 'link_type', 'none');
+                        this.model.link_type = 'none';
                     }
                 } else if(this.model.data_type == 'number' && !this.model.decimal_system) {
                     if(this.model.decimalSeparator == ',') {
-                        this.$set(this.model, 'decimal_system', 'eu');
+                        this.model.decimal_system = 'eu';
                     } else {
-                        this.$set(this.model, 'decimal_system', 'us');
+                        this.model.decimal_system = 'us';
                     }
                     this.changeDecimalStyle();
                 }
@@ -899,11 +899,11 @@
             },
             changeDecimalStyle() {
                 if(this.model.decimal_system == 'us') {
-                    this.$set(this.model, 'decimalSeparator', '.');
-                    this.$set(this.model, 'thousandSeparator', ',');
+                    this.model.decimalSeparator = '.';
+                    this.model.thousandSeparator = ',';
                 } else {
-                    this.$set(this.model, 'decimalSeparator', ',');
-                    this.$set(this.model, 'thousandSeparator', '.');
+                    this.model.decimalSeparator = ',';
+                    this.model.thousandSeparator = '.';
                 }
             }
         },

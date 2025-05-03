@@ -141,13 +141,13 @@ export default {
         },
         updateTextContent(newValue, idx) {
             if (idx !== undefined) {
-                this.$set(this.item.data.value, idx, newValue);
+                this.item.data.value[idx] = newValue;
             } else {
                 this.item.data.value = newValue;
             }
         },
         updateListItem(index, newValue) {
-            this.$set(this.item.data.value, index, newValue);
+            this.item.data.value[index] = newValue;
         },
         updateContent(event) {
             // const $ref = this.$refs.ninja_table_text_editor;

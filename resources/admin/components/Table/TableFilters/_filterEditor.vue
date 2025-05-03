@@ -336,16 +336,16 @@
         watch: {
             'activeEditor.type': function (value) {
                 if(value == 'select') {
-                    this.$set(this.activeEditor, 'select_value_type', 'manual');
+                    this.activeEditor.select_value_type = 'manual';
                 }
                 if(!Array.isArray(this.activeEditor.columns)) {
-                    this.$set(this.activeEditor, 'columns', []);
+                    this.activeEditor.columns = [];
                 }
             }
         },
         mounted() {
             if(!Array.isArray(this.activeEditor.columns)) {
-                this.$set(this.activeEditor, 'columns', []);
+                this.activeEditor.columns = [];
             }
         }
     }

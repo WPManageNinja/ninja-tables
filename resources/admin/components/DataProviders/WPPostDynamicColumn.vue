@@ -231,7 +231,7 @@
         },
         watch: {
             'column.wp_post_custom_data_type': function () {
-                this.$set(this.column, 'wp_post_custom_data_value', '');
+                this.column.wp_post_custom_data_value = '';
             }
         },
         computed: {

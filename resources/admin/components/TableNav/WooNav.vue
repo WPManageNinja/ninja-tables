@@ -85,7 +85,7 @@
                         let terms = response.data.query_terms;
                         each(terms, (term, item_name) => {
                             if (!this.query_selections[item_name]) {
-                                this.$set(this.query_selections, item_name, []);
+                                this.query_selections[item_name] = [];
                             }
                         });
                         this.query_terms = terms;

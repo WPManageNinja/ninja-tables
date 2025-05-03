@@ -282,11 +282,11 @@
                     this.item_settings = this.item.settings;
                 }
                 if (!this.item_settings.cell) {
-                    this.$set(this.item_settings, 'cell', {});
+                    this.item_settings.cell = {};
                 }
                 each(this.columns, (column) => {
                     if (!this.item_settings.cell[column.key]) {
-                        this.$set(this.item_settings.cell, column.key, {});
+                        this.item_settings.cell[column.key] = {};
                     }
                 });
                 if (this.item) {

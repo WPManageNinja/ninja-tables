@@ -300,7 +300,7 @@
                     .then(response => {
                         this.$message.success(response.data.message);
                         this.importing = false;
-                        this.$set(this.otherPluginTables[index], 'ninja_table_id', response.data.tableId);
+                        this.otherPluginTables[index].ninja_table_id = response.data.tableId;
                     })
                     .catch(error => {
                         this.$message.error(error.data.message);
