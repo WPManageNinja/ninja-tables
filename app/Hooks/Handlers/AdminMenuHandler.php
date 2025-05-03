@@ -283,8 +283,6 @@ class AdminMenuHandler
             'i18n' => (new I18nStrings())->getStrings(),
             'rest' => $this->getRestInfo($app),
             'asset_url' => Vite::getAssetsUrl(),
-            // 'pro_enabled' => defined('NINJATABLESPRO'),
-            // 'integrity' => $this->getIntegrity(),
             'nonce' => wp_create_nonce($slug),
             'published_tables' => $this->getPublishedTablesCount(),
             'slug'                     => $slug,

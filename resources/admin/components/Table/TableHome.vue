@@ -56,6 +56,7 @@
     import each from 'lodash/each';
     import size from 'lodash/size';
     import toArray from 'lodash/values';
+import { useEventBus } from '../../eventBus';
 
     export default {
         name: 'table_home',
@@ -64,6 +65,7 @@
         },
         data() {
             return {
+                bus : useEventBus(),
                 table_tabs: [],
                 is_data_saving: false,
                 is_form_saving: false,
@@ -161,7 +163,7 @@
             this.clipboard();
 
             // Initialize the table's manual data sorting.
-            window.ninjaTableBus.$on('initManualSorting', (options, resolve, reject) => {
+            this.bus.on('initManualSorting', (options, resolve, reject) => {
                 let data = {
                     ...options
                 };
@@ -171,18 +173,20 @@
                     .catch(e => reject(e));
             });
 
-            window.ninjaTableBus.$on('tableDoingAjax',  (value) => {
+            this.bus.on('tableDoingAjax',  (value) => {
                 this.doingAjax = value;
             });
 
             // removes previous events to prevent duplicate event handlers.
-            window.ninjaTableBus.$off('updateTableColumns');
+            this.bus.off('updateTableColumns');
 
-            window.ninjaTableBus.$on('updateTableColumns', (callback) => {
+            this.bus.on('updateTableColumns', (callback) => {
                 this.updateTableColumns(callback);
             });
 
-            window.ninjaTableBus.$emit('addedTable');
+            this.bus.emit('addedTable');
+
+            // window.ninjaTableBus.$emit('addedTable');
         }
     }
 </script>

@@ -141,17 +141,17 @@
                     v-for="(column, index) in columns"
                     :width="(columnLength == index + 1 ) ? '' : 150"
                     :key="index">
-                    <template slot-scope="scope">
+                    <template #default="scope">
                         <show-editable-cell
-                            :row="scope.row"
-                            :column="column"
-                            :columns="columns"
-                            :formula_support="config.settings.formula_support"
-                            :is_editable="isEditable"
+                        :row="scope.row"
+                        :column="column"
+                        :columns="columns"
+                        :formula_support="config.settings.formula_support"
+                        :is_editable="isEditable"
                         />
                     </template>
 
-                    <template slot="header">
+                    <template #header="scope">
                         <span>
                             {{ column.name || column.key }}<i class="el-icon-setting nt-column-config" @click="showColumnConfigModal(column)"/>
                         </span>
