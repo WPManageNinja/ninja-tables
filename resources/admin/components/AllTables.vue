@@ -91,9 +91,9 @@
             };
         },
         mounted() {
-            const { on } = useEventBus();
+            const bus = useEventBus();
 
-            on('addedTable', () => {
+            bus.on('addedTable', () => {
                 if (!this.published_tables) {
                     window.ninja_table_admin.published_tables = 1;
                     this.published_tables = true;
