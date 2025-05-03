@@ -64,29 +64,34 @@
                                             />
                                         </div>
                                     </div>
-                                    <draggable @end="storeSettings" v-model="columns" handle=".handle" animation="150">
-                                        <div class="column drawer"
-                                             v-for="(column, index) in columns"
-                                             :key="column.key"
-                                        >
-                                            <div class="header">
-                                                <span class="dashicons dashicons-editor-justify handle" />
-                                                <span @click="openDrawer(index)">{{ column.name || column.key }}</span>
-                                                <span class="dashicons dashicons-edit edit_icon" @click="openDrawer(index)" />
+                                    <draggable 
+                                        @end="storeSettings" 
+                                        v-model="columns" 
+                                        handle=".handle" 
+                                        animation="150"
+                                        item-key="key"
+                                    >
+                                        <template #item="{element: column, index}">
+                                            <div class="column drawer" :key="column.key">
+                                                <div class="header">
+                                                    <span class="dashicons dashicons-editor-justify handle" />
+                                                    <span @click="openDrawer(index)">{{ column.name || column.key }}</span>
+                                                    <span class="dashicons dashicons-edit edit_icon" @click="openDrawer(index)" />
+                                                </div>
+                                                <div class="drawer_body" :class="'drawer_body_'+index">
+                                                    <columns-editor
+                                                        :columns="columns"
+                                                        :dataSourceType="config.table.dataSourceType"
+                                                        :model="column"
+                                                        :has-pro="has_pro"
+                                                        :settings="config.settings"
+                                                        :updating="true"
+                                                        @delete="deleteColumn(index)"
+                                                        @store="storeSettings()"
+                                                    />
+                                                </div>
                                             </div>
-                                            <div class="drawer_body" :class="'drawer_body_'+index">
-                                                <columns-editor
-                                                    :columns="columns"
-                                                    :dataSourceType="config.table.dataSourceType"
-                                                    :model="column"
-                                                    :has-pro="has_pro"
-                                                    :settings="config.settings"
-                                                    :updating="true"
-                                                    @delete="deleteColumn(index)"
-                                                    @store="storeSettings()"
-                                                />
-                                            </div>
-                                        </div>
+                                        </template>
                                     </draggable>
                                 </div>
                             </div>

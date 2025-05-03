@@ -907,10 +907,6 @@
                 }
             }
         },
-        setup() {
-            const { on } = useEventBus();
-            return { on };
-        },
         mounted() {
             if (this.dataSourceType === 'default') {
                 this.dataTypesOptions.image = 'Image/File/Lightbox';
@@ -944,7 +940,7 @@
             if (!this.model.force_download) {
                 this.model.force_download = '';
             }
-            this.on('tableDoingAjax', (status) => {
+            this.bus.on('tableDoingAjax', (status) => {
                 this.doingAjax = status;
             });
         },
