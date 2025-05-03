@@ -409,8 +409,7 @@
                 <div class="advanced-settings">
 
                     <div class="ninja_table_inline_upgrade" v-if="!hasPro">
-
-                        <H3>Advanced Column Settings</H3>
+                        <h3>Advanced Column Settings</h3>
                         <p>
                             Customize your table's column's width, custom css class, content alignments, column styling
                             with this feature.
@@ -721,12 +720,12 @@
     import DynamicWooColumn from '../../TableNav/_WPWooDynamicColumn';
     import NinjaColorPicker from '../../Extras/ColorPicker'
     import GetPro from "../../Tools/GetPro";
-
+    import { useEventBus } from '../../../composables/useEventBus';
 
     export default {
         name: "ColumnsEditor",
         components: {
-          GetPro,
+            GetPro,
             'wp_editor': wpEditor,
             'condition': conditional,
             'wp-post-dynamic-column': WPPostDynamicColumn,
@@ -908,40 +907,43 @@
                 }
             }
         },
-
+        setup() {
+            const { on } = useEventBus();
+            return { on };
+        },
         mounted() {
-            if (this.dataSourceType == 'default') {
-                this.$set(this.dataTypesOptions, 'image', 'Image/File/Lightbox');
+            if (this.dataSourceType === 'default') {
+                this.dataTypesOptions.image = 'Image/File/Lightbox';
             }
             this.dataTypesOptions.button = this.$t('Button/Link');
 
             if (!this.model) return;
             if (!this.model.hasOwnProperty('dateFormat')) {
-                this.$set(this.model, 'dateFormat', "");
+                this.model.dateFormat = "";
             }
             this.model.dateFormat = this.model.dateFormat || "";
             this.model.enable_html_content = ['true', true].indexOf(this.model.enable_html_content) !== -1;
             this.model.header_html_content = this.model.header_html_content || '';
             if (!this.model.contentAlign) {
-                this.$set(this.model, 'contentAlign', '');
+                this.model.contentAlign = '';
             }
             if (!this.model.textAlign) {
-                this.$set(this.model, 'textAlign', '');
+                this.model.textAlign = '';
             }
 
             if (!this.model.maxWidthUnit) {
-                this.$set(this.model, 'maxWidthUnit', 'px');
+                this.model.maxWidthUnit = 'px';
             }
             if (!this.model.timeFormat) {
-              this.$set(this.model, 'timeFormat', '');
+                this.model.timeFormat = '';
             }
-          if (!this.model.relAttributes) {
-            this.$set(this.model, 'relAttributes', []);
-          }
-          if (!this.model.force_download) {
-            this.$set(this.model, 'force_download', '');
-          }
-            window.ninjaTableBus.$on('tableDoingAjax', (status) => {
+            if (!this.model.relAttributes) {
+                this.model.relAttributes = [];
+            }
+            if (!this.model.force_download) {
+                this.model.force_download = '';
+            }
+            this.on('tableDoingAjax', (status) => {
                 this.doingAjax = status;
             });
         },

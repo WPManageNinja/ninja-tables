@@ -126,7 +126,7 @@
                         style="width: 100%"
                 >
                     <el-table-column label="Name">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             <span v-if="scope.row.is_already_imported">( Already Imported )</span> {{
                             scope.row.post_title }}
                         </template>
@@ -135,7 +135,7 @@
                             label="Action"
                             fixed="right"
                     >
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             <el-button type="primary" size="small"
                                        @click="importThisTable(scope.row, scope.$index)"
                             >{{ $t('Import') }}

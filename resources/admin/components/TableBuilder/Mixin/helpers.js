@@ -47,14 +47,14 @@ export const helpers = {
             return frags.join(' ');
         },
         upgradeMessage(){
-            const h = this.$createElement;
             const html = 'You are using free version of ninja-tables, <a href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&amp;utm_medium=wp&amp;utm_campaign=wp_plugin&amp;utm_term=upgrade" target="_blank">' +
                 'Upgrade To Pro' +
                 '</a>';
-            const message = h("div", {domProps:{innerHTML: html}})
+                
             return this.$message({
                 showClose: true,
-                message: this.$t(message),
+                message: html,
+                dangerouslyUseHTMLString: true,
                 type: "warning",
             });
         }

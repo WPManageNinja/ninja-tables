@@ -13,7 +13,7 @@
 
         <div v-else class="conditional-settings-header ninja_table_inline_upgrade">
             <div class="conditional-settings-title">
-                <H3>Conditional Formatting</H3>
+                <h3>Conditional Formatting</h3>
                 <p>
                     Customize your table's appearances based on the cell value. Add as many conditions as you like.
                     Conditional Formatting is a pro feature which can be enabled by using Ninja Table pro Add-on. Ninja
@@ -225,7 +225,7 @@
         methods: {
             addCondition() {
                 if (!this.column.conditions) {
-                    this.$set(this.column, 'conditions', []);
+                    this.column.conditions = [];
                 }
                 this.column.conditions.push({...this.defaultCondition});
             },
@@ -245,7 +245,7 @@
         },
         mounted() {
             if (this.column && !this.column.conditions) {
-                this.$set(this.column, 'conditions', []);
+                this.column.conditions = [];
             }
         }
     }

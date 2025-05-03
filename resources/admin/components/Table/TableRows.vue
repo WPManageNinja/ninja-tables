@@ -256,19 +256,19 @@
         </el-dialog>
 
         <el-dialog
+            v-model="columnModal"
             :close-on-click-modal="false"
             top="50px"
             :append-to-body="true"
             title="Add Table Column"
-            width="70%"
-            :visible.sync="columnModal">
+            width="70%">
             <columns-editor
                 :model="new_column"
                 :hasPro="has_pro"
                 :columns="config.columns"
                 :settings="config.settings"
                 @add="addNewColumn()"
-                @cancel="columnModal = !columnModal"
+                @cancel="columnModal = false"
             />
         </el-dialog>
     </div>
@@ -591,6 +591,13 @@
 
             addColumn() {
                 this.columnModal = true;
+                // Force Vue to update the component state
+                this.$nextTick(() => {
+                    // Ensure the modal is visible
+                    if (!this.columnModal) {
+                        this.columnModal = true;
+                    }
+                });
             },
 
             validateColumn(column) {

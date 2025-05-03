@@ -123,7 +123,7 @@
                 },
                 sql: '',
                 error_html: '',
-                isActivated: this.activated_features.raw_sql_query,
+                isActivated: this.activated_features?.raw_sql_query,
                 hasPro: !!ninja_table_admin.hasPro,
                 has_sql_permission: window.ninja_table_admin.has_sql_permission == 'yes'
             };

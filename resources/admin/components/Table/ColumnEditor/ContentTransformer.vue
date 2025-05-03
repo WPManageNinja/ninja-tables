@@ -5,7 +5,7 @@
         </p>
         <el-input
           type="textarea"
-          rows="4"
+          :rows="4"
           :placeholder="placeholder"
           :disabled="!hasPro"
           v-model="column.transformed_value"
