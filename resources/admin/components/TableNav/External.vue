@@ -2,7 +2,7 @@
     <div class="external-source-nav">
         <el-collapse>
             <el-collapse-item name="1">
-                <template slot="title">
+                <template #title>
                     <i class="header-icon el-icon-info el-text-info"></i>
                     <strong>Edit:</strong> {{isEditableMessage}}
                 </template>
