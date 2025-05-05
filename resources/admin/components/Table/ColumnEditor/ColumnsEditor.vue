@@ -673,7 +673,7 @@
                             v-if="!hideDelete"
                             placement="top"
                             width="170"
-                            v-model="showConfirm"
+                            v-model:visible="showConfirm"
                             trigger="click"
                         >
                             <p>Are you sure to delete this?</p>
@@ -682,24 +682,30 @@
                                     link
                                     size="small"
                                     @click="showConfirm = false"
-                                >cancel
+                                >
+                                    {{ $t('cancel') }}
                                 </el-button>
 
                                 <el-button
                                     type="primary"
                                     size="small"
                                     @click="deleteColumn"
-                                >confirm
+                                >
+                                    {{ $t('confirm') }}
                                 </el-button>
                             </div>
-                            <el-button
-                                v-if="!hideDelete"
-                                type="danger"
-                                size="small"
-                                slot="reference"
-                            >{{ $t('Delete') }}
-                            </el-button>
+
+                            <template #reference>
+                                <el-button
+                                    v-if="!hideDelete"
+                                    type="danger"
+                                    size="small"
+                                >
+                                    {{ $t('Delete') }}
+                                </el-button>
+                            </template>
                         </el-popover>
+
 
                         <el-button :loading="doingAjax" @click.prevent="store" type="primary" size="small">
                             {{ $t('Update') }}

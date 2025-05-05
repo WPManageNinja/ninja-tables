@@ -41,14 +41,14 @@
                 </el-tooltip>
             </template>
             <el-radio-group class="spaced" v-model="activeEditor.type">
-                <el-radio label="select">Select Dropdown</el-radio>
-                <el-radio label="radio">Radio</el-radio>
-                <el-radio label="checkbox">Checkbox</el-radio>
-                <el-radio label="date_picker">Date Picker</el-radio>
-                <el-radio label="date_range">Date Range</el-radio>
-                <el-radio label="text_input">Text Input</el-radio>
-                <el-radio label="number_range">Number Range</el-radio>
-                <el-radio label="reset_filter">Reset Filter Button</el-radio>
+                <el-radio label="Select Dropdown" value="select"/>
+                <el-radio label="Radio" value="radio"/>
+                <el-radio label="Checkbox" value="checkbox"/>
+                <el-radio label="Date Picker" value="date_picker"/>
+                <el-radio label="Date Range" value="date_range"/>
+                <el-radio label="Text Input" value="text_input"/>
+                <el-radio label="Number Range" value="number_range"/>
+                <el-radio label="Reset Filter Button" value="reset_filter"/>
             </el-radio-group>
         </el-form-item>
 
@@ -79,8 +79,8 @@
                     </el-tooltip>
                 </template>
                 <el-radio-group size="small" v-model="activeEditor.select_value_type">
-                    <el-radio-button label="manual">Manual Data</el-radio-button>
-                    <el-radio-button label="dynamic_data">Dynamic Data from Table Column</el-radio-button>
+                    <el-radio-button label="Manual Data" value="manual" />
+                    <el-radio-button label="Dynamic Data from Table Column" value="dynamic_data" />
                 </el-radio-group>
             </el-form-item>
 
@@ -97,7 +97,12 @@
                         </el-tooltip>
                     </template>
                     <el-radio-group class="spaced" v-model="activeEditor.dynamic_select_column">
-                        <el-radio v-for="column in current_columns" :key="column.key" :label="column.key">{{column.name}}</el-radio>
+                        <el-radio
+                            v-for="column in current_columns"
+                            :key="column.key"
+                            :label="column.key"
+                            :value="column.name"
+                        />
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item>
@@ -110,14 +115,14 @@
                 <template v-if="activeEditor.disable_auto_sorting != 'yes'">
                     <el-form-item label="Sort Dynamic Value as: ">
                         <el-radio-group v-model="activeEditor.sorting_type">
-                            <el-radio label="asc">Ascending Way</el-radio>
-                            <el-radio label="desc">Descending Way</el-radio>
+                            <el-radio label="Ascending Way" value="asc" />
+                            <el-radio label="Descending Way" value="desc" />
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="Sort Algorithm">
                         <el-radio-group v-model="activeEditor.sorting_method">
-                            <el-radio label="text">As Text Basis</el-radio>
-                            <el-radio label="numeric">As Numeric Basis</el-radio>
+                            <el-radio label="As Text Basis" value="text" />
+                            <el-radio label="As Numeric Basis" value="numeric" />
                         </el-radio-group>
                     </el-form-item>
                 </template>
@@ -140,7 +145,7 @@
                         <i class="el-icon-info el-text-info"></i>
                     </el-tooltip>
                 </template>
-                <key-pair-options v-model="activeEditor.options"></key-pair-options>
+                <key-pair-options :value="activeEditor.options"></key-pair-options>
             </el-form-item>
         </template>
 
@@ -150,9 +155,9 @@
                     {{ $t('Date Filter Operator') }}
                 </template>
                 <el-radio-group v-model="activeEditor.filter_operator">
-                    <el-radio label="less">Less Than Equal</el-radio>
-                    <el-radio label="greater">Greater Than Equal</el-radio>
-                    <el-radio label="equal">Equal</el-radio>
+                    <el-radio label="Less Than Equal" value="less" />
+                    <el-radio label="Equal" value="equal" />
+                    <el-radio label="Greater Than Equal" value="greater" />
                 </el-radio-group>
             </el-form-item>
             <el-form-item>
@@ -248,7 +253,12 @@
                 </el-tooltip>
             </template>
             <el-checkbox-group v-if="current_columns.length" v-model="activeEditor.columns">
-                <el-checkbox v-for="column in current_columns" :key="column.key" :label="column.key">{{column.name}}</el-checkbox>
+                <el-checkbox
+                    v-for="column in current_columns"
+                    :key="column.key"
+                    :label="column.key"
+                    :value="column.name"
+                />
             </el-checkbox-group>
             <div v-else>
                 Sorry, No corresponding columns found based on your selection and column's data type

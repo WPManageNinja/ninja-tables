@@ -3,8 +3,7 @@
         <input
                 :placeholder="column.dateFormat"
                 type="text"
-                size="small"
-                v-if="only_picker != 'yes'"
+                v-if="only_picker !== 'yes'"
                 v-model="new_column[column.key]"
                 :id="slugify(column.key)"
                 class="form-control"
