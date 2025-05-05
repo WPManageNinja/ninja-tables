@@ -1,4 +1,5 @@
 <?php
+
 namespace NinjaTables\App\Modules\Gutenberg;
 
 use NinjaTables\App\App;
@@ -7,9 +8,8 @@ class GutenbergModule
 {
     public function register()
     {
-        add_action('enqueue_block_assets', [$this, 'blockEditorAssets']);
+//        add_action('enqueue_block_assets', [$this, 'blockEditorAssets']);
         add_action('enqueue_block_editor_assets', [$this, 'enqueueAssets']);
-        add_action('rest_api_init', [$this, 'registerRestRoutes']);
     }
 
     public function enqueueAssets()
@@ -23,31 +23,41 @@ class GutenbergModule
             true
         );
 
-        // Footable integration script for Gutenberg
-        wp_enqueue_script(
-            'ninja-tables-footable-gutenberg',
-            NINJA_TABLES_DIR_URL . 'assets/gutenberg/footable-gutenberg.js',
-            array('jquery', 'footable'),
-            NINJA_TABLES_VERSION,
-            true
-        );
-
-        // Pass data to JavaScript
+        $app = App::getInstance();
+        $assets = $app['url.assets'];
         wp_localize_script(
             'ninja-tables-gutenberg-table-block',
-            'ninjaTablesGutenberg',
+            'ninja_table_admin',
             [
                 'availableTables' => $this->getAvailableTables(),
-                'nonce'           => wp_create_nonce('ninja_tables_gutenberg_nonce'),
-                'ajaxUrl'         => admin_url('admin-ajax.php'),
-                'assetsUrl'       => NINJA_TABLES_DIR_URL . 'assets/'
-            ]
+                'rest'            => $this->getRestInfo($app),
+                'preview_required_scripts' => array(
+                    $assets . "css/ninjatables-public.css",
+                    $assets . "libs/footable/js/footable.min.js",
+                    $assets . "libs/moment/moment.min.js",
+                    $assets . "js/ninja-tables-footable.js",
+                ),
+            ],
         );
+    }
+
+    protected function getRestInfo($app)
+    {
+        $ns  = $app->config->get('app.rest_namespace');
+        $ver = $app->config->get('app.rest_version');
+
+        return [
+            'base_url'  => esc_url_raw(rest_url()),
+            'url'       => rest_url($ns . '/' . $ver),
+            'nonce'     => wp_create_nonce('wp_rest'),
+            'namespace' => $ns,
+            'version'   => $ver
+        ];
     }
 
     public function blockEditorAssets()
     {
-        $app = App::getInstance();
+        $app    = App::getInstance();
         $assets = $app['url.assets'];
 
         wp_enqueue_style(
@@ -62,66 +72,14 @@ class GutenbergModule
             '3.1.5',
             false
         );
-    }
 
-    public function registerRestRoutes()
-    {
-        register_rest_route('ninja-tables/v1', '/get-table-preview', [
-            'methods'             => 'GET',
-            'callback'            => [$this, 'getTablePreview'],
-            'permission_callback' => function () {
-                return current_user_can('edit_posts');
-            },
-            'args'                => [
-                'table_id' => [
-                    'required'          => true,
-                    'sanitize_callback' => 'sanitize_text_field'
-                ]
-            ]
-        ]);
-    }
-
-    public function getTablePreview($request)
-    {
-        $tableId = $request->get_param('table_id');
-        $provider = ninja_table_get_data_provider($tableId);
-
-        if (empty($tableId)) {
-            return new \WP_Error('missing_table_id', 'Table ID is required', ['status' => 400]);
-        }
-
-        // Force editor mode for table
-        add_filter('ninja_tables_item_attributes', function($atts) {
-            $atts['editor_mode'] = true;
-            return $atts;
-        });
-
-        // Enable search, sorting, and pagination
-        add_filter('ninja_tables_settings', function($settings) {
-            $settings['enable_search'] = true;
-            $settings['column_sorting'] = true;
-            $settings['show_all'] = 0; // Enable pagination
-            $settings['perPage'] = 10; // 10 items per page
-            return $settings;
-        });
-
-        // Get table HTML
-        if ($provider == 'drag_and_drop') {
-            $tableHtml = do_shortcode('[ninja_table_builder id="' . esc_attr($tableId) . '"]');
-        } else {
-            $tableHtml = do_shortcode('[ninja_tables id="' . esc_attr($tableId) . '"]');
-        }
-
-        // Add special wrapper with data attributes
-        $tableHtml = '<div class="ninja-tables-gutenberg-preview" data-table-id="' . esc_attr($tableId) . '">' . $tableHtml . '</div>';
-
-        // Note: We're not adding any inline JS here - it all goes in the JS file
-
-        return [
-            'success' => true,
-            'html'    => $tableHtml,
-            'table_id' => $tableId
-        ];
+        wp_enqueue_script(
+            'ninja-tables-footable',
+            $assets . "js/ninja-tables-footable.js",
+            array('jquery'),
+            '3.1.5',
+            false
+        );
     }
 
     private function getAvailableTables()
