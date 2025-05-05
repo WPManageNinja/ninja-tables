@@ -1,5 +1,6 @@
 @use 'sass:map';
-@import "table-theme";
+// @import "table-theme";
+@use "table-theme" as theme;
 
 table.ninja_table_pro.inverted {
 
@@ -24,10 +25,10 @@ table.ninja_table_pro.inverted {
     color: $text-color !important;
   }
 
-  @each $name, $colors in $themes {
+  @each $name, $colors in theme.$themes {
     $bgColor: map-get($colors, 'bg-color');
     $textColor: map-get($colors, 'text-color');
-    &.#{$name}.table {
+    &.nt-#{$name}.table {
       @include theme($bgColor, $textColor);
 
       &.footable-details {

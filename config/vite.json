@@ -1,0 +1,8 @@
+{
+  "protocol": "http://",
+  "host": "localhost",
+  "port": 8880,
+  "strict_port": true,
+  "vite_protocol": "ws",
+  "manifest_path": "assets/manifest.json"
+}

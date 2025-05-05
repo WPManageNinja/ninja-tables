@@ -8,26 +8,6 @@ use NinjaTables\App\Utils\Vite;
 
 class AdminMenuHandler
 {
-    protected function getViteAsset($entry) 
-    {
-        $devServer = 'http://localhost:5173';
-        $isDevelopment = defined('NINJA_TABLES_DEVELOPMENT') && NINJA_TABLES_DEVELOPMENT;
-        
-        if ($isDevelopment) {
-            return $devServer . '/' . $entry;
-        }
-
-        static $manifest = null;
-        if ($manifest === null) {
-            $manifestPath = NINJA_TABLES_DIR_PATH . 'assets/manifest.json';
-            $manifest = file_exists($manifestPath) ? json_decode(file_get_contents($manifestPath), true) : [];
-        }
-
-        $entry = ltrim($entry, '/');
-        return isset($manifest[$entry]) 
-            ? NINJA_TABLES_DIR_URL . 'assets/' . $manifest[$entry]['file'] 
-            : '';
-    }
 
     public function add()
     {
@@ -204,18 +184,15 @@ class AdminMenuHandler
         $app = App::getInstance();
         $slug = $app->config->get('app.slug');
 
-        // Enqueue Element Plus styles
-        // wp_enqueue_style(
-        //     $slug . '_element_plus',
-        //     'https://unpkg.com/element-plus/dist/index.css',
-        //     [],
-        //     NINJA_TABLES_VERSION
-        // );
-
         // Enqueue main admin styles
         Vite::enqueueStyle(
             $slug . '_admin',
-            'admin/css/ninja-tables-admin.scss'
+            'admin/css/vendor.scss'
+        );
+
+        Vite::enqueueStyle(
+            $slug . '_public_css',
+            'public/css/_public.scss'
         );
 
         // Enqueue vendor styles with RTL support
@@ -243,7 +220,7 @@ class AdminMenuHandler
     {
         $app = App::getInstance();
         $slug = $app->config->get('app.slug');
-        $assets = Vite::getAssetsUrl();
+        $assets = Vite::getAssetUrl();
     
         // Get current user
         $currentUser = wp_get_current_user();
@@ -282,7 +259,7 @@ class AdminMenuHandler
         wp_add_inline_script('ninja-tables-data', 'window.ninja_table_admin = ' . wp_json_encode([
             'i18n' => (new I18nStrings())->getStrings(),
             'rest' => $this->getRestInfo($app),
-            'asset_url' => Vite::getAssetsUrl(),
+            'asset_url' => Vite::getAssetUrl(),
             'nonce' => wp_create_nonce($slug),
             'published_tables' => $this->getPublishedTablesCount(),
             'slug'                     => $slug,
