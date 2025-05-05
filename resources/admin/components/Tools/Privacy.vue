@@ -18,7 +18,7 @@
 
                 <div class="form-group">
                     <el-checkbox-group v-model="capability" @change="handleCheckedCapabilitiesChange">
-                        <el-checkbox v-for="role in roles" :label="role.key" :key="role.key">
+                        <el-checkbox v-for="role in roles" :value="role.key" :key="role.key">
                             {{ role.name }}
                         </el-checkbox>
                     </el-checkbox-group>
@@ -110,7 +110,7 @@
             }
         },
         mounted() {
-            this.hasPro = window.ninja_table_admin.hasPro === "1";
+            this.hasPro = window.ninja_table_admin.hasPro === true;
             this.get();
         }
     };
