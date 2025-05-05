@@ -271,7 +271,7 @@
         },
         mounted() {
             this.getPostAuthors().then(() => {
-                _.each(this.conditions, condition => {
+                this.conditions.forEach(condition => {
                     this.setOperators(condition.field, condition, condition.value);
                 });
             });

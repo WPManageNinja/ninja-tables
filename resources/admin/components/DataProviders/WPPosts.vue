@@ -284,7 +284,7 @@
                     current_user_posts: this.currentUserPosts
                 }
 
-                _.forEach(data.where, condition => {
+                data.where.forEach(condition => {
                     delete condition['selectableOptions'];
                 })
 
