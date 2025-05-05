@@ -86,8 +86,8 @@
                         </template>
 
                         <el-radio-group v-model="model.formatType">
-                            <el-radio label="standard">{{ $t('Standard') }}</el-radio>
-                            <el-radio label="custom" @click.native="showProPopUp" :disabled="!hasPro">Custom</el-radio>
+                            <el-radio label="standard" value="standard">{{ $t('Standard') }}</el-radio>
+                            <el-radio label="custom" value="custom" @click.native="showProPopUp" :disabled="!hasPro">Custom</el-radio>
                         </el-radio-group>
 
                         <!-- Format dropdown -->
@@ -179,8 +179,8 @@
                             </el-tooltip>
                         </template>
                         <el-radio-group @change="changeDecimalStyle()" v-model="model.decimal_system">
-                            <el-radio label="us">US Style - decimal point (123,234.01)</el-radio>
-                            <el-radio label="eu">European Style - decimal comma (123.234,01)</el-radio>
+                            <el-radio label="us" value="us">US Style - decimal point (123,234.01)</el-radio>
+                            <el-radio label="eu" value="eu">European Style - decimal comma (123.234,01)</el-radio>
                         </el-radio-group>
                     </el-form-item>
                 </template>
@@ -673,7 +673,7 @@
                             v-if="!hideDelete"
                             placement="top"
                             width="170"
-                            v-model="showConfirm"
+                            v-model:visible="showConfirm"
                             trigger="click"
                         >
                             <p>Are you sure to delete this?</p>
@@ -682,24 +682,30 @@
                                     link
                                     size="small"
                                     @click="showConfirm = false"
-                                >cancel
+                                >
+                                    {{ $t('cancel') }}
                                 </el-button>
 
                                 <el-button
                                     type="primary"
                                     size="small"
                                     @click="deleteColumn"
-                                >confirm
+                                >
+                                    {{ $t('confirm') }}
                                 </el-button>
                             </div>
-                            <el-button
-                                v-if="!hideDelete"
-                                type="danger"
-                                size="small"
-                                slot="reference"
-                            >{{ $t('Delete') }}
-                            </el-button>
+
+                            <template #reference>
+                                <el-button
+                                    v-if="!hideDelete"
+                                    type="danger"
+                                    size="small"
+                                >
+                                    {{ $t('Delete') }}
+                                </el-button>
+                            </template>
                         </el-popover>
+
 
                         <el-button :loading="doingAjax" @click.prevent="store" type="primary" size="small">
                             {{ $t('Update') }}

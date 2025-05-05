@@ -248,8 +248,7 @@
                         type: 'success'
                       });
 
-                      const { emit } = useEventBus();
-                      emit('addedTable');
+                      this.$emit('addedTable');
 
                       if (this.table.ID) {
                         this.closeModal();
