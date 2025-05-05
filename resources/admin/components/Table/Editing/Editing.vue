@@ -61,10 +61,12 @@
                                     </el-tooltip>
                                 </label>
                                 <el-checkbox-group v-model="settings.user_roles_editing">
-                                    <el-checkbox v-for="(role, role_key) in editing_user_roles" :label="role_key"
-                                                 :key="role_key">
-                                        {{role}}
-                                    </el-checkbox>
+                                    <el-checkbox
+                                        v-for="(role, role_key) in editing_user_roles"
+                                        :key="role_key"
+                                        :label="role"
+                                        :value="role_key"
+                                    />
                                 </el-checkbox-group>
                             </div>
                             <div class="form_group form_row_half">
@@ -75,10 +77,12 @@
                                     </el-tooltip>
                                 </label>
                                 <el-checkbox-group v-model="settings.user_roles_deleting">
-                                    <el-checkbox v-for="(role, role_key) in user_roles" :label="role_key"
-                                                 :key="role_key">
-                                        {{role}}
-                                    </el-checkbox>
+                                    <el-checkbox
+                                        v-for="(role, role_key) in user_roles"
+                                        :key="role_key"
+                                        :label="role"
+                                        :value="role_key"
+                                    />
                                 </el-checkbox-group>
                             </div>
                         </div>
@@ -226,8 +230,8 @@
                             </label>
                             <br/>
                             <el-radio-group size="small" v-model="appearance_settings.position">
-                                <el-radio-button label="left">Left</el-radio-button>
-                                <el-radio-button label="right">Right</el-radio-button>
+                                <el-radio-button label="Left" value="left" />
+                                <el-radio-button label="Right" value="right" />
                             </el-radio-group>
                         </div>
                     </div>

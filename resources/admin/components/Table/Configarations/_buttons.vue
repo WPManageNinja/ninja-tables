@@ -114,14 +114,22 @@
                 <h3>Buttons Position</h3>
                 <div class="form_group">
                     <el-radio-group size="small" v-model="table_buttons.button_position">
-                        <el-radio-button v-for="(button_position,position_key) in button_positions" :key="position_key" :label="position_key">{{button_position}}</el-radio-button>
+                        <el-radio-button
+                            v-for="(button_position, position_key) in button_positions"
+                            :key="position_key"
+                            :label="button_position"
+                            :value="position_key" />
                     </el-radio-group>
                 </div>
 
                 <div class="form_group">
                     <label>Buttons Alignment</label>
                     <el-radio-group size="small" v-model="table_buttons.button_alignment">
-                        <el-radio-button v-for="(button_align,align_key) in buttonAlignments" :key="align_key" :label="align_key">{{button_align}}</el-radio-button>
+                        <el-radio-button
+                            v-for="(button_align, align_key) in buttonAlignments"
+                            :key="align_key"
+                            :label="button_align"
+                            :value="align_key" />
                     </el-radio-group>
                 </div>
                 <div v-if="hasPro" class="form_group">

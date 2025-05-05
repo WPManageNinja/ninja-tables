@@ -24,7 +24,7 @@
             </div>
             <el-row v-if="!newTable" class="new-table-wrapper">
                 <el-col :span="12">
-                    <template>
+                    <div>
                         <div
                             class="new_table"
                             :style="`grid-template-rows:repeat(${initialData.table_data.table.tr},1fr);grid-template-columns:repeat(${initialData.table_data.table.tc},1fr)`"
@@ -62,7 +62,7 @@
                                 <a href="#ntb-templates"> {{ $t('Choose a Template') }}</a>
                             </div>
                         </div>
-                    </template>
+                    </div>
                 </el-col>
                 <el-col :span="12">
                     <h4>{{ $t('Import Table from CSV / JSON File') }}</h4>

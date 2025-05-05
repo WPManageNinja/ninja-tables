@@ -28,101 +28,124 @@
             <table id="ntb_table" :role="`${setting.accessibility.options.table_role.value}`"
                 :class="'table ninja_tables_builder_class_' + tableData['id'] + ' ntb_' + tableData['id']"
                 :style="[tableMarginTop, tableMarginBottom, tableInlineStyle, tableAlign(selectedDevice)]">
+
                 <div class="table-header" v-if="manage" :style="tableBorder">
-                    <draggable v-model="tableData.headers" tag="tr" @change="dragColumn">
-                        <th v-for="(header, index) in tableData.headers" :key="header" scope="col"
-                            :colspan="headerColSpan(header)" :class="thActiveInactiveClass(header)"
-                            :style="[tdThActiveMargin, thInlineStyle(header)]">
-                            <template
-                                v-if="(headerName(table.columnIndex) === header) && tdIds.length === 1 && ((!merge.visible) || split.visible)">
-                                <el-dropdown trigger="click" placement="top-start" class="column-options">
+                    <draggable
+                        v-model="tableData.headers"
+                        tag="tr"
+                        @change="dragColumn"
+                    >
+                        <template #item="{element: header, index: index}" :key="header" >
+                            <th scope="col"
+                                :colspan="headerColSpan(header)" :class="thActiveInactiveClass(header)"
+                                :style="[tdThActiveMargin, thInlineStyle(header)]">
+                                <template
+                                    v-if="(headerName(table.columnIndex) === header) && tdIds.length === 1 && ((!merge.visible) || split.visible)">
+                                    <el-dropdown trigger="click" placement="top-start" class="column-options">
                                     <span class="el-dropdown-link">
                                         <i :class="index === table.columnIndex ? 'i-active' : ''"
-                                            class="el-icon-caret-bottom el-icon--right"></i>
+                                           class="el-icon-caret-bottom el-icon--right"></i>
                                     </span>
-                                    <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item @click.native="insertColumnBefore()">{{ $t('Insert column before') }}
-                                        </el-dropdown-item>
-                                        <el-dropdown-item @click.native="insertColumnAfter">{{ $t('Insert column after')
-                                            }}
-                                        </el-dropdown-item>
-                                        <el-dropdown-item @click.native="addLeftColumn">{{ $t('Insert left column')
-                                            }}</el-dropdown-item>
-                                        <el-dropdown-item @click.native="addRightColumn">{{ $t('Insert right column')
-                                            }}</el-dropdown-item>
-                                        <el-dropdown-item divided @click.native="duplicateColumn">{{
-                                            $t('Duplicate column')
-                                        }}
-                                        </el-dropdown-item>
-                                        <el-dropdown-item @click.native="removeColumn">
-                                            <p style="color:red"> {{ $t('Remove column') }}</p>
-                                        </el-dropdown-item>
-                                    </el-dropdown-menu>
-                                </el-dropdown>
-                            </template>
-                        </th>
+                                        <el-dropdown-menu slot="dropdown">
+                                            <el-dropdown-item @click.native="insertColumnBefore()">{{ $t('Insert column before') }}
+                                            </el-dropdown-item>
+                                            <el-dropdown-item @click.native="insertColumnAfter">{{ $t('Insert column after')
+                                                }}
+                                            </el-dropdown-item>
+                                            <el-dropdown-item @click.native="addLeftColumn">{{ $t('Insert left column')
+                                                }}</el-dropdown-item>
+                                            <el-dropdown-item @click.native="addRightColumn">{{ $t('Insert right column')
+                                                }}</el-dropdown-item>
+                                            <el-dropdown-item divided @click.native="duplicateColumn">{{
+                                                    $t('Duplicate column')
+                                                }}
+                                            </el-dropdown-item>
+                                            <el-dropdown-item @click.native="removeColumn">
+                                                <p style="color:red"> {{ $t('Remove column') }}</p>
+                                            </el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </el-dropdown>
+                                </template>
+                            </th>
+                        </template>
                     </draggable>
                 </div>
+
                 <draggable v-model="tableData.data" class="tbody" tag="tbody" @change="dragRow"
                     :style="tdThActiveMargin"
                     v-if="selectedDevice === '' || selectedDevice === 'desktop' || !responsiveIsEnabled || (selectedDevice === 'mobile' && mobileDeviceBreakpoint) || (selectedDevice === 'tablet' && tabletDeviceBreakpoint)">
-                    <tr class="desktop-view"
-                        :class="`${table.rowIndex === index && tdIds.length <= 0 ? 'single-row-column' : 'tr_class_' + row.style.trId} ${firstRowSticky & index == 0 ? 'firstRowSticky' : ''}`"
-                        v-for="(row, index) in tableData.data" :key="index" :id="trId(row.style.trId)"
-                        :style="[trInlineStyle(row, index)]">
-                        <td v-if="manage && tdIds.length === 1 && !mergedTdIndexes().includes(index)"
-                            :rowspan="tdActiveRowSpan(row.style.trId)" :class="tdActiveInactiveClass(row.style.trId)">
-                            <el-dropdown trigger="click" placement="top-start" class="row-options">
+
+                    <template #item="{element: row, index: index}" :key="index" >
+                        <tr class="desktop-view"
+                            :class="`${table.rowIndex === index && tdIds.length <= 0 ? 'single-row-column' : 'tr_class_' + row.style.trId} ${firstRowSticky & index == 0 ? 'firstRowSticky' : ''}`"
+                            :id="trId(row.style.trId)"
+                            :style="[trInlineStyle(row, index)]">
+                            <td v-if="manage && tdIds.length === 1 && !mergedTdIndexes().includes(index)"
+                                :rowspan="tdActiveRowSpan(row.style.trId)" :class="tdActiveInactiveClass(row.style.trId)">
+                                <el-dropdown trigger="click" placement="top-start" class="row-options">
+
                                 <span class="el-dropdown-link">
                                     <i class="el-icon-caret-right"></i>
                                 </span>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item @click.native="insertRowBefore()">{{ $t('Insert row before')
-                                        }}</el-dropdown-item>
-                                    <el-dropdown-item @click.native="insertRowAfter">{{ $t('Insert row after')
-                                        }}</el-dropdown-item>
-                                    <el-dropdown-item @click.native="addTopRow">{{ $t('Insert top row')
-                                        }}</el-dropdown-item>
-                                    <el-dropdown-item @click.native="addBottomRow">{{ $t('Insert bottom row')
-                                        }}</el-dropdown-item>
-                                    <el-dropdown-item divided @click.native="duplicateRow">{{ $t('Duplicate row') }}
-                                    </el-dropdown-item>
-                                    <el-dropdown-item @click.native="removeRow">
-                                        <p style="color:red"> {{ $t('Remove row') }}</p>
-                                    </el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
-                        </td>
 
-                        <td v-for="(header, key) in tableData.headers" :key="header"
-                            @click.shift="manage ? selectItem(index, header, key, row.rows[header], row, true) : ''"
-                            @click.exact="manage ? selectItem(index, header, key, row.rows[header], row, false) : ''"
-                            :id="'td_id_' + tdId(row, header)"
-                            :class="[tdClass(row, header, key), highlightClass(row, header), 'table-data']"
-                            :rowspan="row.rows[header].style.rowspan" :colspan="row.rows[header].style.colspan"
-                            :style="[tdInlineStyle(row, header), highlightedColumnStyle(row, header), showInnerBorder ? innerBorder(index) : '', firstColumnSticky && key === 0 ? stickyColumn() : '']">
-                            <draggable :list="row.rows[header].columns" group="people"
-                                :id="tdIds.includes(tdId(row, header)) ? 'selected-item' : 'cell_' + tdId(row, header)"
-                                :move="onMove">
-                                <div v-for="(item, ind) in row.rows[header].columns" class="single-item"
-                                    :class="[item.id === itemId ? 'item-active' : '', manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon' : 'other-item' : 'responsive-mode')]"
-                                    :key="ind">
-                                    <table-data :manage="manage" :setting="setting" :reference="`${index}_${key}_${row.rows[header].columns.length-(ind+1)}`"
-                                        @click.native="!manage && selectedDevice === '' ? styleChange(item, index, key, row.rows[header], row) : ''"
-                                        :item="item">
-                                    </table-data>
-                                    <template v-if="!manage && selectedDevice === ''">
-                                        <div class="icon-style remove-elements" :style="iconSpacing(item)">
-                                            <i class="el-icon-rank"></i>
-                                            <i class="el-icon-copy-document" @click="copyItem(index, header, item)"></i>
-                                            <i class="el-icon-delete" @click="deleteItem(index, header, ind)"></i>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item @click.native="insertRowBefore()">
+                                            {{ $t('Insert row before') }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click.native="insertRowAfter">
+                                            {{ $t('Insert row after') }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click.native="addTopRow">
+                                            {{ $t('Insert top row') }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click.native="addBottomRow">
+                                            {{ $t('Insert bottom row') }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item divided @click.native="duplicateRow">
+                                            {{ $t('Duplicate row') }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click.native="removeRow">
+                                            <p style="color:red"> {{ $t('Remove row') }}</p>
+                                        </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </td>
+
+                            <td v-for="(header, key) in tableData.headers" :key="header"
+                                @click.shift="manage ? selectItem(index, header, key, row.rows[header], row, true) : ''"
+                                @click.exact="manage ? selectItem(index, header, key, row.rows[header], row, false) : ''"
+                                :id="'td_id_' + tdId(row, header)"
+                                :class="[tdClass(row, header, key), highlightClass(row, header), 'table-data']"
+                                :rowspan="row.rows[header].style.rowspan" :colspan="row.rows[header].style.colspan"
+                                :style="[tdInlineStyle(row, header), highlightedColumnStyle(row, header), showInnerBorder ? innerBorder(index) : '', firstColumnSticky && key === 0 ? stickyColumn() : '']">
+
+                                <draggable :list="row.rows[header].columns" group="people"
+                                           :id="tdIds.includes(tdId(row, header)) ? 'selected-item' : 'cell_' + tdId(row, header)"
+                                           :move="onMove">
+                                    <template #item="{element: item, index: ind}">
+                                        <div class="single-item"
+                                             :class="[item.id === itemId ? 'item-active' : '', manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon' : 'other-item' : 'responsive-mode')]"
+                                             :key="ind">
+                                            <table-data :manage="manage" :setting="setting" :reference="`${index}_${key}_${row.rows[header].columns.length-(ind+1)}`"
+                                                        @click.native="!manage && selectedDevice === '' ? styleChange(item, index, key, row.rows[header], row) : ''"
+                                                        :item="item">
+                                            </table-data>
+                                            <template v-if="!manage && selectedDevice === ''">
+                                                <div class="icon-style remove-elements" :style="iconSpacing(item)">
+                                                    <i class="el-icon-rank"></i>
+                                                    <i class="el-icon-copy-document" @click="copyItem(index, header, item)"></i>
+                                                    <i class="el-icon-delete" @click="deleteItem(index, header, ind)"></i>
+                                                </div>
+                                            </template>
                                         </div>
                                     </template>
-                                </div>
-                            </draggable>
-                        </td>
-                    </tr>
+                                </draggable>
+
+                            </td>
+                        </tr>
+                    </template>
                 </draggable>
+
                 <tbody v-else :key="tableData">
                     <tr v-for="(item, index) in responsiveInitial.tableData" :key="index"
                         :class="`${selectedDevice === 'mobile' ? 'mobile-view tr_class_mobile_' + index : 'tablet-view tr_class_tablet_' + index}`"

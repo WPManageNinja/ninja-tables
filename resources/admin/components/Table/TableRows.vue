@@ -125,7 +125,7 @@
                 border
                 max-height="600"
                 :class="{ compact: isCompact, sorting: sorting}"
-                :style="'width: '+tableWidth"
+                :style="{ width: tableWidth }"
                 @selection-change="handleSelectionChange"
             >
                 <el-table-column
@@ -233,22 +233,22 @@
         <sortable-upgrade-notice :show="sortableUpgradeNotice" @close="sortableUpgradeNotice = false"/>
 
         <el-dialog
+            v-model="showColumnEditor"
             :close-on-click-modal="false"
             class="no_padding_body"
             :append-to-body="true"
-            top="50px"
-            :title="'Edit Table Column : ' +currentEditingColumn.name"
-            width="70%"
-            :visible.sync="showColumnEditor"
+            :top="'50px'"
+            :title="currentEditingColumn ? 'Edit Table Column : ' + currentEditingColumn.name : ''"
+            :width="'70%'"
         >
             <columns-editor
+                v-if="showColumnEditor && currentEditingColumn"
                 :dataSourceType="config.table.dataSourceType"
                 :model="currentEditingColumn"
                 :hasPro="has_pro"
                 :updating="true"
                 :columns="columns"
                 :settings="config.settings"
-                v-if="showColumnEditor && currentEditingColumn"
                 @store="storeSettings()"
                 @delete="deleteColumn()"
                 @cancel="showColumnEditor = false"
@@ -258,11 +258,13 @@
         <el-dialog
             v-model="columnModal"
             :close-on-click-modal="false"
-            top="50px"
+            :top="'50px'"
             :append-to-body="true"
-            title="Add Table Column"
-            width="70%">
+            :title="'Add Table Column'"
+            :width="'70%'"
+        >
             <columns-editor
+                v-if="columnModal"
                 :model="new_column"
                 :hasPro="has_pro"
                 :columns="config.columns"

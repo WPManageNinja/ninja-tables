@@ -57,9 +57,9 @@
 
                 <div v-if="column.wp_post_custom_data_source_type == 'featured_image'">
                     <el-radio-group v-model="column.image_permalink_type">
-                        <el-radio label="lightbox">Make image as lightbox</el-radio>
-                        <el-radio label="linked">Link to Product page</el-radio>
-                        <el-radio label="">None</el-radio>
+                        <el-radio value="lightbox" label="Make image as lightbox" />
+                        <el-radio value="linked" label="Link to Product page" />
+                        <el-radio value="" label="None" />
                     </el-radio-group>
                     <p v-show="column.image_permalink_type == 'linked'">
                         <el-checkbox :true-value="'_blank'" :false-value="'no'" v-model="column.permalink_target">Open Link in new tab</el-checkbox>

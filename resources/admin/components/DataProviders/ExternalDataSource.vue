@@ -110,29 +110,30 @@
 
         <div style="margin-top: 15px;" v-if="editing">
             <el-input
-                    placeholder="Remote URL..."
-                    v-model="table.remoteURL"
-                    v-on:keyup.enter="fatchRemoteData"
+                placeholder="Remote URL..."
+                v-model="table.remoteURL"
+                @keyup.enter="fatchRemoteData"
             >
-                <el-button
+                <template #prepend>
+                    <el-button
                         :loading="fetching"
                         @click="fatchRemoteData"
-                        slot="prepend"
-                        size="small"
-                        plain
-                >{{ $t('Fetch Columns') }}
-                </el-button>
+                        size="default"
+                        :plain="true"
+                    >{{ $t('Fetch Columns') }}
+                    </el-button>
+                </template>
 
-                <el-button
+                <template #append>
+                    <el-button
                         :loading="saving"
                         @click="save"
-                        slot="append"
-                        size="small"
-                        plain
+                        size="default"
+                        :plain="true"
                         type="primary"
-                >{{ $t('Update Settings') }}
-                </el-button>
-
+                    >{{ $t('Update Settings') }}
+                    </el-button>
+                </template>
             </el-input>
         </div>
     </div>

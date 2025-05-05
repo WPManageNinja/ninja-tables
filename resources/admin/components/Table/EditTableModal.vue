@@ -18,7 +18,6 @@
                 />
             </div>
 
-
             <div class="form-group">
                 <label>{{ $t('Table Description') }}</label>
                 <wp_editor v-model="table.post_content"></wp_editor>

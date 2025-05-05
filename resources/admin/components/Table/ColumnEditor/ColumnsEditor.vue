@@ -86,8 +86,8 @@
                         </template>
 
                         <el-radio-group v-model="model.formatType">
-                            <el-radio label="standard">{{ $t('Standard') }}</el-radio>
-                            <el-radio label="custom" @click.native="showProPopUp" :disabled="!hasPro">Custom</el-radio>
+                            <el-radio value="standard">{{ $t('Standard') }}</el-radio>
+                            <el-radio value="custom" @click.native="showProPopUp" :disabled="!hasPro">Custom</el-radio>
                         </el-radio-group>
 
                         <!-- Format dropdown -->
@@ -179,8 +179,8 @@
                             </el-tooltip>
                         </template>
                         <el-radio-group @change="changeDecimalStyle()" v-model="model.decimal_system">
-                            <el-radio label="us">US Style - decimal point (123,234.01)</el-radio>
-                            <el-radio label="eu">European Style - decimal comma (123.234,01)</el-radio>
+                            <el-radio value="us"> {{ $t('US Style - decimal point (123,234.01)') }}</el-radio>
+                            <el-radio value="eu">{{ $t('European Style - decimal comma (123.234,01)') }}</el-radio>
                         </el-radio-group>
                     </el-form-item>
                 </template>
@@ -277,17 +277,17 @@
                         </el-form-item>
                     </template>
                     <el-form-item label="Image Linkable?">
-                        <el-radio :disabled="!hasPro" v-model="model.link_type" label="none">Image Only</el-radio>
-                        <el-radio :disabled="!hasPro" v-model="model.link_type" label="image_light_box">Image Lightbox</el-radio>
-                        <el-radio :disabled="!hasPro" v-model="model.link_type" label="iframe_ligtbox">Iframe Lightbox</el-radio>
-                        <el-radio :disabled="!hasPro" v-model="model.link_type" label="hyperlinked">Link to URL</el-radio>
+                        <el-radio :disabled="!hasPro" v-model="model.link_type" value="none">{{ $t('Image Only') }}</el-radio>
+                        <el-radio :disabled="!hasPro" v-model="model.link_type" value="image_light_box">{{ $t('Image Lightbox') }}</el-radio>
+                        <el-radio :disabled="!hasPro" v-model="model.link_type" value="iframe_ligtbox">{{ $t('Iframe Lightbox') }}</el-radio>
+                        <el-radio :disabled="!hasPro" v-model="model.link_type" value="hyperlinked">{{ $t('Link to URL') }}</el-radio>
                     </el-form-item>
                     <el-form-item v-if="model.link_type == 'file_download'" label="Download Button Text / HTML">
                         <el-input :disabled="!hasPro" type="textarea" placeholder="Download Button Text / HTML"
                                   v-model="model.download_button"></el-input>
                     </el-form-item>
                     <el-form-item v-if="model.link_type == 'hyperlinked' || model.link_type == 'file_download'">
-                        <el-checkbox :disabled="!hasPro" true-label="_blank" false-label="_self" v-model="model.link_target">Open Link
+                        <el-checkbox :disabled="!hasPro" :true-value="'_blank'" :false-value="'_self'" v-model="model.link_target">Open Link
                             in new window
                         </el-checkbox>
                     </el-form-item>
@@ -307,13 +307,13 @@
                     <el-form-item label="Button Text">
                         <el-input size="small" type="text" placeholder="Button Text (HTML supported)"
                                   v-model="model.button_text"></el-input>
-                        <el-checkbox :disabled="!hasPro" true-label="_blank" false-label="_self" v-model="model.link_target">Open Link
+                        <el-checkbox :disabled="!hasPro" :true-value="'_blank'" :false-value="'_self'" v-model="model.link_target">Open Link
                             in new tab
                         </el-checkbox>
-                        <el-checkbox :disabled="!hasPro" true-label="nt_rounded_btn" false-label="" v-model="model.btn_extra_class">Make
+                        <el-checkbox :disabled="!hasPro" :true-value="'nt_rounded_btn'" :false-value="''" v-model="model.btn_extra_class">Make
                             Button as rounded corner
                         </el-checkbox>
-                      <el-checkbox :disabled="!hasPro" true-label="download" false-label="" v-model="model.force_download">Make
+                      <el-checkbox :disabled="!hasPro" :true-value="'download'" :false-value="''" v-model="model.force_download">Make
                         Force download
                       </el-checkbox>
                     </el-form-item>
@@ -673,33 +673,39 @@
                             v-if="!hideDelete"
                             placement="top"
                             width="170"
-                            v-model="showConfirm"
+                            v-model:visible="showConfirm"
                             trigger="click"
                         >
                             <p>Are you sure to delete this?</p>
                             <div style="text-align: right; margin: 0">
                                 <el-button
-                                    type="text"
+                                    link
                                     size="small"
                                     @click="showConfirm = false"
-                                >cancel
+                                >
+                                    {{ $t('cancel') }}
                                 </el-button>
 
                                 <el-button
                                     type="primary"
                                     size="small"
                                     @click="deleteColumn"
-                                >confirm
+                                >
+                                    {{ $t('confirm') }}
                                 </el-button>
                             </div>
-                            <el-button
-                                v-if="!hideDelete"
-                                type="danger"
-                                size="small"
-                                slot="reference"
-                            >{{ $t('Delete') }}
-                            </el-button>
+
+                            <template #reference>
+                                <el-button
+                                    v-if="!hideDelete"
+                                    type="danger"
+                                    size="small"
+                                >
+                                    {{ $t('Delete') }}
+                                </el-button>
+                            </template>
                         </el-popover>
+
 
                         <el-button :loading="doingAjax" @click.prevent="store" type="primary" size="small">
                             {{ $t('Update') }}

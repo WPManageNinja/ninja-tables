@@ -10,7 +10,7 @@
                     <el-checkbox
                         v-for="taxonomy in term.terms"
                         :key="taxonomy.slug"
-                        :label="taxonomy.slug">{{taxonomy.name}} ({{taxonomy.count}})
+                        :value="taxonomy.slug">{{taxonomy.name}} ({{taxonomy.count}})
                     </el-checkbox>
                 </el-checkbox-group>
             </div>

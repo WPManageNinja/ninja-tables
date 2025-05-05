@@ -91,9 +91,9 @@
                             </el-col>
                             <el-col :md="18" style="margin-top:3px;">
                                 <el-radio-group v-model="form.entry_status">
-                                    <el-radio label="all">All</el-radio>
-                                    <el-radio label="read">Read</el-radio>
-                                    <el-radio label="unread">Unread</el-radio>
+                                    <el-radio value="all" :label="$t('All')" />
+                                    <el-radio value="read" :label="$t('Read')" />
+                                    <el-radio value="unread" :label="$t('Unread')" />
                                 </el-radio-group>
                             </el-col>
                         </el-row>
