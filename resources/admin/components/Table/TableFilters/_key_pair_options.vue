@@ -11,22 +11,26 @@
                 :options="{handle:'.handle'}"
                 :list="value"
                 :element="'tbody'"
+                item-key="label"
+                tag="tbody"
         >
-            <tr v-for="(filter, index) in value">
-                <td>
-                    <span style="margin-top: 10px" class="dashicons dashicons-editor-justify handle"></span>
-                </td>
-                <td>
-                    <el-input size="small" v-model="filter.label" type="text"></el-input>
-                </td>
-                <td>
-                    <el-input size="small" v-model="filter.value" type="text"></el-input>
-                </td>
-                <td>
-                    <el-button :disabled="value.length == 1" @click="deleteItem(index)" type="danger" size="small">-</el-button>
-                    <el-button @click="add()" v-show="(index + 1) == value.length" type="success" size="small">+</el-button>
-                </td>
-            </tr>
+           <template #item="{element: filter, index: filter_index}">
+               <tr v-for="(filter, index) in value">
+                   <td>
+                       <span style="margin-top: 10px" class="dashicons dashicons-editor-justify handle"></span>
+                   </td>
+                   <td>
+                       <el-input size="small" v-model="filter.label" type="text"></el-input>
+                   </td>
+                   <td>
+                       <el-input size="small" v-model="filter.value" type="text"></el-input>
+                   </td>
+                   <td>
+                       <el-button :disabled="value.length == 1" @click="deleteItem(index)" type="danger" size="small">-</el-button>
+                       <el-button @click="add()" v-show="(index + 1) == value.length" type="success" size="small">+</el-button>
+                   </td>
+               </tr>
+           </template>
         </draggable>
     </table>
 </template>
@@ -52,9 +56,6 @@
                 });
             }
         },
-        mounted() {
-
-        }
     }
 </script>
 

@@ -145,7 +145,7 @@
                         <i class="el-icon-info el-text-info"></i>
                     </el-tooltip>
                 </template>
-                <key-pair-options v-model="activeEditor.options"></key-pair-options>
+                <key-pair-options :value="activeEditor.options"></key-pair-options>
             </el-form-item>
         </template>
 
@@ -253,7 +253,12 @@
                 </el-tooltip>
             </template>
             <el-checkbox-group v-if="current_columns.length" v-model="activeEditor.columns">
-                <el-checkbox v-for="column in current_columns" :key="column.key" :label="column.key">{{column.name}}</el-checkbox>
+                <el-checkbox
+                    v-for="column in current_columns"
+                    :key="column.key"
+                    :label="column.key"
+                    :value="column.name"
+                />
             </el-checkbox-group>
             <div v-else>
                 Sorry, No corresponding columns found based on your selection and column's data type

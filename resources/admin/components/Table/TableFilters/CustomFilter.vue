@@ -24,26 +24,30 @@
                         </tr>
                         </thead>
                         <draggable
-                                :options="{handle:'.handle'}"
+                                :v-model="{handle:'.handle'}"
                                 :list="table_filters"
                                 :element="'tbody'"
                                 @change="saveFilters()"
+                                item-key="name"
+                                tag="tbody"
                         >
-                            <tr v-for="(table_filter, filter_index) in table_filters">
-                                <td><span class="dashicons dashicons-editor-justify handle"></span> {{ table_filter.title }}</td>
-                                <td>{{ table_filter.type }}</td>
-                                <td>
-                                    <code v-for="columnKey in table_filter.columns" v-show="columnKeyPairs[columnKey]">
-                                        {{ columnKeyPairs[columnKey] }}
-                                    </code>
-                                </td>
-                                <td>
-                                    <el-button @click="edit(table_filter)" size="small" type="primary"
-                                               icon="el-icon-edit"></el-button>
-                                    <el-button size="small" @click="deleteFilter(filter_index)" type="danger"
-                                               icon="el-icon-delete"></el-button>
-                                </td>
-                            </tr>
+                            <template #item="{element: table_filter, index: filter_index}">
+                                <tr v-for="(table_filter, filter_index) in table_filters" :key="filter_index" >
+                                    <td><span class="dashicons dashicons-editor-justify handle"></span> {{ table_filter.title }}</td>
+                                    <td>{{ table_filter.type }}</td>
+                                    <td>
+                                        <code v-for="columnKey in table_filter.columns" v-show="columnKeyPairs[columnKey]">
+                                            {{ columnKeyPairs[columnKey] }}
+                                        </code>
+                                    </td>
+                                    <td>
+                                        <el-button @click="edit(table_filter)" size="small" type="primary"
+                                                   icon="el-icon-edit"></el-button>
+                                        <el-button size="small" @click="deleteFilter(filter_index)" type="danger"
+                                                   icon="el-icon-delete"></el-button>
+                                    </td>
+                                </tr>
+                            </template>
                         </draggable>
                     </table>
                     <h3>Filter Appearance</h3>
