@@ -1,20 +1,23 @@
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import react from "@vitejs/plugin-react";
+
+import {defineConfig} from 'vite'
+// import {viteStaticCopy} from 'vite-plugin-static-copy'
+import vue from '@vitejs/plugin-vue'
+import react from '@vitejs/plugin-react'
+import liveReload from 'vite-plugin-live-reload';
 import path from "path";
+import AutoImport from 'unplugin-auto-import/vite';
 import fs from "fs";
-import AutoImport from "unplugin-auto-import/vite";
-import liveReload from "vite-plugin-live-reload";
-import Components from "unplugin-vue-components/vite";
-import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
-// import { viteStaticCopy } from "vite-plugin-static-copy";
 
-const serverConfig = require("./config/vite.json");
+const {ElementPlusResolver} = require("unplugin-vue-components/resolvers");
+const Components = require("unplugin-vue-components/vite");
+// https://vitejs.dev/config/
 
-const input = [
+//Add All css and js here
+//Important: Key must be output filepath without extension, and value will be the file source
+const inputs = [
   "resources/admin/Boot.js",
   "resources/admin/main.js",
-  "resources/admin/gutenblock.js",
+  "resources/admin/gutenblock.jsx",
   "resources/admin/ninja-table-tinymce-button.js",
   "resources/public/js/ninja-tables-footable.js",
   "resources/public/js/ninja-tables-builder.js",
@@ -25,29 +28,6 @@ const input = [
   "resources/admin/css/gutenblock.scss",
   "resources/preview/preview.scss",
 ];
-
-const moveManifestPlugin = {
-  name: "move-manifest",
-  configResolved(resolvedConfig) {
-    // Store the resolved config for use in writeBundle
-    viteConfig = resolvedConfig;
-  },
-  writeBundle() {
-    const outDir = viteConfig.build.outDir;
-    const manifestSrc = path.join(outDir, ".vite", "manifest.json");
-    const manifestDest = path.resolve(__dirname, serverConfig.manifest_path);
-    const viteDir = path.join(outDir, ".vite");
-
-    // Check if the manifest file exists, then move it
-    if (fs.existsSync(manifestSrc)) {
-      fs.renameSync(manifestSrc, manifestDest); // Move the file
-      // Optionally, remove the .vite directory if it's empty
-      if (fs.existsSync(viteDir) && fs.readdirSync(viteDir).length === 0) {
-        fs.rmSync(viteDir, { recursive: true }); // Remove empty directory
-      }
-    }
-  },
-};
 
 const copyImagesPlugin = {
   name: "copy-images",
@@ -72,96 +52,69 @@ const copyImagesPlugin = {
 };
 
 export default defineConfig({
-  plugins: [
-    vue({
-      template: {
-        transformAssetUrls: {
-          base: null,
-          includeAbsolute: false,
+    plugins:
+        [
+            vue(),
+            react(),
+            liveReload([
+                `${__dirname}/**/*\.php`,
+            ]),
+            // viteStaticCopy({
+            //     targets: [
+            //         {src: 'resources/images', dest: ''},
+            //         {src: 'resources/icons', dest: ''},
+            //         {src: 'resources/libs', dest: ''},
+            //     ]
+            // }),
+            AutoImport({
+                resolvers: [ElementPlusResolver()],
+            }),
+            Components({
+                resolvers: [ElementPlusResolver()],
+                directives: false
+            }),
+            copyImagesPlugin
+        ],
+
+    build: {
+        manifest: true,
+        outDir: 'assets',
+        //assetsDir: '',
+        publicDir: 'assets',
+        //root: '/',
+        emptyOutDir: true, // delete the contents of the output directory before each build
+
+        // https://rollupjs.org/guide/en/#big-list-of-options
+        rollupOptions: {
+            input: inputs,
+            output: {
+                chunkFileNames: '[name].js',
+                entryFileNames: '[name].js',
+            },
         },
-      },
-    }),
-    react({
-      // Enable JSX
-      jsxRuntime: "automatic",
-      babel: {
-        plugins: ["@babel/plugin-transform-react-jsx"],
-      },
-    }),
-    liveReload([`${__dirname}/**/*\.php`]),
-    // viteStaticCopy({
-    //   targets: [
-    //     {
-    //       src: "resources/img",
-    //       dest: "",
-    //     },
-    //   ],
-    // }),
-    // AutoImport({
-    //   resolvers: [],
-    // }),
-    // Components({
-    //   resolvers: [],
-    //   directives: false,
-    // }),
-    moveManifestPlugin,
-    copyImagesPlugin
-  ],
-  base: "",
-  build: {
-    manifest: true,
-    outDir: "assets",
-    rollupOptions: {
-      input,
-      output: {
-        entryFileNames: "js/[name].js",
-        chunkFileNames: "js/[name]-[hash].js",
-        assetFileNames: ({ name }) => {
-          if (/\.(gif|jpe?g|png|svg)$/.test(name ?? "")) {
-            return "img/[name][extname]";
-          }
-          if (/\.css$/.test(name ?? "")) {
-            return "css/[name][extname]";
-          }
-          return "[name][extname]";
+    },
+
+    resolve: {
+      extensions: [".js", ".jsx", ".vue", ".json", ".scss"],
+        alias: {
+            'vue': 'vue/dist/vue.esm-bundler.js',
+            '@': path.resolve(__dirname, 'resources/admin'),
         },
-      },
     },
-  },
-  server: {
-    port: serverConfig.port,
-    strictPort: serverConfig.strict_port,
-    hmr: {
-      port: serverConfig.port,
-      host: serverConfig.host,
-      protocol: serverConfig.vite_protocol,
+
+    server: {
+        port: 8880,
+        strictPort: true,
+        cors:{
+            origin: '*',
+        },
+        hmr: {
+            port: 8880,
+            host: 'localhost',
+            protocol: 'ws',
+        }
     },
-    cors: {
-      origin: "*",
-      methods: ["GET"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-    },
-  },
-  resolve: {
-    extensions: [".js", ".jsx", ".vue", ".json", ".scss"],
-    alias: {
-      "@": path.resolve(__dirname, "resources"),
-      "@admin": path.resolve(__dirname, "resources/admin"),
-      "@public": path.resolve(__dirname, "resources/public"),
-      // 'vue': 'vue/dist/vue.esm-bundler.js',
-    },
-  },
-  esbuild: {
-    loader: "jsx",
-    include: /src\/.*\.jsx?$/,
-    exclude: [],
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      loader: {
-        ".js": "jsx",
-      },
-    },
-    include: ["vue", "element-plus"],
-  },
-});
+    esbuild: {
+        loader: "jsx",
+    }
+})

@@ -46,7 +46,8 @@
 // @import 'element-plus/theme-chalk/el-badge.css';
 // @import 'element-plus/theme-chalk/el-tag.css';
 
-@import './ninja-tables-admin.scss';
+// @import './ninja-tables-admin.scss';
+@use './ninja-tables-admin' as *;
 
 .el-input {
     input[readonly] {
