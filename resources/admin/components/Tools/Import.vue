@@ -117,7 +117,7 @@
 
         <el-dialog
                 title="Your current tables"
-                :visible.sync="showPluginModal"
+                v-model="showPluginModal"
                 @close="closePluginModal()"
         >
             <template v-if="otherPluginTables.length">

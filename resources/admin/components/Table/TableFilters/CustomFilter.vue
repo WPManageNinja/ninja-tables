@@ -81,7 +81,7 @@
 
         <el-dialog
                 title="Edit Custom Filter"
-                :visible.sync="editorModal"
+                v-model="editorModal"
                 width="70%"
                 top="50px"
                 :append-to-body="true">
@@ -94,7 +94,7 @@
 
         <el-dialog
                 title="Add New Custom Filter"
-                :visible.sync="addFilterModal"
+                v-model="addFilterModal"
                 width="70%"
                 top="50px"
                 :append-to-body="true">

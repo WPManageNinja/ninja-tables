@@ -1,7 +1,7 @@
 <template>
     <el-dialog
         :title="title"
-        :visible.sync="showModal"
+        v-model="showModal"
         top="50px"
         :close-on-click-modal="false"
         :append-to-body="true"
@@ -9,24 +9,24 @@
         <div v-if="showModal">
             <div v-for="column in columns" :key="column.key" class="form-group">
                 <label :for="slugify(column.key)">{{ column.name || column.key }}</label>
-                <div v-if="column.data_type == 'textarea'">
+                <div v-if="column.data_type === 'textarea'">
                     <textarea :placeholder="column.name" :id="slugify(column.key)" class="form-control"
                               v-model="newColumn[column.key]"></textarea>
                 </div>
-                <div v-else-if="column.data_type == 'html'">
+                <div v-else-if="column.data_type === 'html'">
                     <wp_editor :editor_id="slugify(column.key)" v-model="newColumn[column.key]"></wp_editor>
                 </div>
-                <div v-else-if="column.data_type == 'date'">
+                <div v-else-if="column.data_type === 'date'">
                     <ninja-date-picker :column="column" :new_column="newColumn"></ninja-date-picker>
                 </div>
-                <div v-else-if="column.data_type == 'selection'">
+                <div v-else-if="column.data_type === 'selection'">
                     <may-be-select :column="column" :newColumn="newColumn"></may-be-select>
                 </div>
 
-                <div v-else-if="column.data_type == 'image' && has_pro">
+                <div v-else-if="column.data_type === 'image' && has_pro">
                     <image-selector :adding_counter="adding_counter" :column="column" :newColumn="newColumn"></image-selector>
                 </div>
-                <div v-else-if="column.data_type == 'button' && has_pro">
+                <div v-else-if="column.data_type === 'button' && has_pro">
                     <input placeholder="Valid button URL" type="url" :id="slugify(column.key)" class="form-control"
                            v-model="newColumn[column.key]">
                     <small>Please provide valid URL</small>

@@ -1,7 +1,7 @@
 <template>
     <el-dialog
             v-if="leadVisible"
-            :visible.sync="leadVisible"
+            v-model="leadVisible"
             title="We made a few tweaks to Ninja Tables"
     >
         <div v-loading="loading" class="ninja_permission_wrapper">

@@ -42,7 +42,7 @@
         </fieldset>
         <el-dialog
                 title="Update Table Info"
-                :visible.sync="editTableModalShow"
+                v-model="editTableModalShow"
                 top="50px"
                 :append-to-body="true"
         >

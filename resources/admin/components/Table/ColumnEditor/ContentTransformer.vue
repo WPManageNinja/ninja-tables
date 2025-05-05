@@ -20,7 +20,7 @@
                 <el-button size="small" @click="show_formulas = true">Show Formulas</el-button>
                 <el-dialog
                     title="Supported Excel Formullas"
-                    :visible.sync="show_formulas"
+                    v-model="show_formulas"
                     width="30%">
                     <ul style="margin: 0px 20px; padding-top: 20px">
                         <li v-for="line_item in supported_formullas">{{line_item}}</li>
