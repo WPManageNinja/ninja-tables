@@ -2,7 +2,12 @@
     <div class="radioButton">
         <span>{{ label }}</span><br>
         <el-radio-group :value="value" size="small" @input="$emit('update', $event)">
-            <el-radio-button v-for="option in options" :key="option.value" :label="option.label"></el-radio-button>
+            <el-radio-button
+                v-for="option in options"
+                :key="option.value"
+                :label="option.label"
+                :value="option.label"
+            />
         </el-radio-group>
     </div>
 </template>

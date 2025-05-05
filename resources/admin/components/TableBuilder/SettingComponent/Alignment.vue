@@ -7,9 +7,9 @@
                     :disabled="disableResponsive || mobileDisableBreakpoint || tabletDisableBreakpoint"
                     style="display: flex; justify-content: space-around; margin-right: 10px;"
     >
-      <el-radio label="left">{{ $t('Left') }}</el-radio>
-      <el-radio label="center">{{ $t('Center') }}</el-radio>
-      <el-radio label="right">{{ $t('Right') }}</el-radio>
+      <el-radio :label="$t('Left')" value="left" />
+      <el-radio :label="$t('Center')" value="center" />
+      <el-radio :label="$t('Right')" valueright />
     </el-radio-group>
   </div>
 </template>

@@ -10,6 +10,7 @@
                             :list="component.fields"
                             :group="{ name: 'people', pull: 'clone', put: false }"
                             :clone="customClone"
+                            item-key="name"
                             @end="end"
                         >
                             <template #item="{element: item, index: index}" :key="index">

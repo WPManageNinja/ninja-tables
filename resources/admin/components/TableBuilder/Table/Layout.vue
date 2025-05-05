@@ -34,6 +34,7 @@
                         v-model="tableData.headers"
                         tag="tr"
                         @change="dragColumn"
+                        item-key="header"
                     >
                         <template #item="{element: header, index: index}" :key="header" >
                             <th scope="col"
@@ -73,6 +74,7 @@
 
                 <draggable v-model="tableData.data" class="tbody" tag="tbody" @change="dragRow"
                     :style="tdThActiveMargin"
+                     item-key="style.trId"
                     v-if="selectedDevice === '' || selectedDevice === 'desktop' || !responsiveIsEnabled || (selectedDevice === 'mobile' && mobileDeviceBreakpoint) || (selectedDevice === 'tablet' && tabletDeviceBreakpoint)">
 
                     <template #item="{element: row, index: index}" :key="index" >
@@ -121,7 +123,7 @@
 
                                 <draggable :list="row.rows[header].columns" group="people"
                                            :id="tdIds.includes(tdId(row, header)) ? 'selected-item' : 'cell_' + tdId(row, header)"
-                                           :move="onMove">
+                                           :move="onMove" itemKey="id">
                                     <template #item="{element: item, index: ind}">
                                         <div class="single-item"
                                              :class="[item.id === itemId ? 'item-active' : '', manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon' : 'other-item' : 'responsive-mode')]"
