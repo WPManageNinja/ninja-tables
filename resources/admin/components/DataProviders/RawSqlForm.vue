@@ -47,8 +47,8 @@
                 <div class="form-group">
                     <label>{{ $t('SQL COnnection Type') }}</label>
                     <el-radio-group v-model="connection_type">
-                        <el-radio label="local">Default WP SQL Table</el-radio>
-                        <el-radio label="external">Remote/External SQL</el-radio>
+                        <el-radio value="local" label="Default WP SQL Table" />
+                        <el-radio value="external" label="Remote/External SQL" />
                     </el-radio-group>
                 </div>
 
