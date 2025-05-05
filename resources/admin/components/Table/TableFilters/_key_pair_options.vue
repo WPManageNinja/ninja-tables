@@ -10,12 +10,11 @@
         <draggable
                 :options="{handle:'.handle'}"
                 :list="value"
-                :element="'tbody'"
                 item-key="label"
                 tag="tbody"
         >
-           <template #item="{element: filter, index: filter_index}">
-               <tr v-for="(filter, index) in value">
+           <template #item="{element: filter, index: index}">
+               <tr>
                    <td>
                        <span style="margin-top: 10px" class="dashicons dashicons-editor-justify handle"></span>
                    </td>

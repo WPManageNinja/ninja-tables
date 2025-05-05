@@ -32,7 +32,7 @@
                                 tag="tbody"
                         >
                             <template #item="{element: table_filter, index: filter_index}">
-                                <tr v-for="(table_filter, filter_index) in table_filters" :key="filter_index" >
+                                <tr>
                                     <td><span class="dashicons dashicons-editor-justify handle"></span> {{ table_filter.title }}</td>
                                     <td>{{ table_filter.type }}</td>
                                     <td>
