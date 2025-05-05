@@ -86,8 +86,8 @@
                         </template>
 
                         <el-radio-group v-model="model.formatType">
-                            <el-radio label="standard">{{ $t('Standard') }}</el-radio>
-                            <el-radio label="custom" @click.native="showProPopUp" :disabled="!hasPro">Custom</el-radio>
+                            <el-radio value="standard">{{ $t('Standard') }}</el-radio>
+                            <el-radio value="custom" @click.native="showProPopUp" :disabled="!hasPro">Custom</el-radio>
                         </el-radio-group>
 
                         <!-- Format dropdown -->
@@ -179,8 +179,8 @@
                             </el-tooltip>
                         </template>
                         <el-radio-group @change="changeDecimalStyle()" v-model="model.decimal_system">
-                            <el-radio label="us">US Style - decimal point (123,234.01)</el-radio>
-                            <el-radio label="eu">European Style - decimal comma (123.234,01)</el-radio>
+                            <el-radio value="us"> {{ $t('US Style - decimal point (123,234.01)') }}</el-radio>
+                            <el-radio value="eu">{{ $t('European Style - decimal comma (123.234,01)') }}</el-radio>
                         </el-radio-group>
                     </el-form-item>
                 </template>
@@ -277,10 +277,10 @@
                         </el-form-item>
                     </template>
                     <el-form-item label="Image Linkable?">
-                        <el-radio :disabled="!hasPro" v-model="model.link_type" label="none">Image Only</el-radio>
-                        <el-radio :disabled="!hasPro" v-model="model.link_type" label="image_light_box">Image Lightbox</el-radio>
-                        <el-radio :disabled="!hasPro" v-model="model.link_type" label="iframe_ligtbox">Iframe Lightbox</el-radio>
-                        <el-radio :disabled="!hasPro" v-model="model.link_type" label="hyperlinked">Link to URL</el-radio>
+                        <el-radio :disabled="!hasPro" v-model="model.link_type" value="none">{{ $t('Image Only') }}</el-radio>
+                        <el-radio :disabled="!hasPro" v-model="model.link_type" value="image_light_box">{{ $t('Image Lightbox') }}</el-radio>
+                        <el-radio :disabled="!hasPro" v-model="model.link_type" value="iframe_ligtbox">{{ $t('Iframe Lightbox') }}</el-radio>
+                        <el-radio :disabled="!hasPro" v-model="model.link_type" value="hyperlinked">{{ $t('Link to URL') }}</el-radio>
                     </el-form-item>
                     <el-form-item v-if="model.link_type == 'file_download'" label="Download Button Text / HTML">
                         <el-input :disabled="!hasPro" type="textarea" placeholder="Download Button Text / HTML"

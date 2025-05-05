@@ -4,11 +4,14 @@
             <div class="ninja_title">
                 <h3 style="margin-right: 15px;">Table Style Customization</h3>
                 <el-radio-group class="ninja_resp_tabs" size="small" v-model="showingDevice">
-                    <el-radio-button label="desktop"><span class="dashicons dashicons-desktop"></span> Desktop
+                    <el-radio-button value="desktop">
+                        <span class="dashicons dashicons-desktop"></span> Desktop
                     </el-radio-button>
-                    <el-radio-button label="tablet"><span class="dashicons dashicons-tablet"></span> Tablet
+                    <el-radio-button value="tablet">
+                        <span class="dashicons dashicons-tablet"></span> Tablet
                     </el-radio-button>
-                    <el-radio-button label="mobile"><span class="dashicons dashicons-smartphone"></span> Mobile
+                    <el-radio-button value="mobile">
+                        <span class="dashicons dashicons-smartphone"></span> Mobile
                     </el-radio-button>
                 </el-radio-group>
             </div>
@@ -69,7 +72,7 @@
                                 <el-radio-button
                                     v-for="(tableLib, libKey) in currentTableLibs"
                                     :key="libKey"
-                                    :label="libKey">
+                                    :value="libKey">
                                     {{ tableLib.title }}
                                     <el-tooltip placement="top-end" effect="light" :content="tableLib.description">
                                         <i class="el-icon-info el-text-info"></i>
@@ -190,8 +193,8 @@
                         <div class="form_group">
                             <h3 class="ninja_inner_title">Select Color Scheme</h3>
                             <el-radio-group size="small" v-model="tableSettings.table_color_type">
-                                <el-radio-button label="pre_defined_color">Pre Defined Scheme</el-radio-button>
-                                <el-radio-button label="custom_color">Custom Scheme</el-radio-button>
+                                <el-radio-button value="pre_defined_color" :label="$t('Pre Defined Scheme')"/>
+                                <el-radio-button value="custom_color" :label="$t('Custom Scheme')"/>
                             </el-radio-group>
                         </div>
                         <div v-if="tableSettings.table_color_type == 'pre_defined_color'" class="form_group">
@@ -390,9 +393,9 @@
                             <el-radio-group
                                 :disabled="tableSettings.show_all == true || tableSettings.show_all == '1'"
                                 size="small" v-model="tableSettings.pagination_position">
-                                <el-radio-button label="left">Left</el-radio-button>
-                                <el-radio-button label="center">Center</el-radio-button>
-                                <el-radio-button label="right">Right</el-radio-button>
+                                <el-radio-button value="left" :label="$t('Left')"/>
+                                <el-radio-button value="center" :label="$t('Center')"/>
+                                <el-radio-button value="right" :label="$t('Right')"/>
                             </el-radio-group>
 
                             <label><input v-model="tableSettings.paginate_to_top" type="checkbox">
@@ -425,10 +428,10 @@
                             <el-radio-group
                                 :disabled="!has_pro"
                                 size="small" v-model="tableSettings.search_position">
-                                <el-radio-button label="left">Left</el-radio-button>
-                                <el-radio-button label="center">Center</el-radio-button>
-                                <el-radio-button label="right">Right</el-radio-button>
-                                <el-radio-button label="">Default</el-radio-button>
+                                <el-radio-button value="left" :label="$t('Left')"/>
+                                <el-radio-button value="center" :label="$t('Center')"/>
+                                <el-radio-button value="right" :label="$t('Right')"/>
+                                <el-radio-button value="" :label="$t('Default')"/>
                             </el-radio-group>
 
                             <label><input v-model="tableSettings.nt_search_full_width" type="checkbox">
@@ -443,12 +446,9 @@
                         <div class="form_group">
                             <label>Select Sorting Method</label>
                             <el-radio-group size="small" v-model="tableSettings.sorting_type">
-                                <el-radio-button :disabled="!config.table.isCreatedSortable" label="by_created_at">By
-                                    Created at
-                                </el-radio-button>
-                                <el-radio-button label="by_column">By Column</el-radio-button>
-                                <el-radio-button :disabled="!config.table.isSortable" label="manual_sort">Manual Sort
-                                </el-radio-button>
+                                <el-radio-button :disabled="!config.table.isCreatedSortable" value="by_created_at" :label="$t('Created At')" />
+                                <el-radio-button value="by_column" :label="$t('By Column')" />
+                                <el-radio-button :disabled="!config.table.isSortable" value="manual_sort" :label="$t('Manual Sort')" />
                             </el-radio-group>
                             <div v-if="config.table.isCreatedSortable && tableSettings.sorting_type == 'by_created_at'" class="">
                                 <span>{{ $t('Sort Type') }}
@@ -488,22 +488,19 @@
                             <label>{{ $t('Row Details (Responsive drawer)') }} <span
                                 v-show="!has_pro">(PRO)</span></label>
                             <el-radio-group size="small" v-model="tableSettings.expand_type">
-                                <el-radio-button label="default">
-                                    Default
+                                <el-radio-button value="default">Default
                                     <el-tooltip placement="top-end" effect="light"
                                                 content="Show All the responsive columns data into the responsive drawer">
                                         <i class="el-icon-info el-text-info"></i>
                                     </el-tooltip>
                                 </el-radio-button>
-                                <el-radio-button label="expandFirst">
-                                    Expand First
+                                <el-radio-button value="expandFirst">Expand First
                                     <el-tooltip placement="top-end" effect="light" content="This will automatically expand the first row of the table when displayed on a device that
                             hides any columns.">
                                         <i class="el-icon-info el-text-info"></i>
                                     </el-tooltip>
                                 </el-radio-button>
-                                <el-radio-button label="expandAll">
-                                    Expand All
+                                <el-radio-button value="expandAll">Expand All
                                     <el-tooltip placement="top-end" effect="light" content="This will automatically expand all rows of the table when displayed on a device that hides
                             any columns.">
                                         <i class="el-icon-info el-text-info"></i>
@@ -515,15 +512,13 @@
                         <div class="form_group">
                             <label>{{ $t('Toggle Position') }}</label>
                             <el-radio-group size="small" v-model="tableSettings.togglePosition">
-                                <el-radio-button label="first">
-                                    First Column
+                                <el-radio-button value="first">First Column
                                     <el-tooltip placement="top-end" effect="light"
                                                 content="If you use responsive breakdown then the '+' icon will show at the first visible column">
                                         <i class="el-icon-info el-text-info"></i>
                                     </el-tooltip>
                                 </el-radio-button>
-                                <el-radio-button label="last">
-                                    Last Column
+                                <el-radio-button value="last">Last Column
                                     <el-tooltip placement="top-end" effect="light"
                                                 content="If you use responsive breakdown then the '+' icon will show at the last visible column">
                                         <i class="el-icon-info el-text-info"></i>
