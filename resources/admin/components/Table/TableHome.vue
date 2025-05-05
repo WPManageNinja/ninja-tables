@@ -44,7 +44,7 @@
                 title="Update Table Info"
                 :visible.sync="editTableModalShow"
                 top="50px"
-                :append-to-body="true"x
+                :append-to-body="true"
         >
             <edit_table v-if="editTableModalShow" :table="table" @modal_close="editTableModalShow = !editTableModalShow"></edit_table>
         </el-dialog>
@@ -56,7 +56,7 @@
     import each from 'lodash/each';
     import size from 'lodash/size';
     import toArray from 'lodash/values';
-import { useEventBus } from '../../eventBus';
+    import { useEventBus } from '../../eventBus';
 
     export default {
         name: 'table_home',

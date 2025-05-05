@@ -287,7 +287,7 @@
                                   v-model="model.download_button"></el-input>
                     </el-form-item>
                     <el-form-item v-if="model.link_type == 'hyperlinked' || model.link_type == 'file_download'">
-                        <el-checkbox :disabled="!hasPro" true-label="_blank" false-label="_self" v-model="model.link_target">Open Link
+                        <el-checkbox :disabled="!hasPro" :true-value="'_blank'" :false-value="'_self'" v-model="model.link_target">Open Link
                             in new window
                         </el-checkbox>
                     </el-form-item>
@@ -307,13 +307,13 @@
                     <el-form-item label="Button Text">
                         <el-input size="small" type="text" placeholder="Button Text (HTML supported)"
                                   v-model="model.button_text"></el-input>
-                        <el-checkbox :disabled="!hasPro" true-label="_blank" false-label="_self" v-model="model.link_target">Open Link
+                        <el-checkbox :disabled="!hasPro" :true-value="'_blank'" :false-value="'_self'" v-model="model.link_target">Open Link
                             in new tab
                         </el-checkbox>
-                        <el-checkbox :disabled="!hasPro" true-label="nt_rounded_btn" false-label="" v-model="model.btn_extra_class">Make
+                        <el-checkbox :disabled="!hasPro" :true-value="'nt_rounded_btn'" :false-value="''" v-model="model.btn_extra_class">Make
                             Button as rounded corner
                         </el-checkbox>
-                      <el-checkbox :disabled="!hasPro" true-label="download" false-label="" v-model="model.force_download">Make
+                      <el-checkbox :disabled="!hasPro" :true-value="'download'" :false-value="''" v-model="model.force_download">Make
                         Force download
                       </el-checkbox>
                     </el-form-item>
@@ -679,7 +679,7 @@
                             <p>Are you sure to delete this?</p>
                             <div style="text-align: right; margin: 0">
                                 <el-button
-                                    type="text"
+                                    link
                                     size="small"
                                     @click="showConfirm = false"
                                 >cancel

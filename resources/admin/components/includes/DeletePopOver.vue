@@ -3,7 +3,7 @@
         <el-popover ref="popover5" placement="top" width="160" v-model="visible">
             <p>{{ $t('Are you sure to delete this?') }}</p>
             <div style="text-align: right; margin: 0">
-                <el-button size="small" type="text" @click="visible = false">
+                <el-button size="small" link @click="visible = false">
                     {{ $t('cancel') }}
                 </el-button>
                 <el-button type="danger" size="small" @click="proceedConfirmation">
