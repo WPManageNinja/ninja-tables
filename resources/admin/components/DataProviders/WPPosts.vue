@@ -32,10 +32,10 @@
                     <el-collapse class="nt_conditions" v-model="conditions_section">
                         <el-collapse-item name="1">
                           <el-checkbox v-model="currentUserPosts">Logged in user posts</el-checkbox>
-                            <template slot="title">
+                            <template #title>
                                 <h4 class="no-margin">Conditions</h4>
                             </template>
-                            <wp-post-conditions
+                            <WPPostConditions
                                 :config="config"
                                 :selected_post_types="selected_post_types"
                                 :postStatuses="postStatuses"
@@ -47,7 +47,7 @@
 
                     <el-collapse class="nt_conditions" v-model="meta_query">
                         <el-collapse-item name="1">
-                            <template slot="title">
+                            <template #title>
                                 <h4 class="no-margin">Meta Query</h4>
                             </template>
 
@@ -122,7 +122,7 @@
                             <el-collapse accordion value="conditions" v-model="conditions_section">
                                 <el-collapse-item name="conditions" title="Conditions">
                                   <el-checkbox v-model="currentUserPosts">Logged in user posts</el-checkbox>
-                                    <wp-post-conditions
+                                    <WPPostConditions
                                         v-if="conditions_section"
                                         :postStatuses="postStatuses"
                                         :selected_post_types="selected_post_types"
@@ -179,7 +179,7 @@
             }
         },
         components: {
-            'wp-post-conditions': WPPostConditions,
+            WPPostConditions,
             PremiumNotice,
             UpgradeNotice,
             WpPostMetaQuery
@@ -377,6 +377,8 @@
     }
 
     .nt_conditions {
+        width: 100%;
+        
         .el-collapse-item.is-active {
             border: 1px solid #ebeef5;
             .el-collapse-item__wrap {
