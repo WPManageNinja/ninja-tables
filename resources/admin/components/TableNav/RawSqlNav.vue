@@ -23,7 +23,7 @@
 
                 <div class="form-group">
                     <label>{{ $t('Custom SQL Query') }}</label>
-                    <my-sql-editor mode="mysql" editor_id="ninja_mysql_editor" v-model="config.table.sql" />
+                    <ace-code-editor mode="mysql" editor_id="ninja_mysql_editor" v-model="config.table.sql" />
                     <p>Please write valid SQL query. Your written SQL query will be passed to <code>$wpdb->get_results()</code> function</p>
                     <p>Check the documentation for advanced use cases: <a target="_blank" rel="noopener" href="https://ninjatables.com/docs/create-table-from-custom-sql/">Ninja Tables SQL Integration Documentation</a></p>
                     <p>Available Dynamic Placeholders: <code>{current_user_id}</code> <code>{current_date}</code> <code>{current_date_time}</code> <code>{current_post_id}</code> <code>{current_post_title}</code> <code>{prefix}</code></p>
@@ -67,13 +67,13 @@
 </template>
 
 <script>
-    import MySqlEditor from '../../../common/_ace_editor_sql';
+    import AceCodeEditor from '../../../common/_ace_editor';
     import RemoteSqlConnection from './_RemoteSQLConnection';
 
     export default {
         name: "RowSQLNav",
         components: {
-            MySqlEditor,
+            AceCodeEditor,
             RemoteSqlConnection
         },
         props: {
