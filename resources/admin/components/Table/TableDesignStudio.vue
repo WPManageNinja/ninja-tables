@@ -569,7 +569,7 @@
                         </div>
                         <div class="font">
                           <label>{{$t('Font Size')}}</label>
-                          <el-input-number :min="1" :max="50" v-model="tableSettings.table_font_size"></el-input-number>
+                          <el-input-number :min="1" :max="50" v-model="tableFontSize"></el-input-number>
                         </div>
                       </div>
                     </el-tab-pane>
@@ -774,6 +774,14 @@
                     }
                 }
                 return tips;
+            },
+            tableFontSize: {
+                get() {
+                    return Number(this.tableSettings.table_font_size);
+                },
+                set(value) {
+                    this.tableSettings.table_font_size = value;
+                }
             }
         },
         watch: {
