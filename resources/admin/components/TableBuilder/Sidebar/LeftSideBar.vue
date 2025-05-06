@@ -59,8 +59,9 @@
             <el-collapse accordion v-model="activeNames" @change="handleChange"
                          v-for="(setting, key) in initialData.settings"
                          :key="key" class="accordions">
+
                 <el-collapse-item :name="key">
-                    <template slot="title">
+                    <template #title>
                         {{ setting.name }}
                         <el-tooltip
                             v-if="setting.key === 'global_styling' || setting.key === 'sticky' || setting.key === 'ace_editor_js'"
@@ -80,7 +81,8 @@
                             <i style="margin-left: 2px" class="el-icon-info el-text-info"></i>
                         </el-tooltip>
                     </template>
-                    <div v-if="setting.key == 'ace_editor_css'" style="margin-right: 3px;" class="ntb-ace-editor">
+
+                    <div v-if="setting.key === 'ace_editor_css'" style="margin-right: 3px;" class="ntb-ace-editor">
                         <label>Add Your Custom CSS</label>
                         <p>
                             You may add <code>.ntb_{{ initialData.table_data.id }} </code> as your css selector prefix
@@ -93,7 +95,8 @@
                         </ace_code_editor>
                         <span>Please don't include <code>&lt;style&gt;&lt;/style&gt;</code> tag</span>
                     </div>
-                    <div v-else-if="setting.key == 'ace_editor_js'" style="margin-right: 3px;" class="ntb-ace-editor">
+
+                    <div v-else-if="setting.key === 'ace_editor_js'" style="margin-right: 3px;" class="ntb-ace-editor">
                         <label>Add Your Custom JS</label>
                         <p>
                             You may use <code>.ntb_{{ initialData.table_data.id }} </code> to target this specific
@@ -104,6 +107,7 @@
                         </ace_code_editor>
                         <span>Please don't include <code>&lt;script>&lt;/script&gt;</code> tag</span>
                     </div>
+
                     <div v-else class="component-spacing" v-for="(item, tabKey, index) in setting.options"
                          :key="tabKey">
                         <all-input-element :disableResponsive="getBoolean(!hasPro && setting.has_pro)"
@@ -117,6 +121,7 @@
                     </div>
                 </el-collapse-item>
             </el-collapse>
+
             <el-collapse v-model="activeNames" class="accordions" @change="handleChange">
                 <el-collapse-item :title="$t('Export Table')" class="export">
                     <select-input :items="exports.items" v-model="exports.format"

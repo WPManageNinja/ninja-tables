@@ -153,7 +153,8 @@
 
                     <template #header>
                         <span>
-                            {{ column.name || column.key }}<i class="el-icon-setting nt-column-config" @click="showColumnConfigModal(column)"/>
+                            {{ column.name || column.key }}
+                            <el-icon @click="showColumnConfigModal(column)"><Setting /></el-icon>
                         </span>
                     </template>
                 </el-table-column>
@@ -294,11 +295,12 @@
 
     import ShowEditableCell from './_ShowEditableCell'
     import { useEventBus } from '../../eventBus';
-    import {InfoFilled} from "@element-plus/icons-vue";
+    import {InfoFilled, Setting} from "@element-plus/icons-vue";
 
     export default {
         name: 'TableDataItems',
         components: {
+            Setting,
             add_data_modal: addDataModal,
             ninja_pagination: NinjaPagination,
             Alert,
@@ -311,7 +313,6 @@
             RawSqlNav,
             WooNavEdit,
             ShowEditableCell,
-            InfoFilled,
         },
         props: ['config', 'getColumnSettings', 'hasPro'],
         data() {

@@ -316,6 +316,7 @@
             this.initNewColumnObj();
         },
         components: {
+            InfoFilled,
           GetPro,
             wp_editor: wp_editor,
             NinjaDatePicker,
