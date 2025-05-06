@@ -8,44 +8,36 @@
                      active-text-color="#fff"
             >
                 <el-menu-item @click="activeTabName = 'default'" index='default'>
-                    <i class="el-icon-setting"></i>
                     <span>Default</span>
                 </el-menu-item>
                 <el-menu-item @click="activeTabName = 'drag_and_drop'" index='drag_and_drop'>
-                  <i class="el-icon-s-unfold"></i>
                   <span>Drag & Drop Table</span>
                 </el-menu-item>
                 <el-menu-item @click="activeTabName = 'import_table'" index="import_table">
-                    <i class="el-icon-upload2"></i>
                     <span>Import Table</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'fluent_form'" index='fluent_form'>
-                    <img :src="fluentFormIcon" alt="fluent form icon" class="el-icon-fluent-form">
                     <span>Connect Fluent Forms</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'wp_posts'" index='wp_posts'>
-                    <i class="el-icon-news"></i> <span>WP Posts</span>
+                    <span>WP Posts</span>
                 </el-menu-item>
 
                 <el-menu-item v-if="has_woo" @click="activeTabName = 'woo_table'" index='woo_table'>
-                    <img :src="wooIcon" alt="woocomerce icon" class="el-icon-fluent-form">
                     <span>WooCommerce Table</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'google_spread_sheet'" index='google_spread_sheet'>
-                    <span class="dashicons dashicons-media-spreadsheet"></span>
                     <span>Connect Google Sheets</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'csv'" index='csv'>
-                    <i class="el-icon-document"></i>
                     <span>Connect External CSV</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'raw_sql'" index='raw_sql'>
-                    <i class="dashicons dashicons-editor-code"></i>
                     <span>Custom SQL Query</span>
                 </el-menu-item>
 
@@ -208,8 +200,6 @@
                     }
                 },
                 isCollapse: false,
-                fluentFormIcon: window.ninja_table_admin.fluent_form_icon,
-                wooIcon: window.ninja_table_admin.img_url+'woo-logo.png',
                 has_woo: !!window.ninja_table_admin.has_woocommerce,
                 initialData : {},
             }
