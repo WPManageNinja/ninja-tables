@@ -12,11 +12,14 @@ const {
     TextControl,
     RangeControl,
     ButtonGroup,
-    Button
+    Button,
+    Tooltip
 } = wp.components;
 
-const { useState, useEffect } = wp.element;
+import {tableLibs} from "../data/data";
 import Rest from "../Bits/Rest";
+const { useState, useEffect } = wp.element;
+
 
 registerBlockType('ninja-tables/table-block', {
     title: __('Ninja Tables'),
@@ -364,12 +367,24 @@ registerBlockType('ninja-tables/table-block', {
                 classes.push('footable-paging-right');
             }
 
+            if (settings.hide_header_row) {
+                classes.push('ninjatable_hide_header_row');
+            }
+
+            if (settings.hide_all_borders) {
+                classes.push('hide_all_borders');
+            }
+
             if (settings.search_position) {
                 classes.push('ninja_search_' + settings.search_position);
             }
 
             if (settings.nt_search_full_width) {
                 classes.push('nt_search_full_width');
+            }
+
+            if (settings.css_lib == 'semantic_ui') {
+                classes.push('ui');
             }
 
             if (has_pro) {
@@ -436,6 +451,239 @@ registerBlockType('ninja-tables/table-block', {
             }
         };
 
+        const renderFeaturesSection = () => {
+            const libs = tableLibs();
+
+            return (
+                <div className="form_group label-normalize">
+                    <h3 className="ninja_inner_title">{__('Features')}</h3>
+
+                    <CheckboxControl
+                        label={__('Show Table Title')}
+                        checked={tableSettings.show_title}
+                        onChange={(value) => updateTableSettings('show_title', value)}
+                        help={__('Enable this if you want to show table title in frontend')}
+                    />
+
+                    <CheckboxControl
+                        label={__('Show Table Description')}
+                        checked={tableSettings.show_description}
+                        onChange={(value) => updateTableSettings('show_description', value)}
+                        help={__('Enable this if you want to show table description in frontend')}
+                    />
+
+                    <CheckboxControl
+                        label={__('Enable the visitor to filter or search the table')}
+                        checked={tableSettings.enable_search}
+                        onChange={(value) => updateTableSettings('enable_search', value)}
+                    />
+
+                    {libs[tableSettings.library]?.supports?.sorting && !tableSettings.enable_ajax && (
+                        <CheckboxControl
+                            label={__('Enable sorting of the table by the visitor')}
+                            checked={tableSettings.column_sorting}
+                            onChange={(value) => updateTableSettings('column_sorting', value)}
+                        />
+                    )}
+
+                    <CheckboxControl
+                        label={__('Hide Header Row')}
+                        checked={tableSettings.hide_header_row}
+                        onChange={(value) => updateTableSettings('hide_header_row', value)}
+                    />
+
+                    <CheckboxControl
+                        label={__('Hide All Borders')}
+                        checked={tableSettings.hide_all_borders}
+                        onChange={(value) => updateTableSettings('hide_all_borders', value)}
+                    />
+
+                    <CheckboxControl
+                        label={
+                            <span>
+                        {__('Hide empty items on responsive breakdown')}
+                                {!has_pro && <span> ({__('Pro Only')})</span>}
+                    </span>
+                        }
+                        checked={tableSettings.hide_on_empty}
+                        onChange={(value) => updateTableSettings('hide_on_empty', value)}
+                        disabled={!has_pro}
+                        help={__('If You enable this then the empty items will not show into responsive drawer / Stackable View')}
+                    />
+
+                    <CheckboxControl
+                        label={
+                            <span>
+                        {__('Hide Labels on responsive breakdown')}
+                                {!has_pro && <span> ({__('Pro Only')})</span>}
+                    </span>
+                        }
+                        checked={tableSettings.hide_responsive_labels}
+                        onChange={(value) => updateTableSettings('hide_responsive_labels', value)}
+                        disabled={!has_pro}
+                        help={__('If You enable this then columns headings will not show into responsive drawer / Stackable View')}
+                    />
+                </div>
+            );
+        };
+        const renderStackableConfigSection = () => {
+            return (
+                <div className="form_group label-normalize">
+                    <h3 className="ninja_inner_title">
+                        {__('Stackable Table Configuration')}
+                        <Tooltip text={__('With stackable table, You can show your rows as list item. You can target by device width')}>
+                            <span className="dashicons dashicons-info" style={{ marginLeft: '5px', fontSize: '16px' }}></span>
+                        </Tooltip>
+                    </h3>
+
+                    <div className="form_group">
+                        <ToggleControl
+                            label={__('Enable Stackable Table')}
+                            checked={tableSettings.stackable === 'yes'}
+                            onChange={(value) => updateTableSettings('stackable', value ? 'yes' : 'no', false)}
+                        />
+
+                        {tableSettings.stackable === 'yes' && (
+                            <>
+                                <h3 style={{ marginTop: '15px' }} className="ninja_inner_title">
+                                    {__('Target Devices')}
+                                    <Tooltip text={__('Select the device by width in where the stackable tables will be enabled')}>
+                                        <span className="dashicons dashicons-info" style={{ marginLeft: '5px', fontSize: '16px' }}></span>
+                                    </Tooltip>
+                                </h3>
+
+                                <CheckboxControl
+                                    label={__('Mobile Device')}
+                                    checked={(tableSettings.stacks_devices || []).includes('xs')}
+                                    onChange={(checked) => {
+                                        const devices = Array.isArray(tableSettings.stacks_devices) ?
+                                            [...tableSettings.stacks_devices] : [];
+                                        if (checked) {
+                                            if (!devices.includes('xs')) {
+                                                devices.push('xs');
+                                            }
+                                        } else {
+                                            const index = devices.indexOf('xs');
+                                            if (index !== -1) {
+                                                devices.splice(index, 1);
+                                            }
+                                        }
+                                        updateTableSettings('stacks_devices', devices, false);
+                                    }}
+                                />
+
+                                <CheckboxControl
+                                    label={__('Tablet Device')}
+                                    checked={(tableSettings.stacks_devices || []).includes('sm')}
+                                    onChange={(checked) => {
+                                        const devices = Array.isArray(tableSettings.stacks_devices) ?
+                                            [...tableSettings.stacks_devices] : [];
+                                        if (checked) {
+                                            if (!devices.includes('sm')) {
+                                                devices.push('sm');
+                                            }
+                                        } else {
+                                            const index = devices.indexOf('sm');
+                                            if (index !== -1) {
+                                                devices.splice(index, 1);
+                                            }
+                                        }
+                                        updateTableSettings('stacks_devices', devices, false);
+                                    }}
+                                />
+
+                                <CheckboxControl
+                                    label={__('Laptop')}
+                                    checked={(tableSettings.stacks_devices || []).includes('md')}
+                                    onChange={(checked) => {
+                                        const devices = Array.isArray(tableSettings.stacks_devices) ?
+                                            [...tableSettings.stacks_devices] : [];
+                                        if (checked) {
+                                            if (!devices.includes('md')) {
+                                                devices.push('md');
+                                            }
+                                        } else {
+                                            const index = devices.indexOf('md');
+                                            if (index !== -1) {
+                                                devices.splice(index, 1);
+                                            }
+                                        }
+                                        updateTableSettings('stacks_devices', devices, false);
+                                    }}
+                                />
+
+                                <CheckboxControl
+                                    label={__('Large Devices (imac)')}
+                                    checked={(tableSettings.stacks_devices || []).includes('lg')}
+                                    onChange={(checked) => {
+                                        const devices = Array.isArray(tableSettings.stacks_devices) ?
+                                            [...tableSettings.stacks_devices] : [];
+                                        if (checked) {
+                                            if (!devices.includes('lg')) {
+                                                devices.push('lg');
+                                            }
+                                        } else {
+                                            const index = devices.indexOf('lg');
+                                            if (index !== -1) {
+                                                devices.splice(index, 1);
+                                            }
+                                        }
+                                        updateTableSettings('stacks_devices', devices, false);
+                                    }}
+                                />
+
+                                <h3 style={{ marginTop: '15px' }} className="ninja_inner_title">
+                                    {__('Stacked Appearance')}
+                                    <Tooltip text={__('You can customize the appearance in stacked view of your table')}>
+                                        <span className="dashicons dashicons-info" style={{ marginLeft: '5px', fontSize: '16px' }}></span>
+                                    </Tooltip>
+                                </h3>
+
+                                <CheckboxControl
+                                    label={__('Hide column headings')}
+                                    checked={(tableSettings.stacks_appearances || []).includes('hide_stacked_th')}
+                                    onChange={(checked) => {
+                                        const appearances = Array.isArray(tableSettings.stacks_appearances) ?
+                                            [...tableSettings.stacks_appearances] : [];
+                                        if (checked) {
+                                            if (!appearances.includes('hide_stacked_th')) {
+                                                appearances.push('hide_stacked_th');
+                                            }
+                                        } else {
+                                            const index = appearances.indexOf('hide_stacked_th');
+                                            if (index !== -1) {
+                                                appearances.splice(index, 1);
+                                            }
+                                        }
+                                        updateTableSettings('stacks_appearances', appearances, false);
+                                    }}
+                                />
+
+                                <CheckboxControl
+                                    label={__('Hide internal borders')}
+                                    checked={(tableSettings.stacks_appearances || []).includes('ninja_stacked_no_cell_border')}
+                                    onChange={(checked) => {
+                                        const appearances = Array.isArray(tableSettings.stacks_appearances) ?
+                                            [...tableSettings.stacks_appearances] : [];
+                                        if (checked) {
+                                            if (!appearances.includes('ninja_stacked_no_cell_border')) {
+                                                appearances.push('ninja_stacked_no_cell_border');
+                                            }
+                                        } else {
+                                            const index = appearances.indexOf('ninja_stacked_no_cell_border');
+                                            if (index !== -1) {
+                                                appearances.splice(index, 1);
+                                            }
+                                        }
+                                        updateTableSettings('stacks_appearances', appearances, false);
+                                    }}
+                                />
+                            </>
+                        )}
+                    </div>
+                </div>
+            );
+        };
         const renderTable = () => {
             if (!tableConfig || isLoading || !scriptLoaded) return null;
 
@@ -445,6 +693,18 @@ registerBlockType('ninja-tables/table-block', {
                 <div className="ninja_design_wrapper">
                     {renderStyles()}
                     <div className="design_preview" style={{ background: 'white', padding: '10px 20px' }}>
+                        {tableSettings.show_title && tableConfig.table?.post_title && (
+                            <h3 className="table_title footable_title">
+                                {tableConfig.table.post_title}
+                            </h3>
+                        )}
+
+                        {tableSettings.show_description && tableConfig.table?.post_content && (
+                            <div
+                                className="table_description footable_description"
+                                dangerouslySetInnerHTML={{ __html: tableConfig.table.post_content }}
+                            />
+                        )}
                         <div
                             id={`footable_parent_${tableId}`}
                             className={`footable_parent ninja_table_wrapper loading_ninja_table wp_table_data_press_parent ${getWrapperClasses()}`}
@@ -513,8 +773,8 @@ registerBlockType('ninja-tables/table-block', {
                                         case 'styling':
                                             return (
                                                 <div className="ninja-tab-content">
-                                                    <h3>{__('Styling Tab Content')}</h3>
-                                                    <p>{__('Styling options will go here')}</p>
+                                                    {renderFeaturesSection()}
+                                                    {renderStackableConfigSection()}
                                                 </div>
                                             );
                                         case 'colors':
