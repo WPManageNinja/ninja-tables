@@ -5,8 +5,8 @@
         </div>
         <div v-else class="section_block">
             <el-radio-group v-model="current_tab">
-                <el-radio-button label="Additional Custom CSS" value="additional_css" />
-                <el-radio-button label="Custom Javascript" value="additional_js" />
+                <el-radio-button :label="$t('Additional Custom CSS')" value="additional_css" />
+                <el-radio-button :label="$t('Custom Javascript')" value="additional_js" />
             </el-radio-group>
             <hr />
             <template v-if="current_tab == 'additional_css'">

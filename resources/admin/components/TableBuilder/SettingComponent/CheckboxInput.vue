@@ -5,7 +5,14 @@
             size="small"
             :value="value"
             @input="$emit('update', $event)">
-            <el-checkbox v-for="option in options" :key="option.value" :label="option.value">{{ option.value }}</el-checkbox>
+
+            <el-checkbox
+                v-for="option in options"
+                :key="option.value"
+                :label="option.value"
+                :value="option.value"
+            />
+
         </el-checkbox-group>
     </div>
 </template>

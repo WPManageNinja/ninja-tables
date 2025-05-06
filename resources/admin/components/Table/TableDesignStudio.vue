@@ -167,10 +167,10 @@
                                     </h3>
                                     <el-checkbox-group
                                         v-model="tableSettings.stacks_devices">
-                                        <el-checkbox label="xs">Mobile Device</el-checkbox>
-                                        <el-checkbox label="sm">Tablet Device</el-checkbox>
-                                        <el-checkbox label="md">Laptop</el-checkbox>
-                                        <el-checkbox label="lg">Large Devices (imac)</el-checkbox>
+                                        <el-checkbox :label="$t('Mobile Device')" value="xs" />
+                                        <el-checkbox :label="$t('Tablet Device')" value="sm" />
+                                        <el-checkbox :label="$t('Laptop')" value="md" />
+                                        <el-checkbox :label="$t('Large Devices (imac)')" value="lg" />
                                     </el-checkbox-group>
 
                                     <h3 style="margin-top: 15px" class="ninja_inner_title">Stacked Appearance
@@ -181,9 +181,8 @@
                                     </h3>
                                     <el-checkbox-group
                                         v-model="tableSettings.stacks_appearances">
-                                        <el-checkbox label="hide_stacked_th">Hide column headings</el-checkbox>
-                                        <el-checkbox label="ninja_stacked_no_cell_border">Hide internal borders
-                                        </el-checkbox>
+                                        <el-checkbox :label="$t('Hide column headings')" value="hide_stacked_th" />
+                                        <el-checkbox :label="$t('Hide internal borders')" value="ninja_stacked_no_cell_border" />
                                     </el-checkbox-group>
                                 </template>
                             </div>

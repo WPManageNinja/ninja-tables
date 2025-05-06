@@ -9,7 +9,7 @@
     >
       <el-radio :label="$t('Left')" value="left" />
       <el-radio :label="$t('Center')" value="center" />
-      <el-radio :label="$t('Right')" valueright />
+      <el-radio :label="$t('Right')" value="right" />
     </el-radio-group>
   </div>
 </template>

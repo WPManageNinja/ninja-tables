@@ -52,15 +52,15 @@
                     </table>
                     <h3>Filter Appearance</h3>
                     <el-radio-group v-model="filter_styling.filter_display_type">
-                        <el-radio label="Show filter inputs as inline" value="inline" />
-                        <el-radio label="Show filter inputs as Columns" value="columns" />
+                        <el-radio :label="$t('Show filter inputs as inline')" value="inline" />
+                        <el-radio :label="$t('Show filter inputs as Columns')" value="columns" />
                     </el-radio-group>
                     <template v-if="filter_styling.filter_display_type === 'columns'">
                         <h3>Filter Columns</h3>
                         <el-radio-group size="small" v-model="filter_styling.filter_columns">
-                            <el-radio-button label="Two Columns" value="columns_2" />
-                            <el-radio-button label="Three Columns" value="columns_3" />
-                            <el-radio-button label="Four Columns" value="columns_4" />
+                            <el-radio-button :label="$t('Two Columns')" value="columns_2" />
+                            <el-radio-button :label="$t('Three Columns')" value="columns_3" />
+                            <el-radio-button :label="$t('Four Columns')" value="columns_4" />
                         </el-radio-group>
                     </template>
 

@@ -93,16 +93,16 @@
                         <el-collapse-item title="Print Screen Header" name="header">
                           <template>
                             <label>Header in each page</label>
-                            <el-radio v-model="table_buttons.print.header_each_page" label="yes">Yes</el-radio>
-                            <el-radio v-model="table_buttons.print.header_each_page" label="no">No</el-radio>
+                            <el-radio v-model="table_buttons.print.header_each_page" value="yes" :label="$t('Yes')" />
+                            <el-radio v-model="table_buttons.print.header_each_page" value="no" :label="$t('No')" />
                           </template>
                             <wp-editor v-model="table_buttons.print.header_html" />
                         </el-collapse-item>
                         <el-collapse-item title="Print Screen Footer" name="footer">
                           <template>
                             <label>Footer in each page</label>
-                            <el-radio v-model="table_buttons.print.footer_each_page" label="yes">Yes</el-radio>
-                            <el-radio v-model="table_buttons.print.footer_each_page" label="no">No</el-radio>
+                            <el-radio v-model="table_buttons.print.footer_each_page" value="yes" :label="$t('Yes')" />
+                            <el-radio v-model="table_buttons.print.footer_each_page" label="no" :label="$t('No')" />
                           </template>
                             <wp-editor v-model="table_buttons.print.footer_html" />
                         </el-collapse-item>

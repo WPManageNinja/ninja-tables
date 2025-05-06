@@ -230,8 +230,8 @@
                             </label>
                             <br/>
                             <el-radio-group size="small" v-model="appearance_settings.position">
-                                <el-radio-button label="Left" value="left" />
-                                <el-radio-button label="Right" value="right" />
+                                <el-radio-button :label="$t('Left')" value="left" />
+                                <el-radio-button :label="$t('Right')" value="right" />
                             </el-radio-group>
                         </div>
                     </div>

@@ -356,7 +356,12 @@
                         </el-tooltip>
                       </template>
                       <el-checkbox-group v-model="model.relAttributes" v-if="model.relAttributes">
-                        <el-checkbox v-for="attr in ['sponsored', 'nofollow', 'noreferrer', 'noopener']" :label="attr" :key="attr"></el-checkbox>
+                        <el-checkbox
+                            v-for="attr in ['sponsored', 'nofollow', 'noreferrer', 'noopener']"
+                            :key="attr"
+                            :label="attr"
+                            :value="attr"
+                        />
                       </el-checkbox-group>
                     </el-form-item>
                 </template>
