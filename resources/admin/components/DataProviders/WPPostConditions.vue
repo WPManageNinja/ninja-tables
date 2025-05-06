@@ -105,7 +105,7 @@
                                 Please specify how many posts/CPTs you want to show in total, Leave blank to show all
                             </p>
                         </template>
-                        <i class="el-icon-info el-text-info"/>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </label>
                 <el-input type="number" size="small" v-model="config.table.query_extra.query_limit"/>
@@ -121,7 +121,7 @@
                                 Please specify order by column. The script will order by with the selected column
                             </p>
                         </template>
-                        <i class="el-icon-info el-text-info"/>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </label>
                 <el-select size="small" v-model="config.table.query_extra.order_by_column">
@@ -138,7 +138,7 @@
                                 Please specify order by type. The script will order with your selected type
                             </p>
                         </template>
-                        <i class="el-icon-info el-text-info"/>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </label>
                 <el-select size="small" v-model="config.table.query_extra.order_by">
@@ -152,6 +152,8 @@
 </template>
 
 <script>
+    import {InfoFilled} from "@element-plus/icons-vue";
+
     export default {
         name: 'WPPostConditions',
         props: ['config','fields', 'conditions', 'allPostTypes', 'postStatuses', 'selected_post_types'],
@@ -192,6 +194,9 @@
                 ],
                 authors: []
             };
+        },
+        components: {
+            InfoFilled
         },
         watch: {
             selected_post_types() {

@@ -88,7 +88,7 @@
                             <h3>Source of data</h3>
                             <p>{{scope.row.remoteURL}}</p>
                           </template>
-                            <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                 </template>
@@ -162,7 +162,6 @@
         },
         data() {
             return {
-                tooltipIconColorCode: '#58b7ff',
                 loading: false,
                 bulkAction: -1,
                 selectAll: 0,

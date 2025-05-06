@@ -56,7 +56,7 @@
                                 contents. It's not recommended to disable <br>
                                 caching unless you know what you are doing
                             </template>
-                            <i class="el-icon-info el-text-info"></i>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </h3>
                   <div class="caching-block">
@@ -82,7 +82,7 @@
                                 To optimize and load faster, You can cache the table data for certain minutes <br/>
                                 so the data will load from cached data. Please Provide the value in minutes.
                             </template>
-                            <i class="el-icon-info el-text-info"></i>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </h3>
                     <div class="caching-block">
@@ -104,7 +104,7 @@
                                 If you enable this then ninja tables will cache the full html of the table and<br/>
                                 render that without interact with database. You can set the time how many minutes it will cache each iteration.
                             </template>
-                            <i class="el-icon-info el-text-info"></i>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </h3>
                     <div class="caching-block">
@@ -128,6 +128,7 @@
 
 <script type="text/babel">
     import {useEventBus} from "../../../eventBus";
+    import { InfoFilled } from '@element-plus/icons-vue';
 
     export default {
         name: 'ninja-rendering_settings',
@@ -137,6 +138,9 @@
                 bus : useEventBus(),
                 hasPro: !!window.ninja_table_admin.hasPro,
             }
+        },
+        components: {
+          InfoFilled
         },
         methods: {
             storeSettings() {

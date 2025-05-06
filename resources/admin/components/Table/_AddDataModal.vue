@@ -89,7 +89,7 @@
                               Set the date of the data creation.<br>
                               This is useful when you want to sort the data by date
                             </span>
-                            <i class="el-icon-info el-text-info"></i>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </label>
                     <el-date-picker
@@ -136,6 +136,7 @@
     import ImageSelector from '../../../common/ImageSelector';
     import NinjaDatePicker from '../Extras/_NinjaDatePicker'
     import GetPro from "../Tools/GetPro";
+    import {InfoFilled } from '@element-plus/icons-vue';
 
     export default {
         name: 'add_data',

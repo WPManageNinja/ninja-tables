@@ -75,7 +75,7 @@
                                     :value="libKey">
                                     {{ tableLib.title }}
                                     <el-tooltip placement="top-end" effect="light" :content="tableLib.description">
-                                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                             </el-radio-group>
@@ -90,7 +90,7 @@
                                        :value="tableStyle.key" :id="'table_style_'+tableStyle.key"/>
                                 {{ tableStyle.title }}
                                 <el-tooltip placement="top-end" effect="light" :content="tableStyle.description">
-                                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </label>
                         </div>
@@ -101,7 +101,7 @@
                                 $t('Show Table Title') }}
                                 <el-tooltip placement="top-end" effect="light"
                                             content="Enable this if you want to show table title in frontend">
-                                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </label>
                             <label for="show_description">
@@ -109,7 +109,7 @@
                                        id="show_description"/> {{ $t('Show Table Description') }}
                                 <el-tooltip placement="top-end" effect="light"
                                             content="Enable this if you want to show table description in frontend">
-                                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </label>
                             <label for="enable_search">
@@ -133,14 +133,14 @@
                                 Hide empty items on responsive breakdown <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
                                             content="If You enable this then the empty ietems will not show into responsive drawer / Stackable View">
-                                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </label>
                             <label><input v-model="tableSettings.hide_responsive_labels" type="checkbox">
                                 Hide Labels on responsive breakdown <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
                                             content="If You enable this then columns headings will not show into responsive drawer / Stackable View">
-                                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </label>
                         </div>
@@ -150,7 +150,7 @@
                                 Stackable Table Configuration
                                 <el-tooltip placement="top-end" effect="light"
                                             content="With stackable table, You can show your rows as list item. You can target by device width">
-                                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </h3>
 
@@ -162,7 +162,7 @@
                                     <h3 style="margin-top: 15px" class="ninja_inner_title">Target Devices
                                         <el-tooltip placement="top-end" effect="light"
                                                     content="Select the device by width in where the stackable tables will be enabled">
-                                            <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                         </el-tooltip>
                                     </h3>
                                     <el-checkbox-group
@@ -176,7 +176,7 @@
                                     <h3 style="margin-top: 15px" class="ninja_inner_title">Stacked Appearance
                                         <el-tooltip placement="top-end" effect="light"
                                                     content="You can customize the appearance in stacked view of your table">
-                                            <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                         </el-tooltip>
                                     </h3>
                                     <el-checkbox-group
@@ -401,7 +401,7 @@
                                 Scroll to table top for pagination change <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
                                             content="If you enable this then on pagination change, the table will be scrolled to top">
-                                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </label>
 
@@ -409,7 +409,7 @@
                                 Show Page sizes change option <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
                                             content="If you enable this then Users can change the items per page on frontend">
-                                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </label>
 
@@ -437,7 +437,7 @@
                                 Make search input as full width <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
                                             content="If You enable this, Then the search input will take all the available space (100% width)">
-                                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </label>
                         </div>
@@ -490,19 +490,19 @@
                                 <el-radio-button value="default">Default
                                     <el-tooltip placement="top-end" effect="light"
                                                 content="Show All the responsive columns data into the responsive drawer">
-                                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                                 <el-radio-button value="expandFirst">Expand First
                                     <el-tooltip placement="top-end" effect="light" content="This will automatically expand the first row of the table when displayed on a device that
                             hides any columns.">
-                                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                                 <el-radio-button value="expandAll">Expand All
                                     <el-tooltip placement="top-end" effect="light" content="This will automatically expand all rows of the table when displayed on a device that hides
                             any columns.">
-                                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                             </el-radio-group>
@@ -514,13 +514,13 @@
                                 <el-radio-button value="first">First Column
                                     <el-tooltip placement="top-end" effect="light"
                                                 content="If you use responsive breakdown then the '+' icon will show at the first visible column">
-                                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                                 <el-radio-button value="last">Last Column
                                     <el-tooltip placement="top-end" effect="light"
                                                 content="If you use responsive breakdown then the '+' icon will show at the last visible column">
-                                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                             </el-radio-group>
@@ -545,7 +545,7 @@
                                 <label style="margin-top: 10px">Sticky Top Offset
                                     <el-tooltip placement="top-end" effect="light"
                                                 content="You can set an offset value for the sticky table header.">
-                                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
                                 <input placeholder="positive or negative number" class="form_control" type="text"
@@ -633,8 +633,7 @@
                 hasSortable: !!window.ninja_table_admin.hasSortable,
                 sortableUpgradeNotice: false,
                 columnCss: '',
-                bus : useEventBus(),
-                tooltipIconColorCode: '#58b7ff'
+                bus : useEventBus()
             }
         },
         computed: {

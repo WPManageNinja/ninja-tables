@@ -8,7 +8,7 @@
                         <h3>Filter Title</h3>
                         <p>Just a Name to identify your Filter</p>
                     </template>
-                    <i class="el-icon-info el-text-info"></i>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-input size="small" v-model="activeEditor.title" />
@@ -22,7 +22,7 @@
                         <h3>Prefix</h3>
                         <p>This will show on your Table Filter</p>
                     </template>
-                    <i class="el-icon-info el-text-info"></i>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-input size="small" v-model="activeEditor.filter_prefix" />
@@ -37,7 +37,7 @@
                         <h3>Filter UI</h3>
                         <p>Select the filter type that you want to show the filter in the frontend</p>
                     </template>
-                    <i class="el-icon-info el-text-info"></i>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-radio-group class="spaced" v-model="activeEditor.type">
@@ -60,7 +60,7 @@
                       <h3>Default Placeholder</h3>
                         <p>This will show on as default placeholder to reset the label ( Ex: All )</p>
                     </template>
-                    <i class="el-icon-info el-text-info"></i>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-input size="small" v-model="activeEditor.placeholder"></el-input>
@@ -75,7 +75,7 @@
                           <h3>Value</h3>
                             <p>Select How the value will be populated to the select dropdown</p>
                         </template>
-                        <i class="el-icon-info el-text-info"></i>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
                 <el-radio-group size="small" v-model="activeEditor.select_value_type">
@@ -93,7 +93,7 @@
                               <h3>Column</h3>
                                 <p>Select Column That you want to populate data</p>
                             </template>
-                            <i class="el-icon-info el-text-info"></i>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                     <el-radio-group class="spaced" v-model="activeEditor.dynamic_select_column">
@@ -142,7 +142,7 @@
                             <h3>Options</h3>
                             <p>Provide the values that you want to show on the frontend. Your values should match your table cell data</p>
                         </template>
-                        <i class="el-icon-info el-text-info"></i>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
                 <key-pair-options :value="activeEditor.options"></key-pair-options>
@@ -173,7 +173,7 @@
                             </p>
                         </template>
 
-                        <i class="el-icon-info el-text-info"/>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
                 <el-select class="nt_column_type_select" size="small" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
@@ -213,7 +213,7 @@
                             </p>
                         </template>
 
-                        <i class="el-icon-info el-text-info"/>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
                 <el-select class="nt_column_type_select" size="small" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
@@ -235,7 +235,7 @@
                         <h3>Filter Prefix</h3>
                         <p>You can use filter prefix to append the value of user inputed value. It will join with the value and perform the search</p>
                     </template>
-                    <i class="el-icon-info el-text-info"></i>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-input size="small" placeholder="Filter Prefix" v-model="activeEditor.filter_value_prefix" />
@@ -249,7 +249,7 @@
                         <h3>Columns</h3>
                         <p>Select the columns that you want to apply this filter</p>
                     </template>
-                    <i class="el-icon-info el-text-info"></i>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-checkbox-group v-if="current_columns.length" v-model="activeEditor.columns">
@@ -279,12 +279,14 @@
 </template>
 
 <script type="text/babel">
+    import { InfoFilled } from '@element-plus/icons-vue';
     import KeyPairOptions from './_key_pair_options'
     import each from 'lodash/each'
     export default {
         name: 'FilterEditor',
         components: {
-            KeyPairOptions
+            KeyPairOptions,
+            InfoFilled
         },
         props: ['activeEditor', 'columnKeyPairs', 'columns'],
         data() {

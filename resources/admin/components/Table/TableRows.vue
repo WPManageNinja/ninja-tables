@@ -294,6 +294,7 @@
 
     import ShowEditableCell from './_ShowEditableCell'
     import { useEventBus } from '../../eventBus';
+    import {InfoFilled} from "@element-plus/icons-vue";
 
     export default {
         name: 'TableDataItems',
@@ -309,7 +310,8 @@
             WPPostsNav,
             RawSqlNav,
             WooNavEdit,
-            ShowEditableCell
+            ShowEditableCell,
+            InfoFilled,
         },
         props: ['config', 'getColumnSettings', 'hasPro'],
         data() {

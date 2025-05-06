@@ -64,7 +64,7 @@
                                             effect="light"
                                             content="Maximun records to show in frontend, keep empty to show all."
                                     >
-                                        <i class="el-icon-info el-text-info"></i>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                     Max Records:
                                 </strong>
@@ -84,7 +84,7 @@
                                             effect="light"
                                             content="Select what type of entries you want to show from fluent form."
                                     >
-                                        <i class="el-icon-info el-text-info"></i>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                     Entry Type:
                                 </strong>
@@ -162,6 +162,7 @@
 </template>
 
 <script>
+    import {  InfoFilled } from '@element-plus/icons-vue';
     export default {
         name: 'FluentForm',
         props: {
@@ -175,6 +176,9 @@
             config: {
                 type: Object
             }
+        },
+        components: {
+            InfoFilled
         },
         data() {
             return {
