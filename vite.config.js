@@ -1,6 +1,6 @@
 
 import {defineConfig} from 'vite'
-// import {viteStaticCopy} from 'vite-plugin-static-copy'
+import {viteStaticCopy} from 'vite-plugin-static-copy'
 import vue from '@vitejs/plugin-vue'
 import react from '@vitejs/plugin-react'
 import liveReload from 'vite-plugin-live-reload';
@@ -8,9 +8,34 @@ import path from "path";
 import AutoImport from 'unplugin-auto-import/vite';
 import fs from "fs";
 
+const serverConfig = require("./config/vite.json");
+
 const {ElementPlusResolver} = require("unplugin-vue-components/resolvers");
 const Components = require("unplugin-vue-components/vite");
 // https://vitejs.dev/config/
+
+const moveManifestPlugin = {
+  name: "move-manifest",
+  configResolved(resolvedConfig) {
+    // Store the resolved config for use in writeBundle
+    viteConfig = resolvedConfig;
+  },
+  writeBundle() {
+    const outDir = viteConfig.build.outDir;
+    const manifestSrc = path.join(outDir, ".vite", "manifest.json");
+    const manifestDest = path.resolve(__dirname, serverConfig.manifest_path);
+    const viteDir = path.join(outDir, ".vite");
+
+    // Check if the manifest file exists, then move it
+    if (fs.existsSync(manifestSrc)) {
+      fs.renameSync(manifestSrc, manifestDest); // Move the file
+      // Optionally, remove the .vite directory if it's empty
+      if (fs.existsSync(viteDir) && fs.readdirSync(viteDir).length === 0) {
+        fs.rmSync(viteDir, { recursive: true }); // Remove empty directory
+      }
+    }
+  },
+};
 
 //Add All css and js here
 //Important: Key must be output filepath without extension, and value will be the file source
@@ -28,6 +53,7 @@ const inputs = [
   "resources/admin/css/gutenblock.scss",
   "resources/preview/preview.scss",
 ];
+
 
 const copyImagesPlugin = {
   name: "copy-images",
@@ -52,20 +78,32 @@ const copyImagesPlugin = {
 };
 
 export default defineConfig({
+  base: '/wp-content/plugins/ninja-tables/',
     plugins:
         [
+        
             vue(),
             react(),
             liveReload([
                 `${__dirname}/**/*\.php`,
             ]),
-            // viteStaticCopy({
-            //     targets: [
-            //         {src: 'resources/images', dest: ''},
-            //         {src: 'resources/icons', dest: ''},
-            //         {src: 'resources/libs', dest: ''},
-            //     ]
-            // }),
+            viteStaticCopy({
+                targets: [
+                    {src: 'resources/images', dest: ''},
+                    {src: 'resources/icons', dest: ''},
+                    {
+                      src: 'resources/libs',
+                      dest: '',            // don't change this
+                      flatten: false       // <- key line: preserve folder structure
+                    },
+                    {src: 'resources/fonts', dest: ''},
+                    {
+                      src: 'resources/libs/icons/*', // Copy all files in the icons folder
+                      dest: 'icons',
+                    },
+                  
+                ]
+            }),
             AutoImport({
                 resolvers: [ElementPlusResolver()],
             }),
@@ -73,23 +111,29 @@ export default defineConfig({
                 resolvers: [ElementPlusResolver()],
                 directives: false
             }),
-            copyImagesPlugin
+            moveManifestPlugin
         ],
 
     build: {
         manifest: true,
         outDir: 'assets',
-        //assetsDir: '',
-        publicDir: 'assets',
-        //root: '/',
         emptyOutDir: true, // delete the contents of the output directory before each build
 
         // https://rollupjs.org/guide/en/#big-list-of-options
         rollupOptions: {
             input: inputs,
             output: {
-                chunkFileNames: '[name].js',
-                entryFileNames: '[name].js',
+              entryFileNames: "js/[name].js",
+              chunkFileNames: "js/[name]-[hash].js",
+              // assetFileNames: ({ name }) => {
+              //   if (/\.(gif|jpe?g|png|svg)$/.test(name ?? "")) {
+              //     return "img/[name][extname]";
+              //   }
+              //   if (/\.css$/.test(name ?? "")) {
+              //     return "css/[name][extname]";
+              //   }
+              //   return "[name][extname]";
+              // },
             },
         },
     },
@@ -99,6 +143,8 @@ export default defineConfig({
         alias: {
             'vue': 'vue/dist/vue.esm-bundler.js',
             '@': path.resolve(__dirname, 'resources/admin'),
+            '@cssicon': path.resolve(__dirname, 'resources/libs/icons'),
+
         },
     },
 

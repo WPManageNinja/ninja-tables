@@ -12,12 +12,13 @@
     &::before {
       width: 16px;
       height: 16px;
-      background-image: url('../../libs/icons/search-outline.svg');
+      background-image: url('../icons/search-outline.svg');
+      
     }
   }
   .fooicon-sort-desc {
     &::before {
-      mask-image: url('../../libs/icons/caret-down-outline.svg');
+      mask-image: url('/assets/libs/icons/caret-down-outline.svg');
       -webkit-mask-image: url('../../libs/icons/caret-down-outline.svg');
       background-color: #000000;
     }

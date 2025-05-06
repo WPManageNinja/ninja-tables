@@ -4,6 +4,7 @@ namespace NinjaTables\App\Modules\DataProviders;
 
 use NinjaTables\App\App;
 use NinjaTables\App\Models\NinjaTableItem;
+use NinjaTables\App\Utils\Vite;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTablesPro\App\Modules\DataProviders\CsvProvider;
 use NinjaTablesPro\App\Modules\DataProviders\WoocommercePostsProvider;
@@ -60,9 +61,14 @@ class NinjaFooTable
             array('jquery'), '3.1.5', true
         );
 
-        wp_enqueue_script('footable_init',
-            $assets . "js/ninja-tables-footable.js",
-            array('footable'), self::$version, true
+        // wp_enqueue_script_module('footable_init',
+        //     $assets . "js/ninja-tables-footable.js",
+        //     array('footable'), self::$version, true
+        // );
+
+        Vite::enqueueScript(
+            'footable_init',
+            'public/js/ninja-tables-footable.js'
         );
 
         $localizeData = array(
@@ -973,18 +979,24 @@ class NinjaFooTable
      */
     public static function enqueuePublicCss()
     {
-        $styleSrc = NINJA_TABLES_DIR_URL . "assets/css/ninjatables-public.css";
+        // $styleSrc = NINJA_TABLES_DIR_URL . "assets/css/ninjatables-public.css";
 
-        if (is_rtl()) {
-            $styleSrc = NINJA_TABLES_DIR_URL . "assets/css/ninjatables-public-rtl.css";
-        }
+        // if (is_rtl()) {
+        //     $styleSrc = NINJA_TABLES_DIR_URL . "assets/css/ninjatables-public-rtl.css";
+        // }
 
-        wp_enqueue_style(
-            'footable_styles',
-            $styleSrc,
-            array(),
-            NINJA_TABLES_VERSION,
-            'all'
-        );
+
+        // wp_enqueue_style(
+        //     'footable_styles',
+        //     $styleSrc,
+        //     array(),
+        //     NINJA_TABLES_VERSION,
+        //     'all'
+        // );
+
+        Vite::enqueueStyle('ninja-tables-public', 'public/css/_public.scss');
+        Vite::enqueueStyle('ninja-tables-pre', 'preview/preview.scss');
+        Vite::enqueueStyle('ninja-tables-pre', 'css/ninja-tables-admin.scss');
+        Vite::enqueueStyle('ninja-tables-pre', 'css/vendor.scss');
     }
 }

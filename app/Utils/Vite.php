@@ -214,9 +214,9 @@ class  Vite
             $assetFile = (static::$instance)->getFileFromManifest($src);
             $srcPath = $this->getProductionFilePath($assetFile);
         } else {
+           
             $srcPath = $this->getVitePath() . $src;
         }
-
         if (empty($srcPath)) {
             return;
         }

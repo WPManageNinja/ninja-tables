@@ -1,6 +1,6 @@
-@import "footable";
-@import "common";
-@import "foo_icons";
+@use "footable" as *;
+@use "common" as *;
+@use "foo_icons" as *;
 
 .bootstrap3 {
   @import "table_boostrap3";
