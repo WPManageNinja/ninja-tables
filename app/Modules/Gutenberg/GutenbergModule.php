@@ -26,14 +26,15 @@ class GutenbergModule
             true
         );
 
-        $app = App::getInstance();
+        $app    = App::getInstance();
         $assets = $app['url.assets'];
         wp_localize_script(
             'ninja-tables-gutenberg-table-block',
             'ninja_table_admin',
             [
-                'availableTables' => $this->getAvailableTables(),
-                'rest'            => $this->getRestInfo($app),
+                'availableTables'          => $this->getAvailableTables(),
+                'rest'                     => $this->getRestInfo($app),
+                'hasPro'                   => defined('NINJATABLESPRO'),
                 'preview_required_scripts' => array(
                     $assets . "css/ninjatables-public.css",
                     $assets . "libs/footable/js/footable.min.js",
