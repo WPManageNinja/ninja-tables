@@ -10,7 +10,7 @@
                         <h3>Field Type</h3>
                         <p>Select The field type you want to populate for each row</p>
                     </template>
-                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-select
@@ -37,7 +37,7 @@
                         <p>Provide the column value for your corresponding value type select</p>
                     </template>
 
-                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <template v-if="selectedFiledValueType == 'options'">
@@ -95,7 +95,7 @@
                         <h3>Buy Now Button Text</h3>
                         <p>Provide Buy Now Button Text</p>
                     </template>
-                    <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-input
@@ -117,7 +117,7 @@
                                 Enable this if you want to link to post/Author permalink
                             </p>
                         </template>
-                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
@@ -138,7 +138,7 @@
                                 Enable this if you want to link to Taxonomy permalink
                             </p>
                         </template>
-                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
@@ -154,7 +154,7 @@
                             <p>Taxonomy Separator for Multiple Items</p>
                         </template>
 
-                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
@@ -176,7 +176,7 @@
                                     Enable this if you want to make the taxonomies as table filter action. So when user click on those filters then they will see only those type of posts.
                                 </p>
                             </template>
-                            <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                     <el-checkbox v-model="column.filter_permalinked" :true-value="'yes'" false-label="" value="yes" label="Make Taxonomies as Table Filter"></el-checkbox>
@@ -191,7 +191,7 @@
                                     Enable this if you want to open the links to new tab
                                 </p>
                             </template>
-                            <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                     <el-checkbox v-model="column.permalink_target" true-label="_blank" false-label="" value="_blank" label="Open link to new tab"></el-checkbox>
