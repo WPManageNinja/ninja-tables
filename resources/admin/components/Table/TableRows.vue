@@ -295,7 +295,7 @@
 
     import ShowEditableCell from './_ShowEditableCell'
     import { useEventBus } from '../../eventBus';
-    import {InfoFilled, Setting} from "@element-plus/icons-vue";
+    import { Setting } from "@element-plus/icons-vue";
 
     export default {
         name: 'TableDataItems',

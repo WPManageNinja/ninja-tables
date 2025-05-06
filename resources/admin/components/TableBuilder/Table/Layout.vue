@@ -2,11 +2,22 @@
     <div class="ninja-tables-layout">
         <div class="table-customize-button" v-if="selectedDevice === ''">
             <el-button-group v-if="activeTab === 'background'" class="button-group" style="margin-top: 0">
-                <el-button type="primary" icon="el-icon-s-grid" size="small" @click="manageCell(true, 'cells')">{{
-                    $t('Manage Cells') }}
+                <el-button
+                    type="primary"
+                    size="small"
+                    @click="manageCell(true, 'cells')"
+                >
+                    <el-icon class="el-icon--right"><Grid /></el-icon>
+                    {{ $t('Manage Cells') }}
                 </el-button>
-                <el-button type="primary" icon="el-icon-ice-cream-square" size="small"
-                    @click="manageCell(true, 'background')">{{ $t('Background') }}
+
+                <el-button
+                    type="primary"
+                    size="small"
+                    @click="manageCell(true, 'background')"
+                >
+                    <el-icon><IceCreamSquare /></el-icon>
+                    {{ $t('Background') }}
                 </el-button>
             </el-button-group>
             <div class="button-group" style="margin-top: 0" v-else>
@@ -176,6 +187,7 @@ import { manageRowColumn } from "../Mixin/manageRowColumn";
 import { manageResponsiveData } from "../Mixin/manageResponsiveData";
 import { helpers } from "../Mixin/helpers";
 import { useEventBus } from './../../../eventBus';
+import {Grid, IceCreamSquare, Search} from "@element-plus/icons-vue";
 
 export default {
     name: "Layout",
@@ -228,6 +240,8 @@ export default {
         };
     },
     components: {
+        IceCreamSquare,
+        Grid,
         draggable,
         TableData
     },
@@ -429,6 +443,9 @@ export default {
         })
     },
     computed: {
+        Search() {
+            return Search
+        },
         firstRowSticky() {
             const isSticky = this.setting.sticky.options.first_row_sticky.value;
             return this.getBoolean(isSticky);

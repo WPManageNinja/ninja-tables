@@ -78,9 +78,8 @@
                         :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]" />
 
                     <div class="icon-styles remove-elements" v-if="!manage">
-                        <i class="el-icon-copy-document" @click.stop="copyItem(index)">
-                        </i>
-                        <i class="el-icon-delete" @click.stop="deleteItem(index)"></i>
+                        <el-icon @click.stop="copyItem(index)"><CopyDocument /></el-icon>
+                        <el-icon @click.stop="deleteItem(index)"><Delete /></el-icon>
                     </div>
 
                 </li>
@@ -118,11 +117,14 @@
 import { restoreCursorPosition, saveCursorPosition } from "../../../utils/cursorSetup";
 import NinjaTextEditor from "../../Extras/_NinjaTextEditor.vue";
 import { manageDataElement } from "../Mixin/manageDataElement";
+import {CopyDocument, Delete} from "@element-plus/icons-vue";
 export default {
     name: "Datas",
     mixins: [manageDataElement],
     props: ["item", 'manage', 'setting', 'reference', 'row'],
     components: {
+        Delete,
+        CopyDocument,
         NinjaTextEditor
     },
     data() {

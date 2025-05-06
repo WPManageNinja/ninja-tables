@@ -116,12 +116,13 @@
                 </div>
             </template>
             <div class="dialog-footer-item">
-                <el-button @click="row_config = !row_config" size="small"><i class="el-icon-setting"></i>
+                <el-button @click="row_config = !row_config" size="small">
+                    <el-icon><Setting /></el-icon>
                 </el-button>
                 <el-button v-loading="btnLoading" :disabled="btnLoading" type="primary" size="small" @click="addData">
                     <span v-if="editId"> {{ $t('Update') }}</span>
                     <span v-else>{{ $t('Add') }}</span>
-                    <i v-if="btnLoading" class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
+                    <el-icon v-if="btnLoading"><Loading /></el-icon>
                 </el-button>
             </div>
         </div>
@@ -136,7 +137,7 @@
     import ImageSelector from '../../../common/ImageSelector';
     import NinjaDatePicker from '../Extras/_NinjaDatePicker'
     import GetPro from "../Tools/GetPro";
-    import {InfoFilled } from '@element-plus/icons-vue';
+    import {InfoFilled, Loading, Setting} from '@element-plus/icons-vue';
 
     export default {
         name: 'add_data',
@@ -316,6 +317,8 @@
             this.initNewColumnObj();
         },
         components: {
+            Loading,
+            Setting,
             InfoFilled,
           GetPro,
             wp_editor: wp_editor,
