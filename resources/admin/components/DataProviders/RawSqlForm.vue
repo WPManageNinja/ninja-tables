@@ -142,8 +142,6 @@
                 })
                     .then((res) => {
 
-                        console.log(res);
-
                         if(typeof res == 'string') {
                             this.error_html = res;
                             return;

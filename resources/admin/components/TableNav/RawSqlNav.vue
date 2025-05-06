@@ -16,7 +16,7 @@
 
         <el-collapse v-else v-model="active">
             <el-collapse-item name="1">
-                <template slot="title">
+                <template #title>
                     <i class="header-icon el-icon-info el-text-info"></i>
                     <strong> Edit:</strong> {{isEditableMessage}}
                 </template>
@@ -43,8 +43,8 @@
                 </div>
 
             </el-collapse-item>
-            <el-collapse-item v-if="config.table.connection_type == 'external'" name="2">
-                <template slot="title">
+            <el-collapse-item v-if="config.table.connection_type === 'external'" name="2">
+                <template #title>
                     <strong>SQL Connection Details:</strong>
                 </template>
                 <remote-sql-connection :connection="connection_details" />
