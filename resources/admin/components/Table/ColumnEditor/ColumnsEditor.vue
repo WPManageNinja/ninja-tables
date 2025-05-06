@@ -14,7 +14,7 @@
                                     Enter a column name to set the header title.
                                 </p>
                             </template>
-                            <i class="el-icon-info el-text-info"/>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                     <el-input size="small" v-model="model.name"/>
@@ -34,7 +34,7 @@
                                 </p>
                             </template>
 
-                            <i class="el-icon-info el-text-info"/>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                     <el-input size="small" v-model="model.key" :disabled="updating"/>
@@ -52,7 +52,7 @@
                                     Choose the data type of the column.
                                 </p>
                             </template>
-                            <i class="el-icon-info el-text-info"/>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                     <el-select class="nt_column_type_select" size="small" v-model="model.data_type" placeholder="Select Data Type of this column">
@@ -81,7 +81,7 @@
                                     </p>
                                 </template>
 
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
 
@@ -121,7 +121,7 @@
                                     </p>
                                 </template>
 
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
                         <el-switch active-value="yes" v-model="model.showTime"/>
@@ -146,7 +146,7 @@
                                     </p>
                                 </template>
 
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
                         <el-select class="nt_column_type_select" size="small" v-model="model.firstDayOfWeek" placeholder="Select first day of the week">
@@ -175,7 +175,7 @@
                                         Please Provide The Thousand/Decimal Separator If Any.
                                     </p>
                                 </template>
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
                         <el-radio-group @change="changeDecimalStyle()" v-model="model.decimal_system">
@@ -199,7 +199,7 @@
                                     </p>
                                 </template>
 
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
 
@@ -230,7 +230,7 @@
                                     </p>
                                 </template>
 
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
 
@@ -257,7 +257,7 @@
                                         If you select yes, Then admin can select multiple item on create data
                                     </p>
                                 </template>
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
                         <el-switch active-value="yes" v-model="model.isMultiple">
@@ -352,11 +352,16 @@
                               Check one or multiple a rel attribute of the column
                             </p>
                           </template>
-                          <i class="el-icon-info el-text-info"/>
+                          <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                       </template>
                       <el-checkbox-group v-model="model.relAttributes" v-if="model.relAttributes">
-                        <el-checkbox v-for="attr in ['sponsored', 'nofollow', 'noreferrer', 'noopener']" :label="attr" :key="attr"></el-checkbox>
+                        <el-checkbox
+                            v-for="attr in ['sponsored', 'nofollow', 'noreferrer', 'noopener']"
+                            :key="attr"
+                            :label="attr"
+                            :value="attr"
+                        />
                       </el-checkbox-group>
                     </el-form-item>
                 </template>
@@ -376,7 +381,7 @@
                                 </p>
                             </template>
 
-                            <i class="el-icon-info el-text-info"/>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
 
@@ -434,7 +439,7 @@
                                     </p>
                                 </template>
 
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
 
@@ -456,7 +461,7 @@
                                     </p>
                                 </template>
 
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
                         <el-col :xs="22" :md="22" :lg="22" :xl="22">
@@ -489,7 +494,7 @@
                                     </p>
                                 </template>
 
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
                         <el-select size="small" v-model="model.textAlign" placeholder="Text Align">
@@ -512,7 +517,7 @@
                                     <h3>Content Text Alignment</h3>
                                     <p> Choose the text alignment for Column Rows</p>
                                 </template>
-                                <i class="el-icon-info el-text-info"></i>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
 
@@ -544,7 +549,7 @@
                                         Provide content for table column header if you want to show html content.
                                     </p>
                                 </template>
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
 
@@ -564,7 +569,7 @@
                                     </p>
                                 </template>
 
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
                         <el-checkbox :disabled="!hasPro" v-model="model.unfilterable" :true-value="'yes'" :false-value="'no'"
@@ -584,7 +589,7 @@
                                     </p>
                                 </template>
 
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
                         <el-checkbox :disabled="!hasPro" v-model="model.unsortable" :true-value="'yes'" :false-value="'no'"
@@ -603,7 +608,7 @@
                                         frontend table.
                                     </p>
                                 </template>
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
                         <el-color-picker
@@ -626,7 +631,7 @@
                                         frontend table.
                                     </p>
                                 </template>
-                                <i class="el-icon-info el-text-info"/>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </template>
                         <el-color-picker
@@ -726,6 +731,8 @@
     import NinjaColorPicker from '../../Extras/ColorPicker'
     import GetPro from "../../Tools/GetPro";
     import { useEventBus } from './../../../eventBus';
+    import { InfoFilled } from '@element-plus/icons-vue'
+
 
     export default {
         name: "ColumnsEditor",
@@ -736,7 +743,8 @@
             'wp-post-dynamic-column': WPPostDynamicColumn,
             'content-transformer': ContentTransformer,
             DynamicWooColumn,
-            NinjaColorPicker
+            NinjaColorPicker,
+            InfoFilled
         },
         props: {
             model: {

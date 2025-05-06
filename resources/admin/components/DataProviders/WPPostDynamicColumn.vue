@@ -12,7 +12,7 @@
                             <p>Select The field type you want to populate for each row</p>
                         </template>
 
-                        <i class="el-icon-info el-text-info" />
+                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
                 <el-select
@@ -39,7 +39,7 @@
                             <p>Provide the column value for your corresponding value type select</p>
                         </template>
 
-                        <i class="el-icon-info el-text-info" />
+                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
                 <template v-if="selectedFiledValueType == 'options'">
@@ -89,7 +89,7 @@
                                 Enable this if you want to link to post/Author permalink
                             </p>
                         </template>
-                        <i class="el-icon-info el-text-info" />
+                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
@@ -109,7 +109,7 @@
                                     Enable this if you want to make the author as table filter action. So when user click on those filters then they will see only the selected author posts.
                                 </p>
                             </template>
-                            <i class="el-icon-info el-text-info" />
+                            <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
 
@@ -126,7 +126,7 @@
                                     Enable this if you want to open the links to new tab
                                 </p>
                             </template>
-                            <i class="el-icon-info el-text-info" />
+                            <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
 
@@ -146,7 +146,7 @@
                                 Enable this if you want to link to Taxonomy permalink
                             </p>
                         </template>
-                        <i class="el-icon-info el-text-info" />
+                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
@@ -162,7 +162,7 @@
                             <p>Taxonomy Separator for Multiple Items</p>
                         </template>
 
-                        <i class="el-icon-info el-text-info" />
+                        <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
@@ -184,7 +184,7 @@
                                     Enable this if you want to make the taxonomies as table filter action. So when user click on those filters then they will see only those type of posts.
                                 </p>
                             </template>
-                            <i class="el-icon-info el-text-info" />
+                            <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                     <el-checkbox v-model="column.filter_permalinked" :true-value="'yes'" :false-value="'no'">Make Taxonomies as Table Filter</el-checkbox>
@@ -199,7 +199,7 @@
                                     Enable this if you want to open the links to new tab
                                 </p>
                             </template>
-                            <i class="el-icon-info el-text-info" />
+                            <el-icon :color="tooltipIconColorCode"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                     <el-checkbox v-model="column.permalink_target" :true-value="'_blank'" :false-value="''">Open link to new tab</el-checkbox>
@@ -210,8 +210,13 @@
 </template>
 
 <script>
+    import {InfoFilled} from "@element-plus/icons-vue";
+
     export default {
         name: "WPPostDynamicColumn",
+        components: {
+            InfoFilled
+        },
         props: {
             column: {
                 type: Object,

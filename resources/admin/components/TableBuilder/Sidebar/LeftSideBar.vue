@@ -18,7 +18,7 @@
                                     <el-badge :value="(!hasPro && item.has_pro) ? 'Pro' : ''" class="item">
                                         <el-button :disabled="!hasPro && item.has_pro" class="button-component"
                                                    :class="!hasPro && item.has_pro ? 'pro-component' : ''" size="small"
-                                                    plain
+                                                   plain
                                                    :icon="item.icon !== null ? item.icon : 'el-icon-s-grid'">{{ item.name }}
                                         </el-button>
                                     </el-badge>
@@ -99,9 +99,9 @@
                             You may use <code>.ntb_{{ initialData.table_data.id }} </code> to target this specific
                             table.
                         </p>
-                        <ace_js_editor editor_id="ninja_custom_js" mode="javascript"
-                                       v-model="initialData.settings.custom_js.value">
-                        </ace_js_editor>
+                        <ace_code_editor editor_id="ninja_custom_js" mode="javascript"
+                                         v-model="initialData.settings.custom_js.value">
+                        </ace_code_editor>
                         <span>Please don't include <code>&lt;script>&lt;/script&gt;</code> tag</span>
                     </div>
                     <div v-else class="component-spacing" v-for="(item, tabKey, index) in setting.options"
@@ -167,7 +167,6 @@
 
 <script>
 import ace_code_editor from '../../../../common/_ace_editor';
-import ace_js_editor from '../../../../common/_ace_editor_js';
 import draggable from "vuedraggable";
 import AllInputElement from "../SettingComponent/AllInputElement";
 import TextOption from "../OptionComponent/TextOption";
@@ -198,7 +197,6 @@ export default {
     mixins: [helpers],
     components: {
         ace_code_editor,
-        ace_js_editor,
         GetPro,
         SelectInput,
         CellSetting,

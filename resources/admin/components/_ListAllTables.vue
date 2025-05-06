@@ -88,7 +88,7 @@
                             <h3>Source of data</h3>
                             <p>{{scope.row.remoteURL}}</p>
                           </template>
-                          <i class="el-icon-info el-text-info"/>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                 </template>
@@ -103,12 +103,12 @@
                         <code class="copy"
                               v-if="scope.row.dataSourceType === 'drag_and_drop'"
                                 :data-clipboard-text='`[ninja_table_builder id="${scope.row.ID}"]`'>
-                            <i class="el-icon-document"></i> [ninja_table_builder id="{{ scope.row.ID }}"]
+                            <el-icon><Document /></el-icon>[ninja_table_builder id="{{ scope.row.ID }}"]
                         </code>
                         <code class="copy"
                               v-else
                               :data-clipboard-text='`[ninja_tables id="${scope.row.ID}"]`'>
-                          <i class="el-icon-document"></i> [ninja_tables id="{{ scope.row.ID }}"]
+                            <el-icon><Document /></el-icon> [ninja_tables id="{{ scope.row.ID }}"]
                         </code>
                     </el-tooltip>
                 </template>
@@ -143,11 +143,15 @@
 <script type="text/babel">
     import pagination from '../../common/NinjaPagination.vue';
     import GetPro from "./Tools/GetPro";
+    import { Document, InfoFilled } from '@element-plus/icons-vue';
+
     export default {
         name: 'Home',
         components: {
+          Document,
+          InfoFilled,
           GetPro,
-            'ninja_pagination': pagination
+          'ninja_pagination': pagination
         },
         props: ['searchAction', 'searchString'],
         watch: {

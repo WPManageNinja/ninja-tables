@@ -22,7 +22,7 @@
                             :value="libKey">
                             {{ tableLib.title }}
                             <el-tooltip placement="top-end" effect="light" :content="tableLib.description">
-                                <i class="el-icon-info el-text-info"></i>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
                         </el-radio-button>
                     </el-radio-group>
@@ -38,7 +38,7 @@
                                :value="tableStyle.key" :id="'table_style_'+tableStyle.key"/>
                         {{ tableStyle.title }}
                         <el-tooltip placement="top-end" effect="light" :content="tableStyle.description">
-                            <i class="el-icon-info el-text-info"></i>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </label>
                 </div>
@@ -51,7 +51,7 @@
                         }}
                         <el-tooltip placement="top-end" effect="light"
                                     content="Enable this if you want to show table title in frontend">
-                            <i class="el-icon-info el-text-info"></i>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </label>
                     <label for="show_description">
@@ -59,7 +59,7 @@
                                id="show_description"/> {{ $t('Show Table Description') }}
                         <el-tooltip placement="top-end" effect="light"
                                     content="Enable this if you want to show table description in frontend">
-                            <i class="el-icon-info el-text-info"></i>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </label>
                     <label for="enable_search">
@@ -126,6 +126,7 @@
 </template>
 
 <script>
+import { InfoFilled } from '@element-plus/icons-vue';
 import {tableLibs} from '../../data/data'
 import intersection from 'lodash/intersection';
 import forEach from 'lodash/forEach'
@@ -140,6 +141,9 @@ export default {
             default_settings: {},
             fontFamily: ['inherit', 'cursive', 'fantasy', 'monospace', 'sans-serif', 'serif', 'system-ui', 'ui-monospace', 'ui-rounded', 'ui-sans-serif', 'ui-serif']
         };
+    },
+    components: {
+      InfoFilled
     },
     computed: {
         tableColors() {

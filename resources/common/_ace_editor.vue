@@ -1,7 +1,7 @@
 <template>
     <div v-loading="loading" element-loading-text="Loading Editor...">
         <div class="ace_container">
-            <div class="ninja_custom_css_editor" :id="editorId">{{ value }}</div>
+            <div :class="'ninja_'+mode+'_editor'" :id="editorId">{{ value }}</div>
         </div>
         <div class="editor_errors" :class="'ninja_'+mode+'_errors'">
             <span v-show="editorError" style="text-align: right; display: inline-block; color: #ff7171; float: right">{{ editorError }}</span>
@@ -17,21 +17,34 @@ export default {
             type: String,
             default: ''
         },
+        modelValue: {
+            type: String,
+            default: ''
+        },
         mode: {
             type: String,
             required: true
         },
-        editorId: {
+        editor_id: {
             type: String,
             default: 'ninja_custom_css'
         }
     },
+    emits: ['update:modelValue', 'change'],
     data() {
         return {
             ace_path: window.ninja_table_admin.ace_path_url,
             editorError: '',
             loading: true,
             editor: null
+        }
+    },
+    computed: {
+        currentValue() {
+            return this.modelValue || this.value || '';
+        },
+        editorId() {
+            return this.editor_id || 'ninja_custom_css';
         }
     },
     methods: {
@@ -54,6 +67,16 @@ export default {
         },
         initAce() {
             try {
+                if (typeof ace === 'undefined') {
+                    console.error("Ace editor not loaded");
+                }
+
+                const editorElement = document.getElementById(this.editorId);
+                if (!editorElement) {
+                    this.loading = false;
+                    return;
+                }
+
                 ace.config.set("workerPath", this.ace_path)
                 ace.config.set("modePath", this.ace_path)
                 ace.config.set("themePath", this.ace_path)
@@ -63,7 +86,7 @@ export default {
                 this.editor.session.setMode(`ace/mode/${this.mode}`)
                 
                 // Set initial value
-                this.editor.setValue(this.value || '', -1)
+                this.editor.setValue(this.currentValue, -1);
                 
                 // Setup event listeners
                 this.editor.getSession().on("changeAnnotation", this.handleAnnotationChange)
@@ -81,12 +104,15 @@ export default {
         },
         handleEditorChange() {
             const value = this.editor.getSession().getValue()
-            this.$emit('update:value', value)
+
+            this.$emit('update:modelValue', value)
             this.$emit('change', value)
         }
     },
     mounted() {
-        this.loadDependencies()
+        this.$nextTick(() => {
+            this.loadDependencies();
+        });
     },
     beforeUnmount() {
         if (this.editor) {
@@ -101,8 +127,12 @@ export default {
                 this.editor.setValue(newValue, -1)
             }
         },
+        modelValue(newVal) {
+            if (this.editor && newVal !== this.editor.getValue()) {
+                this.editor.setValue(newVal, -1);
+            }
+        },
         mode(newMode) {
-            // Update editor mode when prop changes
             if (this.editor) {
                 this.editor.session.setMode(`ace/mode/${newMode}`)
             }
@@ -112,11 +142,16 @@ export default {
 </script>
 
 <style>
-    .ninja_custom_css_editor {
-       min-height: 350px;
-        height: auto;
-    }
-    .ninja_css_errors .ace_gutter-cell.ace_warning {
-        display: none;
-    }
+.ninja_javascript_editor,
+.ninja_css_editor,
+.ninja_mysql_editor {
+    min-height: 350px;
+    height: auto;
+}
+
+.ninja_css_errors .ace_gutter-cell.ace_warning,
+.ninja_javascript_errors .ace_gutter-cell.ace_warning,
+.ninja_mysql_errors .ace_gutter-cell.ace_warning {
+    display: none;
+}
 </style>
