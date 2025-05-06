@@ -3,6 +3,8 @@
 namespace NinjaTables\App\Modules\Gutenberg;
 
 use NinjaTables\App\App;
+use NinjaTables\App\Models\Post;
+use NinjaTables\Framework\Support\Arr;
 
 class GutenbergModule
 {
@@ -10,6 +12,7 @@ class GutenbergModule
     {
 //        add_action('enqueue_block_assets', [$this, 'blockEditorAssets']);
         add_action('enqueue_block_editor_assets', [$this, 'enqueueAssets']);
+        add_action('save_post', [$this, 'updateTableConfig'], 10, 3);
     }
 
     public function enqueueAssets()
@@ -113,5 +116,39 @@ class GutenbergModule
         }
 
         return $formatted;
+    }
+
+    public function updateTableConfig($postId, $post, $update)
+    {
+        if (wp_is_post_autosave($postId) || wp_is_post_revision($postId)) {
+            return;
+        }
+
+        if (!current_user_can('edit_post', $postId)) {
+            return;
+        }
+
+        $blocks = parse_blocks($post->post_content);
+
+        foreach ($blocks as $block) {
+            if (isset($block['blockName']) && $block['blockName'] === 'ninja-tables/table-block') {
+                $this->updateTableSettings($block['attrs']);
+            }
+        }
+    }
+
+    public function updateTableSettings($data)
+    {
+        $tableSettings = Arr::get($data, 'tableSettings', []);
+
+        $tableId         = intval(Arr::get($data, 'tableId', 0));
+        $rawColumns      = '';
+        $tablePreference = '';
+
+        if ($tableSettings) {
+            $tablePreference = ninja_tables_sanitize_array($tableSettings);
+        }
+
+        Post::updatedSettings($tableId, $rawColumns, $tablePreference);
     }
 }
