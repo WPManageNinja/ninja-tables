@@ -548,13 +548,12 @@ registerBlockType('ninja-tables/table-block', {
                                 <CheckboxControl
                                     label={
                                         <span>
-                                    {style.title}
-                                            <span
-                                                className="dashicons dashicons-info tooltip-icon"
-                                                style={{ marginLeft: '5px', fontSize: '16px', cursor: 'help' }}
-                                                title={style.description}
-                                            ></span>
-                                </span>
+                                            {style.title}
+                                            <Tooltip text={__(style.description)}>
+                                                <span className="dashicons dashicons-info"
+                                                      style={{marginLeft: '5px', fontSize: '16px'}}></span>
+                                            </Tooltip>
+                                        </span>
                                     }
                                     checked={(tableSettings.css_classes || []).includes(style.key)}
                                     onChange={(checked) => {
