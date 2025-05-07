@@ -3,8 +3,9 @@
         <span>{{ label }}</span>
         <el-checkbox-group
             size="small"
-            :value="value"
-            @input="$emit('update', $event)">
+            :model-value="modelValue"
+            @update:model-value="$emit('update:modelValue', $event)"
+            >
 
             <el-checkbox
                 v-for="option in options"
@@ -19,12 +20,12 @@
 <script>
 export default {
     name: "CheckboxInput",
-    
-    model: {
-        prop: "value",
-        event: "update"
-    },
+    emits: ['update:modelValue'],
     props: {
+        modelValue: {
+            type: Array,
+            default: () => []
+        },
         value: {
             type: Array,
             default: () => []

@@ -1,12 +1,11 @@
 <template>
-<!--    <pre>{{value}}</pre>-->
    <span
        ref="ninja_table_text_editor"
        contenteditable="true"
-       v-html="value"
+       v-html="displayValue"
        data-placeholder="Add New"
        @keyup="updateContent"
-       :class="{'placeholder': !value}"
+       :class="{'placeholder': !displayValue}"
        @keydown.delete="handleDelete"
        @input="updateContent"
    ></span>
@@ -19,7 +18,8 @@ import { restoreCursorPosition, saveCursorPosition } from '../../utils/cursorSet
 export default {
     props: {
         value: {
-            type: String,
+            type: [String, Object],
+            default: ''
         },
         idx: {
             type: [Number, String],
@@ -29,6 +29,16 @@ export default {
             type: String,
             default: 'bold italic backcolor underline | link unlink'
         },
+    },
+    computed: {
+        displayValue() {
+            if (typeof this.value === 'string') {
+                return this.value;
+            } else if (this.value && this.value.target && this.value.target.innerHTML) {
+                return this.value.target.innerHTML;
+            }
+            return '';
+        }
     },
     mounted() {
         this.initTinymce();
@@ -80,9 +90,11 @@ export default {
                     editor.on('click', function () {
                         const mceuId = tinymce.activeEditor?.theme?.panel?._id || 'mceu_7';
                         const getEle = document.getElementById(mceuId);
-                        getEle.addEventListener('click', function (event) {
-                            event.stopPropagation();
-                        });
+                        if (getEle) {
+                            getEle.addEventListener('click', function (event) {
+                                event.stopPropagation();
+                            });
+                        }
                     });
                 }
             });
@@ -90,13 +102,12 @@ export default {
         updateContent(event) {
             const $ref = this.$refs.ninja_table_text_editor;
             const cursorPosition = saveCursorPosition($ref);
-            this.$emit('input', event.target.innerHTML);
-            this.$nextTick(() => {
-                restoreCursorPosition($ref, cursorPosition);
-            });
+
+            // Get content from the event target
             const content = event.target.innerHTML;
             const finalContent = content === 'Add New' ? '' : content;
 
+            // Emit the string content, not the event object
             if (this.idx !== undefined) {
                 this.$emit('input', finalContent, this.idx);
             } else {
