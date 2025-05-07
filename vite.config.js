@@ -93,12 +93,12 @@ export default defineConfig({
                     {src: 'resources/icons', dest: ''},
                     {
                       src: 'resources/libs',
-                      dest: '',            // don't change this
-                      flatten: false       // <- key line: preserve folder structure
+                      dest: '',
+                      flatten: false
                     },
                     {src: 'resources/fonts', dest: ''},
                     {
-                      src: 'resources/libs/icons/*', // Copy all files in the icons folder
+                      src: 'resources/libs/icons/*',
                       dest: 'icons',
                     },
                   
@@ -111,7 +111,8 @@ export default defineConfig({
                 resolvers: [ElementPlusResolver()],
                 directives: false
             }),
-            moveManifestPlugin
+            moveManifestPlugin,
+            copyImagesPlugin
         ],
 
     build: {
