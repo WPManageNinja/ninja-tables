@@ -10,6 +10,7 @@
           :default-active="activeMenu"
           :router="true"
           mode="horizontal"
+          :ellipsis="false"
       >
         <el-menu-item
             v-for="menuItem in topMenus"
