@@ -253,6 +253,10 @@ class AdminMenuHandler
         // FluentForm URL
         $fluentUrl = admin_url('plugin-install.php?s=FluentForm&tab=search&type=term');
 
+        if (function_exists('wp_enqueue_media')) {
+            wp_enqueue_media();
+        }
+
         // Add admin data
         wp_register_script('ninja-tables-data', '', [], '', true);
         wp_enqueue_script('ninja-tables-data');
@@ -323,6 +327,12 @@ class AdminMenuHandler
             true
         );
         $this->handleScriptConflicts();
+
+        /*
+         * This script only for resolve the conflict of lodash and underscore js
+         * Resolved the issue of media uploader specially for image upload
+         */
+        wp_add_inline_script($slug, $this->getInlineScript(), 'after');
     }
 
     private function handleScriptConflicts()
