@@ -12,13 +12,9 @@
             </el-col>
 
             <el-col :md="3" style="text-align:right;">
-                <el-button
-                        type="primary"
-                        icon="el-icon-plus"
-                        size="small"
-                        style="margin-top:4px;"
-                        @click="addCondition($event)"
-                ></el-button>
+                <el-button type="primary" @click="addCondition($event)">
+                    <el-icon><Plus /></el-icon>
+                </el-button>
             </el-col>
         </el-row>
 
@@ -84,13 +80,9 @@
                 </el-col>
 
                 <el-col :md="3" :sm="3" style="text-align:right;">
-                    <el-button
-                            type="danger"
-                            icon="el-icon-delete"
-                            size="small"
-                            style="margin-top:4px;"
-                            @click="removeCondition(i, $event)"
-                    ></el-button>
+                    <el-button type="danger" @click="removeCondition(i, $event)">
+                        <el-icon><Delete /></el-icon>
+                    </el-button>
                 </el-col>
             </el-row>
         </template>
@@ -152,7 +144,7 @@
 </template>
 
 <script>
-    import {InfoFilled} from "@element-plus/icons-vue";
+import {Delete, InfoFilled, Plus} from "@element-plus/icons-vue";
 
     export default {
         name: 'WPPostConditions',
@@ -196,7 +188,9 @@
             };
         },
         components: {
-            InfoFilled
+            Delete,
+            InfoFilled,
+            Plus
         },
         watch: {
             selected_post_types() {
