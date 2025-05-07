@@ -244,6 +244,7 @@ registerBlockType('ninja-tables/table-block', {
 
             // Pass the updated settings (if available)
             initFootables(updatedSettings);
+            generateColorCss(tableId, updatedSettings || tableSettings);
         };
 
 
@@ -264,7 +265,7 @@ registerBlockType('ninja-tables/table-block', {
 
             const config = getTableConfig(settings);
             NinjaTableApp.initTable($table, config);
-            initializeColorSettings(tableId, tableSettings);
+            // initializeColorSettings(tableId, tableSettings);
         };
 
         const getTableConfig = (customSettings = null) => {
@@ -885,37 +886,37 @@ registerBlockType('ninja-tables/table-block', {
             };
 
             // This useEffect will update the CSS when color settings change
-            useEffect(() => {
-                if (tableId) {
-                    generateColorCss(tableId, tableSettings);
-                }
-            }, [
-                // Add all color-related settings as dependencies
-                tableSettings.table_color_type,
-                tableSettings.table_color,
-                tableSettings.table_search_color_primary,
-                tableSettings.table_search_color_secondary,
-                tableSettings.table_search_color_border,
-                tableSettings.table_header_color_primary,
-                tableSettings.table_color_header_secondary,
-                tableSettings.table_color_header_border,
-                tableSettings.table_color_primary,
-                tableSettings.table_color_secondary,
-                tableSettings.table_color_border,
-                tableSettings.table_color_primary_hover,
-                tableSettings.table_color_secondary_hover,
-                tableSettings.table_color_border_hover,
-                tableSettings.alternate_color_status,
-                tableSettings.table_alt_2_color_primary,
-                tableSettings.table_alt_2_color_secondary,
-                tableSettings.table_alt_2_color_hover,
-                tableSettings.table_alt_color_primary,
-                tableSettings.table_alt_color_secondary,
-                tableSettings.table_alt_color_hover,
-                tableSettings.table_footer_bg,
-                tableSettings.table_footer_active,
-                tableSettings.table_footer_border
-            ]);
+            // useEffect(() => {
+            //     if (tableId) {
+            //         // generateColorCss(tableId, tableSettings);
+            //     }
+            // }, [
+            //     // Add all color-related settings as dependencies
+            //     tableSettings.table_color_type,
+            //     tableSettings.table_color,
+            //     tableSettings.table_search_color_primary,
+            //     tableSettings.table_search_color_secondary,
+            //     tableSettings.table_search_color_border,
+            //     tableSettings.table_header_color_primary,
+            //     tableSettings.table_color_header_secondary,
+            //     tableSettings.table_color_header_border,
+            //     tableSettings.table_color_primary,
+            //     tableSettings.table_color_secondary,
+            //     tableSettings.table_color_border,
+            //     tableSettings.table_color_primary_hover,
+            //     tableSettings.table_color_secondary_hover,
+            //     tableSettings.table_color_border_hover,
+            //     tableSettings.alternate_color_status,
+            //     tableSettings.table_alt_2_color_primary,
+            //     tableSettings.table_alt_2_color_secondary,
+            //     tableSettings.table_alt_2_color_hover,
+            //     tableSettings.table_alt_color_primary,
+            //     tableSettings.table_alt_color_secondary,
+            //     tableSettings.table_alt_color_hover,
+            //     tableSettings.table_footer_bg,
+            //     tableSettings.table_footer_active,
+            //     tableSettings.table_footer_border
+            // ]);
 
             // Update a specific color and generate CSS immediately
             const updateColorSetting = (key, value) => {
