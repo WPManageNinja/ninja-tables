@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tooltip effect="dark" placement="top-right"
+    <el-tooltip effect="dark" placement="top-end"
                 content="If you choose svg you can customize the color otherwise can't">
       <el-button size="small" type="primary" @click.prevent="newIcon" round icon="el-icon-upload">
         {{ $t('Choose Icon') }}
