@@ -221,7 +221,20 @@ class AdminMenuHandler
         $app = App::getInstance();
         $slug = $app->config->get('app.slug');
         $assets = Vite::getAssetUrl();
-    
+
+        if (function_exists('wp_enqueue_editor')) {
+            $app->addFilter('user_can_richedit', function ($status) {
+                return true;
+            });
+            wp_enqueue_editor();
+            wp_enqueue_script('thickbox');
+            wp_enqueue_script('editor');
+        }
+
+        if (function_exists('wp_enqueue_media')) {
+            wp_enqueue_media();
+        }
+        
         // Get current user
         $currentUser = wp_get_current_user();
         
