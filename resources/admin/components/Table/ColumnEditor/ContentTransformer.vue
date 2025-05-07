@@ -41,7 +41,7 @@
                 <tbody>
                     <tr v-for="column in columns" :key="column.key">
                         <td>{{ column.name }}</td>
-                        <td><span>{{ `row.${column.key}` }}</span></td>
+                        <td><span v-text="'{{row.' + column.key + '}}'"></span></td>
                     </tr>
                 </tbody>
             </table>
