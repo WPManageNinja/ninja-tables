@@ -2,7 +2,8 @@
     <div class="form_group">
         <el-color-picker
             show-alpha
-            v-model="colorValue"
+            :model-value="modelValue"
+            @update:model-value="updateValue"
             :disabled="disabled"
         ></el-color-picker>
         <label v-if="label">{{ label }}</label>
@@ -10,9 +11,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from 'vue'
-
-export default defineComponent({
+export default {
     name: 'ninja-color-picker',
     props: {
         label: {
@@ -29,21 +28,10 @@ export default defineComponent({
         }
     },
     emits: ['update:modelValue'],
-    setup(props, { emit }) {
-        const colorValue = ref(props.modelValue)
-
-        watch(() => props.modelValue, (newValue) => {
-            colorValue.value = newValue
-        })
-
-        watch(colorValue, (newValue) => {
-            emit('update:modelValue', newValue)
-        })
-
-        return {
-            colorValue
+    methods: {
+        updateValue(newValue) {
+            this.$emit('update:modelValue', newValue);
         }
     }
-})
+}
 </script>
-
