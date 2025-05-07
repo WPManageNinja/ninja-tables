@@ -1,58 +1,61 @@
+@use "sass:map";
 @use "footable" as *;
 @use "common" as *;
 @use "foo_icons" as *;
+@use "table_boostrap3" as bootstrap3_styles;
+@use "table_bootstrap4" as bootstrap4_styles;
+@use "table_semantic_ui" as semantic_ui_styles;
+@use "colors" as colors;
+@use "stackable" as *;
+@use "editor" as *;
 
 .bootstrap3 {
-  @import "table_boostrap3";
+  @include bootstrap3_styles.styles;
 
-    .table-bordered.ninja_footable {
-        border: 1px solid #dddddd;
-    }
+  .table-bordered.ninja_footable {
+      border: 1px solid #dddddd;
+  }
 }
 
 .bootstrap4 {
-  @import "table_bootstrap4";
+  @include bootstrap4_styles.styles;
 
-    .table-bordered.ninja_footable {
-        border: 1px solid #dee2e6;
-    }
+  .table-bordered.ninja_footable {
+      border: 1px solid #dee2e6;
+  }
 }
 
 .semantic_ui {
-  @import "table_semantic_ui";
+  @include semantic_ui_styles.styles;
 
-    .ui.table {
-        tbody tr {
-            th {
-                border-top: 1px solid rgba(34, 36, 38, 0.1);
-            }
+  .ui.table {
+      tbody tr {
+          th {
+              border-top: 1px solid rgba(34, 36, 38, 0.1);
+          }
 
-            &:first-child th {
-                border-top: none;
-            }
-        }
+          &:first-child th {
+              border-top: none;
+          }
+      }
 
-        tfoot tr.footable-paging td {
-            border-top: 1px solid rgba(34, 36, 38, 0.15) !important;
-            border-radius: 0 0 0.28571429rem 0.28571429rem;
-        }
-    }
+      tfoot tr.footable-paging td {
+          border-top: 1px solid rgba(34, 36, 38, 0.15) !important;
+          border-radius: 0 0 0.28571429rem 0.28571429rem;
+      }
+  }
 }
 
 .colored_table {
-  @import "colors";
+  @include colors.styles;
 
-    table.ninja_table_pro.inverted.table {
-        &.ninja_stacked_table {
-            background-color: unset !important;
-            color: unset !important;
-        }
-    }
+  table.ninja_table_pro.inverted.table {
+      &.ninja_stacked_table {
+          background-color: unset !important;
+          color: unset !important;
+      }
+  }
 }
-
-@import "stackable";
-
-@import "editor";
 
 table.ninja_footable.hide_all_borders {
   border: none !important;
