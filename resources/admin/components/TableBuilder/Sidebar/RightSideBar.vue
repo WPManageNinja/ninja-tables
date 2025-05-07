@@ -83,7 +83,7 @@
                         :on-success="handleFileSuccess"
                         :on-remove="handleRemove"
                     >
-                        <i class="el-icon-upload"></i>
+                        <el-icon><UploadFilled /></el-icon>
                         <div class="el-upload__text">{{ $t('Drop file here or ') }}<em>{{ $t('click to upload') }}</em>
                         </div>
                     </el-upload>
@@ -155,12 +155,14 @@
 import draggable from "vuedraggable";
 import TableLayout from "../Table/Layout";
 import {helpers} from "../Mixin/helpers";
+import {UploadFilled} from "@element-plus/icons-vue";
 
 export default {
     name: "RightSideBar",
     props: ["initialData", "tableId", "selectedDevice"],
     mixins: [helpers],
     components: {
+        UploadFilled,
         draggable,
         TableLayout,
     },

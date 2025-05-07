@@ -78,7 +78,8 @@
                                     applied.</p>
                             </template>
 
-                            <i style="margin-left: 2px" class="el-icon-info el-text-info"></i>
+                            <el-icon style="margin-left: 2px" class="el-text-info"><InfoFilled /></el-icon>
+
                         </el-tooltip>
                     </template>
 
@@ -194,6 +195,7 @@ import SelectInput from "../SettingComponent/SelectInput";
 import {helpers} from "../Mixin/helpers";
 import GetPro from "../../Tools/GetPro";
 import {useEventBus} from './../../../eventBus';
+import {InfoFilled} from "@element-plus/icons-vue";
 
 
 export default {
@@ -201,6 +203,7 @@ export default {
     props: ["initialData", 'singleItem', 'selectedDevice'],
     mixins: [helpers],
     components: {
+        InfoFilled,
         ace_code_editor,
         GetPro,
         SelectInput,

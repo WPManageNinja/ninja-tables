@@ -7,7 +7,7 @@
                     size="small"
                     @click="manageCell(true, 'cells')"
                 >
-                    <el-icon class="el-icon--right"><Grid /></el-icon>
+                    <el-icon><Grid /></el-icon>
                     {{ $t('Manage Cells') }}
                 </el-button>
 
@@ -21,12 +21,26 @@
                 </el-button>
             </el-button-group>
             <div class="button-group" style="margin-top: 0" v-else>
-                <el-button type="primary" icon="el-icon-folder-checked" size="small" @click="mergeCell()"
-                    :disabled="tdIds.length < 2 || merge.visible === false">{{ $t('Merge') }}
+                <el-button
+                    type="primary"
+                    size="small"
+                    @click="mergeCell()"
+                    :disabled="tdIds.length < 2 || merge.visible === false"
+                >
+                    <el-icon><FolderChecked /></el-icon>
+                    {{ $t('Merge') }}
                 </el-button>
-                <el-button type="primary" icon="el-icon-scissors" size="small" @click="splitCell"
-                    :disabled="split.visible === false">{{ $t('Split') }}
+
+                <el-button
+                    type="primary"
+                    size="small"
+                    @click="splitCell"
+                    :disabled="split.visible === false"
+                >
+                    <el-icon><Scissor /></el-icon>
+                    {{ $t('Split') }}
                 </el-button>
+
             </div>
         </div>
         <div class="ntb_table_wrapper"
@@ -55,8 +69,12 @@
                                     v-if="(headerName(table.columnIndex) === header) && tdIds.length === 1 && ((!merge.visible) || split.visible)">
                                     <el-dropdown trigger="click" placement="top-start" class="column-options">
                                     <span class="el-dropdown-link">
-                                        <i :class="index === table.columnIndex ? 'i-active' : ''"
-                                           class="el-icon-caret-bottom el-icon--right"></i>
+                                        <el-icon
+                                            :class="index === table.columnIndex ? 'i-active' : ''"
+                                            class="el-icon--right"
+                                        >
+                                            <CaretBottom />
+                                        </el-icon>
                                     </span>
                                         <el-dropdown-menu slot="dropdown">
                                             <el-dropdown-item @click.native="insertColumnBefore()">{{ $t('Insert column before') }}
@@ -98,7 +116,7 @@
                                 <el-dropdown trigger="click" placement="top-start" class="row-options">
 
                                 <span class="el-dropdown-link">
-                                    <i class="el-icon-caret-right"></i>
+                                    <el-icon><CaretRight /></el-icon>
                                 </span>
 
                                     <el-dropdown-menu slot="dropdown">
@@ -145,9 +163,9 @@
                                             </table-data>
                                             <template v-if="!manage && selectedDevice === ''">
                                                 <div class="icon-style remove-elements" :style="iconSpacing(item)">
-                                                    <i class="el-icon-rank"></i>
-                                                    <i class="el-icon-copy-document" @click="copyItem(index, header, item)"></i>
-                                                    <i class="el-icon-delete" @click="deleteItem(index, header, ind)"></i>
+                                                    <el-icon><Rank/></el-icon>
+                                                    <el-icon @click="copyItem(index, header, item)"><CopyDocument/></el-icon>
+                                                    <el-icon @click="deleteItem(index, header, ind)"><Delete/></el-icon>
                                                 </div>
                                             </template>
                                         </div>
@@ -187,7 +205,18 @@ import { manageRowColumn } from "../Mixin/manageRowColumn";
 import { manageResponsiveData } from "../Mixin/manageResponsiveData";
 import { helpers } from "../Mixin/helpers";
 import { useEventBus } from './../../../eventBus';
-import {Grid, IceCreamSquare, Search} from "@element-plus/icons-vue";
+import {
+    CaretBottom,
+    CaretRight,
+    CopyDocument,
+    Delete,
+    FolderChecked,
+    Grid,
+    IceCreamSquare,
+    Rank,
+    Scissor,
+    Search
+} from "@element-plus/icons-vue";
 
 export default {
     name: "Layout",
@@ -240,6 +269,13 @@ export default {
         };
     },
     components: {
+        CaretBottom,
+        Scissor,
+        FolderChecked,
+        Delete,
+        CopyDocument,
+        Rank,
+        CaretRight,
         IceCreamSquare,
         Grid,
         draggable,

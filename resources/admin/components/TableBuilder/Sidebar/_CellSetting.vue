@@ -21,7 +21,8 @@
                 <get-pro></get-pro>
               </p>
             </template>
-            <i style="margin-left: 2px" class="el-icon-info el-text-info"></i>
+
+              <el-icon style="margin-left: 2px" class="el-text-info"><InfoFilled /></el-icon>
           </el-tooltip>
           <el-switch style="float: right;" @change="changeHcActive" @input="changeHcActive" v-model="hcActive" :disabled="!hasPro && highlightedIsPro"></el-switch>
         </div>
@@ -62,6 +63,7 @@
 
 <script>
 import GetPro from "../../Tools/GetPro";
+import {InfoFilled} from "@element-plus/icons-vue";
 export default {
   name: "CellSetting",
   data() {
@@ -81,6 +83,7 @@ export default {
     }
   },
   components: {
+      InfoFilled,
     GetPro
   },
   props: ['manageCell', 'setting'],
