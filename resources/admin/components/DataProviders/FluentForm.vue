@@ -24,7 +24,7 @@
             <div class="form-group" v-if="!editing">
                 <el-select
                         v-loading="fetching"
-                        filterable
+                        :filterable
                         v-model="form.id"
                         style="width:100%"
                         placeholder="Select a Form"

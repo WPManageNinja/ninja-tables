@@ -1,7 +1,11 @@
 <template>
     <div class="radioButton">
         <span>{{ label }}</span><br>
-        <el-radio-group :value="value" size="small" @input="$emit('update', $event)">
+        <el-radio-group
+            :model-value="modelValue"
+            size="small"
+            @update:model-value="$emit('update:modelValue', $event)"
+        >
             <el-radio-button
                 v-for="option in options"
                 :key="option.value"
@@ -15,12 +19,13 @@
 <script>
 export default {
     name: "RadioButton",
-    model: {
-        prop: "value",
-        event: "update"
-    },
+
     props: {
         value: {
+            type: String,
+            default: 'M'
+        },
+        modelValue: {
             type: String,
             default: 'M'
         },

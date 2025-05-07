@@ -3,7 +3,7 @@
         <el-collapse>
             <el-collapse-item name="1">
                 <template #title>
-                    <i class="header-icon el-icon-info el-text-info"></i>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     <strong>Edit:</strong> {{isEditableMessage}}
                 </template>
                 <FluentForm :tableCreated="tableCreated" :editing="true" :config="config" />
@@ -14,10 +14,11 @@
 
 <script>
     import FluentForm from '../DataProviders/FluentForm';
+    import {InfoFilled} from "@element-plus/icons-vue";
 
     export default {
         name: "FluentformNav",
-        components: { FluentForm },
+        components: {InfoFilled, FluentForm },
         props: {
             config: {
                 type: Object

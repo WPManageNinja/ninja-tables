@@ -222,45 +222,19 @@ class AdminMenuHandler
         $slug = $app->config->get('app.slug');
         $assets = Vite::getAssetUrl();
 
-        Vite::enqueueScript(
-            $slug,
-            'admin/main.js',
-            ['ninja-tables-data'],
-            NINJA_TABLES_VERSION,
-            true
-        );
+        if (function_exists('wp_enqueue_editor')) {
+            $app->addFilter('user_can_richedit', function ($status) {
+                return true;
+            });
+            wp_enqueue_editor();
+            wp_enqueue_script('thickbox');
+            wp_enqueue_script('editor');
+        }
 
-        // Vite::enqueueScript(
-        //     $slug.'_footable',
-        //     'public/js/ninja-tables-footable.js',
-        //     ['ninja-tables-data'],
-        //     NINJA_TABLES_VERSION,
-        //     false
-        // );
-
-       
-        // Vite::enqueueScript(
-        //     $slug.'_footablejs',
-        //     'libs/footable/js/footable.js',
-        //     ['ninja-tables-data'],
-        //     NINJA_TABLES_VERSION,
-        //     true
-        // );
-        // Vite::enqueueScript(
-        //     $slug.'_footable-min',
-        //     'libs/footable/js/footable.min.js',
-        //     ['ninja-tables-data'],
-        //     NINJA_TABLES_VERSION,
-        //     true
-        // );
-        // Vite::enqueueScript(
-        //     $slug.'_footable_public',
-        //     'public/js/ninja-tables-footable.js',
-        //     ['ninja-tables-data'],
-        //     NINJA_TABLES_VERSION,
-        //     true
-        // );
-    
+        if (function_exists('wp_enqueue_media')) {
+            wp_enqueue_media();
+        }
+        
         // Get current user
         $currentUser = wp_get_current_user();
         
@@ -291,6 +265,10 @@ class AdminMenuHandler
         
         // FluentForm URL
         $fluentUrl = admin_url('plugin-install.php?s=FluentForm&tab=search&type=term');
+
+        if (function_exists('wp_enqueue_media')) {
+            wp_enqueue_media();
+        }
 
         // Add admin data
         wp_register_script('ninja-tables-data', '', [], '', true);
@@ -358,6 +336,12 @@ class AdminMenuHandler
         // Enqueue main app script
     
         $this->handleScriptConflicts();
+
+        /*
+         * This script only for resolve the conflict of lodash and underscore js
+         * Resolved the issue of media uploader specially for image upload
+         */
+        wp_add_inline_script($slug, $this->getInlineScript(), 'after');
     }
 
     private function handleScriptConflicts()

@@ -41,10 +41,12 @@
                                         </code>
                                     </td>
                                     <td>
-                                        <el-button @click="edit(table_filter)" size="small" type="primary"
-                                                   icon="el-icon-edit"></el-button>
-                                        <el-button size="small" @click="deleteFilter(filter_index)" type="danger"
-                                                   icon="el-icon-delete"></el-button>
+                                        <el-button type="primary" @click="edit(table_filter)">
+                                            <el-icon><EditPen /></el-icon>
+                                        </el-button>
+                                        <el-button type="danger" @click="deleteFilter(filter_index)">
+                                            <el-icon><Delete /></el-icon>
+                                        </el-button>
                                     </td>
                                 </tr>
                             </template>
@@ -118,11 +120,14 @@
     import NinjaFilterEditor from './_filterEditor'
     import draggable from 'vuedraggable'
     import GetPro from "../../Tools/GetPro";
+    import {Delete, EditPen} from "@element-plus/icons-vue";
 
     export default {
         name: 'custom_filter',
         props: ['table_id', 'columns'],
         components: {
+            Delete,
+            EditPen,
           GetPro,
             NinjaFilterEditor,
             draggable

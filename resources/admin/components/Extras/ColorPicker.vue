@@ -1,29 +1,37 @@
 <template>
     <div class="form_group">
         <el-color-picker
-                show-alpha
-                @active-change="changeColor"
-                :value="value"
-                :disabled="disabled"
-                @input="$emit('update', $event)"
+            show-alpha
+            :model-value="modelValue"
+            @update:model-value="updateValue"
+            :disabled="disabled"
         ></el-color-picker>
-        <label v-if="label">{{label}}</label>
+        <label v-if="label">{{ label }}</label>
     </div>
 </template>
 
-<script type="text/babel">
-    export default {
-        name: 'ninja_color_picker',
-        props: ['label', 'value', 'disabled'],
-        model: {
-          prop: 'value',
-          event: 'update'
+<script>
+export default {
+    name: 'ninja-color-picker',
+    props: {
+        label: {
+            type: String,
+            default: null
         },
-        methods: {
-            changeColor(color) {
-              this.$emit('update', color)
-            }
+        modelValue: {
+            type: String,
+            default: null
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        }
+    },
+    emits: ['update:modelValue'],
+    methods: {
+        updateValue(newValue) {
+            this.$emit('update:modelValue', newValue);
         }
     }
+}
 </script>
-

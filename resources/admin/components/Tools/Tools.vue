@@ -16,7 +16,7 @@
                             v-if="menuItem.status"
                             :index="menuItem.route" 
                             :route="{ name: menuItem.route }">
-                            <i :class="menuItem.icon_class"></i>
+                            <el-icon><component :is="menuItem.icon_class" /></el-icon>
                             <span>{{ menuItem.title }}</span>
                         </el-menu-item>
                     </template>
@@ -30,8 +30,10 @@
 </template>
 
 <script>
+import {UploadFilled, Star, Setting, SetUp, Menu} from '@element-plus/icons-vue';
     export default {
         name: 'Tools',
+        components: {UploadFilled, Star, Setting, Menu, SetUp},
         data() {
             return {
                 has_pro: !!window.ninja_table_admin.hasPro,
@@ -49,31 +51,31 @@
                     {
                         route: 'import_tables',
                         title: this.$t('Import'),
-                        icon_class: 'el-icon-upload',
+                        icon_class: 'UploadFilled',
                         status: true
                     },
                     {
                         route: 'default_table_appearance',
                         title: this.$t('Global Appearance'),
-                        icon_class: 'el-icon-star-off',
+                        icon_class: 'Star',
                         status: true
                     },
                     {
                         route: 'permission',
                         title: this.$t('Permission'),
-                        icon_class: 'el-icon-setting',
+                        icon_class: 'Setting',
                         status: true
                     },
                     {
                         route: 'licensing',
                         title: this.$t('License'),
-                        icon_class: 'ninja-tables-dashicons dashicons dashicons-shield',
+                        icon_class: 'SetUp',
                         status: this.has_pro
                     },
                     {
                         route: 'global_settings',
                         title: this.$t('Global Settings'),
-                        icon_class: 'el-icon-menu',
+                        icon_class: 'Menu',
                         status: true
                     },
                 ]);
