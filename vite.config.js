@@ -44,7 +44,10 @@ const inputs = [
   "resources/admin/main.js",
   "resources/admin/gutenblock.jsx",
   "resources/admin/ninja-table-tinymce-button.js",
+  "resources/public/js/_tableApp.js",
   "resources/public/js/ninja-tables-footable.js",
+  "resources/libs/footable/js/footable.js",
+  "resources/libs/footable/js/footable.min.js",
   "resources/public/js/ninja-tables-builder.js",
   "resources/public/css/_public.scss",
   "resources/public/css/_table_builder.scss",
@@ -78,7 +81,7 @@ const copyImagesPlugin = {
 };
 
 export default defineConfig({
-  base: '/wp-content/plugins/ninja-tables/',
+  // base: '/wp-content/plugins/ninja-tables/',
     plugins:
         [
         

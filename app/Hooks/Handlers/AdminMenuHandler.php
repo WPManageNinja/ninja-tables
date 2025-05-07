@@ -221,6 +221,45 @@ class AdminMenuHandler
         $app = App::getInstance();
         $slug = $app->config->get('app.slug');
         $assets = Vite::getAssetUrl();
+
+        Vite::enqueueScript(
+            $slug,
+            'admin/main.js',
+            ['ninja-tables-data'],
+            NINJA_TABLES_VERSION,
+            true
+        );
+
+        // Vite::enqueueScript(
+        //     $slug.'_footable',
+        //     'public/js/ninja-tables-footable.js',
+        //     ['ninja-tables-data'],
+        //     NINJA_TABLES_VERSION,
+        //     false
+        // );
+
+       
+        // Vite::enqueueScript(
+        //     $slug.'_footablejs',
+        //     'libs/footable/js/footable.js',
+        //     ['ninja-tables-data'],
+        //     NINJA_TABLES_VERSION,
+        //     true
+        // );
+        // Vite::enqueueScript(
+        //     $slug.'_footable-min',
+        //     'libs/footable/js/footable.min.js',
+        //     ['ninja-tables-data'],
+        //     NINJA_TABLES_VERSION,
+        //     true
+        // );
+        // Vite::enqueueScript(
+        //     $slug.'_footable_public',
+        //     'public/js/ninja-tables-footable.js',
+        //     ['ninja-tables-data'],
+        //     NINJA_TABLES_VERSION,
+        //     true
+        // );
     
         // Get current user
         $currentUser = wp_get_current_user();
@@ -305,23 +344,19 @@ class AdminMenuHandler
             'ace_path_url'             => $assets . "libs/ace",
         
             'preview_required_scripts' => array(
-                $assets . "css/ninjatables-public.css",
+                $assets . "public/css/_public.scss",
                 $assets . "libs/footable/js/footable.min.js",
                 $assets . "libs/moment/moment.min.js",
-                $assets . "js/ninja-tables-footable.js",
+                $assets . "public/js/ninja-tables-footable.js",
             ),
 
             'has_sql_permission'       => $app->applyFilters('ninja_table_sql_permission', $isAdmin),
         ]));
 
+    
+
         // Enqueue main app script
-        Vite::enqueueScript(
-            $slug,
-            'admin/main.js',
-            ['ninja-tables-data'],
-            NINJA_TABLES_VERSION,
-            true
-        );
+    
         $this->handleScriptConflicts();
     }
 

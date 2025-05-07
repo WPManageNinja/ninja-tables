@@ -16,42 +16,35 @@
                 </el-radio-group>
             </div>
             <el-button :loading="savingSettings" :disabled="savingSettings" size="small" type="primary"
-                       @click="storeSettings()">Update Settings
+                @click="storeSettings()">Update Settings
             </el-button>
         </div>
         <div class="ninja_design_wrapper">
             <div v-loading="!app_ready" style="background: white; padding: 10px 20px;" class="design_preview">
                 <div class="ninja_upgrade_bar" v-if="showProNotice">
                     {{ $t('Color customization is a PRO feature. Please upgrade to pro apply this feature.') }}
-                    <get-pro type="primary"/>
+                    <get-pro type="primary" />
                 </div>
-                <div
-                    :id="'footable_parent_'+tableId"
+                <div :id="'footable_parent_' + tableId"
                     class="footable_parent ninja_table_wrapper loading_ninja_table wp_table_data_press_parent"
-                    :class="wrapperClasses"
-                >
+                    :class="wrapperClasses">
 
                     <h3 v-if="tableSettings.show_title" class="table_title footable_title">{{ config.table.post_title
-                        }}</h3>
+                    }}</h3>
                     <div v-if="tableSettings.show_description" class="table_description footable_description"
-                         v-html="config.table.post_content"></div>
-                    <table
-                        v-show="app_ready"
-                        :id="'footable_'+tableId"
-                        :class="tableClasses"
-                        :style="fontSetting"
+                        v-html="config.table.post_content"></div>
+                    <table v-show="app_ready" :id="'footable_' + tableId" :class="tableClasses" :style="fontSetting"
                         class="table foo-table ninja_footable">
                         <colgroup>
-                            <col
-                                v-for="(column, column_index) in formattedColumns"
-                                :key="column_index"
-                                :class="['ninja_column_'+column_index, column.breakpoints]"></col>
+                            <col v-for="(column, column_index) in formattedColumns" :key="column_index"
+                                :class="['ninja_column_' + column_index, column.breakpoints]">
+                            </col>
                         </colgroup>
                         <thead></thead>
                     </table>
                 </div>
                 <div class="ninja_demo_disclaimer">
-                    <hr/>
+                    <hr />
                     <p v-if="tableSettings.stackable == 'yes'">
                         <b>For Stackable Tables, Live preview is disabled here. Please check on preview url</b>
                     </p>
@@ -60,7 +53,8 @@
                         items if you enable paginate. Also note that, The table style may differ at the frontend as your
                         theme may overwrite few css elements.
                     </p>
-                    <p>Some elements like custom filters and row-inline styling is not available in this design mode. Please check on live preview or in your embeded page.</p>
+                    <p>Some elements like custom filters and row-inline styling is not available in this design mode.
+                        Please check on live preview or in your embeded page.</p>
                 </div>
             </div>
             <div class="design_controls">
@@ -69,59 +63,64 @@
                         <div class="form_group">
                             <h3 class="ninja_inner_title">Select Styling Library</h3>
                             <el-radio-group size="small" v-model="tableSettings.css_lib">
-                                <el-radio-button
-                                    v-for="(tableLib, libKey) in currentTableLibs"
-                                    :key="libKey"
+                                <el-radio-button v-for="(tableLib, libKey) in currentTableLibs" :key="libKey"
                                     :value="libKey">
                                     {{ tableLib.title }}
                                     <el-tooltip placement="top-end" effect="light" :content="tableLib.description">
-                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                        <el-icon class="tooltip-icon-color">
+                                            <InfoFilled />
+                                        </el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                             </el-radio-group>
                         </div>
                         <div v-if="availableStyles" class="form_group label-normalize">
                             <h3 class="ninja_inner_title">Styles</h3>
-                            <label
-                                v-for="tableStyle in availableStyles"
-                                :key="tableStyle.key"
-                                :for="'table_style_'+tableStyle.key">
+                            <label v-for="tableStyle in availableStyles" :key="tableStyle.key"
+                                :for="'table_style_' + tableStyle.key">
                                 <input v-model="tableSettings.css_classes" type="checkbox" name="table_styles"
-                                       :value="tableStyle.key" :id="'table_style_'+tableStyle.key"/>
+                                    :value="tableStyle.key" :id="'table_style_' + tableStyle.key" />
                                 {{ tableStyle.title }}
                                 <el-tooltip placement="top-end" effect="light" :content="tableStyle.description">
-                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled />
+                                    </el-icon>
                                 </el-tooltip>
                             </label>
                         </div>
                         <div class="form_group label-normalize">
                             <h3 class="ninja_inner_title">Features</h3>
                             <label for="show_title">
-                                <input v-model="tableSettings.show_title" type="checkbox" value="1" id="show_title"/> {{
-                                $t('Show Table Title') }}
+                                <input v-model="tableSettings.show_title" type="checkbox" value="1" id="show_title" />
+                                {{
+                                    $t('Show Table Title') }}
                                 <el-tooltip placement="top-end" effect="light"
-                                            content="Enable this if you want to show table title in frontend">
-                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    content="Enable this if you want to show table title in frontend">
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled />
+                                    </el-icon>
                                 </el-tooltip>
                             </label>
                             <label for="show_description">
                                 <input v-model="tableSettings.show_description" type="checkbox" value="1"
-                                       id="show_description"/> {{ $t('Show Table Description') }}
+                                    id="show_description" /> {{ $t('Show Table Description') }}
                                 <el-tooltip placement="top-end" effect="light"
-                                            content="Enable this if you want to show table description in frontend">
-                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    content="Enable this if you want to show table description in frontend">
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled />
+                                    </el-icon>
                                 </el-tooltip>
                             </label>
                             <label for="enable_search">
                                 <input v-model="tableSettings.enable_search" type="checkbox" value="1"
-                                       id="enable_search"/> {{ $t('Enable the visitor to filter or search the table.')
-                                }}
+                                    id="enable_search" /> {{ $t('Enable the visitor to filter or search the table.')
+                                    }}
                             </label>
                             <label
                                 v-if="tableLibs[tableSettings.library].supports.sorting && !tableSettings.enable_ajax"
                                 for="column_sorting">
                                 <input v-model="tableSettings.column_sorting" type="checkbox" value="1"
-                                       id="column_sorting"/> {{ $t('Enable sorting of the table by the visitor') }}
+                                    id="column_sorting" /> {{ $t('Enable sorting of the table by the visitor') }}
                             </label>
                             <label><input v-model="tableSettings.hide_header_row" type="checkbox">
                                 Hide Header Row
@@ -132,15 +131,19 @@
                             <label><input v-model="tableSettings.hide_on_empty" type="checkbox">
                                 Hide empty items on responsive breakdown <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
-                                            content="If You enable this then the empty ietems will not show into responsive drawer / Stackable View">
-                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    content="If You enable this then the empty ietems will not show into responsive drawer / Stackable View">
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled />
+                                    </el-icon>
                                 </el-tooltip>
                             </label>
                             <label><input v-model="tableSettings.hide_responsive_labels" type="checkbox">
                                 Hide Labels on responsive breakdown <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
-                                            content="If You enable this then columns headings will not show into responsive drawer / Stackable View">
-                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    content="If You enable this then columns headings will not show into responsive drawer / Stackable View">
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled />
+                                    </el-icon>
                                 </el-tooltip>
                             </label>
                         </div>
@@ -149,8 +152,10 @@
                             <h3 class="ninja_inner_title">
                                 Stackable Table Configuration
                                 <el-tooltip placement="top-end" effect="light"
-                                            content="With stackable table, You can show your rows as list item. You can target by device width">
-                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    content="With stackable table, You can show your rows as list item. You can target by device width">
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled />
+                                    </el-icon>
                                 </el-tooltip>
                             </h3>
 
@@ -161,12 +166,13 @@
                                 <template v-if="tableSettings.stackable == 'yes'">
                                     <h3 style="margin-top: 15px" class="ninja_inner_title">Target Devices
                                         <el-tooltip placement="top-end" effect="light"
-                                                    content="Select the device by width in where the stackable tables will be enabled">
-                                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                            content="Select the device by width in where the stackable tables will be enabled">
+                                            <el-icon class="tooltip-icon-color">
+                                                <InfoFilled />
+                                            </el-icon>
                                         </el-tooltip>
                                     </h3>
-                                    <el-checkbox-group
-                                        v-model="tableSettings.stacks_devices">
+                                    <el-checkbox-group v-model="tableSettings.stacks_devices">
                                         <el-checkbox :label="$t('Mobile Device')" value="xs" />
                                         <el-checkbox :label="$t('Tablet Device')" value="sm" />
                                         <el-checkbox :label="$t('Laptop')" value="md" />
@@ -175,14 +181,16 @@
 
                                     <h3 style="margin-top: 15px" class="ninja_inner_title">Stacked Appearance
                                         <el-tooltip placement="top-end" effect="light"
-                                                    content="You can customize the appearance in stacked view of your table">
-                                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                            content="You can customize the appearance in stacked view of your table">
+                                            <el-icon class="tooltip-icon-color">
+                                                <InfoFilled />
+                                            </el-icon>
                                         </el-tooltip>
                                     </h3>
-                                    <el-checkbox-group
-                                        v-model="tableSettings.stacks_appearances">
+                                    <el-checkbox-group v-model="tableSettings.stacks_appearances">
                                         <el-checkbox :label="$t('Hide column headings')" value="hide_stacked_th" />
-                                        <el-checkbox :label="$t('Hide internal borders')" value="ninja_stacked_no_cell_border" />
+                                        <el-checkbox :label="$t('Hide internal borders')"
+                                            value="ninja_stacked_no_cell_border" />
                                     </el-checkbox-group>
                                 </template>
                             </div>
@@ -192,8 +200,8 @@
                         <div class="form_group">
                             <h3 class="ninja_inner_title">Select Color Scheme</h3>
                             <el-radio-group size="small" v-model="tableSettings.table_color_type">
-                                <el-radio-button value="pre_defined_color" :label="$t('Pre Defined Scheme')"/>
-                                <el-radio-button value="custom_color" :label="$t('Custom Scheme')"/>
+                                <el-radio-button value="pre_defined_color" :label="$t('Pre Defined Scheme')" />
+                                <el-radio-button value="custom_color" :label="$t('Custom Scheme')" />
                             </el-radio-group>
                         </div>
                         <div v-if="tableSettings.table_color_type == 'pre_defined_color'" class="form_group">
@@ -207,44 +215,32 @@
                             <h3 class="ninja_inner_title">Search Bar Colors</h3>
                             <div class="ninja_color_blocks">
                                 <div class="ninja_color_block">
-                                    <ninja-color-picker
-                                        label="Background"
-                                        v-model="tableSettings.table_search_color_primary"
-                                    ></ninja-color-picker>
+                                    <ninja-color-picker label="Background"
+                                        v-model="tableSettings.table_search_color_primary"></ninja-color-picker>
                                 </div>
                                 <div class="ninja_color_block">
-                                    <ninja-color-picker
-                                        label="Icon"
-                                        v-model="tableSettings.table_search_color_secondary"
-                                    ></ninja-color-picker>
+                                    <ninja-color-picker label="Icon"
+                                        v-model="tableSettings.table_search_color_secondary"></ninja-color-picker>
                                 </div>
                                 <div class="ninja_color_block">
-                                    <ninja-color-picker
-                                        label="Border"
-                                        v-model="tableSettings.table_search_color_border"
-                                    ></ninja-color-picker>
+                                    <ninja-color-picker label="Border"
+                                        v-model="tableSettings.table_search_color_border"></ninja-color-picker>
                                 </div>
                             </div>
 
                             <h3 class="ninja_inner_title">{{ $t('Table Header Colors') }}</h3>
                             <div class="ninja_color_blocks">
                                 <div class="ninja_color_block">
-                                    <ninja-color-picker
-                                        label="Background"
-                                        v-model="tableSettings.table_header_color_primary"
-                                    ></ninja-color-picker>
+                                    <ninja-color-picker label="Background"
+                                        v-model="tableSettings.table_header_color_primary"></ninja-color-picker>
                                 </div>
                                 <div class="ninja_color_block">
-                                    <ninja-color-picker
-                                        label="Text"
-                                        v-model="tableSettings.table_color_header_secondary"
-                                    ></ninja-color-picker>
+                                    <ninja-color-picker label="Text"
+                                        v-model="tableSettings.table_color_header_secondary"></ninja-color-picker>
                                 </div>
                                 <div class="ninja_color_block">
-                                    <ninja-color-picker
-                                        label="Border"
-                                        v-model="tableSettings.table_color_header_border"
-                                    ></ninja-color-picker>
+                                    <ninja-color-picker label="Border"
+                                        v-model="tableSettings.table_color_header_border"></ninja-color-picker>
                                 </div>
                             </div>
 
@@ -253,53 +249,39 @@
                                 <el-tab-pane label="Default">
                                     <div class="ninja_color_blocks">
                                         <div class="ninja_color_block">
-                                            <ninja-color-picker
-                                                    label="Background"
-                                                    v-model="tableSettings.table_color_primary"
-                                            ></ninja-color-picker>
+                                            <ninja-color-picker label="Background"
+                                                v-model="tableSettings.table_color_primary"></ninja-color-picker>
                                         </div>
                                         <div class="ninja_color_block">
-                                            <ninja-color-picker
-                                                    label="Text"
-                                                    v-model="tableSettings.table_color_secondary"
-                                            ></ninja-color-picker>
+                                            <ninja-color-picker label="Text"
+                                                v-model="tableSettings.table_color_secondary"></ninja-color-picker>
                                         </div>
                                         <div class="ninja_color_block">
-                                            <ninja-color-picker
-                                                    label="Border"
-                                                    v-model="tableSettings.table_color_border"
-                                            ></ninja-color-picker>
+                                            <ninja-color-picker label="Border"
+                                                v-model="tableSettings.table_color_border"></ninja-color-picker>
                                         </div>
                                     </div>
                                 </el-tab-pane>
                                 <el-tab-pane label="Hover">
                                     <div class="ninja_color_blocks">
                                         <div class="ninja_color_block">
-                                            <ninja-color-picker
-                                                    label="Background"
-                                                    v-model="tableSettings.table_color_primary_hover"
-                                            ></ninja-color-picker>
+                                            <ninja-color-picker label="Background"
+                                                v-model="tableSettings.table_color_primary_hover"></ninja-color-picker>
                                         </div>
                                         <div class="ninja_color_block">
-                                            <ninja-color-picker
-                                                    label="Text"
-                                                    v-model="tableSettings.table_color_secondary_hover"
-                                            ></ninja-color-picker>
+                                            <ninja-color-picker label="Text"
+                                                v-model="tableSettings.table_color_secondary_hover"></ninja-color-picker>
                                         </div>
                                         <div class="ninja_color_block">
-                                            <ninja-color-picker
-                                                    label="Border"
-                                                    v-model="tableSettings.table_color_border_hover"
-                                            ></ninja-color-picker>
+                                            <ninja-color-picker label="Border"
+                                                v-model="tableSettings.table_color_border_hover"></ninja-color-picker>
                                         </div>
                                     </div>
                                 </el-tab-pane>
                             </el-tabs>
 
                             <div class="ninja_switch_wrapper">
-                                <el-switch
-                                    inactive-color="gray"
-                                    active-text="Use Alternate Color Schema for Table Rows"
+                                <el-switch inactive-color="gray" active-text="Use Alternate Color Schema for Table Rows"
                                     active-value="yes" inactive-value="no"
                                     v-model="tableSettings.alternate_color_status"></el-switch>
                             </div>
@@ -307,65 +289,47 @@
                                 <h3 class="ninja_inner_title">{{ $t('Odd Row Colors') }}</h3>
                                 <div class="ninja_color_blocks">
                                     <div class="ninja_color_block">
-                                        <ninja-color-picker
-                                            label="Background"
-                                            v-model="tableSettings.table_alt_2_color_primary"
-                                        ></ninja-color-picker>
+                                        <ninja-color-picker label="Background"
+                                            v-model="tableSettings.table_alt_2_color_primary"></ninja-color-picker>
                                     </div>
                                     <div class="ninja_color_block">
-                                        <ninja-color-picker
-                                            label="Text"
-                                            v-model="tableSettings.table_alt_2_color_secondary"
-                                        ></ninja-color-picker>
+                                        <ninja-color-picker label="Text"
+                                            v-model="tableSettings.table_alt_2_color_secondary"></ninja-color-picker>
                                     </div>
                                     <div class="ninja_color_block">
-                                        <ninja-color-picker
-                                            label="Hover Background"
-                                            v-model="tableSettings.table_alt_2_color_hover"
-                                        ></ninja-color-picker>
+                                        <ninja-color-picker label="Hover Background"
+                                            v-model="tableSettings.table_alt_2_color_hover"></ninja-color-picker>
                                     </div>
                                 </div>
                                 <h3 class="ninja_inner_title">{{ $t('Even Row Colors') }}</h3>
                                 <div class="ninja_color_blocks">
                                     <div class="ninja_color_block">
-                                        <ninja-color-picker
-                                            label="Background"
-                                            v-model="tableSettings.table_alt_color_primary"
-                                        ></ninja-color-picker>
+                                        <ninja-color-picker label="Background"
+                                            v-model="tableSettings.table_alt_color_primary"></ninja-color-picker>
                                     </div>
                                     <div class="ninja_color_block">
-                                        <ninja-color-picker
-                                            label="Text"
-                                            v-model="tableSettings.table_alt_color_secondary"
-                                        ></ninja-color-picker>
+                                        <ninja-color-picker label="Text"
+                                            v-model="tableSettings.table_alt_color_secondary"></ninja-color-picker>
                                     </div>
                                     <div class="ninja_color_block">
-                                        <ninja-color-picker
-                                            label="Hover Background"
-                                            v-model="tableSettings.table_alt_color_hover"
-                                        ></ninja-color-picker>
+                                        <ninja-color-picker label="Hover Background"
+                                            v-model="tableSettings.table_alt_color_hover"></ninja-color-picker>
                                     </div>
                                 </div>
                             </div>
                             <h3 class="ninja_inner_title">{{ $t('Footer Colors') }}</h3>
                             <div class="ninja_color_blocks">
                                 <div class="ninja_color_block">
-                                    <ninja-color-picker
-                                        label="Background"
-                                        v-model="tableSettings.table_footer_bg"
-                                    ></ninja-color-picker>
+                                    <ninja-color-picker label="Background"
+                                        v-model="tableSettings.table_footer_bg"></ninja-color-picker>
                                 </div>
                                 <div class="ninja_color_block">
-                                    <ninja-color-picker
-                                        label="Active"
-                                        v-model="tableSettings.table_footer_active"
-                                    ></ninja-color-picker>
+                                    <ninja-color-picker label="Active"
+                                        v-model="tableSettings.table_footer_active"></ninja-color-picker>
                                 </div>
                                 <div class="ninja_color_block">
-                                    <ninja-color-picker
-                                        label="Border"
-                                        v-model="tableSettings.table_footer_border"
-                                    ></ninja-color-picker>
+                                    <ninja-color-picker label="Border"
+                                        v-model="tableSettings.table_footer_border"></ninja-color-picker>
                                 </div>
                             </div>
                         </div>
@@ -373,71 +337,70 @@
                     <el-tab-pane label="Other" name="other_settings">
 
                         <div class="ninja_switch_wrapper">
-                            <el-switch
-                                inactive-color="gray"
-                                active-text="Hide Pagination (Show all data at once)"
-                                active-value="1" inactive-value="0"
-                                v-model="tableSettings.show_all"></el-switch>
+                            <el-switch inactive-color="gray" active-text="Hide Pagination (Show all data at once)"
+                                active-value="1" inactive-value="0" v-model="tableSettings.show_all"></el-switch>
                         </div>
 
                         <div v-show="tableSettings.show_all == 0" class="form_group">
                             <div class="form_group">
                                 <label for="items_per_page">{{ $t('Pagination Items Per Page') }}</label>
                                 <input id="items_per_page" class="form_control" type="number"
-                                       v-model="tableSettings.perPage"
-                                       :disabled="tableSettings.show_all == true || tableSettings.show_all == '1'"/>
+                                    v-model="tableSettings.perPage"
+                                    :disabled="tableSettings.show_all == true || tableSettings.show_all == '1'" />
                             </div>
 
                             <label>{{ $t('Pagination Position') }}</label>
-                            <el-radio-group
-                                :disabled="tableSettings.show_all == true || tableSettings.show_all == '1'"
+                            <el-radio-group :disabled="tableSettings.show_all == true || tableSettings.show_all == '1'"
                                 size="small" v-model="tableSettings.pagination_position">
-                                <el-radio-button value="left" :label="$t('Left')"/>
-                                <el-radio-button value="center" :label="$t('Center')"/>
-                                <el-radio-button value="right" :label="$t('Right')"/>
+                                <el-radio-button value="left" :label="$t('Left')" />
+                                <el-radio-button value="center" :label="$t('Center')" />
+                                <el-radio-button value="right" :label="$t('Right')" />
                             </el-radio-group>
 
                             <label><input v-model="tableSettings.paginate_to_top" type="checkbox">
                                 Scroll to table top for pagination change <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
-                                            content="If you enable this then on pagination change, the table will be scrolled to top">
-                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    content="If you enable this then on pagination change, the table will be scrolled to top">
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled />
+                                    </el-icon>
                                 </el-tooltip>
                             </label>
 
                             <label><input :disabled="!has_pro" v-model="tableSettings.show_pager" type="checkbox">
                                 Show Page sizes change option <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
-                                            content="If you enable this then Users can change the items per page on frontend">
-                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    content="If you enable this then Users can change the items per page on frontend">
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled />
+                                    </el-icon>
                                 </el-tooltip>
                             </label>
 
                             <div v-if="tableSettings.show_pager" class="form_group">
                                 <label>{{ $t('Page Sizes (Number as Comma Separated)') }}</label>
-                                <input class="form_control" type="text"
-                                       placeholder="Default: 10,20,50,100"
-                                       v-model="tableSettings.paze_sizes"/>
+                                <input class="form_control" type="text" placeholder="Default: 10,20,50,100"
+                                    v-model="tableSettings.paze_sizes" />
                             </div>
 
                         </div>
 
                         <div class="form_group">
                             <label>{{ $t('Search Bar Position') }}</label>
-                            <el-radio-group
-                                :disabled="!has_pro"
-                                size="small" v-model="tableSettings.search_position">
-                                <el-radio-button value="left" :label="$t('Left')"/>
-                                <el-radio-button value="center" :label="$t('Center')"/>
-                                <el-radio-button value="right" :label="$t('Right')"/>
-                                <el-radio-button value="" :label="$t('Default')"/>
+                            <el-radio-group :disabled="!has_pro" size="small" v-model="tableSettings.search_position">
+                                <el-radio-button value="left" :label="$t('Left')" />
+                                <el-radio-button value="center" :label="$t('Center')" />
+                                <el-radio-button value="right" :label="$t('Right')" />
+                                <el-radio-button value="" :label="$t('Default')" />
                             </el-radio-group>
 
                             <label><input v-model="tableSettings.nt_search_full_width" type="checkbox">
                                 Make search input as full width <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
-                                            content="If You enable this, Then the search input will take all the available space (100% width)">
-                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    content="If You enable this, Then the search input will take all the available space (100% width)">
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled />
+                                    </el-icon>
                                 </el-tooltip>
                             </label>
                         </div>
@@ -445,11 +408,14 @@
                         <div class="form_group">
                             <label>Select Sorting Method</label>
                             <el-radio-group size="small" v-model="tableSettings.sorting_type">
-                                <el-radio-button :disabled="!config.table.isCreatedSortable" value="by_created_at" :label="$t('Created At')" />
+                                <el-radio-button :disabled="!config.table.isCreatedSortable" value="by_created_at"
+                                    :label="$t('Created At')" />
                                 <el-radio-button value="by_column" :label="$t('By Column')" />
-                                <el-radio-button :disabled="!config.table.isSortable" value="manual_sort" :label="$t('Manual Sort')" />
+                                <el-radio-button :disabled="!config.table.isSortable" value="manual_sort"
+                                    :label="$t('Manual Sort')" />
                             </el-radio-group>
-                            <div v-if="config.table.isCreatedSortable && tableSettings.sorting_type == 'by_created_at'" class="">
+                            <div v-if="config.table.isCreatedSortable && tableSettings.sorting_type == 'by_created_at'"
+                                class="">
                                 <span>{{ $t('Sort Type') }}
                                     <select v-model="tableSettings.default_sorting">
                                         <option value="new_first">{{ $t('Show New Items First') }}</option>
@@ -478,31 +444,37 @@
                             </div>
 
                             <el-button v-if="tableSettings.sorting_type" size="small"
-                                       @click="tableSettings.sorting_type = ''">reset
+                                @click="tableSettings.sorting_type = ''">reset
                             </el-button>
 
                         </div>
 
                         <div class="form_group">
                             <label>{{ $t('Row Details (Responsive drawer)') }} <span
-                                v-show="!has_pro">(PRO)</span></label>
+                                    v-show="!has_pro">(PRO)</span></label>
                             <el-radio-group size="small" v-model="tableSettings.expand_type">
                                 <el-radio-button value="default">Default
                                     <el-tooltip placement="top-end" effect="light"
-                                                content="Show All the responsive columns data into the responsive drawer">
-                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                        content="Show All the responsive columns data into the responsive drawer">
+                                        <el-icon class="tooltip-icon-color">
+                                            <InfoFilled />
+                                        </el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                                 <el-radio-button value="expandFirst">Expand First
                                     <el-tooltip placement="top-end" effect="light" content="This will automatically expand the first row of the table when displayed on a device that
                             hides any columns.">
-                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                        <el-icon class="tooltip-icon-color">
+                                            <InfoFilled />
+                                        </el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                                 <el-radio-button value="expandAll">Expand All
                                     <el-tooltip placement="top-end" effect="light" content="This will automatically expand all rows of the table when displayed on a device that hides
                             any columns.">
-                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                        <el-icon class="tooltip-icon-color">
+                                            <InfoFilled />
+                                        </el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                             </el-radio-group>
@@ -513,14 +485,18 @@
                             <el-radio-group size="small" v-model="tableSettings.togglePosition">
                                 <el-radio-button value="first">First Column
                                     <el-tooltip placement="top-end" effect="light"
-                                                content="If you use responsive breakdown then the '+' icon will show at the first visible column">
-                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                        content="If you use responsive breakdown then the '+' icon will show at the first visible column">
+                                        <el-icon class="tooltip-icon-color">
+                                            <InfoFilled />
+                                        </el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                                 <el-radio-button value="last">Last Column
                                     <el-tooltip placement="top-end" effect="light"
-                                                content="If you use responsive breakdown then the '+' icon will show at the last visible column">
-                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                        content="If you use responsive breakdown then the '+' icon will show at the last visible column">
+                                        <el-icon class="tooltip-icon-color">
+                                            <InfoFilled />
+                                        </el-icon>
                                     </el-tooltip>
                                 </el-radio-button>
                             </el-radio-group>
@@ -529,507 +505,500 @@
                         <div class="form_group">
                             <label for="extra_css_class">{{ $t('Extra CSS Class for the table') }}</label>
                             <input id="extra_css_class" class="form_control" type="text"
-                                   v-model="tableSettings.extra_css_class"/>
+                                v-model="tableSettings.extra_css_class" />
                         </div>
 
                         <div class="form_group">
                             <label>{{ $t('Sticky First Column') }} <span v-if="!has_pro">(Pro)</span></label>
                             <el-checkbox :disabled="!has_pro" :true-value="'yes'" :false-value="'no'"
-                                         v-model="tableSettings.sticky_first_column">Enable first column sticky for table
+                                v-model="tableSettings.sticky_first_column">Enable first column sticky for table
                             </el-checkbox>
                             <label>{{ $t('Sticky Header') }} <span v-if="!has_pro">(Pro)</span></label>
                             <el-checkbox :disabled="!has_pro" :true-value="'yes'" :false-value="'no'"
-                                         v-model="tableSettings.sticky_header">Enable sticky header for table
+                                v-model="tableSettings.sticky_header">Enable sticky header for table
                             </el-checkbox>
                             <template v-if="tableSettings.sticky_header == 'yes'">
                                 <label style="margin-top: 10px">Sticky Top Offset
                                     <el-tooltip placement="top-end" effect="light"
-                                                content="You can set an offset value for the sticky table header.">
-                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                        content="You can set an offset value for the sticky table header.">
+                                        <el-icon class="tooltip-icon-color">
+                                            <InfoFilled />
+                                        </el-icon>
                                     </el-tooltip>
                                 </label>
                                 <input placeholder="positive or negative number" class="form_control" type="text"
-                                       v-model="tableSettings.sticky_header_offset"/>
+                                    v-model="tableSettings.sticky_header_offset" />
                                 <small>Please give positive/negative number or you can provide jquery element object
                                 </small>
 
                                 <el-checkbox :disabled="!has_pro" :true-value="'yes'" :false-value="'no'"
-                                             v-model="tableSettings.disable_sticky_on_mobile">Disable Sticky header for mobile devices
+                                    v-model="tableSettings.disable_sticky_on_mobile">Disable Sticky header for mobile
+                                    devices
                                 </el-checkbox>
 
                             </template>
                         </div>
-                      <div class="form_group font-setting">
-                        <label>Table Font Setting</label>
-                        <div class="font">
-                          <label>{{$t('Font Family')}}</label>
-                          <el-select v-model="tableSettings.table_font_family" placeholder="Select Font">
-                            <el-option v-for="(family, key) in fontFamily" :key="key" :label="family === 'inherit' ? 'theme-font' : family" :value="family"></el-option>
-                          </el-select>
+                        <div class="form_group font-setting">
+                            <label>Table Font Setting</label>
+                            <div class="font">
+                                <label>{{ $t('Font Family') }}</label>
+                                <el-select v-model="tableSettings.table_font_family" placeholder="Select Font">
+                                    <el-option v-for="(family, key) in fontFamily" :key="key"
+                                        :label="family === 'inherit' ? 'theme-font' : family"
+                                        :value="family"></el-option>
+                                </el-select>
+                            </div>
+                            <div class="font">
+                                <label>{{ $t('Font Size') }}</label>
+                                <el-input-number :min="1" :max="50" v-model="tableFontSize"></el-input-number>
+                            </div>
                         </div>
-                        <div class="font">
-                          <label>{{$t('Font Size')}}</label>
-                          <el-input-number :min="1" :max="50" v-model="tableFontSize"></el-input-number>
-                        </div>
-                      </div>
                     </el-tab-pane>
                 </el-tabs>
 
                 <div class="ninja_design_tips" v-if="design_tips.length">
                     <ul class="ninja_design_tips_lists">
                         <li v-for="design_tip in design_tips"><i class="el-icon-warning"></i> <span
-                            v-html="design_tip"></span></li>
+                                v-html="design_tip"></span></li>
                     </ul>
                 </div>
 
                 <div v-if="!has_pro" class="upgrade_box">
-                  <get-pro text="Get Pro"/>
+                    <get-pro text="Get Pro" />
                 </div>
             </div>
         </div>
         <sortable-upgrade-notice :show="sortableUpgradeNotice"
-                                 @close="sortableUpgradeNotice = false"></sortable-upgrade-notice>
+            @close="sortableUpgradeNotice = false"></sortable-upgrade-notice>
     </div>
 </template>
 
 <script type="text/babel">
-    import {tableLibs} from '../../data/data'
-    import get from 'lodash/get'
-    import size from 'lodash/size'
-    import forEach from 'lodash/forEach'
-    import intersection from 'lodash/intersection';
-    import SortableUpgradeNotice from '../includes/SortableUpgradeNotice.vue';
-    import NinjaColorPicker from '../Extras/ColorPicker';
-    import GetPro from "../Tools/GetPro";
-    import {useEventBus} from './../../eventBus';
-    import { InfoFilled } from '@element-plus/icons-vue'
+import { tableLibs } from '../../data/data'
+import get from 'lodash/get'
+import size from 'lodash/size'
+import forEach from 'lodash/forEach'
+import intersection from 'lodash/intersection';
+import SortableUpgradeNotice from '../includes/SortableUpgradeNotice.vue';
+import NinjaColorPicker from '../Extras/ColorPicker';
+import GetPro from "../Tools/GetPro";
+import { useEventBus } from './../../eventBus';
+import { InfoFilled } from '@element-plus/icons-vue'
 
 
-    export default {
-        name: 'table_preview',
-        props: ['config'],
-        components: {
-          GetPro,
-            SortableUpgradeNotice,
-            NinjaColorPicker,
-            InfoFilled
-        },
-        data() {
+export default {
+    name: 'table_preview',
+    props: ['config'],
+    components: {
+        GetPro,
+        SortableUpgradeNotice,
+        NinjaColorPicker,
+        InfoFilled
+    },
+    data() {
+        return {
+            fontFamily: ['inherit', 'cursive', 'fantasy', 'monospace', 'sans-serif', 'serif', 'system-ui', 'ui-monospace', 'ui-rounded', 'ui-sans-serif', 'ui-serif'],
+            rows: [],
+            activeDesign: 'features',
+            tableId: this.$route.params.table_id,
+            tableSettings: this.config.settings,
+            table_body_html: '',
+            data_loaded: false,
+            script_loaded: false,
+            footableLoading: false,
+            tableLibs: tableLibs(),
+            has_pro: !!window.ninja_table_admin.hasPro,
+            savingSettings: false,
+            tableInnerHtml: '',
+            showingDevice: 'desktop',
+            hasSortable: !!window.ninja_table_admin.hasSortable,
+            sortableUpgradeNotice: false,
+            columnCss: '',
+            bus: useEventBus()
+        }
+    },
+    computed: {
+        fontSetting() {
             return {
-                fontFamily: ['inherit', 'cursive', 'fantasy', 'monospace', 'sans-serif', 'serif', 'system-ui', 'ui-monospace', 'ui-rounded', 'ui-sans-serif', 'ui-serif'],
-                rows: [],
-                activeDesign: 'features',
-                tableId: this.$route.params.table_id,
-                tableSettings: this.config.settings,
-                table_body_html: '',
-                data_loaded: false,
-                script_loaded: false,
-                footableLoading: false,
-                tableLibs: tableLibs(),
-                has_pro: !!window.ninja_table_admin.hasPro,
-                savingSettings: false,
-                tableInnerHtml: '',
-                showingDevice: 'desktop',
-                hasSortable: !!window.ninja_table_admin.hasSortable,
-                sortableUpgradeNotice: false,
-                columnCss: '',
-                bus : useEventBus()
-            }
-        },
-        computed: {
-            fontSetting() {
-              return {
                 '--ninja-table-font-family': this.tableSettings.table_font_family,
-                '--ninja-table-font-size': this.tableSettings.table_font_size+'px'
-              }
-            },
-            wrapperClasses() {
-                let classes = [];
-                classes.push(this.tableSettings.css_lib);
-                classes.push('ninja_device_' + this.showingDevice);
-                if (this.tableSettings.table_color_type == 'custom_color' || this.tableSettings.table_color != 'ninja_no_color_table') {
-                    classes.push('colored_table');
-                }
-                return classes;
-            },
-            tableClasses() {
-                let classes = [];
-                classes.push('foo_table_' + this.tableId);
+                '--ninja-table-font-size': this.tableSettings.table_font_size + 'px'
+            }
+        },
+        wrapperClasses() {
+            let classes = [];
+            classes.push(this.tableSettings.css_lib);
+            classes.push('ninja_device_' + this.showingDevice);
+            if (this.tableSettings.table_color_type == 'custom_color' || this.tableSettings.table_color != 'ninja_no_color_table') {
+                classes.push('colored_table');
+            }
+            return classes;
+        },
+        tableClasses() {
+            let classes = [];
+            classes.push('foo_table_' + this.tableId);
 
-                if (this.tableSettings.table_color_type == 'custom_color') {
+            if (this.tableSettings.table_color_type == 'custom_color') {
+                classes.push('inverted');
+                classes.push('ninja_custom_color');
+            } else {
+                if (this.tableSettings.table_color && this.tableSettings.table_color != 'ninja_no_color_table') {
                     classes.push('inverted');
-                    classes.push('ninja_custom_color');
-                } else {
-                    if (this.tableSettings.table_color && this.tableSettings.table_color != 'ninja_no_color_table') {
-                        classes.push('inverted');
-                    }
-                    classes.push(this.tableSettings.table_color);
                 }
+                classes.push(this.tableSettings.table_color);
+            }
 
-                if (this.tableSettings.pagination_position) {
-                    classes.push('footable-paging-' + this.tableSettings.pagination_position);
-                } else {
-                    classes.push('footable-paging-right');
-                }
+            if (this.tableSettings.pagination_position) {
+                classes.push('footable-paging-' + this.tableSettings.pagination_position);
+            } else {
+                classes.push('footable-paging-right');
+            }
 
-                if (this.tableSettings.hide_header_row) {
-                    classes.push('ninjatable_hide_header_row');
-                }
-                if (this.tableSettings.hide_all_borders) {
-                    classes.push('hide_all_borders');
-                }
-                classes.push('ninja_table_pro');
+            if (this.tableSettings.hide_header_row) {
+                classes.push('ninjatable_hide_header_row');
+            }
+            if (this.tableSettings.hide_all_borders) {
+                classes.push('hide_all_borders');
+            }
+            classes.push('ninja_table_pro');
 
-                if (this.tableSettings.search_position) {
-                    classes.push('ninja_search_' + this.tableSettings.search_position);
-                }
+            if (this.tableSettings.search_position) {
+                classes.push('ninja_search_' + this.tableSettings.search_position);
+            }
 
-                let table_css_classes = [];
-                if (this.tableSettings.css_classes) {
-                    table_css_classes = this.availableCssClasses.filter(value => -1 != this.tableSettings.css_classes.indexOf(value));
-                }
+            let table_css_classes = [];
+            if (this.tableSettings.css_classes) {
+                table_css_classes = this.availableCssClasses.filter(value => -1 != this.tableSettings.css_classes.indexOf(value));
+            }
 
-                if (this.tableSettings.hide_responsive_labels) {
-                    classes.push('nt_hide_breakpoint_labels');
-                }
+            if (this.tableSettings.hide_responsive_labels) {
+                classes.push('nt_hide_breakpoint_labels');
+            }
 
-                if (this.tableSettings.nt_search_full_width) {
-                    classes.push('nt_search_full_width');
-                }
+            if (this.tableSettings.nt_search_full_width) {
+                classes.push('nt_search_full_width');
+            }
 
 
-                if (this.tableSettings.css_lib == 'semantic_ui') {
-                    classes.push('ui');
-                }
+            if (this.tableSettings.css_lib == 'semantic_ui') {
+                classes.push('ui');
+            }
 
-                return [...table_css_classes, ...classes];
-            },
-            formattedColumns() {
-                let columns = this.config.columns;
-                let formattedColumns = [];
-                jQuery.each(columns, (index, column) => {
-                    formattedColumns.push({
-                        name: column.key,
-                        title: column.name,
-                        breakpoints: column.breakpoints,
-                        type: column.data_type,
-                        sortable: true,
-                        classes: ['ninja_column_' + index],
-                        visible: (column.breakpoints == 'hidden') ? false : true
-                    });
+            return [...table_css_classes, ...classes];
+        },
+        formattedColumns() {
+            let columns = this.config.columns;
+            let formattedColumns = [];
+            jQuery.each(columns, (index, column) => {
+                formattedColumns.push({
+                    name: column.key,
+                    title: column.name,
+                    breakpoints: column.breakpoints,
+                    type: column.data_type,
+                    sortable: true,
+                    classes: ['ninja_column_' + index],
+                    visible: (column.breakpoints == 'hidden') ? false : true
                 });
-                return formattedColumns;
-            },
-            app_ready() {
-                return this.data_loaded && this.script_loaded
-            },
-            currentTableLibs() {
-                return this.tableLibs[this.tableSettings.library].css_libs;
-            },
-            colors() {
-                return this.tableLibs[this.tableSettings.library].colors;
-            },
-            availableStyles() {
-                let lib = this.currentTableLibs[this.tableSettings.css_lib];
-                if (lib)
-                    return lib.styles;
+            });
+            return formattedColumns;
+        },
+        app_ready() {
+            return this.data_loaded && this.script_loaded
+        },
+        currentTableLibs() {
+            return this.tableLibs[this.tableSettings.library].css_libs;
+        },
+        colors() {
+            return this.tableLibs[this.tableSettings.library].colors;
+        },
+        availableStyles() {
+            let lib = this.currentTableLibs[this.tableSettings.css_lib];
+            if (lib)
+                return lib.styles;
+            return false;
+        },
+        availableCssClasses() {
+            let cssClasses = [];
+            forEach(this.availableStyles, (style) => {
+                cssClasses.push(style.key);
+            });
+            return cssClasses;
+        },
+        showProNotice() {
+            if (this.has_pro) {
                 return false;
-            },
-            availableCssClasses() {
-                let cssClasses = [];
-                forEach(this.availableStyles, (style) => {
-                    cssClasses.push(style.key);
-                });
-                return cssClasses;
-            },
-            showProNotice() {
-                if (this.has_pro) {
-                    return false;
-                }
+            }
+            if (
+                (
+                    this.tableSettings.table_color_type == 'custom_color' &&
+                    this.activeDesign == 'color_customization'
+                )
+                ||
+                (
+                    this.activeDesign == 'color_customization' &&
+                    this.tableSettings.table_color &&
+                    this.tableSettings.table_color != 'ninja_no_color_table')
+            ) {
+                return true;
+            }
+            return false;
+        },
+        design_tips() {
+            let tips = [];
+            if (this.tableSettings.table_color_type == 'custom_color') {
                 if (
-                    (
-                        this.tableSettings.table_color_type == 'custom_color' &&
-                        this.activeDesign == 'color_customization'
-                    )
-                    ||
-                    (
-                        this.activeDesign == 'color_customization' &&
-                        this.tableSettings.table_color &&
-                        this.tableSettings.table_color != 'ninja_no_color_table')
+                    !this.tableSettings.table_search_color_primary ||
+                    !this.tableSettings.table_header_color_primary ||
+                    !this.tableSettings.table_color_primary ||
+                    !this.tableSettings.table_color_secondary
                 ) {
-                    return true;
-                }
-                return false;
-            },
-            design_tips() {
-                let tips = [];
-                if (this.tableSettings.table_color_type == 'custom_color') {
-                    if (
-                        !this.tableSettings.table_search_color_primary ||
-                        !this.tableSettings.table_header_color_primary ||
-                        !this.tableSettings.table_color_primary ||
-                        !this.tableSettings.table_color_secondary
-                    ) {
-                        tips.push('You should set colors at <b>"Table Colors"</b> Tab');
-                    }
-                }
-                return tips;
-            },
-            tableFontSize: {
-                get() {
-                    return Number(this.tableSettings.table_font_size);
-                },
-                set(value) {
-                    this.tableSettings.table_font_size = value;
+                    tips.push('You should set colors at <b>"Table Colors"</b> Tab');
                 }
             }
+            return tips;
         },
-        watch: {
-            data_loaded() {
-                if (this.app_ready) {
+        tableFontSize: {
+            get() {
+                return Number(this.tableSettings.table_font_size);
+            },
+            set(value) {
+                this.tableSettings.table_font_size = value;
+            }
+        }
+    },
+    watch: {
+        data_loaded() {
+            if (this.app_ready) {
+                this.reInitFootables();
+            }
+        },
+        script_loaded() {
+            if (this.app_ready) {
+                this.reInitFootables();
+            }
+        },
+        tableSettings: {
+            handler(val) {
+                this.$nextTick(() => {
+                    this.generateColorCss();
+                });
+            },
+            deep: true
+        },
+        tableClasses: {
+            handler(val) {
+                this.$nextTick(() => {
                     this.reInitFootables();
+                });
+            },
+            deep: true
+        },
+        'tableSettings.enable_search'() {
+            this.$nextTick(() => {
+                this.reInitFootables();
+            });
+        },
+        'tableSettings.column_sorting'() {
+            this.$nextTick(() => {
+                this.reInitFootables();
+            });
+        },
+        'tableSettings.show_all'() {
+            this.$nextTick(() => {
+                this.reInitFootables();
+            });
+        },
+        'tableSettings.togglePosition'() {
+            this.$nextTick(() => {
+                this.reInitFootables();
+            });
+        },
+        'tableSettings.expand_type': function (new_val, old_val) {
+            if (new_val != 'default') {
+                if (!this.has_pro) {
+                    this.tableSettings.expand_type = 'default';
+                    this.bus.emit('show_pro_popup', 1);
+                    return;
                 }
-            },
-            script_loaded() {
-                if (this.app_ready) {
-                    this.reInitFootables();
-                }
-            },
-            tableSettings: {
-                handler(val) {
-                    this.$nextTick(() => {
-                        this.generateColorCss();
-                    });
-                },
-                deep: true
-            },
-            tableClasses: {
-                handler(val) {
-                    this.$nextTick(() => {
-                        this.reInitFootables();
-                    });
-                },
-                deep: true
-            },
-            'tableSettings.enable_search'() {
-                this.$nextTick(() => {
-                    this.reInitFootables();
-                });
-            },
-            'tableSettings.column_sorting'() {
-                this.$nextTick(() => {
-                    this.reInitFootables();
-                });
-            },
-            'tableSettings.show_all'() {
-                this.$nextTick(() => {
-                    this.reInitFootables();
-                });
-            },
-            'tableSettings.togglePosition'() {
-                this.$nextTick(() => {
-                    this.reInitFootables();
-                });
-            },
-            'tableSettings.expand_type': function (new_val, old_val) {
-                if (new_val != 'default') {
-                    if (!this.has_pro) {
-                        this.tableSettings.expand_type = 'default';
-                        this.bus.emit('show_pro_popup', 1);
-                        return;
-                    }
-                }
-                this.$nextTick(() => {
-                    this.reInitFootables();
-                });
-            },
-            'tableSettings.sorting_type': function (newVal, oldVal) {
-                if (newVal === 'manual_sort') {
-                    if (!this.has_pro) {
+            }
+            this.$nextTick(() => {
+                this.reInitFootables();
+            });
+        },
+        'tableSettings.sorting_type': function (newVal, oldVal) {
+            if (newVal === 'manual_sort') {
+                if (!this.has_pro) {
+                    this.tableSettings.sorting_type = oldVal;
+                    this.bus.emit('show_pro_popup', 1);
+                } else if (!this.hasSortable) {
+                    if (!this.hasSortable) {
                         this.tableSettings.sorting_type = oldVal;
-                        this.bus.emit('show_pro_popup', 1);
-                    } else if (!this.hasSortable) {
-                        if (!this.hasSortable) {
-                            this.tableSettings.sorting_type = oldVal;
-                            this.sortableUpgradeNotice = true
-                        }
-                    } else {
-                        this.initManualSorting();
+                        this.sortableUpgradeNotice = true
                     }
+                } else {
+                    this.initManualSorting();
                 }
-            },
-            activeDesign() {
-                this.checkColorPro();
             }
         },
-        methods: {
-            fetchTableBody() {
-              this.$get(`tables/${this.tableId}/table-inner-html`)
-                    .then(response => {
-                        this.tableInnerHtml = response;
-                        this.data_loaded = true;
-                    })
-                    .catch(error => {
-                        jQuery('#footable_' + this.tableId).append('<h1>Error Loading</h1>');
-                    });
-            },
-            initManualSorting() {
-                let promise = new Promise((resolve, reject) => {
-                    this.bus.emit('initManualSorting', {
-                        table_id: this.tableId,
-                        noData: true
-                    }, resolve, reject);
+        activeDesign() {
+            this.checkColorPro();
+        }
+    },
+    methods: {
+        fetchTableBody() {
+            this.$get(`tables/${this.tableId}/table-inner-html`)
+                .then(response => {
+                    this.tableInnerHtml = response;
+                    this.data_loaded = true;
                 })
-            },
-            storeSettings() {
-                this.checkColorPro();
-                this.savingSettings = true;
-                let filteredTableSettings = this.filterTableSettings(this.tableSettings);
-                let data = {
-                    columns: this.columns,
-                    table_settings: this.tableSettings
-                };
-                this.$post(`settings/${this.tableId}`, data)
-                    .then((res) => {
-                        this.$message({
-                            showClose: true,
-                            message: res.message,
-                            type: 'success'
-                        });
-                    })
-                    .catch((error) => {
-
-                    })
-                    .finally(() => {
-                        this.savingSettings = false;
-                    });
-            },
-            filterTableSettings(settings) {
-                let validStyles = [];
-                forEach(this.availableStyles, (style) => {
-                    validStyles.push(style.key);
+                .catch(error => {
+                    jQuery('#footable_' + this.tableId).append('<h1>Error Loading</h1>');
                 });
-                settings.css_classes = intersection(validStyles, this.tableSettings.css_classes);
-
-                return settings;
-            },
-            reInitFootables() {
-                if (!this.app_ready) {
-                    return;
-                }
-                if (typeof FooTable == 'object') {
-                    let ft = FooTable.get('#footable_' + this.tableId);
-                    if (ft) {
-                        ft.destroy();
-                    }
-                }
-                jQuery('#footable_' + this.tableId).find('thead,tbody,tfoot').remove();
-                this.footableLoading = false;
-                jQuery('#footable_' + this.tableId).append(this.tableInnerHtml);
-                this.initFootables();
-            },
-            initFootables() {
-                if (this.footableLoading || !this.script_loaded) {
-                    return;
-                }
-                this.footableLoading = true;
-                let NinjaTableApp = window.ninjaTableApp;
-                let $table = jQuery('#footable_' + this.tableId);
-
-                if (this.tableSettings.hide_on_empty) {
-                    $table.on('expanded.ft.row', function (e, ft, row) {
-                        $table.find('table.footable-details td:empty').parent().addClass('nt_has_hide');
+        },
+        initManualSorting() {
+            let promise = new Promise((resolve, reject) => {
+                this.bus.emit('initManualSorting', {
+                    table_id: this.tableId,
+                    noData: true
+                }, resolve, reject);
+            })
+        },
+        storeSettings() {
+            this.checkColorPro();
+            this.savingSettings = true;
+            let filteredTableSettings = this.filterTableSettings(this.tableSettings);
+            let data = {
+                columns: this.columns,
+                table_settings: this.tableSettings
+            };
+            this.$post(`settings/${this.tableId}`, data)
+                .then((res) => {
+                    this.$message({
+                        showClose: true,
+                        message: res.message,
+                        type: 'success'
                     });
+                })
+                .catch((error) => {
+
+                })
+                .finally(() => {
+                    this.savingSettings = false;
+                });
+        },
+        filterTableSettings(settings) {
+            let validStyles = [];
+            forEach(this.availableStyles, (style) => {
+                validStyles.push(style.key);
+            });
+            settings.css_classes = intersection(validStyles, this.tableSettings.css_classes);
+
+            return settings;
+        },
+        reInitFootables() {
+            if (!this.app_ready) {
+                return;
+            }
+            if (typeof FooTable == 'object') {
+                let ft = FooTable.get('#footable_' + this.tableId);
+                if (ft) {
+                    ft.destroy();
                 }
+            }
+            jQuery('#footable_' + this.tableId).find('thead,tbody,tfoot').remove();
+            this.footableLoading = false;
+            jQuery('#footable_' + this.tableId).append(this.tableInnerHtml);
+            this.initFootables();
+        },
+        initFootables() {
+            if (this.footableLoading || !this.script_loaded) {
+                return;
+            }
+            this.footableLoading = true;
+            let NinjaTableApp = window.ninjaTableApp;
+            let $table = jQuery('#footable_' + this.tableId);
 
-                let config = this.getTableConfig();
-                NinjaTableApp.initTable($table, config);
-                this.footableLoading = false;
-            },
-            dysel(options) {
-                // get options
-                var links = options.links;
-                var callback = options.callback;
-                var nocache = options.nocache;
-                var debug = options.debug;
+            if (this.tableSettings.hide_on_empty) {
+                $table.on('expanded.ft.row', function (e, ft, row) {
+                    $table.find('table.footable-details td:empty').parent().addClass('nt_has_hide');
+                });
+            }
 
-                // js and css file loader
-                var loadjscssfile = function (filename, cb) {
+            let config = this.getTableConfig();
+            NinjaTableApp.initTable($table, config);
+           
+            this.footableLoading = false;
+        },
+        dysel(options) {
+            const links = options.links;
+            const callback = options.callback;
+            const nocache = options.nocache;
+            const debug = options.debug;
+
+            const loadjscssfile = (filename, cb) => {
+                return new Promise((resolve, reject) => {
                     filename = filename.toString();
-                    var ext = filename.split('.').pop();
-                    var fileref = null;
-                    if (ext == "js") {
-                        // for Javascript
+                    const ext = filename.split('.').pop();
+                    let fileref = null;
+                    if (ext === "js") {
                         fileref = document.createElement('script');
                         fileref.setAttribute("type", "text/javascript");
                         fileref.setAttribute("src", filename);
-                    } else if (ext == "css" || filename.indexOf('googleapis.com/css?') > -1) {
-                        // for CSS + google fonts
+                    } else if (ext === "css" || ext ==='scss' || filename.includes('googleapis.com/css?')) {
                         fileref = document.createElement("link");
                         fileref.setAttribute("rel", "stylesheet");
                         fileref.setAttribute("type", "text/css");
                         fileref.setAttribute("href", filename);
                     }
-                    // callback trigger (w/debug if needed)
-                    if (typeof fileref != "undefined") {
-                        if (cb) {
-                            var mycallback = cb;
-                            if (debug) { // if debug redefine callback and add console.log
-                                mycallback = function () {
 
-                                    cb();
-                                }
+                    if (fileref) {
+                        fileref.onload = () => {
+                            if (debug) {
+                                console.log('Loaded:', filename);
                             }
-                            // trigger the callback when resource is loaded
-                            fileref.onreadystatechange = mycallback;
-                            fileref.onload = mycallback
-                        }
-                        if (debug) {
-
-                        }
-                        // push it into the header
-                        document.getElementsByTagName("head")[0].appendChild(fileref);
+                            resolve();
+                        };
+                        fileref.onerror = (error) => reject(error);
+                        document.head.appendChild(fileref);
+                    } else {
+                        reject(new Error('Invalid file type'));
                     }
-                }
+                });
+            };
 
-                // START HERE, i nest the final callback at the deepest
-                // (callbacks will be stacked in reverse order from here)
-                var totalScript = callback;
+            // Load files sequentially
+            const loadSequentially = async () => {
+                for (const link of links) {
+                    const currentLink = nocache ? `${link}?_=${Date.now()}` : link;
 
-                // create nested functions as callbacks,
-                // at the end, if needed, the callback from options is executed
-                // like func_1(loadfile_1, func_2(loadfile_2, func_3(loadfile_3, cbFromOptions)))
-                for (var i = links.length - 1; i >= 0; i--) {
-                    var old = totalScript;
-                    let currentLink = links[i];
-                    if (nocache) {
-                        currentLink += '?' + +new Date().getTime();
-                    }
-                    totalScript = function (oldcb) {
-                        loadjscssfile(this, oldcb);
-                    }.bind(currentLink, old);
+                    await loadjscssfile(currentLink);
                 }
-                // execute the nested callbacks
-                totalScript();
-            },
+                if (callback) {
+                    callback();
+                }
+            };
+
+            loadSequentially().catch(error => {
+                console.error('Failed to load resources:', error);
+            });
+        },
             loadRequiredScripts() {
-                let that = this;
-                this.dysel({
-                    links: window.ninja_table_admin.preview_required_scripts,
-                    callback() {
-                        that.script_loaded = true;
-                    }
-                })
-            },
-            size,
-            get,
-            generateColorCss() {
-                if (this.tableSettings.table_color_type == 'pre_defined_color') {
-                    jQuery('#table_designer_css').html('');
-                    return;
+            let that = this;
+            this.dysel({
+                links: window.ninja_table_admin.preview_required_scripts,
+                callback() {
+                    that.script_loaded = true;
                 }
-                let prefix = '#footable_' + this.tableId;
-                let css = `
+            })
+        },
+        size,
+        get,
+        generateColorCss() {
+            if (this.tableSettings.table_color_type == 'pre_defined_color') {
+                jQuery('#table_designer_css').html('');
+                return;
+            }
+            let prefix = '#footable_' + this.tableId;
+            let css = `
                     ${prefix} {
                         background-color: ${this.tableSettings.table_color_primary} !important;
                         color: ${this.tableSettings.table_color_secondary} !important;
@@ -1098,148 +1067,151 @@
                         border-color: ${this.tableSettings.table_footer_border} !important;
                     }
                 `;
-                jQuery('#table_designer_css').html(css);
-            },
-            changeColor(color, element) {
-                this.tableSettings[element] = color;
-            },
-            checkColorPro() {
-                if (this.has_pro) {
-                    return;
-                }
-                if (this.tableSettings.table_color &&
-                    this.tableSettings.table_color != 'ninja_no_color_table' ||
-                    this.tableSettings.table_color_type != 'pre_defined_color'
-                ) {
-                    this.tableSettings.table_color_type = 'pre_defined_color';
-                    this.tableSettings.table_color = 'ninja_no_color_table';
-                }
-            },
-            generateDefaultCss() {
-                let columnContentCss = this.config.table.custom_css;
-                this.config.columns.forEach((column, index) => {
-                    if (column.background_color || column.text_color || column.contentAlign) {
-                        columnContentCss += `#footable_parent_${this.tableId} thead tr th.ninja_column_${index}, #footable_parent_${this.tableId} tbody tr td.ninja_column_${index} { background-color: ${column.background_color}; color: ${column.text_color}; }`;
-                        columnContentCss += `#footable_parent_${this.tableId} tbody tr td.ninja_column_${index} { text-align: ${column.contentAlign}; }`;
-                    }
-                });
-                jQuery('#ninja_table_designer_common_css').html(columnContentCss);
-            },
-            getTableConfig() {
-                let custom_css = {};
-                this.config.columns.forEach((column, index) => {
-
-                    custom_css['ninja_column_' + index] = {
-                        'text-align': column.textAlign,
-                        'width': column.width + 'px'
-                    };
-                });
-
-                let settings = {
-                    default_sorting: 'old_first',
-                    defualt_filter: false,
-                    defualt_filter_column: null,
-                    expandAll: this.tableSettings.expand_type === "expandAll",
-                    expandFirst: this.tableSettings.expand_type === "expandFirst",
-                    filtering: !!this.tableSettings.enable_search,
-                    i18n: {},
-                    use_parent_width: this.showingDevice !== 'desktop',
-                    sorting: !!this.tableSettings.column_sorting,
-                    togglePosition: this.tableSettings.togglePosition
-                };
-
-                let initConfig = {
-                    "toggleColumn" : this.tableSettings.togglePosition,
-                    "cascade" : true,
-                    "useParentWidth" : this.showingDevice !== 'desktop',
-                    "columns" : this.config.columns,
-                    "expandFirst" : this.tableSettings.expand_type === "expandFirst",
-                    "expandAll" :  this.tableSettings.expand_type === "expandAll",
-                    'empty' : '',
-                    filtering: {
-                        enabled: !!this.tableSettings.enable_search
-                    },
-                    paging: {
-                        enabled: this.tableSettings.show_all == '0' || this.tableSettings.show_all == 0,
-                        "size" : 10,
-                        "container" : "#footable_parent_"+this.tableId+" .paging-ui-container",
-                    },
-                    sorting: {
-                        enabled: !!this.tableSettings.column_sorting
-                    },
-                };
-
-                return {
-                    columns: this.formattedColumns.forEach(item => Object.assign({}, item)),
-                    custom_css: custom_css,
-                    settings: settings,
-                    render_type: 'legacy_table',
-                    instance_name: 'ninja_table_instance_0',
-                    table_id: this.table_id,
-                    title: '',
-                    init_config: initConfig
-                };
+            jQuery('#table_designer_css').html(css);
+        },
+        changeColor(color, element) {
+            this.tableSettings[element] = color;
+        },
+        checkColorPro() {
+            if (this.has_pro) {
+                return;
+            }
+            if (this.tableSettings.table_color &&
+                this.tableSettings.table_color != 'ninja_no_color_table' ||
+                this.tableSettings.table_color_type != 'pre_defined_color'
+            ) {
+                this.tableSettings.table_color_type = 'pre_defined_color';
+                this.tableSettings.table_color = 'ninja_no_color_table';
             }
         },
-        mounted() {
-            this.fetchTableBody();
-            this.loadRequiredScripts();
-            if (!this.tableSettings.table_color_type) {
-                if (this.tableSettings.table_color == 'ninja_table_custom_color') {
-                    this.tableSettings.table_color_type = 'custom_color';
-                } else {
-                    this.tableSettings.table_color_type = 'pre_defined_color';
+        generateDefaultCss() {
+            let columnContentCss = this.config.table.custom_css;
+            this.config.columns.forEach((column, index) => {
+                if (column.background_color || column.text_color || column.contentAlign) {
+                    columnContentCss += `#footable_parent_${this.tableId} thead tr th.ninja_column_${index}, #footable_parent_${this.tableId} tbody tr td.ninja_column_${index} { background-color: ${column.background_color}; color: ${column.text_color}; }`;
+                    columnContentCss += `#footable_parent_${this.tableId} tbody tr td.ninja_column_${index} { text-align: ${column.contentAlign}; }`;
                 }
-            }
-            if (this.tableSettings.alternate_color_status === undefined) {
-                this.tableSettings.alternate_color_status = 'no';
-            }
-            jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
-            jQuery(window).on('resize', function () {
-                jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
             });
-            this.generateDefaultCss();
-            this.generateColorCss();
+            jQuery('#ninja_table_designer_common_css').html(columnContentCss);
+        },
+        getTableConfig() {
+            let custom_css = {};
+            this.config.columns.forEach((column, index) => {
+
+                custom_css['ninja_column_' + index] = {
+                    'text-align': column.textAlign,
+                    'width': column.width + 'px'
+                };
+            });
+
+            let settings = {
+                default_sorting: 'old_first',
+                defualt_filter: false,
+                defualt_filter_column: null,
+                expandAll: this.tableSettings.expand_type === "expandAll",
+                expandFirst: this.tableSettings.expand_type === "expandFirst",
+                filtering: !!this.tableSettings.enable_search,
+                i18n: {},
+                use_parent_width: this.showingDevice !== 'desktop',
+                sorting: !!this.tableSettings.column_sorting,
+                togglePosition: this.tableSettings.togglePosition
+            };
+
+            let initConfig = {
+                "toggleColumn": this.tableSettings.togglePosition,
+                "cascade": true,
+                "useParentWidth": this.showingDevice !== 'desktop',
+                "columns": this.config.columns,
+                "expandFirst": this.tableSettings.expand_type === "expandFirst",
+                "expandAll": this.tableSettings.expand_type === "expandAll",
+                'empty': '',
+                filtering: {
+                    enabled: !!this.tableSettings.enable_search
+                },
+                paging: {
+                    enabled: this.tableSettings.show_all == '0' || this.tableSettings.show_all == 0,
+                    "size": 10,
+                    "container": "#footable_parent_" + this.tableId + " .paging-ui-container",
+                },
+                sorting: {
+                    enabled: !!this.tableSettings.column_sorting
+                },
+            };
+
+            return {
+                columns: this.formattedColumns.forEach(item => Object.assign({}, item)),
+                custom_css: custom_css,
+                settings: settings,
+                render_type: 'legacy_table',
+                instance_name: 'ninja_table_instance_0',
+                table_id: this.table_id,
+                title: '',
+                init_config: initConfig
+            };
         }
+    },
+    mounted() {
+        this.fetchTableBody();
+        this.loadRequiredScripts();
+        if (!this.tableSettings.table_color_type) {
+            if (this.tableSettings.table_color == 'ninja_table_custom_color') {
+                this.tableSettings.table_color_type = 'custom_color';
+            } else {
+                this.tableSettings.table_color_type = 'pre_defined_color';
+            }
+        }
+        if (this.tableSettings.alternate_color_status === undefined) {
+            this.tableSettings.alternate_color_status = 'no';
+        }
+        jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
+        jQuery(window).on('resize', function () {
+            jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
+        });
+        this.generateDefaultCss();
+        this.generateColorCss();
     }
+}
 </script>
 <style lang="scss">
-    .striped > tbody > :nth-child(odd) {
-        background: transparent;
-    }
+.striped>tbody> :nth-child(odd) {
+    background: transparent;
+}
 
-    .footable_parent.ninja_device_mobile {
-        width: 480px;
-        margin: 0 auto;
-    }
+.footable_parent.ninja_device_mobile {
+    width: 480px;
+    margin: 0 auto;
+}
 
-    .footable_parent.ninja_device_tablet {
-        max-width: 768px;
-        padding: 0px 20px;
-        margin: 0 auto;
-    }
+.footable_parent.ninja_device_tablet {
+    max-width: 768px;
+    padding: 0px 20px;
+    margin: 0 auto;
+}
 
-    .design_preview .footable_parent {
-        .footable-header th {
-            // word-break: break-all;
-        }
+.design_preview .footable_parent {
+    .footable-header th {
+        // word-break: break-all;
     }
-    .font-setting {
-      .font {
+}
+
+.font-setting {
+    .font {
         label {
-          width: 30%;
+            width: 30%;
         }
+
         margin-top: 10px;
-      }
     }
-    .ninja_footable {
-      tbody {
+}
+
+.ninja_footable {
+    tbody {
         tr {
-          td {
-            font-size: var(--ninja-table-font-size);
-            font-family: var(--ninja-table-font-family);
-          }
+            td {
+                font-size: var(--ninja-table-font-size);
+                font-family: var(--ninja-table-font-family);
+            }
         }
-      }
     }
+}
 </style>
