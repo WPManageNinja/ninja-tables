@@ -133,8 +133,8 @@ registerBlockType('ninja-tables/table-block', {
           margin: 0 auto;
         }
 
-        .design_preview .footable_parent .footable-header th {
-          /* word-break: break-all; */
+        .footable_parent .footable-header th, .footable_parent .footable-paging {
+           font-size: var(--ninja-table-font-size);
         }
         
         .font-setting .font {
@@ -349,49 +349,93 @@ registerBlockType('ninja-tables/table-block', {
             if (!tableConfig?.settings) return 'table foo-table ninja_footable';
 
             const settings = tableConfig.settings;
-            const classes = ['table', 'foo-table', 'ninja_footable'];
+            let classes = ['table', 'foo-table', 'ninja_footable'];
 
+            // Add table ID class
             if (tableId) {
                 classes.push(`foo_table_${tableId}`);
             }
 
+            // Handle color settings
             if (settings.table_color_type === 'custom_color') {
-                classes.push('inverted', 'ninja_custom_color');
-            } else if (settings.table_color && settings.table_color !== 'ninja_no_color_table') {
-                classes.push('inverted', settings.table_color);
+                classes.push('inverted');
+                classes.push('ninja_custom_color');
+            } else {
+                if (settings.table_color && settings.table_color !== 'ninja_no_color_table') {
+                    classes.push('inverted');
+                    classes.push(settings.table_color);
+                }
             }
 
+            // Pagination position
             if (settings.pagination_position) {
                 classes.push(`footable-paging-${settings.pagination_position}`);
             } else {
                 classes.push('footable-paging-right');
             }
 
+            // Header and borders
             if (settings.hide_header_row) {
                 classes.push('ninjatable_hide_header_row');
             }
-
             if (settings.hide_all_borders) {
                 classes.push('hide_all_borders');
             }
 
-            if (settings.search_position) {
-                classes.push('ninja_search_' + settings.search_position);
-            }
-
-            if (settings.nt_search_full_width) {
-                classes.push('nt_search_full_width');
-            }
-
-            if (settings.css_lib == 'semantic_ui') {
-                classes.push('ui');
-            }
-
+            // Pro features
             if (has_pro) {
                 classes.push('ninja_table_pro');
             }
 
-            return classes.join(' ');
+            // Search position
+            if (settings.search_position) {
+                classes.push(`ninja_search_${settings.search_position}`);
+            }
+
+            // Responsive labels
+            if (settings.hide_responsive_labels) {
+                classes.push('nt_hide_breakpoint_labels');
+            }
+
+            // Full-width search
+            if (settings.nt_search_full_width) {
+                classes.push('nt_search_full_width');
+            }
+
+            // Semantic UI specific class
+            if (settings.css_lib === 'semantic_ui') {
+                classes.push('ui');
+            }
+
+            // Add CSS classes from styles (requires computing available CSS classes)
+            let table_css_classes = [];
+            if (settings.css_classes && Array.isArray(settings.css_classes)) {
+                const availableCssClasses = getAvailableCssClasses();
+                table_css_classes = availableCssClasses.filter(value =>
+                    settings.css_classes.indexOf(value) !== -1
+                );
+            }
+
+            // Combine all classes (put style classes first, then other classes)
+            return [...table_css_classes, ...classes].join(' ');
+        };
+
+// Helper function to compute available CSS classes - similar to Vue's availableCssClasses computed property
+        const getAvailableCssClasses = () => {
+            // Early return if we don't have tableConfig or css_lib not set
+            if (!tableConfig?.settings?.css_lib || !tableConfig?.settings?.library) {
+                return [];
+            }
+
+            const libs = tableLibs();
+            const currentLib = libs[tableConfig.settings.library]?.css_libs?.[tableConfig.settings.css_lib];
+
+            if (!currentLib || !currentLib.styles) {
+                return [];
+            }
+
+            // Extract css class keys from styles array
+            return currentLib.styles.map(style => style.key);
         };
 
         const getFontStyle = () => {
@@ -449,6 +493,90 @@ registerBlockType('ninja-tables/table-block', {
             } catch (error) {
                 console.error('Error saving settings:', error);
             }
+        };
+
+        const renderStylingLibrarySection = () => {
+            // Get the current table libraries for the selected library
+            const libs = tableLibs();
+            const currentTableLibs = libs[tableSettings.library]?.css_libs || {};
+
+            // Convert library data to options for RadioControl
+            const libraryOptions = Object.entries(currentTableLibs).map(([key, lib]) => ({
+                label: (
+                    <span>
+                {lib.title}
+                        <span
+                            className="dashicons dashicons-info tooltip-icon"
+                            style={{ marginLeft: '5px', fontSize: '16px', cursor: 'help' }}
+                            title={lib.description}
+                        ></span>
+            </span>
+                ),
+                value: key
+            }));
+
+            return (
+                <div className="form_group">
+                    <h3 className="ninja_inner_title">{__('Select Styling Library')}</h3>
+                    <RadioControl
+                        selected={tableSettings.css_lib}
+                        options={libraryOptions}
+                        onChange={(value) => updateTableSettings('css_lib', value)}
+                    />
+                </div>
+            );
+        };
+
+        // Function to render the Styles section
+        const renderStylesSection = () => {
+            // Get available styles for the selected library and CSS lib
+            const libs = tableLibs();
+            const currentLib = libs[tableSettings.library]?.css_libs?.[tableSettings.css_lib];
+            const availableStyles = currentLib?.styles || [];
+
+            // If no styles are available, return null
+            if (availableStyles.length === 0) {
+                return null;
+            }
+
+            return (
+                <div className="form_group label-normalize">
+                    <h3 className="ninja_inner_title">{__('Styles')}</h3>
+                    <div className="styles-checkboxes">
+                        {availableStyles.map(style => (
+                            <div key={style.key} className="style-checkbox-row">
+                                <CheckboxControl
+                                    label={
+                                        <span>
+                                    {style.title}
+                                            <span
+                                                className="dashicons dashicons-info tooltip-icon"
+                                                style={{ marginLeft: '5px', fontSize: '16px', cursor: 'help' }}
+                                                title={style.description}
+                                            ></span>
+                                </span>
+                                    }
+                                    checked={(tableSettings.css_classes || []).includes(style.key)}
+                                    onChange={(checked) => {
+                                        let cssClasses = Array.isArray(tableSettings.css_classes) ?
+                                            [...tableSettings.css_classes] : [];
+
+                                        if (checked) {
+                                            if (!cssClasses.includes(style.key)) {
+                                                cssClasses.push(style.key);
+                                            }
+                                        } else {
+                                            cssClasses = cssClasses.filter(cls => cls !== style.key);
+                                        }
+
+                                        updateTableSettings('css_classes', cssClasses);
+                                    }}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
         };
 
         const renderFeaturesSection = () => {
@@ -773,6 +901,8 @@ registerBlockType('ninja-tables/table-block', {
                                         case 'styling':
                                             return (
                                                 <div className="ninja-tab-content">
+                                                    {renderStylingLibrarySection()}
+                                                    {renderStylesSection()}
                                                     {renderFeaturesSection()}
                                                     {renderStackableConfigSection()}
                                                 </div>
@@ -806,7 +936,7 @@ registerBlockType('ninja-tables/table-block', {
                                                                     value={tableSettings.perPage}
                                                                     onChange={(val) => updateTableSettings('perPage', val)}
                                                                     disabled={tableSettings.show_all === '1'
-                                                                }
+                                                                    }
                                                                 />
                                                             </div>
 
