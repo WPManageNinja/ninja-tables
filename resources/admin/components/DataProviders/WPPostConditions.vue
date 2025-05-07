@@ -69,7 +69,7 @@
                     <el-select
                             v-else-if="isSelectable(condition)"
                             multiple
-                            filterable
+                            :filterable
                             collapse-tags
                             v-model="condition.value"
                             class="full-width"

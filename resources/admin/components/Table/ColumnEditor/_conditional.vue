@@ -108,7 +108,7 @@
             <el-col :sm="5" :md="5">
                 <el-select v-model="condition.targetAction"
                            :disabled="!hasPro"
-                           filterable
+                           :filterable
                            size="small"
                            style="width: 100%">
                     <el-option-group key="cell_options" label="Cell Options">
