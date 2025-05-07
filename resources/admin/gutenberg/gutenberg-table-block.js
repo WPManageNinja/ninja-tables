@@ -112,6 +112,7 @@ registerBlockType('ninja-tables/table-block', {
                 tableId: selectedTableId,
                 dataSource: selectedTable?.data_source || ''
             });
+            initializeColorSettings(selectedTableId, tableSettings);
         };
 
         const renderStyles = () => {
@@ -263,6 +264,7 @@ registerBlockType('ninja-tables/table-block', {
 
             const config = getTableConfig(settings);
             NinjaTableApp.initTable($table, config);
+            initializeColorSettings(tableId, tableSettings);
         };
 
         const getTableConfig = (customSettings = null) => {
@@ -858,6 +860,419 @@ registerBlockType('ninja-tables/table-block', {
             );
         };
 
+        const renderColorsTab = () => {
+            // For color picker component
+            const ColorPickerControl = ({ label, value, onChange, disabled = false }) => {
+                return (
+                    <div className="ninja_color_block">
+                        <label style={{ display: 'block', marginBottom: '5px' }}>{__(label)}</label>
+                        <div className="components-base-control">
+                            <input
+                                type="color"
+                                value={value || '#ffffff'}
+                                onChange={(e) => onChange(e.target.value)}
+                                disabled={disabled}
+                                style={{
+                                    width: '100%',
+                                    height: '30px',
+                                    padding: '0',
+                                    cursor: disabled ? 'not-allowed' : 'pointer'
+                                }}
+                            />
+                        </div>
+                    </div>
+                );
+            };
+
+            // This useEffect will update the CSS when color settings change
+            useEffect(() => {
+                if (tableId) {
+                    generateColorCss(tableId, tableSettings);
+                }
+            }, [
+                // Add all color-related settings as dependencies
+                tableSettings.table_color_type,
+                tableSettings.table_color,
+                tableSettings.table_search_color_primary,
+                tableSettings.table_search_color_secondary,
+                tableSettings.table_search_color_border,
+                tableSettings.table_header_color_primary,
+                tableSettings.table_color_header_secondary,
+                tableSettings.table_color_header_border,
+                tableSettings.table_color_primary,
+                tableSettings.table_color_secondary,
+                tableSettings.table_color_border,
+                tableSettings.table_color_primary_hover,
+                tableSettings.table_color_secondary_hover,
+                tableSettings.table_color_border_hover,
+                tableSettings.alternate_color_status,
+                tableSettings.table_alt_2_color_primary,
+                tableSettings.table_alt_2_color_secondary,
+                tableSettings.table_alt_2_color_hover,
+                tableSettings.table_alt_color_primary,
+                tableSettings.table_alt_color_secondary,
+                tableSettings.table_alt_color_hover,
+                tableSettings.table_footer_bg,
+                tableSettings.table_footer_active,
+                tableSettings.table_footer_border
+            ]);
+
+            // Update a specific color and generate CSS immediately
+            const updateColorSetting = (key, value) => {
+                updateTableSettings(key, value, false);
+
+                // Create a new settings object with the updated value
+                const updatedSettings = {
+                    ...tableSettings,
+                    [key]: value
+                };
+
+                // Generate the CSS immediately
+                generateColorCss(tableId, updatedSettings);
+            };
+
+            return (
+                <div className="ninja-tab-content">
+                    <div className="form_group">
+                        <h3 className="ninja_inner_title">{__('Select Color Scheme')}</h3>
+                        <RadioControl
+                            selected={tableSettings.table_color_type || 'pre_defined_color'}
+                            options={[
+                                { label: __('Pre Defined Scheme'), value: 'pre_defined_color' },
+                                { label: __('Custom Scheme'), value: 'custom_color' }
+                            ]}
+                            onChange={(value) => updateTableSettings('table_color_type', value)}
+                        />
+                    </div>
+
+                    {tableSettings.table_color_type === 'pre_defined_color' ? (
+                        <div className="form_group">
+                            <SelectControl
+                                className="form_control"
+                                value={tableSettings.table_color || ''}
+                                options={
+                                    // Get colors from tableLibs
+                                    Object.entries(tableLibs()[tableSettings.library]?.colors || {}).map(
+                                        ([colorKey, colorName]) => ({
+                                            label: colorName,
+                                            value: colorKey
+                                        })
+                                    )
+                                }
+                                onChange={(value) => updateTableSettings('table_color', value)}
+                            />
+                        </div>
+                    ) : (
+                        <div className="form_group ninja_color_customization">
+                            {/* Search Bar Colors */}
+                            <h3 className="ninja_inner_title">{__('Search Bar Colors')}</h3>
+                            <div className="ninja_color_blocks" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                <ColorPickerControl
+                                    label="Background"
+                                    value={tableSettings.table_search_color_primary}
+                                    onChange={(val) => updateColorSetting('table_search_color_primary', val)}
+                                    disabled={!has_pro}
+                                />
+                                <ColorPickerControl
+                                    label="Icon"
+                                    value={tableSettings.table_search_color_secondary}
+                                    onChange={(val) => updateColorSetting('table_search_color_secondary', val)}
+                                    disabled={!has_pro}
+                                />
+                                <ColorPickerControl
+                                    label="Border"
+                                    value={tableSettings.table_search_color_border}
+                                    onChange={(val) => updateColorSetting('table_search_color_border', val)}
+                                    disabled={!has_pro}
+                                />
+                            </div>
+
+                            {/* Table Header Colors */}
+                            <h3 className="ninja_inner_title">{__('Table Header Colors')}</h3>
+                            <div className="ninja_color_blocks" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                <ColorPickerControl
+                                    label="Background"
+                                    value={tableSettings.table_header_color_primary}
+                                    onChange={(val) => updateColorSetting('table_header_color_primary', val)}
+                                    disabled={!has_pro}
+                                />
+                                <ColorPickerControl
+                                    label="Text"
+                                    value={tableSettings.table_color_header_secondary}
+                                    onChange={(val) => updateColorSetting('table_color_header_secondary', val)}
+                                    disabled={!has_pro}
+                                />
+                                <ColorPickerControl
+                                    label="Border"
+                                    value={tableSettings.table_color_header_border}
+                                    onChange={(val) => updateColorSetting('table_color_header_border', val)}
+                                    disabled={!has_pro}
+                                />
+                            </div>
+
+                            {/* Table Body Colors */}
+                            <h3 className="ninja_inner_title">{__('Table Body Colors')}</h3>
+                            <TabPanel
+                                className="ninja-color-tabs"
+                                activeClass="is-active"
+                                tabs={[
+                                    { name: 'default', title: __('Default'), className: 'tab-default' },
+                                    { name: 'hover', title: __('Hover'), className: 'tab-hover' }
+                                ]}
+                            >
+                                {(tab) => {
+                                    if (tab.name === 'default') {
+                                        return (
+                                            <div className="ninja_color_blocks" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                                <ColorPickerControl
+                                                    label="Background"
+                                                    value={tableSettings.table_color_primary}
+                                                    onChange={(val) => updateColorSetting('table_color_primary', val)}
+                                                    disabled={!has_pro}
+                                                />
+                                                <ColorPickerControl
+                                                    label="Text"
+                                                    value={tableSettings.table_color_secondary}
+                                                    onChange={(val) => updateColorSetting('table_color_secondary', val)}
+                                                    disabled={!has_pro}
+                                                />
+                                                <ColorPickerControl
+                                                    label="Border"
+                                                    value={tableSettings.table_color_border}
+                                                    onChange={(val) => updateColorSetting('table_color_border', val)}
+                                                    disabled={!has_pro}
+                                                />
+                                            </div>
+                                        );
+                                    } else if (tab.name === 'hover') {
+                                        return (
+                                            <div className="ninja_color_blocks" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                                <ColorPickerControl
+                                                    label="Background"
+                                                    value={tableSettings.table_color_primary_hover}
+                                                    onChange={(val) => updateColorSetting('table_color_primary_hover', val)}
+                                                    disabled={!has_pro}
+                                                />
+                                                <ColorPickerControl
+                                                    label="Text"
+                                                    value={tableSettings.table_color_secondary_hover}
+                                                    onChange={(val) => updateColorSetting('table_color_secondary_hover', val)}
+                                                    disabled={!has_pro}
+                                                />
+                                                <ColorPickerControl
+                                                    label="Border"
+                                                    value={tableSettings.table_color_border_hover}
+                                                    onChange={(val) => updateColorSetting('table_color_border_hover', val)}
+                                                    disabled={!has_pro}
+                                                />
+                                            </div>
+                                        );
+                                    }
+                                    return null;
+                                }}
+                            </TabPanel>
+
+                            {/* Alternate Color Schema */}
+                            <div className="ninja_switch_wrapper" style={{ margin: '15px 0' }}>
+                                <ToggleControl
+                                    label={__('Use Alternate Color Schema for Table Rows')}
+                                    checked={tableSettings.alternate_color_status === 'yes'}
+                                    onChange={(value) => updateColorSetting('alternate_color_status', value ? 'yes' : 'no')}
+                                    disabled={!has_pro}
+                                />
+                            </div>
+
+                            {tableSettings.alternate_color_status === 'yes' && (
+                                <div className="ninja_alternate_colors">
+                                    {/* Odd Row Colors */}
+                                    <h3 className="ninja_inner_title">{__('Odd Row Colors')}</h3>
+                                    <div className="ninja_color_blocks" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                        <ColorPickerControl
+                                            label="Background"
+                                            value={tableSettings.table_alt_2_color_primary}
+                                            onChange={(val) => updateColorSetting('table_alt_2_color_primary', val)}
+                                            disabled={!has_pro}
+                                        />
+                                        <ColorPickerControl
+                                            label="Text"
+                                            value={tableSettings.table_alt_2_color_secondary}
+                                            onChange={(val) => updateColorSetting('table_alt_2_color_secondary', val)}
+                                            disabled={!has_pro}
+                                        />
+                                        <ColorPickerControl
+                                            label="Hover Background"
+                                            value={tableSettings.table_alt_2_color_hover}
+                                            onChange={(val) => updateColorSetting('table_alt_2_color_hover', val)}
+                                            disabled={!has_pro}
+                                        />
+                                    </div>
+
+                                    {/* Even Row Colors */}
+                                    <h3 className="ninja_inner_title">{__('Even Row Colors')}</h3>
+                                    <div className="ninja_color_blocks" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                        <ColorPickerControl
+                                            label="Background"
+                                            value={tableSettings.table_alt_color_primary}
+                                            onChange={(val) => updateColorSetting('table_alt_color_primary', val)}
+                                            disabled={!has_pro}
+                                        />
+                                        <ColorPickerControl
+                                            label="Text"
+                                            value={tableSettings.table_alt_color_secondary}
+                                            onChange={(val) => updateColorSetting('table_alt_color_secondary', val)}
+                                            disabled={!has_pro}
+                                        />
+                                        <ColorPickerControl
+                                            label="Hover Background"
+                                            value={tableSettings.table_alt_color_hover}
+                                            onChange={(val) => updateColorSetting('table_alt_color_hover', val)}
+                                            disabled={!has_pro}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Footer Colors */}
+                            <h3 className="ninja_inner_title">{__('Footer Colors')}</h3>
+                            <div className="ninja_color_blocks" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                <ColorPickerControl
+                                    label="Background"
+                                    value={tableSettings.table_footer_bg}
+                                    onChange={(val) => updateColorSetting('table_footer_bg', val)}
+                                    disabled={!has_pro}
+                                />
+                                <ColorPickerControl
+                                    label="Active"
+                                    value={tableSettings.table_footer_active}
+                                    onChange={(val) => updateColorSetting('table_footer_active', val)}
+                                    disabled={!has_pro}
+                                />
+                                <ColorPickerControl
+                                    label="Border"
+                                    value={tableSettings.table_footer_border}
+                                    onChange={(val) => updateColorSetting('table_footer_border', val)}
+                                    disabled={!has_pro}
+                                />
+                            </div>
+
+                            {!has_pro && (
+                                <div className="pro-notice" style={{
+                                    margin: '15px 0',
+                                    padding: '15px',
+                                    backgroundColor: '#f8f9fa',
+                                    border: '1px solid #e2e4e7',
+                                    borderRadius: '4px'
+                                }}>
+                                    <p>{__('Color customization is a PRO feature. Please upgrade to pro to apply this feature.')}</p>
+                                    <Button isPrimary>{__('Get Pro')}</Button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // This function generates CSS for the table colors based on the settings
+        const generateColorCss = (tableId, settings) => {
+            if (settings.table_color_type !== 'custom_color') {
+                // Clear custom CSS if using predefined colors
+                const styleElement = document.getElementById('ninja_table_custom_css_' + tableId);
+                if (styleElement) {
+                    styleElement.innerHTML = '';
+                }
+                return;
+            }
+
+            const prefix = '#footable_' + tableId;
+            const css = `
+        ${prefix} {
+            background-color: ${settings.table_color_primary || 'initial'} !important;
+            color: ${settings.table_color_secondary || 'initial'} !important;
+        }
+        ${prefix} thead tr.footable-filtering th {
+            background-color: ${settings.table_search_color_primary || 'initial'} !important;
+            color: ${settings.table_search_color_secondary || 'initial'} !important;
+        }
+        ${prefix}:not(.hide_all_borders) thead tr.footable-filtering th {
+            ${settings.table_search_color_border ?
+                `border: 1px solid ${settings.table_search_color_border} !important;` :
+                'border: 1px solid transparent !important;'
+            }
+        }
+        ${prefix} .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+            background-color: ${settings.table_search_color_secondary || 'initial'} !important;
+            color: ${settings.table_search_color_primary || 'initial'} !important;
+        }
+        ${prefix} tr.footable-header, ${prefix} tr.footable-header th {
+            background-color: ${settings.table_header_color_primary || 'initial'} !important;
+            color: ${settings.table_color_header_secondary || 'initial'} !important;
+        }
+        ${prefix} tr.footable-header, ${prefix} tr.footable-header th span::before {
+            background-color: ${settings.table_color_header_secondary || 'initial'} !important;
+        }
+        ${prefix}:not(.hide_all_borders) tr.footable-header th {
+            border-color: ${settings.table_color_header_border || 'initial'} !important;
+        }
+        ${prefix}:not(.hide_all_borders) tbody tr td {
+            border-color: ${settings.table_color_border || 'initial'} !important;
+        }
+        ${prefix} tbody tr:hover {
+            background-color: ${settings.table_color_primary_hover || 'initial'} !important;
+            color: ${settings.table_color_secondary_hover || 'initial'} !important;
+        }
+        ${prefix} tbody tr:hover td {
+            border-color: ${settings.table_color_border_hover || 'initial'} !important;
+        }
+
+        ${settings.alternate_color_status === 'yes' ? `
+            ${prefix} tbody tr:nth-child(even) {
+                background-color: ${settings.table_alt_color_primary || 'initial'} !important;
+                color: ${settings.table_alt_color_secondary || 'initial'} !important;
+            }
+            ${prefix} tbody tr:nth-child(odd) {
+                background-color: ${settings.table_alt_2_color_primary || 'initial'} !important;
+                color: ${settings.table_alt_2_color_secondary || 'initial'} !important;
+            }
+            ${prefix} tbody tr:nth-child(even):hover {
+                background-color: ${settings.table_alt_color_hover || 'initial'} !important;
+            }
+            ${prefix} tbody tr:nth-child(odd):hover {
+                background-color: ${settings.table_alt_2_color_hover || 'initial'} !important;
+            }
+        ` : ''}
+
+        ${prefix} tfoot .footable-paging {
+            background-color: ${settings.table_footer_bg || 'initial'} !important;
+        }
+        ${prefix} tfoot .footable-paging .footable-page.active a {
+            background-color: ${settings.table_footer_active || 'initial'} !important;
+        }
+        ${prefix}:not(.hide_all_borders) tfoot .footable-paging td {
+            border-color: ${settings.table_footer_border || 'initial'} !important;
+        }
+    `;
+
+            // Apply the CSS - create or update the style element
+            let styleElement = document.getElementById('ninja_table_custom_css_' + tableId);
+            if (!styleElement) {
+                styleElement = document.createElement('style');
+                styleElement.id = 'ninja_table_custom_css_' + tableId;
+                document.head.appendChild(styleElement);
+            }
+            styleElement.innerHTML = css;
+        };
+
+        const initializeColorSettings = (tableId, settings) => {
+            // Set initial CSS
+            generateColorCss(tableId, settings);
+
+            // Return a function to update colors when settings change
+            return (newSettings) => {
+                generateColorCss(tableId, newSettings);
+            };
+        };
+
         return (
             <div {...blockProps}>
                 <InspectorControls>
@@ -909,8 +1324,7 @@ registerBlockType('ninja-tables/table-block', {
                                         case 'colors':
                                             return (
                                                 <div className="ninja-tab-content">
-                                                    <h3>{__('Table Colors Tab Content')}</h3>
-                                                    <p>{__('Color options will go here')}</p>
+                                                    {renderColorsTab()}
                                                 </div>
                                             );
                                         case 'other':
