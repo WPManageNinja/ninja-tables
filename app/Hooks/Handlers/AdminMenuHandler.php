@@ -222,6 +222,14 @@ class AdminMenuHandler
         $slug = $app->config->get('app.slug');
         $assets = Vite::getAssetUrl();
 
+        Vite::enqueueScript(
+            $slug,
+            'admin/main.js',
+            ['ninja-tables-data'],
+            NINJA_TABLES_VERSION,
+            true
+        );
+
         if (function_exists('wp_enqueue_editor')) {
             $app->addFilter('user_can_richedit', function ($status) {
                 return true;
