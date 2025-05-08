@@ -1,7 +1,10 @@
 <template>
   <div class="block">
     <span>{{ label }}</span><br>
-    <el-radio-group :value="value" @input="$emit('update', $event)" style="margin-top: 5px;">
+    <el-radio-group
+        :model-value="modelValue"
+        @update:model-value="updateValue"
+        style="margin-top: 5px;">
       <el-radio :label="$t('Square')" value="square" />
       <el-radio :label="$t('Round')" value="round" />
     </el-radio-group>
@@ -10,19 +13,22 @@
 <script>
 export default {
   name: "Shape",
-  model: {
-    prop: "value",
-    event: "update"
-  },
-  props: {
-    value: {
-      type: String,
-      default: 'square'
+
+    props: {
+        modelValue: {
+            type: String,
+            default: 'square'
+        },
+        label: {
+            type: String,
+            default: ""
+        }
     },
-    label: {
-      type: String,
-      default: ""
+    emits: ['update:modelValue'],
+    methods: {
+        updateValue(newValue) {
+            this.$emit('update:modelValue', newValue);
+        }
     }
-  }
 };
 </script>
