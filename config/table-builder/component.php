@@ -22,7 +22,7 @@ return [
             [
                 "name"    => __("Text", "ninja-tables"),
                 "type"    => "text", // (unique)
-                "icon"    => "el-icon-edit-outline",
+                "icon"    => "edit",
                 "has_pro" => false,
                 "value"   => '',
                 "style"   => [
@@ -42,7 +42,7 @@ return [
             [
                 "name"    => __("Button", "ninja-tables"),
                 "type"    => "button", // (unique)
-                "icon"    => "el-icon-bank-card",
+                "icon"    => "bank-card",
                 "has_pro" => false,
                 "value"   => "Button Text",
                 "style"   => [
@@ -81,7 +81,7 @@ return [
             [
                 "name"    => __("Icon", "ninja-tables"),
                 "type"    => "icon", // (unique)
-                "icon"    => "el-icon-finished",
+                "icon"    => "finished",
                 "has_pro" => true,
                 "value"   => "ninja-table",
                 "style"   => [
@@ -95,7 +95,7 @@ return [
             [
                 "name"    => __("Rating", "ninja-tables"),
                 "type"    => "star_rating", // (unique)
-                "icon"    => "el-icon-star-off",
+                "icon"    => "star-off",
                 "has_pro" => false,
                 "value"   => 5,
                 "style"   => [
@@ -111,7 +111,7 @@ return [
             [
                 "name"    => __("List", "ninja-tables"),
                 "type"    => "list", // (unique)
-                "icon"    => "el-icon-s-operation",
+                "icon"    => "s-operation",
                 "has_pro" => false,
                 "value"   => ['list item 1', 'list item 2', 'list item 3'],
                 "style"   => [
@@ -130,7 +130,7 @@ return [
             [
                 "name"    => __("HTML", "ninja-tables"),
                 "type"    => "custom_html", // (unique)
-                "icon"    => "el-icon-edit",
+                "icon"    => "edit-outline",
                 "has_pro" => false,
                 "value"   => '<span style="display: block; text-align: center; line-height: 1.1">custom html</span>',
                 "style"   => [
@@ -146,7 +146,7 @@ return [
             [
                 "name"    => __("Shortcode", "ninja-tables"),
                 "type"    => "shortcode", // (unique)
-                "icon"    => "el-icon-document-copy",
+                "icon"    => "document-copy",
                 "has_pro" => false,
                 "value"   => "[Shortcode]",
                 "style"   => [
@@ -163,7 +163,7 @@ return [
             [
                 "name"    => __("Image", 'ninja-tables'),
                 "type"    => "image", // (unique)
-                "icon"    => "el-icon-picture-outline",
+                "icon"    => "picture-outline",
                 "has_pro" => true,
                 "value"   => NINJA_TABLES_DIR_URL . "assets/img/ninja-table-editor-button-2x.png",
                 "style"   => [
@@ -187,7 +187,7 @@ return [
             [
                 "name"    => __("Styled List", "ninja-tables"),
                 "type"    => "stylist_list", // (unique)
-                "icon"    => "el-icon-notebook-2",
+                "icon"    => "notebook-2",
                 "has_pro" => true,
                 "value"   => ['list item 1', 'list item 2', 'list item 3'],
                 "style"   => [
@@ -208,7 +208,7 @@ return [
             [
                 "name"    => __("Ribbon", "ninja-tables"),
                 "type"    => "ribbon", // (unique)
-                "icon"    => "el-icon-collection-tag",
+                "icon"    => "collection-tag",
                 "has_pro" => true,
                 "value"   => "Ribbon",
                 "style"   => [
@@ -239,7 +239,7 @@ return [
             [
                 "name"    => __("Progress", "ninja-tables"),
                 "type"    => "progress", // (unique)
-                "icon"    => "el-icon-circle-plus-outline",
+                "icon"    => "circle-plus-outline",
                 "has_pro" => false,
                 "value"   => "",
                 "style"   => [
@@ -257,7 +257,7 @@ return [
             [
                 "name"    => __("Text Icon", "ninja-tables"),
                 "type"    => "text_icon", // (unique)
-                "icon"    => "el-icon-notebook-1",
+                "icon"    => "notebook-1",
                 "has_pro" => true,
                 "value"   => "Enter text...",
                 "style"   => [

@@ -19,7 +19,11 @@
                                         <el-button :disabled="!hasPro && item.has_pro" class="button-component"
                                                    :class="!hasPro && item.has_pro ? 'pro-component' : ''" size="small"
                                                    plain
-                                                   :icon="item.icon !== null ? item.icon : 'el-icon-s-grid'">{{ item.name }}
+                                        >
+                                            <el-icon :is="getIconComponent(item.icon)" class="icon-component" >
+                                                <component :is="getIconComponent(item.icon)" />
+                                            </el-icon>
+                                            {{ item.name }}
                                         </el-button>
                                     </el-badge>
                                 </el-col>
@@ -195,7 +199,18 @@ import SelectInput from "../SettingComponent/SelectInput";
 import {helpers} from "../Mixin/helpers";
 import GetPro from "../../Tools/GetPro";
 import {useEventBus} from './../../../eventBus';
-import {InfoFilled} from "@element-plus/icons-vue";
+import {
+    Collection,
+    CopyDocument,
+    CreditCard,
+    Edit,
+    EditPen,
+    Finished,
+    Grid,
+    InfoFilled, List, Notebook,
+    Operation, Picture, Plus,
+    Star
+} from "@element-plus/icons-vue";
 
 
 export default {
@@ -204,6 +219,19 @@ export default {
     mixins: [helpers],
     components: {
         InfoFilled,
+        Collection,
+        CopyDocument,
+        CreditCard,
+        Edit,
+        EditPen,
+        Finished,
+        Grid,
+        Notebook,
+        Operation,
+        Picture,
+        Plus,
+        Star,
+        List,
         ace_code_editor,
         GetPro,
         SelectInput,
@@ -330,6 +358,30 @@ export default {
         },
         handleUpdateItem(updatedItem) {
             this.item = updatedItem;
+        },
+        getIconComponent(iconName) {
+            if (!iconName) {
+                return Grid;
+            }
+
+            const iconMapping = {
+                'edit-outline': EditPen,
+                'edit': Edit,
+                's-grid': Grid,
+                'bank-card': CreditCard,
+                'finished': Finished,
+                'star-off': Star,
+                's-operation': Operation,
+                'document-copy': CopyDocument,
+                'picture-outline': Picture,
+                'document': Document,
+                'collection-tag': Collection,
+                'circle-plus-outline': Plus,
+                'notebook-1': Notebook,
+                'notebook-2': List,
+            }
+
+            return iconMapping[iconName].name;
         }
     },
     created() {
