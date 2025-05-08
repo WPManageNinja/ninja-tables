@@ -37,9 +37,11 @@ class GutenbergModule
                 'hasPro'                   => defined('NINJATABLESPRO'),
                 'preview_required_scripts' => array(
                     $assets . "css/ninjatables-public.css",
+                    $assets . "css/ninja-table-builder-public.css",
                     $assets . "libs/footable/js/footable.min.js",
                     $assets . "libs/moment/moment.min.js",
                     $assets . "js/ninja-tables-footable.js",
+                    $assets . "js/ninja-table-builder-public.js",
                 ),
             ],
         );

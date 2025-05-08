@@ -47,7 +47,8 @@ registerBlockType('ninja-tables/table-block', {
 
     edit: function(props) {
         const { attributes, setAttributes } = props;
-        const { tableId, activeDesign } = attributes;
+        const { tableId, dataSource, activeDesign } = attributes;
+        const [tableHtml, setTableHtml] = useState('');
         const [instanceId] = useState(() => Math.random().toString(36).substring(2, 10));
 
         const [tableConfig, setTableConfig] = useState(null);
@@ -99,7 +100,10 @@ registerBlockType('ninja-tables/table-block', {
             defaultSettings;
 
         useEffect(() => {
-            if (tableId) {
+            console.log(tableId, dataSource)
+            if (tableId && dataSource === 'drag_and_drop') {
+                fetchDragAndDropTable(tableId);
+            } else if(tableId) {
                 fetchConfig(tableId);
             }
             loadRequiredScripts();
@@ -120,6 +124,31 @@ registerBlockType('ninja-tables/table-block', {
             initializeColorSettings(selectedTableId, tableSettings);
         };
 
+        const renderDragAndDropTable = () => {
+            if (isLoading) {
+                return <div className="loading-spinner">Loading...</div>;
+            }
+
+            return (
+                <div
+                    id={`ninja_table_builder_${tableId}_${instanceId}`}
+                    className="ninja-table-builder-preview"
+                    dangerouslySetInnerHTML={{ __html: tableHtml }}
+                />
+            );
+        };
+
+        const fetchDragAndDropTable = (tableId) => {
+            setIsLoading(true);
+            Rest.get(`tables/${tableId}/drag_and_drop_html`)
+                .then(response => {
+                    setTableHtml(response.html);
+                    setIsLoading(false);
+                })
+                .catch(error => {
+                    setIsLoading(false);
+                });
+        };
         const renderStyles = () => {
             return (
                 <style>
@@ -1291,7 +1320,7 @@ registerBlockType('ninja-tables/table-block', {
                         />
                     </PanelBody>
 
-                    {tableId && tableConfig && (
+                    {tableId && tableConfig && dataSource !== 'drag_and_drop' && (
                         <PanelBody title={__('Design Controls')} initialOpen={false}>
                             <TabPanel
                                 className="ninja-tables-design-tabs"
@@ -1673,6 +1702,8 @@ registerBlockType('ninja-tables/table-block', {
                                 onChange={handleTableSelect}
                             />
                         </Placeholder>
+                    ) : dataSource === 'drag_and_drop' ? (
+                        renderDragAndDropTable()
                     ) : (
                         renderTable()
                     )}
