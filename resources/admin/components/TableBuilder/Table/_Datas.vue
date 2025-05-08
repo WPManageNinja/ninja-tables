@@ -59,12 +59,18 @@
                 :stroke-width="Number(item.data.style.thickness)">
             </el-progress>
         </span>
+
         <span v-else-if="item.data.type === 'image'">
-            <a class="hover-item" @click.prevent v-bind="[hrefAttribute, targetAttribute]" :style="[displayBlock]"
-                :rel="linkAttributes">
+            <a class="hover-item" @click.prevent
+               :href="[hrefAttribute, targetAttribute]"
+               :target="targetAttribute && targetAttribute.target"
+               :style="[displayBlock]"
+               :rel="linkAttributes">
+
                 <img :src="item.data.value"
-                    :style="[displayBlock, dBlockAlign, padding, borderRadius, { 'width': this.item.data.style.size + '%', }]"
-                    :alt="`${item.data.style.alt}`" />
+                     :style="[displayBlock, dBlockAlign, padding, borderRadius, { 'width': this.item.data.style.size + '%', }]"
+                     :alt="`${item.data.style.alt}`"
+                />
             </a>
         </span>
         <span v-else-if="item.data.type === 'list' || item.data.type === 'stylist_list'"

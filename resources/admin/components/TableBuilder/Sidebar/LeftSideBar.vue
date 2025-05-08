@@ -307,14 +307,14 @@ export default {
         },
 
         handleClick(tab, event) {
-            const responsiveTabPress = tab.$options.propsData.name === 'responsiveness';
+            const responsiveTabPress = tab.$options?.propsData?.name === 'responsiveness';
             if (responsiveTabPress) {
                 this.deviceLastSelected === '' ? this.$emit('deviceSelected', '') : this.$emit('deviceSelected', this.deviceLastSelected);
             } else {
                 this.$emit('deviceSelected', '');
             }
 
-            if (tab.$options.propsData.name !== 'options') {
+            if (tab.$options?.propsData.name !== 'options') {
                 this.bus.emit('manageCell');
             }
         },
@@ -325,7 +325,7 @@ export default {
             }
         },
         handleDeviceClick(tab, event) {
-            const data = tab.$options.propsData.name;
+            const data = tab.props.name;
             this.deviceActiveName = data;
             this.deviceLastSelected = data;
             this.$emit('deviceSelected', data);
