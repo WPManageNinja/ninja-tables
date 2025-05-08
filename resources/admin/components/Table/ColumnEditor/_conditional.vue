@@ -108,7 +108,6 @@
             <el-col :sm="5" :md="5">
                 <el-select v-model="condition.targetAction"
                            :disabled="!hasPro"
-                           filterable
                            size="small"
                            style="width: 100%">
                     <el-option-group key="cell_options" label="Cell Options">
@@ -157,13 +156,11 @@
             </el-col>
 
             <el-col :sm="1" :md="1">
-                <el-button
-                    size="small"
-                    type="danger"
-                    icon="el-icon-minus"
-                    @click="removeCondition(index)"
-                    :disabled="!hasPro"
-                ></el-button>
+                <el-button type="danger" size="small" @click="removeCondition(index)" :disabled="!hasPro">
+                    <el-icon>
+                        <Minus />
+                    </el-icon>
+                </el-button>
             </el-col>
         </el-row>
 
@@ -193,6 +190,7 @@
 <script>
     import NinjaColorPicker from '../../Extras/ColorPicker';
     import GetPro from "../../Tools/GetPro";
+    import {Minus} from "@element-plus/icons-vue";
 
     export default {
         name: "Conditional",
@@ -209,6 +207,7 @@
         components: {
           GetPro,
             NinjaColorPicker,
+            Minus
         },
         data() {
             return {
