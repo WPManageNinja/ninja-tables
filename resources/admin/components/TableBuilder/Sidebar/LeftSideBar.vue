@@ -325,7 +325,7 @@ export default {
             }
         },
         handleDeviceClick(tab, event) {
-            const data = tab.$options?.propsData.name;
+            const data = tab.props.name;
             this.deviceActiveName = data;
             this.deviceLastSelected = data;
             this.$emit('deviceSelected', data);
