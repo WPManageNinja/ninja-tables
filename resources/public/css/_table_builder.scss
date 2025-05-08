@@ -1,24 +1,20 @@
-@import '~element-ui/lib/theme-chalk/base.css';
-@import '~element-ui/lib/theme-chalk/rate.css';
-@import '~element-ui/lib/theme-chalk/progress.css';
-
-
 //Table Design
 
 .ntb_table_wrapper {
   overflow-wrap: break-word;
+  max-width: initial;
+  overflow-y: auto;
+
   * {
     margin: 0;
     padding: 0;
     box-sizing: initial;
+
     &:before,
     &:after {
       box-sizing: initial;
     }
   }
-  
-  max-width: initial;
-  overflow-y: auto;
 
   table {
     hr {
@@ -34,6 +30,7 @@
         position: relative;
         z-index: 9;
         border: none !important;
+
         &:before {
           content: "";
           position: absolute;
@@ -46,14 +43,16 @@
           box-shadow: var(--offset-x) var(--offset-y) var(--blur-radius) var(--shadow-color);
         }
       }
+
       tr {
         &:first-child {
           .td-highlight {
             &:before {
-              top:  var(--highlight-height-top);
+              top: var(--highlight-height-top);
             }
           }
         }
+
         &:first-child,
         &:last-child {
           .td-highlight {
@@ -69,11 +68,13 @@
         z-index: 2;
         top: 0;
       }
+
       tr {
         td {
           border: initial;
         }
       }
+
       display: block;
 
       .button-content-wrapper {
@@ -83,21 +84,25 @@
         overflow-wrap: break-word;
         white-space: break-spaces;
       }
+
       .ntb-el-button {
         padding: var(--padding-frontend);
       }
+
       .ntb-el-button:hover {
         .svgIcon {
           background-color: var(--icon-color-hover) !important;
         }
       }
     }
+
     .svgIcon {
       display: inline-block;
       mask-size: cover;
       flex: none;
-      -webkit-mask-size:cover;
+      -webkit-mask-size: cover;
     }
+
     .icon-text-wrapper {
       justify-content: center;
       align-items: center;
@@ -108,6 +113,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
         .el-progress__text {
           color: var(--progress-bar-text-color);
           font-size: var(--progress-bar-font-size) !important;
@@ -117,11 +123,13 @@
 
     .ntb-rating {
       height: auto;
+
       .el-rate__item {
         i {
           font-size: var(--rating-font-size);
         }
       }
+
       .el-rate__text {
         display: block;
         font-size: var(--rating-font-size);
@@ -147,11 +155,13 @@
           text-align: center;
           box-shadow: 0px 1px 2px rgba(black, 0.5);
         }
+
         .left {
           right: -25px;
           top: 30px;
           transform: rotate(-45deg);
         }
+
         .right {
           left: -25px;
           top: 30px;
@@ -163,12 +173,14 @@
         position: absolute;
         overflow: hidden;
         filter: drop-shadow(2px 3px 2px rgba(black, 0.5));
+
         > .content {
           font-size: 1.25rem;
           text-align: center;
           font-weight: 400;
           padding: 8px 2px 4px;
         }
+
         &.up > .content {
           clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 8px), 0 100%);
         }
@@ -178,10 +190,12 @@
         position: relative;
         float: left;
         background-size: cover;
+
         .content {
           position: absolute;
           padding: 8px 10px;
           box-shadow: -1px 2px 3px rgba(0, 0, 0, .3);
+
           &:before {
             width: 7px;
             height: 100%;
@@ -193,6 +207,7 @@
             content: "";
             position: absolute;
           }
+
           &:after {
             width: 5px;
             height: 5px;
@@ -206,7 +221,6 @@
         }
       }
     }
-
   }
 }
 

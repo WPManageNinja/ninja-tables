@@ -4,7 +4,7 @@
 
         <div class="settings_header">
             <div style="display: inline-block; margin-top: 8px;">
-                <el-button class="ninja_mini" size="mini" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button> <span
+                <el-button class="ninja_mini" size="small" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button> <span
                     class="section_title">{{ table.post_title }}</span>
                 <el-tooltip effect="dark"
                             content="Click to copy shortcode"
@@ -20,12 +20,12 @@
             <span style="margin-right: 20px" class="pull-right">
                 <router-link class="doc_link" :to="{ name: 'help' }">{{ $t('Documentation') }}</router-link>
                 <a :href="preview_url" target="_blank">
-                    <el-button size="mini">{{ $t('Preview') }}</el-button>
+                    <el-button size="small">{{ $t('Preview') }}</el-button>
                 </a>
                 <a v-if="!has_pro"
                    href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                    target="_blank">
-                    <el-button type="danger" size="mini">{{ $t('Get Pro') }}</el-button>
+                    <el-button type="danger" size="small">{{ $t('Get Pro') }}</el-button>
                 </a>
             </span>
         </div>
@@ -42,7 +42,7 @@
         </fieldset>
         <el-dialog
                 title="Update Table Info"
-                :visible.sync="editTableModalShow"
+                v-model="editTableModalShow"
                 top="50px"
                 :append-to-body="true"
         >
@@ -56,6 +56,7 @@
     import each from 'lodash/each';
     import size from 'lodash/size';
     import toArray from 'lodash/values';
+    import { useEventBus } from '../../eventBus';
 
     export default {
         name: 'table_home',
@@ -64,6 +65,7 @@
         },
         data() {
             return {
+                bus : useEventBus(),
                 table_tabs: [],
                 is_data_saving: false,
                 is_form_saving: false,
@@ -161,7 +163,7 @@
             this.clipboard();
 
             // Initialize the table's manual data sorting.
-            window.ninjaTableBus.$on('initManualSorting', (options, resolve, reject) => {
+            this.bus.on('initManualSorting', (options, resolve, reject) => {
                 let data = {
                     ...options
                 };
@@ -171,18 +173,20 @@
                     .catch(e => reject(e));
             });
 
-            window.ninjaTableBus.$on('tableDoingAjax',  (value) => {
+            this.bus.on('tableDoingAjax',  (value) => {
                 this.doingAjax = value;
             });
 
             // removes previous events to prevent duplicate event handlers.
-            window.ninjaTableBus.$off('updateTableColumns');
+            this.bus.off('updateTableColumns');
 
-            window.ninjaTableBus.$on('updateTableColumns', (callback) => {
+            this.bus.on('updateTableColumns', (callback) => {
                 this.updateTableColumns(callback);
             });
 
-            window.ninjaTableBus.$emit('addedTable');
+            this.bus.emit('addedTable');
+
+            // window.ninjaTableBus.$emit('addedTable');
         }
     }
 </script>

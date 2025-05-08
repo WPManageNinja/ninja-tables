@@ -1,3 +1,4 @@
+import { h } from 'vue';
 import Home from './components/Home.vue';
 import AllTables from './components/AllTables.vue';
 import Tools from './components/Tools/Tools.vue';
@@ -17,12 +18,12 @@ import TableAdditionalCss from './components/Table/TableAdditionalCss.vue';
 import TableDesignStudio from './components/Table/TableDesignStudio.vue';
 import TableEditing from './components/Table/Editing/Editing.vue';
 
-import AddOrEditTable from './components/TableBuilder/TableBuilderHome'
+import AddOrEditTable from './components/TableBuilder/TableBuilderHome.vue';
 
 export const routes = [
     {
-        name: 'default',
-        path: '*',
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
         redirect: '/'
     },
     {
@@ -31,12 +32,12 @@ export const routes = [
         props: true,
         children: [
             {
-                path: '/',
+                path: '',
                 name: 'home',
                 component: AllTables
             },
             {
-                path: '/tools',
+                path: 'tools',
                 component: Tools,
                 children: [
                     {
@@ -67,7 +68,7 @@ export const routes = [
                 ]
             },
             {
-                path: '/help',
+                path: 'help',
                 name: 'help',
                 component: Help
             }
@@ -107,11 +108,12 @@ export const routes = [
                 path: 'table_editing',
                 name: 'table_editing',
                 component: TableEditing
-            },
+            }
         ]
     },
     {
         path: '/charts',
+        name: 'charts',
         component: Charts,
         props: true
     },
@@ -126,5 +128,5 @@ export const routes = [
         name: 'table_builder_add_table',
         component: AddOrEditTable,
         props: true
-    },
+    }
 ];

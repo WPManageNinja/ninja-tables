@@ -1,3 +1,5 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
 const mix = require('laravel-mix');
 const exec = require('child_process').exec;
 const min = '';
@@ -14,7 +16,7 @@ mix.js('resources/admin/Boot.js', `assets/js/ninja-tables-boot.js`)
     .js('resources/public/js/ninja-tables-builder.js', `assets/js/ninja-table-builder-public.js`)
 
     .vue({
-        version: 2
+        version: 3
     })
     .sass('resources/public/css/_public.scss', `assets/css/ninjatables-public.css`)
     .sass('resources/public/css/_table_builder.scss', `assets/css/ninja-table-builder-public.css`)

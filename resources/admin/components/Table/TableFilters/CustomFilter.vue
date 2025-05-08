@@ -24,44 +24,50 @@
                         </tr>
                         </thead>
                         <draggable
-                                :options="{handle:'.handle'}"
+                                :v-model="{handle:'.handle'}"
                                 :list="table_filters"
                                 :element="'tbody'"
                                 @change="saveFilters()"
+                                item-key="name"
+                                tag="tbody"
                         >
-                            <tr v-for="(table_filter, filter_index) in table_filters">
-                                <td><span class="dashicons dashicons-editor-justify handle"></span> {{ table_filter.title }}</td>
-                                <td>{{ table_filter.type }}</td>
-                                <td>
-                                    <code v-for="columnKey in table_filter.columns" v-show="columnKeyPairs[columnKey]">
-                                        {{ columnKeyPairs[columnKey] }}
-                                    </code>
-                                </td>
-                                <td>
-                                    <el-button @click="edit(table_filter)" size="mini" type="primary"
-                                               icon="el-icon-edit"></el-button>
-                                    <el-button size="mini" @click="deleteFilter(filter_index)" type="danger"
-                                               icon="el-icon-delete"></el-button>
-                                </td>
-                            </tr>
+                            <template #item="{element: table_filter, index: filter_index}">
+                                <tr>
+                                    <td><span class="dashicons dashicons-editor-justify handle"></span> {{ table_filter.title }}</td>
+                                    <td>{{ table_filter.type }}</td>
+                                    <td>
+                                        <code v-for="columnKey in table_filter.columns" v-show="columnKeyPairs[columnKey]">
+                                            {{ columnKeyPairs[columnKey] }}
+                                        </code>
+                                    </td>
+                                    <td>
+                                        <el-button type="primary" @click="edit(table_filter)">
+                                            <el-icon><EditPen /></el-icon>
+                                        </el-button>
+                                        <el-button type="danger" @click="deleteFilter(filter_index)">
+                                            <el-icon><Delete /></el-icon>
+                                        </el-button>
+                                    </td>
+                                </tr>
+                            </template>
                         </draggable>
                     </table>
                     <h3>Filter Appearance</h3>
                     <el-radio-group v-model="filter_styling.filter_display_type">
-                        <el-radio label="inline">Show filter inputs as inline</el-radio>
-                        <el-radio label="columns">Show filter inputs as Columns</el-radio>
+                        <el-radio :label="$t('Show filter inputs as inline')" value="inline" />
+                        <el-radio :label="$t('Show filter inputs as Columns')" value="columns" />
                     </el-radio-group>
-                    <template v-if="filter_styling.filter_display_type == 'columns'">
+                    <template v-if="filter_styling.filter_display_type === 'columns'">
                         <h3>Filter Columns</h3>
-                        <el-radio-group size="mini" v-model="filter_styling.filter_columns">
-                            <el-radio-button label="columns_2">Two Columns</el-radio-button>
-                            <el-radio-button label="columns_3">Three Columns</el-radio-button>
-                            <el-radio-button label="columns_4">Four Columns</el-radio-button>
+                        <el-radio-group size="small" v-model="filter_styling.filter_columns">
+                            <el-radio-button :label="$t('Two Columns')" value="columns_2" />
+                            <el-radio-button :label="$t('Three Columns')" value="columns_3" />
+                            <el-radio-button :label="$t('Four Columns')" value="columns_4" />
                         </el-radio-group>
                     </template>
 
                     <h3>Progressive Filter</h3>
-                    <el-checkbox true-label="yes" false-label="no" v-model="filter_styling.progressive">Enable Progressive filter for dynamic filter options</el-checkbox>
+                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="filter_styling.progressive">Enable Progressive filter for dynamic filter options</el-checkbox>
 
                     <div style="margin-top: 20px" class="form_group">
                         <el-button :loading="saving" size="small" type="primary" @click="saveFilters">Update Settings</el-button>
@@ -81,7 +87,7 @@
 
         <el-dialog
                 title="Edit Custom Filter"
-                :visible.sync="editorModal"
+                v-model="editorModal"
                 width="70%"
                 top="50px"
                 :append-to-body="true">
@@ -94,7 +100,7 @@
 
         <el-dialog
                 title="Add New Custom Filter"
-                :visible.sync="addFilterModal"
+                v-model="addFilterModal"
                 width="70%"
                 top="50px"
                 :append-to-body="true">
@@ -114,11 +120,14 @@
     import NinjaFilterEditor from './_filterEditor'
     import draggable from 'vuedraggable'
     import GetPro from "../../Tools/GetPro";
+    import {Delete, EditPen} from "@element-plus/icons-vue";
 
     export default {
         name: 'custom_filter',
         props: ['table_id', 'columns'],
         components: {
+            Delete,
+            EditPen,
           GetPro,
             NinjaFilterEditor,
             draggable

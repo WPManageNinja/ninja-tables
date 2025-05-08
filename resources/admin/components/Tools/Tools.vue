@@ -6,15 +6,20 @@
       <hr>
         <el-container>
             <el-aside width="200px">
-                <el-menu background-color="#545c64"
-                         :default-active="active_menu"
-                         text-color="#fff"
+                <el-menu :default-active="active_menu"
                          :router="true"
+                         background-color="#545c64"
+                         text-color="#fff"
                          active-text-color="#ffd04b">
-                    <el-menu-item v-for="menuItem in menuItems" v-if="menuItem.status" :key="menuItem.route" :index="menuItem.route" :route="{ name: menuItem.route }">
-                        <i :class="menuItem.icon_class"></i>
-                        <span>{{menuItem.title}}</span>
-                    </el-menu-item>
+                    <template v-for="menuItem in menuItems" :key="menuItem.route">
+                        <el-menu-item 
+                            v-if="menuItem.status"
+                            :index="menuItem.route" 
+                            :route="{ name: menuItem.route }">
+                            <el-icon><component :is="menuItem.icon_class" /></el-icon>
+                            <span>{{ menuItem.title }}</span>
+                        </el-menu-item>
+                    </template>
                 </el-menu>
             </el-aside>
             <el-main>
@@ -25,8 +30,10 @@
 </template>
 
 <script>
+import {UploadFilled, Star, Setting, SetUp, Menu} from '@element-plus/icons-vue';
     export default {
         name: 'Tools',
+        components: {UploadFilled, Star, Setting, Menu, SetUp},
         data() {
             return {
                 has_pro: !!window.ninja_table_admin.hasPro,
@@ -44,31 +51,31 @@
                     {
                         route: 'import_tables',
                         title: this.$t('Import'),
-                        icon_class: 'el-icon-upload',
+                        icon_class: 'UploadFilled',
                         status: true
                     },
                     {
                         route: 'default_table_appearance',
                         title: this.$t('Global Appearance'),
-                        icon_class: 'el-icon-star-off',
+                        icon_class: 'Star',
                         status: true
                     },
                     {
                         route: 'permission',
                         title: this.$t('Permission'),
-                        icon_class: 'el-icon-setting',
+                        icon_class: 'Setting',
                         status: true
                     },
                     {
                         route: 'licensing',
                         title: this.$t('License'),
-                        icon_class: 'ninja-tables-dashicons dashicons dashicons-shield',
+                        icon_class: 'SetUp',
                         status: this.has_pro
                     },
                     {
                         route: 'global_settings',
                         title: this.$t('Global Settings'),
-                        icon_class: 'el-icon-menu',
+                        icon_class: 'Menu',
                         status: true
                     },
                 ]);

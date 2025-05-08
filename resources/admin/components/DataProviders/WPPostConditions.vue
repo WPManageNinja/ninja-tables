@@ -12,13 +12,9 @@
             </el-col>
 
             <el-col :md="3" style="text-align:right;">
-                <el-button
-                        type="primary"
-                        icon="el-icon-plus"
-                        size="small"
-                        style="margin-top:4px;"
-                        @click="addCondition($event)"
-                ></el-button>
+                <el-button type="primary" @click="addCondition($event)">
+                    <el-icon><Plus /></el-icon>
+                </el-button>
             </el-col>
         </el-row>
 
@@ -69,7 +65,7 @@
                     <el-select
                             v-else-if="isSelectable(condition)"
                             multiple
-                            filterable
+                            :filterable
                             collapse-tags
                             v-model="condition.value"
                             class="full-width"
@@ -84,13 +80,9 @@
                 </el-col>
 
                 <el-col :md="3" :sm="3" style="text-align:right;">
-                    <el-button
-                            type="danger"
-                            icon="el-icon-delete"
-                            size="small"
-                            style="margin-top:4px;"
-                            @click="removeCondition(i, $event)"
-                    ></el-button>
+                    <el-button type="danger" @click="removeCondition(i, $event)">
+                        <el-icon><Delete /></el-icon>
+                    </el-button>
                 </el-col>
             </el-row>
         </template>
@@ -99,13 +91,13 @@
             <div class="ninja_form_group">
                 <label>{{ $t('Query Limit for Frontend') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Query Limit</h3>
                             <p>
                                 Please specify how many posts/CPTs you want to show in total, Leave blank to show all
                             </p>
-                        </div>
-                        <i class="el-icon-info el-text-info"/>
+                        </template>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </label>
                 <el-input type="number" size="small" v-model="config.table.query_extra.query_limit"/>
@@ -115,16 +107,16 @@
             <div class="ninja_form_group">
                 <label>{{ $t('Order By Column') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Order By Column</h3>
                             <p>
                                 Please specify order by column. The script will order by with the selected column
                             </p>
-                        </div>
-                        <i class="el-icon-info el-text-info"/>
+                        </template>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </label>
-                <el-select size="mini" v-model="config.table.query_extra.order_by_column">
+                <el-select size="small" v-model="config.table.query_extra.order_by_column">
                     <el-option v-for="field in orderByFields"  :value="field" :key="field" :label="field"></el-option>
                 </el-select>
             </div>
@@ -132,16 +124,16 @@
             <div style="margin-top: 20px" class="ninja_form_group">
                 <label>{{ $t('Order By Type') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Order By Type</h3>
                             <p>
                                 Please specify order by type. The script will order with your selected type
                             </p>
-                        </div>
-                        <i class="el-icon-info el-text-info"/>
+                        </template>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </label>
-                <el-select size="mini" v-model="config.table.query_extra.order_by">
+                <el-select size="small" v-model="config.table.query_extra.order_by">
                     <el-option value="ASC" label="Ascending"></el-option>
                     <el-option value="DESC" label="Descending"></el-option>
                 </el-select>
@@ -152,6 +144,8 @@
 </template>
 
 <script>
+import {Delete, InfoFilled, Plus} from "@element-plus/icons-vue";
+
     export default {
         name: 'WPPostConditions',
         props: ['config','fields', 'conditions', 'allPostTypes', 'postStatuses', 'selected_post_types'],
@@ -193,6 +187,11 @@
                 authors: []
             };
         },
+        components: {
+            Delete,
+            InfoFilled,
+            Plus
+        },
         watch: {
             selected_post_types() {
                 this.getPostAuthors();
@@ -215,9 +214,9 @@
 
                 condition.operators = [...this.common_operators];
 
-                if (column == 'comment_count') {
+                if (column === 'comment_count') {
                     condition.operators.map((operator, i) => {
-                        if (operator.key == '!=') {
+                        if (operator.key === '!=') {
                             condition.operators.splice(i, 1);
                         }
                     });
@@ -271,7 +270,7 @@
         },
         mounted() {
             this.getPostAuthors().then(() => {
-                _.each(this.conditions, condition => {
+                this.conditions.forEach(condition => {
                     this.setOperators(condition.field, condition, condition.value);
                 });
             });

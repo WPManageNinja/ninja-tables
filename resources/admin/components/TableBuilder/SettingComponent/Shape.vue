@@ -2,8 +2,8 @@
   <div class="block">
     <span>{{ label }}</span><br>
     <el-radio-group :value="value" @input="$emit('update', $event)" style="margin-top: 5px;">
-      <el-radio label="square">{{ $t('Square') }}</el-radio>
-      <el-radio label="round">{{ $t('Round') }}</el-radio>
+      <el-radio :label="$t('Square')" value="square" />
+      <el-radio :label="$t('Round')" value="round" />
     </el-radio-group>
   </div>
 </template>

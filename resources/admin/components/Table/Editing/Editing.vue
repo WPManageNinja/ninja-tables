@@ -35,10 +35,10 @@
             </div>
             <div class="editing_body">
                 <div class="editing_sub_section">
-                    <el-checkbox true-label="yes" false-label="no" v-model="settings.allow_frontend">
+                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="settings.allow_frontend">
                         Enable Frontend editing
                         <el-tooltip placement="top-start" effect="light" content="Allow editing table from the frontend">
-                            <i class="el-icon-info el-text-info"></i>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </el-checkbox>
                 </div>
@@ -57,28 +57,32 @@
                                 <label>
                                     User Roles for Edit/Add Table Rows
                                     <el-tooltip placement="top-start" effect="light" content="Your selected user roles can edit this table rows from frontend. Please note, Adminstrators will have this access by default">
-                                        <i class="el-icon-info el-text-info"></i>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
                                 <el-checkbox-group v-model="settings.user_roles_editing">
-                                    <el-checkbox v-for="(role, role_key) in editing_user_roles" :label="role_key"
-                                                 :key="role_key">
-                                        {{role}}
-                                    </el-checkbox>
+                                    <el-checkbox
+                                        v-for="(role, role_key) in editing_user_roles"
+                                        :key="role_key"
+                                        :label="role"
+                                        :value="role_key"
+                                    />
                                 </el-checkbox-group>
                             </div>
                             <div class="form_group form_row_half">
                                 <label>
                                     User Roles for Deleting Table Rows
                                     <el-tooltip placement="top-start" effect="light" content="Your selected user roles can delete this table rows from frontend. Please note, Adminstrators will have this access by default">
-                                        <i class="el-icon-info el-text-info"></i>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
                                 <el-checkbox-group v-model="settings.user_roles_deleting">
-                                    <el-checkbox v-for="(role, role_key) in user_roles" :label="role_key"
-                                                 :key="role_key">
-                                        {{role}}
-                                    </el-checkbox>
+                                    <el-checkbox
+                                        v-for="(role, role_key) in user_roles"
+                                        :key="role_key"
+                                        :label="role"
+                                        :value="role_key"
+                                    />
                                 </el-checkbox-group>
                             </div>
                         </div>
@@ -87,11 +91,11 @@
                             <label>
                                 Own Data Only
                                 <el-tooltip placement="top-start" effect="light" content="If this is enabled, users will see and edit only the rows that were created by them">
-                                    <i class="el-icon-info el-text-info"></i>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </label>
                             <div class="form-group">
-                                <el-checkbox true-label="yes" false-label="no" v-model="settings.own_data_only">
+                                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="settings.own_data_only">
                                     Users can see and edit/delete only own data
                                 </el-checkbox>
                             </div>
@@ -119,19 +123,19 @@
                                     <th>
                                         Editable?
                                         <el-tooltip placement="top-start" effect="light" content="Select the columns that you need to be editable from frontend">
-                                            <i class="el-icon-info el-text-info"></i>
+                                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                         </el-tooltip>
                                     </th>
                                     <th>
                                         Required?
                                         <el-tooltip placement="top-start" effect="light" content="Select the columns that you need to be required from frontend">
-                                            <i class="el-icon-info el-text-info"></i>
+                                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                         </el-tooltip>
                                     </th>
                                     <th>
                                         Default Value
                                         <el-tooltip placement="top-start" effect="light" content="If you would like to have some values pre-defined in editors (i.e. default editor values) please enter these here.">
-                                            <i class="el-icon-info el-text-info"></i>
+                                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                         </el-tooltip>
                                     </th>
                                 </tr>
@@ -148,7 +152,7 @@
                                                    v-model="required_items[column.key]"></el-switch>
                                     </td>
                                     <td>
-                                        <el-input :placeholder="'Default Value for '+column.name" size="mini"
+                                        <el-input :placeholder="'Default Value for '+column.name" size="small"
                                                   v-model="default_values[column.key]"></el-input>
                                     </td>
                                 </tr>
@@ -166,10 +170,10 @@
                         </div>
 
                         <div class="form-group">
-                            <el-checkbox true-label="yes" false-label="no" v-model="appearance_settings.alwaysShow">
+                            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance_settings.alwaysShow">
                                 Always Show Edit Icons
                                 <el-tooltip placement="top-start" effect="light" content="If you enable this then, Selected user roles can always see the edit buttons, Otherwise they will see a button to initialize editing">
-                                    <i class="el-icon-info el-text-info"></i>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </el-checkbox>
                         </div>
@@ -180,19 +184,19 @@
                                 <label>
                                     Add Row Button Label
                                     <el-tooltip placement="top-start" effect="light" content="Button label for Add New Data Default: 'New row'">
-                                        <i class="el-icon-info el-text-info"></i>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
-                                <el-input size="mini" placeholder="eg: New row" v-model="appearance_settings.addText"></el-input>
+                                <el-input size="small" placeholder="eg: New row" v-model="appearance_settings.addText"></el-input>
                             </div>
                             <div class="form_group form_row_half">
                                 <label>
                                     Edit Rows Button Label
                                     <el-tooltip placement="top-start" effect="light" content="Button label for Edit Rows Default: 'Edit rows'">
-                                        <i class="el-icon-info el-text-info"></i>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
-                                <el-input size="mini" placeholder="eg: Edit rows" v-model="appearance_settings.showText"></el-input>
+                                <el-input size="small" placeholder="eg: Edit rows" v-model="appearance_settings.showText"></el-input>
                             </div>
                         </div>
 
@@ -201,19 +205,19 @@
                                 <label>
                                     Add Popup Heading
                                     <el-tooltip placement="top-start" effect="light" content="Title for popup heading for adding new data">
-                                        <i class="el-icon-info el-text-info"></i>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
-                                <el-input size="mini" placeholder="eg: Add Data" v-model="appearance_settings.addModalLabel"></el-input>
+                                <el-input size="small" placeholder="eg: Add Data" v-model="appearance_settings.addModalLabel"></el-input>
                             </div>
                             <div class="form_group form_row_half">
                                 <label>
                                     Edit Popup Heading
                                     <el-tooltip placement="top-start" effect="light" content="Title for popup heading for editing existing data">
-                                        <i class="el-icon-info el-text-info"></i>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
-                                <el-input size="mini" placeholder="eg: Edit Data" v-model="appearance_settings.editModalLabel"></el-input>
+                                <el-input size="small" placeholder="eg: Edit Data" v-model="appearance_settings.editModalLabel"></el-input>
                             </div>
                         </div>
 
@@ -221,13 +225,13 @@
                             <label>
                                 Editor Icon Position
                                 <el-tooltip placement="top-start" effect="light" content="Edit icon postion. If you select Right then it will append the edit icons at the last column otherwise at the first column">
-                                    <i class="el-icon-info el-text-info"></i>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                 </el-tooltip>
                             </label>
                             <br/>
-                            <el-radio-group size="mini" v-model="appearance_settings.position">
-                                <el-radio-button label="left">Left</el-radio-button>
-                                <el-radio-button label="right">Right</el-radio-button>
+                            <el-radio-group size="small" v-model="appearance_settings.position">
+                                <el-radio-button :label="$t('Left')" value="left" />
+                                <el-radio-button :label="$t('Right')" value="right" />
                             </el-radio-group>
                         </div>
                     </div>
@@ -242,9 +246,13 @@
 
 <script>
     import GetPro from "../../Tools/GetPro";
+    import { InfoFilled } from '@element-plus/icons-vue';
     export default {
-        name: 'frontend-editing-settings',
-      components: {GetPro},
+      name: 'frontend-editing-settings',
+      components: {
+          GetPro,
+          InfoFilled
+      },
       props: ['config'],
         data() {
             return {

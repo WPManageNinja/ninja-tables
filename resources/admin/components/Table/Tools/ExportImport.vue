@@ -7,11 +7,11 @@
                          text-color="#fff"
                          active-text-color="#ffd04b">
                     <el-menu-item  @click="active_menu = 'import'" index="import">
-                        <i class="el-icon-upload"></i>
+                        <el-icon><UploadFilled /></el-icon>
                         <span>{{$t('Import Data')}}</span>
                     </el-menu-item>
                     <el-menu-item @click="active_menu = 'export'" index="export">
-                        <i class="el-icon-download"></i>
+                        <el-icon><Download /></el-icon>
                         <span>{{ $t('Export Data') }}</span>
                     </el-menu-item>
                 </el-menu>
@@ -26,12 +26,15 @@
 <script>
     import ExportTable from './_ExportTable.vue';
     import ImportTable from './Import';
+    import {Download, UploadFilled} from '@element-plus/icons-vue';
 
     export default {
         name: "ExportImport",
         components: {
             'export': ExportTable,
-            'import' : ImportTable
+            'import' : ImportTable,
+            Download,
+            UploadFilled
         },
         props: ['config'],
         data() {

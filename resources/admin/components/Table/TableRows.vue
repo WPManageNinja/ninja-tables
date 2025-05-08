@@ -125,7 +125,7 @@
                 border
                 max-height="600"
                 :class="{ compact: isCompact, sorting: sorting}"
-                :style="'width: '+tableWidth"
+                :style="{ width: tableWidth }"
                 @selection-change="handleSelectionChange"
             >
                 <el-table-column
@@ -141,19 +141,20 @@
                     v-for="(column, index) in columns"
                     :width="(columnLength == index + 1 ) ? '' : 150"
                     :key="index">
-                    <template slot-scope="scope">
+                    <template #default="scope">
                         <show-editable-cell
-                            :row="scope.row"
-                            :column="column"
-                            :columns="columns"
-                            :formula_support="config.settings.formula_support"
-                            :is_editable="isEditable"
+                        :row="scope.row"
+                        :column="column"
+                        :columns="columns"
+                        :formula_support="config.settings.formula_support"
+                        :is_editable="isEditable"
                         />
                     </template>
 
-                    <template slot="header">
+                    <template #header>
                         <span>
-                            {{ column.name || column.key }}<i class="el-icon-setting nt-column-config" @click="showColumnConfigModal(column)"/>
+                            {{ column.name || column.key }}
+                            <el-icon @click="showColumnConfigModal(column)"><Setting /></el-icon>
                         </span>
                     </template>
                 </el-table-column>
@@ -180,7 +181,7 @@
                         label="Actions"
                         class-name="actions"
                         width="120">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             <a v-if="has_pro" @click="addAfter(scope)">
                                 <el-tooltip placement="top-end" effect="light" content="Add Data after this row"
                                             :open-delay="500">
@@ -233,22 +234,22 @@
         <sortable-upgrade-notice :show="sortableUpgradeNotice" @close="sortableUpgradeNotice = false"/>
 
         <el-dialog
+            v-model="showColumnEditor"
             :close-on-click-modal="false"
             class="no_padding_body"
             :append-to-body="true"
-            top="50px"
-            :title="'Edit Table Column : ' +currentEditingColumn.name"
-            width="70%"
-            :visible.sync="showColumnEditor"
+            :top="'50px'"
+            :title="currentEditingColumn ? 'Edit Table Column : ' + currentEditingColumn.name : ''"
+            :width="'70%'"
         >
             <columns-editor
+                v-if="showColumnEditor && currentEditingColumn"
                 :dataSourceType="config.table.dataSourceType"
                 :model="currentEditingColumn"
                 :hasPro="has_pro"
                 :updating="true"
                 :columns="columns"
                 :settings="config.settings"
-                v-if="showColumnEditor && currentEditingColumn"
                 @store="storeSettings()"
                 @delete="deleteColumn()"
                 @cancel="showColumnEditor = false"
@@ -256,19 +257,21 @@
         </el-dialog>
 
         <el-dialog
+            v-model="columnModal"
             :close-on-click-modal="false"
-            top="50px"
+            :top="'50px'"
             :append-to-body="true"
-            title="Add Table Column"
-            width="70%"
-            :visible.sync="columnModal">
+            :title="'Add Table Column'"
+            :width="'70%'"
+        >
             <columns-editor
+                v-if="columnModal"
                 :model="new_column"
                 :hasPro="has_pro"
                 :columns="config.columns"
                 :settings="config.settings"
                 @add="addNewColumn()"
-                @cancel="columnModal = !columnModal"
+                @cancel="columnModal = false"
             />
         </el-dialog>
     </div>
@@ -291,10 +294,13 @@
     import WooNavEdit from '../TableNav/WooNavEdit';
 
     import ShowEditableCell from './_ShowEditableCell'
+    import { useEventBus } from '../../eventBus';
+    import { Setting } from "@element-plus/icons-vue";
 
     export default {
         name: 'TableDataItems',
         components: {
+            Setting,
             add_data_modal: addDataModal,
             ninja_pagination: NinjaPagination,
             Alert,
@@ -306,11 +312,12 @@
             WPPostsNav,
             RawSqlNav,
             WooNavEdit,
-            ShowEditableCell
+            ShowEditableCell,
         },
         props: ['config', 'getColumnSettings', 'hasPro'],
         data() {
             return {
+                bus : useEventBus(),
                 columnModal: false,
                 show_meta: false,
                 new_column: {},
@@ -369,7 +376,7 @@
                 if (newVal) {
                     if (!this.has_pro) {
                         this.sorting = false;
-                        window.ninjaTableBus.$emit('show_pro_popup');
+                        this.bus.emit('show_pro_popup');
 
                         return;
                     }
@@ -591,6 +598,13 @@
 
             addColumn() {
                 this.columnModal = true;
+                // Force Vue to update the component state
+                this.$nextTick(() => {
+                    // Ensure the modal is visible
+                    if (!this.columnModal) {
+                        this.columnModal = true;
+                    }
+                });
             },
 
             validateColumn(column) {
@@ -673,7 +687,7 @@
                     this.loading = true;
 
                     let promise = new Promise((resolve, reject) => {
-                        window.ninjaTableBus.$emit('initManualSorting', {
+                        this.bus.emit('initManualSorting', {
                             table_id: this.tableId,
                             page: this.paginate.current_page,
                             per_page: this.paginate.per_page,
@@ -756,7 +770,7 @@
                 this.showColumnEditor = true;
             },
             storeSettings() {
-                window.ninjaTableBus.$emit('updateTableColumns', () => {
+                this.bus.emit('updateTableColumns', () => {
                     this.showColumnEditor = false;
                     this.currentEditingColumn = false;
                     if (this.dataSource && this.dataSource != 'default') {

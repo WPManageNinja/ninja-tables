@@ -1,68 +1,157 @@
 <template>
     <div v-loading="loading" element-loading-text="Loading Editor...">
         <div class="ace_container">
-            <div class="ninja_custom_css_editor" id="ninja_custom_css">{{ value }}</div>
+            <div :class="'ninja_'+mode+'_editor'" :id="editorId">{{ value }}</div>
         </div>
-        <div  class="editor_errors" :class="'ninja_'+mode+'_errors'">
+        <div class="editor_errors" :class="'ninja_'+mode+'_errors'">
             <span v-show="editorError" style="text-align: right; display: inline-block; color: #ff7171; float: right">{{ editorError }}</span>
         </div>
     </div>
 </template>
-<script type="text/babel">
-    export default {
-        name: 'ninja_ace_editor',
-        props: ['value', 'mode', 'editor_id'],
-        data() {
-            return {
-                ace_path: window.ninja_table_admin.ace_path_url,
-                editorError: '',
-                loading: true
-            }
+
+<script>
+export default {
+    name: 'NinjaAceEditor',
+    props: {
+        value: {
+            type: String,
+            default: ''
         },
-        methods: {
-            loadDependencies() {
-                if(typeof ace == 'undefined') {
-                    jQuery.get(this.ace_path + '/ace.min.js', () => {
-                        this.initAce();
-                    });
-                } else {
-                    this.initAce();
+        modelValue: {
+            type: String,
+            default: ''
+        },
+        mode: {
+            type: String,
+            required: true
+        },
+        editor_id: {
+            type: String,
+            default: 'ninja_custom_css'
+        }
+    },
+    emits: ['update:modelValue', 'change'],
+    data() {
+        return {
+            ace_path: window.ninja_table_admin.ace_path_url,
+            editorError: '',
+            loading: true,
+            editor: null
+        }
+    },
+    computed: {
+        currentValue() {
+            return this.modelValue || this.value || '';
+        },
+        editorId() {
+            return this.editor_id || 'ninja_custom_css';
+        }
+    },
+    methods: {
+        async loadDependencies() {
+            try {
+                if (typeof ace === 'undefined') {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script')
+                        script.src = this.ace_path + '/ace.min.js'
+                        script.onload = resolve
+                        script.onerror = reject
+                        document.head.appendChild(script)
+                    })
                 }
-            },
-            initAce() {
-                ace.config.set("workerPath", this.ace_path);
-                ace.config.set("modePath", this.ace_path);
-                ace.config.set("themePath", this.ace_path);
-                let editor = ace.edit('ninja_custom_css');
-                editor.setTheme("ace/theme/monokai");
-                editor.session.setMode("ace/mode/"+this.mode);
-                editor.getSession().on("changeAnnotation", () => {
-                    var annot = editor.getSession().getAnnotations();
-                    this.editorError = '';
-                    for (var key in annot) {
-                       if(annot[key].type == 'error') {
-                           this.editorError = annot[key].text;
-                       }
-                    }
-                });
-                editor.getSession().on("change", () => {
-                    this.$emit('input', editor.getSession().getValue());
-                });
-                this.loading = false;
+                this.initAce()
+            } catch (error) {
+                console.error('Failed to load Ace editor:', error)
+                this.loading = false
             }
         },
-        mounted() {
+        initAce() {
+            try {
+                if (typeof ace === 'undefined') {
+                    console.error("Ace editor not loaded");
+                }
+
+                const editorElement = document.getElementById(this.editorId);
+                if (!editorElement) {
+                    this.loading = false;
+                    return;
+                }
+
+                ace.config.set("workerPath", this.ace_path)
+                ace.config.set("modePath", this.ace_path)
+                ace.config.set("themePath", this.ace_path)
+                
+                this.editor = ace.edit(this.editorId)
+                this.editor.setTheme("ace/theme/monokai")
+                this.editor.session.setMode(`ace/mode/${this.mode}`)
+                
+                // Set initial value
+                this.editor.setValue(this.currentValue, -1);
+                
+                // Setup event listeners
+                this.editor.getSession().on("changeAnnotation", this.handleAnnotationChange)
+                this.editor.getSession().on("change", this.handleEditorChange)
+                
+                this.loading = false
+            } catch (error) {
+                console.error('Failed to initialize Ace editor:', error)
+                this.loading = false
+            }
+        },
+        handleAnnotationChange() {
+            const annotations = this.editor.getSession().getAnnotations()
+            this.editorError = annotations.find(a => a.type === 'error')?.text || ''
+        },
+        handleEditorChange() {
+            const value = this.editor.getSession().getValue()
+
+            this.$emit('update:modelValue', value)
+            this.$emit('change', value)
+        }
+    },
+    mounted() {
+        this.$nextTick(() => {
             this.loadDependencies();
+        });
+    },
+    beforeUnmount() {
+        if (this.editor) {
+            this.editor.destroy()
+            this.editor = null
+        }
+    },
+    watch: {
+        value(newValue) {
+            // Update editor content when prop changes
+            if (this.editor && newValue !== this.editor.getValue()) {
+                this.editor.setValue(newValue, -1)
+            }
+        },
+        modelValue(newVal) {
+            if (this.editor && newVal !== this.editor.getValue()) {
+                this.editor.setValue(newVal, -1);
+            }
+        },
+        mode(newMode) {
+            if (this.editor) {
+                this.editor.session.setMode(`ace/mode/${newMode}`)
+            }
         }
     }
+}
 </script>
 
 <style>
-    .ninja_custom_css_editor {
-       min-height: 350px;
-        height: auto;
-    }
-    .ninja_css_errors .ace_gutter-cell.ace_warning {
-        display: none;
-    }
+.ninja_javascript_editor,
+.ninja_css_editor,
+.ninja_mysql_editor {
+    min-height: 350px;
+    height: auto;
+}
+
+.ninja_css_errors .ace_gutter-cell.ace_warning,
+.ninja_javascript_errors .ace_gutter-cell.ace_warning,
+.ninja_mysql_errors .ace_gutter-cell.ace_warning {
+    display: none;
+}
 </style>

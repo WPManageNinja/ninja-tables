@@ -3,14 +3,14 @@
         <h4>{{ $t('Dynamic Column Data Settings') }}</h4>
         <hr />
         <el-form-item>
-            <template slot="label">
+            <template #label>
                 {{ $t("Field Type") }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content>
                         <h3>Field Type</h3>
                         <p>Select The field type you want to populate for each row</p>
-                    </div>
-                    <i class="el-icon-info el-text-info" />
+                    </template>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-select
@@ -29,15 +29,15 @@
             </el-select>
         </el-form-item>
         <el-form-item>
-            <template slot="label">
+            <template #label>
                 {{ $t("Field Value") }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content>
                         <h3>Field Value</h3>
                         <p>Provide the column value for your corresponding value type select</p>
-                    </div>
+                    </template>
 
-                    <i class="el-icon-info el-text-info" />
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <template v-if="selectedFiledValueType == 'options'">
@@ -57,12 +57,12 @@
 
                 <div v-if="column.wp_post_custom_data_source_type == 'featured_image'">
                     <el-radio-group v-model="column.image_permalink_type">
-                        <el-radio label="lightbox">Make image as lightbox</el-radio>
-                        <el-radio label="linked">Link to Product page</el-radio>
-                        <el-radio label="">None</el-radio>
+                        <el-radio value="lightbox" label="Make image as lightbox" />
+                        <el-radio value="linked" label="Link to Product page" />
+                        <el-radio value="" label="None" />
                     </el-radio-group>
                     <p v-show="column.image_permalink_type == 'linked'">
-                        <el-checkbox true-label="_blank" false-label="no" v-model="column.permalink_target">Open Link in new tab</el-checkbox>
+                        <el-checkbox :true-value="'_blank'" :false-value="'no'" v-model="column.permalink_target">Open Link in new tab</el-checkbox>
                     </p>
                 </div>
 
@@ -88,14 +88,14 @@
         </el-form-item>
 
         <el-form-item v-if="column.wp_post_custom_data_key == 'buy_now_button'">
-            <template slot="label">
+            <template #label>
                 {{ $t("Buy Now Button Text") }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content>
                         <h3>Buy Now Button Text</h3>
                         <p>Provide Buy Now Button Text</p>
-                    </div>
-                    <i class="el-icon-info el-text-info" />
+                    </template>
+                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-input
@@ -108,53 +108,53 @@
 
         <template v-if="column.wp_post_custom_data_key == 'post_title' || (column.source_type == 'custom' && column.wp_post_custom_data_type == 'featured_image')">
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t("Link") }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Link to Post/Author Permalink</h3>
                             <p>
                                 Enable this if you want to link to post/Author permalink
                             </p>
-                        </div>
-                        <i class="el-icon-info el-text-info" />
+                        </template>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
-                <el-checkbox v-if="column.wp_post_custom_data_key == 'post_author'" v-model="column.permalinked" true-label="yes" false-label="no" value="yes" label="Link to Author Permalink"></el-checkbox>
-                <el-checkbox v-else v-model="column.permalinked" true-label="yes" false-label="no" value="yes" label="Link to post permalink"></el-checkbox>
+                <el-checkbox v-if="column.wp_post_custom_data_key == 'post_author'" v-model="column.permalinked" :true-value="'yes'" :false-value="'no'" value="yes" label="Link to Author Permalink"></el-checkbox>
+                <el-checkbox v-else v-model="column.permalinked" :true-value="'yes'" :false-value="'no'" value="yes" label="Link to post permalink"></el-checkbox>
                 <el-checkbox v-model="column.permalink_target" true-label="_blank" false-label="" value="_blank" label="Open link to new tab"></el-checkbox>
             </el-form-item>
         </template>
 
         <template v-else-if="column.source_type == 'tax_data'">
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t("Link") }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Link to Taxonomy Permalink</h3>
                             <p>
                                 Enable this if you want to link to Taxonomy permalink
                             </p>
-                        </div>
-                        <i class="el-icon-info el-text-info" />
+                        </template>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
-                <el-checkbox v-model="column.permalinked" true-label="yes" false-label="no" value="yes" label="Link to Taxonomy"></el-checkbox>
+                <el-checkbox v-model="column.permalinked" :true-value="'yes'" :false-value="'no'" value="yes" label="Link to Taxonomy"></el-checkbox>
             </el-form-item>
 
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     {{ $t("Taxonomy Separator") }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content>
                             <h3>Taxonomy Separator</h3>
                             <p>Taxonomy Separator for Multiple Items</p>
-                        </div>
+                        </template>
 
-                        <i class="el-icon-info el-text-info" />
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
@@ -167,31 +167,31 @@
 
             <template v-if="column.permalinked == 'yes'">
                 <el-form-item>
-                    <template slot="label">
+                    <template #label>
                         {{ $t("Permalink Action") }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
-                            <div slot="content">
+                            <template #content>
                                 <h3>Permalink Action Type</h3>
                                 <p>
                                     Enable this if you want to make the taxonomies as table filter action. So when user click on those filters then they will see only those type of posts.
                                 </p>
-                            </div>
-                            <i class="el-icon-info el-text-info" />
+                            </template>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
-                    <el-checkbox v-model="column.filter_permalinked" true-label="yes" false-label="" value="yes" label="Make Taxonomies as Table Filter"></el-checkbox>
+                    <el-checkbox v-model="column.filter_permalinked" :true-value="'yes'" false-label="" value="yes" label="Make Taxonomies as Table Filter"></el-checkbox>
                 </el-form-item>
                 <el-form-item v-if="column.filter_permalinked != 'yes'">
-                    <template slot="label">
+                    <template #label>
                         {{ $t("Open Link To New tab") }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
-                            <div slot="content">
+                            <template #content>
                                 <h3>Open Link To New tab</h3>
                                 <p>
                                     Enable this if you want to open the links to new tab
                                 </p>
-                            </div>
-                            <i class="el-icon-info el-text-info" />
+                            </template>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                     <el-checkbox v-model="column.permalink_target" true-label="_blank" false-label="" value="_blank" label="Open link to new tab"></el-checkbox>
@@ -199,9 +199,11 @@
             </template>
         </template>
     </div>
-</template>
+</template>>
 
 <script type="text/babel">
+    import {InfoFilled} from "@element-plus/icons-vue";
+
     export default {
         name: "WPWooDynamicColumn",
         props: {
@@ -224,13 +226,13 @@
         watch: {
             'column.wp_post_custom_data_source_type': function () {
                 // Find selected type
-                this.$set(this.column, 'source_type', this.selectedField.source_type);
+                this.column.source_type = this.selectedField.source_type;
 
                 if(this.selectedField.source_type == 'tax_data') {
-                    this.$set(this.column, 'taxonomy_separator', ', ');
+                    this.column.taxonomy_separator = ', ';
                 }
 
-                this.$set(this.column, 'wp_post_custom_data_key', '');
+                this.column.wp_post_custom_data_key = '';
             }
         },
         computed: {
@@ -249,6 +251,9 @@
                 }
                 return 'text';
             }
+        },
+        components: {
+            InfoFilled
         },
         methods: {
             setFieldOptions() {

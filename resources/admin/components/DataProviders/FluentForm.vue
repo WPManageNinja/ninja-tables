@@ -24,7 +24,7 @@
             <div class="form-group" v-if="!editing">
                 <el-select
                         v-loading="fetching"
-                        filterable
+                        :filterable
                         v-model="form.id"
                         style="width:100%"
                         placeholder="Select a Form"
@@ -64,7 +64,7 @@
                                             effect="light"
                                             content="Maximun records to show in frontend, keep empty to show all."
                                     >
-                                        <i class="el-icon-info el-text-info"></i>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                     Max Records:
                                 </strong>
@@ -84,16 +84,16 @@
                                             effect="light"
                                             content="Select what type of entries you want to show from fluent form."
                                     >
-                                        <i class="el-icon-info el-text-info"></i>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                     Entry Type:
                                 </strong>
                             </el-col>
                             <el-col :md="18" style="margin-top:3px;">
                                 <el-radio-group v-model="form.entry_status">
-                                    <el-radio label="all">All</el-radio>
-                                    <el-radio label="read">Read</el-radio>
-                                    <el-radio label="unread">Unread</el-radio>
+                                    <el-radio value="all" :label="$t('All')" />
+                                    <el-radio value="read" :label="$t('Read')" />
+                                    <el-radio value="unread" :label="$t('Unread')" />
                                 </el-radio-group>
                             </el-col>
                         </el-row>
@@ -101,7 +101,7 @@
                 </el-row>
                 <template v-if="config && config.table">
                     <br />
-                    <el-checkbox true-label="yes" false-label="no" v-model="config.table.current_user_entry_only">Show current user submissions only at frontend</el-checkbox>
+                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="config.table.current_user_entry_only">Show current user submissions only at frontend</el-checkbox>
                 </template>
             </div>
             <hr>
@@ -162,6 +162,7 @@
 </template>
 
 <script>
+    import {  InfoFilled } from '@element-plus/icons-vue';
     export default {
         name: 'FluentForm',
         props: {
@@ -175,6 +176,9 @@
             config: {
                 type: Object
             }
+        },
+        components: {
+            InfoFilled
         },
         data() {
             return {

@@ -56,7 +56,13 @@
                             </span>
 
                             <div class="form-item">
-                                <el-checkbox true-label="yes" false-label="no" v-model="do_unicode">Convert to UTF-8 format ( Check this if your csv is non-unicode format )</el-checkbox>
+                                <el-checkbox
+                                    :true-value="'yes'"
+                                    :false-value="'no'"
+                                    v-model="do_unicode"
+                                >
+                                    Convert to UTF-8 format (Check this if your CSV is non-unicode format)
+                                </el-checkbox>
                             </div>
                         </template>
 
@@ -111,7 +117,7 @@
 
         <el-dialog
                 title="Your current tables"
-                :visible.sync="showPluginModal"
+                v-model="showPluginModal"
                 @close="closePluginModal()"
         >
             <template v-if="otherPluginTables.length">
@@ -120,7 +126,7 @@
                         style="width: 100%"
                 >
                     <el-table-column label="Name">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             <span v-if="scope.row.is_already_imported">( Already Imported )</span> {{
                             scope.row.post_title }}
                         </template>
@@ -129,8 +135,8 @@
                             label="Action"
                             fixed="right"
                     >
-                        <template slot-scope="scope">
-                            <el-button type="primary" size="mini"
+                        <template #default="scope">
+                            <el-button type="primary" size="small"
                                        @click="importThisTable(scope.row, scope.$index)"
                             >{{ $t('Import') }}
                             </el-button>
@@ -294,7 +300,7 @@
                     .then(response => {
                         this.$message.success(response.data.message);
                         this.importing = false;
-                        this.$set(this.otherPluginTables[index], 'ninja_table_id', response.data.tableId);
+                        this.otherPluginTables[index].ninja_table_id = response.data.tableId;
                     })
                     .catch(error => {
                         this.$message.error(error.data.message);

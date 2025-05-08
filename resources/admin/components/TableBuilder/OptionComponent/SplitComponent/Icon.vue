@@ -1,12 +1,12 @@
 <template>
   <div>
-    <el-tooltip effect="dark" placement="top-right"
+    <el-tooltip effect="dark" placement="top-end"
                 content="If you choose svg you can customize the color otherwise can't">
-      <el-button size="mini" type="primary" @click.prevent="newIcon" round icon="el-icon-upload">
+      <el-button size="small" type="primary" @click.prevent="newIcon" round icon="el-icon-upload">
         {{ $t('Choose Icon') }}
       </el-button>
     </el-tooltip>
-    <el-input size="mini" :placeholder="$t('Search Icon')" v-model="keyword" style="margin: 10px 0; width: 96%;"></el-input>
+    <el-input size="small" :placeholder="$t('Search Icon')" v-model="keyword" style="margin: 10px 0; width: 96%;"></el-input>
     <div style="height: 100px;width: 100%;overflow-y: scroll;">
         <span v-for="(icon, index) in iconList" :key="index">
             <img @click="chooseIcon(`${icon}`)" :src="getAsset(icon)" width="30px" height="30px">

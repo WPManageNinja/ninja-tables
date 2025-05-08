@@ -64,29 +64,34 @@
                                             />
                                         </div>
                                     </div>
-                                    <draggable @end="storeSettings" v-model="columns" handle=".handle" animation="150">
-                                        <div class="column drawer"
-                                             v-for="(column, index) in columns"
-                                             :key="column.key"
-                                        >
-                                            <div class="header">
-                                                <span class="dashicons dashicons-editor-justify handle" />
-                                                <span @click="openDrawer(index)">{{ column.name || column.key }}</span>
-                                                <span class="dashicons dashicons-edit edit_icon" @click="openDrawer(index)" />
+                                    <draggable 
+                                        @end="storeSettings" 
+                                        v-model="columns" 
+                                        handle=".handle" 
+                                        animation="150"
+                                        item-key="key"
+                                    >
+                                        <template #item="{element: column, index}">
+                                            <div class="column drawer" :key="column.key">
+                                                <div class="header">
+                                                    <span class="dashicons dashicons-editor-justify handle" />
+                                                    <span @click="openDrawer(index)">{{ column.name || column.key }}</span>
+                                                    <span class="dashicons dashicons-edit edit_icon" @click="openDrawer(index)" />
+                                                </div>
+                                                <div class="drawer_body" :class="'drawer_body_'+index">
+                                                    <columns-editor
+                                                        :columns="columns"
+                                                        :dataSourceType="config.table.dataSourceType"
+                                                        :model="column"
+                                                        :has-pro="has_pro"
+                                                        :settings="config.settings"
+                                                        :updating="true"
+                                                        @delete="deleteColumn(index)"
+                                                        @store="storeSettings()"
+                                                    />
+                                                </div>
                                             </div>
-                                            <div class="drawer_body" :class="'drawer_body_'+index">
-                                                <columns-editor
-                                                    :columns="columns"
-                                                    :dataSourceType="config.table.dataSourceType"
-                                                    :model="column"
-                                                    :has-pro="has_pro"
-                                                    :settings="config.settings"
-                                                    :updating="true"
-                                                    @delete="deleteColumn(index)"
-                                                    @store="storeSettings()"
-                                                />
-                                            </div>
-                                        </div>
+                                        </template>
                                     </draggable>
                                 </div>
                             </div>
@@ -141,6 +146,7 @@
     import NinjaLanguageSettings from '../Configarations/_LanguageSettings'
     import NinjaRenderingSettings from '../Configarations/_RenderingSettings'
     import NinjaButtonSettings from '../Configarations/_buttons'
+    import { useEventBus } from '../../../eventBus';
 
     import { tableLibs } from '../../../data/data'
 
@@ -157,6 +163,7 @@
         props: ['config'],
         data() {
             return {
+                bus : useEventBus(),
                 hasPro: !!window.ninja_table_admin.hasPro,
                 active_menu: 'columns',
                 table_color_primary: '#000',
@@ -203,7 +210,7 @@
         },
         methods: {
             storeSettings() {
-                window.ninjaTableBus.$emit('tableDoingAjax', true);
+                this.bus.emit('tableDoingAjax', true);
 
                 let data = {
                     table_id: this.tableId,
@@ -217,11 +224,11 @@
                             message: res.message,
                             type: 'success'
                         });
-                        this.$set(this.config, 'columns', this.columns);
-                      window.ninjaTableBus.$emit('tableDoingAjax', false);
+                        this.config.columns = this.columns;
+                      this.bus.emit('tableDoingAjax', false);
                     })
                     .catch((error) => {
-                      window.ninjaTableBus.$emit('tableDoingAjax', false);
+                      this.bus.emit('tableDoingAjax', false);
                     })
 
             },
@@ -273,13 +280,13 @@
             },
             showProAd(title) {
                 this.addVisible = true;
-                window.ninjaTableBus.$emit('show_pro_popup', 1);
+                this.bus.emit('show_pro_popup', 1);
             },
             size,
             get,
             initManualSorting() {
                 let promise = new Promise((resolve, reject) => {
-                    window.ninjaTableBus.$emit('initManualSorting', {
+                    this.bus.emit('initManualSorting', {
                         table_id: this.tableId,
                         noData: true
                     }, resolve, reject);

@@ -10,15 +10,15 @@
                     <el-checkbox
                         v-for="taxonomy in term.terms"
                         :key="taxonomy.slug"
-                        :label="taxonomy.slug">{{taxonomy.name}} ({{taxonomy.count}})
+                        :value="taxonomy.slug">{{taxonomy.name}} ({{taxonomy.count}})
                     </el-checkbox>
                 </el-checkbox-group>
             </div>
         </div>
         <div class="nt_each_selection">
             <el-checkbox
-                true-label="yes"
-                false-label="no"
+                :true-value="'yes'"
+                :false-value="'no'"
                 v-model="query_conditions.hide_out_of_stock">
                 Hide <b>out of stocks</b> items
             </el-checkbox>
@@ -26,7 +26,7 @@
         <div class="nt_each_selection">
             <label>
                 Initial Order By
-                <el-select size="mini" v-model="query_conditions.order_by" placeholder="Order By">
+                <el-select size="small" v-model="query_conditions.order_by" placeholder="Order By">
                     <el-option
                         v-for="(item,item_key) in product_orders"
                         :key="item_key"
@@ -36,7 +36,7 @@
                 </el-select>
                 <el-select
                     v-show="query_conditions.order_by && query_conditions.order_by != 'random'"
-                    size="mini"
+                    size="small"
                     v-model="query_conditions.order_by_type"
                     placeholder="Order By Type">
                     <el-option
@@ -85,7 +85,7 @@
                         let terms = response.data.query_terms;
                         each(terms, (term, item_name) => {
                             if (!this.query_selections[item_name]) {
-                                this.$set(this.query_selections, item_name, []);
+                                this.query_selections[item_name] = [];
                             }
                         });
                         this.query_terms = terms;

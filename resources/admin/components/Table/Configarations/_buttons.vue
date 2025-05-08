@@ -15,14 +15,14 @@
             <div style="max-width: 800px" class="section_block">
                 <h3>CSV Export Button Settings</h3>
                 <div class="form_group">
-                    <el-checkbox true-label="yes" false-label="no" v-model="table_buttons.csv.status">
+                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="table_buttons.csv.status">
                         Enable CSV Export Button
                     </el-checkbox>
                 </div>
                 <template v-if="table_buttons.csv.status == 'yes'">
                     <div style="max-width: 500px" class="form_group">
                         <label>Button Label</label>
-                        <el-input size="mini" placeholder="Button Text" v-model="table_buttons.csv.label"/>
+                        <el-input size="small" placeholder="Button Text" v-model="table_buttons.csv.label"/>
                     </div>
                     <div class="form_group">
                         <label>Button Background Color</label>
@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="form_group">
-                        <el-checkbox true-label="yes" false-label="no" v-model="table_buttons.csv.plainText">
+                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="table_buttons.csv.plainText">
                             Export as Plain Text
                         </el-checkbox>
                     </div>
@@ -49,7 +49,7 @@
                 <hr/>
                 <h3>Print Button Settings</h3>
                 <div class="form_group">
-                    <el-checkbox true-label="yes" false-label="no" v-model="table_buttons.print.status">Enable Print
+                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="table_buttons.print.status">Enable Print
                         Button
                     </el-checkbox>
                 </div>
@@ -61,14 +61,14 @@
                     */
                     -->
 <!--                    <div class="form_group">-->
-<!--                        <el-checkbox true-label="yes" false-label="no" v-model="table_buttons.print.includeFilter">-->
+<!--                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="table_buttons.print.includeFilter">-->
 <!--                            Include Filter or Search-->
 <!--                        </el-checkbox>-->
 <!--                    </div>-->
 
                     <div style="max-width: 500px" class="form_group">
                         <label>Button Label</label>
-                        <el-input size="mini" placeholder="Button Text" v-model="table_buttons.print.label"/>
+                        <el-input size="small" placeholder="Button Text" v-model="table_buttons.print.label"/>
                     </div>
                     <div class="form_group form_row_full">
                         <div class="form_row_half">
@@ -93,16 +93,16 @@
                         <el-collapse-item title="Print Screen Header" name="header">
                           <template>
                             <label>Header in each page</label>
-                            <el-radio v-model="table_buttons.print.header_each_page" label="yes">Yes</el-radio>
-                            <el-radio v-model="table_buttons.print.header_each_page" label="no">No</el-radio>
+                            <el-radio v-model="table_buttons.print.header_each_page" value="yes" :label="$t('Yes')" />
+                            <el-radio v-model="table_buttons.print.header_each_page" value="no" :label="$t('No')" />
                           </template>
                             <wp-editor v-model="table_buttons.print.header_html" />
                         </el-collapse-item>
                         <el-collapse-item title="Print Screen Footer" name="footer">
                           <template>
                             <label>Footer in each page</label>
-                            <el-radio v-model="table_buttons.print.footer_each_page" label="yes">Yes</el-radio>
-                            <el-radio v-model="table_buttons.print.footer_each_page" label="no">No</el-radio>
+                            <el-radio v-model="table_buttons.print.footer_each_page" value="yes" :label="$t('Yes')" />
+                            <el-radio v-model="table_buttons.print.footer_each_page" label="no" :label="$t('No')" />
                           </template>
                             <wp-editor v-model="table_buttons.print.footer_html" />
                         </el-collapse-item>
@@ -114,14 +114,22 @@
                 <h3>Buttons Position</h3>
                 <div class="form_group">
                     <el-radio-group size="small" v-model="table_buttons.button_position">
-                        <el-radio-button v-for="(button_position,position_key) in button_positions" :key="position_key" :label="position_key">{{button_position}}</el-radio-button>
+                        <el-radio-button
+                            v-for="(button_position, position_key) in button_positions"
+                            :key="position_key"
+                            :label="button_position"
+                            :value="position_key" />
                     </el-radio-group>
                 </div>
 
                 <div class="form_group">
                     <label>Buttons Alignment</label>
                     <el-radio-group size="small" v-model="table_buttons.button_alignment">
-                        <el-radio-button v-for="(button_align,align_key) in buttonAlignments" :key="align_key" :label="align_key">{{button_align}}</el-radio-button>
+                        <el-radio-button
+                            v-for="(button_align, align_key) in buttonAlignments"
+                            :key="align_key"
+                            :label="button_align"
+                            :value="align_key" />
                     </el-radio-group>
                 </div>
                 <div v-if="hasPro" class="form_group">

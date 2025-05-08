@@ -5,8 +5,11 @@ class FormulaParser {
      * @see https://github.com/handsontable/formula-parser#api-methods for more
      */
     constructor() {
-        if( typeof formulaParser == 'object') {
-            this.instance = new formulaParser.Parser()
+        // Check if formulaParser is available in window object
+        this.formulaParser = window.formulaParser || null;
+
+        if (this.formulaParser) {
+            this.instance = new this.formulaParser.Parser()
 
             this._addFunctionNUMVAL(
                 this.instance
@@ -75,7 +78,12 @@ class FormulaParser {
     }
 
     getSupportedFormulas() {
-        let formulas = formulaParser.SUPPORTED_FORMULAS;
+        // Check if formulaParser is available
+        if (!this.formulaParser) {
+            return [];
+        }
+
+        let formulas = this.formulaParser.SUPPORTED_FORMULAS;
 
         if (!formulas.includes('NUMVAL')) {
             formulas.push('NUMVAL');

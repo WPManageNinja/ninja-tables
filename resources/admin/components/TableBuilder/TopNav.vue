@@ -35,18 +35,20 @@
   </el-menu>
 </template>
 <script>
+import {useEventBus} from '../../../admin/eventBus';
 export default {
   name: "TopNav",
   props: ["initialData", "tableId", "selectedDevice"],
   data() {
     return {
+      bus : useEventBus(),
       id: '',
     };
   },
   methods: {
     saveTableData() {
-      window.ninjaTableBus.$emit('closeManageCell');
-      window.ninjaTableBus.$emit('saveData');
+      this.bus.emit('closeManageCell');
+      this.bus.emit('saveData');
 
       if (this.selectedDevice !== '') {
         this.$emit('deviceSelected', '');

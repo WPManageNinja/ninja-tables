@@ -1,27 +1,24 @@
 <template>
   <div class="block">
-
     <span>{{ label }}</span><br>
-    <el-radio-group :value="value"
-                    @input="$emit('update', $event)"
-                    :disabled="disableResponsive || mobileDisableBreakpoint || tabletDisableBreakpoint"
-                    style="display: flex; justify-content: space-around; margin-right: 10px;"
+
+    <el-radio-group
+        :model-value="modelValue"
+        @update:model-value="$emit('update:modelValue', $event)"
+        :disabled="disableResponsive || mobileDisableBreakpoint || tabletDisableBreakpoint"
+        style="display: flex; justify-content: space-around; margin-right: 10px;"
     >
-      <el-radio label="left">{{ $t('Left') }}</el-radio>
-      <el-radio label="center">{{ $t('Center') }}</el-radio>
-      <el-radio label="right">{{ $t('Right') }}</el-radio>
+      <el-radio :label="$t('Left')" value="left" />
+      <el-radio :label="$t('Center')" value="center" />
+      <el-radio :label="$t('Right')" value="right" />
     </el-radio-group>
   </div>
 </template>
 <script>
 export default {
   name: "Alignment",
-  model: {
-    prop: "value",
-    event: "update"
-  },
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: 'left'
     },
@@ -41,6 +38,7 @@ export default {
       type: Boolean,
       default: false
     }
-  }
+  },
+  emits: ['update:modelValue']
 };
 </script>

@@ -40,14 +40,14 @@
                 <div>
                     <p>{{ $t('List Type') }}</p>
                     <el-radio-group v-model="item.data.style.listType">
-                        <el-radio label="ul">{{ $t('Unordered List') }}</el-radio>
-                        <el-radio label="ol">{{ $t('Ordered List') }}</el-radio>
+                        <el-radio :label="$t('Unordered List')" value="ul" />
+                        <el-radio :label="$t('Ordered List')" value="ol" />
                     </el-radio-group>
                 </div>
                 <div>
                     <p>{{ $t('List Icon') }}</p>
                     <el-select
-                        size="mini"
+                        size="small"
                         v-model="item.data.style.listStyle"
                         :placeholder="$t('List Icon')">
                         <el-option

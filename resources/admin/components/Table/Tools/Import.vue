@@ -13,13 +13,15 @@
                     </div>
 
                     <div class="form-group">
-                        <el-checkbox true-label="yes" false-label="no" v-model="do_unicode">Convert to UTF-8 format ( Check this if your csv is non-unicode format )</el-checkbox>
+                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="do_unicode">Convert to UTF-8 format ( Check this if your csv is non-unicode format )</el-checkbox>
                     </div>
 
                     <div class="form-group">
-                        <el-button type="primary" icon="el-icon-upload2" size="small"
-                                   @click.prevent="upload" :loading="btnLoading">
-                            {{ $t('Import from CSV') }}
+                        <el-button type="primary" size="small" @click.prevent="upload" :loading="btnLoading">
+                            <el-icon>
+                                <Upload/>
+                            </el-icon>
+                            <span> {{ $t('Import from CSV') }} </span>
                         </el-button>
                     </div>
                 </form>
@@ -39,9 +41,11 @@
                         {{ $t('CSV Header Structure') }}
                     </h3>
 
-                    <el-button type="primary" icon="el-icon-download" size="small"
-                               style="float: right" @click="download">
-                        {{ $t('Download Sample CSV') }}
+                    <el-button type="primary" size="small" @click="download">
+                        <el-icon>
+                            <Download/>
+                        </el-icon>
+                        <span> {{ $t('Download Sample CSV') }} </span>
                     </el-button>
                 </div>
 
@@ -77,9 +81,11 @@
 
 <script>
     import each from 'lodash/each'
+    import {Download, Upload} from "@element-plus/icons-vue";
 
     export default {
         name: "Import",
+        components: {Download, Upload},
         props: ['config', 'tableId'],
         data() {
             return {

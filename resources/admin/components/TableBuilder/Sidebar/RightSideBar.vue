@@ -24,7 +24,7 @@
             </div>
             <el-row v-if="!newTable" class="new-table-wrapper">
                 <el-col :span="12">
-                    <template>
+                    <div>
                         <div
                             class="new_table"
                             :style="`grid-template-rows:repeat(${initialData.table_data.table.tr},1fr);grid-template-columns:repeat(${initialData.table_data.table.tc},1fr)`"
@@ -53,7 +53,7 @@
                             <el-button
                                 @click="createTable('default')"
                                 type="primary"
-                                size="mini"
+                                size="small"
                             >Create
                             </el-button
                             >
@@ -62,7 +62,7 @@
                                 <a href="#ntb-templates"> {{ $t('Choose a Template') }}</a>
                             </div>
                         </div>
-                    </template>
+                    </div>
                 </el-col>
                 <el-col :span="12">
                     <h4>{{ $t('Import Table from CSV / JSON File') }}</h4>
@@ -83,7 +83,7 @@
                         :on-success="handleFileSuccess"
                         :on-remove="handleRemove"
                     >
-                        <i class="el-icon-upload"></i>
+                        <el-icon><UploadFilled /></el-icon>
                         <div class="el-upload__text">{{ $t('Drop file here or ') }}<em>{{ $t('click to upload') }}</em>
                         </div>
                     </el-upload>
@@ -92,7 +92,7 @@
                             :loading="loading"
                             @click="importCJ"
                             type="primary"
-                            size="mini"
+                            size="small"
                         >Import
                         </el-button>
                     </div>
@@ -122,7 +122,7 @@
                                 />
                                 <div class="ready-made-table-button">
                                     <el-button
-                                        size="mini"
+                                        size="small"
                                         @click="createTable(item.key, item)"
                                         type="primary"
                                     >
@@ -155,12 +155,14 @@
 import draggable from "vuedraggable";
 import TableLayout from "../Table/Layout";
 import {helpers} from "../Mixin/helpers";
+import {UploadFilled} from "@element-plus/icons-vue";
 
 export default {
     name: "RightSideBar",
     props: ["initialData", "tableId", "selectedDevice"],
     mixins: [helpers],
     components: {
+        UploadFilled,
         draggable,
         TableLayout,
     },

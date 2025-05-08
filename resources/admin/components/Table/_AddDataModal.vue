@@ -1,7 +1,7 @@
 <template>
     <el-dialog
         :title="title"
-        :visible.sync="showModal"
+        v-model="showModal"
         top="50px"
         :close-on-click-modal="false"
         :append-to-body="true"
@@ -9,24 +9,24 @@
         <div v-if="showModal">
             <div v-for="column in columns" :key="column.key" class="form-group">
                 <label :for="slugify(column.key)">{{ column.name || column.key }}</label>
-                <div v-if="column.data_type == 'textarea'">
+                <div v-if="column.data_type === 'textarea'">
                     <textarea :placeholder="column.name" :id="slugify(column.key)" class="form-control"
                               v-model="newColumn[column.key]"></textarea>
                 </div>
-                <div v-else-if="column.data_type == 'html'">
+                <div v-else-if="column.data_type === 'html'">
                     <wp_editor :editor_id="slugify(column.key)" v-model="newColumn[column.key]"></wp_editor>
                 </div>
-                <div v-else-if="column.data_type == 'date'">
+                <div v-else-if="column.data_type === 'date'">
                     <ninja-date-picker :column="column" :new_column="newColumn"></ninja-date-picker>
                 </div>
-                <div v-else-if="column.data_type == 'selection'">
+                <div v-else-if="column.data_type === 'selection'">
                     <may-be-select :column="column" :newColumn="newColumn"></may-be-select>
                 </div>
 
-                <div v-else-if="column.data_type == 'image' && has_pro">
+                <div v-else-if="column.data_type === 'image' && has_pro">
                     <image-selector :adding_counter="adding_counter" :column="column" :newColumn="newColumn"></image-selector>
                 </div>
-                <div v-else-if="column.data_type == 'button' && has_pro">
+                <div v-else-if="column.data_type === 'button' && has_pro">
                     <input placeholder="Valid button URL" type="url" :id="slugify(column.key)" class="form-control"
                            v-model="newColumn[column.key]">
                     <small>Please provide valid URL</small>
@@ -89,7 +89,7 @@
                               Set the date of the data creation.<br>
                               This is useful when you want to sort the data by date
                             </span>
-                            <i class="el-icon-info el-text-info"></i>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </label>
                     <el-date-picker
@@ -116,12 +116,13 @@
                 </div>
             </template>
             <div class="dialog-footer-item">
-                <el-button @click="row_config = !row_config" size="small"><i class="el-icon-setting"></i>
+                <el-button @click="row_config = !row_config" size="small">
+                    <el-icon><Setting /></el-icon>
                 </el-button>
                 <el-button v-loading="btnLoading" :disabled="btnLoading" type="primary" size="small" @click="addData">
                     <span v-if="editId"> {{ $t('Update') }}</span>
                     <span v-else>{{ $t('Add') }}</span>
-                    <i v-if="btnLoading" class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
+                    <el-icon v-if="btnLoading"><Loading /></el-icon>
                 </el-button>
             </div>
         </div>
@@ -136,6 +137,7 @@
     import ImageSelector from '../../../common/ImageSelector';
     import NinjaDatePicker from '../Extras/_NinjaDatePicker'
     import GetPro from "../Tools/GetPro";
+    import {InfoFilled, Loading, Setting} from '@element-plus/icons-vue';
 
     export default {
         name: 'add_data',
@@ -282,11 +284,11 @@
                     this.item_settings = this.item.settings;
                 }
                 if (!this.item_settings.cell) {
-                    this.$set(this.item_settings, 'cell', {});
+                    this.item_settings.cell = {};
                 }
                 each(this.columns, (column) => {
                     if (!this.item_settings.cell[column.key]) {
-                        this.$set(this.item_settings.cell, column.key, {});
+                        this.item_settings.cell[column.key] = {};
                     }
                 });
                 if (this.item) {
@@ -315,6 +317,9 @@
             this.initNewColumnObj();
         },
         components: {
+            Loading,
+            Setting,
+            InfoFilled,
           GetPro,
             wp_editor: wp_editor,
             NinjaDatePicker,

@@ -31,7 +31,8 @@
 
                 <div class="form-group">
                     <label>{{ $t('Custom SQL Query') }}</label>
-                    <my-sql-editor mode="mysql" editor_id="ninja_mysql_editor" v-model="sql" />
+<!--                    <ace_code_editor mode="mysql" editor_id="ninja_mysql_editor" v-model="sql" />-->
+                    <ace_code_editor editor_id="ninja_mysql_editor" mode="mysql" v-model="sql"></ace_code_editor>
                     <p>Please write valid SQL query. Your written SQL query will be passed to <code>$wpdb->get_results()</code> function</p>
                 </div>
 
@@ -45,14 +46,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label>{{ $t('SQL COnnection Type') }}</label>
+                    <label>{{ $t('SQL Connection Type') }}</label>
                     <el-radio-group v-model="connection_type">
-                        <el-radio label="local">Default WP SQL Table</el-radio>
-                        <el-radio label="external">Remote/External SQL</el-radio>
+                        <el-radio value="local" label="Default WP SQL Table" />
+                        <el-radio value="external" label="Remote/External SQL" />
                     </el-radio-group>
                 </div>
 
-                <div v-if="connection_type == 'external'" class="form-group">
+                <div v-if="connection_type === 'external'" class="form-group">
                     <label>{{ $t('MYSQL Connection Details') }}</label>
                     <remote-sql-connection :connection="remote_connection" />
                 </div>
@@ -82,13 +83,14 @@
 </template>
 
 <script>
-    import MySqlEditor from '../../../common/_ace_editor_sql';
     import PremiumNotice from '../includes/PremiumNotice';
     import RemoteSqlConnection from '../TableNav/_RemoteSQLConnection'
+    import ace_code_editor from "../../../common/_ace_editor.vue";
+
     export default {
         name: 'CustomSQLQuery',
         components: {
-            MySqlEditor,
+            ace_code_editor,
             PremiumNotice,
             RemoteSqlConnection
         },
@@ -123,7 +125,7 @@
                 },
                 sql: '',
                 error_html: '',
-                isActivated: this.activated_features.raw_sql_query,
+                isActivated: this.activated_features?.raw_sql_query,
                 hasPro: !!ninja_table_admin.hasPro,
                 has_sql_permission: window.ninja_table_admin.has_sql_permission == 'yes'
             };
@@ -141,8 +143,6 @@
                     table_Id: this.config && this.config.table.ID || null
                 })
                     .then((res) => {
-
-                        console.log(res);
 
                         if(typeof res == 'string') {
                             this.error_html = res;

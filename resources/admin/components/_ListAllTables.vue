@@ -8,12 +8,12 @@
             border
             aria-label="all-tables"
             @sort-change="handleTableSort"
-            style="100%">
+            style="width: 100%">
 
             <!-- <el-table-column type="selection" fixed width="55" /> -->
 
             <el-table-column :label="$t('ID')" width="90" prop="ID" sortable="custom">
-              <template slot-scope="scope">
+              <template #default="scope">
                 <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
                   {{ scope.row.ID }}
                 </router-link>
@@ -24,7 +24,7 @@
             </el-table-column>
 
             <el-table-column :label="$t('Title')" prop="post_title" sortable="custom">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <strong>
                         <template v-if="shouldBeVisible(scope.row)">
                           <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
@@ -73,29 +73,29 @@
             </el-table-column>
 
             <el-table-column :label="$t('Description')" class-name="description">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <div class="nt_cell" v-html="scope.row.post_content"/>
                 </template>
             </el-table-column>
 
             <el-table-column width="190" :label="$t('Data Source')">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <strong v-if="scope.row.dataSourceType === 'drag_and_drop'">{{$t('Drag & Drop Table')}}</strong>
                     <strong v-else>{{ dataSourceType(scope.row) }}</strong>
                     <template v-if="scope.row.remoteURL">
                         <el-tooltip class="item" effect="light" :content="scope.row.remoteURL" placement="top-start">
-                          <div slot="content">
+                          <template #content>
                             <h3>Source of data</h3>
                             <p>{{scope.row.remoteURL}}</p>
-                          </div>
-                          <i class="el-icon-info el-text-info"/>
+                          </template>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                 </template>
             </el-table-column>
 
             <el-table-column width="250" :label="$t('ShortCode')">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <el-tooltip effect="dark"
                                 content="Click to copy shortcode"
                                 title="Click to copy shortcode"
@@ -103,12 +103,12 @@
                         <code class="copy"
                               v-if="scope.row.dataSourceType === 'drag_and_drop'"
                                 :data-clipboard-text='`[ninja_table_builder id="${scope.row.ID}"]`'>
-                            <i class="el-icon-document"></i> [ninja_table_builder id="{{ scope.row.ID }}"]
+                            <el-icon><Document /></el-icon>[ninja_table_builder id="{{ scope.row.ID }}"]
                         </code>
                         <code class="copy"
                               v-else
                               :data-clipboard-text='`[ninja_tables id="${scope.row.ID}"]`'>
-                          <i class="el-icon-document"></i> [ninja_tables id="{{ scope.row.ID }}"]
+                            <el-icon><Document /></el-icon> [ninja_tables id="{{ scope.row.ID }}"]
                         </code>
                     </el-tooltip>
                 </template>
@@ -143,11 +143,15 @@
 <script type="text/babel">
     import pagination from '../../common/NinjaPagination.vue';
     import GetPro from "./Tools/GetPro";
+    import { Document, InfoFilled } from '@element-plus/icons-vue';
+
     export default {
         name: 'Home',
         components: {
+          Document,
+          InfoFilled,
           GetPro,
-            'ninja_pagination': pagination
+          'ninja_pagination': pagination
         },
         props: ['searchAction', 'searchString'],
         watch: {

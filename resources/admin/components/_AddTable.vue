@@ -8,44 +8,36 @@
                      active-text-color="#fff"
             >
                 <el-menu-item @click="activeTabName = 'default'" index='default'>
-                    <i class="el-icon-setting"></i>
                     <span>Default</span>
                 </el-menu-item>
                 <el-menu-item @click="activeTabName = 'drag_and_drop'" index='drag_and_drop'>
-                  <i class="el-icon-s-unfold"></i>
                   <span>Drag & Drop Table</span>
                 </el-menu-item>
                 <el-menu-item @click="activeTabName = 'import_table'" index="import_table">
-                    <i class="el-icon-upload2"></i>
                     <span>Import Table</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'fluent_form'" index='fluent_form'>
-                    <img :src="fluentFormIcon" alt="fluent form icon" class="el-icon-fluent-form">
                     <span>Connect Fluent Forms</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'wp_posts'" index='wp_posts'>
-                    <i class="el-icon-news"></i> <span>WP Posts</span>
+                    <span>WP Posts</span>
                 </el-menu-item>
 
                 <el-menu-item v-if="has_woo" @click="activeTabName = 'woo_table'" index='woo_table'>
-                    <img :src="wooIcon" alt="woocomerce icon" class="el-icon-fluent-form">
                     <span>WooCommerce Table</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'google_spread_sheet'" index='google_spread_sheet'>
-                    <span class="dashicons dashicons-media-spreadsheet"></span>
                     <span>Connect Google Sheets</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'csv'" index='csv'>
-                    <i class="el-icon-document"></i>
                     <span>Connect External CSV</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'raw_sql'" index='raw_sql'>
-                    <i class="dashicons dashicons-editor-code"></i>
                     <span>Custom SQL Query</span>
                 </el-menu-item>
 
@@ -158,7 +150,7 @@
     import RawSqlForm from './DataProviders/RawSqlForm'
     import PremiumNotice from './includes/PremiumNotice';
     import RightSideBar from "./TableBuilder/Sidebar/RightSideBar";
-
+    import { useEventBus } from '../eventBus';
 
     export default {
         name: 'add_table',
@@ -208,8 +200,6 @@
                     }
                 },
                 isCollapse: false,
-                fluentFormIcon: window.ninja_table_admin.fluent_form_icon,
-                wooIcon: window.ninja_table_admin.img_url+'woo-logo.png',
                 has_woo: !!window.ninja_table_admin.has_woocommerce,
                 initialData : {},
             }
@@ -247,25 +237,39 @@
                         message: response.message,
                         type: 'success'
                       });
-                      window.ninjaTableBus.$emit('addedTable');
+
+                      this.$emit('addedTable');
+
                       if (this.table.ID) {
                         this.closeModal();
                       } else {
-                        this.fireTableCreated(response.table_id);
+                        // Check if response has table_id directly or in data property
+                        const tableId = response.table_id || (response.data && response.data.table_id);
+                        if (tableId) {
+                          this.fireTableCreated(tableId);
+                        } else {
+                          console.error('No table_id found in response:', response);
+                        }
                       }
                       this.btnLoading = false;
                   })
                   .catch(error => {
-                      if (error.responseJSON.data.message) {
+                      if (error.responseJSON && error.responseJSON.data && error.responseJSON.data.message) {
                         this.$message({
                           showClose: true,
                           message: error.responseJSON.data.message,
                           type: 'error'
                         });
-                      } else {
+                      } else if (error.responseText) {
                         this.$message({
                           showClose: true,
                           message: error.responseText,
+                          type: 'error'
+                        });
+                      } else {
+                        this.$message({
+                          showClose: true,
+                          message: 'An error occurred while creating the table',
                           type: 'error'
                         });
                       }
