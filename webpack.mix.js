@@ -1,33 +1,60 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
 const mix = require('laravel-mix');
 const exec = require('child_process').exec;
+const path = require('path');
 const min = '';
 const assetVersion = '3.1.0';
+
+// Set the public path and resource root
 mix.setPublicPath('assets');
 mix.setResourceRoot('../');
 
-mix.js('resources/admin/gutenblock.js', `assets/js/ninja-tables-gutenblock.js`).react();
+// Configure webpack
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'resources'),
+        }
+    }
+});
 
-mix.js('resources/admin/Boot.js', `assets/js/ninja-tables-boot.js`)
+// JS Compilation
+mix.js('resources/admin/gutenblock.js', `assets/js/ninja-tables-gutenblock.js`).react()
+    .js('resources/admin/Boot.js', `assets/js/ninja-tables-boot.js`)
     .js('resources/admin/main.js', `assets/js/ninja-tables-admin.js`)
     .js('resources/public/js/ninja-tables-footable.js', `assets/js/ninja-tables-footable.js`)
     .js('resources/admin/ninja-table-tinymce-button.js', `assets/js/ninja-table-tinymce-button.js`)
-    .js('resources/public/js/ninja-tables-builder.js', `assets/js/ninja-table-builder-public.js`)
+    .js('resources/public/js/ninja-tables-builder.js', `assets/js/ninja-table-builder-public.js`);
 
-    .vue({
-        version: 3
-    })
-    .sass('resources/public/css/_public.scss', `assets/css/ninjatables-public.css`)
+// Vue Configuration
+mix.vue({
+    version: 3,
+    options: {
+        compilerOptions: {
+            isCustomElement: tag => tag.startsWith('wp-')
+        }
+    }
+});
+
+// SASS/SCSS Compilation
+mix.sass('resources/public/css/_public.scss', `assets/css/ninjatables-public.css`)
     .sass('resources/public/css/_table_builder.scss', `assets/css/ninja-table-builder-public.css`)
     .sass('resources/admin/css/ninja-tables-admin.scss', `assets/css/ninja-tables-admin.css`)
     .sass('resources/admin/css/vendor.scss', 'assets/css/ninja-tables-vendor.css')
     .sass('resources/admin/css/gutenblock.scss', 'assets/css/ninja-tables-gutenblock.css')
-    .sass('resources/preview/preview.scss', 'assets/css/ninja-tables-preview.css')
-    .copy('resources/libs', 'assets/libs')
-    .copy('resources/img', 'assets/img')
-    .sourceMaps(false);
+    .sass('resources/preview/preview.scss', 'assets/css/ninja-tables-preview.css');
+// Asset Copying
+mix.copy('resources/libs', 'assets/libs')
+   .copy('resources/img', 'assets/img');
 
+// Disable source maps in production
+mix.sourceMaps(false);
+
+// Production specific configurations
+if (mix.inProduction()) {
+    mix.version();
+}
+
+// RTL CSS Generation
 mix.then(() => {
     exec('rtlcss ./assets/css/ninja-tables-vendor.css ./assets/css/ninja-tables-vendor-rtl.css', (error) => {
         if (error) {
