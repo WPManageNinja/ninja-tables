@@ -10,7 +10,7 @@
         <draggable
                 :options="{handle:'.handle'}"
                 :list="value"
-                item-key="label"
+                item-key="index"
                 tag="tbody"
         >
            <template #item="{element: filter, index: index}">
