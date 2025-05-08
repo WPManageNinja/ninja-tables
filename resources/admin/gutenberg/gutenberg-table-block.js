@@ -48,6 +48,7 @@ registerBlockType('ninja-tables/table-block', {
     edit: function(props) {
         const { attributes, setAttributes } = props;
         const { tableId, activeDesign } = attributes;
+        const [instanceId] = useState(() => Math.random().toString(36).substring(2, 10));
 
         const [tableConfig, setTableConfig] = useState(null);
         const [tableInnerHtml, setTableInnerHtml] = useState('');
@@ -55,6 +56,10 @@ registerBlockType('ninja-tables/table-block', {
         const [isLoading, setIsLoading] = useState(false);
         const [scriptLoaded, setScriptLoaded] = useState(false);
         const [dataLoaded, setDataLoaded] = useState(false);
+
+        const tableElementId = `footable_${tableId}_${instanceId}`;
+        const wrapperElementId = `footable_parent_${tableId}_${instanceId}`;
+
 
         const blockProps = useBlockProps();
 
@@ -232,13 +237,13 @@ registerBlockType('ninja-tables/table-block', {
             if (!appReady) return;
 
             if (typeof FooTable === 'object') {
-                const ft = FooTable.get(`#footable_${tableId}`);
+                const ft = FooTable.get(`#${tableElementId}`);
                 if (ft) {
                     ft.destroy();
                 }
             }
 
-            const $table = jQuery(`#footable_${tableId}`);
+            const $table = jQuery(`#${tableElementId}`);
             $table.find('thead,tbody,tfoot').remove();
             $table.append(tableInnerHtml);
 
@@ -252,7 +257,7 @@ registerBlockType('ninja-tables/table-block', {
             if (!scriptLoaded) return;
 
             const NinjaTableApp = window.ninjaTableApp;
-            const $table = jQuery(`#footable_${tableId}`);
+            const $table = jQuery(`#${tableElementId}`);
 
             // Use updated settings if provided, otherwise use the state
             const settings = updatedSettings || tableSettings;
@@ -311,7 +316,7 @@ registerBlockType('ninja-tables/table-block', {
                     // Use the passed settings (which may include the latest changes)
                     enabled: settings.show_all !== '1' && settings.show_all !== 1,
                     size: parseInt(settings.perPage || 10),
-                    container: `#footable_parent_${tableId} .paging-ui-container`,
+                    container: `#${wrapperElementId} .paging-ui-container`,
                 },
                 sorting: {
                     enabled: !!settings.column_sorting
@@ -836,11 +841,11 @@ registerBlockType('ninja-tables/table-block', {
                             />
                         )}
                         <div
-                            id={`footable_parent_${tableId}`}
+                            id={wrapperElementId}
                             className={`footable_parent ninja_table_wrapper loading_ninja_table wp_table_data_press_parent ${getWrapperClasses()}`}
                         >
                             <table
-                                id={`footable_${tableId}`}
+                                id={tableElementId}
                                 className={getTableClasses()}
                                 style={getFontStyle()}
                                 display={appReady ? 'block' : 'none'}
@@ -1178,14 +1183,14 @@ registerBlockType('ninja-tables/table-block', {
         const generateColorCss = (tableId, settings) => {
             if (settings.table_color_type !== 'custom_color') {
                 // Clear custom CSS if using predefined colors
-                const styleElement = document.getElementById('ninja_table_custom_css_' + tableId);
+                const styleElement = document.getElementById(`ninja_table_custom_css_${tableId}_${instanceId}`);
                 if (styleElement) {
                     styleElement.innerHTML = '';
                 }
                 return;
             }
 
-            const prefix = '#footable_' + tableId;
+            const prefix = `#${tableElementId}`;
             const css = `
         ${prefix} {
             background-color: ${settings.table_color_primary || 'initial'} !important;
@@ -1255,10 +1260,10 @@ registerBlockType('ninja-tables/table-block', {
     `;
 
             // Apply the CSS - create or update the style element
-            let styleElement = document.getElementById('ninja_table_custom_css_' + tableId);
+            let styleElement = document.getElementById(`ninja_table_custom_css_${tableId}_${instanceId}`);
             if (!styleElement) {
                 styleElement = document.createElement('style');
-                styleElement.id = 'ninja_table_custom_css_' + tableId;
+                styleElement.id = `ninja_table_custom_css_${tableId}_${instanceId}`;
                 document.head.appendChild(styleElement);
             }
             styleElement.innerHTML = css;
