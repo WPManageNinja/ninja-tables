@@ -13,19 +13,21 @@
     "babel-preset-env": "^1.7.0",
     "clipboard": "^2.0.10",
     "copy-to-clipboard": "^3.0.6",
-    "element-ui": "^2.15.6",
+    "element-plus": "^2.3.8",
     "es6-object-assign": "^1.1.0",
     "lodash": "^4.17.21",
     "rtlcss": "^3.5.0",
     "sortablejs": "^1.7.0",
-    "vue": "^2.6.14",
+    "vue": "^3.3.4",
     "vue-codemirror-lite": "^1.0.4",
-    "vue-router": "^3.5.3",
-    "vuedraggable": "^2.16.0"
+    "vue-router": "^4.2.4",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.0-rc.0",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/compiler-sfc": "^3.3.4",
     "babel-preset-react": "^6.24.1",
     "cross-env": "^7.0.3",
     "laravel-mix": "^6.0.43",
@@ -35,9 +37,10 @@
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.63.4",
     "sass-loader": "^12.6.0",
-    "vue-loader": "^15.9.8",
-    "vue-template-compiler": "^2.6.14",
-    "vue2-ace-editor": "0.0.10",
+    "unplugin-auto-import": "^0.16.6",
+    "unplugin-vue-components": "^0.25.1",
+    "vue-loader": "^17.0.1",
+    "vue-template-compiler": "^2.7.16",
     "webpack": "^5.87.0"
   }
 }
