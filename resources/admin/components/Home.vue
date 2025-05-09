@@ -27,7 +27,7 @@
                  {{ menuItem.title }}
               </el-menu-item>
 
-              <el-menu-item index="buy-pro" v-if="!has_pro">
+              <el-menu-item  class="get_pro" index="buy-pro" v-if="!has_pro">
                   <get-pro size="small"/>
               </el-menu-item>
           </el-menu>
