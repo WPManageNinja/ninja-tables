@@ -117,7 +117,7 @@
 <script type="text/babel">
 
     import each from 'lodash/each';
-    import NinjaFilterEditor from './_filterEditor'
+    import NinjaFilterEditor from './_filterEditor.vue'
     import draggable from 'vuedraggable'
     import GetPro from "../../Tools/GetPro";
     import {Delete, EditPen} from "@element-plus/icons-vue";

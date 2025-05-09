@@ -153,7 +153,7 @@
 </template>
 <script>
 import draggable from "vuedraggable";
-import TableLayout from "../Table/Layout";
+import TableLayout from "../Table/Layout.vue";
 import {helpers} from "../Mixin/helpers";
 import {UploadFilled} from "@element-plus/icons-vue";
 

@@ -280,7 +280,7 @@
 
 <script type="text/babel">
     import { InfoFilled } from '@element-plus/icons-vue';
-    import KeyPairOptions from './_key_pair_options'
+    import KeyPairOptions from './_key_pair_options.vue'
     import each from 'lodash/each'
     export default {
         name: 'FilterEditor',
