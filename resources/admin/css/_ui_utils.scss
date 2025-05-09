@@ -1,0 +1,11 @@
+#data-tables-app {
+  .ninja-button {
+    @apply rounded-[8px] p-[8px] leading-5 font-[500] text-[14px] cursor-pointer;
+  }
+  .ninja-button--primary {
+    @apply bg-[#335cff] text-white;
+  }
+  .ninja-button--secondary {
+    @apply bg-white text-[#525866] border border-solid border-[#E1E4EA];
+  }
+}

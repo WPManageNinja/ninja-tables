@@ -21,14 +21,18 @@
                     </label>
 
                     <router-link :to="{ name: 'import_tables' }">
-                        <el-button size="small">
+                        <NinjaButton type="secondary" class="mr-2">
                             {{ $t( 'Import Table' ) }}
-                        </el-button>
+                        </NinjaButton>
                     </router-link>
 
-                    <el-button @click="openCreateModal" size="small" type="primary">
+                    <NinjaButton @click="openCreateModal">
                         {{ $t( 'Add Table' ) }}
-                    </el-button>
+                    </NinjaButton>
+
+                    <!-- <el-button @click="openCreateModal" size="small" type="primary">
+                        {{ $t( 'Add Table' ) }}
+                    </el-button> -->
 
                 </div>
             </div>
@@ -69,6 +73,7 @@
     import leadModal from './Extras/lead';
     import NinjaReviewDialog from './Extras/_ReviewDialog';
     import { useEventBus } from './../eventBus';
+import { NinjaButton } from '../@ui-utils';
 
     export default {
         name: 'all_tables',
@@ -77,7 +82,8 @@
             'list-all-tables': ListAllTables,
             'add-table-modal': AddTableModal,
             'lead-modal': leadModal,
-            NinjaReviewDialog
+            NinjaReviewDialog,
+            NinjaButton
         },
         props: ['hasPro'],
         data() {
