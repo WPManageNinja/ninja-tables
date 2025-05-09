@@ -36,15 +36,15 @@
                 </div>
 
                 <router-link :to="{ name: 'help' }">
-                    <el-button size="small">{{ $t('Documentation') }}</el-button>
+                    <el-button class="rounded-[12px]">{{ $t('Documentation') }}</el-button>
                 </router-link>
                 <a :href="preview_url" target="_blank">
-                    <el-button size="small">{{ $t('Preview') }}</el-button>
+                    <el-button >{{ $t('Preview') }}</el-button>
                 </a>
                 <a v-if="!has_pro"
                    href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                    target="_blank">
-                    <el-button type="danger" size="small">{{ $t('Get Pro') }}</el-button>
+                    <el-button type="danger">{{ $t('Get Pro') }}</el-button>
                 </a>
             </div>
 
