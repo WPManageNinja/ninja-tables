@@ -1,5 +1,108 @@
 @import "nav";
 
+
+// All tables page
+.all-tables-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+  margin: 20px 0;
+
+  .all-tables-header-left {
+    .heading-text {
+      color: #171717;
+      font-feature-settings: 'ss11' on, 'liga' off, 'calt' off;
+      font-family: Inter;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: -0.27px;
+    }
+    .caption-text {
+      color: #5C5C5C;
+      font-feature-settings: 'ss11' on, 'liga' off, 'calt' off;
+      font-family: Inter;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: -0.084px;
+    }
+  }
+
+  .all-tables-header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+}
+
+.all-tables-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  background: #FFFFFF;
+  padding: 16px 0;
+  border-radius: 12px;
+}
+
+
+.ninja-pagination-wrapper {
+  display: flex;
+  padding: 16px 20px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+
+  .pagination-page-change-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ninja-pagination {
+    .btn-prev, .btn-next {
+      .el-icon {
+        svg {
+          width: 14px;
+          height: 14px;
+          color: #525866;
+        }
+      }
+    }
+    .el-pager {
+      gap: 5px;
+      margin-top: 5px;
+
+      li {
+        padding: 6px;
+        color: #525866;
+        border: 1px solid #E1E4EA;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+
+      li.is-active {
+        border: none;
+        background: #F5F7FA;
+        color: #525866;
+      }
+
+      li:hover {
+        background: #F5F7FA;
+        color: #525866;
+      }
+    }
+  }
+}
+
+
+
+// old css
 .pageLoading {
   text-align: center;
   display: flex;

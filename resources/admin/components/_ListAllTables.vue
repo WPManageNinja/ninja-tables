@@ -115,16 +115,34 @@
             </el-table-column>
         </el-table>
 
-        <div class="pull-right">
+        <div class="ninja-pagination-wrapper">
+
+            <div class="pagination-page-change-option">
+               <span class="flex-shrink-0">
+                  Page {{ paginate.current_page }}
+                  of {{ Math.ceil(paginate.total / Number(paginate.per_page)) }} ({{ paginate.total }})
+               </span>
+
+                <el-select class="min-w-[100px]" v-model="paginate.per_page" @change="handleSizeChange">
+                    <el-option value="10">10/page</el-option>
+                    <el-option value="15">15/page</el-option>
+                    <el-option value="20">20/page</el-option>
+                    <el-option value="50">50/page</el-option>
+                    <el-option value="100">100/page</el-option>
+                </el-select>
+            </div>
+
             <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="goToPage"
-                    :current-page.sync="paginate.current_page"
-                    :page-sizes="[10, 20, 50, 100]"
-                    :page-size="paginate.per_page"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="paginate.total">
-            </el-pagination>
+                class="ninja-pagination"
+                @size-change="handleSizeChange"
+                @current-change="goToPage"
+                :current-page.sync="paginate.current_page"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="paginate.per_page"
+                layout="prev, pager, next, jumper"
+                :total="paginate.total"
+            />
+
         </div>
 
         <div v-if="!loading && !is_installed && items.length > 2 && !hasPro">
@@ -143,9 +161,11 @@
 <script type="text/babel">
     import pagination from '../../common/NinjaPagination.vue';
     import GetPro from "./Tools/GetPro";
+    import NinjaInput from "../@ui-utils/NinjaInput.vue";
     export default {
         name: 'Home',
         components: {
+            NinjaInput,
           GetPro,
           'ninja_pagination': pagination
         },

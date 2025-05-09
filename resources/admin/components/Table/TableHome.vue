@@ -36,7 +36,7 @@
                 </div>
 
                 <router-link :to="{ name: 'help' }">
-                    <el-button class="rounded-[12px]">{{ $t('Documentation') }}</el-button>
+                    <el-button>{{ $t('Documentation') }}</el-button>
                 </router-link>
                 <a :href="preview_url" target="_blank">
                     <el-button >{{ $t('Preview') }}</el-button>
