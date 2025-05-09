@@ -126,7 +126,6 @@
 </template>
 
 <script>
-import { InfoFilled } from '@element-plus/icons-vue';
 import {tableLibs} from '../../data/data'
 import intersection from 'lodash/intersection';
 import forEach from 'lodash/forEach'
@@ -141,9 +140,6 @@ export default {
             default_settings: {},
             fontFamily: ['inherit', 'cursive', 'fantasy', 'monospace', 'sans-serif', 'serif', 'system-ui', 'ui-monospace', 'ui-rounded', 'ui-sans-serif', 'ui-serif']
         };
-    },
-    components: {
-      InfoFilled
     },
     computed: {
         tableColors() {

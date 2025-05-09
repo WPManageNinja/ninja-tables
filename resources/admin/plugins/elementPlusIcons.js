@@ -3,7 +3,16 @@ import {
     Delete,
     Search,
     Plus,
-    ArrowDown
+    ArrowDown,
+    UploadFilled,
+    Download,
+    Document,
+    InfoFilled,
+    Setting,
+    Loading,
+    Star,
+    SetUp,
+    Menu
 } from '@element-plus/icons-vue'
 
 const icons = {
@@ -11,7 +20,16 @@ const icons = {
     Delete,
     Search,
     Plus,
-    ArrowDown
+    ArrowDown,
+    UploadFilled,
+    Download,
+    Document,
+    InfoFilled,
+    Setting,
+    Loading,
+    Star,
+    SetUp,
+    Menu
 }
 
 export default {

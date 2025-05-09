@@ -583,7 +583,6 @@ import SortableUpgradeNotice from '../includes/SortableUpgradeNotice.vue';
 import NinjaColorPicker from '../Extras/ColorPicker';
 import GetPro from "../Tools/GetPro";
 import { useEventBus } from './../../eventBus';
-import { InfoFilled } from '@element-plus/icons-vue'
 
 
 export default {
@@ -592,8 +591,7 @@ export default {
     components: {
         GetPro,
         SortableUpgradeNotice,
-        NinjaColorPicker,
-        InfoFilled
+        NinjaColorPicker
     },
     data() {
         return {

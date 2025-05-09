@@ -731,7 +731,6 @@
     import NinjaColorPicker from '../../Extras/ColorPicker'
     import GetPro from "../../Tools/GetPro";
     import { useEventBus } from './../../../eventBus';
-    import { InfoFilled } from '@element-plus/icons-vue'
 
 
     export default {
@@ -743,8 +742,7 @@
             'wp-post-dynamic-column': WPPostDynamicColumn,
             'content-transformer': ContentTransformer,
             DynamicWooColumn,
-            NinjaColorPicker,
-            InfoFilled
+            NinjaColorPicker
         },
         props: {
             model: {

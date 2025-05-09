@@ -162,7 +162,6 @@
 </template>
 
 <script>
-    import {  InfoFilled } from '@element-plus/icons-vue';
     export default {
         name: 'FluentForm',
         props: {
@@ -176,9 +175,6 @@
             config: {
                 type: Object
             }
-        },
-        components: {
-            InfoFilled
         },
         data() {
             return {
