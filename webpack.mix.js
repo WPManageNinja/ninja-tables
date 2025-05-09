@@ -48,7 +48,8 @@ mix.sass('resources/admin/css/gutenblock.scss', 'assets/css/ninja-tables-gutenbl
     .sass('resources/preview/preview.scss', 'assets/css/ninja-tables-preview.css')
 // Asset Copying
 mix.copy('resources/libs', 'assets/libs')
-   .copy('resources/img', 'assets/img');
+    .copy('resources/img', 'assets/img')
+    .copy('resources/icons', 'assets/icons');
 
 // Disable source maps in production
 mix.sourceMaps(false);

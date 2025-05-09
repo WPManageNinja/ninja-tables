@@ -1,3 +1,5 @@
+
+// Main Navbar
 .ninja_main_nav {
   display: flex;
   justify-content: space-between;
@@ -9,7 +11,8 @@
   background: #FFFFFF;
   border-bottom: 1px solid #E1E4EA;
   margin-top: -10px;
-  margin-left: -22px;
+  margin-left: -20px;
+  margin-right: -20px;
 
   .plugin-name {
     display: flex;
@@ -73,6 +76,86 @@
 
     &:hover {
       color: white;
+    }
+  }
+}
+
+// TableRows Navbar
+.ninja_inner_nav {
+  background: #FFFFFF;
+  border-bottom: 1px solid #E1E4EA;
+  height: 56px;
+  margin-top: -10px;
+  margin-right: -20px;
+  margin-left: -20px;
+  padding: 16px 30px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+
+  //.action {
+  //  font-size: 16px;
+  //  cursor: pointer;
+  //  &:hover {
+  //    color: #0085ba;
+  //  }
+  //}
+
+  .ninja_inner_nav_left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .nav-all-tables {
+      color: #525866;
+      text-align: center;
+      font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+      font-family: Inter;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: -0.084px;
+    }
+
+    .nav-table-name {
+      color: #0E121B;
+      text-align: center;
+      font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+      font-family: Inter;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: -0.084px;
+      margin-right: 8px;
+    }
+  }
+
+  .ninja_inner_nav_right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+
+
+    .copy_shortcode {
+      code {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 8px;
+        background: #F5F7FA;
+        cursor: pointer;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 20px;
+        letter-spacing: -0.084px;
+      }
     }
   }
 }
