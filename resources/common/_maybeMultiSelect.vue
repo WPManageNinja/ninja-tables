@@ -25,7 +25,7 @@
                 :size="size"
                 style="width: 100%"
                 v-model="newColumn[column.key]"
-                :filterable
+                filterable
                 @change="$emit('blur')"
                 allow-create
                 default-first-option

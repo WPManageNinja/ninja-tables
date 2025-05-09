@@ -29,12 +29,15 @@
             elementFormat() {
                 let originalFormat  = this.column.dateFormat;
                 let defaultTimeFormat  = 'h:m:s';
-                let updatedFormat = '';
-                if(originalFormat == 'DD-MMM-YY') {
-                  updatedFormat = 'dd-MMM-yy';
-                } else {
-                  updatedFormat = originalFormat.replace(/Y/g, 'y').replace(/D/g, 'd');
-                }
+
+                // this code snippets is creating a problem after updating to element-plus. without this code, it's working. keep it for now
+                // let updatedFormat = '';
+                // if(originalFormat == 'DD-MMM-YY') {
+                //   updatedFormat = 'dd-MMM-yy';
+                // } else {
+                //   updatedFormat = originalFormat.replace(/Y/g, 'y').replace(/D/g, 'd');
+                // }
+                let updatedFormat = originalFormat;
 
                 if (this.type === 'date') {
                   return updatedFormat;
