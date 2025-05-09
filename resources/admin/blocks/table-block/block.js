@@ -16,8 +16,9 @@ const {
     Tooltip
 } = wp.components;
 
-import {tableLibs} from "../data/data";
-import Rest from "../Bits/Rest";
+import {tableLibs} from "../../data/data";
+import Rest from "../../Bits/Rest";
+import Save from "./Save";
 const { useState, useEffect } = wp.element;
 
 
@@ -1712,17 +1713,5 @@ registerBlockType('ninja-tables/table-block', {
         );
     },
 
-    save: function({ attributes }) {
-        const { tableId, dataSource } = attributes;
-
-        if (!tableId) {
-            return null;
-        }
-
-        if (dataSource === 'drag_and_drop') {
-            return `[ninja_table_builder id="${tableId}"]`;
-        } else {
-            return `[ninja_tables id="${tableId}"]`;
-        }
-    }
+    save: Save
 });

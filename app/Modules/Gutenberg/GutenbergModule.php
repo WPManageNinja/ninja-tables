@@ -20,7 +20,7 @@ class GutenbergModule
         // Main block script
         wp_enqueue_script(
             'ninja-tables-gutenberg-table-block',
-            NINJA_TABLES_DIR_URL . 'assets/gutenberg/gutenberg-table-block.js',
+            NINJA_TABLES_DIR_URL . 'assets/blocks/table-block/block.js',
             array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor', 'wp-api-fetch', 'jquery'),
             NINJA_TABLES_VERSION,
             true

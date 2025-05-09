@@ -7,8 +7,7 @@ mix.setResourceRoot('../');
 
 mix
     .js('resources/admin/gutenblock.js', `assets/js/ninja-tables-gutenblock.js`)
-    .js('resources/admin/gutenberg/gutenberg-table-block.js', `assets/gutenberg/gutenberg-table-block.js`)
-    .js('resources/admin/gutenberg/footable-gutenberg.js', `assets/gutenberg/footable-gutenberg.js`)
+    .js('resources/admin/blocks/table-block/block.js', `assets/blocks/table-block/block.js`)
     .react();
 
 mix.js('resources/admin/Boot.js', `assets/js/ninja-tables-boot.js`)
