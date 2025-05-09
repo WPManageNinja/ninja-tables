@@ -17,6 +17,7 @@ import StyleTab from "./ui/tabs/StyleTab";
 import OtherTab from "./ui/tabs/OtherTab";
 import {customColorCss} from "./utils/data";
 import BlockPreview from "./components/BlockPreview";
+import {DEFAULT_TABLE_SETTINGS} from "./utils/constants";
 
 export default function Edit(props) {
     const {attributes, setAttributes} = props;
@@ -40,29 +41,7 @@ export default function Edit(props) {
     const availableTables = window.ninja_table_admin ?
         window.ninja_table_admin.availableTables : [];
     // Default settings
-    const defaultSettings = {
-        show_all: '0',
-        perPage: 10,
-        pagination_position: 'right',
-        paginate_to_top: false,
-        show_pager: false,
-        paze_sizes: '10,20,50,100',
-        search_position: '',
-        nt_search_full_width: false,
-        sorting_type: '',
-        default_sorting: 'old_first',
-        sorting_column: '',
-        sorting_column_by: 'ASC',
-        expand_type: 'default',
-        togglePosition: 'first',
-        extra_css_class: '',
-        sticky_first_column: 'no',
-        sticky_header: 'no',
-        sticky_header_offset: '0',
-        disable_sticky_on_mobile: 'no',
-        table_font_family: 'inherit',
-        table_font_size: 16
-    };
+    const defaultSettings = DEFAULT_TABLE_SETTINGS;
 
     // Merge default settings with table config settings
     const tableSettings = tableConfig?.settings ?

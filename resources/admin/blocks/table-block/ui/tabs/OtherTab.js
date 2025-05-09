@@ -11,6 +11,13 @@ const {
 } = wp.components;
 
 import {hasPro} from "../../utils/data";
+import {
+    EXPAND_TYPE_OPTIONS,
+    FONT_FAMILY_OPTIONS,
+    PAGINATION_POSITION_OPTIONS,
+    SEARCH_POSITION_OPTIONS,
+    TOGGLE_POSITION_OPTIONS
+} from "../../utils/constants";
 
 export default function OtherTab({ tableSettings, updateTableSettings, tableConfig }) {
     return (
@@ -39,11 +46,7 @@ export default function OtherTab({ tableSettings, updateTableSettings, tableConf
                     <RadioControl
                         label={__('Pagination Position')}
                         selected={tableSettings.pagination_position}
-                        options={[
-                            { label: __('Left'), value: 'left' },
-                            { label: __('Center'), value: 'center' },
-                            { label: __('Right'), value: 'right' }
-                        ]}
+                        options={PAGINATION_POSITION_OPTIONS}
                         onChange={(val) => updateTableSettings('pagination_position', val)}
                     />
 
@@ -79,12 +82,7 @@ export default function OtherTab({ tableSettings, updateTableSettings, tableConf
                 <RadioControl
                     label={__('Search Bar Position')}
                     selected={tableSettings.search_position}
-                    options={[
-                        { label: __('Left'), value: 'left' },
-                        { label: __('Center'), value: 'center' },
-                        { label: __('Right'), value: 'right' },
-                        { label: __('Default'), value: '' }
-                    ]}
+                    options={SEARCH_POSITION_OPTIONS}
                     onChange={(val) => updateTableSettings('search_position', val)}
                     disabled={!hasPro}
                 />
@@ -182,11 +180,7 @@ export default function OtherTab({ tableSettings, updateTableSettings, tableConf
                 </label>
                 <RadioControl
                     selected={tableSettings.expand_type}
-                    options={[
-                        { label: __('Default'), value: 'default' },
-                        { label: __('Expand First'), value: 'expandFirst' },
-                        { label: __('Expand All'), value: 'expandAll' }
-                    ]}
+                    options={EXPAND_TYPE_OPTIONS}
                     onChange={(val) => updateTableSettings('expand_type', val, false)}
                     disabled={!hasPro}
                 />
@@ -197,10 +191,7 @@ export default function OtherTab({ tableSettings, updateTableSettings, tableConf
                 <RadioControl
                     label={__('Toggle Position')}
                     selected={tableSettings.togglePosition}
-                    options={[
-                        { label: __('First Column'), value: 'first' },
-                        { label: __('Last Column'), value: 'last' }
-                    ]}
+                    options={TOGGLE_POSITION_OPTIONS}
                     onChange={(val) => updateTableSettings('togglePosition', val, false)}
                 />
             </div>
@@ -254,19 +245,7 @@ export default function OtherTab({ tableSettings, updateTableSettings, tableConf
                 <SelectControl
                     label={__('Font Family')}
                     value={tableSettings.table_font_family}
-                    options={[
-                        { label: __('theme-font'), value: 'inherit' },
-                        { label: 'cursive', value: 'cursive' },
-                        { label: 'fantasy', value: 'fantasy' },
-                        { label: 'monospace', value: 'monospace' },
-                        { label: 'sans-serif', value: 'sans-serif' },
-                        { label: 'serif', value: 'serif' },
-                        { label: 'system-ui', value: 'system-ui' },
-                        { label: 'ui-monospace', value: 'ui-monospace' },
-                        { label: 'ui-rounded', value: 'ui-rounded' },
-                        { label: 'ui-sans-serif', value: 'ui-sans-serif' },
-                        { label: 'ui-serif', value: 'ui-serif' }
-                    ]}
+                    options={FONT_FAMILY_OPTIONS}
                     onChange={(val) => updateTableSettings('table_font_family', val, false)}
                 />
                 <RangeControl
