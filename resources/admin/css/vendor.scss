@@ -3,6 +3,10 @@
 // @import './ninja-tables-admin.scss';
 @use './ninja-tables-admin' as *;
 
+#wpcontent{
+    background: #F4F5FA;
+}
+
 .el-input {
     input[readonly] {
         background: white !important;
