@@ -30,10 +30,8 @@
 </template>
 
 <script>
-import {UploadFilled, Star, Setting, SetUp, Menu} from '@element-plus/icons-vue';
     export default {
         name: 'Tools',
-        components: {UploadFilled, Star, Setting, Menu, SetUp},
         data() {
             return {
                 has_pro: !!window.ninja_table_admin.hasPro,

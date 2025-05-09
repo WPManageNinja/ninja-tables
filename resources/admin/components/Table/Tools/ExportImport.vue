@@ -26,15 +26,12 @@
 <script>
     import ExportTable from './_ExportTable.vue';
     import ImportTable from './Import';
-    import {Download, UploadFilled} from '@element-plus/icons-vue';
 
     export default {
         name: "ExportImport",
         components: {
             'export': ExportTable,
-            'import' : ImportTable,
-            Download,
-            UploadFilled
+            'import' : ImportTable
         },
         props: ['config'],
         data() {

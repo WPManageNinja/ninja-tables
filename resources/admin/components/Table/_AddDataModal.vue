@@ -137,7 +137,6 @@
     import ImageSelector from '../../../common/ImageSelector';
     import NinjaDatePicker from '../Extras/_NinjaDatePicker'
     import GetPro from "../Tools/GetPro";
-    import {InfoFilled, Loading, Setting} from '@element-plus/icons-vue';
 
     export default {
         name: 'add_data',
@@ -317,9 +316,6 @@
             this.initNewColumnObj();
         },
         components: {
-            Loading,
-            Setting,
-            InfoFilled,
           GetPro,
             wp_editor: wp_editor,
             NinjaDatePicker,

@@ -143,13 +143,9 @@
 <script type="text/babel">
     import pagination from '../../common/NinjaPagination.vue';
     import GetPro from "./Tools/GetPro";
-    import { Document, InfoFilled } from '@element-plus/icons-vue';
-
     export default {
         name: 'Home',
         components: {
-          Document,
-          InfoFilled,
           GetPro,
           'ninja_pagination': pagination
         },

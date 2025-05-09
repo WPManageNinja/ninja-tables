@@ -24,13 +24,9 @@
 </template>
 
 <script>
-import { InfoFilled } from '@element-plus/icons-vue';
 
 export default {
     name: "SliderInput",
-    components: {
-        InfoFilled
-    },
     props: {
         modelValue: {
             type: [Number, String],

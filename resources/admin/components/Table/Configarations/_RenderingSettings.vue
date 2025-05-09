@@ -128,7 +128,6 @@
 
 <script type="text/babel">
     import {useEventBus} from "../../../eventBus";
-    import { InfoFilled } from '@element-plus/icons-vue';
 
     export default {
         name: 'ninja-rendering_settings',
@@ -138,9 +137,6 @@
                 bus : useEventBus(),
                 hasPro: !!window.ninja_table_admin.hasPro,
             }
-        },
-        components: {
-          InfoFilled
         },
         methods: {
             storeSettings() {

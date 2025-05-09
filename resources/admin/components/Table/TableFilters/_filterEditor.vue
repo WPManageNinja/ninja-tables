@@ -279,14 +279,12 @@
 </template>
 
 <script type="text/babel">
-    import { InfoFilled } from '@element-plus/icons-vue';
     import KeyPairOptions from './_key_pair_options'
     import each from 'lodash/each'
     export default {
         name: 'FilterEditor',
         components: {
             KeyPairOptions,
-            InfoFilled
         },
         props: ['activeEditor', 'columnKeyPairs', 'columns'],
         data() {

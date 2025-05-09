@@ -4,7 +4,7 @@
 
         <template v-else>
             <div class="row clearfix" style="margin-top: 10px">
-                <h1 class="wp-heading-inline">
+                <h1 class="wp-heading-inline text-green-500">
                     {{ $t('All Tables') }}
                 </h1>
 

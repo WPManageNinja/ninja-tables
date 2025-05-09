@@ -246,12 +246,10 @@
 
 <script>
     import GetPro from "../../Tools/GetPro";
-    import { InfoFilled } from '@element-plus/icons-vue';
     export default {
       name: 'frontend-editing-settings',
       components: {
           GetPro,
-          InfoFilled
       },
       props: ['config'],
         data() {
