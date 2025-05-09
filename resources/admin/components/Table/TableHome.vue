@@ -2,23 +2,42 @@
     <div>
         <span v-if="doingAjax" v-loading="doingAjax" class="doingAJaxLoading"></span>
 
-        <div class="settings_header">
-            <div style="display: inline-block; margin-top: 8px;">
-                <el-button class="ninja_mini" size="small" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button> <span
-                    class="section_title">{{ table.post_title }}</span>
-                <el-tooltip effect="dark"
-                            content="Click to copy shortcode"
-                            title="Click to copy shortcode"
-                            placement="top">
-                    <code class="copy"
-                          :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>
-                        <i class="el-icon-document"></i> [ninja_tables id="{{ tableId }}"]
-                    </code>
-                </el-tooltip>
+        <div class="ninja_inner_nav">
+            <div class="ninja_inner_nav_left">
+                <router-link to="/" class="nav-all-tables">All Tables</router-link>
+                <span class="mx-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path
+                            d="M10.7958 9.9992L7.08334 6.2867L8.14384 5.2262L12.9168 9.9992L8.14384 14.7722L7.08334 13.7117L10.7958 9.9992Z"
+                            fill="#CACFD8" />
+                    </svg>
+                </span>
+                <span class="nav-table-name">{{ table.post_title }}</span>
+                <img
+                    @click="editTableModalShow = !editTableModalShow"
+                    class="cursor-pointer"
+                    :src="assetUrl('icons/edit-2.svg')"
+                    alt="Edit Table"
+                />
             </div>
 
-            <span style="margin-right: 20px" class="pull-right">
-                <router-link class="doc_link" :to="{ name: 'help' }">{{ $t('Documentation') }}</router-link>
+            <div class="ninja_inner_nav_right">
+                <div class="copy_shortcode">
+                    <el-tooltip effect="dark"
+                                content="Click to copy shortcode"
+                                title="Click to copy shortcode"
+                                placement="top">
+                        <code class="copy flex"
+                              :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>
+                            <img :src="assetUrl('icons/copy-02.svg')" class="mr-2" alt="copy" />
+                            [ninja_tables id="{{ tableId }}"]
+                        </code>
+                    </el-tooltip>
+                </div>
+
+                <router-link :to="{ name: 'help' }">
+                    <el-button size="small">{{ $t('Documentation') }}</el-button>
+                </router-link>
                 <a :href="preview_url" target="_blank">
                     <el-button size="small">{{ $t('Preview') }}</el-button>
                 </a>
@@ -27,8 +46,25 @@
                    target="_blank">
                     <el-button type="danger" size="small">{{ $t('Get Pro') }}</el-button>
                 </a>
-            </span>
+            </div>
+
+
+<!--            <div style="display: inline-block; margin-top: 8px;">-->
+<!--                <el-button class="ninja_mini" size="small" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button> <span-->
+<!--                    class="section_title">{{ table.post_title }}</span>-->
+<!--                <el-tooltip effect="dark"-->
+<!--                            content="Click to copy shortcode"-->
+<!--                            title="Click to copy shortcode"-->
+<!--                            placement="top">-->
+<!--                    <code class="copy"-->
+<!--                          :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>-->
+<!--                        <i class="el-icon-document"></i> [ninja_tables id="{{ tableId }}"]-->
+<!--                    </code>-->
+<!--                </el-tooltip>-->
+<!--            </div>-->
+
         </div>
+
         <fieldset :class="[is_form_saving ? 'disabled' : '']" :disabled="is_form_saving">
             <h2 class="nav-tab-wrapper">
                 <router-link v-for="tableTab in table_tabs" :key="tableTab.route" active-class="nav-tab-active" exact :class="[ 'nav-tab' ]"
@@ -57,6 +93,7 @@
     import size from 'lodash/size';
     import toArray from 'lodash/values';
     import { useEventBus } from '../../eventBus';
+    import { assetUrl } from "../../utils/ninjatablesadmin";
 
     export default {
         name: 'table_home',
@@ -81,6 +118,7 @@
             }
         },
         methods: {
+            assetUrl,
             updateTableColumns(callback) {
               let tableId = this.tableId;
 
@@ -190,22 +228,3 @@
         }
     }
 </script>
-<style lang="scss">
-    .settings_header {
-        font-size: 20px;
-        padding-bottom: 20px;
-        background: white;
-        margin-top: -20px;
-        padding-top: 20px;
-        margin-right: -20px;
-        margin-left: -20px;
-        padding-left: 24px;
-        .action {
-            font-size: 16px;
-            cursor: pointer;
-            &:hover {
-                color: #0085ba;
-            }
-        }
-    }
-</style>
