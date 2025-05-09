@@ -1,6 +1,6 @@
 import {instanceUID} from "./data";
-export default function generateColorCss(tableId, settings) {
-    const instanceId = instanceUID();
+export default function generateColorCss(tableId, settings, uniqueInstanceId = null) {
+    const instanceId = uniqueInstanceId || instanceUID();
     if (settings.table_color_type !== 'custom_color') {
         const styleElement = document.getElementById(`ninja_table_custom_css_${tableId}_${instanceId}`);
         if (styleElement) {

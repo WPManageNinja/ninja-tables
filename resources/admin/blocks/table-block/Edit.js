@@ -15,6 +15,7 @@ const {useState, useEffect} = wp.element;
 import {instanceUID} from "./utils/data";
 import StyleTab from "./ui/tabs/StyleTab";
 import OtherTab from "./ui/tabs/OtherTab";
+import {customColorCss} from "./utils/data";
 
 export default function Edit(props) {
     const {attributes, setAttributes} = props;
@@ -91,7 +92,7 @@ export default function Edit(props) {
             tableId: selectedTableId,
             dataSource: selectedTable?.data_source || ''
         });
-        initializeColorSettings(selectedTableId, tableSettings);
+        initializeColorSettings(selectedTableId, tableSettings, instanceId);
     };
 
     const renderDragAndDropTable = () => {
@@ -248,7 +249,7 @@ export default function Edit(props) {
 
         // Pass the updated settings (if available)
         initFootables(updatedSettings);
-        generateColorCss(tableId, updatedSettings || tableSettings);
+        customColorCss(tableId, updatedSettings || tableSettings, instanceId);
     };
 
 
@@ -549,102 +550,15 @@ export default function Edit(props) {
     };
 
     // This function generates CSS for the table colors based on the settings
-    const generateColorCss = (tableId, settings) => {
-        if (settings.table_color_type !== 'custom_color') {
-            // Clear custom CSS if using predefined colors
-            const styleElement = document.getElementById(`ninja_table_custom_css_${tableId}_${instanceId}`);
-            if (styleElement) {
-                styleElement.innerHTML = '';
-            }
-            return;
-        }
 
-        const prefix = `#${tableElementId}`;
-        const css = `
-        ${prefix} {
-            background-color: ${settings.table_color_primary || 'initial'} !important;
-            color: ${settings.table_color_secondary || 'initial'} !important;
-        }
-        ${prefix} thead tr.footable-filtering th {
-            background-color: ${settings.table_search_color_primary || 'initial'} !important;
-            color: ${settings.table_search_color_secondary || 'initial'} !important;
-        }
-        ${prefix}:not(.hide_all_borders) thead tr.footable-filtering th {
-            ${settings.table_search_color_border ?
-            `border: 1px solid ${settings.table_search_color_border} !important;` :
-            'border: 1px solid transparent !important;'
-        }
-        }
-        ${prefix} .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
-            background-color: ${settings.table_search_color_secondary || 'initial'} !important;
-            color: ${settings.table_search_color_primary || 'initial'} !important;
-        }
-        ${prefix} tr.footable-header, ${prefix} tr.footable-header th {
-            background-color: ${settings.table_header_color_primary || 'initial'} !important;
-            color: ${settings.table_color_header_secondary || 'initial'} !important;
-        }
-        ${prefix} tr.footable-header, ${prefix} tr.footable-header th span::before {
-            background-color: ${settings.table_color_header_secondary || 'initial'} !important;
-        }
-        ${prefix}:not(.hide_all_borders) tr.footable-header th {
-            border-color: ${settings.table_color_header_border || 'initial'} !important;
-        }
-        ${prefix}:not(.hide_all_borders) tbody tr td {
-            border-color: ${settings.table_color_border || 'initial'} !important;
-        }
-        ${prefix} tbody tr:hover {
-            background-color: ${settings.table_color_primary_hover || 'initial'} !important;
-            color: ${settings.table_color_secondary_hover || 'initial'} !important;
-        }
-        ${prefix} tbody tr:hover td {
-            border-color: ${settings.table_color_border_hover || 'initial'} !important;
-        }
 
-        ${settings.alternate_color_status === 'yes' ? `
-            ${prefix} tbody tr:nth-child(even) {
-                background-color: ${settings.table_alt_color_primary || 'initial'} !important;
-                color: ${settings.table_alt_color_secondary || 'initial'} !important;
-            }
-            ${prefix} tbody tr:nth-child(odd) {
-                background-color: ${settings.table_alt_2_color_primary || 'initial'} !important;
-                color: ${settings.table_alt_2_color_secondary || 'initial'} !important;
-            }
-            ${prefix} tbody tr:nth-child(even):hover {
-                background-color: ${settings.table_alt_color_hover || 'initial'} !important;
-            }
-            ${prefix} tbody tr:nth-child(odd):hover {
-                background-color: ${settings.table_alt_2_color_hover || 'initial'} !important;
-            }
-        ` : ''}
-
-        ${prefix} tfoot .footable-paging {
-            background-color: ${settings.table_footer_bg || 'initial'} !important;
-        }
-        ${prefix} tfoot .footable-paging .footable-page.active a {
-            background-color: ${settings.table_footer_active || 'initial'} !important;
-        }
-        ${prefix}:not(.hide_all_borders) tfoot .footable-paging td {
-            border-color: ${settings.table_footer_border || 'initial'} !important;
-        }
-    `;
-
-        // Apply the CSS - create or update the style element
-        let styleElement = document.getElementById(`ninja_table_custom_css_${tableId}_${instanceId}`);
-        if (!styleElement) {
-            styleElement = document.createElement('style');
-            styleElement.id = `ninja_table_custom_css_${tableId}_${instanceId}`;
-            document.head.appendChild(styleElement);
-        }
-        styleElement.innerHTML = css;
-    };
-
-    const initializeColorSettings = (tableId, settings) => {
+    const initializeColorSettings = (tableId, settings, instanceId) => {
         // Set initial CSS
-        generateColorCss(tableId, settings);
+        customColorCss(tableId, settings, instanceId);
 
         // Return a function to update colors when settings change
         return (newSettings) => {
-            generateColorCss(tableId, newSettings);
+            customColorCss(tableId, newSettings, instanceId);
         };
     };
 
