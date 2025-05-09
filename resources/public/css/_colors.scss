@@ -1,218 +1,226 @@
-@use "sass:map";
-@use "table-theme" as theme;
+@use 'sass:map';
+@import "table-theme";
 
-@mixin theme-colors($bg-color, $text-color) {
-  background-color: $bg-color !important;
-  color: $text-color !important;
-}
+table.ninja_table_pro.inverted {
 
-@mixin brown-theme {
-  background-color: #A5673F;
-  color: #FFFFFF;
-  border-color: brown;
-}
+  th, td {
+    background-color: inherit;
+    color: inherit;
+  }
 
-@mixin styles {
-  table.ninja_table_pro.inverted {
-    th, td {
-      background-color: inherit;
+  &.table {
+    a {
       color: inherit;
     }
 
-    &.table {
-      a {
-        color: inherit;
-      }
-
-      a.checkbox {
-        color: black;
-      }
+    a.checkbox {
+      color: black;
     }
+  }
 
-    @each $name, $colors in theme.$themes {
-      $bgColor: map.get($colors, 'bg-color');
-      $textColor: map.get($colors, 'text-color');
-      &.nt-#{$name}.table {
-        @include theme-colors($bgColor, $textColor);
 
-        &.footable-details {
-          tr th {
-            background-color: map.get(map.get($colors, 'footable-details'), 'bg-color') !important;
-            color: map.get(map.get($colors, 'footable-details'), 'text-color') !important;
-          }
+  @mixin theme($bg-color, $text-color) {
+    background-color: $bg-color !important;
+    color: $text-color !important;
+  }
+
+  @each $name, $colors in $themes {
+    $bgColor: map-get($colors, 'bg-color');
+    $textColor: map-get($colors, 'text-color');
+    &.#{$name}.table {
+      @include theme($bgColor, $textColor);
+
+      &.footable-details {
+        tr th {
+          background-color: map-get(map-get($colors, 'footable-details'), 'bg-color') !important;
+          color: map-get(map-get($colors, 'footable-details'), 'text-color') !important;
         }
-
-        thead {
-          @include theme-colors($bgColor, $textColor);
-
-          tr {
-            &.footable {
-              &-header {
-                background-color: map.get(map.get($colors, 'footable-header'), 'bg-color') !important;
-                color: map.get(map.get($colors, 'footable-header'), 'text-color') !important;
-
-                th span:before {
-                  background-color: map.get(map.get($colors, 'footable-header'), 'text-color') !important;
-                }
-              }
-
-              &-filtering th {
-                background-color: map.get(map.get($colors, 'footable-filtering'), 'bg-color') !important;
-                color: map.get(map.get($colors, 'footable-filtering'), 'text-color') !important;
-              }
-            }
-          }
-        }
-
-        tbody {
-          tr {
-            &:hover {
-              background-color: map.get(map.get(map.get(map.get($colors, 'tbody'), 'tr'), 'hover'), 'bg-color') !important;
-              color: map.get(map.get(map.get(map.get($colors, 'tbody'), 'tr'), 'hover'), 'text-color') !important;
-              border-color: map.get(map.get(map.get(map.get($colors, 'tbody'), 'tr'), 'hover'), 'border-color') !important;
-
-              td {
-                span.fooicon-plus, span.fooicon-minus {
-                  &:before {
-                    background-color: map.get(map.get(map.get(map.get($colors, 'tbody'), 'tr'), 'hover'), 'text-color') !important;
-                  }
-                }
-              }
-            }
-          }
-
-          td {
-            span.fooicon-plus, span.fooicon-minus {
-              &:before {
-                background-color: map.get(map.get(map.get(map.get($colors, 'tbody'), 'td'), 'collapse-icon'), 'bg-color') !important;
-              }
-            }
-          }
-        }
-
-        tfoot {
-          .footable-paging {
-            .footable-page {
-              a {
-                color: map.get(map.get(map.get(map.get($colors, 'tfoot'), 'footable-paging'), 'footable-page'), 'text-color') !important;
-              }
-
-              &.active a {
-                background-color: map.get(map.get(map.get(map.get($colors, 'tfoot'), 'footable-paging'), 'footable-page'), 'bg-color') !important;
-              }
-            }
-          }
-        }
-
-        &.ninja_stacked_table .footable-details tbody {
-          @include theme-colors($bgColor, $textColor);
-        }
-
-        .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
-          background-color: map.get(map.get($colors, 'input-group'), 'bg-color') !important;
-        }
-      }
-    }
-
-    /* Brown */
-    &.brown.table {
-      @include brown-theme;
-
-      .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
-        background-color: #A5673F;
       }
 
       thead {
-        @include brown-theme;
-      }
+        @include theme($bgColor, $textColor);
 
-      &.ninja_stacked_table .footable-details tbody {
-        @include brown-theme;
-      }
-    }
+        tr {
+          &.footable {
+            &-header {
+              background-color: map-get(map-get($colors, 'footable-header'), 'bg-color') !important;
+              color: map-get(map-get($colors, 'footable-header'), 'text-color') !important;
 
+              th span:before {
+                background-color: map-get(map-get($colors, 'footable-header'), 'text-color') !important;
+              }
+            }
 
-    /*--------------
-        Inverted
-    ---------------*/
-
-    &.hide_all_borders.table {
-      thead {
-        border-color: transparent;
-
-        tr, th, td {
-          border-color: transparent;
+            &-filtering th {
+              background-color: map-get(map-get($colors, 'footable-filtering'), 'bg-color') !important;
+              color: map-get(map-get($colors, 'footable-filtering'), 'text-color') !important;
+            }
+          }
         }
       }
 
       tbody {
-        th, td, th {
-          border-color: transparent;
+        tr {
+          &:hover {
+            background-color: map-get(map-get(map-get(map-get($colors, 'tbody'), 'tr'), 'hover'), 'bg-color') !important;
+            color: map-get(map-get(map-get(map-get($colors, 'tbody'), 'tr'), 'hover'), 'text-color') !important;
+            border-color: map-get(map-get(map-get(map-get($colors, 'tbody'), 'tr'), 'hover'), 'border-color') !important;
+
+            td {
+              span.fooicon-plus, span.fooicon-minus {
+                &:before {
+                  background-color: map-get(map-get(map-get(map-get($colors, 'tbody'), 'tr'), 'hover'), 'text-color') !important;
+                }
+              }
+            }
+          }
+        }
+
+        //tr,
+        //th {
+        //  border-color: map-get(map-get(map-get($colors, 'tbody'), 'tr'), 'border-color') !important;
+        //}
+
+        td {
+          span.fooicon-plus, span.fooicon-minus {
+            &:before {
+              background-color: map-get(map-get(map-get(map-get($colors, 'tbody'), 'td'), 'collapse-icon'), 'bg-color') !important;
+            }
+          }
         }
       }
-    }
 
-    &.table tr.disabled td,
-    &.table tr td.disabled,
-    &.table tr.disabled:hover td,
-    &.table tr:hover td.disabled {
-      pointer-events: none;
-      color: rgba(225, 225, 225, 0.3);
-    }
+      tfoot {
+        .footable-paging {
+          //background-color: rgba(255, 255, 255, 1) !important;
+          .footable-page {
+            a {
+              color: map-get(map-get(map-get(map-get($colors, 'tfoot'), 'footable-paging'), 'footable-page'), 'text-color') !important;
+            }
 
-    /* Definition */
-    &.definition.table tfoot:not(.full-width) th:first-child,
-    &.definition.table thead:not(.full-width) th:first-child {
-      background: #FFFFFF;
-    }
-
-    &.definition.table tr td:first-child {
-      background: rgba(255, 255, 255, 0.02);
-      color: #ffffff;
-    }
-
-    &.table-striped tbody tr:nth-of-type(odd) {
-      background-color: rgba(255, 255, 255, 0.05);
-    }
-
-    &.table-hover > tbody > tr:hover {
-      background-color: rgba(255, 255, 255, 0.15);
-    }
-
-    /*******************************
-         Site Overrides
-    *******************************/
-    & {
-      .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-        background-color: rgba(0, 0, 0, 0.15);
-        border-color: rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.9);
-        -webkit-box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
-        box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
+            &.active a {
+              background-color: map-get(map-get(map-get(map-get($colors, 'tfoot'), 'footable-paging'), 'footable-page'), 'bg-color') !important;
+            }
+          }
+        }
       }
 
-      .pagination a.footable-page-link {
-        color: rgba(0, 0, 0, 0.5);
+      &.ninja_stacked_table .footable-details tbody {
+        @include theme($bgColor, $textColor);
       }
 
       .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.9);
+        background-color: map-get(map-get($colors, 'input-group'), 'bg-color') !important;
+      }
+
+    }
+  }
+
+
+  /* Brown */
+  @mixin brown {
+    background-color: #A5673F;
+    color: #FFFFFF;
+    border-color: brown;
+  }
+
+  &.brown.table {
+    @include brown;
+
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: #A5673F;
+    }
+
+    thead {
+      @include brown;
+    }
+
+    &.ninja_stacked_table .footable-details tbody {
+      @include brown;
+    }
+  }
+
+
+  /*--------------
+      Inverted
+  ---------------*/
+
+  &.hide_all_borders.table {
+    thead {
+      border-color: transparent;
+
+      tr, th, td {
+        border-color: transparent;
       }
     }
 
-    thead tr.footable-header {
-      background: inherit;
-      color: inherit;
-      border-color: inherit;
+    tbody {
+      th, td, th {
+        border-color: transparent;
+      }
+    }
+  }
+
+  &.table tr.disabled td,
+  &.table tr td.disabled,
+  &.table tr.disabled:hover td,
+  &.table tr:hover td.disabled {
+    pointer-events: none;
+    color: rgba(225, 225, 225, 0.3);
+  }
+
+  /* Definition */
+  &.definition.table tfoot:not(.full-width) th:first-child,
+  &.definition.table thead:not(.full-width) th:first-child {
+    background: #FFFFFF;
+  }
+
+  &.definition.table tr td:first-child {
+    background: rgba(255, 255, 255, 0.02);
+    color: #ffffff;
+  }
+
+  &.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  &.table-hover > tbody > tr:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  /*******************************
+           Site Overrides
+  *******************************/
+  & {
+    .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
+      -webkit-box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
-    tbody tr, tbody tr td {
-      background: inherit;
-      color: inherit;
-      //border-color: inherit;
+    .pagination a.footable-page-link {
+      color: rgba(0, 0, 0, 0.5);
     }
+
+    .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  thead tr.footable-header {
+    background: inherit;
+    color: inherit;
+    border-color: inherit;
+  }
+
+  tbody tr, tbody tr td {
+    background: inherit;
+    color: inherit;
+    //border-color: inherit;
   }
 }
 
