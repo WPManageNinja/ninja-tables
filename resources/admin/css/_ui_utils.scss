@@ -1,11 +1,35 @@
 #data-tables-app {
+  //button style
   .ninja-button {
-    @apply rounded-[8px] p-[8px] leading-5 font-[500] text-[14px] cursor-pointer;
+    @apply rounded-[8px] p-[8px] leading-5 font-[500] text-[14px] cursor-pointer flex;
   }
   .ninja-button--primary {
-    @apply bg-[#335cff] text-white;
+    @apply bg-[#335cff] text-white hover:bg-[#2547D0] delay-100 duration-100;
   }
   .ninja-button--secondary {
     @apply bg-white text-[#525866] border border-solid border-[#E1E4EA];
+  }
+  .ninja-button--danger {
+    @apply bg-white text-[#FB3748] border border-solid border-[#FB3748];
+  }
+
+  //input style
+  .ninja-input {
+    --el-input-inner-height: auto;
+    width: 250px;
+    .el-input__wrapper{
+        border-radius: 8px;
+    }
+    .el-input__inner{
+        padding: 4px 0;
+        @apply border-none focus:shadow-none focus:outline-none pr-0;
+    }
+  }
+
+  .ninja-select{
+    .el-select__wrapper{
+        border-radius: 8px;
+        height: 40px;
+    }
   }
 }

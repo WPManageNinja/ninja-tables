@@ -1,10 +1,9 @@
 <template>
     <button
-        :icon="icon"
         :disabled="disabled"
         :loading="loading"
         @click="handleClick"
-        class="ninja-button"
+        class="ninja-button flex items-center"
         :class="{
             'ninja-button--primary': type === 'primary',
             'ninja-button--secondary': type === 'secondary',
@@ -12,7 +11,8 @@
             'ninja-button--info': type === 'info',
         }"
     >
-        <slot />
+        <img v-if="icon" :src="icon" class="mr-1" />
+        {{ btnText }}
     </button>
 </template>
 
@@ -40,6 +40,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        btnText: {
+            type: String,
+            default: 'Submit',
+        }
     },
     methods: {
         handleClick(event) {
