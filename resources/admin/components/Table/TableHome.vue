@@ -56,21 +56,6 @@
                 </a>
             </div>
 
-
-<!--            <div style="display: inline-block; margin-top: 8px;">-->
-<!--                <el-button class="ninja_mini" size="small" @click="editTableModalShow = !editTableModalShow"><i title="Edit" class="el-icon-edit action">{{ $t('Edit') }}</i></el-button> <span-->
-<!--                    class="section_title">{{ table.post_title }}</span>-->
-<!--                <el-tooltip effect="dark"-->
-<!--                            content="Click to copy shortcode"-->
-<!--                            title="Click to copy shortcode"-->
-<!--                            placement="top">-->
-<!--                    <code class="copy"-->
-<!--                          :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>-->
-<!--                        <i class="el-icon-document"></i> [ninja_tables id="{{ tableId }}"]-->
-<!--                    </code>-->
-<!--                </el-tooltip>-->
-<!--            </div>-->
-
         </div>
 
         <fieldset :class="[is_form_saving ? 'disabled' : '']" :disabled="is_form_saving">

@@ -114,23 +114,5 @@
     justify-content: flex-end;
     align-items: center;
     gap: 8px;
-
-
-    .copy_shortcode {
-      code {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px;
-        border-radius: 8px;
-        background: #F5F7FA;
-        cursor: pointer;
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: 20px;
-        letter-spacing: -0.084px;
-      }
-    }
   }
 }

@@ -178,6 +178,36 @@
   }
 }
 
+// Icons Background
+.icons_bg {
+  margin-right: 3px;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid #D6DAE1;
+  border-radius: 8px;
+  background: #F9FAFB;
+}
+
+.copy_shortcode {
+  code {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    background: #F5F7FA;
+    cursor: pointer;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: -0.084px;
+  }
+}
 
 
 // old css
