@@ -43,7 +43,7 @@ export default {
         },
         size: {
             type: String,
-            default: "medium", // Options: 'small', 'medium', 'large'
+            default: "default", // Options: 'small', 'default', 'large'
         },
         prefixIcon: {
             type: String,

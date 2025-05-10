@@ -36,10 +36,18 @@
                 </div>
 
                 <router-link :to="{ name: 'help' }">
-                    <el-button>{{ $t('Documentation') }}</el-button>
+                    <NinjaButton
+                        type="secondary"
+                        :icon="assetUrl('icons/computer.svg')"
+                        :btnText="$t('Documentation')"
+                    />
                 </router-link>
                 <a :href="preview_url" target="_blank">
-                    <el-button >{{ $t('Preview') }}</el-button>
+                    <NinjaButton
+                        type="secondary"
+                        :icon="assetUrl('icons/view.svg')"
+                        :btnText="$t('Preview')"
+                    />
                 </a>
                 <a v-if="!has_pro"
                    href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
@@ -94,10 +102,12 @@
     import toArray from 'lodash/values';
     import { useEventBus } from '../../eventBus';
     import { assetUrl } from "../../utils/ninjatablesadmin";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
     export default {
         name: 'table_home',
         components: {
+            NinjaButton,
             'edit_table': EditTable
         },
         data() {

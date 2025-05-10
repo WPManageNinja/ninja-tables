@@ -120,15 +120,15 @@
             <div class="pagination-page-change-option">
                <span class="flex-shrink-0">
                   Page {{ paginate.current_page }}
-                  of {{ Math.ceil(paginate.total / Number(paginate.per_page)) }} ({{ paginate.total }})
+                  of {{ Math.ceil(paginate.total / Number(paginate.per_page)) }}
                </span>
 
                 <el-select class="min-w-[100px]" v-model="paginate.per_page" @change="handleSizeChange">
-                    <el-option value="10">10/page</el-option>
-                    <el-option value="15">15/page</el-option>
-                    <el-option value="20">20/page</el-option>
-                    <el-option value="50">50/page</el-option>
-                    <el-option value="100">100/page</el-option>
+                    <el-option value="10">{{ $t('10/page') }}</el-option>
+                    <el-option value="15">{{ $t('15/page') }}</el-option>
+                    <el-option value="20">{{ $t('20/page') }}</el-option>
+                    <el-option value="50">{{ $t('50/page') }}</el-option>
+                    <el-option value="100">{{ $t('100/page') }}</el-option>
                 </el-select>
             </div>
 

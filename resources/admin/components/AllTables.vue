@@ -21,7 +21,6 @@
                             :btnText="$t('Import')"
                         />
                     </router-link>
-                    
 
                     <NinjaButton
                         @click="openCreateModal"
@@ -34,7 +33,7 @@
 
             <div class="all-tables-card">
                 <div class="flex justify-between items-center px-4">
-                    <p>Total Records: 215</p>
+                    <p>Total Records: {{ totalTables }}</p>
                     <NinjaInput
                         v-model="searchString"
                         placeholder="Search"
@@ -45,11 +44,10 @@
 
                 <list-all-tables
                     v-show="published_tables"
-                    @total_table="published_tables = true"
+                    @total_table="handleTotalTables"
                     :searchString="searchString"
                     :searchAction="searchAction"
                     @selection="makeSelection"
-
                 />
             </div>
         </template>
@@ -103,7 +101,8 @@
                 searchAction: 0,
                 searchString: '',
                 selected: [],
-                review_option: window.ninja_table_admin.show_review_dialog
+                review_option: window.ninja_table_admin.show_review_dialog,
+                totalTables: 0,
             };
         },
         mounted() {
@@ -130,6 +129,10 @@
             },
             makeSelection(ids) {
                 this.selected = ids;
+            },
+            handleTotalTables(total) {
+                this.totalTables = total;
+                this.published_tables = true
             },
             handleBulkActions(event) {
                 if (event === 'delete') {

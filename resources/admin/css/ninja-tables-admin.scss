@@ -51,7 +51,7 @@
   border-radius: 12px;
 }
 
-
+// Pagination styles
 .ninja-pagination-wrapper {
   display: flex;
   padding: 16px 20px;
@@ -96,6 +96,22 @@
         background: #F5F7FA;
         color: #525866;
       }
+    }
+
+    .el-pagination__jump {
+     .el-input {
+       .el-input__wrapper {
+         padding: 0;
+         .el-input__inner {
+           border: 1px solid #E1E4EA;
+
+           &:focus {
+             border: 1px solid #409EFF;
+             box-shadow: none;
+           }
+         }
+       }
+     }
     }
   }
 }
