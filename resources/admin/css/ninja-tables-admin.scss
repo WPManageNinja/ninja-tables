@@ -41,14 +41,70 @@
   }
 }
 
-.all-tables-card {
+.all_tables_card {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 12px;
   background: #FFFFFF;
   padding: 16px 0;
+  margin-top: 24px;
   border-radius: 12px;
+}
+
+.default_nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  padding: 0 20px;
+
+  .default_nav_left {
+    display: flex;
+    align-items: center;
+
+    .bulk_action {
+      display: flex;
+      width: 200px;
+
+      .bulk_select {
+        width: 100%;
+        border: 1px solid #E1E4EA;
+        border-radius: 8px 0 0 8px;
+        padding: 4px 10px;
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+      .bulk_action_btn {
+        border-radius: 0 8px 8px 0;
+        border: 1px solid #E1E4EA;
+        border-left: none;
+        padding: 4px 10px;
+        cursor: pointer;
+        background: #F5F7FA;
+      }
+    }
+  }
+
+  .default_nav_right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .nav_options {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .actions_buttons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
 }
 
 // Pagination styles
@@ -64,6 +120,7 @@
     align-items: center;
     gap: 8px;
   }
+
   .ninja-pagination {
     .btn-prev, .btn-next {
       .el-icon {
@@ -99,6 +156,11 @@
     }
 
     .el-pagination__jump {
+      margin-left: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
      .el-input {
        .el-input__wrapper {
          padding: 0;
@@ -1733,9 +1795,6 @@ h2.nav-tab-wrapper {
     margin-bottom: 15px;
   }
 
-  .show-meta-data {
-    margin: 0;
-  }
 }
 
 .ninja_tables_wpposts {

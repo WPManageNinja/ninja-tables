@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div class="all-tables-card">
+            <div class="all_tables_card">
                 <div class="flex justify-between items-center px-4">
                     <p>Total Records: {{ totalTables }}</p>
                     <NinjaInput
