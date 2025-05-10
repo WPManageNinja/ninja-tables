@@ -33,7 +33,7 @@
 
             <div class="all_tables_card">
                 <div class="flex justify-between items-center px-4">
-                    <p>Total Records: {{ totalTables }}</p>
+                    <p class="caption-text">Total Tables : {{ totalTables }}</p>
                     <NinjaInput
                         v-model="searchString"
                         placeholder="Search"

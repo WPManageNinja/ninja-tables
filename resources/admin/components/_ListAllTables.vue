@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-table
-            class="ninja-tables compact"
+            class="ninja_tables compact"
             @selection-change="handleSelectionChange"
             v-loading.body="pageLoading"
             :data="items"

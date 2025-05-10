@@ -145,7 +145,7 @@
             <template v-if="columns.length">
                 <el-table
                     @sort-change="onSortChange"
-                    class="js-sortable-table"
+                    class="ninja_tables js-sortable-table"
                     v-loading="loading"
                     :data="items"
                     row-key="id"
@@ -206,30 +206,39 @@
                         <el-table-column
                             fixed="right"
                             label="Actions"
-                            class-name="actions"
-                            width="120">
-                            <template #default="scope">
-                                <a v-if="has_pro" @click="addAfter(scope)">
-                                    <el-tooltip placement="top-end" effect="light" content="Add Data after this row"
-                                                :open-delay="500">
-                                        <span class="dashicons dashicons-plus"></span>
-                                    </el-tooltip>
-                                </a>
+                            width="100"
+                            :align="'center'"
+                        >
 
-                                <a @click="showUpdateModal(scope)">
-                                    <el-tooltip placement="top-end" effect="light" content="Edit data" :open-delay="500">
-                                        <span class="dashicons dashicons-edit"></span>
-                                    </el-tooltip>
-                                </a>
+                        <template #default="scope">
+                            <div class="flex justify-end">
+                                <span v-if="has_pro" @click="addAfter(scope)" class="cursor-pointer mr-2">
+                                    <img :src="assetUrl('icons/add-ico.svg')" class="mb-[3px]" alt="Add"/>
+                                </span>
 
-                                <a @click="duplicateData(scope)">
-                                    <el-tooltip placement="top-end" effect="light" content="Duplicate data"
-                                                :open-delay="500">
-                                        <span class="dashicons dashicons-admin-page"></span>
-                                    </el-tooltip>
-                                </a>
-                                <delete-pop-over @deleted="deleteItem(scope.row.id)"></delete-pop-over>
-                            </template>
+                                <span @click="showUpdateModal(scope)" class="cursor-pointer mr-2" >
+                                    <img :src="assetUrl('icons/edit-2.svg')" alt="Edit"/>
+                                </span>
+                                <el-dropdown>
+                                    <span class="el-dropdown-link">
+                                      <img :src="assetUrl('/icons/more.svg')" alt="more"/>
+                                    </span>
+
+                                    <template #dropdown>
+                                        <el-dropdown-menu>
+                                            <el-dropdown-item>
+                                                <span @click="duplicateData(scope)">Duplicate</span>
+                                            </el-dropdown-item>
+                                            <el-dropdown-item>
+                                                <span class="mb-1" @click="deleteItem(scope.row.id)">Delete</span>
+                                            </el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </template>
+                                </el-dropdown>
+                            </div>
+
+                        </template>
+
                         </el-table-column>
                     </template>
                 </el-table>
@@ -238,8 +247,7 @@
             <div class="ninja-pagination-wrapper">
                 <div class="pagination-page-change-option">
                        <span class="flex-shrink-0">
-                          Page {{ paginate.current_page }}
-                          of {{ Math.ceil(paginate.total / Number(paginate.per_page)) }}
+                           Total {{ paginate.total }}
                        </span>
 
                     <el-select class="min-w-[100px]" v-model="paginate.per_page" @change="handleSizeChange">
