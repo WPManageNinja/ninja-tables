@@ -64,9 +64,6 @@ export default {
 </script>
 
 <style scoped>
-.ninja-input {
-    width: 100%;
-}
 .prefix-icon,
 .suffix-icon {
     width: 16px;

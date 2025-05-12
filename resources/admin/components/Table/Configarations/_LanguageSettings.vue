@@ -1,46 +1,48 @@
 <template>
     <div class="ninja_Language_settings">
-        <div class="ninja_header">
-            <h2>Language Settings</h2>
-            <div class="ninja_actions_action">
-                <el-button size="small" type="primary" @click="storeSettings()"> {{ $t('Update Configuration') }}</el-button>
-            </div>
+        <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Language Settings') }}</div>
+        <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
+            {{ $t("You can configure table language settings here.") }}
         </div>
-        <div class="ninja_style_wrapper">
-            <div class="section_block">
-                <div class="language_block">
-                    <div class="form_group">
-                        <label for="no_result_text">Empty Results Text:</label>
-                        <input v-model="tableSettings.no_result_text" id="no_result_text" type="text" class="form_control"
-                               autocomplete="off">
-                        <small>The text to display if the table contains no rows.</small>
-                    </div>
-                    <div class="form_group">
-                        <label for="search_box_placeholder">Search Box Placeholder Text</label>
-                        <input v-model="tableSettings.search_placeholder" id="search_box_placeholder" type="text"
-                               class="form_control" autocomplete="off">
-                        <small>Search Box Placeholder</small>
-                    </div>
-                    <div class="form_group">
-                        <label for="search_box_in">Search Dropdown Heading</label>
-                        <input v-model="tableSettings.search_in_text" id="search_box_in" type="text" class="form_control"
-                               autocomplete="off">
-                        <small>Search Dropdown Box Title</small>
-                    </div>
+
+        <div class="mb-3 text-[16px] font-[500]">{{ $t("Customize Your Language Preferences") }}</div>
+        <div class="px-6 py-5 border-solid border border-[#E1E4EA] rounded-[10px]">
+            <div class="grid grid-cols-2 gap-5">
+                <div class="w-full">
+                    <div class="mb-2 text-[14px] font-[500]">Empty Results Text:</div>
+                    <NinjaInput v-model="tableSettings.no_result_text" size="large"/>
+                </div>
+
+                <div>
+                    <div class="mb-2 text-[14px] font-[500]">Search Box Placeholder Text</div>
+                    <NinjaInput v-model="tableSettings.search_placeholder" size="large"/>
+                </div>
+
+                <div>
+                    <div class="mb-2 text-[14px] font-[500]">Search Dropdown Heading</div>
+                    <NinjaInput v-model="tableSettings.search_in_text" size="large"/>
                 </div>
             </div>
+        </div>
+
+        <div class="flex justify-end mt-5">
+            <NinjaButton type="primary" size="small" @click="storeSettings" :btn-text="$t('Save Settings')"/>
         </div>
     </div>
 </template>
 
 <script type="text/babel">
-    export default {
-        name: 'ninja_language_settings',
-        props: ['tableSettings'],
-        methods: {
-            storeSettings() {
-                this.$emit('storeSettings');
-            }
+import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
+import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+
+export default {
+    name: 'ninja_language_settings',
+    components: {NinjaButton, NinjaInput},
+    props: ['tableSettings'],
+    methods: {
+        storeSettings() {
+            this.$emit('storeSettings');
         }
     }
+}
 </script>

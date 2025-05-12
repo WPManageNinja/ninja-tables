@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="table-column-settings">
+        <div class="table-column-settings mx-4">
             <el-container class="ninja-table-aside">
                 <el-aside width="300px">
                     <el-menu background-color="white"

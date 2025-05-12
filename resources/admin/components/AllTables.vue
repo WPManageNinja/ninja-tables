@@ -34,13 +34,16 @@
             <div class="all_tables_card">
                 <div class="flex justify-between items-center px-4">
                     <p class="caption-text">Total Tables : {{ totalTables }}</p>
-                    <NinjaInput
-                        v-model="searchString"
-                        placeholder="Search"
-                        prefix-icon="icons/search.svg"
-                        @keyup.enter="getData"
-                        size="small"
-                    />
+                    <div class="w-[300px]">
+                        <NinjaInput
+                            v-model="searchString"
+                            placeholder="Search"
+                            prefix-icon="icons/search.svg"
+                            @keyup.enter="getData"
+                            size="small"
+                        />
+                    </div>
+
                 </div>
 
                 <list-all-tables
