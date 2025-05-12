@@ -2,7 +2,6 @@
     <button
         :disabled="disabled"
         :loading="loading"
-        @click="handleClick"
         class="ninja-button flex items-center"
         :class="{
             'ninja-button--primary': type === 'primary',
@@ -44,11 +43,6 @@ export default {
             type: String,
             default: 'Submit',
         }
-    },
-    methods: {
-        handleClick(event) {
-            this.$emit("click", event);
-        },
-    },
+    }
 };
 </script>
