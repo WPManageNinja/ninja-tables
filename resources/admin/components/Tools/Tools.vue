@@ -1,14 +1,14 @@
 <template>
-    <div style="margin-top: 10px">
-      <h1 class="wp-heading-inline">
+    <div class="px-32" style="margin-top: 20px">
+      <!-- <h1 class="wp-heading-inline">
         {{ $t('Tools and Settings') }}
       </h1>
-      <hr>
-        <el-container>
-            <el-aside width="200px">
+      <hr> -->
+        <el-container class="ninja-table-aside">
+            <el-aside width="300px">
                 <el-menu :default-active="active_menu"
                          :router="true"
-                         background-color="#545c64"
+                         background-color="white"
                          text-color="#fff"
                          active-text-color="#ffd04b">
                     <template v-for="menuItem in menuItems" :key="menuItem.route">
@@ -22,7 +22,7 @@
                     </template>
                 </el-menu>
             </el-aside>
-            <el-main>
+            <el-main class="ml-10">
                 <router-view></router-view>
             </el-main>
         </el-container>

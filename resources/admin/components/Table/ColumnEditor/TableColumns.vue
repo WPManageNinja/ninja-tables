@@ -1,40 +1,40 @@
 <template>
     <div>
         <div class="table-column-settings">
-            <el-container>
-                <el-aside width="200px">
-                    <el-menu background-color="#545c64"
+            <el-container class="ninja-table-aside">
+                <el-aside width="300px">
+                    <el-menu background-color="white"
                              :default-active="active_menu"
-                             text-color="#fff"
+                             text-color="#525866"
                              active-text-color="#ffd04b"
                     >
                         <el-menu-item  @click="active_menu = 'columns'" index="columns">
-                            <i class="dashicons dashicons-editor-table"></i>
+                            <img :src="assetUrl('/icons/credit-card.svg')"/>
                             <span>Columns</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'rendering_settings'" index="rendering_settings">
-                            <i class="dashicons dashicons-album"></i>
+                             <img :src="assetUrl('/icons/credit-card.svg')"/>
                             <span>Rendering Settings</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'custom_filters'" index="custom_filters">
-                            <i class="dashicons dashicons-filter"></i>
+                             <img :src="assetUrl('/icons/customize.svg')"/>
                             <span>Custom Filters</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'button_settings'" index="button_settings">
-                            <i class="dashicons dashicons-images-alt"></i>
+                             <img :src="assetUrl('/icons/search-area.svg')"/>
                             <span>Buttons (CSV/Print)</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'language_settings'" index="language_settings">
-                            <i class="dashicons dashicons-translation"></i>
+                            <img :src="assetUrl('/icons/language-square.svg')"/>
                             <span>Language Settings</span>
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
-                <el-main>
+                <el-main class="ml-10">
                     <template v-if="active_menu == 'columns'">
                         <div class="ninja_header">
                             <h2>Table Column Settings</h2>
@@ -149,6 +149,7 @@
     import { useEventBus } from '../../../eventBus';
 
     import { tableLibs } from '../../../data/data'
+import { assetUrl } from '../../../utils/ninjatablesadmin';
 
     export default {
         name: 'TableConfiguration',
@@ -209,6 +210,7 @@
             },
         },
         methods: {
+            assetUrl,
             storeSettings() {
                 this.bus.emit('tableDoingAjax', true);
 
