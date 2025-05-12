@@ -24,14 +24,17 @@
 
             <el-table-column :label="$t('Title')" prop="post_title" sortable="custom" width="200">
                 <template #default="scope">
-                        <template v-if="shouldBeVisible(scope.row)">
-                          <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
+                    <template v-if="shouldBeVisible(scope.row) && scope.row.ID">
+                        <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
                             {{$t(scope.row.post_title)}}
-                          </router-link>
-                          <router-link v-else :to="{ name: 'data_items', params: { table_id: scope.row.ID } }">
+                        </router-link>
+                        <router-link v-else :to="{ name: 'data_items', params: { table_id: scope.row.ID } }">
                             {{$t(scope.row.post_title)}}
-                          </router-link>
-                        </template>
+                        </router-link>
+                    </template>
+                    <template v-else-if="shouldBeVisible(scope.row) && !scope.row.ID">
+                        {{$t(scope.row.post_title)}}
+                    </template>
 
                         <template v-else>
                             {{ scope.row.post_title }}
@@ -99,7 +102,7 @@
                         </span>
 
                         <el-dropdown>
-                            <span class="el-dropdown-link">
+                            <span class="el-dropdown-link no-hover">
                                 <img :src="assetUrl('/icons/more.svg')" alt="more"/>
                             </span>
 
@@ -345,5 +348,16 @@
             }
         }
     }
+
+    .el-dropdown-link {
+        outline: none;
+        &:hover {
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+    }
+
+
 </style>
 
