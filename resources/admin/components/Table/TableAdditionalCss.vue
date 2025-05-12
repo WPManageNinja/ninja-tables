@@ -14,15 +14,15 @@
         <div v-if="current_tab === 'additional_css'">
             <p class="my-[16px]">{{ $t('You may add') }}
                 <code
-                    class='bg-[#D3DCFF] py-[2px] px-[6px] rounded cursor-pointer'
-                    @click="()=>copyToClipboard('#footable_parent_'+ config.table.ID, 'Table Wrapper Copied')"
+                    class='bg-[#D3DCFF] py-[2px] px-[6px] rounded cursor-pointer copy'
+                    :data-clipboard-text="'#footable_parent_'+ config.table.ID"
                 >
                     #footable_parent_{{ config.table.ID }}
                 </code>
                 {{ $t('as your css selector prefix to target this specific table. Alternatively, you can use') }}
                 <code
-                    class='bg-[#D3DCFF] py-[2px] px-[6px] rounded cursor-pointer'
-                    @click="()=>copyToClipboard('#footable_parent_NT_ID', 'Table Wrapper Copied')"
+                    class='bg-[#D3DCFF] py-[2px] px-[6px] rounded cursor-pointer copy'
+                    :data-clipboard-text="'#footable_parent_NT_ID'"
                 >#footable_parent_NT_ID</code>
                 {{ $t('where') }} <strong>NT_ID</strong> {{ $t(' will be replaced with your table ID dynamically.') }}
             </p>
@@ -30,7 +30,7 @@
             <p v-html="styleTagInfo" class="ndt-editor-info mt-2"></p>
         </div>
         <div v-else-if="current_tab === 'additional_js'">
-            <p class="my-3">
+            <p class="my-4">
                 {{
                     $t(`Your additional JS code will run after the table initialized. Please provide valid javascript code. Invalid JS code may break the table UI.`)
                 }}
@@ -56,7 +56,6 @@
 
 <script type="text/babel">
 import ace_code_editor from '../../../common/_ace_editor';
-import {copyToClipboard} from '../../utils/ninjatablesadmin';
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
 export default {
@@ -78,7 +77,6 @@ export default {
         }
     },
     methods: {
-        copyToClipboard,
         saveScripts() {
             if (!this.hasPro) {
                 this.custom_js = '';
@@ -122,6 +120,7 @@ export default {
     },
     mounted() {
         this.getScripts();
+        this.clipboard(); // Initialize clipboard functionality
     }
 }
 </script>
