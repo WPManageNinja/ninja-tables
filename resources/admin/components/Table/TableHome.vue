@@ -13,22 +13,15 @@
                     </svg>
                 </span>
                 <span class="nav-table-name">{{ table.post_title }}</span>
-                <img
-                    @click="editTableModalShow = !editTableModalShow"
-                    class="cursor-pointer"
-                    :src="assetUrl('icons/edit-2.svg')"
-                    alt="Edit Table"
-                />
+                <img @click="editTableModalShow = !editTableModalShow" class="cursor-pointer"
+                    :src="assetUrl('icons/edit-2.svg')" alt="Edit Table" />
             </div>
 
             <div class="ninja_inner_nav_right">
                 <div class="copy_shortcode">
-                    <el-tooltip effect="dark"
-                                content="Click to copy shortcode"
-                                title="Click to copy shortcode"
-                                placement="top">
-                        <code class="copy flex"
-                              :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>
+                    <el-tooltip effect="dark" content="Click to copy shortcode" title="Click to copy shortcode"
+                        placement="top">
+                        <code class="copy flex" :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>
                             <img :src="assetUrl('icons/copy-02.svg')" class="mr-2" alt="copy" />
                             [ninja_tables id="{{ tableId }}"]
                         </code>
@@ -36,22 +29,15 @@
                 </div>
 
                 <router-link :to="{ name: 'help' }">
-                    <NinjaButton
-                        type="secondary"
-                        :icon="assetUrl('icons/computer.svg')"
-                        :btnText="$t('Documentation')"
-                    />
+                    <NinjaButton type="secondary" :icon="assetUrl('icons/computer.svg')"
+                        :btnText="$t('Documentation')" />
                 </router-link>
                 <a :href="preview_url" target="_blank">
-                    <NinjaButton
-                        type="secondary"
-                        :icon="assetUrl('icons/view.svg')"
-                        :btnText="$t('Preview')"
-                    />
+                    <NinjaButton type="secondary" :icon="assetUrl('icons/view.svg')" :btnText="$t('Preview')" />
                 </a>
                 <a v-if="!has_pro"
-                   href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
-                   target="_blank">
+                    href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
+                    target="_blank">
                     <el-button type="danger">{{ $t('Get Pro') }}</el-button>
                 </a>
             </div>
@@ -59,9 +45,12 @@
         </div>
 
         <fieldset :class="[is_form_saving ? 'disabled' : '']" :disabled="is_form_saving">
-            <h2 class="nav-tab-wrapper">
-                <router-link v-for="tableTab in table_tabs" :key="tableTab.route" active-class="nav-tab-active" exact :class="[ 'nav-tab' ]"
-                             :to="{ name: tableTab.route, params: { table_id: tableId } }">
+            <h2 class="bg-white !-mx-5 py-4 px-4 border-b border-[#E1E4EA]">
+                <router-link v-for="tableTab in table_tabs" :key="tableTab.route"
+                    :to="{ name: tableTab.route, params: { table_id: tableId } }"
+                    exact-active-class="focus:shadow-none outline:none border-b-2 py-4 border-[#335cff] text-[#0e121b]"
+                    class="px-2 mx-4 py-3 focus:shadow-none font-[500] text-[#525866]">
+                    <span class="py-3"></span>
                     {{ tableTab.title }}
                 </router-link>
             </h2>
@@ -69,157 +58,153 @@
             <router-view v-if="config" :config="config" :getColumnSettings="getSettings"></router-view>
 
         </fieldset>
-        <el-dialog
-                title="Update Table Info"
-                v-model="editTableModalShow"
-                top="50px"
-                :append-to-body="true"
-        >
-            <edit_table v-if="editTableModalShow" :table="table" @modal_close="editTableModalShow = !editTableModalShow"></edit_table>
+        <el-dialog title="Update Table Info" v-model="editTableModalShow" top="50px" :append-to-body="true">
+            <edit_table v-if="editTableModalShow" :table="table"
+                @modal_close="editTableModalShow = !editTableModalShow"></edit_table>
         </el-dialog>
     </div>
 </template>
 
 <script type="text/babel">
-    import EditTable from './EditTableModal';
-    import each from 'lodash/each';
-    import size from 'lodash/size';
-    import toArray from 'lodash/values';
-    import { useEventBus } from '../../eventBus';
-    import { assetUrl } from "../../utils/ninjatablesadmin";
-    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+import EditTable from './EditTableModal';
+import each from 'lodash/each';
+import size from 'lodash/size';
+import toArray from 'lodash/values';
+import { useEventBus } from '../../eventBus';
+import { assetUrl } from "../../utils/ninjatablesadmin";
+import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
-    export default {
-        name: 'table_home',
-        components: {
-            NinjaButton,
-            'edit_table': EditTable
-        },
-        data() {
-            return {
-                bus : useEventBus(),
-                table_tabs: [],
-                is_data_saving: false,
-                is_form_saving: false,
-                tableId: this.$route.params.table_id,
-                config: null,
-                table: {},
-                doingAjax: false,
-                doingAjaxTest: false,
-                user_tab: this.$route.query.user_tab,
-                editTableModalShow: false,
-                preview_url: '#',
-                has_pro: window.ninja_table_admin.hasPro
-            }
-        },
-        methods: {
-            assetUrl,
-            updateTableColumns(callback) {
-              let tableId = this.tableId;
+export default {
+    name: 'table_home',
+    components: {
+        NinjaButton,
+        'edit_table': EditTable
+    },
+    data() {
+        return {
+            bus: useEventBus(),
+            table_tabs: [],
+            is_data_saving: false,
+            is_form_saving: false,
+            tableId: this.$route.params.table_id,
+            config: null,
+            table: {},
+            doingAjax: false,
+            doingAjaxTest: false,
+            user_tab: this.$route.query.user_tab,
+            editTableModalShow: false,
+            preview_url: '#',
+            has_pro: window.ninja_table_admin.hasPro
+        }
+    },
+    methods: {
+        assetUrl,
+        updateTableColumns(callback) {
+            let tableId = this.tableId;
 
-              let data = {
+            let data = {
                 table_id: this.tableId,
                 columns: this.config.columns
-              }
-
-              this.$post('settings/'+tableId, data)
-                  .then((res) => {
-                      this.$message({
-                          showClose: true,
-                          message: res.message,
-                          type: 'success'
-                      });
-                      callback(res)
-                  })
-            },
-            getSettings() {
-              let tableId = this.tableId;
-
-                this.$get('settings/'+tableId)
-                    .then(response => {
-                        if (Object.prototype.toString.call(response.columns) == '[object Object]') {
-                            response.columns = toArray(response.columns);
-                        }
-                        this.config = response;
-                        this.table = response.table;
-                        this.preview_url = response.preview_url;
-                    })
-                    .catch((error) => {
-                        this.$message.error(error.responseJSON.data.message);
-                        if(error.responseJSON.data.route) {
-                            this.$router.push({ name: error.responseJSON.data.route });
-                        }
-                    })
-            },
-            goToTab(key) {
-                this.user_tab = key;
-                this.$router.push({
-                    name: 'custom_tab',
-                    params: {table_id: this.tableId},
-                    query: {user_tab: key}
-                });
-            },
-            size,
-            each,
-           initTableTabs() {
-                this.table_tabs = this.applyFilters('ninja_table_table_tabs', [
-                    {
-                        route: 'data_items',
-                        title: 'Table Rows'
-                    },
-                    {
-                        route: 'data_columns',
-                        title: 'Table Configuration'
-                    },
-                    {
-                        route: 'design_studio',
-                        title: 'Table Design'
-                    },
-                    {
-                        route: 'table_editing',
-                        title: 'Frontend Editing'
-                    },
-                    {
-                        route: 'additional_css',
-                        title: 'Custom CSS/JS'
-                    },
-                    {
-                        route: 'import-export',
-                        title: 'Import - Export'
-                    }
-                ]);
             }
+
+            this.$post('settings/' + tableId, data)
+                .then((res) => {
+                    this.$message({
+                        showClose: true,
+                        message: res.message,
+                        type: 'success'
+                    });
+                    callback(res)
+                })
         },
-        mounted() {
-            this.initTableTabs();
-            this.getSettings();
-            this.clipboard();
+        getSettings() {
+            let tableId = this.tableId;
 
-            // Initialize the table's manual data sorting.
-            this.bus.on('initManualSorting', (options, resolve, reject) => {
-                let data = {
-                    ...options
-                };
-
-                this.$post('pro/sortable/init', data)
-                    .then(response => resolve(response))
-                    .catch(e => reject(e));
+            this.$get('settings/' + tableId)
+                .then(response => {
+                    if (Object.prototype.toString.call(response.columns) == '[object Object]') {
+                        response.columns = toArray(response.columns);
+                    }
+                    this.config = response;
+                    this.table = response.table;
+                    this.preview_url = response.preview_url;
+                })
+                .catch((error) => {
+                    this.$message.error(error.responseJSON.data.message);
+                    if (error.responseJSON.data.route) {
+                        this.$router.push({ name: error.responseJSON.data.route });
+                    }
+                })
+        },
+        goToTab(key) {
+            this.user_tab = key;
+            this.$router.push({
+                name: 'custom_tab',
+                params: { table_id: this.tableId },
+                query: { user_tab: key }
             });
-
-            this.bus.on('tableDoingAjax',  (value) => {
-                this.doingAjax = value;
-            });
-
-            // removes previous events to prevent duplicate event handlers.
-            this.bus.off('updateTableColumns');
-
-            this.bus.on('updateTableColumns', (callback) => {
-                this.updateTableColumns(callback);
-            });
-
-            this.bus.emit('addedTable');
-
-            // window.ninjaTableBus.$emit('addedTable');
+        },
+        size,
+        each,
+        initTableTabs() {
+            this.table_tabs = this.applyFilters('ninja_table_table_tabs', [
+                {
+                    route: 'data_items',
+                    title: 'Table Rows'
+                },
+                {
+                    route: 'data_columns',
+                    title: 'Table Configuration'
+                },
+                {
+                    route: 'design_studio',
+                    title: 'Table Design'
+                },
+                {
+                    route: 'table_editing',
+                    title: 'Frontend Editing'
+                },
+                {
+                    route: 'additional_css',
+                    title: 'Custom CSS/JS'
+                },
+                {
+                    route: 'import-export',
+                    title: 'Import - Export'
+                }
+            ]);
         }
+    },
+    mounted() {
+        this.initTableTabs();
+        this.getSettings();
+        this.clipboard();
+
+        // Initialize the table's manual data sorting.
+        this.bus.on('initManualSorting', (options, resolve, reject) => {
+            let data = {
+                ...options
+            };
+
+            this.$post('pro/sortable/init', data)
+                .then(response => resolve(response))
+                .catch(e => reject(e));
+        });
+
+        this.bus.on('tableDoingAjax', (value) => {
+            this.doingAjax = value;
+        });
+
+        // removes previous events to prevent duplicate event handlers.
+        this.bus.off('updateTableColumns');
+
+        this.bus.on('updateTableColumns', (callback) => {
+            this.updateTableColumns(callback);
+        });
+
+        this.bus.emit('addedTable');
+
+        // window.ninjaTableBus.$emit('addedTable');
     }
+}
 </script>
