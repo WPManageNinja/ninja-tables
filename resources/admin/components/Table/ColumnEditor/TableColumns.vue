@@ -50,7 +50,7 @@
                                         </el-button>
                                     </div>
                                 </div>
-                                <div class="widget_body">
+                                <div class="widget_body border border-[#ebeef5]">
                                     <div v-if="addColumnStatus || !columns.length" class="column">
                                         <div class="add_column_wrapper">
                                             <columns-editor
@@ -73,10 +73,16 @@
                                     >
                                         <template #item="{element: column, index}">
                                             <div class="column drawer" :key="column.key">
-                                                <div class="header">
-                                                    <span class="dashicons dashicons-editor-justify handle" />
-                                                    <span @click="openDrawer(index)">{{ column.name || column.key }}</span>
-                                                    <span class="dashicons dashicons-edit edit_icon" @click="openDrawer(index)" />
+                                                <div class="header flex justify-between items-center" :class="{'border-b border-[#ebeef5]':currentIndex.includes(index)}">
+                                                    <div>
+                                                        <span class="dashicons dashicons-editor-justify handle" />
+                                                        <span @click="openDrawer(index)">{{ column.name || column.key }}</span>
+                                                    </div>
+                                                    <span @click="openDrawer(index)" class="cursor-pointer">
+                                                        <!-- <img v-if="currentIndex.includes(index)" :src="assetUrl('/icons/chevron-up.svg')"/>
+                                                        <img v-else :src="assetUrl('/icons/chevron-down.svg')"/> -->
+                                                        <img :src="assetUrl('/icons/edit-2.svg')"/>
+                                                    </span>
                                                 </div>
                                                 <div class="drawer_body" :class="'drawer_body_'+index">
                                                     <columns-editor
@@ -141,7 +147,7 @@
     import get from 'lodash/get'
     import size from 'lodash/size'
     import snakeCase from 'lodash/snakeCase'
-    import ColumnsEditor from './ColumnsEditor';
+    import ColumnsEditor from './ColumnsEditor.vue';
     import NinjaCustomFilters from '../TableFilters/CustomFilter';
     import NinjaLanguageSettings from '../Configarations/_LanguageSettings'
     import NinjaRenderingSettings from '../Configarations/_RenderingSettings'
@@ -149,7 +155,7 @@
     import { useEventBus } from '../../../eventBus';
 
     import { tableLibs } from '../../../data/data'
-import { assetUrl } from '../../../utils/ninjatablesadmin';
+    import { assetUrl } from '../../../utils/ninjatablesadmin';
 
     export default {
         name: 'TableConfiguration',
@@ -165,6 +171,7 @@ import { assetUrl } from '../../../utils/ninjatablesadmin';
         data() {
             return {
                 bus : useEventBus(),
+                currentIndex: [],
                 hasPro: !!window.ninja_table_admin.hasPro,
                 active_menu: 'columns',
                 table_color_primary: '#000',
@@ -236,6 +243,11 @@ import { assetUrl } from '../../../utils/ninjatablesadmin';
             },
             openDrawer(index) {
                 jQuery('.drawer_body_' + index).slideToggle();
+                if(this.currentIndex.includes(index)){
+                    this.currentIndex = this.currentIndex.filter(i => i !== index);
+                } else {
+                    this.currentIndex.push(index);
+                }
             },
             validateColumn(column) {
                 if (!column.name) {

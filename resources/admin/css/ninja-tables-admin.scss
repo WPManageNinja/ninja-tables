@@ -1,6 +1,5 @@
 @import "nav";
 
-
 // All tables page
 .all-tables-wrapper {
   display: flex;
@@ -13,7 +12,7 @@
   .all-tables-header-left {
     .heading-text {
       color: #171717;
-      font-feature-settings: 'ss11' on, 'liga' off, 'calt' off;
+      font-feature-settings: "ss11" on, "liga" off, "calt" off;
       font-family: Inter;
       font-size: 18px;
       font-style: normal;
@@ -22,8 +21,8 @@
       letter-spacing: -0.27px;
     }
     .caption-text {
-      color: #5C5C5C;
-      font-feature-settings: 'ss11' on, 'liga' off, 'calt' off;
+      color: #5c5c5c;
+      font-feature-settings: "ss11" on, "liga" off, "calt" off;
       font-family: Inter;
       font-size: 14px;
       font-style: normal;
@@ -46,7 +45,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 12px;
-  background: #FFFFFF;
+  background: #ffffff;
   padding: 16px 0;
   margin: 24px 12px;
   border-radius: 12px;
@@ -69,7 +68,7 @@
 
       .bulk_select {
         width: 100%;
-        border: 1px solid #E1E4EA;
+        border: 1px solid #e1e4ea;
         border-radius: 8px 0 0 8px;
         padding: 4px 10px;
 
@@ -79,11 +78,11 @@
       }
       .bulk_action_btn {
         border-radius: 0 8px 8px 0;
-        border: 1px solid #E1E4EA;
+        border: 1px solid #e1e4ea;
         border-left: none;
         padding: 4px 10px;
         cursor: pointer;
-        background: #F5F7FA;
+        background: #f5f7fa;
       }
     }
   }
@@ -122,7 +121,8 @@
   }
 
   .ninja-pagination {
-    .btn-prev, .btn-next {
+    .btn-prev,
+    .btn-next {
       .el-icon {
         svg {
           width: 14px;
@@ -138,19 +138,19 @@
       li {
         padding: 6px;
         color: #525866;
-        border: 1px solid #E1E4EA;
+        border: 1px solid #e1e4ea;
         border-radius: 8px;
         font-size: 14px;
       }
 
       li.is-active {
         border: none;
-        background: #F5F7FA;
+        background: #f5f7fa;
         color: #525866;
       }
 
       li:hover {
-        background: #F5F7FA;
+        background: #f5f7fa;
         color: #525866;
       }
     }
@@ -161,19 +161,19 @@
       align-items: center;
       gap: 4px;
 
-     .el-input {
-       .el-input__wrapper {
-         padding: 0;
-         .el-input__inner {
-           border: 1px solid #E1E4EA;
+      .el-input {
+        .el-input__wrapper {
+          padding: 0;
+          .el-input__inner {
+            border: 1px solid #e1e4ea;
 
-           &:focus {
-             border: 1px solid #409EFF;
-             box-shadow: none;
-           }
-         }
-       }
-     }
+            &:focus {
+              border: 1px solid #409eff;
+              box-shadow: none;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -186,11 +186,10 @@
   justify-content: center;
   align-items: center;
   padding: 5px;
-  border: 1px solid #D6DAE1;
+  border: 1px solid #d6dae1;
   border-radius: 8px;
-  background: #F9FAFB;
+  background: #f9fafb;
 }
-
 
 // old css
 .pageLoading {
@@ -991,17 +990,35 @@ ul.ninja_render_features li {
   .widget_body {
     background: white;
     padding: 0px;
+    border-radius: 10px;
   }
+}
+
+.column.drawer:first-child {
+  .header {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  /* Add your custom styles */
+}
+
+.column.drawer:last-child {
+  .header {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom: none;
+  }
+  /* Add your custom styles */
 }
 
 .drawer {
   display: block;
-  border-bottom: 1px solid #434a50;
+  border-bottom: 1px solid #ebeef5;
 
   .drawer_body {
     padding: 10px;
     display: none;
-
+    background: #f9fafb;
     .form_group {
       // padding-right: 20px;
     }
@@ -1009,11 +1026,10 @@ ul.ninja_render_features li {
 
   .header {
     padding: 15px 10px;
-    background: #535c63;
-    color: white;
+    background: white;
+    color: #303133;
     //font-weight: bold;
     font-size: 17px;
-
     .edit_icon {
       float: right;
       font-size: 12px;
@@ -1806,7 +1822,6 @@ h2.nav-tab-wrapper {
   .tablenav {
     margin-bottom: 15px;
   }
-
 }
 
 .ninja_tables_wpposts {
@@ -1823,13 +1838,14 @@ h2.nav-tab-wrapper {
   }
 }
 
-
 .ninja-tables-help {
   @apply bg-white p-6 my-6 mx-3 rounded-[12px];
 }
 
 .toplevel_page_ninja_tables {
-  .mce-btn.mce-active, .mce-btn:active, .qt-dfw.active {
+  .mce-btn.mce-active,
+  .mce-btn:active,
+  .qt-dfw.active {
     background-color: #555c66 !important;
     border-color: #50575e !important;
   }
@@ -1838,5 +1854,3 @@ h2.nav-tab-wrapper {
 .nt-custom-css-js-editor-wrapper {
   @apply bg-white p-6 my-6 rounded-[12px];
 }
-
-
