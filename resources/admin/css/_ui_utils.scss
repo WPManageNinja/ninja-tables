@@ -76,4 +76,23 @@
       @apply bg-white rounded-[12px] p-5;
     }
   }
+
+  .ninja_tables_radio_group{
+    .el-radio.is-bordered{
+      border: 1px dashed #E1E4EA;
+      background: white;
+      border-radius: 10px !important;
+    }
+    .el-radio__input.is-checked+.el-radio__label{
+      color: #335cff;
+    }
+    .el-radio__input.is-checked .el-radio__inner{
+      border-color: #335cff;
+      background: #335cff;
+      &::after{
+        height: 7px;
+        width: 7px;
+      }
+    }
+  }
 }
