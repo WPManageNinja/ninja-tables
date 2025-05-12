@@ -39,6 +39,7 @@
                         placeholder="Search"
                         prefix-icon="icons/search.svg"
                         @keyup.enter="getData"
+                        size="small"
                     />
                 </div>
 

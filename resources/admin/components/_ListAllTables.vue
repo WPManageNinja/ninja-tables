@@ -22,9 +22,8 @@
               </template>
             </el-table-column>
 
-            <el-table-column :label="$t('Title')" prop="post_title" sortable="custom">
+            <el-table-column :label="$t('Title')" prop="post_title" sortable="custom" width="200">
                 <template #default="scope">
-                    <strong>
                         <template v-if="shouldBeVisible(scope.row)">
                           <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
                             {{$t(scope.row.post_title)}}
@@ -41,52 +40,37 @@
                         <span v-show="scope.row.post_status !== 'publish'">
                             ({{ scope.row.post_status }})
                         </span>
-                    </strong>
                 </template>
             </el-table-column>
 
-            <el-table-column :label="$t('Description')" class-name="description">
+            <el-table-column :label="$t('Description')" class-name="description" width="300">
                 <template #default="scope">
                     <div class="nt_cell" v-html="scope.row.post_content"/>
                 </template>
             </el-table-column>
 
-            <el-table-column :label="$t('Data Source')">
+            <el-table-column :label="$t('Data Source')" width="200">
                 <template #default="scope">
-                    <strong v-if="scope.row.dataSourceType === 'drag_and_drop'">{{$t('Drag & Drop Table')}}</strong>
-                    <strong v-else>{{ dataSourceType(scope.row) }}</strong>
-                    <template v-if="scope.row.remoteURL">
-                        <el-tooltip class="item" effect="light" :content="scope.row.remoteURL" placement="top-start">
-                          <template #content>
-                            <h3>Source of data</h3>
-                            <p>{{scope.row.remoteURL}}</p>
-                          </template>
-                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                        </el-tooltip>
-                    </template>
+                    <span v-if="scope.row.dataSourceType === 'drag_and_drop'">{{$t('Drag & Drop Table')}}</span>
+                    <span v-else>{{ dataSourceType(scope.row) }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column :label="$t('ShortCode')">
+            <el-table-column :label="$t('ShortCode')" :min-width="200">
                 <template #default="scope">
-                    <div class="copy_shortcode">
-                        <el-tooltip effect="dark"
-                                    content="Click to copy shortcode"
-                                    title="Click to copy shortcode"
-                                    placement="top">
-                            <code class="copy"
-                                  v-if="scope.row.dataSourceType === 'drag_and_drop'"
-                                  :data-clipboard-text='`[ninja_table_builder id="${scope.row.ID}"]`'>
-                                <img :src="assetUrl('icons/copy-02.svg')" class="mr-2" alt="copy" />
-                                [ninja_table_builder id="{{ scope.row.ID }}"]
-                            </code>
-                            <code class="copy"
-                                  v-else
-                                  :data-clipboard-text='`[ninja_tables id="${scope.row.ID}"]`'>
-                                <img :src="assetUrl('icons/copy-02.svg')" alt="copy" />
-                                [ninja_tables id="{{ scope.row.ID }}"]
-                            </code>
-                        </el-tooltip>
+                    <div class="flex items-center" type="info" :style="{ cursor: 'pointer' }">
+                        <div class="bg-[#F5F6F7] px-2 py-1 rounded-[8px] flex items-center copy"
+                             :data-clipboard-text="scope.row.dataSourceType === 'drag_and_drop' ? 
+                                `[ninja_table_builder id='${scope.row.ID}']` : 
+                                `[ninja_tables id='${scope.row.ID}']`"
+                             style="border: 1px solid #E1E4EA">
+                            <img class="mr-2" :src="assetUrl('icons/copy-02.svg')"/> 
+                            <span class="text-sm">
+                                {{ scope.row.dataSourceType === 'drag_and_drop' ? 
+                                   `[ninja_table_builder id='${scope.row.ID}']` : 
+                                   `[ninja_tables id='${scope.row.ID}']` }}
+                            </span>
+                        </div>
                     </div>
                 </template>
             </el-table-column>
