@@ -100,7 +100,7 @@
 
                     <div class="nav_options">
                         <div class="flex items-center">
-                            <label for="compact_view" class="form_group">
+                            <label for="compact_view" class="form_group font-normal">
                                 <input id="compact_view" type="checkbox" v-model="isCompact"/> Compact View
                             </label>
 
@@ -109,7 +109,7 @@
                             </label>
                         </div>
 
-                        <label class="sorting_option form_group">
+                        <label class="sorting_option form_group font-normal">
                             <input type="checkbox" name="checkbox" v-model="sorting">
                             Sort Manually
                             <template v-if="!has_pro">(Pro Feature)</template>
@@ -122,6 +122,7 @@
                             @click="add"
                             type="secondary"
                             :btnText="$t('Add Data')"
+                            class="mx-2"
                         />
 
                         <NinjaButton
