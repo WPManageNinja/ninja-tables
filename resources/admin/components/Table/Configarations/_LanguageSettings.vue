@@ -10,17 +10,17 @@
             <div class="grid grid-cols-2 gap-5">
                 <div class="w-full">
                     <div class="mb-2 text-[14px] font-[500]">{{ $t('Empty Results Text:') }}</div>
-                    <NinjaInput v-model="tableSettings.no_result_text" size="large"/>
+                    <NinjaInput v-model="tableSettings.no_result_text"/>
                 </div>
 
                 <div>
                     <div class="mb-2 text-[14px] font-[500]"> {{ $t("Search Box Placeholder Text") }}</div>
-                    <NinjaInput v-model="tableSettings.search_placeholder" size="large"/>
+                    <NinjaInput v-model="tableSettings.search_placeholder"/>
                 </div>
 
                 <div>
                     <div class="mb-2 text-[14px] font-[500]">{{ $t("Search Dropdown Heading") }}</div>
-                    <NinjaInput v-model="tableSettings.search_in_text" size="large"/>
+                    <NinjaInput v-model="tableSettings.search_in_text"/>
                 </div>
             </div>
         </div>

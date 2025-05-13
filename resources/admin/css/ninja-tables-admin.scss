@@ -1994,3 +1994,22 @@ h2.nav-tab-wrapper {
 .nt-custom-css-js-editor-wrapper {
   @apply bg-white p-6 my-5 rounded-[12px];
 }
+
+
+.nt_rendering {
+  .nt_rendering_card {
+    @apply bg-white flex p-4 justify-between border-solid border border-[#E1E4EA] rounded-[12px] cursor-pointer;
+
+    .radio_button {
+      @apply rounded-full w-[12px] h-[12px] shadow-xl border-solid border-2 border-[#E1E4EA];
+    }
+  }
+
+  .is_active {
+    @apply border-[#335CFF];
+
+    .radio_button {
+      @apply rounded-full w-[12px] h-[12px] border-solid border-4 border-[#335CFF];
+    }
+  }
+}

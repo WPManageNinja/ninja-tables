@@ -93,11 +93,11 @@
                         </div>
                         <div class="flex justify-between rounded-[8px] bg-white w-[350px] px-2 py-2 gap-3">
                             <div @click="print_screen ='header'"
-                                 :class="`${print_screen ==='header' && 'bg-[#ececed] rounded-[8px] shadow shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
+                                 :class="`${print_screen ==='header' && 'bg-[#f9f9f9] rounded-[8px] shadow shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
                                 {{ $t('Print Screen Header') }}
                             </div>
                             <div @click="print_screen ='footer'"
-                                 :class="`${print_screen ==='footer' && 'bg-[#ececed] rounded-[8px] shadow shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
+                                 :class="`${print_screen ==='footer' && 'bg-[#f9f9f9] rounded-[8px] shadow shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
                                 {{ $t('Print Screen Footer') }}
                             </div>
                         </div>
