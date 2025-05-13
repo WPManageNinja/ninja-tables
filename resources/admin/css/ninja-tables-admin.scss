@@ -110,7 +110,7 @@
 // Pagination styles
 .ninja-pagination-wrapper {
   display: flex;
-  padding: 16px 20px;
+  padding: 0 20px;
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
@@ -122,8 +122,7 @@
   }
 
   .ninja-pagination {
-    .btn-prev,
-    .btn-next {
+    .btn-prev, .btn-next {
       .el-icon {
         svg {
           width: 14px;
@@ -139,19 +138,19 @@
       li {
         padding: 6px;
         color: #525866;
-        border: 1px solid #e1e4ea;
+        border: 1px solid #E1E4EA;
         border-radius: 8px;
         font-size: 14px;
       }
 
       li.is-active {
         border: none;
-        background: #f5f7fa;
+        background: #F5F7FA;
         color: #525866;
       }
 
       li:hover {
-        background: #f5f7fa;
+        background: #F5F7FA;
         color: #525866;
       }
     }
@@ -162,19 +161,19 @@
       align-items: center;
       gap: 4px;
 
-      .el-input {
-        .el-input__wrapper {
-          padding: 0;
-          .el-input__inner {
-            border: 1px solid #e1e4ea;
+     .el-input {
+       .el-input__wrapper {
+         padding: 0;
+         .el-input__inner {
+           border: 1px solid #E1E4EA;
 
-            &:focus {
-              border: 1px solid #409eff;
-              box-shadow: none;
-            }
-          }
-        }
-      }
+           &:focus {
+             border: 1px solid #409EFF;
+             box-shadow: none;
+           }
+         }
+       }
+     }
     }
   }
 }
@@ -187,10 +186,139 @@
   justify-content: center;
   align-items: center;
   padding: 5px;
-  border: 1px solid #d6dae1;
+  border: 1px solid #D6DAE1;
   border-radius: 8px;
-  background: #f9fafb;
+  background: #F9FAFB;
 }
+
+.copy_shortcode {
+  code {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    background: #F5F7FA;
+    cursor: pointer;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: -0.084px;
+  }
+}
+
+.ninja_create-table-modal {
+  &.el-dialog {
+    border-radius: 20px;
+    background: #FFFFFF;
+
+    .el-dialog__header {
+      display: flex;
+      padding: 10px 16px 16px 10px;
+      align-items: center;
+      gap: 14px;
+      align-self: stretch;
+      border-radius: 20px 20px 0 0;
+      border-bottom: 1px solid #E1E4EA;
+    }
+
+    .el-dialog__body {
+      .ninja-add-table {
+        .ninja-tables-aside {
+          display: flex;
+          width: 260px;
+          height: 770px;
+          padding: 15px 4px 0 4px;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+          border-radius: 0 0 0 20px;
+          background: #FFFFFF;
+          border-right: 1px solid #E1E4EA;
+
+          .el-menu {
+            border: none;
+
+            .el-menu-item {
+              height: 36px;
+              display: flex;
+              width: 225px;
+              padding: 8px 12px;
+              align-items: center;
+              gap: 8px;
+
+              &.is-active,
+              &.is-active:hover {
+                border-radius: 8px;
+                background: rgba(71, 108, 255, 0.10);
+              }
+
+              &:hover {
+                background: none;
+                color: #335CFF;
+              }
+            }
+          }
+        }
+
+        .ninja-tables-main {
+          display: flex;
+          padding: 30px;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+          flex: 1 0 0;
+          align-self: stretch;
+
+          .ninja_modal-body {
+            .ninja_modal_title {
+              color: #0E121B;
+              font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+              font-family: Inter;
+              font-size: 20px;
+              font-style: normal;
+              font-weight: 500;
+              line-height: 28px;
+            }
+
+            .ninja_modal_subtitle {
+              color: #0E121B;
+              font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+              font-family: Inter;
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 20px;
+              letter-spacing: -0.084px;
+            }
+          }
+
+          .modal-footer {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.form-label {
+  color: #0E121B;
+  font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.084px;
+}
+
 
 // old css
 .pageLoading {
@@ -990,7 +1118,7 @@ ul.ninja_render_features li {
 
   .widget_body {
     background: white;
-    padding: 0px;
+    padding: 0;
     border-radius: 10px;
   }
 }
@@ -1823,6 +1951,7 @@ h2.nav-tab-wrapper {
   .tablenav {
     margin-bottom: 15px;
   }
+
 }
 
 .ninja_tables_wpposts {
@@ -1844,9 +1973,7 @@ h2.nav-tab-wrapper {
 }
 
 .toplevel_page_ninja_tables {
-  .mce-btn.mce-active,
-  .mce-btn:active,
-  .qt-dfw.active {
+  .mce-btn.mce-active, .mce-btn:active, .qt-dfw.active {
     background-color: #555c66 !important;
     border-color: #50575e !important;
   }

@@ -58,6 +58,7 @@
 
         <!--Select your table type and create-->
         <el-dialog
+            id="data-tables-app"
             :close-on-click-modal="false"
             :title="$t('How would you like to create your table?')"
             v-model="modalVisible"
@@ -65,10 +66,12 @@
             width="75%"
             :append-to-body="true"
             custom-class="create-table-modal"
+            class="ninja_create-table-modal"
         >
-            <add-table-modal @table_inserted="addTableAction"
-                             @modal_close="modalVisible = false"
-                             :hasPro="hasPro"
+            <add-table-modal
+                @table_inserted="addTableAction"
+                @modal_close="modalVisible = false"
+                :hasPro="hasPro"
             />
         </el-dialog>
         <lead-modal></lead-modal>
@@ -168,13 +171,5 @@
     label.form_group.search_action {
         padding-top: 0;
         margin-bottom: 0;
-    }
-
-    .create-table-modal {
-        z-index: 9999 !important;
-
-        .el-dialog__body {
-            padding: 20px;
-        }
     }
 </style>

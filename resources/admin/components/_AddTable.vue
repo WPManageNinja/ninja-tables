@@ -1,11 +1,12 @@
 <template>
     <el-container class="ninja-add-table">
-        <el-aside v-if="!table.ID" style="background-color: rgb(35, 40, 45);">
-            <el-menu :collapse="isCollapse"
-                     :default-active="activeTabName"
-                     background-color="#23282d"
-                     text-color="#eee"
-                     active-text-color="#fff"
+        <el-aside v-if="!table.ID" class="ninja-tables-aside">
+            <el-menu
+                 :collapse="isCollapse"
+                 :default-active="activeTabName"
+                 background-color="#FFFFFF"
+                 text-color="#565865"
+                 active-text-color="#335CFF"
             >
                 <el-menu-item @click="activeTabName = 'default'" index='default'>
                     <span>Default</span>
@@ -44,35 +45,37 @@
             </el-menu>
         </el-aside>
 
-        <el-main>
+        <el-main class="ninja-tables-main">
             <template v-if="activeTabName == 'default'">
                 <div class="ninja_modal-body">
                     <template v-if="!table.ID">
-                        <h3>Manually Create a Table</h3>
-                        <p class="ninja_subtitle">
+                        <h3 class="ninja_modal_title">Manually Create a Table</h3>
+                        <p class="ninja_modal_subtitle">
                             Manually create your table columns and rows to get complete
                             control over your data with tons of customizations.
                         </p>
                     </template>
 
-                    <div class="form-group">
-                        <label for="name">{{ $t('Table Title') }}</label>
-                        <input v-model="table.post_title"
-                               type="text" id="name" class="form-control"
-                               placeholder="Enter a title to identify your table"
-                        >
-                    </div>
-                    <div class="form-group">
-                        <label>{{ $t('Table Description') }}</label>
-                        <wp_editor v-model="table.post_content"></wp_editor>
+                    <div class="my-[30px]">
+                        <div class="form-group">
+                            <label class="form-label">{{ $t('Table Title') }}</label>
+                            <NinjaInput
+                                v-model="table.post_title"
+                                :placeholder="$t('Enter a title to identify your table')"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">{{ $t('Table Description') }}</label>
+                            <wp_editor v-model="table.post_content"></wp_editor>
+                        </div>
                     </div>
                 </div>
+
                 <div class="modal-footer">
-                    <el-button type="primary" size="small" @click="addTable">
-                        <span v-if="table.ID">{{ $t('Update') }}</span>
-                        <span v-else>{{ $t('Add') }}</span>
-                        <i v-if="btnLoading" class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
-                    </el-button>
+                    <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
+                    <NinjaButton v-if="table.ID" @click="addTable" :btnText="$t('Update')"/>
+                    <NinjaButton v-else @click="addTable" :btnText="$t('Add')" />
                 </div>
             </template>
             <template v-else-if="activeTabName === 'drag_and_drop'">
@@ -150,11 +153,15 @@
     import RawSqlForm from './DataProviders/RawSqlForm'
     import PremiumNotice from './includes/PremiumNotice';
     import RightSideBar from "./TableBuilder/Sidebar/RightSideBar";
-    import { useEventBus } from '../eventBus';
+    import {assetUrl} from "../utils/ninjatablesadmin";
+    import NinjaInput from "../@ui-utils/NinjaInput.vue";
+    import NinjaButton from "../@ui-utils/NinjaButton.vue";
 
     export default {
         name: 'add_table',
         components: {
+            NinjaInput,
+            NinjaButton,
             RightSideBar,
             wp_editor: wp_editor,
             'wp-posts-data-source': WPPosts,
@@ -205,6 +212,7 @@
             }
         },
         methods: {
+            assetUrl,
             createDragAndDropTable() {
               this.$get("table-builder")
                   .then(response => {
@@ -303,35 +311,3 @@
     }
 </script>
 
-<style lang="scss">
-    .ninja-add-table {
-        .el-main {
-            padding: 0 1px 0 15px;
-            min-height: initial;
-        }
-
-        .el-menu {
-            border-right: initial;
-        }
-
-        .el-menu-item {
-            .el-icon-fluent-form {
-                height: 18px;
-            }
-
-            .dashicons {
-                width: 24px;
-                height: 18px;
-                margin-right: 5px;
-            }
-
-            &.is-active {
-                background-color: #0073aa !important;
-            }
-        }
-
-        .el-table .cell {
-            text-overflow: initial;
-        }
-    }
-</style>

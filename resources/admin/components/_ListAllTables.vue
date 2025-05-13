@@ -63,14 +63,14 @@
                 <template #default="scope">
                     <div class="flex items-center" type="info" :style="{ cursor: 'pointer' }">
                         <div class="bg-[#F5F6F7] px-2 py-1 rounded-[8px] flex items-center copy"
-                             :data-clipboard-text="scope.row.dataSourceType === 'drag_and_drop' ? 
-                                `[ninja_table_builder id='${scope.row.ID}']` : 
+                             :data-clipboard-text="scope.row.dataSourceType === 'drag_and_drop' ?
+                                `[ninja_table_builder id='${scope.row.ID}']` :
                                 `[ninja_tables id='${scope.row.ID}']`"
                              style="border: 1px solid #E1E4EA">
-                            <img class="mr-2" :src="assetUrl('icons/copy-02.svg')"/> 
+                            <img class="mr-2" :src="assetUrl('icons/copy-02.svg')"/>
                             <span class="text-sm">
-                                {{ scope.row.dataSourceType === 'drag_and_drop' ? 
-                                   `[ninja_table_builder id='${scope.row.ID}']` : 
+                                {{ scope.row.dataSourceType === 'drag_and_drop' ?
+                                   `[ninja_table_builder id='${scope.row.ID}']` :
                                    `[ninja_tables id='${scope.row.ID}']` }}
                             </span>
                         </div>

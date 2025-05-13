@@ -20,23 +20,23 @@
     .el-input__wrapper {
       border-radius: 8px;
     }
-    .el-input__inner {
-      padding: 4px 0;
-      @apply border-none focus:shadow-none focus:outline-none pr-0;
+    .el-input__inner{
+        padding: 4px 0;
+        @apply border-none focus:shadow-none focus:outline-none pr-0;
     }
   }
 
-  .ninja-select {
-    .el-select__wrapper {
-      border-radius: 8px;
-      height: 40px;
+  .ninja-select{
+    .el-select__wrapper{
+        border-radius: 8px;
+        height: 40px;
     }
   }
 
   // El tables
   .el-table {
     .el-table__inner-wrapper {
-      .el-table__header-wrapper {
+      .el-table__header-wrapper{
         .el-table__header {
           @apply bg-red-500 !important;
         }
