@@ -21,7 +21,8 @@
                 <div class="copy_shortcode">
                     <el-tooltip effect="dark" content="Click to copy shortcode" title="Click to copy shortcode"
                         placement="top">
-                        <code class="copy flex p-[8px] rounded-[8px] border border-[#E1E4EA]" :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>
+                        <code class="copy flex p-[8px] rounded-[8px] border border-[#E1E4EA]"
+                            :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>
                             <img :src="assetUrl('icons/copy-02.svg')" class="mr-2" alt="copy" />
                             [ninja_tables id="{{ tableId }}"]
                         </code>
@@ -40,12 +41,14 @@
                     target="_blank">
                     <el-button type="danger">{{ $t('Get Pro') }}</el-button>
                 </a>
+                <NinjaButton v-if="$route.name === 'design_studio'" :btnText="$t('Save')" :disabled="is_form_saving"
+                    :loading="is_form_saving" @click="saveDesign" />
             </div>
 
         </div>
 
         <fieldset :class="[is_form_saving ? 'disabled' : '']" :disabled="is_form_saving">
-            <h2 class="bg-white !-mx-5 py-4 px-4 border-b border-[#E1E4EA]">
+            <div class="bg-white !-mx-5 py-4 px-4 border-b border-[#E1E4EA]">
                 <router-link v-for="tableTab in table_tabs" :key="tableTab.route"
                     :to="{ name: tableTab.route, params: { table_id: tableId } }"
                     exact-active-class="focus:shadow-none outline:none border-b-2 py-4 border-[#335cff] text-[#0e121b]"
@@ -53,7 +56,7 @@
                     <span class="py-3"></span>
                     {{ tableTab.title }}
                 </router-link>
-            </h2>
+            </div>
 
             <router-view v-if="config" :config="config" :getColumnSettings="getSettings"></router-view>
 
@@ -73,6 +76,8 @@ import toArray from 'lodash/values';
 import { useEventBus } from '../../eventBus';
 import { assetUrl } from "../../utils/ninjatablesadmin";
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+import tableConfigStore from '../../store/tableConfigStore'; // Import the store
+import { forEach } from 'lodash';
 
 export default {
     name: 'table_home',
@@ -84,17 +89,23 @@ export default {
         return {
             bus: useEventBus(),
             table_tabs: [],
+            tableSettings: tableConfigStore.state.config ? tableConfigStore.state.config.settings : {},
             is_data_saving: false,
             is_form_saving: false,
             tableId: this.$route.params.table_id,
-            config: null,
             table: {},
             doingAjax: false,
             doingAjaxTest: false,
             user_tab: this.$route.query.user_tab,
             editTableModalShow: false,
             preview_url: '#',
-            has_pro: window.ninja_table_admin.hasPro
+            has_pro: window.ninja_table_admin.hasPro,
+            store: tableConfigStore // Add the store reference
+        }
+    },
+    computed: {
+        config() {
+            return this.store.state.config;
         }
     },
     methods: {
@@ -104,28 +115,37 @@ export default {
 
             let data = {
                 table_id: this.tableId,
-                columns: this.config.columns
+                columns: this.store.state.config.columns // Get from store
             }
 
             this.$post('settings/' + tableId, data)
                 .then((res) => {
+                    // Update the store with any returned data if needed
+                    this.store.setConfig(res.data || res);
+
                     this.$message({
                         showClose: true,
                         message: res.message,
                         type: 'success'
                     });
-                    callback(res)
+
+                    if (callback) callback(res)
                 })
         },
         getSettings() {
             let tableId = this.tableId;
+            this.store.setTableId(tableId); // Set tableId in the store
 
             this.$get('settings/' + tableId)
                 .then(response => {
                     if (Object.prototype.toString.call(response.columns) == '[object Object]') {
                         response.columns = toArray(response.columns);
                     }
-                    this.config = response;
+
+                    // Set the data in the store
+                    this.store.setConfig(response);
+
+                    // You can still set local references if needed
                     this.table = response.table;
                     this.preview_url = response.preview_url;
                 })
@@ -143,6 +163,25 @@ export default {
                 params: { table_id: this.tableId },
                 query: { user_tab: key }
             });
+        },
+        saveDesign() {
+            if (this.is_form_saving) return; // Prevent double-clicks
+
+            this.is_form_saving = true;
+
+            // Create a timeout promise for error handling
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Save operation timed out')), 10000);
+            });
+
+            // Emit event and wait for response
+            this.bus.emit('saveTableDesign');
+
+            // Reset the form state after 2 seconds if no response 
+            // (This is a fallback in case the event doesn't complete the operation)
+            setTimeout(() => {
+                this.is_form_saving = false;
+            }, 2000);
         },
         size,
         each,
