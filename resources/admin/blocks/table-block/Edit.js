@@ -1,12 +1,10 @@
 import Rest from "../../Bits/Rest";
-import {tableLibs} from "../../data/data";
 import ColorsTab from "./ui/tabs/ColorsTab";
 
 const {InspectorControls, useBlockProps} = wp.blockEditor || wp.editor;
 const {
     PanelBody,
     SelectControl,
-    Placeholder,
     TabPanel
 } = wp.components;
 
@@ -18,6 +16,12 @@ import OtherTab from "./ui/tabs/OtherTab";
 import {customColorCss} from "./utils/data";
 import BlockPreview from "./components/BlockPreview";
 import {DEFAULT_TABLE_SETTINGS} from "./utils/constants";
+
+import {
+    loadRequiredScripts,
+    reInitFootables,
+    getTableConfig
+} from "./utils/footable";
 
 export default function Edit(props) {
     const {attributes, setAttributes} = props;
@@ -34,7 +38,6 @@ export default function Edit(props) {
 
     const tableElementId = `footable_${tableId}_${instanceId}`;
     const wrapperElementId = `footable_parent_${tableId}_${instanceId}`;
-
 
     const blockProps = useBlockProps();
 
@@ -54,12 +57,31 @@ export default function Edit(props) {
         } else if (tableId) {
             fetchConfig(tableId);
         }
-        loadRequiredScripts();
+        // Use the utility function for loading scripts
+        loadRequiredScripts(setScriptLoaded);
     }, [tableId]);
 
     useEffect(() => {
         if (scriptLoaded && dataLoaded && tableInnerHtml) {
-            reInitFootables();
+            // Use the utility function for reinitialization
+            const getConfigFunction = (settings) => getTableConfig(
+                tableConfig,
+                formattedColumns,
+                settings,
+                wrapperElementId
+            );
+
+            reInitFootables(
+                scriptLoaded,
+                dataLoaded,
+                tableElementId,
+                tableInnerHtml,
+                null,
+                tableSettings,
+                getConfigFunction,
+                tableId,
+                instanceId
+            );
         }
     }, [scriptLoaded, dataLoaded, tableInnerHtml]);
 
@@ -70,20 +92,6 @@ export default function Edit(props) {
             dataSource: selectedTable?.data_source || ''
         });
         initializeColorSettings(selectedTableId, tableSettings, instanceId);
-    };
-
-    const renderDragAndDropTable = () => {
-        if (isLoading) {
-            return <div className="loading-spinner">Loading...</div>;
-        }
-
-        return (
-            <div
-                id={`ninja_table_builder_${tableId}_${instanceId}`}
-                className="ninja-table-builder-preview"
-                dangerouslySetInnerHTML={{__html: tableHtml}}
-            />
-        );
     };
 
     const fetchDragAndDropTable = (tableId) => {
@@ -141,155 +149,6 @@ export default function Edit(props) {
         setFormattedColumns(formatted);
     };
 
-    const loadRequiredScripts = () => {
-        if (typeof FooTable !== 'undefined') {
-            setScriptLoaded(true);
-            return;
-        }
-
-        const scripts = window.ninja_table_admin?.preview_required_scripts || [];
-
-        scripts.forEach(script => {
-            const element = document.createElement(script.endsWith('.css') ? 'link' : 'script');
-
-            if (script.endsWith('.css')) {
-                element.rel = 'stylesheet';
-                element.href = script;
-            } else {
-                element.src = script;
-                element.onload = () => {
-                    if (typeof FooTable !== 'undefined') {
-                        setScriptLoaded(true);
-                    }
-                };
-            }
-
-            document.head.appendChild(element);
-        });
-    };
-
-    const reInitFootables = (updatedSettings = null) => {
-        if (!scriptLoaded || !dataLoaded) return;
-
-        const appReady = dataLoaded && scriptLoaded;
-        if (!appReady) return;
-
-        if (typeof FooTable === 'object') {
-            const ft = FooTable.get(`#${tableElementId}`);
-            if (ft) {
-                ft.destroy();
-            }
-        }
-
-        const $table = jQuery(`#${tableElementId}`);
-        $table.find('thead,tbody,tfoot').remove();
-        $table.append(tableInnerHtml);
-
-        // Pass the updated settings (if available)
-        initFootables(updatedSettings);
-        customColorCss(tableId, updatedSettings || tableSettings, instanceId);
-    };
-
-
-    const initFootables = (updatedSettings = null) => {
-        if (!scriptLoaded) return;
-
-        const NinjaTableApp = window.ninjaTableApp;
-        const $table = jQuery(`#${tableElementId}`);
-
-        // Use updated settings if provided, otherwise use the state
-        const settings = updatedSettings || tableSettings;
-
-        if (settings.hide_on_empty) {
-            $table.on('expanded.ft.row', function (e, ft, row) {
-                $table.find('table.footable-details td:empty').parent().addClass('nt_has_hide');
-            });
-        }
-
-        const config = getTableConfig(settings);
-        NinjaTableApp.initTable($table, config);
-        // initializeColorSettings(tableId, tableSettings);
-    };
-
-    const getTableConfig = (customSettings = null) => {
-        if (!tableConfig) return {};
-
-        // Use provided settings or fall back to state
-        const settings = customSettings || tableConfig.settings || {};
-        const columns = tableConfig.columns || [];
-
-        const customCss = {};
-        columns.forEach((column, index) => {
-            customCss[`ninja_column_${index}`] = {
-                'text-align': column.textAlign,
-                'width': `${column.width}px`
-            };
-        });
-
-        const tableSettings = {
-            default_sorting: settings.default_sorting || 'old_first',
-            defaut_filter: false,
-            defaut_filter_column: null,
-            expandAll: settings.expand_type === "expandAll",
-            expandFirst: settings.expand_type === "expandFirst",
-            filtering: !!settings.enable_search,
-            i18n: {},
-            use_parent_width: false,
-            sorting: !!settings.column_sorting,
-            togglePosition: settings.togglePosition
-        };
-
-        const initConfig = {
-            toggleColumn: settings.togglePosition,
-            cascade: true,
-            useParentWidth: false,
-            columns: columns,
-            expandFirst: settings.expand_type === "expandFirst",
-            expandAll: settings.expand_type === "expandAll",
-            empty: '',
-            filtering: {
-                enabled: !!settings.enable_search
-            },
-            paging: {
-                // Use the passed settings (which may include the latest changes)
-                enabled: settings.show_all !== '1' && settings.show_all !== 1,
-                size: parseInt(settings.perPage || 10),
-                container: `#${wrapperElementId} .paging-ui-container`,
-            },
-            sorting: {
-                enabled: !!settings.column_sorting
-            },
-        };
-
-        return {
-            columns: formattedColumns.map(item => Object.assign({}, item)),
-            custom_css: customCss,
-            settings: tableSettings,
-            render_type: 'legacy_table',
-            instance_name: 'ninja_table_instance_0',
-            table_id: tableId,
-            title: '',
-            init_config: initConfig
-        };
-    };
-
-// Helper function to compute available CSS classes - similar to Vue's availableCssClasses computed property
-    const getAvailableCssClasses = () => {
-        // Early return if we don't have tableConfig or css_lib not set
-        if (!tableConfig?.settings?.css_lib || !tableConfig?.settings?.library) {
-            return [];
-        }
-
-        const libs = tableLibs();
-        const currentLib = libs[tableConfig.settings.library]?.css_libs?.[tableConfig.settings.css_lib];
-
-        if (!currentLib || !currentLib.styles) {
-            return [];
-        }
-
-        // Extract css class keys from styles array
-        return currentLib.styles.map(style => style.key);
-    };
 
     const updateTableSettings = (key, value, isReload = true) => {
         const newSettings = {
@@ -322,7 +181,25 @@ export default function Edit(props) {
 
         if (isReload) {
             setTimeout(() => {
-                reInitFootables(newSettings);
+                // Use the utility function for reinitialization
+                const getConfigFunction = (settings) => getTableConfig(
+                    tableConfig,
+                    formattedColumns,
+                    settings,
+                    wrapperElementId
+                );
+
+                reInitFootables(
+                    scriptLoaded,
+                    dataLoaded,
+                    tableElementId,
+                    tableInnerHtml,
+                    newSettings,
+                    tableSettings,
+                    getConfigFunction,
+                    tableId,
+                    instanceId
+                );
             }, 50);
         }
     };
@@ -337,9 +214,6 @@ export default function Edit(props) {
             console.error('Error saving settings:', error);
         }
     };
-
-    // This function generates CSS for the table colors based on the settings
-
 
     const initializeColorSettings = (tableId, settings, instanceId) => {
         // Set initial CSS

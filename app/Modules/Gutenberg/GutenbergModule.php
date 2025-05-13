@@ -10,7 +10,6 @@ class GutenbergModule
 {
     public function register()
     {
-//        add_action('enqueue_block_assets', [$this, 'blockEditorAssets']);
         add_action('enqueue_block_editor_assets', [$this, 'enqueueAssets']);
         add_action('save_post', [$this, 'updateTableConfig'], 10, 3);
     }
@@ -61,33 +60,6 @@ class GutenbergModule
         ];
     }
 
-    public function blockEditorAssets()
-    {
-        $app    = App::getInstance();
-        $assets = $app['url.assets'];
-
-        wp_enqueue_style(
-            'ninja-tables-footable',
-            $assets . "css/ninjatables-public.css"
-        );
-
-        wp_enqueue_script(
-            'footable',
-            $assets . "libs/footable/js/footable.min.js",
-            array('jquery'),
-            '3.1.5',
-            false
-        );
-
-        wp_enqueue_script(
-            'ninja-tables-footable',
-            $assets . "js/ninja-tables-footable.js",
-            array('jquery'),
-            '3.1.5',
-            false
-        );
-    }
-
     private function getAvailableTables()
     {
         $args = array(
@@ -134,7 +106,7 @@ class GutenbergModule
         $blocks = parse_blocks($post->post_content);
 
         foreach ($blocks as $block) {
-            if (isset($block['blockName']) && $block['blockName'] === 'ninja-tables/table-block') {
+            if (isset($block['blockName']) && $block['blockName'] === 'ninja-tables/guten-block') {
                 $this->updateTableSettings($block['attrs']);
             }
         }
