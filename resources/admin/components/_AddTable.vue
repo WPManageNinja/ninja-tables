@@ -11,7 +11,7 @@
                 <el-menu-item @click="activeTabName = 'default'" index='default'>
                     <span>Default</span>
                 </el-menu-item>
-                
+
                 <el-menu-item @click="activeTabName = 'drag_and_drop'" index='drag_and_drop'>
                   <span>Drag & Drop Table</span>
                 </el-menu-item>
@@ -55,16 +55,16 @@
                     </template>
 
                     <div class="my-[30px]">
-                        <div class="form-group">
-                            <label class="form-label">{{ $t('Table Title') }}</label>
+                        <div class="ninja-form-group">
+                            <label class="ninja-form-label">{{ $t('Table Title') }}</label>
                             <NinjaInput
                                 v-model="table.post_title"
                                 :placeholder="$t('Enter a title to identify your table')"
                             />
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">{{ $t('Table Description') }}</label>
+                        <div class="ninja-form-group">
+                            <label class="ninja-form-label">{{ $t('Table Description') }}</label>
                             <wp_editor v-model="table.post_content"></wp_editor>
                         </div>
                     </div>
@@ -101,6 +101,7 @@
             <template v-else-if="activeTabName == 'fluent_form'">
                 <fluent-form-data-source
                         :tableCreated="fireTableCreated"
+                        @modalClose="closeModal"
                 />
             </template>
 

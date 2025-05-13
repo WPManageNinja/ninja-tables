@@ -304,6 +304,22 @@
               font-weight: 400;
               line-height: 20px;
               letter-spacing: -0.084px;
+              margin-top: 4px;
+            }
+
+            .ninja-form-group {
+              margin-bottom: 20px;
+
+              .ninja-form-label {
+                color: #0E121B;
+                font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+                font-family: Inter;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px;
+                letter-spacing: -0.084px;
+              }
             }
           }
 
@@ -329,6 +345,14 @@
   font-weight: 500;
   line-height: 20px;
   letter-spacing: -0.084px;
+}
+
+.ninja-checkbox-group-wrapper {
+  @apply border border-solid border-[#E1E4EA] rounded-[8px] mb-4;
+
+  .ninja-checkbox-group-header {
+    @apply bg-[#F9FAFB] flex justify-between items-center px-4 py-2 rounded-t-[8px];
+  }
 }
 
 

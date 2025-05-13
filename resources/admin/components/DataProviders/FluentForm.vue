@@ -1,118 +1,127 @@
 <template>
     <div class="ninja_modal-body">
-        <h3 v-if="!editing">
-            Construct Table from WP Fluent Form Entries
+        <h3 v-if="!editing" class="ninja_modal_title">
+            {{ $t('Construct Table from WP Fluent Form Entries') }}
         </h3>
 
         <template v-if="isFluentFormUpdated">
-            <p class="ninja_subtitle" v-if="!editing">
-                Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase
-                your form submissions.
-                <a target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">Click
-                    here to learn more about WP Fluent From Integration</a>
+            <p class="ninja_modal_subtitle" v-if="!editing">
+                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase your form submissions.') }}
+                <a target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
+                   {{ $t('Click here to learn more about WP Fluent From Integration') }}
+                </a>
             </p>
 
-            <div class="form-group" v-if="!editing">
-                <label for="name">{{ $t('Table Title') }}</label>
-                <input
+            <div class="my-[30px]">
+                <div class="ninja-form-group" v-if="!editing">
+                    <label for="name" class="ninja-form-label">{{ $t('Table Title') }}</label>
+                    <NinjaInput
                         v-model="post_title"
-                        type="text" id="name" class="form-control"
-                        placeholder="Enter a title to identify your table"
-                >
-            </div>
+                        :placeholder="$t('Enter a title to identify your table')"
+                    />
+                </div>
 
-            <div class="form-group" v-if="!editing">
-                <el-select
+                <div class="ninja-form-group" v-if="!editing">
+                    <label for="name" class="ninja-form-label">{{ $t('Choose Form') }}</label>
+                    <el-select
+                        class="ninja-select"
                         v-loading="fetching"
-                        filterable
                         v-model="form.id"
                         style="width:100%"
-                        placeholder="Select a Form"
+                        :placeholder="$t('Select a Form')"
                         @change="handleFormSelectionChange">
-                    <el-option
+                        <el-option
                             v-for="form in forms"
                             :key="form.id"
                             :label="form.id +' : '+ form.title"
                             :value="form.id">
-                    </el-option>
-                </el-select>
-            </div>
+                        </el-option>
+                    </el-select>
+                </div>
 
-            <div v-if="form.id" class="form-group">
-                <el-table
-                        :data="fields"
-                        empty-text="Loading..."
-                        ref="rowSelectableTable"
-                        style="width:100% !important"
-                        @selection-change="handleFieldsSelectionChange"
-                >
-                    <el-table-column type="selection"></el-table-column>
-                    <el-table-column prop="label" label="Select Entry Fields"></el-table-column>
-                </el-table>
-            </div>
+                <div v-if="fields.length > 0 && form.id" class="ninja-checkbox-group-wrapper">
+                    <div class="ninja-checkbox-group-header"
+                         style="border-bottom: 1px solid #E1E4EA">
+                        <div>{{ $t('Select Form Fields') }}</div>
+                        <div>
+                            <el-checkbox
+                                v-model="checkAll"
+                                :indeterminate="isIndeterminate"
+                                @change="handleCheckAllChange"
+                            >
+                                {{ $t('Select all') }}
+                            </el-checkbox>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <el-checkbox-group
+                            v-model="selectedFields"
+                            @change="handleFieldsSelectionChange"
+                        >
+                            <el-checkbox v-for="fld in fields" :key="fld.name" :value="fld.name">
+                                {{ fld.label }}
+                            </el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+                </div>
 
-            <div class="form-group">
-                <strong>Options (Optional)</strong>
-                <hr>
-                <el-row :gutter="20" style="margin-top:15px;">
-                    <el-col :md="12">
-                        <el-row>
-                            <el-col :md="6" style="margin-top:10px;">
-                                <strong>
-                                    <el-tooltip
-                                            placement="right"
-                                            effect="light"
-                                            content="Maximun records to show in frontend, keep empty to show all."
-                                    >
-                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                                    </el-tooltip>
-                                    Max Records:
-                                </strong>
-                            </el-col>
-                            <el-col :md="18">
-                                <el-input v-model="form.entry_limit"></el-input>
-                            </el-col>
-                        </el-row>
-                    </el-col>
+                <div class="my-4">
+                    <p class="mb-2"><strong>Options (Optional)</strong></p>
+                    <hr>
+                </div>
 
-                    <el-col :md="12" style="margin-top:10px;">
-                        <el-row>
-                            <el-col :md="6">
-                                <strong>
-                                    <el-tooltip
-                                            placement="right"
-                                            effect="light"
-                                            content="Select what type of entries you want to show from fluent form."
-                                    >
-                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                                    </el-tooltip>
-                                    Entry Type:
-                                </strong>
-                            </el-col>
-                            <el-col :md="18" style="margin-top:3px;">
-                                <el-radio-group v-model="form.entry_status">
-                                    <el-radio value="all" :label="$t('All')" />
-                                    <el-radio value="read" :label="$t('Read')" />
-                                    <el-radio value="unread" :label="$t('Unread')" />
-                                </el-radio-group>
-                            </el-col>
-                        </el-row>
-                    </el-col>
-                </el-row>
-                <template v-if="config && config.table">
-                    <br />
-                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="config.table.current_user_entry_only">Show current user submissions only at frontend</el-checkbox>
-                </template>
-            </div>
-            <hr>
-            <div class="form-group">
-                <el-button
-                        size="small"
-                        type="primary"
-                        :loading="btnLoading"
-                        style="margin-top: 12px; float: right;"
-                        @click="save">{{ editing ? $t('Update') : $t('Save') }}
-                </el-button>
+                <div class="ninja-form-group flex justify-start items-center gap-8">
+                    <div>
+                        <el-tooltip
+                            placement="right"
+                            effect="light"
+                            content="Maximum records to show in frontend, keep empty to show all."
+                        >
+                            <el-icon class="tooltip-icon-color">
+                                <InfoFilled/>
+                            </el-icon>
+                        </el-tooltip>
+                        <label class="ninja-form-label">{{ $t('Max Records:') }}</label>
+                        <NinjaInput v-model="form.entry_limit" />
+                    </div>
+
+                    <div>
+                        <el-tooltip
+                            placement="right"
+                            effect="light"
+                            content="Select what type of entries you want to show from fluent form."
+                        >
+                            <el-icon class="tooltip-icon-color">
+                                <InfoFilled/>
+                            </el-icon>
+                        </el-tooltip>
+                        <label class="ninja-form-label">{{ $t('Entry Type:') }}</label>
+                        <el-radio-group v-model="form.entry_status" class="ninja_tables_radio_group">
+                            <el-radio border value="all" :label="$t('All')" class="mr-2" />
+                            <el-radio border value="read" :label="$t('Read')" class="mr-2" />
+                            <el-radio border value="unread" :label="$t('Unread')" class="mr-2" />
+                        </el-radio-group>
+                    </div>
+                </div>
+
+                <div class="ninja-form-group">
+                    <template v-if="config && config.table">
+                        <el-checkbox
+                            :true-value="'yes'"
+                            :false-value="'no'"
+                            v-model="config.table.current_user_entry_only"
+                        >
+                           {{ $t('Show current user submissions only at frontend') }}
+                        </el-checkbox>
+                    </template>
+                </div>
+
+                <div class="modal-footer">
+                    <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
+                    <NinjaButton v-if="editing"  @click="save" :btnText="$t('Update')"/>
+                    <NinjaButton v-else  @click="save" :btnText="$t('Save')" />
+                </div>
+
             </div>
         </template>
 
@@ -162,8 +171,13 @@
 </template>
 
 <script>
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import {InfoFilled} from "@element-plus/icons-vue";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+
     export default {
         name: 'FluentForm',
+        components: {NinjaButton, InfoFilled, NinjaInput},
         props: {
             tableCreated: {
                 type: Function,
@@ -190,8 +204,11 @@
                     entry_status: 'all',
                     entry_limit: 1000,
                 },
+                isIndeterminate: false,
+                checkAll: false,
                 hasFluentForm: !!window.ninja_table_admin.hasFluentForm,
                 isFluentFormUpdated: !!window.ninja_table_admin.isFluentFormUpdated,
+                selectedFields: [],
             };
         },
         methods: {
@@ -205,31 +222,49 @@
             handleFormSelectionChange(formId) {
                 this.$get('fluent-forms/' + formId)
                     .then(res => {
-                        this.fields = res.data
+                        this.fields = res.data;
+                        this.selectedFields = [];
+
                         if (this.editing) {
                             this.form.entry_limit = this.config.table.entry_limit;
                             this.form.entry_status = this.config.table.entry_status;
-                            this.$nextTick(() => {
-                                let selected = this.config.columns.map(c => c.original_name);
-                                this.fields.filter(f => selected.indexOf(f.name) != -1).forEach(row => {
-                                    this.$refs.rowSelectableTable.toggleRowSelection(row);
-                                });
-                            });
+
+                            // Set selected fields based on config
+                            if (this.config.columns) {
+                                this.selectedFields = this.config.columns
+                                    .map(c => c.original_name)
+                                    .filter(name => this.fields.some(f => f.name === name));
+                                this.updateCheckAllState();
+                            }
                         }
                     })
                     .catch(error => {
-
-                    })
+                        console.error(error);
+                    });
             },
-            handleFieldsSelectionChange(val) {
-                this.form.fields = val;
+            handleFieldsSelectionChange(value) {
+                this.form.fields = this.fields.filter(field => value.includes(field.name));
+                this.updateCheckAllState();
+            },
+            handleCheckAllChange(val) {
+                this.selectedFields = val ? this.fields.map(field => field.name) : [];
+                this.updateCheckAllState();
+            },
+            updateCheckAllState() {
+                const fieldsCount = this.fields.length;
+                const selectedCount = this.selectedFields.length;
+                this.checkAll = selectedCount === fieldsCount;
+                this.isIndeterminate = selectedCount > 0 && selectedCount < fieldsCount;
             },
             save() {
                 this.btnLoading = true;
 
-                if(this.config && this.config.table.current_user_entry_only) {
+                if(this.config && this.config.table && this.config.table.current_user_entry_only) {
                     this.form.current_user_entry_only = this.config.table.current_user_entry_only;
                 }
+
+                // Make sure form.fields is properly set from selectedFields
+                this.form.fields = this.fields.filter(field => this.selectedFields.includes(field.name));
 
                 let data = {
                   post_title: this.post_title,
@@ -248,6 +283,10 @@
                         this.$message({showClose: true, message: message, type: 'error'});
                     })
                 this.btnLoading = false
+            },
+
+            closeModal() {
+                this.$emit('modalClose');
             },
             installFluentFrom() {
                 this.installing = true;
