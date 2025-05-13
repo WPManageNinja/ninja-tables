@@ -14,15 +14,69 @@
   }
 
   //input style
-  .ninja-input {
-    --el-input-inner-height: auto;
+  .ninja-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
     width: 100%;
-    .el-input__wrapper {
-      border-radius: 8px;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    transition: border-color 0.2s;
+    background-color: #fff;
+    &:hover {
+      border-color: #c0c4cc;
     }
-    .el-input__inner{
-        padding: 4px 0;
-        @apply border-none focus:shadow-none focus:outline-none pr-0;
+    &:focus-within {
+      border-color: #335cff;
+    }
+
+    .ninja-input {
+      flex: 1;
+      width: 100%;
+      border: none;
+      outline: none;
+      padding: 0 12px;
+      height: 40px;
+      font-size: 14px;
+      color: #606266;
+      background: transparent;
+    }
+
+    .ninja-input--small {
+      height: 32px;
+      font-size: 13px;
+    }
+
+    .ninja-input--large {
+      height: 48px;
+      font-size: 15px;
+    }
+
+    .ninja-input-prefix,
+    .ninja-input-suffix {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: #909399;
+    }
+
+    .ninja-input-prefix {
+      border-right: 1px solid #dcdfe6;
+    }
+
+    .ninja-input-suffix {
+      border-left: 1px solid #dcdfe6;
+    }
+    .prefix-icon,
+    .suffix-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .ninja-input:disabled,
+    .ninja-input-wrapper.disabled {
+      background-color: #f5f7fa;
+      cursor: not-allowed;
     }
   }
 
