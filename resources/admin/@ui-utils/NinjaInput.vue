@@ -70,15 +70,9 @@ export default {
     methods: {
         assetUrl,
         handleInput(event) {
-            console.log('Input event:', event);
             const value = event.target.value;
             this.$emit("update:modelValue", value);
         },
-        handleChange(event) {
-            console.log('Change event:', event);
-            const value = event.target.value;
-            this.$emit("update:modelValue", value);
-        }
     },
     emits: ['update:modelValue'],
 };
