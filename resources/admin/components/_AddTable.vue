@@ -47,30 +47,30 @@
             <template v-if="activeTabName == 'default'">
                 <div class="ninja_modal-body">
                     <template v-if="!table.ID">
-                        <h3 class="ninja_modal_title">Manually Create a Table</h3>
-                        <p class="ninja_modal_subtitle">
+                        <h3 class="nt-modal-title">Manually Create a Table</h3>
+                        <p class="nt-modal-subtitle">
                             Manually create your table columns and rows to get complete
                             control over your data with tons of customizations.
                         </p>
                     </template>
 
                     <div class="my-[30px]">
-                        <div class="ninja-form-group">
-                            <label class="ninja-form-label">{{ $t('Table Title') }}</label>
+                        <div class="nt-form-group">
+                            <label class="nt-form-label">{{ $t('Table Title') }}</label>
                             <NinjaInput
                                 v-model="table.post_title"
                                 :placeholder="$t('Enter a title to identify your table')"
                             />
                         </div>
 
-                        <div class="ninja-form-group">
-                            <label class="ninja-form-label">{{ $t('Table Description') }}</label>
+                        <div class="nt-form-group">
+                            <label class="nt-form-label">{{ $t('Table Description') }}</label>
                             <wp_editor v-model="table.post_content"></wp_editor>
                         </div>
                     </div>
                 </div>
 
-                <div class="modal-footer">
+                <div class="nt-modal-footer">
                     <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
                     <NinjaButton v-if="table.ID" @click="addTable" :btnText="$t('Update')"/>
                     <NinjaButton v-else @click="addTable" :btnText="$t('Add')" />

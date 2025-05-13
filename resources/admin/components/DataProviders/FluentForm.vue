@@ -1,11 +1,11 @@
 <template>
     <div class="ninja_modal-body">
-        <h3 v-if="!editing" class="ninja_modal_title">
+        <h3 v-if="!editing" class="nt-modal-title">
             {{ $t('Construct Table from WP Fluent Form Entries') }}
         </h3>
 
         <template v-if="isFluentFormUpdated">
-            <p class="ninja_modal_subtitle" v-if="!editing">
+            <p class="nt-modal-subtitle" v-if="!editing">
                 {{ $t('Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase your form submissions.') }}
                 <a target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
                    {{ $t('Click here to learn more about WP Fluent From Integration') }}
@@ -13,16 +13,16 @@
             </p>
 
             <div class="my-[30px]">
-                <div class="ninja-form-group" v-if="!editing">
-                    <label for="name" class="ninja-form-label">{{ $t('Table Title') }}</label>
+                <div class="nt-form-group" v-if="!editing">
+                    <label for="name" class="nt-form-label">{{ $t('Table Title') }}</label>
                     <NinjaInput
                         v-model="post_title"
                         :placeholder="$t('Enter a title to identify your table')"
                     />
                 </div>
 
-                <div class="ninja-form-group" v-if="!editing">
-                    <label for="name" class="ninja-form-label">{{ $t('Choose Form') }}</label>
+                <div class="nt-form-group" v-if="!editing">
+                    <label for="name" class="nt-form-label">{{ $t('Choose Form') }}</label>
                     <el-select
                         class="ninja-select"
                         v-loading="fetching"
@@ -39,8 +39,8 @@
                     </el-select>
                 </div>
 
-                <div v-if="fields.length > 0 && form.id" class="ninja-checkbox-group-wrapper">
-                    <div class="ninja-checkbox-group-header"
+                <div v-if="fields.length > 0 && form.id" class="nt-checkbox-group-wrapper">
+                    <div class="nt-checkbox-group-header"
                          style="border-bottom: 1px solid #E1E4EA">
                         <div>{{ $t('Select Form Fields') }}</div>
                         <div>
@@ -70,7 +70,7 @@
                     <hr>
                 </div>
 
-                <div class="ninja-form-group flex justify-start items-center gap-8">
+                <div class="nt-form-group flex justify-start items-center gap-8">
                     <div>
                         <el-tooltip
                             placement="right"
@@ -81,7 +81,7 @@
                                 <InfoFilled/>
                             </el-icon>
                         </el-tooltip>
-                        <label class="ninja-form-label">{{ $t('Max Records:') }}</label>
+                        <label class="nt-form-label">{{ $t('Max Records:') }}</label>
                         <NinjaInput v-model="form.entry_limit" />
                     </div>
 
@@ -95,7 +95,7 @@
                                 <InfoFilled/>
                             </el-icon>
                         </el-tooltip>
-                        <label class="ninja-form-label">{{ $t('Entry Type:') }}</label>
+                        <label class="nt-form-label">{{ $t('Entry Type:') }}</label>
                         <el-radio-group v-model="form.entry_status" class="ninja_tables_radio_group">
                             <el-radio border value="all" :label="$t('All')" class="mr-2" />
                             <el-radio border value="read" :label="$t('Read')" class="mr-2" />
@@ -104,7 +104,7 @@
                     </div>
                 </div>
 
-                <div class="ninja-form-group">
+                <div class="nt-form-group">
                     <template v-if="config && config.table">
                         <el-checkbox
                             :true-value="'yes'"
@@ -116,7 +116,7 @@
                     </template>
                 </div>
 
-                <div class="modal-footer">
+                <div class="nt-modal-footer">
                     <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
                     <NinjaButton v-if="editing"  @click="save" :btnText="$t('Update')"/>
                     <NinjaButton v-else  @click="save" :btnText="$t('Save')" />
