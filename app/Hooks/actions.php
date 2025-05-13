@@ -42,7 +42,6 @@ $app->addAction('wp_ajax_nopriv_wp_ajax_ninja_tables_public_action', [AjaxHandle
 $app->addAction('wp_loaded', [PreviewHandler::class, 'defaultTable']);
 $app->addAction('wp_loaded', [PreviewHandler::class, 'dragAndDropTable']);
 
-$app->addAction('init', [EditorBlockHandler::class, 'loadGutenBlock']);
 $app->addAction('init', [EditorBlockHandler::class, 'addTablesToEditor']);
 
 $app->addAction('admin_print_styles', [StyleHandler::class, 'adminMenuStyle']);

@@ -6,7 +6,6 @@ mix.setPublicPath('assets');
 mix.setResourceRoot('../');
 
 mix
-    .js('resources/admin/gutenblock.js', `assets/js/ninja-tables-gutenblock.js`)
     .js('resources/admin/blocks/table-block/block.js', `assets/blocks/table-block/block.js`)
     .react();
 
@@ -23,7 +22,6 @@ mix.js('resources/admin/Boot.js', `assets/js/ninja-tables-boot.js`)
     .sass('resources/public/css/_table_builder.scss', `assets/css/ninja-table-builder-public.css`)
     .sass('resources/admin/css/ninja-tables-admin.scss', `assets/css/ninja-tables-admin.css`)
     .sass('resources/admin/css/vendor.scss', 'assets/css/ninja-tables-vendor.css')
-    .sass('resources/admin/css/gutenblock.scss', 'assets/css/ninja-tables-gutenblock.css')
     .sass('resources/preview/preview.scss', 'assets/css/ninja-tables-preview.css')
     .copy('resources/libs', 'assets/libs')
     .copy('resources/img', 'assets/img')
