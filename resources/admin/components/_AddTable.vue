@@ -1,5 +1,5 @@
 <template>
-    <el-container class="ninja-add-table">
+    <el-container class="ninja-add-table" id="data-tables-app">
         <el-aside v-if="!table.ID" style="background-color: rgb(35, 40, 45);">
             <el-menu :collapse="isCollapse"
                      :default-active="activeTabName"
@@ -57,10 +57,15 @@
 
                     <div class="form-group">
                         <label for="name">{{ $t('Table Title') }}</label>
-                        <input v-model="table.post_title"
+                        <!-- <input v-model="table.post_title"
                                type="text" id="name" class="form-control"
                                placeholder="Enter a title to identify your table"
-                        >
+                        > -->
+                        <NinjaInput
+                            v-model="table.post_title"
+                            id="name"
+                            size="small"
+                            />
                     </div>
                     <div class="form-group">
                         <label>{{ $t('Table Description') }}</label>
@@ -151,6 +156,7 @@
     import PremiumNotice from './includes/PremiumNotice';
     import RightSideBar from "./TableBuilder/Sidebar/RightSideBar";
     import { useEventBus } from '../eventBus';
+import NinjaInput from '../@ui-utils/NinjaInput.vue';
 
     export default {
         name: 'add_table',
@@ -163,7 +169,8 @@
             'external-data-source': ExternalDataSource,
             ImportTable,
             RawSqlForm,
-            PremiumNotice
+            PremiumNotice,
+            NinjaInput
         },
         props: {
             table: {

@@ -21,7 +21,7 @@
                 <div class="copy_shortcode">
                     <el-tooltip effect="dark" content="Click to copy shortcode" title="Click to copy shortcode"
                         placement="top">
-                        <code class="copy flex" :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>
+                        <code class="copy flex p-[8px] rounded-[8px] border border-[#E1E4EA]" :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>
                             <img :src="assetUrl('icons/copy-02.svg')" class="mr-2" alt="copy" />
                             [ninja_tables id="{{ tableId }}"]
                         </code>
