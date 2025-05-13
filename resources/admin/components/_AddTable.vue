@@ -11,11 +11,9 @@
                 <el-menu-item @click="activeTabName = 'default'" index='default'>
                     <span>Default</span>
                 </el-menu-item>
+                
                 <el-menu-item @click="activeTabName = 'drag_and_drop'" index='drag_and_drop'>
                   <span>Drag & Drop Table</span>
-                </el-menu-item>
-                <el-menu-item @click="activeTabName = 'import_table'" index="import_table">
-                    <span>Import Table</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'fluent_form'" index='fluent_form'>
@@ -80,10 +78,6 @@
             </template>
             <template v-else-if="activeTabName === 'drag_and_drop'">
               <right-side-bar :initialData="initialData"></right-side-bar>
-            </template>
-
-            <template v-else-if="activeTabName === 'import_table'">
-                <import-table></import-table>
             </template>
 
             <template v-else-if="activeTabName == 'google_spread_sheet'">

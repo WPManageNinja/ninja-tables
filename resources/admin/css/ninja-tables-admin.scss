@@ -213,15 +213,20 @@
   &.el-dialog {
     border-radius: 20px;
     background: #FFFFFF;
+    padding: 0;
 
     .el-dialog__header {
       display: flex;
-      padding: 10px 16px 16px 10px;
+      padding: 20px 16px;
       align-items: center;
       gap: 14px;
       align-self: stretch;
       border-radius: 20px 20px 0 0;
       border-bottom: 1px solid #E1E4EA;
+
+      .el-dialog__headerbtn {
+        top: 12px;
+      }
     }
 
     .el-dialog__body {
@@ -229,8 +234,7 @@
         .ninja-tables-aside {
           display: flex;
           width: 260px;
-          height: 770px;
-          padding: 15px 4px 0 4px;
+          padding: 30px 20px;
           flex-direction: column;
           align-items: flex-start;
           gap: 20px;
@@ -248,6 +252,13 @@
               padding: 8px 12px;
               align-items: center;
               gap: 8px;
+              font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+              font-family: Inter;
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 500;
+              line-height: 20px;
+              letter-spacing: -0.084px;
 
               &.is-active,
               &.is-active:hover {
@@ -271,6 +282,7 @@
           gap: 10px;
           flex: 1 0 0;
           align-self: stretch;
+          border-radius: 0 0 20px 0;
 
           .ninja_modal-body {
             .ninja_modal_title {

@@ -87,17 +87,6 @@
     }
   }
 
-  // El tables
-  .el-table {
-    .el-table__inner-wrapper {
-      .el-table__header-wrapper{
-        .el-table__header {
-          @apply bg-red-500 !important;
-        }
-      }
-    }
-  }
-
   .ninja_tables {
     &.el-table tr th {
       @apply bg-[#F9FAFB] text-xs py-3 text-[#565865] text-[14px] font-[500] leading-5;
@@ -149,4 +138,11 @@
       }
     }
   }
+}
+
+.el-overlay {
+  background: rgba(2, 13, 23, 0.30) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  z-index: 999 !important;
 }
