@@ -5,7 +5,7 @@
         </h3>
 
         <template v-if="isFluentFormUpdated">
-            <p class="nt-modal-subtitle" v-if="!editing">
+            <p class="nt-modal-description" v-if="!editing">
                 {{ $t('Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase your form submissions.') }}
                 <a target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
                    {{ $t('Click here to learn more about WP Fluent From Integration') }}
@@ -115,13 +115,12 @@
                         </el-checkbox>
                     </template>
                 </div>
+            </div>
 
-                <div class="nt-modal-footer">
-                    <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
-                    <NinjaButton v-if="editing"  @click="save" :btnText="$t('Update')"/>
-                    <NinjaButton v-else  @click="save" :btnText="$t('Save')" />
-                </div>
-
+            <div class="nt-modal-footer">
+                <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
+                <NinjaButton v-if="editing"  @click="save" :btnText="$t('Update')"/>
+                <NinjaButton v-else  @click="save" :btnText="$t('Save')" />
             </div>
         </template>
 

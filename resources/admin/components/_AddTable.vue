@@ -48,7 +48,7 @@
                 <div class="ninja_modal-body">
                     <template v-if="!table.ID">
                         <h3 class="nt-modal-title">Manually Create a Table</h3>
-                        <p class="nt-modal-subtitle">
+                        <p class="nt-modal-description">
                             Manually create your table columns and rows to get complete
                             control over your data with tons of customizations.
                         </p>
@@ -116,6 +116,7 @@
                 <woo-data-source
                     v-if="activated_features.woocommerce_table"
                     :tableCreated="fireTableCreated"
+                    @modalClose="closeModal"
                 />
                 <div v-else-if="has_woo && hasPro">
                     <p>Please update to latest version of <b>Ninja Tables Pro</b> to use WooCommerce integration</p>
