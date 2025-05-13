@@ -2,9 +2,10 @@
     <div v-loading="loading" class="ntn_query_selections">
         <div v-for="(term,term_name) in query_terms" class="nt_each_selection">
             <div class="nt_query_header">
-                <h3>{{term.title}}</h3>
-                <p>{{term.description}}</p>
+                <h3 class="nt-modal-subtitle">{{term.title}}</h3>
+                <p class="nt-modal-description">{{term.description}}</p>
             </div>
+
             <div class="nt_query_body">
                 <el-checkbox-group v-model="query_selections[term_name]">
                     <el-checkbox
@@ -15,6 +16,7 @@
                 </el-checkbox-group>
             </div>
         </div>
+
         <div class="nt_each_selection">
             <el-checkbox
                 :true-value="'yes'"
@@ -24,9 +26,13 @@
             </el-checkbox>
         </div>
         <div class="nt_each_selection">
-            <label>
-                Initial Order By
-                <el-select size="small" v-model="query_conditions.order_by" placeholder="Order By">
+            <label class="nt-form-label mb-2">Initial Order By</label>
+            <div class="flex justify-start items-center gap-4">
+                <el-select
+                    class="ninja-select"
+                    v-model="query_conditions.order_by"
+                    placeholder="Order By"
+                >
                     <el-option
                         v-for="(item,item_key) in product_orders"
                         :key="item_key"
@@ -34,13 +40,15 @@
                         :value="item_key">
                     </el-option>
                 </el-select>
+
                 <el-select
+                    class="ninja-select"
                     v-show="query_conditions.order_by && query_conditions.order_by != 'random'"
-                    size="small"
                     v-model="query_conditions.order_by_type"
-                    placeholder="Order By Type">
+                    placeholder="Order By Type"
+                >
                     <el-option
-                        label="Assending Way"
+                        label="Ascending Way"
                         value="ASC">
                     </el-option>
                     <el-option
@@ -48,8 +56,7 @@
                         value="DESC">
                     </el-option>
                 </el-select>
-            </label>
-
+            </div>
         </div>
     </div>
 </template>
@@ -72,7 +79,9 @@
                     price: 'price',
                     popularity: 'Popularity (Sales)',
                     random: 'Random'
-                }
+                },
+                isIndeterminate: false,
+                checkAll: false
             }
         },
         methods: {

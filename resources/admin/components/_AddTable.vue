@@ -11,7 +11,7 @@
                 <el-menu-item @click="activeTabName = 'default'" index='default'>
                     <span>Default</span>
                 </el-menu-item>
-                
+
                 <el-menu-item @click="activeTabName = 'drag_and_drop'" index='drag_and_drop'>
                   <span>Drag & Drop Table</span>
                 </el-menu-item>
@@ -47,30 +47,30 @@
             <template v-if="activeTabName == 'default'">
                 <div class="ninja_modal-body">
                     <template v-if="!table.ID">
-                        <h3 class="ninja_modal_title">Manually Create a Table</h3>
-                        <p class="ninja_modal_subtitle">
+                        <h3 class="nt-modal-title">Manually Create a Table</h3>
+                        <p class="nt-modal-description">
                             Manually create your table columns and rows to get complete
                             control over your data with tons of customizations.
                         </p>
                     </template>
 
                     <div class="my-[30px]">
-                        <div class="form-group">
-                            <label class="form-label">{{ $t('Table Title') }}</label>
+                        <div class="nt-form-group">
+                            <label class="nt-form-label">{{ $t('Table Title') }}</label>
                             <NinjaInput
                                 v-model="table.post_title"
                                 :placeholder="$t('Enter a title to identify your table')"
                             />
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">{{ $t('Table Description') }}</label>
+                        <div class="nt-form-group">
+                            <label class="nt-form-label">{{ $t('Table Description') }}</label>
                             <wp_editor v-model="table.post_content"></wp_editor>
                         </div>
                     </div>
                 </div>
 
-                <div class="modal-footer">
+                <div class="nt-modal-footer">
                     <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
                     <NinjaButton v-if="table.ID" @click="addTable" :btnText="$t('Update')"/>
                     <NinjaButton v-else @click="addTable" :btnText="$t('Add')" />
@@ -101,6 +101,7 @@
             <template v-else-if="activeTabName == 'fluent_form'">
                 <fluent-form-data-source
                         :tableCreated="fireTableCreated"
+                        @modalClose="closeModal"
                 />
             </template>
 
@@ -115,6 +116,7 @@
                 <woo-data-source
                     v-if="activated_features.woocommerce_table"
                     :tableCreated="fireTableCreated"
+                    @modalClose="closeModal"
                 />
                 <div v-else-if="has_woo && hasPro">
                     <p>Please update to latest version of <b>Ninja Tables Pro</b> to use WooCommerce integration</p>

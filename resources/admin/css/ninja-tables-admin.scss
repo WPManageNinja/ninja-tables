@@ -285,7 +285,7 @@
           border-radius: 0 0 20px 0;
 
           .ninja_modal-body {
-            .ninja_modal_title {
+            .nt-modal-title {
               color: #0E121B;
               font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
               font-family: Inter;
@@ -295,7 +295,18 @@
               line-height: 28px;
             }
 
-            .ninja_modal_subtitle {
+            .nt-modal-subtitle {
+              color: #0E121B;
+              font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+              font-family: Inter;
+              font-size: 16px;
+              font-style: normal;
+              font-weight: 500;
+              line-height: 24px;
+              letter-spacing: -0.176px;
+            }
+
+            .nt-modal-description {
               color: #0E121B;
               font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
               font-family: Inter;
@@ -304,10 +315,26 @@
               font-weight: 400;
               line-height: 20px;
               letter-spacing: -0.084px;
+              margin-top: 4px;
+            }
+
+            .nt-form-group {
+              margin-bottom: 20px;
+
+              .nt-form-label {
+                color: #0E121B;
+                font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+                font-family: Inter;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px;
+                letter-spacing: -0.084px;
+              }
             }
           }
 
-          .modal-footer {
+          .nt-modal-footer {
             width: 100%;
             display: flex;
             justify-content: flex-end;
@@ -329,6 +356,14 @@
   font-weight: 500;
   line-height: 20px;
   letter-spacing: -0.084px;
+}
+
+.nt-checkbox-group-wrapper {
+  @apply border border-solid border-[#E1E4EA] rounded-[8px] mb-4;
+
+  .nt-checkbox-group-header {
+    @apply bg-[#F9FAFB] flex justify-between items-center px-4 py-2 rounded-t-[8px];
+  }
 }
 
 
