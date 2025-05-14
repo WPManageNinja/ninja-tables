@@ -45,9 +45,13 @@
                                     <h3 v-if="addColumnStatus || !columns.length" class="title">{{ $t('Add Table Column') }}</h3>
                                     <h3 v-else class="title">{{ $t('Available Columns') }}</h3>
                                     <div v-show="!addColumnStatus" class="inline_action" v-if="addable">
-                                        <el-button size="small" type="primary" v-show="columns.length" @click="addColumnStatus = !addColumnStatus">
-                                            {{ $t('Add Column') }}
-                                        </el-button>
+                                        <NinjaButton 
+                                        v-show="columns.length" 
+                                        @click="addColumnStatus = !addColumnStatus" 
+                                        :btnText="$t('Add Column')"
+                                        type="secondary"
+                                        :icon="assetUrl('/icons/add-01.svg')"
+                                        />
                                     </div>
                                 </div>
                                 <div class="widget_body border border-[#ebeef5]">
@@ -74,9 +78,10 @@
                                         <template #item="{element: column, index}">
                                             <div class="column drawer" :key="column.key">
                                                 <div class="header flex justify-between items-center" :class="{'border-b border-[#ebeef5]':currentIndex.includes(index)}">
-                                                    <div>
-                                                        <span class="dashicons dashicons-editor-justify handle" />
-                                                        <span @click="openDrawer(index)">{{ column.name || column.key }}</span>
+                                                    <div class="flex items-center gap-2">
+                                                        <!-- <span class="dashicons dashicons-editor-justify handle" /> -->
+                                                         <img class="cursor-move handle" :src="assetUrl('/icons/drag-drop.svg')"/>
+                                                        <span @click="openDrawer(index)" class="text-[14px]">{{ column.name || column.key }}</span>
                                                     </div>
                                                     <span @click="openDrawer(index)" class="cursor-pointer">
                                                         <!-- <img v-if="currentIndex.includes(index)" :src="assetUrl('/icons/chevron-up.svg')"/>
@@ -156,6 +161,7 @@
 
     import { tableLibs } from '../../../data/data'
     import { assetUrl } from '../../../utils/ninjatablesadmin';
+    import { NinjaButton } from '../../../@ui-utils';
 
     export default {
         name: 'TableConfiguration',
@@ -165,7 +171,8 @@
             NinjaCustomFilters,
             NinjaLanguageSettings,
             NinjaRenderingSettings,
-            NinjaButtonSettings
+            NinjaButtonSettings,
+            NinjaButton
         },
         props: ['config'],
         data() {
