@@ -99,7 +99,7 @@
                         <el-radio-group v-model="form.entry_status" class="ninja_tables_radio_group">
                             <el-radio border value="all" :label="$t('All')" class="mr-2" />
                             <el-radio border value="read" :label="$t('Read')" class="mr-2" />
-                            <el-radio border value="unread" :label="$t('Unread')" class="mr-2" />
+                            <el-radio border value="unread" :label="$t('Unread')" />
                         </el-radio-group>
                     </div>
                 </div>

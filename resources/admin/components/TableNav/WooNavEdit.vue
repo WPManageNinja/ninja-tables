@@ -104,21 +104,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .nt-woo-nav {
-        .nt-appearance {
-            label.el-checkbox {
-                display: block;
-            }
-        }
-
-        .nt-form-group {
-            margin-bottom: 15px;
-
-            label {
-                margin-right: 15px;
-            }
-        }
-    }
-</style>
