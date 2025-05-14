@@ -28,32 +28,7 @@
                         </el-row>
                     </div>
 
-<!--                    <div class="nt-transfer-wrapper">-->
-<!--                        <el-row>-->
-<!--                            <div style="text-align:center">-->
-<!--                                <el-transfer-->
-<!--                                    :data="post_types"-->
-<!--                                    v-model="selected_post_types"-->
-<!--                                    :titles="['All Types', 'Selected Types']"-->
-<!--                                    style="text-align: left; display: block"-->
-<!--                                    @change="handlePostTypeChange">-->
-<!--                                </el-transfer>-->
-<!--                            </div>-->
-<!--                        </el-row>-->
-
-<!--                        <el-row style="margin-top:20px;">-->
-<!--                            <div style="text-align: center">-->
-<!--                                <el-transfer-->
-<!--                                    :data="post_types_fields"-->
-<!--                                    v-model="selected_post_types_fields"-->
-<!--                                    :titles="['All Properties', 'Selected Properties']"-->
-<!--                                    style="text-align: left; display: block">-->
-<!--                                </el-transfer>-->
-<!--                            </div>-->
-<!--                        </el-row>-->
-<!--                    </div>-->
-
-                    <div class="bg-[#F9FAFB] p-3 mt-5 rounded-[8px] border border-solid border-[#E1E4EA]">
+                    <div class=" bg-[#F9FAFB] p-3 mt-5 rounded-[8px] border border-solid border-[#E1E4EA]">
                         <div class="mb-4">
                             <el-transfer
                                 filterable
@@ -62,7 +37,6 @@
                                 :titles="['All Types', 'Selected Types']"
                                 v-model="selected_post_types"
                                 @change="handlePostTypeChange"
-
                             >
                             </el-transfer>
                         </div>
@@ -75,16 +49,13 @@
                                 v-model="selected_post_types_fields"
                             />
                         </div>
-
-
                     </div>
 
-
-                    <div class="nt-form-group">
-                        <el-row>
-                            <el-collapse accordion value="conditions" v-model="conditions_section">
+                    <div class="my-[20px]">
+                            <el-collapse accordion class="nt-accordion" value="conditions" v-model="conditions_section">
                                 <el-collapse-item name="conditions" title="Conditions">
-                                    <el-checkbox v-model="currentUserPosts">Logged in user posts</el-checkbox>
+                                    <el-checkbox v-model="currentUserPosts" class="mt-2">{{ $t('Logged in user posts') }}</el-checkbox>
+
                                     <WPPostConditions
                                         v-if="conditions_section"
                                         :postStatuses="postStatuses"
@@ -94,7 +65,6 @@
                                         :fields="query_able_post_types_fields"/>
                                 </el-collapse-item>
                             </el-collapse>
-                        </el-row>
                     </div>
                 </div>
 
