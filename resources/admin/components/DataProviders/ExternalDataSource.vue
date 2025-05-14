@@ -1,83 +1,121 @@
 <template>
     <div>
         <div class="ninja_modal-body" v-if="!editing">
-
-            <el-steps :active="active_step" align-center>
-                <el-step title="Step 1"></el-step>
-                <el-step title="Step 2"></el-step>
-            </el-steps>
-
-            <template v-if="active_step == 0">
-                <template v-if="type == 'google-csv'">
-                    <h3>
-                        Construct Table from Google Sheets
+            <div class="external-link-heading">
+                <template v-if="type === 'google-csv'">
+                    <h3 class="nt-modal-title">
+                        {{ $t('Construct Table from Google Sheets') }}
                     </h3>
-                    <p class="ninja_subtitle">
-                        Whenever your Google Sheets data changes it will be automatically reflected here. You won't have
-                        to do a thing. Please provide the publishable public URL of your google sheet.
+                    <p class="nt-modal-description">
+                        {{`Whenever your Google Sheets data changes it will be automatically reflected here.
+                            You won't have to do a thing. Please provide the publishable public URL of your google sheet.`}}
                         <a target="_blank"
                            href="https://ninjatables.com/docs/google-sheets-integration/">
-                          View Documentation Here</a>
+                            {{$t('View Documentation Here')}}
+                        </a>
                     </p>
                 </template>
 
-                <template v-if="type == 'csv'">
-                    <h3>
-                        Construct Table from Remote CSV File
+                <template v-if="type === 'csv'">
+                    <h3 class="nt-modal-title">
+                        {{ $t('Construct Table from Remote CSV File') }}
                     </h3>
-                    <p class="ninja_subtitle">
-                        Whenever your remote CSV data changes it will be synced here automatically.
+                    <p class="nt-modal-description">
+                        {{ $t('Whenever your remote CSV data changes it will be synced here automatically.') }}
                     </p>
                 </template>
+            </div>
 
-                <div class="form-group">
-                    <label for="name">{{ $t('Table Title') }}</label>
-                    <input v-model="table.post_title"
-                           type="text"
-                           id="name"
-                           class="form-control"
-                           placeholder="Enter a title to identify your table"
-                           :disabled="!activated_features.external_data_source"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="remote_url">{{ $t('Data Source URL') }}</label>
-                    <input v-model="table.remote_url"
-                           id="remote_url"
-                           type="text"
-                           class="form-control"
-                           placeholder="Enter your source URL"
-                           :disabled="!activated_features.external_data_source"
-                    />
-                </div>
-            </template>
-
-            <template v-else>
-                <el-table
-                        v-loading="fetching"
-                        ref="rowSelectableTable"
-                        :data="fields"
-                        style="width:100% !important"
-                        @selection-change="handleFieldsSelectionChange"
+            <div class="my-[30px]">
+                <el-steps
+                    class="mx-auto my-5 max-w-[350px] nt-steps"
+                    :active="active_step"
+                    align-center
                 >
-                    <el-table-column type="selection"></el-table-column>
-                    <el-table-column prop="name" label="Select Entry Fields"></el-table-column>
-                </el-table>
-            </template>
+                    <el-step title="Step 1"></el-step>
+                    <el-step title="Step 2"></el-step>
+                </el-steps>
+            </div>
+
+            <div>
+                <template v-if="active_step === 0">
+                    <div class="nt-form-group">
+                        <label for="nt-form-label">{{ $t('Table Title') }}</label>
+                        <NinjaInput
+                            v-model="table.post_title"
+                            :placeholder="$t('Enter a title to identify your table')"
+                            :disabled="!activated_features.external_data_source"
+                        />
+                    </div>
+
+                    <div class="nt-form-group">
+                        <label for="remote_url" class="nt-form-label">{{ $t('Data Source URL') }}</label>
+                        <NinjaInput
+                            v-model="table.remote_url"
+                            :placeholder="$t('Enter your source URL')"
+                            :disabled="!activated_features.external_data_source"
+                        />
+                    </div>
+                </template>
+
+                <template v-else>
+                    <div class="nt-checkbox-group-wrapper">
+                        <div class="nt-checkbox-group-header"
+                             style="border-bottom: 1px solid #E1E4EA">
+                            <div>{{ $t('Select Entry Fields') }}</div>
+                            <div>
+                                <el-checkbox
+                                    v-model="checkAll"
+                                    :indeterminate="isIndeterminate"
+                                    @change="handleCheckAllChange"
+                                >
+                                    {{ $t('Select all') }}
+                                </el-checkbox>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <el-checkbox-group
+                                v-model="selectedFields"
+                                @change="handleFieldsSelectionChange"
+                            >
+                                <el-checkbox v-for="field in fields" :key="field.name" :value="field.name">
+                                    {{ field.name }}
+                                </el-checkbox>
+                            </el-checkbox-group>
+                        </div>
+                    </div>
+                </template>
+            </div>
         </div>
 
+
+<!--  for table edit nav -->
         <template v-else>
-            <el-table
-                    :loading="fetching"
-                    ref="rowSelectableTable"
-                    :data="fields"
-                    style="width:100% !important"
-                    @selection-change="handleFieldsSelectionChange"
-            >
-                <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="name" label="Select Entry Fields"></el-table-column>
-            </el-table>
+            <div class="nt-checkbox-group-wrapper">
+                <div class="nt-checkbox-group-header"
+                     style="border-bottom: 1px solid #E1E4EA">
+                    <div>{{ $t('Select Entry Fields') }}</div>
+                    <div>
+                        <el-checkbox
+                            v-model="checkAll"
+                            :indeterminate="isIndeterminate"
+                            @change="handleCheckAllChange"
+                        >
+                            {{ $t('Select all') }}
+                        </el-checkbox>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <el-checkbox-group
+                        v-model="selectedFields"
+                        @change="handleFieldsSelectionChange"
+                    >
+                        <el-checkbox v-for="field in fields" :key="field.name" :value="field.name">
+                            {{ field.name }}
+                        </el-checkbox>
+                    </el-checkbox-group>
+                </div>
+            </div>
         </template>
 
         <template v-if="!hasPro">
@@ -87,25 +125,16 @@
             <UpgradeNotice/>
         </template>
 
-        <div style="margin-top: 20px" class="modal-footer">
-            <el-row v-if="!editing">
-                <el-col :md="12">
-                    <el-button type="primary" style="float:left" size="small" @click="nextStep">
-                        {{ active_step > 0 ? 'Prev' : 'Next' }}
-                    </el-button>
-                </el-col>
-                <el-col :md="12" v-if="active_step > 0">
-                    <el-button
-                            style="float: right"
-                            type="success"
-                            size="small"
-                            :loading="saving"
-                            @click="save"
-                            :disabled="!activated_features.external_data_source"
-                    >{{ $t('Save') }}
-                    </el-button>
-                </el-col>
-            </el-row>
+        <div class="nt-modal-footer" v-if="!editing">
+            <div v-if="active_step > 0" class="flex items-center gap-4">
+                <NinjaButton @click="nextStep" type="secondary" :btnText="$t('Previous')" />
+                <NinjaButton @click="save" :btnText="$t('Save')" :disabled="!activated_features.external_data_source"/>
+            </div>
+
+            <div v-else class="flex items-center gap-4">
+                <NinjaButton @click="$emit('modalClose')" :btnText="$t('Cancel')" type="secondary" />
+                <NinjaButton @click="nextStep" :btnText="$t('Next')"/>
+            </div>
         </div>
 
         <div style="margin-top: 15px;" v-if="editing">
@@ -142,10 +171,14 @@
 <script>
     import PremiumNotice from '../includes/PremiumNotice';
     import UpgradeNotice from '../includes/UpgradeNotice';
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
     export default {
         name: 'Remote-Data-Source',
         components: {
+            NinjaButton,
+            NinjaInput,
             PremiumNotice,
             UpgradeNotice
         },
@@ -190,6 +223,9 @@
                 active_step: 0,
                 saving: false,
                 fetching: false,
+                selectedFields: [],
+                checkAll: false,
+                isIndeterminate: false
             }
         },
         methods: {
@@ -235,11 +271,10 @@
 
                         if (this.editing) {
                             let selected = this.columns.map(c => c.original_name);
-                            this.$nextTick(() => {
-                                this.fields.filter(f => selected.indexOf(f.name) != -1).forEach(row => {
-                                    this.$refs.rowSelectableTable.toggleRowSelection(row);
-                                });
-                            });
+                            this.selectedFields = selected.filter(name =>
+                                this.fields.some(f => f.name === name)
+                            );
+                            this.updateCheckAllState();
                         }
                     })
                     .fail(res => {
@@ -252,8 +287,19 @@
                     })
                     .always(res => this.fetching = false);
             },
-            handleFieldsSelectionChange(val) {
-                this.table.fields = val;
+            handleCheckAllChange(val) {
+                this.selectedFields = val ? this.fields.map(field => field.name) : [];
+                this.handleFieldsSelectionChange(this.selectedFields);
+            },
+            handleFieldsSelectionChange(value) {
+                this.table.fields = this.fields.filter(field => value.includes(field.name));
+                this.updateCheckAllState();
+            },
+            updateCheckAllState() {
+                const fieldsCount = this.fields.length;
+                const selectedCount = this.selectedFields.length;
+                this.checkAll = fieldsCount > 0 && selectedCount === fieldsCount;
+                this.isIndeterminate = selectedCount > 0 && selectedCount < fieldsCount;
             },
             save(event) {
                 this.saving = true;

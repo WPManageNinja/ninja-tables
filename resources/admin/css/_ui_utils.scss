@@ -81,17 +81,6 @@
     }
   }
 
-  // El tables
-  .el-table {
-    .el-table__inner-wrapper {
-      .el-table__header-wrapper {
-        .el-table__header {
-          @apply bg-red-500 !important;
-        }
-      }
-    }
-  }
-
   .ninja_tables {
     &.el-table tr th {
       @apply bg-[#F9FAFB] text-xs py-3 text-[#565865] text-[14px] font-[500] leading-5;
@@ -130,6 +119,8 @@
       border: 1px dashed #e1e4ea;
       background: white;
       border-radius: 10px !important;
+      margin-right: 10px;
+      margin-bottom: 0;
     }
     .el-radio__input.is-checked + .el-radio__label {
       color: #335cff;
@@ -140,6 +131,47 @@
       &::after {
         height: 7px;
         width: 7px;
+      }
+    }
+  }
+
+  .nt-steps.el-steps--horizontal {
+    .el-step__main {
+      .el-step__title {
+        font-weight: 400 !important;
+      }
+    }
+    .is-process {
+      .el-step__icon {
+        border: 1px solid #335CFF !important;
+        .el-step__icon-inner {
+          font-weight: 300;
+          color: #335CFF;
+        }
+      }
+    }
+    .is-wait {
+      .el-step__line {
+        background: #CACFD8;
+      }
+      .el-step__icon {
+        border: 1px solid #CACFD8 !important;
+        .el-step__icon-inner {
+          font-weight: 300;
+          color: #CACFD8;
+        }
+      }
+    }
+    .is-finish {
+      .el-step__line {
+        background: #335CFF;
+      }
+      .el-step__icon {
+        border: 1px solid #335CFF !important;
+        .el-step__icon-inner {
+          font-weight: 300;
+          color: #335CFF;
+        }
       }
     }
   }
@@ -164,4 +196,11 @@
       }
     }
   }
+}
+
+.el-overlay {
+  background: rgba(2, 13, 23, 0.30) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  z-index: 999 !important;
 }
