@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" class="ninja_modal-body">
-        <h3 v-if="!editing" class="nt-modal-title">
+        <h3 class="nt-modal-title">
             {{ $t('Construct Table from Your WooCommerce Products') }}
         </h3>
 

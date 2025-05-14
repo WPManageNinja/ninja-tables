@@ -134,6 +134,47 @@
       }
     }
   }
+
+  .nt-steps.el-steps--horizontal {
+    .el-step__main {
+      .el-step__title {
+        font-weight: 400 !important;
+      }
+    }
+    .is-process {
+      .el-step__icon {
+        border: 1px solid #335CFF !important;
+        .el-step__icon-inner {
+          font-weight: 300;
+          color: #335CFF;
+        }
+      }
+    }
+    .is-wait {
+      .el-step__line {
+        background: #CACFD8;
+      }
+      .el-step__icon {
+        border: 1px solid #CACFD8 !important;
+        .el-step__icon-inner {
+          font-weight: 300;
+          color: #CACFD8;
+        }
+      }
+    }
+    .is-finish {
+      .el-step__line {
+        background: #335CFF;
+      }
+      .el-step__icon {
+        border: 1px solid #335CFF !important;
+        .el-step__icon-inner {
+          font-weight: 300;
+          color: #335CFF;
+        }
+      }
+    }
+  }
   .nt_tab_design {
     .el-tabs__header .is-top {
       .el-tabs__nav-scroll {

@@ -95,6 +95,7 @@
                         :tableCreated="fireTableCreated"
                         :has-pro="hasPro"
                         :activated_features="activated_features"
+                        @modalClose="closeModal"
                 />
             </template>
 

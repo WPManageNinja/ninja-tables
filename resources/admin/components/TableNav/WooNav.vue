@@ -1,20 +1,12 @@
 <template>
     <div v-loading="loading" class="ntn_query_selections">
         <div v-for="(term,term_name) in query_terms" class="nt_each_selection">
-            <div class="nt_query_header">
-                <h3 class="nt-modal-subtitle">{{term.title}}</h3>
-                <p class="nt-modal-description">{{term.description}}</p>
-            </div>
-
-            <div class="nt_query_body">
-                <el-checkbox-group v-model="query_selections[term_name]">
-                    <el-checkbox
-                        v-for="taxonomy in term.terms"
-                        :key="taxonomy.slug"
-                        :value="taxonomy.slug">{{taxonomy.name}} ({{taxonomy.count}})
-                    </el-checkbox>
-                </el-checkbox-group>
-            </div>
+            <WooTypeSelection
+                :term="term"
+                :termName="term_name"
+                :querySelections="query_selections[term_name]"
+                @selectionChange="handleSelectionChange($event, term_name)"
+            />
         </div>
 
         <div class="nt_each_selection">
@@ -63,10 +55,14 @@
 
 <script type="text/babel">
     import each from 'lodash/each';
+    import WooTypeSelection from './_WooTypeSelection.vue';
 
     export default {
         name: 'woo_conditions',
         props: ['query_selections', 'query_conditions'],
+        components: {
+            WooTypeSelection
+        },
         data() {
             return {
                 query_terms: [],
@@ -80,8 +76,6 @@
                     popularity: 'Popularity (Sales)',
                     random: 'Random'
                 },
-                isIndeterminate: false,
-                checkAll: false
             }
         },
         methods: {
@@ -105,6 +99,10 @@
                     .always(() => {
                         this.loading = false;
                     })
+            },
+
+            handleSelectionChange(selections, termName) {
+                this.query_selections[termName] = selections;
             },
         },
         mounted() {
