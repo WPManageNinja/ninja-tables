@@ -86,6 +86,7 @@
                         :tableCreated="fireTableCreated"
                         :has-pro="hasPro"
                         :activated_features="activated_features"
+                        @modalClose="closeModal"
                 />
             </template>
 
@@ -133,6 +134,7 @@
                     :has_sql_permission="has_sql_permission"
                     :tableCreated="fireTableCreated"
                     :activated_features="activated_features"
+                    @modalClose="closeModal"
                 />
             </template>
         </el-main>
