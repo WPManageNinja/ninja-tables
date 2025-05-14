@@ -175,6 +175,7 @@
       }
     }
   }
+
   .nt_tab_design {
     .el-tabs__header .is-top {
       .el-tabs__nav-scroll {
@@ -188,6 +189,7 @@
       padding: 0 18px;
     }
   }
+
   .el-radio-group {
     .is-active {
       .el-radio-button__inner {
@@ -196,6 +198,95 @@
       }
     }
   }
+
+  .el-transfer {
+    width: 100%;
+
+    .el-input {
+      .el-input__wrapper {
+        border-radius: 8px;
+
+        &:focus {
+          border: 1px solid #409EFF;
+          box-shadow: none;
+        }
+        .el-input__inner {
+          border: none;
+
+          &:focus {
+            border: none;
+            box-shadow: none;
+          }
+        }
+      }
+    }
+    .el-transfer__buttons{
+      button{
+        background: white !important;
+        border: 1px solid #E1E4EA;
+        padding: 5px 8px;
+        svg{
+          color: #525866;
+        }
+      }
+      button:nth-of-type(1){
+        border-radius: 8px 0px 0px 8px;
+        &:hover{
+          border: 1px solid #E1E4EA;
+        }
+      }
+      button:nth-of-type(2){
+        border-radius: 0 8px 8px 0;
+        margin: 0;
+        border-left: none;
+        &:hover{
+          border-top: 1px solid ;
+          border-right: 1px solid;
+          border-bottom: 1px solid;
+          border-color: #E1E4EA;
+        }
+      }
+
+      .is-disabled{
+        background: #F5F7FA !important;
+        svg{
+          color: #CACFD8 !important;
+        }
+      }
+    }
+
+    .el-transfer-panel{
+      width: 40%;
+      border-radius: 12px;
+
+      .el-transfer-panel__header{
+        background: transparent;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        padding: 20px 16px 12px 16px;
+
+        .el-checkbox{
+          .el-checkbox__label{
+            font-size: 14px;
+            font-weight: 300;
+          }
+        }
+      }
+
+      .el-transfer-panel__body{
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        font-weight: 300;
+
+        .el-checkbox-group {
+          .el-checkbox__label {
+            font-weight: 300;
+          }
+        }
+      }
+    }
+  }
+
 }
 
 .el-overlay {

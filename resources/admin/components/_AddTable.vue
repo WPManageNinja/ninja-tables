@@ -108,9 +108,10 @@
             </template>
 
             <template v-else-if="activeTabName == 'wp_posts'">
-                <wp-posts-data-source
+                <WPPosts
                         :tableCreated="fireTableCreated"
                         :activated_features="activated_features"
+                        @modalClose="closeModal"
                 />
             </template>
 
@@ -163,7 +164,7 @@
             NinjaButton,
             RightSideBar,
             wp_editor: wp_editor,
-            'wp-posts-data-source': WPPosts,
+            WPPosts,
             'woo-data-source': WooProducts,
             'fluent-form-data-source': FluentForm,
             'external-data-source': ExternalDataSource,

@@ -1,5 +1,5 @@
 <template>
-    <div v-loading="loading" class="ninja_tables_wpposts">
+    <div v-loading="loading" class="ninja_modal-body ninja_tables_wpposts">
         <template v-if="!hasPro">
             <premium-notice highlight="Create nice tables from your existings posts/pages/custom post types"/>
         </template>
@@ -7,7 +7,118 @@
             <upgrade-notice/>
         </template>
         <div v-else>
+
+            <div v-if="!hasPLainLayout">
+                <h3 class="nt-modal-title">
+                    Construct Table from Posts / CPTs
+                </h3>
+                <p class="nt-modal-description">
+                    Displays website content in a searchable, sortable with Ninja Tables. It supports custom posts,
+                    pages, & custom post types.
+                    <a target="_blank" href="https://ninjatables.com/docs/create-custom-column-in-wp-post-cpt-woocommerce-table/">
+                        Learn more about this module
+                    </a>
+                </p>
+
+                <div class="my-[30px]">
+                    <div class="nt-form-group">
+                        <el-row>
+                            <label class="nt-form-label">{{ $t('Table Title') }}</label>
+                            <NinjaInput v-model="title" placeholder="Title"/>
+                        </el-row>
+                    </div>
+
+<!--                    <div class="nt-transfer-wrapper">-->
+<!--                        <el-row>-->
+<!--                            <div style="text-align:center">-->
+<!--                                <el-transfer-->
+<!--                                    :data="post_types"-->
+<!--                                    v-model="selected_post_types"-->
+<!--                                    :titles="['All Types', 'Selected Types']"-->
+<!--                                    style="text-align: left; display: block"-->
+<!--                                    @change="handlePostTypeChange">-->
+<!--                                </el-transfer>-->
+<!--                            </div>-->
+<!--                        </el-row>-->
+
+<!--                        <el-row style="margin-top:20px;">-->
+<!--                            <div style="text-align: center">-->
+<!--                                <el-transfer-->
+<!--                                    :data="post_types_fields"-->
+<!--                                    v-model="selected_post_types_fields"-->
+<!--                                    :titles="['All Properties', 'Selected Properties']"-->
+<!--                                    style="text-align: left; display: block">-->
+<!--                                </el-transfer>-->
+<!--                            </div>-->
+<!--                        </el-row>-->
+<!--                    </div>-->
+
+                    <div class="bg-[#F9FAFB] p-3 mt-5 rounded-[8px] border border-solid border-[#E1E4EA]">
+                        <div class="mb-4">
+                            <el-transfer
+                                filterable
+                                class="my-3 flex justify-between items-center"
+                                :data="post_types"
+                                :titles="['All Types', 'Selected Types']"
+                                v-model="selected_post_types"
+                                @change="handlePostTypeChange"
+
+                            >
+                            </el-transfer>
+                        </div>
+                        <div>
+                            <el-transfer
+                                filterable
+                                class="flex justify-between items-center"
+                                :data="post_types_fields"
+                                :titles="['All Properties', 'Selected Properties']"
+                                v-model="selected_post_types_fields"
+                            />
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="nt-form-group">
+                        <el-row>
+                            <el-collapse accordion value="conditions" v-model="conditions_section">
+                                <el-collapse-item name="conditions" title="Conditions">
+                                    <el-checkbox v-model="currentUserPosts">Logged in user posts</el-checkbox>
+                                    <WPPostConditions
+                                        v-if="conditions_section"
+                                        :postStatuses="postStatuses"
+                                        :selected_post_types="selected_post_types"
+                                        :conditions="conditions"
+                                        :allPostTypes="all_types"
+                                        :fields="query_able_post_types_fields"/>
+                                </el-collapse-item>
+                            </el-collapse>
+                        </el-row>
+                    </div>
+                </div>
+
+                <div class="nt-modal-footer">
+                    <NinjaButton
+                        type="secondary"
+                        :btnText="$t('Cancel')"
+                        @click="$emit('modalClose')"
+                    />
+
+                    <NinjaButton
+                        :btnText="$t('Save')"
+                        @click="save"
+                        :loading="saving"
+                        :disabled="!activated_features.wp_posts_table"
+                    />
+                </div>
+            </div>
+
             <template v-if="hasPLainLayout">
+                <div class="p-4 m-4 border-gray-700 rounded-[12px] w-full">
+                    <strong>Test: Has Pain Layout</strong>
+                    <p>From WPPosts.vue line 97, remove from here</p>
+                </div>
                 <el-row>
                     <el-col :md="12" class="table-rows">
                         <el-transfer
@@ -70,90 +181,6 @@
                     </el-button>
                 </el-row>
             </template>
-            <template v-if="!hasPLainLayout">
-                <h3>
-                    Construct Table from Posts / CPTs
-                </h3>
-                <p class="ninja_subtitle">
-                    Displays website content in a searchable, sortable with Ninja Tables. It supports custom posts,
-                    pages, &
-                    custom post types. <a target="_blank"
-                                          href="https://ninjatables.com/docs/create-custom-column-in-wp-post-cpt-woocommerce-table/">Learn more
-                    about this module</a>
-                </p>
-
-                <el-steps :active="active_step" align-center>
-                    <el-step title="Step 1"></el-step>
-                    <el-step title="Step 2"></el-step>
-                </el-steps>
-
-                <template v-if="active_step == 0">
-                    <el-row style="margin-top:20px;">
-                        <el-input placeholder="Title" v-model="title"></el-input>
-                    </el-row>
-
-                    <el-row style="margin-top:20px;">
-                        <div style="text-align:center">
-                            <el-transfer
-                                :data="post_types"
-                                v-model="selected_post_types"
-                                :titles="['All Types', 'Selected Types']"
-                                style="text-align: left; display: block"
-                                @change="handlePostTypeChange">
-                            </el-transfer>
-                        </div>
-                    </el-row>
-                </template>
-
-                <template v-if="active_step == 1">
-                    <el-row style="margin-top:20px;">
-                        <div style="text-align: center">
-                            <el-transfer
-                                :data="post_types_fields"
-                                v-model="selected_post_types_fields"
-                                :titles="['All Properties', 'Selected Properties']"
-                                style="text-align: left; display: block">
-                            </el-transfer>
-                        </div>
-                    </el-row>
-
-                    <el-row style="margin-top:20px;">
-                        <div>
-                            <el-collapse accordion value="conditions" v-model="conditions_section">
-                                <el-collapse-item name="conditions" title="Conditions">
-                                  <el-checkbox v-model="currentUserPosts">Logged in user posts</el-checkbox>
-                                    <WPPostConditions
-                                        v-if="conditions_section"
-                                        :postStatuses="postStatuses"
-                                        :selected_post_types="selected_post_types"
-                                        :conditions="conditions"
-                                        :allPostTypes="all_types"
-                                        :fields="query_able_post_types_fields"/>
-                                </el-collapse-item>
-                            </el-collapse>
-                        </div>
-                    </el-row>
-                </template>
-
-                <el-row>
-                    <el-col :md="12">
-                        <el-button type="primary" style="margin-top: 12px;" @click="nextStep">
-                            {{ active_step > 0 ? 'Prev' : 'Next' }}
-                        </el-button>
-                    </el-col>
-
-                    <el-col :md="12">
-                        <el-button
-                            v-if="active_step > 0"
-                            type="success"
-                            :disabled="!activated_features.wp_posts_table"
-                            :loading="saving"
-                            style="float:right;margin-top:12px;"
-                            @click="save">Save
-                        </el-button>
-                    </el-col>
-                </el-row>
-            </template>
         </div>
     </div>
 </template>
@@ -163,6 +190,8 @@
     import WpPostMetaQuery from './WPPostMetaQuery';
     import PremiumNotice from '../includes/PremiumNotice';
     import UpgradeNotice from '../includes/UpgradeNotice';
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
     export default {
         name: 'WP-Posts',
@@ -179,6 +208,8 @@
             }
         },
         components: {
+            NinjaButton,
+            NinjaInput,
             WPPostConditions,
             PremiumNotice,
             UpgradeNotice,
