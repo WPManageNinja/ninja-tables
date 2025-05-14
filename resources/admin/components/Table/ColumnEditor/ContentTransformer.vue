@@ -34,7 +34,7 @@
             <table class="wp-list-table widefat fixed striped">
                 <thead>
                     <tr>
-                        <th>Column Title</th>
+                        <th></th>
                         <th>Reference Shortcode</th>
                     </tr>
                 </thead>

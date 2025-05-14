@@ -1,4 +1,4 @@
-#data-tables-app {
+.toplevel_page_ninja_tables {
   .ninja-button {
     @apply rounded-[8px] p-[8px] px-5 leading-5 font-[500] text-[14px] cursor-pointer flex;
   }
@@ -324,11 +324,11 @@
     }
   }
 
-}
+  .el-overlay {
+    background: rgba(2, 13, 23, 0.30) !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+    z-index: 999 !important;
+  }
 
-.el-overlay {
-  background: rgba(2, 13, 23, 0.30) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(2px) !important;
-  z-index: 999 !important;
 }

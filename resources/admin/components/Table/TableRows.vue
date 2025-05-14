@@ -300,6 +300,7 @@
         </el-dialog>
 
         <el-dialog
+            class="ninja_create-table-modal"
             v-model="columnModal"
             :close-on-click-modal="false"
             :top="'50px'"
@@ -931,11 +932,6 @@
         &:hover {
             color: #58B7FF;
         }
-    }
-
-    .instruction_block {
-        padding: 30px 20px;
-        background: white;
     }
 
     .js-sortable-table {
