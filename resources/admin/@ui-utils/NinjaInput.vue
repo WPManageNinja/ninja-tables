@@ -1,26 +1,25 @@
 <template>
-    <el-input
-        :placeholder="placeholder"
-        :model-value="modelValue"
-        :disabled="disabled"
-        :size="size"
-        @update:model-value="handleInput"
-        class="ninja-input"
-    >
-        <!-- Prefix Slot -->
-        <template #prefix>
+    <div class="ninja-input-wrapper">
+        <div v-if="$slots.prefix || prefixIcon" class="ninja-input-prefix">
             <slot name="prefix">
                 <img v-if="prefixIcon" :src="assetUrl(prefixIcon)" alt="Prefix Icon" class="prefix-icon" />
             </slot>
-        </template>
-
-        <!-- Suffix Slot -->
-        <template #suffix>
+        </div>
+        <input
+            :placeholder="placeholder"
+            :value="modelValue"
+            :disabled="disabled"
+            :class="['ninja-input', sizeClass]"
+            @input="handleInput"
+            @change="handleChange"
+            v-bind="$attrs"
+        />
+        <div v-if="$slots.suffix || suffixIcon" class="ninja-input-suffix">
             <slot name="suffix">
                 <img v-if="suffixIcon" :src="assetUrl(suffixIcon)" alt="Suffix Icon" class="suffix-icon" />
             </slot>
-        </template>
-    </el-input>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -28,9 +27,10 @@ import { assetUrl } from "../utils/ninjatablesadmin";
 
 export default {
     name: "NinjaInput",
+    inheritAttrs: false,
     props: {
         modelValue: {
-            type: String,
+            type: [String, Number],
             default: "",
         },
         placeholder: {
@@ -43,7 +43,7 @@ export default {
         },
         size: {
             type: String,
-            default: "default", // Options: 'small', 'default', 'large'
+            default: "default",
         },
         prefixIcon: {
             type: String,
@@ -54,19 +54,25 @@ export default {
             default: null,
         },
     },
+    computed: {
+        sizeClass() {
+            return {
+                'ninja-input--small': this.size === 'small',
+                'ninja-input--large': this.size === 'large',
+            };
+        }
+    },
     methods: {
         assetUrl,
-        handleInput(value) {
-            this.$emit("update:modelValue", value); // Emit the updated value to the parent
+        handleInput(event) {
+            const value = event.target.value;
+            this.$emit("update:modelValue", value);
+        },
+        handleChange(event) {
+            const value = event.target.value;
+            this.$emit("change", value);
         },
     },
+    emits: ['update:modelValue'],
 };
 </script>
-
-<style scoped>
-.prefix-icon,
-.suffix-icon {
-    width: 16px;
-    height: 16px;
-}
-</style>

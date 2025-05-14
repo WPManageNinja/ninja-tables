@@ -1,64 +1,77 @@
 <template>
     <div class="ninja_design">
-        <div class="ninja_title_section">
-            <div class="ninja_title">
-                <h3 style="margin-right: 15px;">Table Style Customization</h3>
-                <el-radio-group class="ninja_resp_tabs" size="small" v-model="showingDevice">
-                    <el-radio-button value="desktop">
-                        <span class="dashicons dashicons-desktop"></span> Desktop
-                    </el-radio-button>
-                    <el-radio-button value="tablet">
-                        <span class="dashicons dashicons-tablet"></span> Tablet
-                    </el-radio-button>
-                    <el-radio-button value="mobile">
-                        <span class="dashicons dashicons-smartphone"></span> Mobile
-                    </el-radio-button>
-                </el-radio-group>
-            </div>
-            <el-button :loading="savingSettings" :disabled="savingSettings" size="small" type="primary"
-                @click="storeSettings()">Update Settings
-            </el-button>
-        </div>
         <div class="ninja_design_wrapper">
-            <div v-loading="!app_ready" style="background: white; padding: 10px 20px;" class="design_preview">
-                <div class="ninja_upgrade_bar" v-if="showProNotice">
-                    {{ $t('Color customization is a PRO feature. Please upgrade to pro apply this feature.') }}
-                    <get-pro type="primary" />
-                </div>
-                <div :id="'footable_parent_' + tableId"
-                    class="footable_parent ninja_table_wrapper loading_ninja_table wp_table_data_press_parent"
-                    :class="wrapperClasses">
+            <div v-loading="!app_ready" class="w-[70%]">
+                <div class="design_preview">
+                    <div class="flex justify-center items-center mb-5">
+                        <div class="flex items-center rounded-[8px] px-[10px] py-[6px] bg-white"
+                            style="border: 1px solid #E1E4EA">
+                            <div class="mr-3 pr-2 flex items-center" style="border-right: 1px solid #E1E4EA">
+                                <img @click="showingDevice = 'desktop'"
+                                    :class="`cursor-pointer ${(activeTab !== 'desktop' && activeTab !== undefined) && 'non-selected'}`"
+                                    :src="assetUrl('icons/computer.svg')" />
+                            </div>
+                            <div class="mr-3 pr-2 flex items-center" style="border-right: 1px solid #E1E4EA">
+                                <img @click="showingDevice = 'tablet'"
+                                    :class="`cursor-pointer ${activeTab !== 'tablet' && 'non-selected'}`"
+                                    :src="assetUrl('icons/tablet-pen.svg')" />
+                            </div>
+                            <div class="flex items-center">
+                                <img @click="showingDevice = 'mobile'"
+                                    :class="`cursor-pointer ${activeTab !== 'mobile' && 'non-selected'}`"
+                                    :src="assetUrl('icons/smart-phone-01.svg')" />
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: white; padding: 10px 20px;">
+                        <div class="ninja_upgrade_bar" v-if="showProNotice">
+                            {{ $t('Color customization is a PRO feature. Please upgrade to pro apply this feature.') }}
+                            <get-pro type="primary" />
+                        </div>
+                        <div :id="'footable_parent_' + tableId"
+                            class="footable_parent ninja_table_wrapper loading_ninja_table wp_table_data_press_parent"
+                            :class="wrapperClasses">
 
-                    <h3 v-if="tableSettings.show_title" class="table_title footable_title">{{ config.table.post_title
-                    }}</h3>
-                    <div v-if="tableSettings.show_description" class="table_description footable_description"
-                        v-html="config.table.post_content"></div>
-                    <table v-show="app_ready" :id="'footable_' + tableId" :class="tableClasses" :style="fontSetting"
-                        class="table foo-table ninja_footable">
-                        <colgroup>
-                            <col v-for="(column, column_index) in formattedColumns" :key="column_index"
-                                :class="['ninja_column_' + column_index, column.breakpoints]">
-                            </col>
-                        </colgroup>
-                        <thead></thead>
-                    </table>
-                </div>
-                <div class="ninja_demo_disclaimer">
-                    <hr />
-                    <p v-if="tableSettings.stackable == 'yes'">
-                        <b>For Stackable Tables, Live preview is disabled here. Please check on preview url</b>
-                    </p>
-                    <p>
-                        <b>Note: </b> For preview purpose, you are seeing up to 25 latest rows here and and per page 10
-                        items if you enable paginate. Also note that, The table style may differ at the frontend as your
-                        theme may overwrite few css elements.
-                    </p>
-                    <p>Some elements like custom filters and row-inline styling is not available in this design mode.
-                        Please check on live preview or in your embeded page.</p>
+                            <h3 v-if="tableSettings.show_title && config?.table" class="table_title footable_title">
+                                {{ config.table.post_title }}
+                            </h3>
+                            <div v-if="tableSettings.show_description && config?.table"
+                                class="table_description footable_description" v-html="config.table.post_content">
+                            </div>
+                            <table v-show="app_ready" :id="'footable_' + tableId" :class="tableClasses"
+                                :style="fontSetting" class="table foo-table ninja_footable">
+                                <colgroup>
+                                    <col v-for="(column, column_index) in formattedColumns" :key="column_index"
+                                        :class="['ninja_column_' + column_index, column.breakpoints]">
+                                    </col>
+                                </colgroup>
+                                <thead></thead>
+                            </table>
+                        </div>
+                        <div class="ninja_demo_disclaimer">
+                            <hr />
+                            <p v-if="tableSettings.stackable == 'yes'">
+                                <b>For Stackable Tables, Live preview is disabled here. Please check on preview url</b>
+                            </p>
+                            <p>
+                                <b>Note: </b> For preview purpose, you are seeing up to 25 latest rows here and and per
+                                page
+                                10
+                                items if you enable paginate. Also note that, The table style may differ at the frontend
+                                as
+                                your
+                                theme may overwrite few css elements.
+                            </p>
+                            <p>Some elements like custom filters and row-inline styling is not available in this design
+                                mode.
+                                Please check on live preview or in your embeded page.</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            <div class="design_controls">
-                <el-tabs v-model="activeDesign" type="border-card">
+            <div class="w-[30%] bg-white">
+                <el-tabs v-model="activeDesign" tab-position="top" class="nt_tab_design">
                     <el-tab-pane label="Styling" name="features">
                         <div class="form_group">
                             <h3 class="ninja_inner_title">Select Styling Library</h3>
@@ -583,11 +596,11 @@ import SortableUpgradeNotice from '../includes/SortableUpgradeNotice.vue';
 import NinjaColorPicker from '../Extras/ColorPicker';
 import GetPro from "../Tools/GetPro";
 import { useEventBus } from './../../eventBus';
-
+import { assetUrl } from '../../utils/ninjatablesadmin';
+import tableConfigStore from '../../store/tableConfigStore';
 
 export default {
     name: 'table_preview',
-    props: ['config'],
     components: {
         GetPro,
         SortableUpgradeNotice,
@@ -595,11 +608,12 @@ export default {
     },
     data() {
         return {
+            store: tableConfigStore,
             fontFamily: ['inherit', 'cursive', 'fantasy', 'monospace', 'sans-serif', 'serif', 'system-ui', 'ui-monospace', 'ui-rounded', 'ui-sans-serif', 'ui-serif'],
             rows: [],
             activeDesign: 'features',
             tableId: this.$route.params.table_id,
-            tableSettings: this.config.settings,
+            tableSettings: tableConfigStore.state.config ? JSON.parse(JSON.stringify(tableConfigStore.state.config.settings)) : {},
             table_body_html: '',
             data_loaded: false,
             script_loaded: false,
@@ -616,6 +630,9 @@ export default {
         }
     },
     computed: {
+        config() {
+            return this.store.state.config || { table: {} };
+        },
         fontSetting() {
             return {
                 '--ninja-table-font-family': this.tableSettings.table_font_family,
@@ -684,7 +701,7 @@ export default {
             return [...table_css_classes, ...classes];
         },
         formattedColumns() {
-            let columns = this.config.columns;
+            let columns = this.store.state.config.columns; // Use store for columns
             let formattedColumns = [];
             jQuery.each(columns, (index, column) => {
                 formattedColumns.push({
@@ -842,6 +859,7 @@ export default {
         }
     },
     methods: {
+        assetUrl,
         fetchTableBody() {
             this.$get(`tables/${this.tableId}/table-inner-html`)
                 .then(response => {
@@ -863,21 +881,30 @@ export default {
         storeSettings() {
             this.checkColorPro();
             this.savingSettings = true;
+
             let filteredTableSettings = this.filterTableSettings(this.tableSettings);
             let data = {
                 columns: this.columns,
                 table_settings: this.tableSettings
             };
-            this.$post(`settings/${this.tableId}`, data)
+
+            return this.$post(`settings/${this.tableId}`, data)
                 .then((res) => {
+                    // Update the store with the new settings
+                    this.store.updateSettings({ ...this.tableSettings });
+
                     this.$message({
                         showClose: true,
                         message: res.message,
                         type: 'success'
                     });
+
+                    return res;
                 })
                 .catch((error) => {
-
+                    // Error handling
+                    this.$message.error('Could not save table design');
+                    return Promise.reject(error);
                 })
                 .finally(() => {
                     this.savingSettings = false;
@@ -923,7 +950,7 @@ export default {
 
             let config = this.getTableConfig();
             NinjaTableApp.initTable($table, config);
-           
+
             this.footableLoading = false;
         },
         dysel(options) {
@@ -941,7 +968,7 @@ export default {
                         fileref = document.createElement('script');
                         fileref.setAttribute("type", "text/javascript");
                         fileref.setAttribute("src", filename);
-                    } else if (ext === "css" || ext ==='scss' || filename.includes('googleapis.com/css?')) {
+                    } else if (ext === "css" || ext === 'scss' || filename.includes('googleapis.com/css?')) {
                         fileref = document.createElement("link");
                         fileref.setAttribute("rel", "stylesheet");
                         fileref.setAttribute("type", "text/css");
@@ -979,7 +1006,7 @@ export default {
                 console.error('Failed to load resources:', error);
             });
         },
-            loadRequiredScripts() {
+        loadRequiredScripts() {
             let that = this;
             this.dysel({
                 links: window.ninja_table_admin.preview_required_scripts,
@@ -1083,8 +1110,8 @@ export default {
             }
         },
         generateDefaultCss() {
-            let columnContentCss = this.config.table.custom_css;
-            this.config.columns.forEach((column, index) => {
+            let columnContentCss = this.store.state.config.table.custom_css; // Use store for custom_css
+            this.store.state.config.columns.forEach((column, index) => { // Use store for columns
                 if (column.background_color || column.text_color || column.contentAlign) {
                     columnContentCss += `#footable_parent_${this.tableId} thead tr th.ninja_column_${index}, #footable_parent_${this.tableId} tbody tr td.ninja_column_${index} { background-color: ${column.background_color}; color: ${column.text_color}; }`;
                     columnContentCss += `#footable_parent_${this.tableId} tbody tr td.ninja_column_${index} { text-align: ${column.contentAlign}; }`;
@@ -1094,7 +1121,7 @@ export default {
         },
         getTableConfig() {
             let custom_css = {};
-            this.config.columns.forEach((column, index) => {
+            this.store.state.config.columns.forEach((column, index) => { // Use store for columns
 
                 custom_css['ninja_column_' + index] = {
                     'text-align': column.textAlign,
@@ -1119,7 +1146,7 @@ export default {
                 "toggleColumn": this.tableSettings.togglePosition,
                 "cascade": true,
                 "useParentWidth": this.showingDevice !== 'desktop',
-                "columns": this.config.columns,
+                "columns": this.store.state.config.columns, // Use store for columns
                 "expandFirst": this.tableSettings.expand_type === "expandFirst",
                 "expandAll": this.tableSettings.expand_type === "expandAll",
                 'empty': '',
@@ -1161,13 +1188,38 @@ export default {
         if (this.tableSettings.alternate_color_status === undefined) {
             this.tableSettings.alternate_color_status = 'no';
         }
-        jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
+        // jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
         jQuery(window).on('resize', function () {
             jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
         });
         this.generateDefaultCss();
         this.generateColorCss();
+        this.bus.on('saveTableDesign', () => {
+            this.storeSettings();
+        });
+
+        if (this.store.state.config && this.store.state.config.settings) {
+            // Create a deep copy to prevent readonly issues
+            this.tableSettings = JSON.parse(JSON.stringify(this.store.state.config.settings));
+
+            // Set defaults if needed
+            if (!this.tableSettings.table_color_type) {
+                if (this.tableSettings.table_color == 'ninja_table_custom_color') {
+                    this.tableSettings.table_color_type = 'custom_color';
+                } else {
+                    this.tableSettings.table_color_type = 'pre_defined_color';
+                }
+            }
+
+            if (this.tableSettings.alternate_color_status === undefined) {
+                this.tableSettings.alternate_color_status = 'no';
+            }
+        }
+    },
+    beforeUnmount() {
+        this.bus.off('saveTableDesign');
     }
+
 }
 </script>
 <style lang="scss">
