@@ -143,49 +143,59 @@
     }
     .is-process {
       .el-step__icon {
-        border: 1px solid #335CFF !important;
+        border: 1px solid #335cff !important;
         .el-step__icon-inner {
           font-weight: 300;
-          color: #335CFF;
+          color: #335cff;
         }
       }
     }
     .is-wait {
       .el-step__line {
-        background: #CACFD8;
+        background: #cacfd8;
       }
       .el-step__icon {
-        border: 1px solid #CACFD8 !important;
+        border: 1px solid #cacfd8 !important;
         .el-step__icon-inner {
           font-weight: 300;
-          color: #CACFD8;
+          color: #cacfd8;
         }
       }
     }
     .is-finish {
       .el-step__line {
-        background: #335CFF;
+        background: #335cff;
       }
       .el-step__icon {
-        border: 1px solid #335CFF !important;
+        border: 1px solid #335cff !important;
         .el-step__icon-inner {
           font-weight: 300;
-          color: #335CFF;
+          color: #335cff;
         }
       }
     }
   }
   .nt_tab_design {
     .el-tabs__header .is-top {
+      color: #525866;
+      font-weight: 500;
+      font-size: 14px;
+      margin: 0 !important;
       .el-tabs__nav-scroll {
         padding: 0 18px;
       }
       &::after {
         height: 1px;
       }
+      .is-active {
+        color: #0e121b;
+      }
+      .el-tabs__active-bar{
+        background: #335cff;
+      }
     }
-    .el-tabs__content {
-      padding: 0 18px;
+    .el-tabs__header{
+      margin: 0;
     }
   }
   .el-radio-group {
@@ -199,7 +209,7 @@
 }
 
 .el-overlay {
-  background: rgba(2, 13, 23, 0.30) !important;
+  background: rgba(2, 13, 23, 0.3) !important;
   backdrop-filter: blur(5px) !important;
   -webkit-backdrop-filter: blur(2px) !important;
   z-index: 999 !important;

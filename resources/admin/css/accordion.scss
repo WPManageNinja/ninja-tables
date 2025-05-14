@@ -81,3 +81,21 @@
     }
   }
 }
+
+.nt-design-collapse{
+    .el-collapse-item {
+      border-radius: 12px;
+      .el-collapse-item__header{
+        padding: 0 20px;
+      }
+      .el-collapse-item__content{
+        padding: 0 20px;
+      }
+    }
+    .el-collapse-item.is-active{
+      .el-collapse-item__header{
+        background: #F5F7FA;
+        border-bottom: 1px solid #E1E4EA;
+      }
+    }
+}

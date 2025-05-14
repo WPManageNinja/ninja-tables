@@ -70,144 +70,175 @@
 
                 </div>
             </div>
-            <div class="w-[30%] bg-white">
+            <div class="w-[30%] bg-white border-r border-l border-b border-[#E1E4EA]">
                 <el-tabs v-model="activeDesign" tab-position="top" class="nt_tab_design">
                     <el-tab-pane label="Styling" name="features">
-                        <div class="form_group">
-                            <h3 class="ninja_inner_title">Select Styling Library</h3>
-                            <el-radio-group size="small" v-model="tableSettings.css_lib">
-                                <el-radio-button v-for="(tableLib, libKey) in currentTableLibs" :key="libKey"
-                                    :value="libKey">
-                                    {{ tableLib.title }}
-                                    <el-tooltip placement="top-end" effect="light" :content="tableLib.description">
+                        <el-collapse accordion class="nt-design-collapse">
+                            <el-collapse-item name="styles">
+                                 <template #title>
+                                    <div class="flex items-center">
+                                    <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
+                                    <span style="font-weight: 500; font-size: 14px;">{{ $t('Styles') }}</span>
+                                    </div>
+                                </template>
+                                <div class="flex justify-center my-4">
+                                   <div class="flex rounded-[8px] bg-[#F5F7FA] px-2 py-2 gap-3">
+                                        <div 
+                                            @click="tableSettings.css_lib = 'semantic_ui'" 
+                                            :class="{
+                                                'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.css_lib === 'semantic_ui',
+                                                'px-2 py-1 cursor-pointer': true
+                                            }"
+                                        >
+                                            {{ $t('Semantic UI') }}
+                                        </div>
+                                        <div 
+                                            @click="tableSettings.css_lib = 'bootstrap4'" 
+                                            :class="{
+                                                'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.css_lib === 'bootstrap4',
+                                                'px-2 py-1 cursor-pointer': true
+                                            }"
+                                        >
+                                            {{ $t('Bootstrap 4') }}
+                                        </div>
+                                        <div 
+                                            @click="tableSettings.css_lib = 'bootstrap3'" 
+                                            :class="{
+                                                'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.css_lib === 'bootstrap3',
+                                                'px-2 py-1 cursor-pointer': true
+                                            }"
+                                        >
+                                            {{ $t('Bootstrap 3') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            <div v-if="availableStyles" class="form_group label-normalize">
+                                <h3 class="ninja_inner_title">Styles</h3>
+                                <label v-for="tableStyle in availableStyles" :key="tableStyle.key"
+                                    :for="'table_style_' + tableStyle.key">
+                                    <input v-model="tableSettings.css_classes" type="checkbox" name="table_styles"
+                                        :value="tableStyle.key" :id="'table_style_' + tableStyle.key" />
+                                    {{ tableStyle.title }}
+                                    <el-tooltip placement="top-end" effect="light" :content="tableStyle.description">
                                         <el-icon class="tooltip-icon-color">
                                             <InfoFilled />
                                         </el-icon>
                                     </el-tooltip>
-                                </el-radio-button>
-                            </el-radio-group>
-                        </div>
-                        <div v-if="availableStyles" class="form_group label-normalize">
-                            <h3 class="ninja_inner_title">Styles</h3>
-                            <label v-for="tableStyle in availableStyles" :key="tableStyle.key"
-                                :for="'table_style_' + tableStyle.key">
-                                <input v-model="tableSettings.css_classes" type="checkbox" name="table_styles"
-                                    :value="tableStyle.key" :id="'table_style_' + tableStyle.key" />
-                                {{ tableStyle.title }}
-                                <el-tooltip placement="top-end" effect="light" :content="tableStyle.description">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </label>
-                        </div>
-                        <div class="form_group label-normalize">
-                            <h3 class="ninja_inner_title">Features</h3>
-                            <label for="show_title">
-                                <input v-model="tableSettings.show_title" type="checkbox" value="1" id="show_title" />
-                                {{
-                                    $t('Show Table Title') }}
-                                <el-tooltip placement="top-end" effect="light"
-                                    content="Enable this if you want to show table title in frontend">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </label>
-                            <label for="show_description">
-                                <input v-model="tableSettings.show_description" type="checkbox" value="1"
-                                    id="show_description" /> {{ $t('Show Table Description') }}
-                                <el-tooltip placement="top-end" effect="light"
-                                    content="Enable this if you want to show table description in frontend">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </label>
-                            <label for="enable_search">
-                                <input v-model="tableSettings.enable_search" type="checkbox" value="1"
-                                    id="enable_search" /> {{ $t('Enable the visitor to filter or search the table.')
-                                    }}
-                            </label>
-                            <label
-                                v-if="tableLibs[tableSettings.library].supports.sorting && !tableSettings.enable_ajax"
-                                for="column_sorting">
-                                <input v-model="tableSettings.column_sorting" type="checkbox" value="1"
-                                    id="column_sorting" /> {{ $t('Enable sorting of the table by the visitor') }}
-                            </label>
-                            <label><input v-model="tableSettings.hide_header_row" type="checkbox">
-                                Hide Header Row
-                            </label>
-                            <label><input v-model="tableSettings.hide_all_borders" type="checkbox">
-                                Hide All Borders
-                            </label>
-                            <label><input v-model="tableSettings.hide_on_empty" type="checkbox">
-                                Hide empty items on responsive breakdown <span v-show="!has_pro">(Pro Only)</span>
-                                <el-tooltip placement="top-end" effect="light"
-                                    content="If You enable this then the empty ietems will not show into responsive drawer / Stackable View">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </label>
-                            <label><input v-model="tableSettings.hide_responsive_labels" type="checkbox">
-                                Hide Labels on responsive breakdown <span v-show="!has_pro">(Pro Only)</span>
-                                <el-tooltip placement="top-end" effect="light"
-                                    content="If You enable this then columns headings will not show into responsive drawer / Stackable View">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </label>
-                        </div>
-
-                        <div class="form_group label-normalize">
-                            <h3 class="ninja_inner_title">
-                                Stackable Table Configuration
-                                <el-tooltip placement="top-end" effect="light"
-                                    content="With stackable table, You can show your rows as list item. You can target by device width">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </h3>
-
-                            <div class="form_group">
-                                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="tableSettings.stackable">
-                                    Enable Stackable Table
-                                </el-checkbox>
-                                <template v-if="tableSettings.stackable == 'yes'">
-                                    <h3 style="margin-top: 15px" class="ninja_inner_title">Target Devices
-                                        <el-tooltip placement="top-end" effect="light"
-                                            content="Select the device by width in where the stackable tables will be enabled">
-                                            <el-icon class="tooltip-icon-color">
-                                                <InfoFilled />
-                                            </el-icon>
-                                        </el-tooltip>
-                                    </h3>
-                                    <el-checkbox-group v-model="tableSettings.stacks_devices">
-                                        <el-checkbox :label="$t('Mobile Device')" value="xs" />
-                                        <el-checkbox :label="$t('Tablet Device')" value="sm" />
-                                        <el-checkbox :label="$t('Laptop')" value="md" />
-                                        <el-checkbox :label="$t('Large Devices (imac)')" value="lg" />
-                                    </el-checkbox-group>
-
-                                    <h3 style="margin-top: 15px" class="ninja_inner_title">Stacked Appearance
-                                        <el-tooltip placement="top-end" effect="light"
-                                            content="You can customize the appearance in stacked view of your table">
-                                            <el-icon class="tooltip-icon-color">
-                                                <InfoFilled />
-                                            </el-icon>
-                                        </el-tooltip>
-                                    </h3>
-                                    <el-checkbox-group v-model="tableSettings.stacks_appearances">
-                                        <el-checkbox :label="$t('Hide column headings')" value="hide_stacked_th" />
-                                        <el-checkbox :label="$t('Hide internal borders')"
-                                            value="ninja_stacked_no_cell_border" />
-                                    </el-checkbox-group>
-                                </template>
+                                </label>
                             </div>
-                        </div>
+                            </el-collapse-item>
+                            <el-collapse-item name="features">
+                                <template #title>
+                                    <div class="flex items-center">
+                                    <img class="mr-2" :src="assetUrl('icons/layers.svg')"/>
+                                    <span style="font-weight: 500; font-size: 14px;">{{ $t('Features') }}</span>
+                                    </div>
+                                </template>
+                                 <div class="form_group label-normalize">
+                                    <label for="show_title">
+                                        <input v-model="tableSettings.show_title" type="checkbox" value="1" id="show_title" />
+                                        {{
+                                            $t('Show Table Title') }}
+                                        <el-tooltip placement="top-end" effect="light"
+                                            content="Enable this if you want to show table title in frontend">
+                                            <el-icon class="tooltip-icon-color">
+                                                <InfoFilled />
+                                            </el-icon>
+                                        </el-tooltip>
+                                    </label>
+                                    <label for="show_description">
+                                        <input v-model="tableSettings.show_description" type="checkbox" value="1"
+                                            id="show_description" /> {{ $t('Show Table Description') }}
+                                        <el-tooltip placement="top-end" effect="light"
+                                            content="Enable this if you want to show table description in frontend">
+                                            <el-icon class="tooltip-icon-color">
+                                                <InfoFilled />
+                                            </el-icon>
+                                        </el-tooltip>
+                                    </label>
+                                    <label for="enable_search">
+                                        <input v-model="tableSettings.enable_search" type="checkbox" value="1"
+                                            id="enable_search" /> {{ $t('Enable the visitor to filter or search the table.')
+                                            }}
+                                    </label>
+                                    <label
+                                        v-if="tableLibs[tableSettings.library].supports.sorting && !tableSettings.enable_ajax"
+                                        for="column_sorting">
+                                        <input v-model="tableSettings.column_sorting" type="checkbox" value="1"
+                                            id="column_sorting" /> {{ $t('Enable sorting of the table by the visitor') }}
+                                    </label>
+                                    <label><input v-model="tableSettings.hide_header_row" type="checkbox">
+                                        Hide Header Row
+                                    </label>
+                                    <label><input v-model="tableSettings.hide_all_borders" type="checkbox">
+                                        Hide All Borders
+                                    </label>
+                                    <label><input v-model="tableSettings.hide_on_empty" type="checkbox">
+                                        Hide empty items on responsive breakdown <span v-show="!has_pro">(Pro Only)</span>
+                                        <el-tooltip placement="top-end" effect="light"
+                                            content="If You enable this then the empty ietems will not show into responsive drawer / Stackable View">
+                                            <el-icon class="tooltip-icon-color">
+                                                <InfoFilled />
+                                            </el-icon>
+                                        </el-tooltip>
+                                    </label>
+                                    <label><input v-model="tableSettings.hide_responsive_labels" type="checkbox">
+                                        Hide Labels on responsive breakdown <span v-show="!has_pro">(Pro Only)</span>
+                                        <el-tooltip placement="top-end" effect="light"
+                                            content="If You enable this then columns headings will not show into responsive drawer / Stackable View">
+                                            <el-icon class="tooltip-icon-color">
+                                                <InfoFilled />
+                                            </el-icon>
+                                        </el-tooltip>
+                                    </label>
+                                </div>
+                            </el-collapse-item>
+                            <el-collapse-item name="configuration">
+                                <template #title>
+                                    <div class="flex items-center">
+                                    <img class="mr-2" :src="assetUrl('icons/elements.svg')"/>
+                                    <span style="font-weight: 500; font-size: 14px;">{{ $t('Table Configuration') }}</span>
+                                    </div>
+                                </template>
+                                <div class="form_group label-normalize">
+                                    <div class="form_group">
+                                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="tableSettings.stackable">
+                                            Enable Stackable Table
+                                        </el-checkbox>
+                                        <template v-if="tableSettings.stackable == 'yes'">
+                                            <h3 style="margin-top: 15px" class="ninja_inner_title">Target Devices
+                                                <el-tooltip placement="top-end" effect="light"
+                                                    content="Select the device by width in where the stackable tables will be enabled">
+                                                    <el-icon class="tooltip-icon-color">
+                                                        <InfoFilled />
+                                                    </el-icon>
+                                                </el-tooltip>
+                                            </h3>
+                                            <el-checkbox-group v-model="tableSettings.stacks_devices">
+                                                <el-checkbox :label="$t('Mobile Device')" value="xs" />
+                                                <el-checkbox :label="$t('Tablet Device')" value="sm" />
+                                                <el-checkbox :label="$t('Laptop')" value="md" />
+                                                <el-checkbox :label="$t('Large Devices (imac)')" value="lg" />
+                                            </el-checkbox-group>
+
+                                            <h3 style="margin-top: 15px" class="ninja_inner_title">Stacked Appearance
+                                                <el-tooltip placement="top-end" effect="light"
+                                                    content="You can customize the appearance in stacked view of your table">
+                                                    <el-icon class="tooltip-icon-color">
+                                                        <InfoFilled />
+                                                    </el-icon>
+                                                </el-tooltip>
+                                            </h3>
+                                            <el-checkbox-group v-model="tableSettings.stacks_appearances">
+                                                <el-checkbox :label="$t('Hide column headings')" value="hide_stacked_th" />
+                                                <el-checkbox :label="$t('Hide internal borders')"
+                                                    value="ninja_stacked_no_cell_border" />
+                                            </el-checkbox-group>
+                                        </template>
+                                    </div>
+                                </div>
+                            </el-collapse-item>
+                        </el-collapse>
                     </el-tab-pane>
                     <el-tab-pane label="Table Colors" name="color_customization">
                         <div class="form_group">
@@ -608,6 +639,7 @@ export default {
     },
     data() {
         return {
+            activeTab: 'desktop',
             store: tableConfigStore,
             fontFamily: ['inherit', 'cursive', 'fantasy', 'monospace', 'sans-serif', 'serif', 'system-ui', 'ui-monospace', 'ui-rounded', 'ui-sans-serif', 'ui-serif'],
             rows: [],

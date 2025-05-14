@@ -76,8 +76,7 @@ import toArray from 'lodash/values';
 import { useEventBus } from '../../eventBus';
 import { assetUrl } from "../../utils/ninjatablesadmin";
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
-import tableConfigStore from '../../store/tableConfigStore'; // Import the store
-import { forEach } from 'lodash';
+import tableConfigStore from '../../store/tableConfigStore';
 
 export default {
     name: 'table_home',
@@ -100,7 +99,7 @@ export default {
             editTableModalShow: false,
             preview_url: '#',
             has_pro: window.ninja_table_admin.hasPro,
-            store: tableConfigStore // Add the store reference
+            store: tableConfigStore
         }
     },
     computed: {
