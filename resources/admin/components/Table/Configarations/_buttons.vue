@@ -1,14 +1,16 @@
 <template>
     <div class="nt-table-configuration-content">
-        <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('CSV Export / Print Button Settings for Frontend') }}</div>
+        <div class="text-[18px] font-[600] text-[#0E121B]">{{
+                $t('CSV Export / Print Button Settings for Frontend')
+            }}
+        </div>
         <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
             {{ $t("You can enable/disable print and csv export settings here") }}
         </div>
 
 
         <div v-if="!hasPro">
-            <h3>Export CSV and Table Print is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature</h3>
-            <get-pro/>
+            <h3>Export CSV and Table Print is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature <get-pro/></h3>
         </div>
         <div v-else v-loading="fetching">
             <div class="mb-3 text-[16px] font-[500]">{{ $t("Toolbar Button Settings") }}</div>
@@ -24,30 +26,33 @@
                                     active-value="yes"
                                     inactive-value="no"
                                 />
-                                <span style="font-weight: 400; font-size: 14px;">{{$t('Enable CSV Export Button') }}</span>
+                                <span style="font-weight: 400; font-size: 14px;">{{
+                                        $t('Enable CSV Export Button')
+                                    }}</span>
                             </div>
                         </template>
-                        <div class="grid grid-cols-2 gap-5 my-4">
+                        <div class="grid grid-cols-2 gap-5 mt-4" style="margin-bottom: -12px">
                             <div>
                                 <div class="mb-2 font-[500] text-[14px]">{{ $t("Button Text") }}</div>
-                                <NinjaInput v-model="table_buttons.csv.label" placeholder="Enter button text" size="large" />
+                                <NinjaInput v-model="table_buttons.csv.label" placeholder="Enter button text"/>
                             </div>
                             <div class="grid grid-cols-2 gap-5">
                                 <div>
                                     <div class="mb-2 font-[500] text-[14px]">{{ $t("Button BG Color") }}</div>
                                     <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                                        <ColorPicker :labelShow="false" v-model="table_buttons.csv.bg_color" />
+                                        <ColorPicker :labelShow="false" v-model="table_buttons.csv.bg_color"/>
                                     </div>
                                 </div>
                                 <div>
                                     <div class="mb-2 font-[500] text-[14px]">{{ $t("Button Text Color") }}</div>
                                     <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                                        <ColorPicker :labelShow="false" v-model="table_buttons.csv.text_color" />
+                                        <ColorPicker :labelShow="false" v-model="table_buttons.csv.text_color"/>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <el-checkbox size="large" :true-value="'yes'" :false-value="'no'" v-model="table_buttons.csv.plainText">
+                                <el-checkbox size="large" :true-value="'yes'" :false-value="'no'"
+                                             v-model="table_buttons.csv.plainText">
                                     Export as Plain Text
                                 </el-checkbox>
                             </div>
@@ -69,21 +74,57 @@
                         <div class="grid grid-cols-2 gap-5 my-4">
                             <div>
                                 <div class="mb-2 font-[500] text-[14px]">{{ $t("Button Text") }}</div>
-                                <NinjaInput v-model="table_buttons.print.label" placeholder="Enter button text" size="large" />
+                                <NinjaInput v-model="table_buttons.print.label" placeholder="Enter button text"/>
                             </div>
                             <div class="grid grid-cols-2 gap-5">
                                 <div>
                                     <div class="mb-2 font-[500] text-[14px]">{{ $t("Button BG Color") }}</div>
                                     <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                                        <ColorPicker :labelShow="false" v-model="table_buttons.print.bg_color" />
+                                        <ColorPicker :labelShow="false" v-model="table_buttons.print.bg_color"/>
                                     </div>
                                 </div>
                                 <div>
                                     <div class="mb-2 font-[500] text-[14px]">{{ $t("Button Text Color") }}</div>
                                     <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                                        <ColorPicker :labelShow="false" v-model="table_buttons.print.text_color" />
+                                        <ColorPicker :labelShow="false" v-model="table_buttons.print.text_color"/>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between rounded-[8px] bg-white w-[350px] px-2 py-2 gap-3">
+                            <div @click="print_screen ='header'"
+                                 :class="`${print_screen ==='header' && 'bg-[#f9f9f9] rounded-[8px] shadow shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
+                                {{ $t('Print Screen Header') }}
+                            </div>
+                            <div @click="print_screen ='footer'"
+                                 :class="`${print_screen ==='footer' && 'bg-[#f9f9f9] rounded-[8px] shadow shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
+                                {{ $t('Print Screen Footer') }}
+                            </div>
+                        </div>
+                        <div v-if="print_screen === 'header'">
+                            <div class="font-[500] text-[14px] my-3">{{ $t("Header in each page") }}</div>
+                            <div class="ninja_tables_radio_group my-3">
+                                <el-radio-group v-model="table_buttons.print.header_each_page">
+                                    <el-radio value="yes" size="large" border>{{ $t("Yes") }}</el-radio>
+                                    <el-radio value="no" size="large" border>{{ $t("No") }}</el-radio>
+                                </el-radio-group>
+                            </div>
+                            <div class="my-3">
+                                <div class="font-[500] text-[14px] my-3">{{ $t("Description For Header") }}</div>
+                                <WPEditor v-model="table_buttons.print.header_html"/>
+                            </div>
+                        </div>
+                        <div v-else-if="print_screen === 'footer'">
+                            <div class="font-[500] text-[14px] my-3">{{ $t("Footer in each page") }}</div>
+                            <div class="ninja_tables_radio_group my-3">
+                                <el-radio-group v-model="table_buttons.print.footer_each_page">
+                                    <el-radio value="yes" size="large" border>{{ $t("Yes") }}</el-radio>
+                                    <el-radio value="no" size="large" border>{{ $t("No") }}</el-radio>
+                                </el-radio-group>
+                            </div>
+                            <div class="my-3">
+                                <div class="font-[500] text-[14px] my-3">{{ $t("Description For Footer") }}</div>
+                                <WPEditor v-model="table_buttons.print.footer_html"/>
                             </div>
                         </div>
                     </el-collapse-item>
@@ -114,94 +155,95 @@
         </div>
 
         <div class="flex justify-end mt-5">
-            <NinjaButton size="small" @click="saveSettings()" type="primary" :btnText="$t('Save Settings')"/>
+            <NinjaButton size="small" @click="saveSettings" type="primary" :btnText="$t('Save Settings')"/>
         </div>
     </div>
 
 </template>
 <script type="text/babel">
 
-    import wpEditor from '../../../../common/_wp_editor';
-    import GetPro from "../../Tools/GetPro";
-    import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
-    import ColorPicker from "../../../@ui-utils/ColorPicker.vue";
-    import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+import WPEditor from '../../../../common/_wp_editor.vue';
+import GetPro from "../../Tools/GetPro";
+import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
+import ColorPicker from "../../../@ui-utils/ColorPicker.vue";
+import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
 
-    export default {
-        name: 'button_settings',
-        components: {
-            NinjaButton,
-            ColorPicker,
-            NinjaInput,
-          GetPro,
-            wpEditor
-        },
-        props: ['table_id'],
-        data() {
-            return {
-                table_buttons: {
-                    csv: {
-                        status: 'no',
-                        label: 'CSV',
-                        all_rows: 'no'
-                    },
-                    print: {
-                        status: 'no',
-                        label: 'Print',
-                        all_rows: 'no',
-                        header_each_page: 'no',
-                        footer_each_page: 'no',
-                    }
+export default {
+    name: 'button_settings',
+    components: {
+        NinjaButton,
+        ColorPicker,
+        NinjaInput,
+        GetPro,
+        WPEditor
+    },
+    props: ['table_id'],
+    data() {
+        return {
+            print_screen: 'header',
+            table_buttons: {
+                csv: {
+                    status: 'no',
+                    label: 'CSV',
+                    all_rows: 'no'
                 },
-                fetching: false,
-                saving: false,
-                button_positions: {
-                    after_search_box: 'After Search Box',
-                    before_table: 'Before of the table',
-                    after_table: 'Bottom of the table',
-                },
-                buttonAlignments: {
-                    'ninja_buttons_left': 'Left',
-                    'ninja_buttons_center': 'Center',
-                    'ninja_buttons_right': 'Right'
-                },
-                hasPro: !!window.ninja_table_admin.hasPro
-            }
-        },
-        methods: {
-            getSettings() {
-                this.fetching = true;
-                this.$get('settings/' + this.table_id + '/button')
-                    .then(response => {
-                        this.table_buttons = response.data.button_settings;
-                      this.fetching = false;
-                    })
-                    .catch(error => {
-                      this.fetching = false;
-                    })
+                print: {
+                    status: 'no',
+                    label: 'Print',
+                    all_rows: 'no',
+                    header_each_page: 'no',
+                    footer_each_page: 'no',
+                }
             },
-            saveSettings() {
-                this.saving = true;
-                let data = {
-                  table_id: this.table_id,
-                  button_settings: this.table_buttons
-                };
-                this.$put('settings/' + this.table_id + '/button', data)
-                    .then(response => {
-                        this.$message({
-                            showClose: true,
-                            message: response.data.message,
-                            type: 'success'
-                        });
-                      this.saving = false;
-                    })
-                    .catch(error => {
-                      this.saving = false;
-                    })
-            }
-        },
-        mounted() {
-            this.getSettings();
+            fetching: false,
+            saving: false,
+            button_positions: {
+                after_search_box: 'After Search Box',
+                before_table: 'Before of the table',
+                after_table: 'Bottom of the table',
+            },
+            buttonAlignments: {
+                'ninja_buttons_left': 'Left',
+                'ninja_buttons_center': 'Center',
+                'ninja_buttons_right': 'Right'
+            },
+            hasPro: !!window.ninja_table_admin.hasPro
         }
+    },
+    methods: {
+        getSettings() {
+            this.fetching = true;
+            this.$get('settings/' + this.table_id + '/button')
+                .then(response => {
+                    this.table_buttons = response.data.button_settings;
+                    this.fetching = false;
+                })
+                .catch(error => {
+                    this.fetching = false;
+                })
+        },
+        saveSettings() {
+            this.saving = true;
+            let data = {
+                table_id: this.table_id,
+                button_settings: this.table_buttons
+            };
+            this.$put('settings/' + this.table_id + '/button', data)
+                .then(response => {
+                    this.$message({
+                        showClose: true,
+                        message: response.data.message,
+                        type: 'success'
+                    });
+                    this.saving = false;
+                })
+                .catch(error => {
+                    this.saving = false;
+                })
+        }
+    },
+    mounted() {
+        this.getSettings();
     }
+}
 </script>
