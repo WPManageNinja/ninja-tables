@@ -1184,6 +1184,7 @@ ul.ninja_render_features li {
     border-bottom-right-radius: 12px;
     border-bottom: none;
   }
+    border-bottom: none;
   /* Add your custom styles */
 }
 
@@ -1415,7 +1416,6 @@ ul.ninja_render_features li {
 .ninja_design_wrapper {
   display: flex;
   padding-bottom: 20px;
-  background: white;
 
   .design_controls {
     flex: 1;
@@ -1450,7 +1450,6 @@ ul.ninja_render_features li {
   }
 
   .design_preview {
-    background: white;
     padding: 10px 20px;
     flex: 2;
     min-height: 800px;

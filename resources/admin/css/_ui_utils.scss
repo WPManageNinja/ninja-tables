@@ -1,7 +1,6 @@
 #data-tables-app {
-  //button style
   .ninja-button {
-    @apply rounded-[8px] p-[8px] leading-5 font-[500] text-[14px] cursor-pointer flex;
+    @apply rounded-[8px] p-[8px] px-5 leading-5 font-[500] text-[14px] cursor-pointer flex;
   }
   .ninja-button--primary {
     @apply bg-[#335cff] text-white hover:bg-[#2547D0] delay-100 duration-100;
@@ -36,19 +35,14 @@
       border: none;
       outline: none;
       padding: 0 12px;
-      height: 40px;
+      height: 32px;
       font-size: 14px;
       color: #606266;
       background: transparent;
     }
 
-    .ninja-input--small {
-      height: 32px;
-      font-size: 13px;
-    }
-
     .ninja-input--large {
-      height: 48px;
+      height: 36px;
       font-size: 15px;
     }
 
@@ -80,10 +74,10 @@
     }
   }
 
-  .ninja-select{
-    .el-select__wrapper{
-        border-radius: 8px;
-        height: 40px;
+  .ninja-select {
+    .el-select__wrapper {
+      border-radius: 8px;
+      height: 40px;
     }
   }
 
@@ -120,23 +114,44 @@
     }
   }
 
-  .ninja_tables_radio_group{
-    .el-radio.is-bordered{
-      border: 1px dashed #E1E4EA;
+  .ninja_tables_radio_group {
+    .el-radio.is-bordered {
+      border: 1px dashed #e1e4ea;
       background: white;
       border-radius: 10px !important;
       margin-right: 10px;
       margin-bottom: 0;
     }
-    .el-radio__input.is-checked+.el-radio__label{
+    .el-radio__input.is-checked + .el-radio__label {
       color: #335cff;
     }
-    .el-radio__input.is-checked .el-radio__inner{
+    .el-radio__input.is-checked .el-radio__inner {
       border-color: #335cff;
       background: #335cff;
-      &::after{
+      &::after {
         height: 7px;
         width: 7px;
+      }
+    }
+  }
+  .nt_tab_design {
+    .el-tabs__header .is-top {
+      .el-tabs__nav-scroll {
+        padding: 0 18px;
+      }
+      &::after {
+        height: 1px;
+      }
+    }
+    .el-tabs__content {
+      padding: 0 18px;
+    }
+  }
+  .el-radio-group {
+    .is-active {
+      .el-radio-button__inner {
+        background: #335cff;
+        border-color: #335cff;
       }
     }
   }
