@@ -259,7 +259,7 @@ class AdminMenuHandler
             $slug . '_admin_app',
             $assets . "js/ninja-tables-boot.js",
             array('jquery'),
-            '1.0',
+            NINJA_TABLES_VERSION,
             true
         );
 
@@ -269,7 +269,7 @@ class AdminMenuHandler
             $slug,
             $assets . "js/ninja-tables-admin.js",
             array('jquery'),
-            '1.0',
+            NINJA_TABLES_VERSION,
             true
         );
 

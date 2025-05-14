@@ -226,7 +226,7 @@
                 });
             },
             deleteTable(tableId) {
-              this.$del("tables/"+tableId)
+              this.$get("tables/"+tableId)
                   .then(response => {
                     this.fetchTables();
                     this.$message({

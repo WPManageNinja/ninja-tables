@@ -192,7 +192,7 @@
                   table_id: this.table_id,
                   button_settings: this.table_buttons
                 };
-                this.$put('settings/' + this.table_id + '/button', data)
+                this.$post('settings/' + this.table_id + '/button', data)
                     .then(response => {
                         this.$message({
                             showClose: true,
