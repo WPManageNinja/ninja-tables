@@ -1,6 +1,5 @@
-import {instanceUID} from "./data";
-export default function generateColorCss(tableId, settings, uniqueInstanceId = null) {
-    const instanceId = uniqueInstanceId || instanceUID();
+export default function generateColorCss(tableId, settings, instanceId) {
+
     if (settings.table_color_type !== 'custom_color') {
         const styleElement = document.getElementById(`ninja_table_custom_css_${tableId}_${instanceId}`);
         if (styleElement) {
@@ -23,6 +22,10 @@ export default function generateColorCss(tableId, settings, uniqueInstanceId = n
             ${settings.table_search_color_border ?
         `border: 1px solid ${settings.table_search_color_border} !important;` :
         'border: 1px solid transparent !important;'}
+        }
+       ${prefix} .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+             background-color: ${settings.table_search_color_secondary} !important;
+             color: ${settings.table_search_color_primary} !important;
         }
         ${prefix} tr.footable-header, ${prefix} tr.footable-header th {
             background-color: ${settings.table_header_color_primary || 'initial'} !important;

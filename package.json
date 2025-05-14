@@ -36,7 +36,7 @@
     "sass": "^1.63.4",
     "sass-loader": "^12.6.0",
     "vue-loader": "^15.9.8",
-    "vue-template-compiler": "^2.6.14",
+    "vue-template-compiler": "^2.7.16",
     "vue2-ace-editor": "0.0.10",
     "webpack": "^5.87.0"
   }

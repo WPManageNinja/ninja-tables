@@ -10,12 +10,12 @@ const {
 import {ColorPickerControl} from "../controls/ColorPickerControl";
 import {hasPro, customColorCss, tableLibrary} from "../../utils/data";
 
-export default function ColorsTab({ tableSettings, updateTableSettings, tableId}) {
+export default function ColorsTab({ tableSettings, updateTableSettings, tableId, instanceId}) {
 
     const updateColorSetting = (key, value) => {
         updateTableSettings(key, value, false);
         const updatedSettings = { ...tableSettings, [key]: value };
-        customColorCss(tableId, updatedSettings);
+        customColorCss(tableId, updatedSettings, instanceId);
     };
 
     return (

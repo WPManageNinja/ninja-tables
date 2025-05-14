@@ -10,7 +10,6 @@ const {
 
 const {__} = wp.i18n;
 const {useState, useEffect} = wp.element;
-import {instanceUID} from "./utils/data";
 import StyleTab from "./ui/tabs/StyleTab";
 import OtherTab from "./ui/tabs/OtherTab";
 import {customColorCss} from "./utils/data";
@@ -27,7 +26,7 @@ export default function Edit(props) {
     const {attributes, setAttributes} = props;
     const {tableId, dataSource, activeDesign} = attributes;
     const [tableHtml, setTableHtml] = useState('');
-    const instanceId = instanceUID();
+    const [instanceId] = useState(() => Math.random().toString(36).substring(2, 10));
 
     const [tableConfig, setTableConfig] = useState(null);
     const [tableInnerHtml, setTableInnerHtml] = useState('');
@@ -268,6 +267,7 @@ export default function Edit(props) {
                                         return (<StyleTab
                                             tableSettings={tableSettings}
                                             updateTableSettings={updateTableSettings}
+                                            instanceId={instanceId}
                                         />);
                                     case 'colors':
                                         return (
@@ -276,6 +276,7 @@ export default function Edit(props) {
                                                     tableSettings={tableSettings}
                                                     updateTableSettings={updateTableSettings}
                                                     tableId={tableId}
+                                                    instanceId={instanceId}
                                                 />
                                             </div>
                                         );
@@ -285,6 +286,7 @@ export default function Edit(props) {
                                                 tableSettings={tableSettings}
                                                 updateTableSettings={updateTableSettings}
                                                 tableConfig={tableConfig}
+                                                instanceId={instanceId}
                                             />
                                         );
                                     default:

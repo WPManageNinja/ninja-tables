@@ -1,3 +1,5 @@
+import {tableLibs} from "../../../data/data";
+
 const {Placeholder, SelectControl} = wp.components;
 const {__} = wp.i18n;
 import {hasPro, availableTables} from "../utils/data";
@@ -57,7 +59,30 @@ export default function BlockPreview({
         if (settings.nt_search_full_width) classes.push('nt_search_full_width');
         if (settings.css_lib === 'semantic_ui') classes.push('ui');
 
-        return classes.join(' ');
+        let table_css_classes = [];
+        if (settings.css_classes && Array.isArray(settings.css_classes)) {
+            const availableCssClasses = getAvailableCssClasses();
+            table_css_classes = availableCssClasses.filter(value =>
+                settings.css_classes.indexOf(value) !== -1
+            );
+        }
+
+        return [...table_css_classes, ...classes].join(' ');
+    };
+
+    const getAvailableCssClasses = () => {
+        if (!tableConfig?.settings?.css_lib || !tableConfig?.settings?.library) {
+            return [];
+        }
+
+        const libs = tableLibs()
+        const currentLib = libs[tableConfig.settings.library]?.css_libs?.[tableConfig.settings.css_lib];
+
+        if (!currentLib || !currentLib.styles) {
+            return [];
+        }
+
+        return currentLib.styles.map(style => style.key);
     };
 
     const getFontStyle = () => {
