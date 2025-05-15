@@ -206,15 +206,25 @@
 
   .nt_tab_design {
     .el-tabs__header .is-top {
+      color: #525866;
+      font-weight: 500;
+      font-size: 14px;
+      margin: 0 !important;
       .el-tabs__nav-scroll {
         padding: 0 18px;
       }
       &::after {
         height: 1px;
       }
+      .is-active {
+        color: #0e121b;
+      }
+      .el-tabs__active-bar{
+        background: #335cff;
+      }
     }
-    .el-tabs__content {
-      padding: 0 18px;
+    .el-tabs__header{
+      margin: 0;
     }
   }
 

@@ -70,280 +70,479 @@
 
                 </div>
             </div>
-            <div class="w-[30%] bg-white">
+            <div class="w-[30%] bg-white border-r border-l border-b border-[#E1E4EA]">
                 <el-tabs v-model="activeDesign" tab-position="top" class="nt_tab_design">
                     <el-tab-pane label="Styling" name="features">
-                        <div class="form_group">
-                            <h3 class="ninja_inner_title">Select Styling Library</h3>
-                            <el-radio-group size="small" v-model="tableSettings.css_lib">
-                                <el-radio-button v-for="(tableLib, libKey) in currentTableLibs" :key="libKey"
-                                    :value="libKey">
-                                    {{ tableLib.title }}
-                                    <el-tooltip placement="top-end" effect="light" :content="tableLib.description">
-                                        <el-icon class="tooltip-icon-color">
-                                            <InfoFilled />
-                                        </el-icon>
-                                    </el-tooltip>
-                                </el-radio-button>
-                            </el-radio-group>
-                        </div>
-                        <div v-if="availableStyles" class="form_group label-normalize">
-                            <h3 class="ninja_inner_title">Styles</h3>
-                            <label v-for="tableStyle in availableStyles" :key="tableStyle.key"
-                                :for="'table_style_' + tableStyle.key">
-                                <input v-model="tableSettings.css_classes" type="checkbox" name="table_styles"
-                                    :value="tableStyle.key" :id="'table_style_' + tableStyle.key" />
-                                {{ tableStyle.title }}
-                                <el-tooltip placement="top-end" effect="light" :content="tableStyle.description">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </label>
-                        </div>
-                        <div class="form_group label-normalize">
-                            <h3 class="ninja_inner_title">Features</h3>
-                            <label for="show_title">
-                                <input v-model="tableSettings.show_title" type="checkbox" value="1" id="show_title" />
-                                {{
-                                    $t('Show Table Title') }}
-                                <el-tooltip placement="top-end" effect="light"
-                                    content="Enable this if you want to show table title in frontend">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </label>
-                            <label for="show_description">
-                                <input v-model="tableSettings.show_description" type="checkbox" value="1"
-                                    id="show_description" /> {{ $t('Show Table Description') }}
-                                <el-tooltip placement="top-end" effect="light"
-                                    content="Enable this if you want to show table description in frontend">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </label>
-                            <label for="enable_search">
-                                <input v-model="tableSettings.enable_search" type="checkbox" value="1"
-                                    id="enable_search" /> {{ $t('Enable the visitor to filter or search the table.')
-                                    }}
-                            </label>
-                            <label
-                                v-if="tableLibs[tableSettings.library].supports.sorting && !tableSettings.enable_ajax"
-                                for="column_sorting">
-                                <input v-model="tableSettings.column_sorting" type="checkbox" value="1"
-                                    id="column_sorting" /> {{ $t('Enable sorting of the table by the visitor') }}
-                            </label>
-                            <label><input v-model="tableSettings.hide_header_row" type="checkbox">
-                                Hide Header Row
-                            </label>
-                            <label><input v-model="tableSettings.hide_all_borders" type="checkbox">
-                                Hide All Borders
-                            </label>
-                            <label><input v-model="tableSettings.hide_on_empty" type="checkbox">
-                                Hide empty items on responsive breakdown <span v-show="!has_pro">(Pro Only)</span>
-                                <el-tooltip placement="top-end" effect="light"
-                                    content="If You enable this then the empty ietems will not show into responsive drawer / Stackable View">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </label>
-                            <label><input v-model="tableSettings.hide_responsive_labels" type="checkbox">
-                                Hide Labels on responsive breakdown <span v-show="!has_pro">(Pro Only)</span>
-                                <el-tooltip placement="top-end" effect="light"
-                                    content="If You enable this then columns headings will not show into responsive drawer / Stackable View">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </label>
-                        </div>
-
-                        <div class="form_group label-normalize">
-                            <h3 class="ninja_inner_title">
-                                Stackable Table Configuration
-                                <el-tooltip placement="top-end" effect="light"
-                                    content="With stackable table, You can show your rows as list item. You can target by device width">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
-                                    </el-icon>
-                                </el-tooltip>
-                            </h3>
-
-                            <div class="form_group">
-                                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="tableSettings.stackable">
-                                    Enable Stackable Table
-                                </el-checkbox>
-                                <template v-if="tableSettings.stackable == 'yes'">
-                                    <h3 style="margin-top: 15px" class="ninja_inner_title">Target Devices
-                                        <el-tooltip placement="top-end" effect="light"
-                                            content="Select the device by width in where the stackable tables will be enabled">
-                                            <el-icon class="tooltip-icon-color">
-                                                <InfoFilled />
-                                            </el-icon>
-                                        </el-tooltip>
-                                    </h3>
-                                    <el-checkbox-group v-model="tableSettings.stacks_devices">
-                                        <el-checkbox :label="$t('Mobile Device')" value="xs" />
-                                        <el-checkbox :label="$t('Tablet Device')" value="sm" />
-                                        <el-checkbox :label="$t('Laptop')" value="md" />
-                                        <el-checkbox :label="$t('Large Devices (imac)')" value="lg" />
-                                    </el-checkbox-group>
-
-                                    <h3 style="margin-top: 15px" class="ninja_inner_title">Stacked Appearance
-                                        <el-tooltip placement="top-end" effect="light"
-                                            content="You can customize the appearance in stacked view of your table">
-                                            <el-icon class="tooltip-icon-color">
-                                                <InfoFilled />
-                                            </el-icon>
-                                        </el-tooltip>
-                                    </h3>
-                                    <el-checkbox-group v-model="tableSettings.stacks_appearances">
-                                        <el-checkbox :label="$t('Hide column headings')" value="hide_stacked_th" />
-                                        <el-checkbox :label="$t('Hide internal borders')"
-                                            value="ninja_stacked_no_cell_border" />
-                                    </el-checkbox-group>
+                        <el-collapse accordion class="nt-design-collapse">
+                            <el-collapse-item name="styles">
+                                 <template #title>
+                                    <div class="flex items-center">
+                                    <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
+                                    <span style="font-weight: 500; font-size: 14px;">{{ $t('Styles') }}</span>
+                                    </div>
                                 </template>
+                                <div class="flex justify-center my-4">
+                                   <div class="flex rounded-[8px] bg-[#F5F7FA] px-2 py-2 gap-3">
+                                        <div 
+                                            @click="tableSettings.css_lib = 'semantic_ui'" 
+                                            :class="{
+                                                'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.css_lib === 'semantic_ui',
+                                                'px-2 py-1 cursor-pointer': true
+                                            }"
+                                        >
+                                            {{ $t('Semantic UI') }}
+                                        </div>
+                                        <div 
+                                            @click="tableSettings.css_lib = 'bootstrap4'" 
+                                            :class="{
+                                                'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.css_lib === 'bootstrap4',
+                                                'px-2 py-1 cursor-pointer': true
+                                            }"
+                                        >
+                                            {{ $t('Bootstrap 4') }}
+                                        </div>
+                                        <div 
+                                            @click="tableSettings.css_lib = 'bootstrap3'" 
+                                            :class="{
+                                                'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.css_lib === 'bootstrap3',
+                                                'px-2 py-1 cursor-pointer': true
+                                            }"
+                                        >
+                                            {{ $t('Bootstrap 3') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            <div v-if="availableStyles" class="form_group label-normalize">
+                                <label v-for="tableStyle in availableStyles" :key="tableStyle.key"
+                                    :for="'table_style_' + tableStyle.key">
+                                    <div class="flex items-center justify-between">
+                                        <span>
+                                            {{ tableStyle.title }}
+                                            <el-tooltip placement="top-end" effect="light" :content="tableStyle.description">
+                                            <el-icon class="tooltip-icon-color">
+                                                <InfoFilled />
+                                            </el-icon>
+                                        </el-tooltip>
+                                        </span>
+                                         <el-switch 
+                                            :model-value="isStyleActive(tableStyle.key)"
+                                            @change="(val) => toggleStyle(tableStyle.key, val)"
+                                            :id="'table_style_' + tableStyle.key">
+                                        </el-switch>
+                                    </div>
+                                </label>
                             </div>
-                        </div>
+                            </el-collapse-item>
+                            <el-collapse-item name="features">
+                                <template #title>
+                                    <div class="flex items-center">
+                                    <img class="mr-2" :src="assetUrl('icons/layers.svg')"/>
+                                    <span style="font-weight: 500; font-size: 14px;">{{ $t('Features') }}</span>
+                                    </div>
+                                </template>
+                                 <div class="form_group label-normalize mt-4">
+                                    <div for="show_title" class="flex items-center justify-between">
+                                        <span>
+                                            {{ $t('Show Table Title') }}
+                                            <el-tooltip placement="top-end" effect="light" content="Enable this if you want to show table title in frontend">
+                                                <el-icon class="tooltip-icon-color">
+                                                    <InfoFilled />
+                                                </el-icon>
+                                            </el-tooltip>
+                                        </span>
+                                        <el-switch 
+                                            v-model="tableSettings.show_title"
+                                            :active-value="1"
+                                            :inactive-value="0"
+                                            :id="'show_title'">
+                                        </el-switch>
+                                    </div>
+
+                                    <div for="show_description" class="flex items-center justify-between">
+                                        <span>
+                                            {{ $t('Show Table Description') }}
+                                            <el-tooltip placement="top-end" effect="light" content="Enable this if you want to show table description in frontend">
+                                                <el-icon class="tooltip-icon-color">
+                                                    <InfoFilled />
+                                                </el-icon>
+                                            </el-tooltip>
+                                        </span>
+                                        <el-switch 
+                                            v-model="tableSettings.show_description"
+                                            :active-value="1"
+                                            :inactive-value="0"
+                                            :id="'show_description'">
+                                        </el-switch>
+                                    </div>
+
+                                    <div for="enable_search" class="flex items-center justify-between">
+                                        <span>
+                                            {{ $t('Enable the visitor to filter or search the table.') }}
+                                        </span>
+                                        <el-switch 
+                                            v-model="tableSettings.enable_search"
+                                            :active-value="1"
+                                            :inactive-value="0"
+                                            :id="'enable_search'">
+                                        </el-switch>
+                                    </div>
+
+                                    <div 
+                                        v-if="tableLibs[tableSettings.library].supports.sorting && !tableSettings.enable_ajax"
+                                        for="column_sorting" 
+                                        class="flex items-center justify-between">
+                                        <span>
+                                            {{ $t('Enable sorting of the table by the visitor') }}
+                                        </span>
+                                        <el-switch 
+                                            v-model="tableSettings.column_sorting"
+                                            :active-value="1"
+                                            :inactive-value="0"
+                                            :id="'column_sorting'">
+                                        </el-switch>
+                                    </div>
+
+                                    <div for="hide_header_row" class="flex items-center justify-between">
+                                        <span>
+                                            Hide Header Row
+                                        </span>
+                                        <el-switch 
+                                            v-model="tableSettings.hide_header_row"
+                                            :id="'hide_header_row'">
+                                        </el-switch>
+                                    </div>
+
+                                    <div for="hide_all_borders" class="flex items-center justify-between">
+                                        <span>
+                                            Hide All Borders
+                                        </span>
+                                        <el-switch 
+                                            v-model="tableSettings.hide_all_borders"
+                                            :id="'hide_all_borders'">
+                                        </el-switch>
+                                    </div>
+
+                                    <div for="hide_on_empty" class="flex items-center justify-between">
+                                        <span>
+                                            Hide empty items on responsive breakdown 
+                                            <span v-show="!has_pro">(Pro Only)</span>
+                                            <el-tooltip placement="top-end" effect="light" content="If You enable this then the empty items will not show into responsive drawer / Stackable View">
+                                                <el-icon class="tooltip-icon-color">
+                                                    <InfoFilled />
+                                                </el-icon>
+                                            </el-tooltip>
+                                        </span>
+                                        <el-switch 
+                                            v-model="tableSettings.hide_on_empty"
+                                            :id="'hide_on_empty'">
+                                        </el-switch>
+                                    </div>
+
+                                    <div for="hide_responsive_labels" class="flex items-center justify-between">
+                                        <span>
+                                            Hide Labels on responsive breakdown 
+                                            <span v-show="!has_pro">(Pro Only)</span>
+                                            <el-tooltip placement="top-end" effect="light" content="If You enable this then columns headings will not show into responsive drawer / Stackable View">
+                                                <el-icon class="tooltip-icon-color">
+                                                    <InfoFilled />
+                                                </el-icon>
+                                            </el-tooltip>
+                                        </span>
+                                        <el-switch 
+                                            v-model="tableSettings.hide_responsive_labels"
+                                            :id="'hide_responsive_labels'">
+                                        </el-switch>
+                                    </div>
+                                </div>
+                            </el-collapse-item>
+                            <el-collapse-item name="configuration">
+                                <template #title>
+                                    <div class="flex items-center">
+                                    <img class="mr-2" :src="assetUrl('icons/elements.svg')"/>
+                                    <span style="font-weight: 500; font-size: 14px;">{{ $t('Table Configuration') }}</span>
+                                    </div>
+                                </template>
+                                <div class="form_group label-normalize mt-4">
+                                    <div class="form_group">
+                                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="tableSettings.stackable">
+                                            Enable Stackable Table
+                                        </el-checkbox>
+                                        <template v-if="tableSettings.stackable == 'yes'">
+                                            <h3 style="margin-top: 15px" class="ninja_inner_title">Target Devices
+                                                <el-tooltip placement="top-end" effect="light"
+                                                    content="Select the device by width in where the stackable tables will be enabled">
+                                                    <el-icon class="tooltip-icon-color">
+                                                        <InfoFilled />
+                                                    </el-icon>
+                                                </el-tooltip>
+                                            </h3>
+                                            <el-checkbox-group v-model="tableSettings.stacks_devices">
+                                                <el-checkbox :label="$t('Mobile Device')" value="xs" />
+                                                <el-checkbox :label="$t('Tablet Device')" value="sm" />
+                                                <el-checkbox :label="$t('Laptop')" value="md" />
+                                                <el-checkbox :label="$t('Large Devices (imac)')" value="lg" />
+                                            </el-checkbox-group>
+
+                                            <h3 style="margin-top: 15px" class="ninja_inner_title">Stacked Appearance
+                                                <el-tooltip placement="top-end" effect="light"
+                                                    content="You can customize the appearance in stacked view of your table">
+                                                    <el-icon class="tooltip-icon-color">
+                                                        <InfoFilled />
+                                                    </el-icon>
+                                                </el-tooltip>
+                                            </h3>
+                                            <el-checkbox-group v-model="tableSettings.stacks_appearances">
+                                                <el-checkbox :label="$t('Hide column headings')" value="hide_stacked_th" />
+                                                <el-checkbox :label="$t('Hide internal borders')"
+                                                    value="ninja_stacked_no_cell_border" />
+                                            </el-checkbox-group>
+                                        </template>
+                                    </div>
+                                </div>
+                            </el-collapse-item>
+                        </el-collapse>
                     </el-tab-pane>
                     <el-tab-pane label="Table Colors" name="color_customization">
-                        <div class="form_group">
-                            <h3 class="ninja_inner_title">Select Color Scheme</h3>
-                            <el-radio-group size="small" v-model="tableSettings.table_color_type">
-                                <el-radio-button value="pre_defined_color" :label="$t('Pre Defined Scheme')" />
-                                <el-radio-button value="custom_color" :label="$t('Custom Scheme')" />
-                            </el-radio-group>
+                        <div class="px-[18px]">
+                            <h3 class="text-[16px] mt-4">Select Color Scheme</h3>
+                            <div class="flex rounded-[8px] bg-[#F5F7FA] px-2 py-2 my-4 gap-3">
+                                <div 
+                                    @click="tableSettings.table_color_type = 'pre_defined_color'" 
+                                    :class="{
+                                        'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.table_color_type === 'pre_defined_color',
+                                        'px-2 py-1 cursor-pointer': true
+                                    }"
+                                >
+                                    {{ $t('Pre Defined Scheme') }}
+                                </div>
+                                <div 
+                                    @click="tableSettings.table_color_type = 'custom_color'" 
+                                    :class="{
+                                        'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.table_color_type === 'custom_color',
+                                        'px-2 py-1 cursor-pointer': true
+                                    }"
+                                >
+                                    {{ $t('Custom Scheme') }}
+                                </div>
+                            </div>
                         </div>
-                        <div v-if="tableSettings.table_color_type == 'pre_defined_color'" class="form_group">
-                            <select class="form_control" v-model="tableSettings.table_color">
-                                <option v-for="(colorName, colorKey) in colors" :key="colorKey" :value="colorKey">{{
+                        <div v-if="tableSettings.table_color_type == 'pre_defined_color'" class="px-[18px]">
+                            <el-select class="ninja-select" v-model="tableSettings.table_color">
+                                <el-option v-for="(colorName, colorKey) in colors" :key="colorKey" :value="colorKey">{{
                                     colorName }}
-                                </option>
-                            </select>
+                                </el-option>
+                            </el-select>
                         </div>
                         <div v-else class="form_group ninja_color_customization">
-                            <h3 class="ninja_inner_title">Search Bar Colors</h3>
-                            <div class="ninja_color_blocks">
-                                <div class="ninja_color_block">
-                                    <ninja-color-picker label="Background"
-                                        v-model="tableSettings.table_search_color_primary"></ninja-color-picker>
-                                </div>
-                                <div class="ninja_color_block">
-                                    <ninja-color-picker label="Icon"
-                                        v-model="tableSettings.table_search_color_secondary"></ninja-color-picker>
-                                </div>
-                                <div class="ninja_color_block">
-                                    <ninja-color-picker label="Border"
-                                        v-model="tableSettings.table_search_color_border"></ninja-color-picker>
-                                </div>
-                            </div>
-
-                            <h3 class="ninja_inner_title">{{ $t('Table Header Colors') }}</h3>
-                            <div class="ninja_color_blocks">
-                                <div class="ninja_color_block">
-                                    <ninja-color-picker label="Background"
-                                        v-model="tableSettings.table_header_color_primary"></ninja-color-picker>
-                                </div>
-                                <div class="ninja_color_block">
-                                    <ninja-color-picker label="Text"
-                                        v-model="tableSettings.table_color_header_secondary"></ninja-color-picker>
-                                </div>
-                                <div class="ninja_color_block">
-                                    <ninja-color-picker label="Border"
-                                        v-model="tableSettings.table_color_header_border"></ninja-color-picker>
-                                </div>
-                            </div>
-
-                            <h3 class="ninja_inner_title">{{ $t('Table Body Colors') }}</h3>
-                            <el-tabs>
-                                <el-tab-pane label="Default">
-                                    <div class="ninja_color_blocks">
-                                        <div class="ninja_color_block">
-                                            <ninja-color-picker label="Background"
-                                                v-model="tableSettings.table_color_primary"></ninja-color-picker>
+                             <el-collapse accordion class="nt-design-collapse">
+                                <el-collapse-item name="search_bar">
+                                 <template #title>
+                                    <div class="flex items-center">
+                                        <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
+                                        <span style="font-weight: 500; font-size: 14px;">{{ $t('Search Bar Colors') }}</span>
+                                    </div>
+                                 </template>
+                                 <div class="my-2">
+                                    <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
+                                    <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                       <ColorPicker labelShow
+                                        v-model="tableSettings.table_search_color_primary"/>
+                                     </div>
+                                 </div>
+                                 <div class="mb-2">
+                                    <div class="mb-1 font-[300] text-[14px]">{{ $t("Icon") }}</div>
+                                    <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                       <ColorPicker labelShow
+                                        v-model="tableSettings.table_search_color_secondary"/>
+                                     </div>
+                                 </div>
+                                 <div class="mb-4">
+                                    <div class="mb-1 font-[300] text-[14px]">{{ $t("Border") }}</div>
+                                    <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                       <ColorPicker labelShow
+                                        v-model="tableSettings.table_search_color_border"/>
+                                     </div>
+                                 </div>
+                               </el-collapse-item>
+                               <el-collapse-item name="header">
+                                    <template #title>
+                                        <div class="flex items-center">
+                                            <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
+                                            <span style="font-weight: 500; font-size: 14px;">{{ $t('Table Header Colors') }}</span>
                                         </div>
-                                        <div class="ninja_color_block">
-                                            <ninja-color-picker label="Text"
-                                                v-model="tableSettings.table_color_secondary"></ninja-color-picker>
-                                        </div>
-                                        <div class="ninja_color_block">
-                                            <ninja-color-picker label="Border"
-                                                v-model="tableSettings.table_color_border"></ninja-color-picker>
+                                    </template>
+                                    <div class="my-2">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                            v-model="tableSettings.table_header_color_primary"/>
                                         </div>
                                     </div>
-                                </el-tab-pane>
-                                <el-tab-pane label="Hover">
-                                    <div class="ninja_color_blocks">
-                                        <div class="ninja_color_block">
-                                            <ninja-color-picker label="Background"
-                                                v-model="tableSettings.table_color_primary_hover"></ninja-color-picker>
-                                        </div>
-                                        <div class="ninja_color_block">
-                                            <ninja-color-picker label="Text"
-                                                v-model="tableSettings.table_color_secondary_hover"></ninja-color-picker>
-                                        </div>
-                                        <div class="ninja_color_block">
-                                            <ninja-color-picker label="Border"
-                                                v-model="tableSettings.table_color_border_hover"></ninja-color-picker>
+                                    <div class="mb-2">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Text") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                            v-model="tableSettings.table_color_header_secondary"/>
                                         </div>
                                     </div>
-                                </el-tab-pane>
-                            </el-tabs>
+                                 <div class="mb-4">
+                                    <div class="mb-1 font-[300] text-[14px]">{{ $t("Border") }}</div>
+                                    <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                       <ColorPicker labelShow
+                                        v-model="tableSettings.table_color_header_border"/>
+                                     </div>
+                                 </div>
+                               </el-collapse-item>
+                               <el-collapse-item>
+                                    <template #title>
+                                        <div class="flex items-center">
+                                            <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
+                                            <span style="font-weight: 500; font-size: 14px;">{{ $t('Table Body Colors') }}</span>
+                                        </div>
+                                    </template>
+                                    <el-tabs>
+                                        <el-tab-pane label="Default">
+                                            <div class="my-2">
+                                                <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
+                                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                    v-model="tableSettings.table_color_primary"/>
+                                                </div>
+                                            </div>
+                                             <div class="mb-2">
+                                                <div class="mb-1 font-[300] text-[14px]">{{ $t("Text") }}</div>
+                                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                    v-model="tableSettings.table_color_secondary"/>
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <div class="mb-1 font-[300] text-[14px]">{{ $t("Border") }}</div>
+                                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                    v-model="tableSettings.table_color_border"/>
+                                                </div>
+                                            </div>
+                                        </el-tab-pane>
+                                        <el-tab-pane label="Hover">
+                                            <div class="my-2">
+                                                <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
+                                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                    v-model="tableSettings.table_color_primary_hover"/>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2">
+                                                <div class="mb-1 font-[300] text-[14px]">{{ $t("Text") }}</div>
+                                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                    v-model="tableSettings.table_color_secondary_hover"/>
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <div class="mb-1 font-[300] text-[14px]">{{ $t("Border") }}</div>
+                                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                    v-model="tableSettings.table_color_border_hover"/>
+                                                </div>
+                                            </div>
+                                        </el-tab-pane>
+                                    </el-tabs>
+                               </el-collapse-item>
+                               <el-collapse-item name="footer">
+                                  <template #title>
+                                        <div class="flex items-center">
+                                            <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
+                                            <span style="font-weight: 500; font-size: 14px;">{{ $t('Footer Colors') }}</span>
+                                        </div>
+                                    </template>
+                                    <div class="mb-4">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                            v-model="tableSettings.table_footer_bg"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Active") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                            v-model="tableSettings.table_footer_active"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Border") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                            v-model="tableSettings.table_footer_border"/>
+                                        </div>
+                                    </div>
+                               </el-collapse-item>
+                               <el-collapse-item v-if="tableSettings.alternate_color_status == 'yes'" name="ode_row_color" >
+                                  <template #title>
+                                        <div class="flex items-center">
+                                            <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
+                                            <span style="font-weight: 500; font-size: 14px;">{{ $t('Odd Row Colors') }}</span>
+                                        </div>
+                                    </template>
+                                    <div class="mb-4">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                           v-model="tableSettings.table_alt_2_color_primary"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Text") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                            v-model="tableSettings.table_alt_2_color_secondary"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Hover Background") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                            v-model="tableSettings.table_alt_2_color_hover"/>
+                                        </div>
+                                    </div>
+                               </el-collapse-item>
+                               <el-collapse-item v-if="tableSettings.alternate_color_status == 'yes'" name="even_row_color" >
+                                  <template #title>
+                                        <div class="flex items-center">
+                                            <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
+                                            <span style="font-weight: 500; font-size: 14px;">{{ $t('Even Row Colors') }}</span>
+                                        </div>
+                                    </template>
+                                    <div class="mb-4">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                           v-model="tableSettings.table_alt_color_primary"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Text") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                            v-model="tableSettings.table_alt_color_secondary"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Hover Background") }}</div>
+                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                        <ColorPicker labelShow
+                                            v-model="tableSettings.table_alt_color_hover"/>
+                                        </div>
+                                    </div>
+                               </el-collapse-item>
+                             </el-collapse>
+                        
 
-                            <div class="ninja_switch_wrapper">
+                            <div class="ninja_switch_wrapper px-[18px]">
                                 <el-switch inactive-color="gray" active-text="Use Alternate Color Schema for Table Rows"
                                     active-value="yes" inactive-value="no"
                                     v-model="tableSettings.alternate_color_status"></el-switch>
-                            </div>
-                            <div class="ninja_alternate_colors" v-if="tableSettings.alternate_color_status == 'yes'">
-                                <h3 class="ninja_inner_title">{{ $t('Odd Row Colors') }}</h3>
-                                <div class="ninja_color_blocks">
-                                    <div class="ninja_color_block">
-                                        <ninja-color-picker label="Background"
-                                            v-model="tableSettings.table_alt_2_color_primary"></ninja-color-picker>
-                                    </div>
-                                    <div class="ninja_color_block">
-                                        <ninja-color-picker label="Text"
-                                            v-model="tableSettings.table_alt_2_color_secondary"></ninja-color-picker>
-                                    </div>
-                                    <div class="ninja_color_block">
-                                        <ninja-color-picker label="Hover Background"
-                                            v-model="tableSettings.table_alt_2_color_hover"></ninja-color-picker>
-                                    </div>
-                                </div>
-                                <h3 class="ninja_inner_title">{{ $t('Even Row Colors') }}</h3>
-                                <div class="ninja_color_blocks">
-                                    <div class="ninja_color_block">
-                                        <ninja-color-picker label="Background"
-                                            v-model="tableSettings.table_alt_color_primary"></ninja-color-picker>
-                                    </div>
-                                    <div class="ninja_color_block">
-                                        <ninja-color-picker label="Text"
-                                            v-model="tableSettings.table_alt_color_secondary"></ninja-color-picker>
-                                    </div>
-                                    <div class="ninja_color_block">
-                                        <ninja-color-picker label="Hover Background"
-                                            v-model="tableSettings.table_alt_color_hover"></ninja-color-picker>
-                                    </div>
-                                </div>
-                            </div>
-                            <h3 class="ninja_inner_title">{{ $t('Footer Colors') }}</h3>
-                            <div class="ninja_color_blocks">
-                                <div class="ninja_color_block">
-                                    <ninja-color-picker label="Background"
-                                        v-model="tableSettings.table_footer_bg"></ninja-color-picker>
-                                </div>
-                                <div class="ninja_color_block">
-                                    <ninja-color-picker label="Active"
-                                        v-model="tableSettings.table_footer_active"></ninja-color-picker>
-                                </div>
-                                <div class="ninja_color_block">
-                                    <ninja-color-picker label="Border"
-                                        v-model="tableSettings.table_footer_border"></ninja-color-picker>
-                                </div>
                             </div>
                         </div>
                     </el-tab-pane>
@@ -598,16 +797,19 @@ import GetPro from "../Tools/GetPro";
 import { useEventBus } from './../../eventBus';
 import { assetUrl } from '../../utils/ninjatablesadmin';
 import tableConfigStore from '../../store/tableConfigStore';
+import ColorPicker from '../../@ui-utils/ColorPicker.vue';
 
 export default {
     name: 'table_preview',
     components: {
         GetPro,
         SortableUpgradeNotice,
-        NinjaColorPicker
+        NinjaColorPicker,
+        ColorPicker
     },
     data() {
         return {
+            activeTab: 'desktop',
             store: tableConfigStore,
             fontFamily: ['inherit', 'cursive', 'fantasy', 'monospace', 'sans-serif', 'serif', 'system-ui', 'ui-monospace', 'ui-rounded', 'ui-sans-serif', 'ui-serif'],
             rows: [],
@@ -860,6 +1062,31 @@ export default {
     },
     methods: {
         assetUrl,
+         isStyleActive(styleKey) {
+            if (!Array.isArray(this.tableSettings.css_classes)) {
+                this.tableSettings.css_classes = [];
+            }
+            return this.tableSettings.css_classes.includes(styleKey);
+        },
+        
+        toggleStyle(styleKey, isActive) {
+            if (!Array.isArray(this.tableSettings.css_classes)) {
+                this.tableSettings.css_classes = [];
+            }
+            
+            // Create a new array to maintain reactivity
+            const updatedStyles = [...this.tableSettings.css_classes];
+            
+            if (isActive && !updatedStyles.includes(styleKey)) {
+                updatedStyles.push(styleKey);
+            } else if (!isActive && updatedStyles.includes(styleKey)) {
+                const index = updatedStyles.indexOf(styleKey);
+                updatedStyles.splice(index, 1);
+            }
+            
+            // Update the tableSettings
+            this.tableSettings.css_classes = updatedStyles;
+        },
         fetchTableBody() {
             this.$get(`tables/${this.tableId}/table-inner-html`)
                 .then(response => {
