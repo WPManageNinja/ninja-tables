@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <p>
+    <div class="ninja_modal-body ">
+        <p class="nt-modal-description">
             Data Transformer is a powerful tool where you can concat any column values easily into any valid html and show as computed value.
         </p>
         <el-input
@@ -9,44 +9,73 @@
           :placeholder="placeholder"
           :disabled="!hasPro"
           v-model="column.transformed_value"
+          class="mt-2"
         ></el-input>
+
         <ninja-premium-notice v-if="!hasPro" highlight="Transform Column Value"></ninja-premium-notice>
 
-        <div class="ninja_instruction">
-            <el-checkbox :disabled="!hasPro" :true-value="'yes'" :false-value="'no'" v-model="settings.formula_support">Enable Excel Formula support for Transform Value</el-checkbox>
-            <div v-show="settings.formula_support == 'yes'">
-                <p>Note: Excel formuala is an experimental feature so all formulas may not work. We are improving this feature day by day so please don't be mad if some formulas don't work properly.</p>
+        <div class="mt-4">
+<!--            <el-checkbox-->
+<!--                :disabled="!hasPro"-->
+<!--                :true-value="'yes'"-->
+<!--                :false-value="'no'"-->
+<!--                v-model="settings.formula_support"-->
+<!--            >-->
+<!--                Enable Excel Formula support for Transform Value-->
+<!--            </el-checkbox>-->
 
-                <el-button size="small" @click="show_formulas = true">Show Formulas</el-button>
+           <div class="flex gap-2 items-center">
+               <el-switch
+                   size="small"
+                   v-model="settings.formula_support"
+                   :disabled="!hasPro"
+               />
+               <p class="tex-[14px] font-[400]">Enable Excel Formula support for Transform Value</p>
+           </div>
+
+            <div class="bg-[#F9FAFB] p-4 rounded-[8px]" v-show="settings.formula_support == 'yes'">
+                <p class="nt-modal-description mb-2">Note: Excel formula is an experimental feature so all formulas may not work. We are improving this feature day by day so please don't be mad if some formulas don't work properly.</p>
+
+                <NinjaButton
+                    size="small"
+                    type="secondary"
+                    @click.prevent="show_formulas = true"
+                    :btnText="$t('Show Formulas')"
+                />
+
                 <el-dialog
-                    title="Supported Excel Formullas"
+                    class="ninja_create-table-modal"
+                    title="Supported Excel Formulas"
                     v-model="show_formulas"
                     width="30%">
                     <ul style="margin: 0px 20px; padding-top: 20px">
                         <li v-for="line_item in supported_formullas">{{line_item}}</li>
                     </ul>
+                    <div class="flex justify-end p-4">
+                        <NinjaButton
+                            size="small"
+                            type="secondary"
+                            @click.prevent="show_formulas = false"
+                            :btnText="$t('Close')"
+                        />
+                    </div>
                 </el-dialog>
             </div>
         </div>
 
-        <div class="ninja_instruction">
+        <div class="my-4">
             <p>You can use the following Reference Shortcode Values to transform your cell value</p>
-            <table class="wp-list-table widefat fixed striped">
-                <thead>
-                    <tr>
-                        <th>Column Title</th>
-                        <th>Reference Shortcode</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="column in columns" :key="column.key">
-                        <td>{{ column.name }}</td>
-                        <td><span v-text="'{{row.' + column.key + '}}'"></span></td>
-                    </tr>
-                </tbody>
-            </table>
-            <br />
-            <p>You may <a href="https://wpmanageninja.com/docs/ninja-tables/configuring-tables/value-transformation/" target="_blank">check the documentation here.</a></p>
+            <div>
+                <el-table :data="columns" border  class="nt-inner-table">
+                    <el-table-column prop="name" label="Column Title" />
+                    <el-table-column label="Reference Shortcode">
+                        <template #default="scope">
+                            <span v-text="'{{row.' + scope.row.key + '}}'"></span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <p>You may <a class="text-[#335CFF]" href="https://wpmanageninja.com/docs/ninja-tables/configuring-tables/value-transformation/" target="_blank">check the documentation here.</a></p>
             <p style="font-weight: bold" v-show="settings.formula_support == 'yes'">You can use any Excel formula into the transform value box</p>
         </div>
 
@@ -58,6 +87,7 @@
     import NinjaPremiumNotice from '../../includes/PremiumNotice';
     import parser from '../../../../public/js/parser';
     import { useEventBus } from '../../../eventBus';
+    import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
 
 
     export default {
@@ -76,6 +106,7 @@
             }
         },
         components: {
+            NinjaButton,
             ninja_alert,
             NinjaPremiumNotice
         },
