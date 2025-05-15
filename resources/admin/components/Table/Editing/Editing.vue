@@ -26,9 +26,11 @@
                                 size="small"
                                 v-model="settings.allow_frontend"
                                 class="mr-2"
-                                @click="(e)=>{activeCollapse = settings.allow_frontend ==='yes' ? ['collapse1']:[]
-                                        e.stopPropagation();
-                                }"
+                                @click="(e)=>{
+                                 activeCollapse = settings.allow_frontend === 'yes' ? ['collapse1'] : []
+                                 e.stopPropagation();
+                                 handleDisable(settings.allow_frontend)
+                               }"
                                 active-value="yes"
                                 inactive-value="no"
                             />
@@ -182,7 +184,7 @@
                                 </div>
 
                                 <div class="flex justify-end">
-                                    <NinjaButton type="primary" @click="updateSettings()" size="small"
+                                    <NinjaButton type="primary" @click="updateSettings" size="small"
                                                  :btn-text="$t('Save Settings')"/>
                                 </div>
                             </div>
@@ -229,12 +231,17 @@ export default {
             activeCollapse: [],
         }
     },
-    watch: {
-        'settings.allow_frontend'(newVal, oldVal) {
-            this.activeCollapse = this.settings.allow_frontend === 'yes' ? ['collapse1'] : [];
-        },
-    },
     methods: {
+        handleDisable(val) {
+            val === 'no' && this.updateSettings();
+        },
+        initializeFlags(target, columns) {
+            if (Object.keys(target).length === 0) {
+                columns.forEach(column => {
+                    target[column.key] = 'no';
+                });
+            }
+        },
         getEditSettings() {
             this.fetching = true;
             this.$get({
@@ -243,12 +250,22 @@ export default {
             })
                 .then(response => {
                     this.settings = response.data.settings;
+                    if (this.settings.allow_frontend === 'yes') {
+                        this.activeCollapse = ['collapse1']
+                    }
+
                     this.user_roles = response.data.user_roles;
                     this.editing_user_roles = response.data.editing_user_roles;
                     this.editing_items = response.data.editor_pref.editing_items;
                     this.required_items = response.data.editor_pref.required_items;
                     this.default_values = response.data.editor_pref.default_values;
                     this.appearance_settings = response.data.editor_pref.appearance_settings;
+
+                    if (Object.keys(this.editing_items).length === 0) {
+                        this.initializeFlags(this.editing_items, this.columns);
+                    } else if (Object.keys(this.required_items).length === 0) {
+                        this.initializeFlags(this.required_items, this.columns);
+                    }
                 })
                 .fail(error => {
 
