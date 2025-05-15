@@ -6,44 +6,70 @@
         top="50px"
         :close-on-click-modal="false"
         :append-to-body="true"
-        @close="closeModal">
-        <div v-if="showModal">
-            <div v-for="column in columns" :key="column.key" class="form-group">
-                <label :for="slugify(column.key)">{{ column.name || column.key }}</label>
-                <div v-if="column.data_type === 'textarea'">
-                    <textarea :placeholder="column.name" :id="slugify(column.key)" class="form-control"
-                              v-model="newColumn[column.key]"></textarea>
-                </div>
-                <div v-else-if="column.data_type === 'html'">
-                    <wp_editor :editor_id="slugify(column.key)" v-model="newColumn[column.key]"></wp_editor>
-                </div>
-                <div v-else-if="column.data_type === 'date'">
-                    <ninja-date-picker :column="column" :new_column="newColumn"></ninja-date-picker>
-                </div>
-                <div v-else-if="column.data_type === 'selection'">
-                    <may-be-select :column="column" :newColumn="newColumn"></may-be-select>
-                </div>
+        @close="closeModal"
+    >
+        <div class="ninja_modal-body p-[20px]">
+            <div v-if="showModal">
+                <div v-for="column in columns" :key="column.key" class="form-group">
+                    <label :for="slugify(column.key)" class="nt-form-label">{{ column.name || column.key }}</label>
+                    <div v-if="column.data_type === 'textarea'">
+                        <el-input
+                            type="textarea"
+                            v-model="newColumn[column.key]"
+                            :placeholder="column.name"
+                            :id="slugify(column.key)"
+                            :autosize="{ minRows: 4, maxRows: 8}"
+                        />
+                    </div>
+                    <div v-else-if="column.data_type === 'html'">
+                        <wp_editor :editor_id="slugify(column.key)" v-model="newColumn[column.key]"></wp_editor>
+                    </div>
+                    <div v-else-if="column.data_type === 'date'">
+                        <ninja-date-picker :column="column" :new_column="newColumn"></ninja-date-picker>
+                    </div>
+                    <div v-else-if="column.data_type === 'selection'">
+                        <may-be-select :column="column" :newColumn="newColumn"></may-be-select>
+                    </div>
 
-                <div v-else-if="column.data_type === 'image' && has_pro">
-                    <image-selector :adding_counter="adding_counter" :column="column" :newColumn="newColumn"></image-selector>
-                </div>
-                <div v-else-if="column.data_type === 'button' && has_pro">
-                    <input placeholder="Valid button URL" type="url" :id="slugify(column.key)" class="form-control"
-                           v-model="newColumn[column.key]">
-                    <small>Please provide valid URL</small>
-                </div>
+                    <div v-else-if="column.data_type === 'image' && has_pro">
+                        <image-selector :adding_counter="adding_counter" :column="column" :newColumn="newColumn"></image-selector>
+                    </div>
+                    <div v-else-if="column.data_type === 'button' && has_pro">
+<!--                        <input-->
+<!--                            placeholder="Valid button URL"-->
+<!--                            type="url" :id="slugify(column.key)"-->
+<!--                            class="form-control"-->
+<!--                            v-model="newColumn[column.key]"-->
+<!--                        >-->
+                        <NinjaInput
+                            placeholder="Valid button URL"
+                            type="url"
+                            :id="slugify(column.key)"
+                            class="form-control"
+                            v-model="newColumn[column.key]"
+                        />
+                        <small>{{ $t('Please provide valid URL') }}</small>
+                    </div>
 
-                <div v-else>
-                    <input :placeholder="column.name" type="text" :id="slugify(column.key)" class="form-control"
-                           v-model="newColumn[column.key]">
+                    <div v-else>
+                        <NinjaInput
+                            :placeholder="column.name"
+                            :id="slugify(column.key)"
+                            v-model="newColumn[column.key]"
+                        />
+                    </div>
+                </div>
+                <div v-if="!editId && manualSort && !insertAfterPosition" class="flex items-center gap-2">
+                    <label class="nt-form-label">{{ $t('Add at') }}</label>
+                    <el-radio-group
+                        v-model="position"
+                        class="ninja_tables_radio_group"
+                    >
+                        <el-radio value="last" border>Last</el-radio>
+                        <el-radio value="first" border>First</el-radio>
+                    </el-radio-group>
                 </div>
             </div>
-            <div v-if="!editId && manualSort && !insertAfterPosition">
-                Add at
-                <input type="radio" v-model="position" value="last" style="margin-left: 5px;">Last
-                <input type="radio" v-model="position" value="first" style="margin-left: 10px;">First
-            </div>
-        </div>
 
         <div class="row_config_container" v-if="row_config">
             <template v-if="has_pro">
@@ -109,25 +135,45 @@
             </template>
         </div>
 
-        <div slot="footer" class="dialog-footer" :class="{ 'single-child': shouldNotContinueAdding }">
-            <template v-if="!shouldNotContinueAdding">
-                <div>
-                    <label for="adding_more" class="dialog-footer-item">
-                        <input type="checkbox" id="adding_more" v-model="continueAdding"/> Continue Adding
-                    </label>
+            <div class="pt-[16px] flex flex-col gap-2" :class="{ 'single-child': shouldNotContinueAdding }">
+                <div v-if="!shouldNotContinueAdding">
+                    <el-checkbox v-model="continueAdding">{{ $t('Continue Adding') }}</el-checkbox>
                 </div>
-            </template>
-            <div class="dialog-footer-item">
-                <el-button @click="row_config = !row_config" size="small">
-                    <el-icon><Setting /></el-icon>
-                </el-button>
-                <el-button v-loading="btnLoading" :disabled="btnLoading" type="primary" size="small" @click="addData">
-                    <span v-if="editId"> {{ $t('Update') }}</span>
-                    <span v-else>{{ $t('Add') }}</span>
-                    <el-icon v-if="btnLoading"><Loading /></el-icon>
-                </el-button>
+
+                <div class="flex justify-between items-center">
+                    <div @click="row_config = !row_config"
+                         class="mr-3 cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                        <img :src="assetUrl('icons/setting-02.svg')" alt="settings"/>
+                    </div>
+
+                    <div class="flex gap-2 items-center">
+                        <NinjaButton
+                            size="small"
+                            @click="closeModal"
+                            type="secondary"
+                            :btn-text="$t('Cancel')"
+                        />
+
+                        <NinjaButton
+                            v-if="editId"
+                            size="small"
+                            @click="addData"
+                            :disabled="btnLoading"
+                            :btn-text="$t('Update')"
+                        />
+                        <NinjaButton
+                            v-else
+                            size="small"
+                            @click="addData"
+                            :disabled="btnLoading"
+                            :btn-text="$t('Add')"
+                        />
+                    </div>
+
+                </div>
             </div>
         </div>
+
     </el-dialog>
 </template>
 
@@ -139,6 +185,9 @@
     import ImageSelector from '../../../common/ImageSelector';
     import NinjaDatePicker from '../Extras/_NinjaDatePicker'
     import GetPro from "../Tools/GetPro";
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import {assetUrl} from "../../utils/ninjatablesadmin";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
     export default {
         name: 'add_data',
@@ -188,6 +237,7 @@
             }
         },
         methods: {
+            assetUrl,
             addData() {
                 let valid = false;
                 each(this.newColumn, (value) => {
@@ -318,6 +368,8 @@
             this.initNewColumnObj();
         },
         components: {
+            NinjaButton,
+            NinjaInput,
           GetPro,
             wp_editor: wp_editor,
             NinjaDatePicker,
