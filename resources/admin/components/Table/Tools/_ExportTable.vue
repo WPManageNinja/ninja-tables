@@ -1,31 +1,29 @@
 <template>
-    <div>
+    <div class="export-table-wrapper ml-2">
+        <div class="text-[18px] font-[600] text-[#0E121B] my-5">{{ $t('Export Table Here') }}</div>
+        <div v-if="config.table.isExportable">
+            <div class="text-[14px] font-[400] text-[#0E121B] my-5 w-1/2">{{
+                    $t("You can download the table as CSV or JSON format, If you download as JSON then you can can import the table to Fluent table installation")
+                }}
+            </div>
 
-        <div class="ninja_header">
-            <h2>{{ $t('Export Data') }}</h2>
+
+            <el-form-item size="large" label-position="top" :label="$t('Format')" class="!mb-[10px] w-1/2">
+                <el-select class="ninja-data-tables_select" v-model="selected">
+                    <el-option value="csv" label="CSV"/>
+                    <el-option value="json" label="JSON"/>
+                </el-select>
+            </el-form-item>
+
+            <NinjaButton class="my-3" type="primary" @click="doExport"
+                         :btnText="$t('Export Table')"/>
+
+
         </div>
-        <div v-if="config.table.isExportable" class="ninja_content">
-            <div class="ninja_suggest">
-                <p>{{ $t('You can download the table data as CSV or JSON format, If you download as json then you can import the table to any Ninja Table Installation') }}</p>
-            </div>
-            <div class="ninja_export_block">
-                {{ $t('Format:') }}
-                <select v-model="selected">
-                    <option v-for="(option, key) in exportOptions" :value="key">
-                        {{ option }}
-                    </option>
-                </select>
-                <el-button type="primary" @click.prevent="doExport()">
-                    <el-icon>
-                        <Download/>
-                    </el-icon>
-                    <span> {{ $t('Export') }} </span>
-                </el-button>
-            </div>
-        </div>
-        <div v-else class="ninja_content">
-            <div class="ninja_suggest">
-                <p>{{ $t('Sorry! You can not export the data as the table data is configured as external source') }} ({{ config.table.dataSourceType }})</p>
+        <div v-else>
+            <div class="text-[14px] font-[400] text-[#0E121B] my-5 w-1/2">
+                {{ $t('Sorry! You can not export the data as the table data is configured as external source') }}
+                ({{ config.table.dataSourceType }})
             </div>
         </div>
     </div>
@@ -33,21 +31,19 @@
 
 <script>
 import {Download} from "@element-plus/icons-vue";
+import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
 
 export default {
     name: 'ExportTable',
     props: ['config'],
     components: {
+        NinjaButton,
         Download
     },
 
     data() {
         return {
             tableId: this.$route.params.table_id,
-            exportOptions: {
-                csv: 'CSV',
-                json: 'JSON'
-            },
             selected: 'csv'
         }
     },
