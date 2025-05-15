@@ -10,7 +10,7 @@
             <div
                 v-if="column.conditions && column.conditions.length < 1 "
                 @click="addCondition"
-                class="flex items-center text-[#335CFF] cursor-pointer font-[300]"
+                class="flex items-center text-[#335CFF] cursor-pointer font-[300] my-2"
             >
                 <img :src="assetUrl('icons/add-line.svg')" alt="add" /> {{ $t('Add Condition') }}
             </div>

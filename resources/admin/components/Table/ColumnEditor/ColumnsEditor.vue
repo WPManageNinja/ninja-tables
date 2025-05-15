@@ -740,7 +740,7 @@
             </el-tab-pane>
 
             <!-- Transform Value -->
-            <el-tab-pane label="Transform Value" name="transformer">
+            <el-tab-pane label="Transform Value" name="transformer" class="ninja_modal_body px-[10px]">
                 <content-transformer :settings="settings" :columns="columns" :column="model"/>
             </el-tab-pane>
 
