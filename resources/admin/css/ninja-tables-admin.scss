@@ -366,8 +366,16 @@
   }
 }
 
+.sql_connection_wrapper {
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #E1E4EA;
+  margin-top: 5px;
+}
 
-// old css
+
+/*!=== old css ===*/
+
 .pageLoading {
   text-align: center;
   display: flex;
@@ -1863,13 +1871,6 @@ h2.nav-tab-wrapper {
     width: 100%;
     padding: 4px 7px;
   }
-}
-
-.sql_connection_wrapper {
-  padding: 10px 15px;
-  background: #c5c5c5;
-  border-radius: 10px;
-  margin-bottom: 20px;
 }
 
 .nt_row_2 {
