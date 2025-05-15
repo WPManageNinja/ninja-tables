@@ -735,7 +735,7 @@
             </el-tab-pane>
 
             <!-- Conditional Settings -->
-            <el-tab-pane label="Conditional Formatting" name="conditional">
+            <el-tab-pane label="Conditional Formatting" name="conditional" class="ninja_modal_body px-[10px]">
                 <condition :column="model" :has-pro="hasPro"/>
             </el-tab-pane>
 
