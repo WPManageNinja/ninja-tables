@@ -21,7 +21,7 @@ import {
 
 export default function OtherTab({ tableSettings, updateTableSettings, tableConfig }) {
     return (
-        <div className="ninja-tab-content">
+        <div className="ntb-tab-content">
             {/* Hide Pagination Toggle */}
             <div className="ninja_switch_wrapper">
                 <ToggleControl

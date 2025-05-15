@@ -20,7 +20,7 @@ registerBlockType('ninja-tables/guten-block', {
         },
         activeDesign: {
             type: 'string',
-            default: 'features'
+            default: 'styling'
         },
         tableSettings: {
             type: 'object',

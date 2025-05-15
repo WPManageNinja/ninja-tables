@@ -19,7 +19,7 @@ export default function ColorsTab({ tableSettings, updateTableSettings, tableId,
     };
 
     return (
-        <div className="ninja-tab-content">
+        <div className="ntb-tab-content">
             <div className="form_group">
                 <h3 className="ninja_inner_title">{__('Select Color Scheme')}</h3>
                 <RadioControl

@@ -1,12 +1,13 @@
 const {
     CheckboxControl,
     RadioControl,
-    Tooltip
-}  = wp.components
-const { __ }   = wp.i18n
+    Tooltip,
+    PanelBody
+} = wp.components
+const {__} = wp.i18n
 import {tableLibrary, hasPro} from "../../utils/data";
 
-export default function StyleTab({ tableSettings, updateTableSettings }) {
+export default function StyleTab({tableSettings, updateTableSettings}) {
     const libs = tableLibrary();
     const currentTableLibs = libs[tableSettings.library]?.css_libs || {};
     const currentLib = currentTableLibs[tableSettings.css_lib] || {};
@@ -14,17 +15,17 @@ export default function StyleTab({ tableSettings, updateTableSettings }) {
 
     const renderStylingLibrarySection = () => (
         <div className="form_group">
-            <h3 className="ninja_inner_title">{__('Select Styling Library')}</h3>
             <RadioControl
                 selected={tableSettings.css_lib}
                 options={Object.entries(currentTableLibs).map(([key, lib]) => ({
                     label: (
                         <span>
                             {lib.title}
-                            <span className="dashicons dashicons-info tooltip-icon"
-                                  style={{ marginLeft: '5px', fontSize: '16px', cursor: 'help' }}
-                                  title={lib.description}
-                            />
+                            <Tooltip text={__(lib.description)}>
+                                <span className="dashicons dashicons-info"
+                                      style={{marginLeft: '5px', fontSize: '16px'}}>
+                                </span>
+                            </Tooltip>
                         </span>
                     ),
                     value: key
@@ -39,7 +40,6 @@ export default function StyleTab({ tableSettings, updateTableSettings }) {
 
         return (
             <div className="form_group label-normalize">
-                <h3 className="ninja_inner_title">{__('Styles')}</h3>
                 <div className="styles-checkboxes">
                     {availableStyles.map(style => (
                         <div key={style.key} className="style-checkbox-row">
@@ -49,7 +49,7 @@ export default function StyleTab({ tableSettings, updateTableSettings }) {
                                         {style.title}
                                         <Tooltip text={__(style.description)}>
                                             <span className="dashicons dashicons-info"
-                                                  style={{ marginLeft: '5px', fontSize: '16px' }} />
+                                                  style={{marginLeft: '5px', fontSize: '16px'}}/>
                                         </Tooltip>
                                     </span>
                                 }
@@ -77,8 +77,6 @@ export default function StyleTab({ tableSettings, updateTableSettings }) {
 
     const renderFeaturesSection = () => (
         <div className="form_group label-normalize">
-            <h3 className="ninja_inner_title">{__('Features')}</h3>
-
             <CheckboxControl
                 label={__('Show Table Title')}
                 checked={tableSettings.show_title}
@@ -134,15 +132,19 @@ export default function StyleTab({ tableSettings, updateTableSettings }) {
 
     const renderStackableConfigSection = () => (
         <div className="form_group label-normalize">
-            <h3 className="ninja_inner_title">
-                {__('Stackable Table Configuration')}
-                <Tooltip text={__('With stackable table, You can show your rows as list item. You can target by device width')}>
-                    <span className="dashicons dashicons-info" style={{ marginLeft: '5px', fontSize: '16px' }} />
-                </Tooltip>
-            </h3>
-
             <CheckboxControl
-                label={__('Enable Stackable Table')}
+                label={
+                    <span>
+                      {__('Enable Stackable Table')}
+                        <Tooltip
+                            text={__('With stackable table, You can show your rows as list item. You can target by device width')}>
+                            <span className="dashicons dashicons-info"
+                                  style={{marginLeft: '5px', fontSize: '16px'}}>
+                            </span>
+                        </Tooltip>
+                    </span>
+                }
+
                 checked={tableSettings.stackable === 'yes'}
                 onChange={(val) => updateTableSettings('stackable', val ? 'yes' : 'no', false)}
             />
@@ -173,8 +175,8 @@ export default function StyleTab({ tableSettings, updateTableSettings }) {
 
                     <h4 className="ninja_inner_title">{__('Stacked Appearance')}</h4>
                     {[
-                        { key: 'hide_stacked_th', label: __('Hide column headings') },
-                        { key: 'ninja_stacked_no_cell_border', label: __('Hide internal borders') }
+                        {key: 'hide_stacked_th', label: __('Hide column headings')},
+                        {key: 'ninja_stacked_no_cell_border', label: __('Hide internal borders')}
                     ].map(option => (
                         <CheckboxControl
                             key={option.key}
@@ -198,11 +200,19 @@ export default function StyleTab({ tableSettings, updateTableSettings }) {
     );
 
     return (
-        <div className="ninja-tab-content">
-            {renderStylingLibrarySection()}
-            {renderStylesSection()}
-            {renderFeaturesSection()}
-            {renderStackableConfigSection()}
+        <div className="ntb-tab-content">
+            <PanelBody title={__('Select Styling Library')} initialOpen={true}>
+                {renderStylingLibrarySection()}
+            </PanelBody>
+            <PanelBody title={__('Select Styles')} initialOpen={true}>
+                {renderStylesSection()}
+            </PanelBody>
+            <PanelBody title={__('Table Features')} initialOpen={true}>
+                {renderFeaturesSection()}
+            </PanelBody>
+            <PanelBody title={__('Stackable Table Configuration')} initialOpen={true}>
+                {renderStackableConfigSection()}
+            </PanelBody>
         </div>
     );
 }

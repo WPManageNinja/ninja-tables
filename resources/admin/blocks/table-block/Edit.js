@@ -3,7 +3,6 @@ import ColorsTab from "./ui/tabs/ColorsTab";
 
 const {InspectorControls, useBlockProps} = wp.blockEditor || wp.editor;
 const {
-    PanelBody,
     SelectControl,
     TabPanel
 } = wp.components;
@@ -15,7 +14,7 @@ import OtherTab from "./ui/tabs/OtherTab";
 import {customColorCss} from "./utils/data";
 import BlockPreview from "./components/BlockPreview";
 import {DEFAULT_TABLE_SETTINGS} from "./utils/constants";
-
+import './style.scss';
 import {
     loadRequiredScripts,
     reInitFootables,
@@ -227,74 +226,68 @@ export default function Edit(props) {
     return (
         <div {...blockProps}>
             <InspectorControls>
-                <PanelBody title={__('Table Settings')} initialOpen={true}>
-                    <SelectControl
-                        label={__('Select Table')}
-                        value={tableId}
-                        options={availableTables}
-                        onChange={handleTableSelect}
-                    />
-                </PanelBody>
+                <SelectControl
+                    label={__('Select Table')}
+                    value={tableId}
+                    options={availableTables}
+                    onChange={handleTableSelect}
+                />
 
                 {tableId && tableConfig && dataSource !== 'drag_and_drop' && (
-                    <PanelBody title={__('Design Controls')} initialOpen={false}>
-                        <TabPanel
-                            className="ninja-tables-design-tabs"
-                            activeClass="is-active"
-                            tabs={[
-                                {
-                                    name: 'styling',
-                                    title: __('Styling'),
-                                    className: 'tab-styling'
-                                },
-                                {
-                                    name: 'colors',
-                                    title: __('Colors'),
-                                    className: 'tab-colors'
-                                },
-                                {
-                                    name: 'other',
-                                    title: __('Other'),
-                                    className: 'tab-other'
-                                }
-                            ]}
-                            onSelect={(tabName) => setAttributes({activeDesign: tabName})}
-                            initialTabName={activeDesign}
-                        >
-                            {(tab) => {
-                                switch (tab.name) {
-                                    case 'styling':
-                                        return (<StyleTab
+                    <TabPanel
+                        className="ninja-tables-design-tabs"
+                        activeClass="is-active"
+                        tabs={[
+                            {
+                                name: 'styling',
+                                title: __('Styling'),
+                                className: 'tab-styling'
+                            },
+                            {
+                                name: 'colors',
+                                title: __('Colors'),
+                                className: 'tab-colors'
+                            },
+                            {
+                                name: 'other',
+                                title: __('Other'),
+                                className: 'tab-other'
+                            }
+                        ]}
+                        onSelect={(tabName) => setAttributes({activeDesign: tabName})}
+                        initialTabName={activeDesign}
+                    >
+                        {(tab) => {
+                            switch (tab.name) {
+                                case 'styling':
+                                    return (<StyleTab
+                                        tableSettings={tableSettings}
+                                        updateTableSettings={updateTableSettings}
+                                        instanceId={instanceId}
+                                    />);
+                                case 'colors':
+                                    return (
+                                        <ColorsTab
                                             tableSettings={tableSettings}
                                             updateTableSettings={updateTableSettings}
+                                            tableId={tableId}
                                             instanceId={instanceId}
-                                        />);
-                                    case 'colors':
-                                        return (
-                                            <div className="ninja-tab-content">
-                                                <ColorsTab
-                                                    tableSettings={tableSettings}
-                                                    updateTableSettings={updateTableSettings}
-                                                    tableId={tableId}
-                                                    instanceId={instanceId}
-                                                />
-                                            </div>
-                                        );
-                                    case 'other':
-                                        return (
-                                            <OtherTab
-                                                tableSettings={tableSettings}
-                                                updateTableSettings={updateTableSettings}
-                                                tableConfig={tableConfig}
-                                                instanceId={instanceId}
-                                            />
-                                        );
-                                    default:
-                                        return null;
-                                }
-                            }}
-                        </TabPanel>
-                    </PanelBody>
+                                        />
+                                    );
+                                case 'other':
+                                    return (
+                                        <OtherTab
+                                            tableSettings={tableSettings}
+                                            updateTableSettings={updateTableSettings}
+                                            tableConfig={tableConfig}
+                                            instanceId={instanceId}
+                                        />
+                                    );
+                                default:
+                                    return null;
+                            }
+                        }}
+                    </TabPanel>
                 )}
             </InspectorControls>
 
