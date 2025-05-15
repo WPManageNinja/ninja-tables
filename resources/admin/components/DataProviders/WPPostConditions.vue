@@ -77,10 +77,6 @@
                 </el-col>
 
                 <el-col :md="3" :sm="3" style="text-align:right;">
-<!--                    <el-button type="danger" @click="removeCondition(i, $event)">-->
-<!--                        <el-icon><Delete /></el-icon>-->
-<!--                    </el-button>-->
-
                     <div class="flex">
                         <div @click="addCondition($event)"
                              class="mr-3 cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
@@ -91,7 +87,6 @@
                             <img :src="assetUrl('icons/delete-02.svg')" alt="delete"/>
                         </div>
                     </div>
-
                 </el-col>
             </el-row>
         </div>
