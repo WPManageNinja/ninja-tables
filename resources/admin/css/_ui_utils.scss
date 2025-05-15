@@ -346,4 +346,27 @@
     z-index: 999 !important;
   }
 
+  .nt-input-append {
+    .el-input__wrapper {
+      border-radius: 7px 0 0 7px !important;
+
+      .el-input__inner {
+        border: none;
+
+        &:focus {
+          border: none;
+          box-shadow: none;
+        }
+      }
+    }
+
+    .el-input-group__append {
+      .el-select {
+        .el-input__wrapper {
+          border: none;
+        }
+      }
+    }
+  }
+
 }

@@ -345,14 +345,14 @@
                             />
 
                             <div class="mt-2">
-                                <el-checkbox :disabled="!hasPro" :true-value="'_blank'" :false-value="'_self'" v-model="model.link_target">Open Link
-                                    in new tab
+                                <el-checkbox :disabled="!hasPro" :true-value="'_blank'" :false-value="'_self'" v-model="model.link_target">
+                                    Open Link in new tab
                                 </el-checkbox>
-                                <el-checkbox :disabled="!hasPro" :true-value="'nt_rounded_btn'" :false-value="''" v-model="model.btn_extra_class">Make
-                                    Button as rounded corner
+                                <el-checkbox :disabled="!hasPro" :true-value="'nt_rounded_btn'" :false-value="''" v-model="model.btn_extra_class">
+                                    Make Button as rounded corner
                                 </el-checkbox>
-                                <el-checkbox :disabled="!hasPro" :true-value="'download'" :false-value="''" v-model="model.force_download">Make
-                                    Force download
+                                <el-checkbox :disabled="!hasPro" :true-value="'download'" :false-value="''" v-model="model.force_download">
+                                    Make Force download
                                 </el-checkbox>
                             </div>
                         </div>
@@ -413,31 +413,31 @@
                                     <ColorPicker :disabled="!hasPro" v-model="model.btn_border_color" />
                                 </div>
                             </div>
+
+                            <div class="flex flex-col mt-4">
+                                <label class="nt-form-label">
+                                    {{ $t('Link With Rel Attribute') }}
+                                    <el-tooltip class="item" placement="bottom-start" effect="light">
+                                        <template #content>
+                                            <h3>Sponsored, Nofollow, NoReferrer & Noopener</h3>
+                                            <p>
+                                                Check one or multiple a rel attribute of the column
+                                            </p>
+                                        </template>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    </el-tooltip>
+                                </label>
+                                <el-checkbox-group class="mt-2" v-model="model.relAttributes" v-if="model.relAttributes">
+                                    <el-checkbox
+                                        v-for="attr in ['sponsored', 'nofollow', 'noreferrer', 'noopener']"
+                                        :key="attr"
+                                        :label="attr"
+                                        :value="attr"
+                                    />
+                                </el-checkbox-group>
+                            </div>
                         </div>
                     </div>
-
-                    <el-form-item class="flex flex-col">
-                        <label class="nt-form-label">
-                            {{ $t('Link With Rel Attribute') }}
-                            <el-tooltip class="item" placement="bottom-start" effect="light">
-                                <template #content>
-                                    <h3>Sponsored, Nofollow, NoReferrer & Noopener</h3>
-                                    <p>
-                                        Check one or multiple a rel attribute of the column
-                                    </p>
-                                </template>
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </label>
-                        <el-checkbox-group v-model="model.relAttributes" v-if="model.relAttributes">
-                            <el-checkbox
-                                v-for="attr in ['sponsored', 'nofollow', 'noreferrer', 'noopener']"
-                                :key="attr"
-                                :label="attr"
-                                :value="attr"
-                            />
-                        </el-checkbox-group>
-                    </el-form-item>
                 </template>
 
                 <!-- Responsive Breakpoint -->
@@ -484,12 +484,12 @@
             </el-tab-pane>
 
             <!-- Advanced Settings -->
-            <el-tab-pane label="Advanced Settings" name="advanced">
+            <el-tab-pane label="Advanced Settings" name="advanced" class="ninja_modal_body px-[10px]">
                 <div class="advanced-settings">
 
                     <div class="ninja_table_inline_upgrade" v-if="!hasPro">
-                        <h3>Advanced Column Settings</h3>
-                        <p>
+                        <h3 class="nt-modal-title">Advanced Column Settings</h3>
+                        <p class="nt-modal-description">
                             Customize your table's column's width, custom css class, content alignments, column styling
                             with this feature.
                             Advanced Column Settings is a pro feature and You can use it once you upgrade to Ninja
@@ -499,142 +499,149 @@
                         <get-pro size="small"/>
                     </div>
 
-                    <!-- Extra classes -->
-                    <el-form-item>
-                        <template #label>
-                            {{ $t("Extra Classes") }}
+                    <div class="grid grid-cols-2 gap-x-5">
+                        <!-- Extra classes -->
+                        <div class="flex flex-col mt-2">
+                            <label class="nt-form-label">
+                                {{ $t("Extra Classes") }}
+                                <el-tooltip class="item" placement="bottom-start" effect="light">
+                                    <template #content>
+                                        <h3>Extra Classes</h3>
 
-                            <el-tooltip class="item" placement="bottom-start" effect="light">
-                                <template #content>
-                                    <h3>Extra CSS Classes</h3>
+                                        <p>
+                                            Add extra classes to this column. This will be applied for the entire column
+                                        </p>
+                                    </template>
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled/>
+                                    </el-icon>
+                                </el-tooltip>
+                            </label>
 
-                                    <p>
-                                        Enter extra CSS classes to the column. <br>
-                                        Use `space` to separate each class.
-                                    </p>
-                                </template>
+                            <!--                        <el-input size="small" v-model="model.classes" :disabled="!hasPro"/>-->
+                            <NinjaInput
+                                v-model="model.classes"
+                                :disabled="!hasPro"
+                            />
+                        </div>
 
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </template>
+                        <!-- Max width -->
+                        <div class="flex flex-col mt-2">
+                            <label class="nt-form-label">
+                                {{ $t("Column Width") }}
+                                <el-tooltip class="item" placement="bottom-start" effect="light">
+                                    <template #content>
+                                        <h3>Column Width</h3>
 
-                        <el-input size="small" v-model="model.classes" :disabled="!hasPro"/>
-                    </el-form-item>
+                                        <p>
+                                            Set the column width. This will be applied for the entire column
+                                        </p>
+                                    </template>
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled/>
+                                    </el-icon>
+                                </el-tooltip>
+                            </label>
+                            <!-- width input -->
+                            <div>
+                                <el-input
+                                    :disabled="!hasPro"
+                                    v-model="model.width"
+                                    class="nt-input-append"
+                                >
+                                    <template #append>
+                                        <el-select v-model="model.maxWidthUnit" placeholder="Select"
+                                                   style="width: 75px">
+                                            <el-option label="%" value="%"/>
+                                            <el-option label="px" value="px"/>
+                                        </el-select>
+                                    </template>
+                                </el-input>
+                            </div>
+                        </div>
 
-                    <!-- Max width -->
-                    <el-form-item>
-                        <template #label>
-                            {{ $t("Max Width") }}
+                        <!-- Header Text alignment -->
+                        <div class="flex flex-col mt-4">
+                            <label class="nt-form-label">
+                                {{ $t("Header Text Align") }}
+                                <el-tooltip class="item" placement="bottom-start" effect="light">
+                                    <template #content>
+                                        <h3> {{ $t("Header Text Alignment") }}</h3>
+                                        <p>{{ $t('Choose the text alignment. This will be applied only for header') }}</p>
+                                    </template>
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled/>
+                                    </el-icon>
+                                </el-tooltip>
+                            </label>
 
-                            <el-tooltip class="item" placement="bottom-start" effect="light">
-                                <template #content>
-                                    <h3>{{ $t('Maximum Width') }}</h3>
+                            <el-select class="ninja-select" v-model="model.textAlign" placeholder="Text Align">
+                                <el-option
+                                    v-for="(alignmentLabel, alignmentVal) in alignmentOptions"
+                                    :key="alignmentVal"
+                                    :label="alignmentLabel"
+                                    :value="alignmentVal">
+                                </el-option>
+                            </el-select>
+                        </div>
 
-                                    <p>
-                                        Enter the maximum width of the column. This will be applied for the entire
-                                        column
-                                    </p>
-                                </template>
-
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </template>
-                        <el-col :xs="22" :md="22" :lg="22" :xl="22">
-                            <el-form-item>
-                                <el-input size="small" type="number" :disabled="!hasPro" v-model="model.width"/>
-                            </el-form-item>
-                        </el-col>
-
-                        <el-col :xs="2" :md="2" :lg="2" :xl="2">
-                            <el-form-item>
-                                <el-select size="small" v-model="model.maxWidthUnit" placeholder="Select">
-                                    <el-option label="px" value="px"/>
-                                    <el-option label="%" value="%"/>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-form-item>
-
-                    <!-- Header Text alignment -->
-                    <el-form-item>
-                        <template #label>
-                            {{ $t("Header Text Align") }}
-
-                            <el-tooltip class="item" placement="bottom-start" effect="light">
-                                <template #content>
-                                    <h3>Header Text Alignment</h3>
-
-                                    <p>
-                                        Choose the text alignment. This will be applied only for header
-                                    </p>
-                                </template>
-
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </template>
-                        <el-select size="small" v-model="model.textAlign" placeholder="Text Align">
-                            <el-option
-                                v-for="(alignmentLabel, alignmentVal) in alignmentOptions"
-                                :key="alignmentVal"
-                                :label="alignmentLabel"
-                                :value="alignmentVal">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-
-                    <!-- Content Text alignment -->
-                    <el-form-item>
-                        <template #label>
-                            {{ $t("Row Content Text Align") }}
-
-                            <el-tooltip class="item" placement="bottom-start" effect="light">
-                                <template #content>
-                                    <h3>Content Text Alignment</h3>
-                                    <p> Choose the text alignment for Column Rows</p>
-                                </template>
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </template>
+                        <!-- Content Text alignment -->
+                        <div class="flex flex-col mt-4">
+                            <label class="nt-form-label">
+                                {{ $t("Row Content Text Align") }}
+                                <el-tooltip class="item" placement="bottom-start" effect="light">
+                                    <template #content>
+                                        <h3>Content Text Alignment</h3>
+                                        <p> Choose the text alignment for Column Rows</p>
+                                    </template>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
+                                </el-tooltip>
+                            </label>
 
 
-                        <el-select size="small" v-model="model.contentAlign" placeholder="Content Alignment">
-                            <el-option
-                                v-for="(alignmentLabel, alignmentVal) in contentAlignmentOptions"
-                                :key="alignmentVal"
-                                :label="alignmentLabel"
-                                :value="alignmentVal">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
+                            <el-select class="ninja-select" v-model="model.contentAlign" placeholder="Content Alignment">
+                                <el-option
+                                    v-for="(alignmentLabel, alignmentVal) in contentAlignmentOptions"
+                                    :key="alignmentVal"
+                                    :label="alignmentLabel"
+                                    :value="alignmentVal">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </div>
 
                     <!-- Enable / Disable Table HTML -->
-                    <el-form-item>
-                        <el-checkbox :disabled="!hasPro" v-model="model.enable_html_content" :value="true"
-                                     label="Enable HTML Table Header Content"></el-checkbox>
-                    </el-form-item>
+                    <div class="mt-4">
+                        <el-checkbox
+                            :disabled="!hasPro"
+                            v-model="model.enable_html_content"
+                            :value="true"
+                            label="Enable HTML Table Header Content" />
+                    </div>
 
                     <!-- model.header_html_content -->
-                    <el-form-item v-if="model.enable_html_content">
-                        <template #label>
+                    <div v-if="model.enable_html_content" class="flex flex-col mt-2">
+                        <label class="nt-form-label">
                             {{ $t("Header HTML Content") }}
                             <el-tooltip class="item" placement="bottom-start" effect="light">
                                 <template #content>
                                     <h3>Header HTML Content</h3>
+
                                     <p>
                                         Provide content for table column header if you want to show html content.
                                     </p>
                                 </template>
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
                             </el-tooltip>
-                        </template>
+                        </label>
 
                         <wp_editor v-model="model.header_html_content"></wp_editor>
-                    </el-form-item>
+                    </div>
 
-                    <el-form-item>
-                        <template #label>
+                    <!--Filterable Column-->
+                    <div class="flex flex-col mt-4">
+                        <label class="nt-form-label">
                             {{ $t("Filterable") }}
-
                             <el-tooltip class="item" placement="bottom-start" effect="light">
                                 <template #content>
                                     <h3>Filterable</h3>
@@ -643,18 +650,23 @@
                                         If You enable this then this column data will not be filterable at the frontend.
                                     </p>
                                 </template>
+                                <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
+                                </el-tooltip>
+                        </label>
 
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </template>
-                        <el-checkbox :disabled="!hasPro" v-model="model.unfilterable" :true-value="'yes'" :false-value="'no'"
-                                     value="yes" label="Disable frontend search for this column data"></el-checkbox>
-                    </el-form-item>
+                        <div class="flex items-center gap-4 mt-1">
+                            <el-switch
+                                v-model="model.unfilterable"
+                                :disabled="!hasPro"
+                            />
+                            <p class="text-[14px] font-[400]">{{ $t('Disable frontend search for this column data') }}</p>
+                        </div>
+                    </div>
 
-                    <el-form-item>
-                        <template #label>
+                    <!--Sortable Column-->
+                    <div class="flex flex-col mt-4">
+                        <label class="nt-form-label">
                             {{ $t("Sortable") }}
-
                             <el-tooltip class="item" placement="bottom-start" effect="light">
                                 <template #content>
                                     <h3>Sortable</h3>
@@ -663,60 +675,62 @@
                                         If You enable this then this column data will not be sortable at the frontend.
                                     </p>
                                 </template>
-
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
                             </el-tooltip>
-                        </template>
-                        <el-checkbox :disabled="!hasPro" v-model="model.unsortable" :true-value="'yes'" :false-value="'no'"
-                                     value="yes" label="Disable frontend sorting for this column"></el-checkbox>
-                    </el-form-item>
+                        </label>
 
-                    <el-form-item>
-                        <template #label>
-                            {{ $t("Column Background") }}
-                            <el-tooltip class="item" placement="bottom-start" effect="light">
-                                <template #content>
-                                    <h3>Background color</h3>
+                        <div class="flex items-center gap-4 mt-1">
+                            <el-switch
+                                v-model="model.unsortable"
+                                :disabled="!hasPro"
+                            />
+                            <p class="text-[14px] font-[400]">{{ $t('Disable frontend sorting for this column') }}</p>
+                        </div>
+                    </div>
 
-                                    <p>
-                                        You can set background color of this particular column that will show on the
-                                        frontend table.
-                                    </p>
-                                </template>
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </template>
-                        <el-color-picker
-                            :disabled="!hasPro"
-                            v-model="model.background_color"
-                            show-alpha
-                            size="small"
-                        ></el-color-picker>
-                    </el-form-item>
+                    <div class="grid grid-cols-2 gap-x-5">
+                        <!-- Column Background Color-->
+                        <div class="flex flex-col mt-4">
+                            <label class="nt-form-label">
+                                {{ $t("Background Color") }}
+                                <el-tooltip class="item" placement="bottom-start" effect="light">
+                                    <template #content>
+                                        <h3>Column Background Color</h3>
 
-                    <el-form-item>
-                        <template #label>
-                            {{ $t("Column Text Color") }}
-                            <el-tooltip class="item" placement="bottom-start" effect="light">
-                                <template #content>
-                                    <h3>Text Color color</h3>
+                                        <p>
+                                            You can set Column Background color of this particular column that will show on the
+                                            frontend table.
+                                        </p>
+                                    </template>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
+                                </el-tooltip>
+                            </label>
 
-                                    <p>
-                                        You can set Column Text color of this particular column that will show on the
-                                        frontend table.
-                                    </p>
-                                </template>
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </template>
-                        <el-color-picker
-                            :disabled="!hasPro"
-                            v-model="model.text_color"
-                            show-alpha
-                            size="small"
-                        ></el-color-picker>
-                    </el-form-item>
+                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                                <ColorPicker :disabled="!hasPro" v-model="model.background_color" />
+                            </div>
+                        </div>
 
+                        <!--Column Text Color-->
+                        <div class="flex flex-col mt-4">
+                            <label class="nt-form-label">
+                                {{ $t("Column Text Color") }}
+                                <el-tooltip class="item" placement="bottom-start" effect="light">
+                                    <template #content>
+                                        <h3>{{ $t("Column Text Color") }}</h3>
+                                        <p>
+                                            {{ $t('You can set Column Text color of this particular column that will show on the frontend table.') }}
+                                        </p>
+                                    </template>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
+                                </el-tooltip>
+                            </label>
+
+                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                                <ColorPicker :disabled="!hasPro" v-model="model.text_color" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </el-tab-pane>
 
