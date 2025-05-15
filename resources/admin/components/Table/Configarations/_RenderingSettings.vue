@@ -59,15 +59,18 @@
                 </template>
                 <div class="mt-5">
                     <div class="border-b-solid">
-                        <div class="flex items-center" v-if="config.table.hasCacheFeature">
-                            <el-switch active-value="yes" inactive-value="no" v-model="tableSettings.shouldNotCache"
-                                       style="font-weight: 400;"/>
-                            <span class="ml-3 text-[14px]">{{ $t('Disable Caching') }}</span>
-                        </div>
-                        <div class="flex items-center" v-if="config.table.hasCacheFeature">
-                            <el-switch active-value="yes" inactive-value="no" v-model="tableSettings.frontend_loader"
-                                       style="font-weight: 400;"/>
-                            <span class="ml-3 text-[14px]">{{ $t('Display Frontend Loader') }}</span>
+                        <div class="flex gap-6 mb-4" v-if="config.table.hasCacheFeature">
+                            <div class="frontend-loader">
+                                <el-checkbox true-value="yes" false-value="no" v-model="tableSettings.frontend_loader"
+                                             style="font-weight: 400;"/>
+                                <span class="ml-2 text-[14px]">{{ $t('Display Frontend Loader') }}</span>
+                            </div>
+
+                            <div class="disable-cache">
+                                <el-checkbox true-value="yes" false-value="no" v-model="tableSettings.shouldNotCache"
+                                             style="font-weight: 400;"/>
+                                <span class=" ml-2 text-[14px]">{{ $t('Disable Caching') }}</span>
+                            </div>
                         </div>
                         <div v-if="config.table.hasExternalCachingInterval" class="w-1/2">
                             <div class="mb-2 text-[14px] font-[500]">{{ $t('Caching Interval (In Minutes)') }}</div>
@@ -76,6 +79,8 @@
                             <p v-if="tableSettings.caching_interval > 60">Current Caching Interval:
                                 <b>{{ (tableSettings.caching_interval / 60).toFixed(2) }} hours</b></p>
                         </div>
+                        <hr v-if="tableSettings.enable_html_cache === 'yes'" class="mt-3">
+
 
                         <div class="my-4 w-1/2"
                              v-if="config.settings.render_type == 'legacy_table' && tableSettings.shouldNotCache != 'yes'">

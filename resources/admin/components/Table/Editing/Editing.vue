@@ -38,9 +38,7 @@
                         </div>
                     </template>
                     <div class="my-5">
-                        <div class="text-[18px] text-[500] my-2">{{
-                                $t("User Roles and Data Editing Permissions")
-                            }}
+                        <div class="text-[18px] text-[500] my-2">{{$t("User Roles and Data Editing Permissions") }}
                         </div>
                         <div class="mb-3 text-[14px]">
                             {{
@@ -48,9 +46,9 @@
                             }}
                         </div>
 
-                        <div class="flex items-center gap-4">
-                            <div class="form_group form_row_half">
-                                <label>User Roles for Edit/Add Table Rows</label>
+                        <div class="flex items-center">
+                            <div class="">
+                                <div class="text-[18px] text-[500] my-2">{{ $t("User Roles for Edit/Add Table Rows") }}</div>
                                 <el-checkbox-group v-model="settings.user_roles_editing">
                                     <el-checkbox
                                         v-for="(role, role_key) in editing_user_roles"
@@ -60,8 +58,8 @@
                                     />
                                 </el-checkbox-group>
                             </div>
-                            <div class="form_group form_row_half">
-                                <label>User Roles for Deleting Table Rows</label>
+                            <div class="">
+                                <div class="text-[18px] text-[500] my-2">{{ $t("User Roles for Deleting Table Rows") }}</div>
                                 <el-checkbox-group v-model="settings.user_roles_deleting">
                                     <el-checkbox
                                         v-for="(role, role_key) in user_roles"
@@ -73,7 +71,7 @@
                             </div>
                         </div>
 
-                        <div class="text-[18px] text-[500] mt-3">{{ $t("Own Data Only") }}</div>
+                        <div class="text-[18px] text-[500] my-2">{{ $t("Own Data Only") }}</div>
                         <div class="mb-4 text-[14px]">
                             <el-checkbox
                                 true-value="yes"
@@ -84,10 +82,7 @@
                         </div>
 
                         <div class="mb-5">
-                            <div class="text-[18px] text-[500] my-2">{{
-                                    $t("User Roles and Data Editing Permissions")
-                                }}
-                            </div>
+                            <div class="text-[18px] text-[500] my-2">{{$t("User Roles and Data Editing Permissions") }}</div>
                             <div class="mb-3 text-[14px] font-[400]">
                                 {{
                                     $t("Please Specify which columns can be editable from front-end and also, You can specify which columns will be required")
@@ -127,9 +122,7 @@
 
                             <div>
                                 <div class="text-[18px] text-[500] my-2">{{ $t('Appearance Settings') }}</div>
-                                <div class="mb-3 text-[14px] font-[400]">
-                                    {{ $t("You can set the Editing Component Labels and Appearances") }}
-                                </div>
+                                <div class="mb-3 text-[14px] font-[400]">{{ $t("You can set the Editing Component Labels and Appearances") }}</div>
                                 <div>
                                     <div class="mb-4 text-[14px]">
                                         <el-checkbox
@@ -172,15 +165,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="mb-2 text-[14px] font-[400]">
-                                        {{ $t("Set your action icon position") }}
-                                    </div>
-                                    <div class="ninja_tables_radio_group mb-1">
-                                        <el-radio-group border v-model="appearance_settings.position">
-                                            <el-radio border value="left">{{ $t('Left') }}</el-radio>
-                                            <el-radio border value="right"> {{ $t('Right') }}</el-radio>
-                                        </el-radio-group>
-                                    </div>
+                                </div>
+
+                                <div class="text-[18px] text-[500] my-2">{{$t("Set your action icon position") }}</div>
+                                <div class="ninja_tables_radio_group my-2">
+                                    <el-radio-group border v-model="appearance_settings.position">
+                                        <el-radio border value="left">{{ $t('Left') }}</el-radio>
+                                        <el-radio border value="right"> {{ $t('Right') }}</el-radio>
+                                    </el-radio-group>
                                 </div>
 
                                 <div class="flex justify-end">
