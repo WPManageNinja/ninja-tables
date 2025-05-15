@@ -324,6 +324,21 @@
     }
   }
 
+  .el-textarea {
+    .el-textarea__inner {
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: #525866;
+      min-height: 100px;
+      resize: vertical;
+      &:focus {
+        border: 1px solid #409EFF;
+        box-shadow: none;
+      }
+    }
+  }
+
   .el-overlay {
     background: rgba(2, 13, 23, 0.30) !important;
     backdrop-filter: blur(5px) !important;

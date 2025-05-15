@@ -2,7 +2,7 @@
     <el-form ref="form" :model="model" class="form-wrapper">
         <el-tabs v-model="activeTab" @tab-click="onTabClick">
             <!-- Basic Settings -->
-            <el-tab-pane class="basic_settings ninja_modal_body" label="Basic Settings" name="basic">
+            <el-tab-pane class="basic_settings ninja_modal_body px-[10px]" label="Basic Settings" name="basic">
 
                 <div class="grid grid-cols-2 gap-x-5">
                     <!-- Column Name -->
@@ -359,43 +359,62 @@
                     </div>
 
                     <div class="flex flex-col">
-                        <label class="nt-form-label">
-                            {{ $t('Button Style') }}
-                            <el-tooltip class="item" placement="bottom-start" effect="light">
-                                <template #content>
-                                    <h3>Button Style</h3>
-                                    <p>
-                                        Change the button style
-                                    </p>
-                                </template>
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </label>
-                        <div class="ninja_color_blocks">
-                            <div class="ninja_color_block">
-                                <ninja-color-picker
-                                    :disabled="!hasPro"
-                                    label="Background"
-                                    v-model="model.btn_bg_color"
-                                ></ninja-color-picker>
+                        <div class="grid grid-cols-2 gap-x-5">
+                           <div class="mt-2">
+                               <label class="nt-form-label">
+                                   {{ $t('Button Background Color') }}
+                                   <el-tooltip class="item" placement="bottom-start" effect="light">
+                                       <template #content>
+                                           <h3>{{ $t('Button Background Color') }}</h3>
+                                           <p>
+                                               {{ $t('Change the button background color') }}
+                                           </p>
+                                       </template>
+                                       <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                   </el-tooltip>
+                               </label>
+                               <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                                   <ColorPicker :disabled="!hasPro" v-model="model.btn_bg_color" />
+                               </div>
+                           </div>
+
+                            <div class="mt-2">
+                                <label class="nt-form-label">
+                                    {{ $t('Button Text Color') }}
+                                    <el-tooltip class="item" placement="bottom-start" effect="light">
+                                        <template #content>
+                                            <h3>{{ $t('Button Text Color') }}</h3>
+                                            <p>
+                                                {{ $t('Change the button text color') }}
+                                            </p>
+                                        </template>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    </el-tooltip>
+                                </label>
+                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                                    <ColorPicker :disabled="!hasPro" v-model="model.btn_text_color" />
+                                </div>
                             </div>
-                            <div class="ninja_color_block">
-                                <ninja-color-picker
-                                    :disabled="!hasPro"
-                                    label="Text Color"
-                                    v-model="model.btn_bg_color"
-                                ></ninja-color-picker>
-                            </div>
-                            <div class="ninja_color_block">
-                                <ninja-color-picker
-                                    :disabled="!hasPro"
-                                    label="Border Color"
-                                    v-model="model.btn_border_color"
-                                ></ninja-color-picker>
+
+                            <div class="mt-2">
+                                <label class="nt-form-label">
+                                    {{ $t('Button Border Color') }}
+                                    <el-tooltip class="item" placement="bottom-start" effect="light">
+                                        <template #content>
+                                            <h3>{{ $t('Button Border Color') }}</h3>
+                                            <p>
+                                                {{ $t('Change the button border color') }}
+                                            </p>
+                                        </template>
+                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                    </el-tooltip>
+                                </label>
+                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                                    <ColorPicker :disabled="!hasPro" v-model="model.btn_border_color" />
+                                </div>
                             </div>
                         </div>
                     </div>
-
 
                     <el-form-item class="flex flex-col">
                         <label class="nt-form-label">
@@ -712,7 +731,7 @@
             </el-tab-pane>
 
             <!-- Buttons -->
-            <div class="flex justify-end px-5 py-4 gap-2">
+            <div class="flex justify-end px-[10px] py-4 gap-2">
                 <div v-if="!updating" class="flex align-center gap-2">
                     <NinjaButton
                         @click.prevent="cancel"
@@ -788,11 +807,13 @@
     import { useEventBus } from './../../../eventBus';
     import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
     import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
+    import ColorPicker from "../../../@ui-utils/ColorPicker.vue";
 
 
     export default {
         name: "ColumnsEditor",
         components: {
+            ColorPicker,
             NinjaInput,
             NinjaButton,
             GetPro,
