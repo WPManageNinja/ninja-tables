@@ -745,8 +745,8 @@
             </el-tab-pane>
 
             <!-- Buttons -->
-            <div class="flex justify-end px-[10px] py-4 gap-2">
-                <div v-if="!updating" class="flex align-center gap-2">
+            <div v-if="!updating" class="flex justify-end px-[10px] py-4 gap-2">
+                <div class="flex align-center gap-2">
                     <NinjaButton
                         @click.prevent="cancel"
                         v-if="!hideCancel"
@@ -761,8 +761,10 @@
                         :btnText="$t('Add Column')"
                     />
                 </div>
+            </div>
 
-                <template v-else>
+            <div v-else class="flex justify-between items-center px-[10px] py-4">
+                <div>
                     <el-popover
                         v-if="!hideDelete"
                         placement="top"
@@ -791,20 +793,33 @@
 
                         <template #reference>
                             <el-button
+                                link
                                 v-if="!hideDelete"
                                 type="danger"
-                                size="small"
                             >
                                 {{ $t('Delete') }}
                             </el-button>
                         </template>
                     </el-popover>
+                </div>
 
 
-                    <el-button :loading="doingAjax" @click.prevent="store" type="primary" size="small">
-                        {{ $t('Update') }}
-                    </el-button>
-                </template>
+                <div class="flex items-center gap-2">
+                    <NinjaButton
+                        size="small"
+                        v-if="!hideCancel"
+                        @click.prevent="cancel"
+                        type="secondary"
+                        :btnText="$t('Cancel')"
+                    />
+
+                    <NinjaButton
+                        :loading="doingAjax"
+                        @click.prevent="store"
+                        size="small"
+                        :btnText="$t('Update')"
+                    />
+                </div>
             </div>
         </el-tabs>
     </el-form>
