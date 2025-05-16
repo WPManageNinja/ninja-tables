@@ -1,79 +1,19 @@
 <template>
-    <div>
-        <div class="ninja_header">
-            <h2>{{ $t('Import Table Data') }}</h2>
-        </div>
-        <div v-if="config.table.isImportable" class="ninja_content">
-            <div v-if="columns.length">
-                <form action="" id="fileUploadForm" class="">
-                    <div class="form-group">
-                        <input type="file" id="fileUpload" @click="clear">
-
-                        <el-checkbox v-model="replace">{{ $t('Replace Existing Data') }}</el-checkbox>
-                    </div>
-
-                    <div class="form-group">
-                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="do_unicode">Convert to UTF-8 format ( Check this if your csv is non-unicode format )</el-checkbox>
-                    </div>
-
-                    <div class="form-group">
-                        <el-button type="primary" size="small" @click.prevent="upload" :loading="btnLoading">
-                            <el-icon>
-                                <Upload/>
-                            </el-icon>
-                            <span> {{ $t('Import from CSV') }} </span>
-                        </el-button>
-                    </div>
-                </form>
-                <div class="ninja_suggest">
-                    <p>
-                        Please note that, your CSV data structure need to follow the sample CSV.
-                        You may want to check the <a :href="tutorial">video tutorial here.</a>
-                    </p>
-                    <br>
-                    <p>
-                        Also make sure the content is in UTF-8 format, for the best result.
-                    </p>
-                </div>
-
-                <div class="justify-items">
-                    <h3>
-                        {{ $t('CSV Header Structure') }}
-                    </h3>
-
-                    <el-button type="primary" size="small" @click="download">
-                        <el-icon>
-                            <Download/>
-                        </el-icon>
-                        <span> {{ $t('Download Sample CSV') }} </span>
-                    </el-button>
-                </div>
-
-                <el-table border :data="sampleData" style="width: 100%" stripe>
-                    <el-table-column v-for="column in columns"
-                                     :prop="column.key"
-                                     :label="column.key"
-                                     :key="column.key"
-                    ></el-table-column>
-                </el-table>
-
-                <h3>or as bellow</h3>
-                <el-table border :data="sampleData" style="width: 100%" stripe>
-                    <el-table-column v-for="column in columns"
-                                     :prop="column.key"
-                                     :label="column.name"
-                                     :key="column.key"
-                    ></el-table-column>
-                </el-table>
+    <div class="import-table-wrapper ml-2">
+        <div class="text-[18px] font-[600] text-[#0E121B] my-5">{{ $t('Import Table') }}</div>
+        <div v-if="config.table.isImportable">
+            <div class="text-[14px] font-[400] text-[#0E121B] my-5 w-1/2">
+                {{$t("Import CSV data into the existing table. Please note that, your CSV data structure need to follow the sample CSV. Download the sample CSV to ensure correct data formatting.") }}
             </div>
-            <div v-else="" class="error">
-                <p>{{ $t('Please set table configuration first.') }}</p>
-            </div>
-        </div>
+            <div class="w-1/2 my-3">
 
-        <div v-else class="ninja_content">
-            <div class="ninja_suggest">
-                <p>Sorry! You can not import any data as the table data is configured as external source ({{ config.table.dataSourceType }})</p>
+                <input type="file" id="fileUpload" @click="clear">
+
+                <el-checkbox v-model="replace">{{ $t('Replace Existing Data') }}</el-checkbox>
+                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="do_unicode">Convert to UTF-8 format ( Check this if your csv is non-unicode format )</el-checkbox>
+                <div class="py-[16px]">
+                        <NinjaButton size="small" type="primary" :btnText="$t('Import Table')" @click.prevent="upload"/>
+                </div>
             </div>
         </div>
     </div>
@@ -82,10 +22,11 @@
 <script>
     import each from 'lodash/each'
     import {Download, Upload} from "@element-plus/icons-vue";
+    import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
 
     export default {
         name: "Import",
-        components: {Download, Upload},
+        components: {NinjaButton, Download, Upload},
         props: ['config', 'tableId'],
         data() {
             return {
@@ -135,7 +76,6 @@
                         that.$emit('csvUploaded');
 
                         that.clear();
-
                         that.$message.success(response.data.message)
                     })
                     .catch(error => {
@@ -144,46 +84,6 @@
                     that.btnLoading = false;
 
             },
-            download: function () {
-                var rows = [1, 2];
-
-                var samples = [];
-
-                var headers = this.config.columns.map(item => {
-                    return item.key;
-                });
-
-                samples.push(headers);
-
-                rows.forEach(function (row, rowIndex) {
-                    var item = [];
-
-                    headers.forEach(function (header, headerIndex) {
-                        item.push('content_' + rowIndex + '_' + headerIndex);
-                    })
-
-                    samples.push(item);
-                })
-
-                var csv = "data:text/csv;charset=utf-8,";
-
-                samples.forEach(function (item, index) {
-                    var dataString = item.join(",");
-                    csv += index < samples.length ? dataString + "\n" : dataString;
-                });
-
-                var encodedUri = encodeURI(csv);
-
-                var link = document.createElement("a");
-
-                link.setAttribute("href", encodedUri);
-
-                link.setAttribute("download", "sample.csv");
-
-                document.body.appendChild(link);
-
-                link.click();
-            }
         }
     }
 </script>
