@@ -1,79 +1,86 @@
 <template>
-    <div class="ninja_custom_filter_wrapper">
-        <div class="ninja_header">
-            <h2 class="ninja_block">Custom Search Filters</h2>
-            <p>
-                Custom Search Filters is useful if you want to add select box / Radio Button to show a group of rows of
-                your table.
+    <div class="ninja_table_filters_wrapper">
+        <div class="ninja_table_filters">
+            <h2 class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Custom Search Filters') }}</h2>
+            <p class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
+                {{ $t(' Custom Search Filters is useful if you want to add select box / Radio Button to show a group of rows ofyour table.') }}
                 <br/>
-                To learn more about this <a target="_blank"
-                                            href="https://ninjatables.com/docs/custom-filters/">click here</a>
+                {{ $t('To learn more about this') }}
+                <a target="_blank" href="https://ninjatables.com/docs/custom-filters/" class="text-[#335CFF]">{{ $t('click here') }}</a>
             </p>
         </div>
+
         <div style="margin: 25px 0" v-loading="loading" class="ninja_style_wrapper">
             <div v-if="hasAdvancedFilters" class="section_block">
-                <el-button @click="showAddFilter()" size="small" type="primary">Add New Filter</el-button>
-                <template v-if="table_filters.length">
-                    <table style="margin: 20px 0" class="wp-list-table table-bordered widefat fixed striped">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Target Columns</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <draggable
-                                :v-model="{handle:'.handle'}"
-                                :list="table_filters"
-                                :element="'tbody'"
-                                @change="saveFilters()"
-                                item-key="name"
-                                tag="tbody"
-                        >
-                            <template #item="{element: table_filter, index: filter_index}">
-                                <tr>
-                                    <td><span class="dashicons dashicons-editor-justify handle"></span> {{ table_filter.title }}</td>
-                                    <td>{{ table_filter.type }}</td>
-                                    <td>
-                                        <code v-for="columnKey in table_filter.columns" v-show="columnKeyPairs[columnKey]">
-                                            {{ columnKeyPairs[columnKey] }}
-                                        </code>
-                                    </td>
-                                    <td>
-                                        <el-button type="primary" @click="edit(table_filter)">
-                                            <el-icon><EditPen /></el-icon>
-                                        </el-button>
-                                        <el-button type="danger" @click="deleteFilter(filter_index)">
-                                            <el-icon><Delete /></el-icon>
-                                        </el-button>
-                                    </td>
-                                </tr>
+                <div class="flex justify-end mb-4">
+                    <NinjaButton
+                        @click="showAddFilter()"
+                        :btn-text="$t('Add New Filter')"
+                    />
+                </div>
+
+                <div v-if="table_filters.length">
+                    <el-table class="nt-inner-table mt-4" :data="table_filters" border>
+                        <el-table-column width="50">
+                            <template #default>
+                                <img class="cursor-move handle-custom-filter" :src="assetUrl('icons/drag-drop.svg')"/>
                             </template>
-                        </draggable>
-                    </table>
-                    <h3>Filter Appearance</h3>
-                    <el-radio-group v-model="filter_styling.filter_display_type">
-                        <el-radio :label="$t('Show filter inputs as inline')" value="inline" />
-                        <el-radio :label="$t('Show filter inputs as Columns')" value="columns" />
-                    </el-radio-group>
-                    <template v-if="filter_styling.filter_display_type === 'columns'">
-                        <h3>Filter Columns</h3>
-                        <el-radio-group size="small" v-model="filter_styling.filter_columns">
-                            <el-radio-button :label="$t('Two Columns')" value="columns_2" />
-                            <el-radio-button :label="$t('Three Columns')" value="columns_3" />
-                            <el-radio-button :label="$t('Four Columns')" value="columns_4" />
+                        </el-table-column>
+                        <el-table-column label="Name">
+                            <template #default="{ row }">
+                                {{ row.title }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="Type" prop="type" />
+                        <el-table-column label="Target Columns">
+                            <template #default="{ row }">
+                                <code v-for="columnKey in row.columns" v-show="columnKeyPairs[columnKey]">
+                                    {{ columnKeyPairs[columnKey] }}
+                                </code>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="Action">
+                            <template #default="{ row, $index }">
+                                <div class="flex items-center">
+                                    <div class="mr-3 mt-[2px] cursor-pointer" @click="edit(row)">
+                                        <img :src="assetUrl('icons/edit-2.svg')"/>
+                                    </div>
+                                    <div class="cursor-pointer" @click="deleteFilter($index)">
+                                        <img :src="assetUrl('icons/delete-02.svg')"/>
+                                    </div>
+                                </div>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+
+                    <div class="bg-white border border-solid border-[#E1E4EA] p-5 rounded-[12px] mt-6">
+                        <h3 class="text-[16px] font-[500] text-[#0E121B]">Filter Appearance</h3>
+                        <el-radio-group class="ninja_tables_radio_group" v-model="filter_styling.filter_display_type">
+                            <el-radio :label="$t('Show filter inputs as inline')" value="inline" />
+                            <el-radio :label="$t('Show filter inputs as Columns')" value="columns" />
                         </el-radio-group>
-                    </template>
 
-                    <h3>Progressive Filter</h3>
-                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="filter_styling.progressive">Enable Progressive filter for dynamic filter options</el-checkbox>
+                        <template v-if="filter_styling.filter_display_type === 'columns'">
+                            <h3 class="text-[16px] font-[500] text-[#0E121B] mt-5 mb-2">Filter Columns</h3>
+                            <el-radio-group class="ninja_tables_radio_group" size="large" v-model="filter_styling.filter_columns">
+                                <el-radio border :label="$t('Two Columns')" value="columns_2" />
+                                <el-radio border :label="$t('Three Columns')" value="columns_3" />
+                                <el-radio border :label="$t('Four Columns')" value="columns_4" />
+                            </el-radio-group>
+                        </template>
 
-                    <div style="margin-top: 20px" class="form_group">
-                        <el-button :loading="saving" size="small" type="primary" @click="saveFilters">Update Settings</el-button>
+                        <h3 class="text-[16px] font-[500] text-[#0E121B] mt-5">Progressive Filter</h3>
+                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="filter_styling.progressive">
+                            {{ $t('Enable Progressive filter for dynamic filter options') }}
+                        </el-checkbox>
                     </div>
-                </template>
+
+                    <div class="mt-5 flex justify-end">
+                        <NinjaButton :loading="saving" @click="saveFilters" :btn-text="$t('Update Settings')" />
+                    </div>
+                </div>
             </div>
+
             <div v-else-if="hasPro" class="section_block">
                 <h3>Custom Filters is introduced in version 2.4.0. Please update <b>Ninja tables pro</b> plugin to use
                     this feature</h3>
@@ -86,11 +93,11 @@
         </div>
 
         <el-dialog
-                title="Edit Custom Filter"
-                v-model="editorModal"
-                width="70%"
-                top="50px"
-                :append-to-body="true">
+            title="Edit Custom Filter"
+            v-model="editorModal"
+            width="70%"
+            top="50px"
+            :append-to-body="true">
             <ninja-filter-editor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor"></ninja-filter-editor>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editorModal = false">Cancel</el-button>
@@ -99,16 +106,26 @@
         </el-dialog>
 
         <el-dialog
-                title="Add New Custom Filter"
-                v-model="addFilterModal"
-                width="70%"
-                top="50px"
-                :append-to-body="true">
-            <ninja-filter-editor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor"></ninja-filter-editor>
-            <span slot="footer">
-                <el-button size="small" @click="addFilterModal = false">Cancel</el-button>
-                <el-button size="small" type="primary" @click="addFilter(activeEditor)">Add</el-button>
-            </span>
+            title="Add New Custom Filter"
+            v-model="addFilterModal"
+            width="70%"
+            top="50px"
+            :append-to-body="true"
+            class="ninja_create-table-modal"
+        >
+            <ninja-filter-editor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor" />
+
+            <div class="flex items-center justify-end px-5 py-4 gap-2">
+                <NinjaButton
+                    type="secondary"
+                    @click="addFilterModal = false"
+                    :btn-text="$t('Cancel')"
+                />
+                <NinjaButton
+                    @click="addFilter(activeEditor)"
+                    :btn-text="$t('Add')"
+                />
+            </div>
         </el-dialog>
 
     </div>
@@ -121,11 +138,14 @@
     import draggable from 'vuedraggable'
     import GetPro from "../../Tools/GetPro";
     import {Delete, EditPen} from "@element-plus/icons-vue";
+    import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+    import {assetUrl} from "../../../utils/ninjatablesadmin";
 
     export default {
         name: 'custom_filter',
         props: ['table_id', 'columns'],
         components: {
+            NinjaButton,
             Delete,
             EditPen,
           GetPro,
@@ -159,6 +179,7 @@
             }
         },
         methods: {
+            assetUrl,
             each,
             fetchFilters() {
                 this.loading = true;
