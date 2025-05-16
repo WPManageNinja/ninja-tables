@@ -1,12 +1,23 @@
 <template>
-    <div v-loading="loading" element-loading-text="Loading Editor...">
-        <div class="ace_container">
-            <div :class="'ninja_'+mode+'_editor'" :id="editorId">{{ value }}</div>
+    <div class="nt-custom-editor-container">
+        <div class="nt-custom-editor-header">
+            <div class="nt-window-buttons">
+                <span class="red"></span>
+                <span class="yellow"></span>
+                <span class="green"></span>
+            </div>
         </div>
-        <div class="editor_errors" :class="'ninja_'+mode+'_errors'">
-            <span v-show="editorError" style="text-align: right; display: inline-block; color: #ff7171; float: right">{{ editorError }}</span>
+
+        <div v-loading="loading" element-loading-text="Loading Editor...">
+            <div class="ace_container">
+                <div :class="'ninja_'+mode+'_editor'" :id="editorId">{{ value }}</div>
+            </div>
+            <div class="editor_errors" :class="'ninja_'+mode+'_errors'">
+                <span v-show="editorError" style="text-align: right; display: inline-block; color: #ff7171; float: right">{{ editorError }}</span>
+            </div>
         </div>
     </div>
+
 </template>
 
 <script>
@@ -82,7 +93,7 @@ export default {
                 ace.config.set("themePath", this.ace_path)
                 
                 this.editor = ace.edit(this.editorId)
-                this.editor.setTheme("ace/theme/monokai")
+                this.editor.setTheme('ace/theme/dracula')
                 this.editor.session.setMode(`ace/mode/${this.mode}`)
                 
                 // Set initial value
@@ -142,6 +153,45 @@ export default {
 </script>
 
 <style>
+.nt-custom-editor-container {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nt-custom-editor-header {
+    background-color: #4A5461; /* Adjust this color to match the bar */
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #F9FAFB;
+}
+
+.nt-window-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.nt-window-buttons span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.nt-window-buttons .red {
+    background-color: #ff5f56;
+}
+
+.nt-window-buttons .yellow {
+    background-color: #ffbd2e;
+}
+
+.nt-window-buttons .green {
+    background-color: #27c93f;
+}
+
 .ninja_javascript_editor,
 .ninja_css_editor,
 .ninja_mysql_editor {
