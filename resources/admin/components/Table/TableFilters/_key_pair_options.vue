@@ -1,43 +1,55 @@
 <template>
-    <table class="ninja_filter_table">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Label</th>
-                <th>Filter Value</th>
-            </tr>
-        </thead>
-        <draggable
-                :options="{handle:'.handle'}"
-                :list="value"
-                item-key="index"
-                tag="tbody"
-        >
-           <template #item="{element: filter, index: index}">
-               <tr>
-                   <td>
-                       <span style="margin-top: 10px" class="dashicons dashicons-editor-justify handle"></span>
-                   </td>
-                   <td>
-                       <el-input size="small" v-model="filter.label" type="text"></el-input>
-                   </td>
-                   <td>
-                       <el-input size="small" v-model="filter.value" type="text"></el-input>
-                   </td>
-                   <td>
-                       <el-button :disabled="value.length == 1" @click="deleteItem(index)" type="danger" size="small">-</el-button>
-                       <el-button @click="add()" v-show="(index + 1) == value.length" type="success" size="small">+</el-button>
-                   </td>
-               </tr>
-           </template>
-        </draggable>
-    </table>
+    <el-table :data="value" border class="nt-inner-table">
+        <el-table-column width="50">
+            <template #header>
+                <span></span>
+            </template>
+            <template #default>
+                <img class="cursor-move handle-custom-filter" :src="assetUrl('icons/drag-drop.svg')"/>
+            </template>
+        </el-table-column>
+
+        <el-table-column label="Label">
+            <template #default="scope">
+                <NinjaInput v-model="scope.row.label" :placeholder="$t('Enter Filter Label')"/>
+            </template>
+        </el-table-column>
+
+        <el-table-column label="Filter Value">
+            <template #default="scope">
+                <NinjaInput v-model="scope.row.value" :placeholder="$t('Enter Filter Value')"/>
+            </template>
+        </el-table-column>
+
+        <el-table-column width="100">
+            <template #header>
+                <span>{{ $t('Action') }}</span>
+            </template>
+
+            <template #default="scope">
+                <div class="flex items-center">
+                    <div v-show="value.length > 1" class="cursor-pointer" @click="deleteItem(scope.$index)">
+                        <img :src="assetUrl('icons/delete-02.svg')"/>
+                    </div>
+
+                    <div v-show="(scope.$index + 1) == value.length" @click="add()"
+                         class="mr-3 mt-[2px] cursor-pointer">
+                        <img :src="assetUrl('icons/edit-2.svg')"/>
+                    </div>
+                </div>
+
+            </template>
+        </el-table-column>
+    </el-table>
 </template>
+
 <script type="text/babel">
     import draggable from 'vuedraggable'
+    import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
+    import {assetUrl} from "../../../utils/ninjatablesadmin";
     export default {
         name: 'ninja_key_pair_options',
-        components: { draggable },
+        components: {NinjaInput, draggable },
         props: ['value'],
         data() {
             return {
@@ -45,6 +57,7 @@
             }
         },
         methods: {
+            assetUrl,
             deleteItem(index) {
                 this.value.splice(index, 1);
             },

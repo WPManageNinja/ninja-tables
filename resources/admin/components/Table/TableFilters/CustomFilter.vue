@@ -110,12 +110,22 @@
             v-model="addFilterModal"
             width="70%"
             top="50px"
-            :append-to-body="true">
-            <ninja-filter-editor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor"></ninja-filter-editor>
-            <span slot="footer">
-                <el-button size="small" @click="addFilterModal = false">Cancel</el-button>
-                <el-button size="small" type="primary" @click="addFilter(activeEditor)">Add</el-button>
-            </span>
+            :append-to-body="true"
+            class="ninja_create-table-modal"
+        >
+            <ninja-filter-editor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor" />
+
+            <div class="flex items-center justify-end px-5 py-4 gap-2">
+                <NinjaButton
+                    type="secondary"
+                    @click="addFilterModal = false"
+                    :btn-text="$t('Cancel')"
+                />
+                <NinjaButton
+                    @click="addFilter(activeEditor)"
+                    :btn-text="$t('Add')"
+                />
+            </div>
         </el-dialog>
 
     </div>
