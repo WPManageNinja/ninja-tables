@@ -90,16 +90,19 @@ export default function OtherTab({ tableSettings, updateTableSettings, tableConf
                 <ButtonGroup>
                     {tableConfig?.table?.isCreatedSortable && (
                         <Button
+                            isSmall
                             isPressed={tableSettings.sorting_type === 'by_created_at'}
                             onClick={() => updateTableSettings('sorting_type', 'by_created_at', false)}
-                        >{__('By Created at')}</Button>
+                        >{__('Created at')}</Button>
                     )}
                     <Button
+                        isSmall
                         isPressed={tableSettings.sorting_type === 'by_column'}
                         onClick={() => updateTableSettings('sorting_type', 'by_column', false)}
                     >{__('By Column')}</Button>
                     {tableConfig?.table?.isSortable && (
                         <Button
+                            isSmall
                             isPressed={tableSettings.sorting_type === 'manual_sort'}
                             onClick={() => updateTableSettings('sorting_type', 'manual_sort', false)}
                         >{__('Manual Sort')}</Button>
