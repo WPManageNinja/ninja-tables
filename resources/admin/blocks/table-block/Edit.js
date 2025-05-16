@@ -226,12 +226,14 @@ export default function Edit(props) {
     return (
         <div {...blockProps}>
             <InspectorControls>
-                <SelectControl
-                    label={__('Select Table')}
-                    value={tableId}
-                    options={availableTables}
-                    onChange={handleTableSelect}
-                />
+               <div style={{padding: '0 15px'}}>
+                   <SelectControl
+                       label={__('Select Table')}
+                       value={tableId}
+                       options={availableTables}
+                       onChange={handleTableSelect}
+                   />
+               </div>
 
                 {tableId && tableConfig && dataSource !== 'drag_and_drop' && (
                     <TabPanel

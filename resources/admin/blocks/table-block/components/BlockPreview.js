@@ -1,6 +1,6 @@
 import {tableLibs} from "../../../data/data";
 
-const {Placeholder, SelectControl} = wp.components;
+const {Placeholder, SelectControl, Spinner} = wp.components;
 const {__} = wp.i18n;
 import {hasPro, availableTables} from "../utils/data";
 
@@ -115,7 +115,7 @@ export default function BlockPreview({
 
     const renderDragAndDropTable = () => {
         if (isLoading) {
-            return <div className="loading-spinner">Loading...</div>;
+            return <div style={{textAlign: "center"}}><Spinner/></div>;
         }
         return (
             <div
@@ -127,7 +127,11 @@ export default function BlockPreview({
     };
 
     const renderStandardTable = () => {
+        if (isLoading) {
+            return <div style={{textAlign: "center"}}><Spinner/></div>;
+        }
         if (!tableConfig) return null;
+
         return (
             <div className="ninja_design_wrapper">
                 {renderStyles()}
