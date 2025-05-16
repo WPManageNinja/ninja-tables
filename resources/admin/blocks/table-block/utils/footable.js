@@ -1,29 +1,62 @@
-export const loadRequiredScripts = (setScriptLoaded) => {
-    if (typeof FooTable !== 'undefined') {
-        setScriptLoaded(true);
+let scriptsAlreadyLoaded = false;
+
+export const loadRequiredScripts = async (setScriptLoaded) => {
+    // Avoid loading multiple times across block instances
+    if (scriptsAlreadyLoaded) {
+        waitForGlobals(setScriptLoaded);
         return;
     }
 
     const scripts = window.ninja_table_admin?.preview_required_scripts || [];
 
-    scripts.forEach(script => {
-        const element = document.createElement(script.endsWith('.css') ? 'link' : 'script');
-
-        if (script.endsWith('.css')) {
-            element.rel = 'stylesheet';
-            element.href = script;
-        } else {
-            element.src = script;
-            element.onload = () => {
-                if (typeof FooTable !== 'undefined') {
-                    setScriptLoaded(true);
-                }
-            };
+    scripts.filter(src => src.endsWith('.css')).forEach(href => {
+        if (!document.querySelector(`link[href="${href}"]`)) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            document.head.appendChild(link);
         }
-
-        document.head.appendChild(element);
     });
+
+    const jsScripts = scripts
+        .filter(src => src.endsWith('.js'))
+        .sort((a, b) => {
+            if (a.includes('ninja-tables-footable.js')) return 1;
+            if (b.includes('ninja-tables-footable.js')) return -1;
+
+            return 0;
+        });
+
+    for (const src of jsScripts) {
+        if (document.querySelector(`script[src="${src}"]`)) continue;
+
+        await new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = false;
+            script.onload = resolve;
+            script.onerror = () => {
+                console.error(`Failed to load: ${src}`);
+                resolve(); // continue loading others
+            };
+            document.head.appendChild(script);
+        });
+    }
+
+    scriptsAlreadyLoaded = true;
+    waitForGlobals(setScriptLoaded);
 };
+
+const waitForGlobals = (setScriptLoaded, retryCount = 0) => {
+    if (typeof window.FooTable !== 'undefined' && typeof window.ninjaTableApp !== 'undefined') {
+        setScriptLoaded(true);
+    } else if (retryCount < 10) {
+        setTimeout(() => waitForGlobals(setScriptLoaded, retryCount + 1), 300);
+    } else {
+        console.warn('Scripts loaded but FooTable or ninjaTableApp still missing.');
+    }
+};
+
 
 export const initFootables = (scriptLoaded, tableElementId, settings, getTableConfig) => {
     if (!scriptLoaded) return;

@@ -49,14 +49,16 @@ export default function Edit(props) {
         {...defaultSettings, ...tableConfig.settings} :
         defaultSettings;
 
+    useEffect(async () => {
+        await loadRequiredScripts(setScriptLoaded);
+    }, []);
+
     useEffect(() => {
         if (tableId && dataSource === 'drag_and_drop') {
             fetchDragAndDropTable(tableId);
         } else if (tableId) {
             fetchConfig(tableId);
         }
-        // Use the utility function for loading scripts
-        loadRequiredScripts(setScriptLoaded);
     }, [tableId]);
 
     useEffect(() => {
@@ -226,14 +228,14 @@ export default function Edit(props) {
     return (
         <div {...blockProps}>
             <InspectorControls>
-               <div style={{padding: '0 15px'}}>
-                   <SelectControl
-                       label={__('Select Table')}
-                       value={tableId}
-                       options={availableTables}
-                       onChange={handleTableSelect}
-                   />
-               </div>
+                <div style={{padding: '0 15px'}}>
+                    <SelectControl
+                        label={__('Select Table')}
+                        value={tableId}
+                        options={availableTables}
+                        onChange={handleTableSelect}
+                    />
+                </div>
 
                 {tableId && tableConfig && dataSource !== 'drag_and_drop' && (
                     <TabPanel
