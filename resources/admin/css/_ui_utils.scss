@@ -465,4 +465,17 @@
     }
   }
 
+  .el-date-editor {
+    .el-input__wrapper {
+      .el-input__inner {
+        border: none;
+
+        &:focus {
+          border: none;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
 }
