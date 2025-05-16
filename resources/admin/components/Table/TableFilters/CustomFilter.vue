@@ -20,7 +20,13 @@
                 </div>
 
                 <div v-if="table_filters.length">
-                    <el-table class="nt-inner-table mt-4" :data="table_filters" border>
+                    <el-table
+                        class="nt-inner-table mt-4"
+                        :data="table_filters"
+                        border
+                        row-class-name="handle-custom-filter"
+                        :row-key="row => row.title + '-' + row.type"
+                    >
                         <el-table-column width="50">
                             <template #default>
                                 <img class="cursor-move handle-custom-filter" :src="assetUrl('icons/drag-drop.svg')"/>
@@ -131,156 +137,192 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
+import each from 'lodash/each';
+import NinjaFilterEditor from './_filterEditor.vue';
+import GetPro from "../../Tools/GetPro";
+import { Delete, EditPen } from "@element-plus/icons-vue";
+import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+import { assetUrl } from "../../../utils/ninjatablesadmin";
+import Sortable from 'sortablejs';
 
-    import each from 'lodash/each';
-    import NinjaFilterEditor from './_filterEditor.vue'
-    import draggable from 'vuedraggable'
-    import GetPro from "../../Tools/GetPro";
-    import {Delete, EditPen} from "@element-plus/icons-vue";
-    import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
-    import {assetUrl} from "../../../utils/ninjatablesadmin";
-
-    export default {
-        name: 'custom_filter',
-        props: ['table_id', 'columns'],
-        components: {
-            NinjaButton,
-            Delete,
-            EditPen,
-          GetPro,
-            NinjaFilterEditor,
-            draggable
-        },
-        data() {
-            return {
-                loading: false,
-                saving: false,
-                hasPro: !!window.ninja_table_admin.hasPro,
-                hasAdvancedFilters: !!window.ninja_table_admin.hasAdvancedFilters,
-                table_filters: [],
-                activeEditor: false,
-                editorModal: false,
-                addFilterModal: false,
-                filter_styling: {
-                    filter_display_type: '',
-                    filter_columns: 'columns_2',
-                    filter_column_label: 'new_line'
-                }
+export default {
+    name: 'custom_filter',
+    props: ['table_id', 'columns'],
+    components: {
+        NinjaButton,
+        Delete,
+        EditPen,
+        GetPro,
+        NinjaFilterEditor
+    },
+    data() {
+        return {
+            loading: false,
+            saving: false,
+            hasPro: !!window.ninja_table_admin.hasPro,
+            hasAdvancedFilters: !!window.ninja_table_admin.hasAdvancedFilters,
+            table_filters: [],
+            activeEditor: false,
+            editorModal: false,
+            addFilterModal: false,
+            sortableInstance: null,
+            filter_styling: {
+                filter_display_type: '',
+                filter_columns: 'columns_2',
+                filter_column_label: 'new_line'
             }
-        },
-        computed: {
-            columnKeyPairs() {
-                let formattedColumns = {};
-                each(this.columns, (column) => {
-                    formattedColumns[column.key] = column.name;
-                });
-                return formattedColumns;
-            }
-        },
-        methods: {
-            assetUrl,
-            each,
-            fetchFilters() {
-                this.loading = true;
-                this.$get('pro/custom-filter', {
-                  table_id: this.table_id
+        }
+    },
+    computed: {
+        columnKeyPairs() {
+            let formattedColumns = {};
+            each(this.columns, (column) => {
+                formattedColumns[column.key] = column.name;
+            });
+            return formattedColumns;
+        }
+    },
+    methods: {
+        assetUrl,
+        each,
+        fetchFilters() {
+            this.loading = true;
+            this.$get('pro/custom-filter', {
+                table_id: this.table_id
+            })
+                .then((response) => {
+                    this.table_filters = response.data.table_filters;
+                    this.filter_styling = response.data.filter_styling;
                 })
-                    .then((response) => {
-                        this.table_filters = response.data.table_filters;
-                        this.filter_styling = response.data.filter_styling;
-                    })
-                    .catch(error => {
-
-                    })
-                    .finally(() => {
-                        this.loading = false;
+                .catch(error => {
+                    console.error('Fetch filters error:', error);
+                })
+                .finally(() => {
+                    this.loading = false;
+                    this.$nextTick(() => {
+                        this.initCustomFilterSortable();
                     });
-            },
-            updateFilter(filter) {
-                if (this.validateFilter(filter)) {
+                });
+        },
+        updateFilter(filter) {
+            if (this.validateFilter(filter)) {
+                this.saveFilters();
+            }
+        },
+        validateFilter(filter) {
+            if (!filter.title) {
+                this.$message.error('Please Provide Filter Title');
+                return false;
+            }
+            if (!filter.options.length) {
+                this.$message.error('Please Provide Filter Options');
+                return false;
+            }
+            if (filter.type != 'reset_filter' && filter.type != 'select' && !filter.columns.length) {
+                this.$message.error('Please Select columns that you need to add filter');
+                return false;
+            }
+            if (filter.type == 'select' && filter.select_value_type == 'dynamic_data' && !filter.dynamic_select_column) {
+                this.$message.error('Please Select Target Column');
+                return false;
+            }
+            return true;
+        },
+        saveFilters() {
+            this.saving = true;
+            let data = {
+                table_id: this.table_id,
+                ninja_filters: this.table_filters,
+                filter_styling: this.filter_styling
+            };
+
+            this.$post('pro/custom-filter', data)
+                .then((response) => {
+                    this.$message.success(response.data.message);
+                })
+                .catch(error => {
+                    console.error('Save filters error:', error);
+                })
+                .finally(() => {
+                    this.saving = false;
+                    this.activeEditor = false;
+                    this.editorModal = false;
+                    this.addFilterModal = false;
+                });
+        },
+        showAddFilter() {
+            this.activeEditor = {
+                placeholder: "All",
+                options: [{
+                    value: '',
+                    label: ''
+                }],
+                type: "select",
+                columns: [],
+                strict: 'no',
+                title: ""
+            };
+            this.addFilterModal = true;
+        },
+        addFilter(filter) {
+            if (this.validateFilter(filter)) {
+                this.table_filters.push(filter);
+                this.$nextTick(() => {
                     this.saveFilters();
-                }
-            },
-            validateFilter(filter) {
-                if (!filter.title) {
-                    this.$message.error('Please Provide Filter Title');
-                    return false;
-                }
-                if (!filter.options.length) {
-                    this.$message.error('Please Provide Filter Options');
-                    return false;
-                }
+                    this.initCustomFilterSortable();
+                });
+            }
+        },
+        edit(row) {
+            this.activeEditor = row;
+            this.editorModal = true;
+        },
+        deleteFilter(index) {
+            this.table_filters.splice(index, 1);
+            this.$nextTick(() => {
+                this.saveFilters();
+                this.initCustomFilterSortable();
+            });
+        },
+        initCustomFilterSortable() {
+            if (this.sortableInstance) {
+                this.sortableInstance.destroy();
+                this.sortableInstance = null;
+            }
 
-                if ( filter.type != 'reset_filter' && filter.type != 'select'  && !filter.columns.length) {
-                    this.$message.error('Please Select columns that you need to add filter');
-                    return false;
-                }
+            const tableBody = this.$el.querySelector('.nt-inner-table tbody');
 
-                if(filter.type == 'select' && filter.select_value_type == 'dynamic_data' && !filter.dynamic_select_column) {
-                    this.$message.error('Please Select Target Column');
-                    return false;
-                }
+            if (!tableBody) {
+                console.warn('Table body not found for sortable initialization');
+                return;
+            }
 
-                return true;
-            },
-            saveFilters() {
-                this.saving = true;
-                let data = {
-                  table_id: this.table_id,
-                  ninja_filters: this.table_filters,
-                  filter_styling: this.filter_styling
-                };
-
-                this.$post('pro/custom-filter', data)
-                    .then((response) => {
-                        this.$message.success(response.data.message);
-                    })
-                    .catch(error => {
-
-                    })
-                    .finally(() => {
-                        this.saving = false;
-                        this.activeEditor = false;
-                        this.editorModal = false;
-                        this.addFilterModal = false;
-                    });
-            },
-            showAddFilter() {
-                this.activeEditor = {
-                    placeholder: "All",
-                    options: [{
-                        value: '',
-                        label: ''
-                    }],
-                    type: "select",
-                    columns: [],
-                    strict: 'no',
-                    title: ""
-                };
-                this.addFilterModal = true;
-            },
-            addFilter(filter) {
-                if (this.validateFilter(filter)) {
-                    this.table_filters.push(filter);
+            this.sortableInstance = Sortable.create(tableBody, {
+                handle: '.handle-custom-filter',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onEnd: ({ newIndex, oldIndex }) => {
+                    if (newIndex === oldIndex) return;
+                    const movedItem = this.table_filters.splice(oldIndex, 1)[0];
+                    this.table_filters.splice(newIndex, 0, movedItem);
                     this.$nextTick(() => {
                         this.saveFilters();
                     });
                 }
-            },
-            edit(row) {
-                this.activeEditor = row;
-                this.editorModal = true;
-            },
-            deleteFilter(index) {
-                this.table_filters.splice(index, 1);
-                this.saveFilters();
-            }
-        },
-        mounted() {
-            if (this.hasAdvancedFilters) {
-                this.fetchFilters();
-            }
+            });
+        }
+    },
+    mounted() {
+        if (this.hasAdvancedFilters) {
+            this.fetchFilters();
+        }
+    },
+    beforeUnmount() {
+        if (this.sortableInstance) {
+            this.sortableInstance.destroy();
+            this.sortableInstance = null;
         }
     }
+}
 </script>

@@ -1,5 +1,11 @@
 <template>
-    <el-table :data="value" border class="nt-inner-table">
+    <el-table
+        :data="value"
+        border
+        class="nt-inner-table"
+        row-class-name="handle-custom-filter"
+        :row-key="getRowKey"
+    >
         <el-table-column width="50">
             <template #header>
                 <span></span>
@@ -37,48 +43,111 @@
                         <img :src="assetUrl('icons/edit-2.svg')"/>
                     </div>
                 </div>
-
             </template>
         </el-table-column>
     </el-table>
 </template>
 
-<script type="text/babel">
-    import draggable from 'vuedraggable'
-    import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
-    import {assetUrl} from "../../../utils/ninjatablesadmin";
-    export default {
-        name: 'ninja_key_pair_options',
-        components: {NinjaInput, draggable },
-        props: ['value'],
-        data() {
-            return {
-                filterArray: []
+<script>
+import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
+import { assetUrl } from "../../../utils/ninjatablesadmin";
+import Sortable from 'sortablejs';
+
+export default {
+    name: 'ninja_key_pair_options',
+    components: { NinjaInput },
+    props: ['value'],
+    data() {
+        return {
+            sortableInstance: null,
+            rowKeys: [], // Array to store unique keys for each row
+            nextKey: 1 // Counter for generating unique keys
+        }
+    },
+    methods: {
+        assetUrl,
+        getRowKey(row) {
+            // Find the index of the row in the value array
+            const index = this.value.indexOf(row);
+            // Return the corresponding key from rowKeys, or generate a new one
+            if (!this.rowKeys[index]) {
+                this.rowKeys[index] = `key-${this.nextKey++}`;
             }
+            return this.rowKeys[index];
         },
-        methods: {
-            assetUrl,
-            deleteItem(index) {
-                this.value.splice(index, 1);
-            },
-            add() {
-                this.value.push({
-                    label: '',
-                    value: ''
-                });
+        deleteItem(index) {
+            this.value.splice(index, 1);
+            this.rowKeys.splice(index, 1); // Remove the corresponding key
+            this.$nextTick(() => {
+                this.initSortable();
+            });
+        },
+        add() {
+            this.value.push({
+                label: '',
+                value: ''
+            });
+            this.rowKeys.push(`key-${this.nextKey++}`); // Add a new key
+            this.$nextTick(() => {
+                this.initSortable();
+            });
+        },
+        initSortable() {
+            if (this.sortableInstance) {
+                this.sortableInstance.destroy();
+                this.sortableInstance = null;
             }
-        },
+
+            const tableBody = this.$el.querySelector('.nt-inner-table tbody');
+            if (!tableBody) {
+                console.warn('Table body not found for sortable initialization');
+                return;
+            }
+
+            this.sortableInstance = Sortable.create(tableBody, {
+                handle: '.handle-custom-filter',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onEnd: ({ newIndex, oldIndex }) => {
+                    if (newIndex === oldIndex) return;
+                    // Update value array
+                    const movedItem = this.value.splice(oldIndex, 1)[0];
+                    this.value.splice(newIndex, 0, movedItem);
+                    // Update rowKeys array to keep keys in sync
+                    const movedKey = this.rowKeys.splice(oldIndex, 1)[0];
+                    this.rowKeys.splice(newIndex, 0, movedKey);
+                }
+            });
+        }
+    },
+    mounted() {
+        // Initialize rowKeys for existing rows
+        this.rowKeys = this.value.map(() => `key-${this.nextKey++}`);
+        this.$nextTick(() => {
+            this.initSortable();
+        });
+    },
+    beforeUnmount() {
+        if (this.sortableInstance) {
+            this.sortableInstance.destroy();
+            this.sortableInstance = null;
+        }
     }
+}
 </script>
 
 <style lang="scss">
-    table.ninja_filter_table {
-        width: 100%;
-        text-align: left;
-        border-collapse: collapse;
-        tr, td, th {
-            border: 1px solid #eaeaea;
-            padding: 2px 10px;
-        }
+table.ninja_filter_table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    tr, td, th {
+        border: 1px solid #eaeaea;
+        padding: 2px 10px;
     }
+}
+.sortable-ghost {
+    opacity: 0.5;
+    background: #c8ebfb;
+}
 </style>
