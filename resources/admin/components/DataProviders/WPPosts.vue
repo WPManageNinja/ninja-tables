@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="my-[20px]">
-                            <el-collapse accordion class="nt-accordion" value="conditions" v-model="conditions_section">
+                            <el-collapse accordion class="ninja-tables_rendering_accordion" value="conditions" v-model="conditions_section">
                                 <el-collapse-item name="conditions" title="Conditions">
                                     <el-checkbox v-model="currentUserPosts" class="mt-2">{{ $t('Logged in user posts') }}</el-checkbox>
 
