@@ -1,58 +1,68 @@
 <template>
-    <div class="license">
-        <div class="ninja_header">
-            <div v-if="is_valid == 'valid'">
-                <h2>{{ $t('Your License is Active') }}</h2>
+    <div class="nt-table-license-content">
+        <div class="nt-license-header">
+            <div class="text-[18px] font-[600] text-[#0E121B]" v-if="is_valid == 'valid'">
+                {{ $t('CSV Export / Print Button Settings for Frontend') }}
             </div>
-            <div v-loading="checkingLicense" v-else-if="is_valid == 'expired'">
-                <h2>{{ $t('Licensing has been expired') }}</h2>
+            <div class="text-[18px] font-[600] text-[#0E121B]" v-loading="checkingLicense"
+                 v-else-if="is_valid == 'expired'">
+                {{ $t('Licensing has been expired') }}
             </div>
             <div v-else>
-                <h2>{{ $t('Licensing') }}</h2>
-                <p>
-                    You need to activate your Ninja Table Pro by providing the license key bellow. If you don't have a
-                    license key please <a href="https://wpmanageninja.com/checkout/purchase-history/" target="_blank">Click
-                    Here</a> to get a license key from your purchase. <br/>Any questions or problems with your license? <a
-                        href="https://wpmanageninja.com/contact/" target="_blank">Contact us!</a>
-                </p>
+                <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Licensing') }}</div>
+                <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
+                    {{
+                        $t(`You need to activate your Ninja Table Pro by providing the license key below. If you don't have a license key please`)
+                    }}
+                    <a href="https://wpmanageninja.com/checkout/purchase-history/" target="_blank"
+                       class="text-blue-500 underline">Click Here</a>
+                    {{ $t('to get a license key from your purchase. Any questions or problems with your license?') }}
+                    <a href="https://wpmanageninja.com/contact/" target="_blank" class="text-blue-500 underline">Contact
+                        us!</a>
+                </div>
             </div>
+            <hr class="my-4">
         </div>
-        <div v-loading="checkingLicense" class="ninja_content">
-            <div v-if="is_valid == 'valid'"  class="license_success">
-                <h3>{{ $t('Your license is active! Enjoy Ninja Tables Pro Add On') }}</h3>
-                <el-button v-loading="doing_ajax" @click="deactivateLicense()" class="license_submit" type="default" size="small">{{ $t('Deactivate License') }}</el-button>
+        <div v-loading="checkingLicense" class="nt-license-content mt-4">
+            <div class="text-[16px] font-[500] text-center text-[#0E121B] my-4" v-if="is_valid == 'valid'">
+                {{ $t('Your license is active! Enjoy Ninja Tables Pro Add On') }}
+                <NinjaButton size="small" class="m-auto my-3" @click="deactivateLicense"
+                             :btn-text="$t('Deactivate License')"/>
                 <p v-if="renewHtml" v-html="renewHtml"></p>
             </div>
-            <div v-loading="checkingLicense" v-else-if="is_valid == 'expired'" class="license_form">
-                <div style="text-align: center;" class="checking_license license_renew_box" v-html="renewLicenseHtml"></div>
-                <p>If you already renewed your license then please <a @click.prevent="get_license_info()" href="#">click here to check again</a></p>
-                <p>Have a new license key? Please <a href="#" @click.prevent="enter_new_license = true">click here</a></p>
+            <div v-else-if="is_valid == 'expired'">
+                <div v-html="renewLicenseHtml"></div>
+                <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
+                        <span>
+                            {{ $t('If you already renewed your license then please') }}
+                        <a @click.prevent="get_license_info" class="text-blue-500 underline"
+                           href="#">{{ $t('click here to check again') }}</a>
+                        </span>
 
-                <div v-if="enter_new_license" class="license_form">
-                    <label for="license_form_input">
-                        {{ $t('Enter your license key') }}
-                    </label>
-                    <div class="form_input">
-                        <input v-model="licenseKey" placeholder="License Key" id="license_form_input"/>
-                    </div>
-                    <el-button v-loading="doing_ajax" @click="activateLicense()" class="license_submit" type="primary">{{  $t('Activate Ninja Tables Pro') }}</el-button>
-                    <div class="nt_messages">
-                        <p class="error_message" v-html="error_message" v-if="error_message"></p>
+                    <span>
+                        {{ $t('Have a new license key? Please ') }}
+                        <a href="#" @click.prevent="enter_new_license = true"
+                           class="text-blue-500 underline">{{ $t('click here') }}</a>
+                    </span>
+
+                </div>
+                <div v-if="enter_new_license" class="my-4 flex flex-col">
+                    <p class="my-2 text-[16px] font-[500] text-[#0E121B]">{{ $t('Enter your license key') }}</p>
+                    <div class="w-1/2">
+                        <NinjaInput size="small" v-model="licenseKey" placeholder="License Key"/>
+                        <NinjaButton class="my-3" v-loading="doing_ajax" @click="activateLicense" type="primary"
+                                     size="small" :btn-text="$t('Activate Pro')"/>
+                        <p v-html="error_message" v-if="error_message"></p>
                     </div>
                 </div>
-
             </div>
-            <div v-else class="license_form">
-                <label for="license_form_input">
-                    {{ $t('Enter your license key') }}
-                </label>
-                <div class="form_input">
-                    <input v-model="licenseKey" placeholder="License Key" id="license_form_input"/>
-                </div>
-                <el-button v-loading="doing_ajax" @click="activateLicense()" class="license_submit" type="primary">{{  $t('Activate Ninja Tables Pro') }}</el-button>
-
-                <div class="nt_messages">
-                    <p class="error_message" v-html="error_message" v-if="error_message"></p>
+            <div v-else class="my-4 flex flex-col">
+                <p class="my-2 text-[16px] font-[500] text-[#0E121B]">{{ $t('Enter your license key') }}</p>
+                <div class="w-1/2">
+                    <NinjaInput size="small" v-model="licenseKey" placeholder="License Key"/>
+                    <NinjaButton class="my-3" v-loading="doing_ajax" @click="activateLicense" type="primary"
+                                 size="small" :btn-text="$t('Activate Pro')"/>
+                    <p v-html="error_message" v-if="error_message"></p>
                 </div>
             </div>
         </div>
@@ -60,34 +70,38 @@
 </template>
 
 <script type="text/babel">
-    export default {
-        name: 'license',
-        data() {
-            return {
-                licenseKey: '',
-                error_message: '',
-                enter_new_license: false,
-                checkingLicense: false,
-                doing_ajax: false,
-                renewLicenseHtml : '',
-                renewHtml: '',
-                is_valid: window.ninja_table_admin.hasValidLicense
+import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+
+export default {
+    name: 'license',
+    components: {NinjaInput, NinjaButton},
+    data() {
+        return {
+            licenseKey: '',
+            error_message: '',
+            enter_new_license: false,
+            checkingLicense: false,
+            doing_ajax: false,
+            renewLicenseHtml: '',
+            renewHtml: '',
+            is_valid: window.ninja_table_admin.hasValidLicense
+        }
+    },
+    methods: {
+        activateLicense() {
+            if (!this.licenseKey) {
+                this.error_message = 'Please provide a license key';
+                return;
             }
-        },
-        methods: {
-            activateLicense() {
-                if(!this.licenseKey) {
-                    this.error_message = 'Please provide a license key';
-                    return;
-                }
-                this.doing_ajax = true;
-                this.error_message = '';
-                this.$post({
-                    action: '_ninjatables_pro_license_activate_license',
-                    _ninjatables_pro_license_key: this.licenseKey
-                })
+            this.doing_ajax = true;
+            this.error_message = '';
+            this.$post({
+                action: '_ninjatables_pro_license_activate_license',
+                _ninjatables_pro_license_key: this.licenseKey
+            })
                 .then(response => {
-                    if(response.data && response.data.message) {
+                    if (response.data && response.data.message) {
                         jQuery('.error_notice_ninjatables_pro_license').remove();
                         this.is_valid = 'valid';
                     } else {
@@ -95,125 +109,62 @@
                     }
                     this.doing_ajax = false;
                 })
-                    .fail(error => {
-                        if(error.responseJSON && error.responseJSON.data) {
-                            this.error_message = error.responseJSON.data.message;
-                        } else {
-                            this.error_message = 'Sorry, Something is wrong! Please make sure you have ninja tables pro installed and curl installed on your server';
-                        }
-                        this.doing_ajax = false;
-                    })
-                    .always(() => {
-                        this.doing_ajax = false;
-                    });
-            },
-            deactivateLicense() {
-                this.doing_ajax = true;
-                this.error_message = '';
-                this.$post({
-                    action: '_ninjatables_pro_license_deactivate_license'
-                })
-                    .then(response => {
-                        this.is_valid = false;
-                    })
-                    .fail(error => {
-                        console.log(error);
+                .fail(error => {
+                    if (error.responseJSON && error.responseJSON.data) {
                         this.error_message = error.responseJSON.data.message;
-                        if(error.responseJSON && error.responseJSON.data) {
-                            this.$message.error(error.responseJSON.data.message);
-                        } else {
-                            this.$message.error('Sorry, Something is wrong! Please try again');
-                        }
-                    })
-                    .always(() => {
-                        this.doing_ajax = false;
-                    });
-
-            },
-            get_license_info() {
-                this.checkingLicense = true;
-                this.error_message = '';
-                this.$get({
-                    action: '_ninjatables_pro_license_get_license_info'
+                    } else {
+                        this.error_message = 'Sorry, Something is wrong! Please make sure you have ninja tables pro installed and curl installed on your server';
+                    }
+                    this.doing_ajax = false;
                 })
-                    .then(response => {
-                        this.renewLicenseHtml = response.data.renewHtml;
-                        this.is_valid = response.data.status;
-                        this.renewHtml = response.data.renewHtml;
-                    })
-                    .fail(error => {
-                        this.error_message = error.responseJSON.data.message;
-                    })
-                    .always(() => {
-                        this.checkingLicense = false;
-                    });
-            }
+                .always(() => {
+                    this.doing_ajax = false;
+                });
         },
-        mounted() {
-            this.get_license_info();
+        deactivateLicense() {
+            this.doing_ajax = true;
+            this.error_message = '';
+            this.$post({
+                action: '_ninjatables_pro_license_deactivate_license'
+            })
+                .then(response => {
+                    this.is_valid = false;
+                })
+                .fail(error => {
+                    console.log(error);
+                    this.error_message = error.responseJSON.data.message;
+                    if (error.responseJSON && error.responseJSON.data) {
+                        this.$message.error(error.responseJSON.data.message);
+                    } else {
+                        this.$message.error('Sorry, Something is wrong! Please try again');
+                    }
+                })
+                .always(() => {
+                    this.doing_ajax = false;
+                });
+
+        },
+        get_license_info() {
+            this.checkingLicense = true;
+            this.error_message = '';
+            this.$get({
+                action: '_ninjatables_pro_license_get_license_info'
+            })
+                .then(response => {
+                    this.renewLicenseHtml = response.data.renewHtml;
+                    this.is_valid = response.data.status;
+                    this.renewHtml = response.data.renewHtml;
+                })
+                .fail(error => {
+                    this.error_message = error.responseJSON.data.message;
+                })
+                .always(() => {
+                    this.checkingLicense = false;
+                });
         }
+    },
+    mounted() {
+        this.get_license_info();
     }
+}
 </script>
-
-<style lang="scss">
-    .license_form {
-        text-align: center;
-        padding: 20px 0px;
-        label {
-            font-size: 30px;
-            font-weight: normal;
-            display: block;
-            margin-bottom: 20px;
-            text-transform: capitalize;
-        }
-        .form_input input {
-            min-width: 400px;
-            height: 48px;
-            width: 50%;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            border: 1px solid gray;
-            background: #fbfdff;
-            font-size: 20px;
-            padding: 0px 10px;
-        }
-        .license_submit {
-
-        }
-        .error_message {
-            margin-top: 40px;
-            padding: 10px;
-            background: #ffe491;
-            color: #000000;
-            font-weight: bold;
-            border-radius: 5px;
-        }
-    }
-    .license_success {
-        text-align: center;
-        padding: 40px 0px;
-    }
-
-    .license_renew_box {
-        padding: 10px;
-        border: 2px dashed yellow;
-        background: #ffee9b;
-        p {
-            font-size: 18px;
-        }
-        a {
-            font-weight: bold;
-            text-transform: capitalize;
-            border: 1px solid gray;
-            text-decoration: none;
-            padding: 5px 15px;
-            background: #0073aa;
-            color: white;
-            border-radius: 21px;
-            &:hover {
-                background: white;
-                color: #0073aa;
-            }
-        }
-    }
-</style>
