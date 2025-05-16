@@ -1,22 +1,24 @@
 <template>
-    <div class="privacy">
-        <div class="ninja_header">
-            <h2>Permission <span v-show="!hasPro">(Pro Feature)</span></h2>
+    <div class="nt-table-permission-content">
+        <div class="nt-permission-header">
+            <div class="text-[18px] font-[600] text-[#0E121B]">
+                {{ $t('Permission') }} <span v-show="!hasPro">(Pro Feature)</span>
+            </div>
+            <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
+                    {{$t(`By default, Only Administrator have access to manage the tables. By selecting additional roles bellow, You can give access to manage your Tables to other user roles.`) }}
+            </div>
+            <hr class="my-3">
         </div>
 
-        <div v-loading="fetching" class="ninja_content">
-            <div class="ninja_block">
-                <p>By default, Only Administrator have access to manage the tables. By selecting additional roles bellow, You can give access to manage your Tables to other user roles.</p>
-            </div>
-            <hr />
+        <div class="nt-permission-body">
             <template v-if="hasPro">
-                <div class="form-group">
+                <div>
                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
                         {{ $t('Check all') }}
                     </el-checkbox>
                 </div>
 
-                <div class="form-group">
+                <div>
                     <el-checkbox-group v-model="capability" @change="handleCheckedCapabilitiesChange">
                         <el-checkbox v-for="role in roles" :value="role.key" :key="role.key">
                             {{ role.name }}
@@ -24,7 +26,7 @@
                     </el-checkbox-group>
                 </div>
 
-                <div v-if="capability && capability.length" class="form-group">
+                <div v-if="capability && capability.length">
                     <el-checkbox
                         :true-value="'yes'"
                         :false-value="'no'"
@@ -33,16 +35,16 @@
                     </el-checkbox>
                 </div>
 
-                <div class="form-group">
-                    <el-button @click="store" type="primary" size="small">Save</el-button>
+                <div>
+                    <NinjaButton type="primary" size="small" @click="store" :btn-text="$t('Save')" />
                 </div>
             </template>
 
             <template v-else>
-                 {{ $t('Activate Ninja Tables Pro Add-on plugin to unlock this feature') }}
-               <p>
-                 <get-pro/>
-               </p>
+                {{ $t('Activate Ninja Tables Pro Add-on plugin to unlock this feature') }}
+                <p>
+                    <get-pro/>
+                </p>
             </template>
         </div>
     </div>
@@ -50,9 +52,10 @@
 
 <script>
     import GetPro from "./GetPro";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
     export default {
         name: "Privacy",
-      components: {GetPro},
+      components: {NinjaButton, GetPro},
       data() {
             return {
                 hasPro: false,
@@ -110,24 +113,10 @@
             }
         },
         mounted() {
-            this.hasPro = window.ninja_table_admin.hasPro === true;
+            this.hasPro = window.ninja_table_admin.hasPro === true || window.ninja_table_admin.hasPro === '1';
             this.get();
         }
     };
 </script>
-
-<style>
-    .el-text-info {
-        color: #58b7ff;
-    }
-
-    .privacy label {
-        margin-bottom: initial;
-    }
-
-    #capability {
-        margin-left: 75px;
-    }
-</style>
 
 
