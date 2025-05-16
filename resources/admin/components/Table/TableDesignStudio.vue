@@ -1,6 +1,6 @@
 <template>
     <div class="ninja_design">
-        <div class="ninja_design_wrapper">
+        <div class="ninja_design_wrapper !-mx-5">
             <div v-loading="!app_ready" class="w-[70%]">
                 <div class="design_preview">
                     <div class="flex justify-center items-center mb-5">
@@ -546,8 +546,7 @@
                             </div>
                         </div>
                     </el-tab-pane>
-                    <el-tab-pane label="Other" name="other_settings">
-
+                    <el-tab-pane label="Other" name="other_settings" class="px-4">
                         <div class="ninja_switch_wrapper">
                             <el-switch inactive-color="gray" active-text="Hide Pagination (Show all data at once)"
                                 active-value="1" inactive-value="0" v-model="tableSettings.show_all"></el-switch>
@@ -555,21 +554,24 @@
 
                         <div v-show="tableSettings.show_all == 0" class="form_group">
                             <div class="form_group">
-                                <label for="items_per_page">{{ $t('Pagination Items Per Page') }}</label>
-                                <input id="items_per_page" class="form_control" type="number"
-                                    v-model="tableSettings.perPage"
-                                    :disabled="tableSettings.show_all == true || tableSettings.show_all == '1'" />
+                                <label class="font-[500]">{{ $t('Pagination Items Per Page') }}</label>
+                                <NinjaInput
+                                 id="items_per_page"
+                                 v-model="tableSettings.perPage"
+                                 :disabled="tableSettings.show_all == true || tableSettings.show_all == '1'"
+                                />
                             </div>
 
-                            <label>{{ $t('Pagination Position') }}</label>
-                            <el-radio-group :disabled="tableSettings.show_all == true || tableSettings.show_all == '1'"
+                            <label class="font-[500]">{{ $t('Pagination Position') }}</label>
+                            <div class="ninja_tables_radio_group mb-3">
+                                <el-radio-group :disabled="tableSettings.show_all == true || tableSettings.show_all == '1'"
                                 size="small" v-model="tableSettings.pagination_position">
-                                <el-radio-button value="left" :label="$t('Left')" />
-                                <el-radio-button value="center" :label="$t('Center')" />
-                                <el-radio-button value="right" :label="$t('Right')" />
-                            </el-radio-group>
-
-                            <label><input v-model="tableSettings.paginate_to_top" type="checkbox">
+                                    <el-radio value="left" size="small" border>{{ $t("Left") }}</el-radio>
+                                    <el-radio value="center" size="small" border>{{ $t("Center") }}</el-radio>
+                                    <el-radio value="right" size="small" border>{{ $t("Right") }}</el-radio>
+                                </el-radio-group>
+                            </div>
+                            <label class="font-[500]"><input v-model="tableSettings.paginate_to_top" type="checkbox">
                                 Scroll to table top for pagination change <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
                                     content="If you enable this then on pagination change, the table will be scrolled to top">
@@ -579,7 +581,7 @@
                                 </el-tooltip>
                             </label>
 
-                            <label><input :disabled="!has_pro" v-model="tableSettings.show_pager" type="checkbox">
+                            <label class="font-[500]"><input :disabled="!has_pro" v-model="tableSettings.show_pager" type="checkbox">
                                 Show Page sizes change option <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
                                     content="If you enable this then Users can change the items per page on frontend">
@@ -598,15 +600,16 @@
                         </div>
 
                         <div class="form_group">
-                            <label>{{ $t('Search Bar Position') }}</label>
-                            <el-radio-group :disabled="!has_pro" size="small" v-model="tableSettings.search_position">
-                                <el-radio-button value="left" :label="$t('Left')" />
-                                <el-radio-button value="center" :label="$t('Center')" />
-                                <el-radio-button value="right" :label="$t('Right')" />
-                                <el-radio-button value="" :label="$t('Default')" />
-                            </el-radio-group>
-
-                            <label><input v-model="tableSettings.nt_search_full_width" type="checkbox">
+                            <label class="font-[500]">{{ $t('Search Bar Position') }}</label>
+                            <div class="ninja_tables_radio_group mb-3">
+                                <el-radio-group :disabled="!has_pro" size="small" v-model="tableSettings.search_position">
+                                    <el-radio value="left" size="small" border>{{ $t("Left") }}</el-radio>
+                                    <el-radio value="center" size="small" border>{{ $t("Center") }}</el-radio>
+                                    <el-radio value="right" size="small" border>{{ $t("Right") }}</el-radio>
+                                    <el-radio value="" size="small" border>{{ $t("Default") }}</el-radio>
+                                </el-radio-group>
+                            </div>
+                            <label class="font-[500]"><input v-model="tableSettings.nt_search_full_width" type="checkbox">
                                 Make search input as full width <span v-show="!has_pro">(Pro Only)</span>
                                 <el-tooltip placement="top-end" effect="light"
                                     content="If You enable this, Then the search input will take all the available space (100% width)">
@@ -618,21 +621,21 @@
                         </div>
 
                         <div class="form_group">
-                            <label>Select Sorting Method</label>
-                            <el-radio-group size="small" v-model="tableSettings.sorting_type">
-                                <el-radio-button :disabled="!config.table.isCreatedSortable" value="by_created_at"
-                                    :label="$t('Created At')" />
-                                <el-radio-button value="by_column" :label="$t('By Column')" />
-                                <el-radio-button :disabled="!config.table.isSortable" value="manual_sort"
-                                    :label="$t('Manual Sort')" />
-                            </el-radio-group>
+                            <label class="font-[500]">Select Sorting Method</label>
+                            <div class="ninja_tables_radio_group mb-3">
+                                <el-radio-group size="small" v-model="tableSettings.sorting_type">
+                                    <el-radio :disabled="!config.table.isCreatedSortable" value="by_created_at" size="small" border>{{ $t("Created At") }}</el-radio>
+                                    <el-radio value="by_column" size="small" border>{{ $t("By Column") }}</el-radio>
+                                    <el-radio :disabled="!config.table.isSortable" value="manual_sort" size="small" border>{{ $t("Manual Sort") }}</el-radio>
+                                </el-radio-group>
+                            </div>
                             <div v-if="config.table.isCreatedSortable && tableSettings.sorting_type == 'by_created_at'"
                                 class="">
                                 <span>{{ $t('Sort Type') }}
-                                    <select v-model="tableSettings.default_sorting">
+                                    <el-select class="ninja-select" v-model="tableSettings.default_sorting">
                                         <option value="new_first">{{ $t('Show New Items First') }}</option>
                                         <option value="old_first">{{ $t('Show Old Items First') }}</option>
-                                    </select>
+                                    </el-select>
                                 </span>
                             </div>
                             <div v-else-if="tableSettings.sorting_type == 'by_column'">
@@ -662,75 +665,87 @@
                         </div>
 
                         <div class="form_group">
-                            <label>{{ $t('Row Details (Responsive drawer)') }} <span
+                            <label class="font-[500]">{{ $t('Row Details (Responsive drawer)') }} <span
                                     v-show="!has_pro">(PRO)</span></label>
-                            <el-radio-group size="small" v-model="tableSettings.expand_type">
-                                <el-radio-button value="default">Default
-                                    <el-tooltip placement="top-end" effect="light"
+
+                             <div class="ninja_tables_radio_group mb-3">
+                                <el-radio-group size="small" v-model="tableSettings.expand_type">
+                                    <el-radio value="default" size="small" border>
+                                        {{ $t("Default") }}
+                                        <el-tooltip placement="top-end" effect="light"
                                         content="Show All the responsive columns data into the responsive drawer">
-                                        <el-icon class="tooltip-icon-color">
-                                            <InfoFilled />
-                                        </el-icon>
-                                    </el-tooltip>
-                                </el-radio-button>
-                                <el-radio-button value="expandFirst">Expand First
-                                    <el-tooltip placement="top-end" effect="light" content="This will automatically expand the first row of the table when displayed on a device that
+                                            <el-icon class="tooltip-icon-color">
+                                                <InfoFilled />
+                                            </el-icon>
+                                        </el-tooltip>
+                                    </el-radio>
+                                    <el-radio value="expandFirst" size="small" border>
+                                        {{ $t("Expand First") }}
+                                        <el-tooltip placement="top-end" effect="light" content="This will automatically expand the first row of the table when displayed on a device that
                             hides any columns.">
                                         <el-icon class="tooltip-icon-color">
                                             <InfoFilled />
                                         </el-icon>
                                     </el-tooltip>
-                                </el-radio-button>
-                                <el-radio-button value="expandAll">Expand All
-                                    <el-tooltip placement="top-end" effect="light" content="This will automatically expand all rows of the table when displayed on a device that hides
+                                    </el-radio>
+                                    <el-radio value="expandAll" size="small" border>
+                                        {{ $t("Expand All") }}
+                                        <el-tooltip placement="top-end" effect="light" content="This will automatically expand all rows of the table when displayed on a device that hides
                             any columns.">
-                                        <el-icon class="tooltip-icon-color">
-                                            <InfoFilled />
-                                        </el-icon>
-                                    </el-tooltip>
-                                </el-radio-button>
-                            </el-radio-group>
+                                            <el-icon class="tooltip-icon-color">
+                                                <InfoFilled />
+                                            </el-icon>
+                                        </el-tooltip>
+                                    </el-radio>
+                                </el-radio-group>
+                            </div>
                         </div>
 
                         <div class="form_group">
-                            <label>{{ $t('Toggle Position') }}</label>
-                            <el-radio-group size="small" v-model="tableSettings.togglePosition">
-                                <el-radio-button value="first">First Column
-                                    <el-tooltip placement="top-end" effect="light"
-                                        content="If you use responsive breakdown then the '+' icon will show at the first visible column">
-                                        <el-icon class="tooltip-icon-color">
-                                            <InfoFilled />
-                                        </el-icon>
-                                    </el-tooltip>
-                                </el-radio-button>
-                                <el-radio-button value="last">Last Column
-                                    <el-tooltip placement="top-end" effect="light"
+                            <label class="font-[500]">{{ $t('Toggle Position') }}</label>
+                            <div class="ninja_tables_radio_group mb-3">
+                                 <el-radio-group size="small"  v-model="tableSettings.togglePosition">
+                                    <el-radio value="first" size="small" border>
+                                        {{ $t("First Column") }}
+                                        <el-tooltip placement="top-end" effect="light" content="This will automatically expand all rows of the table when displayed on a device that hides
+                            any columns.">
+                                            <el-icon class="tooltip-icon-color">
+                                                <InfoFilled />
+                                            </el-icon>
+                                        </el-tooltip>
+                                    </el-radio>
+                                    <el-radio value="last" size="small" border>
+                                        {{ $t("Last Column") }}
+                                        <el-tooltip placement="top-end" effect="light"
                                         content="If you use responsive breakdown then the '+' icon will show at the last visible column">
                                         <el-icon class="tooltip-icon-color">
                                             <InfoFilled />
                                         </el-icon>
                                     </el-tooltip>
-                                </el-radio-button>
-                            </el-radio-group>
+                                    </el-radio>
+                                 </el-radio-group>
+                            </div>
+                           
                         </div>
 
                         <div class="form_group">
-                            <label for="extra_css_class">{{ $t('Extra CSS Class for the table') }}</label>
-                            <input id="extra_css_class" class="form_control" type="text"
-                                v-model="tableSettings.extra_css_class" />
+                            <label class="font-[500]" for="extra_css_class">{{ $t('Extra CSS Class for the table') }}</label>
+                            <NinjaInput
+                             v-model="tableSettings.extra_css_class"
+                            />
                         </div>
 
                         <div class="form_group">
-                            <label>{{ $t('Sticky First Column') }} <span v-if="!has_pro">(Pro)</span></label>
+                            <label class="font-[500]">{{ $t('Sticky First Column') }} <span v-if="!has_pro">(Pro)</span></label>
                             <el-checkbox :disabled="!has_pro" :true-value="'yes'" :false-value="'no'"
                                 v-model="tableSettings.sticky_first_column">Enable first column sticky for table
                             </el-checkbox>
-                            <label>{{ $t('Sticky Header') }} <span v-if="!has_pro">(Pro)</span></label>
+                            <label class="font-[500]">{{ $t('Sticky Header') }} <span v-if="!has_pro">(Pro)</span></label>
                             <el-checkbox :disabled="!has_pro" :true-value="'yes'" :false-value="'no'"
-                                v-model="tableSettings.sticky_header">Enable sticky header for table
+                                v-model="tableSettings.sticky_header">{{$t("Enable sticky header for table")}}
                             </el-checkbox>
                             <template v-if="tableSettings.sticky_header == 'yes'">
-                                <label style="margin-top: 10px">Sticky Top Offset
+                                <label class="font-[500]" style="margin-top: 10px">Sticky Top Offset
                                     <el-tooltip placement="top-end" effect="light"
                                         content="You can set an offset value for the sticky table header.">
                                         <el-icon class="tooltip-icon-color">
@@ -738,14 +753,13 @@
                                         </el-icon>
                                     </el-tooltip>
                                 </label>
-                                <input placeholder="positive or negative number" class="form_control" type="text"
-                                    v-model="tableSettings.sticky_header_offset" />
-                                <small>Please give positive/negative number or you can provide jquery element object
+                                <NinjaInput :placeholder="$t('positive or negative number')" v-model="tableSettings.sticky_header_offset"/>
+                                <small>{{$t('Please give positive/negative number or you can provide jquery element object')}}
                                 </small>
 
-                                <el-checkbox :disabled="!has_pro" :true-value="'yes'" :false-value="'no'"
-                                    v-model="tableSettings.disable_sticky_on_mobile">Disable Sticky header for mobile
-                                    devices
+                                <el-checkbox class="font-[500]" :disabled="!has_pro" :true-value="'yes'" :false-value="'no'"
+                                    v-model="tableSettings.disable_sticky_on_mobile">
+                                    {{$t('Disable Sticky header for mobile ')}}                               devices
                                 </el-checkbox>
 
                             </template>
@@ -753,8 +767,8 @@
                         <div class="form_group font-setting">
                             <label>Table Font Setting</label>
                             <div class="font">
-                                <label>{{ $t('Font Family') }}</label>
-                                <el-select v-model="tableSettings.table_font_family" placeholder="Select Font">
+                                <label class="font-[500]">{{ $t('Font Family') }}</label>
+                                <el-select class="ninja-select" v-model="tableSettings.table_font_family" placeholder="Select Font">
                                     <el-option v-for="(family, key) in fontFamily" :key="key"
                                         :label="family === 'inherit' ? 'theme-font' : family"
                                         :value="family"></el-option>
@@ -798,6 +812,7 @@ import { useEventBus } from './../../eventBus';
 import { assetUrl } from '../../utils/ninjatablesadmin';
 import tableConfigStore from '../../store/tableConfigStore';
 import ColorPicker from '../../@ui-utils/ColorPicker.vue';
+import NinjaInput from '../../@ui-utils/NinjaInput.vue';
 
 export default {
     name: 'table_preview',
@@ -805,7 +820,8 @@ export default {
         GetPro,
         SortableUpgradeNotice,
         NinjaColorPicker,
-        ColorPicker
+        ColorPicker,
+        NinjaInput
     },
     data() {
         return {
@@ -1463,12 +1479,6 @@ export default {
     max-width: 768px;
     padding: 0px 20px;
     margin: 0 auto;
-}
-
-.design_preview .footable_parent {
-    .footable-header th {
-        // word-break: break-all;
-    }
 }
 
 .font-setting {
