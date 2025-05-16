@@ -1,38 +1,61 @@
 <template>
-    <div v-if="appReady" class="image_selector">
-        <template v-if="column.link_type == 'hyperlinked' || column.link_type == 'none' || column.link_type == 'image_light_box' || column.link_type == 'iframe_ligtbox'">
-            <div class="nt_form_group">
-                <label>Upload Image</label>
-                <div class="nt_form_input">
-                    <div v-if="data.image_thumb" class="image_preview">
-                        <img :src="data.image_thumb" />
-                    </div>
-                    <el-button class="image_select_button" @click="initUploader" size="small" type="info">
-                        <span v-if="data.image_thumb">Change Image</span>
-                        <span v-else>Upload Image</span>
-                    </el-button>
+    <div v-if="appReady">
+        <div class="flex gap-4">
+            <div v-if="data.image_thumb" class="mr-4">
+                <img class="rounded-[10px]" width="100" height="100" :src="data.image_thumb" alt="image"/>
+            </div>
 
-                    <el-button v-if="data.image_thumb" @click="remove" class="image_select_button" size="small" type="warning">
-                        Remove Image
-                    </el-button>
+            <div class="flex gap-4">
+                <div class="flex items-center gap-2 my-2">
+                    <NinjaButton
+                        v-if="!data.image_thumb"
+                        type="secondary"
+                        :icon="assetUrl('icons/upload-02.svg')"
+                        @click="initUploader"
+                        :btn-text="$t('Image Upload')"
+                    />
+                    <NinjaButton
+                        v-if="data.image_thumb"
+                        type="danger"
+                        class-names="text-[#FB3748] border-[#FB3748] py-[7px] font-[300] bg-white hover:bg-white"
+                        @click="remove"
+                        :btn-text="$t('Remove')"
+                    />
+                    <NinjaButton
+                        v-if="data.image_thumb"
+                        type="secondary"
+                        class-names="font-[300] py-[7px] ms-3"
+                        @click="initUploader"
+                        :btn-text="$t('Change')"
+                    />
+                </div>
+
+                <div
+                    v-if="column.link_type === 'hyperlinked' || column.link_type === 'iframe_ligtbox' && data.image_thumb">
+                    <label v-if="column.link_type === 'iframe_ligtbox'"
+                           class="nt-form-modal">{{ $t('Iframe URL (Only The URL)') }}</label>
+                    <label v-else class="nt-form-modal">{{ $t('Target URL') }}</label>
+                    <NinjaInput
+                        type="url"
+                        size="small"
+                        placeholder="Permalink"
+                        v-model="data.permalink"
+                    />
                 </div>
             </div>
-            <div v-if="column.link_type == 'hyperlinked' || column.link_type == 'iframe_ligtbox'" class="nt_form_group">
-                <label v-if="column.link_type == 'iframe_ligtbox'">Iframe URL (Only The URL)</label>
-                <label v-else>Target URL</label>
-                <div class="nt_form_input">
-                    <el-input type="url" size="small" placeholder="Permalink" v-model="data.permalink" />
-                </div>
-            </div>
-        </template>
+        </div>
     </div>
 </template>
 
 <script type="text/babel">
 import each from 'lodash/each';
+import NinjaButton from "../admin/@ui-utils/NinjaButton.vue";
+import {assetUrl} from "../admin/utils/ninjatablesadmin";
+import NinjaInput from "../admin/@ui-utils/NinjaInput.vue";
 
 export default {
         name: 'maybe_multi_select',
+    components: {NinjaInput, NinjaButton},
         props: ['newColumn', 'column', 'adding_counter'],
         data() {
             return {
@@ -53,6 +76,7 @@ export default {
             }
         },
         methods: {
+            assetUrl,
             beforeAvatarUpload(file) {
                 if (file.type == 'image/jpg' || file.type == 'image/gif' || file.type == 'image/png') {
                     return true;

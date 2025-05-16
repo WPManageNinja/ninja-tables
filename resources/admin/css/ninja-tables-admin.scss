@@ -285,52 +285,8 @@
           border-radius: 0 0 20px 0;
 
           .ninja_modal-body {
-            .nt-modal-title {
-              color: #0E121B;
-              font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
-              font-family: Inter;
-              font-size: 20px;
-              font-style: normal;
-              font-weight: 500;
-              line-height: 28px;
-            }
-
-            .nt-modal-subtitle {
-              color: #0E121B;
-              font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
-              font-family: Inter;
-              font-size: 16px;
-              font-style: normal;
-              font-weight: 500;
-              line-height: 24px;
-              letter-spacing: -0.176px;
-            }
-
-            .nt-modal-description {
-              color: #0E121B;
-              font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
-              font-family: Inter;
-              font-size: 14px;
-              font-style: normal;
-              font-weight: 400;
-              line-height: 20px;
-              letter-spacing: -0.084px;
-              margin-top: 4px;
-            }
-
             .nt-form-group {
               margin-bottom: 20px;
-
-              .nt-form-label {
-                color: #0E121B;
-                font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
-                font-family: Inter;
-                font-size: 14px;
-                font-style: normal;
-                font-weight: 500;
-                line-height: 20px;
-                letter-spacing: -0.084px;
-              }
             }
           }
 
@@ -346,6 +302,39 @@
     }
   }
 }
+.nt-modal-title {
+  color: #0E121B;
+  font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+}
+
+.nt-modal-subtitle {
+  color: #0E121B;
+  font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.176px;
+}
+
+.nt-modal-description {
+  color: #0E121B;
+  font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.084px;
+  margin-top: 4px;
+}
+
 
 .nt-form-label {
   color: #0E121B;
@@ -1562,12 +1551,6 @@ input.form-control::placeholder {
 .el-dialog__wrapper {
   background: rgba(0, 0, 0, 0.55);
   z-index: 9999 !important;
-}
-
-.ninja_modal-body {
-  h3 {
-    margin: 0;
-  }
 }
 
 .handle {
