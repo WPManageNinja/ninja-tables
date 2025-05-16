@@ -47,7 +47,7 @@
 
                 </div>
                 <div v-if="enter_new_license" class="my-4 flex flex-col">
-                    <p class="my-2 text-[16px] font-[500] text-[#0E121B]">{{ $t('Enter your license key') }}</p>
+                    <p class="my-2 text-[16px] font-[400] text-[#0E121B]">{{ $t('Enter your license key') }}</p>
                     <div class="w-1/2">
                         <NinjaInput size="small" v-model="licenseKey" placeholder="License Key"/>
                         <NinjaButton class="my-3" v-loading="doing_ajax" @click="activateLicense" type="primary"
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div v-else class="my-4 flex flex-col">
-                <p class="my-2 text-[16px] font-[500] text-[#0E121B]">{{ $t('Enter your license key') }}</p>
+                <p class="my-2 text-[16px] font-[400] text-[#0E121B]">{{ $t('Enter your license key') }}</p>
                 <div class="w-1/2">
                     <NinjaInput size="small" v-model="licenseKey" placeholder="License Key"/>
                     <NinjaButton class="my-3" v-loading="doing_ajax" @click="activateLicense" type="primary"
