@@ -1,5 +1,6 @@
 <template>
     <el-dialog
+        class="ninja_create-table-modal"
         :title="title"
         v-model="showModal"
         top="50px"
@@ -107,6 +108,7 @@
                <get-pro/>
             </template>
         </div>
+
         <div slot="footer" class="dialog-footer" :class="{ 'single-child': shouldNotContinueAdding }">
             <template v-if="!shouldNotContinueAdding">
                 <div>

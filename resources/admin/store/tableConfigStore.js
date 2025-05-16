@@ -45,6 +45,6 @@ const actions = {
 
 // Export readonly state and actions
 export default {
-  state: readonly(state),
+  state,
   ...actions
 }

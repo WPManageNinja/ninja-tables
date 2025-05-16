@@ -279,7 +279,7 @@
         <el-dialog
             v-model="showColumnEditor"
             :close-on-click-modal="false"
-            class="no_padding_body"
+            class="ninja_create-table-modal"
             :append-to-body="true"
             :top="'50px'"
             :title="currentEditingColumn ? 'Edit Table Column : ' + currentEditingColumn.name : ''"

@@ -87,6 +87,34 @@
     }
   }
 
+  .nt-inner-table {
+    &.el-table tr th {
+      @apply bg-[#F9FAFB] text-xs py-3 text-[#565865] text-[14px] font-[500] leading-5;
+    }
+
+    &.el-table tr th:first-of-type {
+      border: 1px solid #E1E4EA;
+      border-radius: 12px 0 0 0;
+    }
+
+    &.el-table tr th:last-of-type {
+      border: 1px solid #E1E4EA;
+      border-radius: 0 12px 0 0;
+    }
+
+    tbody tr:last-child {
+      td:first-child {
+        border-radius: 0 0 0 12px;
+      }
+
+      td:last-child {
+        border-radius: 0 0 12px 0;
+      }
+    }
+
+    border-radius: 12px;
+  }
+
   .ninja-table-aside {
     aside {
       height: fit-content;
@@ -178,15 +206,25 @@
 
   .nt_tab_design {
     .el-tabs__header .is-top {
+      color: #525866;
+      font-weight: 500;
+      font-size: 14px;
+      margin: 0 !important;
       .el-tabs__nav-scroll {
         padding: 0 18px;
       }
       &::after {
         height: 1px;
       }
+      .is-active {
+        color: #0e121b;
+      }
+      .el-tabs__active-bar{
+        background: #335cff;
+      }
     }
-    .el-tabs__content {
-      padding: 0 18px;
+    .el-tabs__header{
+      margin: 0;
     }
   }
 
@@ -344,6 +382,54 @@
     backdrop-filter: blur(5px) !important;
     -webkit-backdrop-filter: blur(2px) !important;
     z-index: 999 !important;
+  }
+
+  .nt-input-append {
+    .el-input__wrapper {
+      border-radius: 7px 0 0 7px !important;
+
+      .el-input__inner {
+        border: none;
+
+        &:focus {
+          border: none;
+          box-shadow: none;
+        }
+      }
+    }
+
+    .el-input-group__append {
+      .el-select {
+        .el-input__wrapper {
+          border: none;
+        }
+      }
+    }
+  }
+
+  .ndt-table-config_custom_filter {
+    .el-table--border {
+      th:first-of-type {
+        border: 1px solid #E1E4EA;
+        border-radius: 12px 0 0 0;
+      }
+      th:last-of-type {
+        border: 1px solid #E1E4EA;
+        border-radius: 0 12px 0 0;
+      }
+
+
+      tbody tr:last-child {
+        td:first-child {
+          border-radius: 0 0 0 12px;
+        }
+        td:last-child {
+          border-radius: 0 0 12px 0;
+        }
+      }
+
+      border-radius: 12px;
+    }
   }
 
 }
