@@ -161,6 +161,13 @@
         width: 7px;
       }
     }
+    .el-radio--small{
+         .el-radio__label{
+            padding-left: 3px;
+          }
+          margin-right: 5px;
+    }
+ 
   }
 
   .nt-steps.el-steps--horizontal {
@@ -237,6 +244,31 @@
     }
   }
 
+ .el-input-number{
+  border-radius: 8px;
+  border-color: #335CFF;
+  .el-input-number__decrease{
+    border-radius: 8px 0 0 8px;
+  }
+  .el-input-number__increase{
+    border-radius: 0 8px 8px 0;
+  }
+  .el-input__wrapper{
+    border-radius: 8px;
+  }
+  .el-input__inner {
+    border: none;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #525866;
+    &:focus {
+      box-shadow: none;
+      border: none;
+      outline: none;
+    }
+  }
+}
+
   .el-transfer {
     width: 100%;
 
@@ -258,6 +290,7 @@
         }
       }
     }
+
     .el-transfer__buttons{
       button{
         background: white !important;
@@ -321,43 +354,6 @@
             font-weight: 300;
           }
         }
-      }
-    }
-  }
-
-  .nt-accordion {
-    border-left: 1px solid #E1E4EA;
-    border-right: 1px solid #E1E4EA;
-    border-radius: 12px;
-
-    .el-collapse-item {
-      .el-collapse-item__header {
-        border-radius: 12px 12px 0 0;
-        padding: 0 16px;
-      }
-      .el-collapse-item__wrap {
-        padding: 0 16px;
-        background:#F9FAFB;
-      }
-
-      &:last-child {
-        margin-bottom: 0;
-        .el-collapse-item__header {
-          border-radius: 12px;
-          padding: 0 16px;
-        }
-        .el-collapse-item__wrap {
-          border-radius: 0 0 12px 12px;
-        }
-      }
-
-    }
-    .is-active{
-      .el-collapse-item__header {
-        border-bottom-right-radius: 0 !important;
-        border-bottom-left-radius: 0 !important;
-        border-bottom: 1px solid #E1E4EA;
-        padding: 0 16px;
       }
     }
   }
