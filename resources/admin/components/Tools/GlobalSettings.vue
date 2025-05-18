@@ -1,11 +1,11 @@
 <template>
     <div class="nt-table-global-settings-content">
-        <div class="nt-license-header text-[18px] font-[600] text-[#0E121B]">
-            {{ $t('Global Settings') }}
+        <div class="nt-license-header text-[18px] font-[600] text-[#0E121B]">{{ $t('Global Settings') }}</div>
+        <div class="text-[14px] font-[400] text-[#0E121B] my-5">
+            {{ $t('You can configure global settings for Ninja Tables here. This settings will apply to all the tables.') }}
         </div>
-        <hr class="my-4">
         <div class="nt-global-settings-content">
-            <div class="text-[16px] font-[400] text-[#0E121B]">{{ $t('Global Javascript Error Handling') }}</div>
+            <div class="text-[16px] font-[500] text-[#3C434A]">{{ $t('Global Javascript Error Handling') }}</div>
             <div class="ninja_tables_radio_group my-3">
                 <el-radio-group v-model="ninja_suppress_error">
                     <el-space direction="vertical" alignment="start">
@@ -21,8 +21,8 @@
 
 
 
-            <div class="text-[16px] font-[400] text-[#0E121B]">{{ $t('Clear Cache') }}</div>
-            <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
+            <div class="text-[16px] font-[500] text-[#3C434A]">{{ $t('Clear Cache') }}</div>
+            <div class="text-[14px] font-[400] text-[#3C434A] mt-[10px] mb-[20px]">
                 {{
                     $t(`If you want to clear all the Ninja table cache, please click on the "Clear Table Cache" button or if you want to clear the cache by popular external plugins please click "Clear External Caches`)
                 }}
@@ -33,33 +33,6 @@
             </div>
         </div>
     </div>
-
-
-<!--    <div class="privacy">-->
-<!--        <div class="ninja_header">-->
-<!--            <h2>Global Settings</h2>-->
-<!--        </div>-->
-
-<!--        <div v-loading="loading" class="ninja_content">-->
-<!--            <div class="ninja_block">-->
-<!--                <h3>Global Javascript Error Handling</h3>-->
-<!--                <el-radio-group class="spaced_new_line" v-model="ninja_suppress_error">-->
-<!--                    <el-radio :value="'log_silently'">Console Log JS Errors Silently</el-radio>-->
-<!--                    <el-radio :value="'yes'">Handle Error But don't Log</el-radio>-->
-<!--                    <el-radio :value="'no'">Don't Handle Global Javascript Errors (Default)</el-radio>-->
-<!--                </el-radio-group>-->
-<!--            </div>-->
-<!--            <el-button @click="storeSettings()" size="small" type="primary">Update Global Settings</el-button>-->
-<!--        </div>-->
-
-<!--        <div class="ninja_block ninja_heightlight_block">-->
-<!--            <h3>Clear Cache</h3>-->
-<!--            <p>If you want to clear all the Ninja table cache, please click on the "Clear Table Cache" button or if you want to clear the cache by popular external plugins please click "Clear External Caches".</p>-->
-<!--&lt;!&ndash;        It will remove all the cache of "LiteSpeed Cache", "WP Redis", "WP Rocket", "WP Fastest Cache", "Autoptimize", "WP-Optimize", "SiteGround Optimizer", "Cloudflare" if you have at least any one of these. It will also clear Godaddy internal caches and wp-cache caches.&ndash;&gt;-->
-<!--            <el-button @click="clearTableCache" size="small" type="primary">Clear Table Cache</el-button>-->
-<!--            <el-button @click="clearExternalCache" size="small" type="warning">Clear External Caches</el-button>-->
-<!--        </div>-->
-<!--    </div>-->
 </template>
 
 <script>
@@ -80,7 +53,7 @@
 
                 this.$get('tables/tools/global-settings')
                     .then(response => {
-                        this.ninja_suppress_error = response.data.ninja_suppress_error;
+                        this.ninja_suppress_error = response.data.ninja_suppress_error ?? 'log_silently';
                     })
                     .catch(error => {})
               this.loading = false;
