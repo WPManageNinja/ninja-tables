@@ -38,11 +38,11 @@
   </div>
 </template>
 <script>
-import SliderInput from "./SliderInput";
-import SwitchInput from "./SwitchInput";
-import Alignment from "./Alignment";
-import ColorInput from "./ColorInput";
-import SelectInput from "./SelectInput";
+import SliderInput from "./SliderInput.vue";
+import SwitchInput from "./SwitchInput.vue";
+import Alignment from "./Alignment.vue";
+import ColorInput from "./ColorInput.vue";
+import SelectInput from "./SelectInput.vue";
 
 export default {
   name: "AllInputElement",

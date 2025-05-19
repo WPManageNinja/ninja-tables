@@ -291,7 +291,7 @@ export default {
         IceCreamSquare,
         Grid,
         draggable,
-        TableData
+        TableData,
     },
     methods: {
         handleEdit(data){
@@ -598,8 +598,9 @@ export default {
 </script>
 <style lang="scss">
 .ninja-tables-layout {
+    margin-top: 20px;
     .table-customize-button {
-        padding-bottom: 20px;
+        padding-bottom: 8px;
     }
 
     .sortable-ghost {
@@ -613,6 +614,14 @@ export default {
         display: flex !important;
         justify-content: center;
         margin: 5px auto;
+        button{
+            background: #335cff;
+            border-color: #335cff;
+            &:hover{
+                background: #335cff;
+                border-color: #335cff;
+            }
+        }
     }
 
     .manage-button {
@@ -938,4 +947,6 @@ export default {
         cursor: pointer;
     }
 }
+
+
 </style>
