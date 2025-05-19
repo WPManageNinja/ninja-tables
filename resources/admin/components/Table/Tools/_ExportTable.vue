@@ -1,6 +1,6 @@
 <template>
     <div class="export-table-wrapper ml-2">
-        <div class="text-[18px] font-[600] text-[#0E121B] my-5">{{ $t('Export Table Here') }}</div>
+        <div class="text-[18px] font-[600] text-[#0E121B] my-5">{{ $t('Export Table') }}</div>
         <div v-if="config.table.isExportable">
             <div class="text-[14px] font-[400] text-[#0E121B] my-5 w-1/2">{{
                     $t("You can download the table as CSV or JSON format, If you download as JSON then you can can import the table to Fluent table installation")
