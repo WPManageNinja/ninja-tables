@@ -46,34 +46,70 @@
                             }}
                         </div>
 
-                        <div class="flex items-center">
-                            <div class="">
-                                <div class="text-[18px] text-[500] my-2">{{
-                                        $t("User Roles for Edit/Add Table Rows")
-                                    }}
+                        <div class="flex items-center gap-6">
+                            <div class="mr-4 w-1/2">
+                                <div class="border border-solid border-[#E1E4EA] rounded-[8px] mb-4">
+                                    <div class="bg-[#F9FAFB] flex justify-between items-center px-4 py-2 rounded-t-[8px]"
+                                         style="border-bottom: 1px solid #E1E4EA">
+                                        <div>{{ $t('User Roles for Edit/Add Table Rows') }}</div>
+                                        <div>
+                                            <el-checkbox
+                                                v-model="editRolesCheckAll"
+                                                :indeterminate="editRolesIndeterminate"
+                                                @change="handleEditRolesCheckAllChange"
+                                            >
+                                                {{ $t('Select All') }}
+                                            </el-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <el-checkbox-group 
+                                            v-model="settings.user_roles_editing"
+                                            @change="handleEditRolesChange"
+                                            class="nt-checkbox-group">
+                                            <el-checkbox
+                                                v-for="(role, role_key) in editing_user_roles"
+                                                :key="role_key"
+                                                :value="role_key"
+                                                style="font-weight: 300"
+                                            >
+                                                {{ role }}
+                                            </el-checkbox>
+                                        </el-checkbox-group>
+                                    </div>
                                 </div>
-                                <el-checkbox-group v-model="settings.user_roles_editing">
-                                    <el-checkbox
-                                        v-for="(role, role_key) in editing_user_roles"
-                                        :key="role_key"
-                                        :label="role"
-                                        :value="role_key"
-                                    />
-                                </el-checkbox-group>
                             </div>
-                            <div class="">
-                                <div class="text-[18px] text-[500] my-2">{{
-                                        $t("User Roles for Deleting Table Rows")
-                                    }}
+                            <div class="w-1/2">
+                                <div class="border border-solid border-[#E1E4EA] rounded-[8px] mb-4">
+                                    <div class="bg-[#F9FAFB] flex justify-between items-center px-4 py-2 rounded-t-[8px]"
+                                         style="border-bottom: 1px solid #E1E4EA">
+                                        <div>{{ $t('User Roles for Deleting Table Rows') }}</div>
+                                        <div>
+                                            <el-checkbox
+                                                v-model="deleteRolesCheckAll"
+                                                :indeterminate="deleteRolesIndeterminate"
+                                                @change="handleDeleteRolesCheckAllChange"
+                                            >
+                                                {{ $t('Select All') }}
+                                            </el-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <el-checkbox-group 
+                                            v-model="settings.user_roles_deleting"
+                                            @change="handleDeleteRolesChange"
+                                            class="nt-checkbox-group">
+                                            <el-checkbox
+                                                v-for="(role, role_key) in user_roles"
+                                                :key="role_key"
+                                                :value="role_key"
+                                                style="font-weight: 300"
+                                            >
+                                                {{ role }}
+                                            </el-checkbox>
+                                        </el-checkbox-group>
+                                    </div>
                                 </div>
-                                <el-checkbox-group v-model="settings.user_roles_deleting">
-                                    <el-checkbox
-                                        v-for="(role, role_key) in user_roles"
-                                        :key="role_key"
-                                        :label="role"
-                                        :value="role_key"
-                                    />
-                                </el-checkbox-group>
                             </div>
                         </div>
 
@@ -232,6 +268,10 @@ export default {
             hasPro: !!window.ninja_table_admin.hasPro,
             isActivated: !!window.ninja_table_admin.activated_features.ninja_table_front_editor,
             activeCollapse: [],
+            editRolesCheckAll: false,
+            editRolesIndeterminate: false,
+            deleteRolesCheckAll: false,
+            deleteRolesIndeterminate: false,
         }
     },
     methods: {
@@ -320,7 +360,25 @@ export default {
                 .always(() => {
                     this.saving = false;
                 });
-        }
+        },
+        handleEditRolesCheckAllChange(val) {
+            this.settings.user_roles_editing = val ? Object.keys(this.editing_user_roles) : [];
+            this.editRolesIndeterminate = false;
+        },
+        handleEditRolesChange(value) {
+            let checkedCount = value.length;
+            this.editRolesCheckAll = checkedCount === Object.keys(this.editing_user_roles).length;
+            this.editRolesIndeterminate = checkedCount > 0 && checkedCount < Object.keys(this.editing_user_roles).length;
+        },
+        handleDeleteRolesCheckAllChange(val) {
+            this.settings.user_roles_deleting = val ? Object.keys(this.user_roles) : [];
+            this.deleteRolesIndeterminate = false;
+        },
+        handleDeleteRolesChange(value) {
+            let checkedCount = value.length;
+            this.deleteRolesCheckAll = checkedCount === Object.keys(this.user_roles).length;
+            this.deleteRolesIndeterminate = checkedCount > 0 && checkedCount < Object.keys(this.user_roles).length;
+        },
     },
     mounted() {
         this.getEditSettings();
