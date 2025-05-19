@@ -91,7 +91,7 @@
             <div class="text-center">
                 <h2 class="m-0 text-[24px] font-[500]">{{$t('Get In Touch')}}</h2>
                 <p class="m-0 mt-2 mb-3 text-[#525866]">{{$t('Connect with the Ninja Tables community on Social Media.')}}</p>
-                <div class="flex justify-center gap-3">
+                <div class="flex justify-center items-center gap-3">
                     <a href="https://www.facebook.com/ninjatables/" target="_blank">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                             <path d="M16 2.00391C8.3 2.00391 2 8.33556 2 16.0743C2 23.018 7.138 28.7868 13.76 30.0039V20.014H10.26V16.0743H13.76V12.9788C13.76 9.46119 16 7.49134 19.22 7.49134C20.2 7.49134 21.32 7.63205 22.3 7.77275V11.3607H20.48C18.8 11.3607 18.38 12.2049 18.38 13.3305V16.0743H22.09L21.46 20.014H18.38V29.9898C24.995 28.7657 30 23.018 30 16.0743C30 8.33556 23.7 2.00391 16 2.00391Z" fill="url(#paint0_linear_2802_193187)"/>
