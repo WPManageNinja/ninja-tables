@@ -71,31 +71,35 @@
                 </div>
 
                 <div class="nt-form-group flex justify-start items-center gap-8">
-                    <div>
-                        <el-tooltip
-                            placement="right"
-                            effect="light"
-                            content="Maximum records to show in frontend, keep empty to show all."
-                        >
-                            <el-icon class="tooltip-icon-color">
-                                <InfoFilled/>
-                            </el-icon>
-                        </el-tooltip>
-                        <label class="nt-form-label">{{ $t('Max Records:') }}</label>
+                    <div class="flex flex-col">
+                        <div class="flex gap-1">
+                            <el-tooltip
+                                placement="right"
+                                effect="light"
+                                content="Maximum records to show in frontend, keep empty to show all."
+                            >
+                                <el-icon class="tooltip-icon-color">
+                                    <InfoFilled/>
+                                </el-icon>
+                            </el-tooltip>
+                            <label class="nt-form-label">{{ $t('Max Records:') }}</label>
+                        </div>
                         <NinjaInput v-model="form.entry_limit" />
                     </div>
 
-                    <div>
-                        <el-tooltip
-                            placement="right"
-                            effect="light"
-                            content="Select what type of entries you want to show from fluent form."
-                        >
-                            <el-icon class="tooltip-icon-color">
-                                <InfoFilled/>
-                            </el-icon>
-                        </el-tooltip>
-                        <label class="nt-form-label">{{ $t('Entry Type:') }}</label>
+                    <div class="flex flex-col">
+                        <div class="flex gap-1">
+                            <el-tooltip
+                                placement="right"
+                                effect="light"
+                                content="Select what type of entries you want to show from fluent form."
+                            >
+                                <el-icon class="tooltip-icon-color">
+                                    <InfoFilled/>
+                                </el-icon>
+                            </el-tooltip>
+                            <label class="nt-form-label">{{ $t('Entry Type:') }}</label>
+                        </div>
                         <el-radio-group v-model="form.entry_status" class="ninja_tables_radio_group">
                             <el-radio border value="all" :label="$t('All')" class="mr-2" />
                             <el-radio border value="read" :label="$t('Read')" class="mr-2" />

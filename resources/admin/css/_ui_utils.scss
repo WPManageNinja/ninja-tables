@@ -269,6 +269,27 @@
   }
 }
 
+  .el-checkbox {
+    &.is-checked {
+      .el-checkbox__label {
+        color: #335cff;
+      }
+      .el-checkbox__inner {
+        background: #335cff;
+        border-color: #335cff;
+      }
+    }
+  }
+
+  .el-switch {
+    &.is-checked {
+      .el-switch__core {
+        background: #335cff;
+        border-color: #335cff;
+      }
+    }
+  }
+
   .el-transfer {
     width: 100%;
 
