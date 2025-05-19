@@ -38,7 +38,7 @@
                         </div>
                     </template>
                     <div class="my-5">
-                        <div class="text-[18px] text-[500] my-2">{{$t("User Roles and Data Editing Permissions") }}
+                        <div class="text-[18px] text-[500] my-2">{{ $t("User Roles and Data Editing Permissions") }}
                         </div>
                         <div class="mb-3 text-[14px]">
                             {{
@@ -48,7 +48,10 @@
 
                         <div class="flex items-center">
                             <div class="">
-                                <div class="text-[18px] text-[500] my-2">{{ $t("User Roles for Edit/Add Table Rows") }}</div>
+                                <div class="text-[18px] text-[500] my-2">{{
+                                        $t("User Roles for Edit/Add Table Rows")
+                                    }}
+                                </div>
                                 <el-checkbox-group v-model="settings.user_roles_editing">
                                     <el-checkbox
                                         v-for="(role, role_key) in editing_user_roles"
@@ -59,7 +62,10 @@
                                 </el-checkbox-group>
                             </div>
                             <div class="">
-                                <div class="text-[18px] text-[500] my-2">{{ $t("User Roles for Deleting Table Rows") }}</div>
+                                <div class="text-[18px] text-[500] my-2">{{
+                                        $t("User Roles for Deleting Table Rows")
+                                    }}
+                                </div>
                                 <el-checkbox-group v-model="settings.user_roles_deleting">
                                     <el-checkbox
                                         v-for="(role, role_key) in user_roles"
@@ -82,7 +88,10 @@
                         </div>
 
                         <div class="mb-5">
-                            <div class="text-[18px] text-[500] my-2">{{$t("User Roles and Data Editing Permissions") }}</div>
+                            <div class="text-[18px] text-[500] my-2">{{
+                                    $t("User Roles and Data Editing Permissions")
+                                }}
+                            </div>
                             <div class="mb-3 text-[14px] font-[400]">
                                 {{
                                     $t("Please Specify which columns can be editable from front-end and also, You can specify which columns will be required")
@@ -122,7 +131,9 @@
 
                             <div>
                                 <div class="text-[18px] text-[500] my-2">{{ $t('Appearance Settings') }}</div>
-                                <div class="mb-3 text-[14px] font-[400]">{{ $t("You can set the Editing Component Labels and Appearances") }}</div>
+                                <div class="mb-3 text-[14px] font-[400]">
+                                    {{ $t("You can set the Editing Component Labels and Appearances") }}
+                                </div>
                                 <div>
                                     <div class="mb-4 text-[14px]">
                                         <el-checkbox
@@ -167,7 +178,7 @@
                                     </div>
                                 </div>
 
-                                <div class="text-[18px] text-[500] my-2">{{$t("Set your action icon position") }}</div>
+                                <div class="text-[18px] text-[500] my-2">{{ $t("Set your action icon position") }}</div>
                                 <div class="ninja_tables_radio_group my-2">
                                     <el-radio-group border v-model="appearance_settings.position">
                                         <el-radio border value="left">{{ $t('Left') }}</el-radio>
@@ -234,6 +245,19 @@ export default {
                 });
             }
         },
+        initializeSettings() {
+            if (Object.keys(this.editing_items).length === 0) {
+                this.initializeFlags(this.editing_items, this.columns);
+            }
+
+            if (Object.keys(this.required_items).length === 0) {
+                this.initializeFlags(this.required_items, this.columns);
+            }
+
+            if (this.appearance_settings && !this.appearance_settings.position) {
+                this.appearance_settings.position = 'right';
+            }
+        },
         getEditSettings() {
             this.fetching = true;
             this.$get({
@@ -253,11 +277,7 @@ export default {
                     this.default_values = response.data.editor_pref.default_values;
                     this.appearance_settings = response.data.editor_pref.appearance_settings;
 
-                    if (Object.keys(this.editing_items).length === 0) {
-                        this.initializeFlags(this.editing_items, this.columns);
-                    } else if (Object.keys(this.required_items).length === 0) {
-                        this.initializeFlags(this.required_items, this.columns);
-                    }
+                    this.initializeSettings();
                 })
                 .fail(error => {
 
