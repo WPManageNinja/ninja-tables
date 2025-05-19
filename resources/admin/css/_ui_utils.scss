@@ -269,7 +269,11 @@
   }
 }
 
+  .el-checkbox-group, .el-checkbox,
   .el-checkbox {
+    display: flex !important;
+    align-items: center;
+
     &.is-checked {
       .el-checkbox__label {
         color: #335cff;
@@ -277,12 +281,20 @@
       .el-checkbox__inner {
         background: #335cff;
         border-color: #335cff;
+        border-radius: 4px !important;
       }
     }
     .is-indeterminate {
       .el-checkbox__inner {
         background: #335cff;
         border-color: #335cff;
+        border-radius: 4px !important;
+      }
+    }
+
+    .el-checkbox__input {
+      .el-checkbox__inner {
+        border-radius: 4px !important;
       }
     }
   }
@@ -483,6 +495,11 @@
         }
       }
     }
+  }
+
+  .el-icon.tooltip-icon-color {
+    color: #335cff !important;
+    top: 2px;
   }
 
 }
