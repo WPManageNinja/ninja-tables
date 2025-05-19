@@ -130,7 +130,7 @@
                                 <h4 class="no-margin">{{$t('Meta Query')}}</h4>
                             </template>
 
-                            <wp-post-meta-query
+                            <WpPostMetaQuery
                                 :config="config"
                                 :metas="metas"
                                 :fields="query_able_post_types_fields"
