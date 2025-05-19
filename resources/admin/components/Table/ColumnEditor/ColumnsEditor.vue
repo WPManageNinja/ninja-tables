@@ -654,8 +654,9 @@
                                 </el-tooltip>
                         </label>
 
-                        <div class="flex items-center gap-4 mt-1">
+                        <div class="flex items-center gap-2 mt-1">
                             <el-switch
+                                size="small"
                                 v-model="model.unfilterable"
                                 :disabled="!hasPro"
                             />
@@ -679,8 +680,9 @@
                             </el-tooltip>
                         </label>
 
-                        <div class="flex items-center gap-4 mt-1">
+                        <div class="flex items-center gap-2 mt-1">
                             <el-switch
+                                size="small"
                                 v-model="model.unsortable"
                                 :disabled="!hasPro"
                             />

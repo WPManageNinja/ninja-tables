@@ -14,22 +14,26 @@
             </el-alert>
         </template>
 
-        <el-collapse v-else v-model="active">
+        <el-collapse
+            v-else
+            v-model="active"
+            :class="config.table.connection_type === 'external'? 'nt_accordion_group_content_white' : 'nt_accordion_content_white' "
+        >
             <el-collapse-item name="1">
                 <template #title>
                     <i class="header-icon el-icon-info el-text-info"></i>
-                    <strong> Edit:</strong> {{isEditableMessage}}
+                    <p class="nt-form-label"> {{ $t('Edit:') }} {{ $t(isEditableMessage) }}</p>
                 </template>
 
-                <div class="form-group">
-                    <label>{{ $t('Custom SQL Query') }}</label>
+                <div class="form-group my-5">
+                    <label class="nt-form-label">{{ $t('Custom SQL Query') }}</label>
                     <ace-code-editor mode="mysql" editor_id="ninja_mysql_editor" v-model="config.table.sql" />
-                    <p>Please write valid SQL query. Your written SQL query will be passed to <code>$wpdb->get_results()</code> function</p>
-                    <p>Check the documentation for advanced use cases: <a target="_blank" rel="noopener" href="https://ninjatables.com/docs/create-table-from-custom-sql/">Ninja Tables SQL Integration Documentation</a></p>
-                    <p>Available Dynamic Placeholders: <code>{current_user_id}</code> <code>{current_date}</code> <code>{current_date_time}</code> <code>{current_post_id}</code> <code>{current_post_title}</code> <code>{prefix}</code></p>
+                    <p class="nt-form-description mt-2">Please write valid SQL query. Your written SQL query will be passed to <code class="nt-code">$wpdb->get_results()</code> function</p>
+                    <p class="nt-form-description my-1">Check the documentation for advanced use cases: <a class="text-[#335CFF]" target="_blank" rel="noopener" href="https://ninjatables.com/docs/create-table-from-custom-sql/">Ninja Tables SQL Integration Documentation</a></p>
+                    <p class="nt-form-description">Available Dynamic Placeholders: <code class="nt-code">{current_user_id}</code> <code class="nt-code">{current_date}</code> <code class="nt-code">{current_date_time}</code> <code class="nt-code">{current_post_id}</code> <code class="nt-code">{current_post_title}</code> <code class="nt-code">{prefix}</code></p>
                 </div>
 
-                <div v-if="error_html" class="form-group">
+                <div v-if="error_html" class="form-group mt-2">
                     <el-alert
                         title="SQL Error"
                         @close="error_html = ''"
@@ -38,16 +42,24 @@
                     </el-alert>
                 </div>
 
-                <div style="text-align: right" class="form-group">
-                    <el-button v-loading="loading" @click="updateSql()" size="small" type="primary">Update SQL Query</el-button>
+                <div class="flex justify-end">
+                    <NinjaButton
+                        :btn-text="$t('Update SQL Query')"
+                        v-loading="loading"
+                        @click="updateSql()"
+                    />
                 </div>
 
             </el-collapse-item>
+
             <el-collapse-item v-if="config.table.connection_type === 'external'" name="2">
                 <template #title>
-                    <strong>SQL Connection Details:</strong>
+                    <p class="nt-form-label">SQL Connection Details</p>
                 </template>
-                <remote-sql-connection :connection="connection_details" />
+
+                <div class="py-5">
+                    <remote-sql-connection :connection="connection_details" />
+                </div>
 
                 <div v-if="error_html" class="form-group">
                     <el-alert
@@ -58,8 +70,12 @@
                     </el-alert>
                 </div>
 
-                <div style="text-align: right" class="form-group">
-                    <el-button v-loading="loading" @click="updateSql()" size="small" type="primary">Update SQL Connection Details</el-button>
+                <div class="form-group flex justify-end">
+                    <NinjaButton
+                        :btn-text="$t('Update SQL Connection')"
+                        v-loading="loading"
+                        @click="updateSql()"
+                    />
                 </div>
             </el-collapse-item>
         </el-collapse>
@@ -69,10 +85,12 @@
 <script>
     import AceCodeEditor from '../../../common/_ace_editor';
     import RemoteSqlConnection from './_RemoteSQLConnection';
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
     export default {
         name: "RowSQLNav",
         components: {
+            NinjaButton,
             AceCodeEditor,
             RemoteSqlConnection
         },

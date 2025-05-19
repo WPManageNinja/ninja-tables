@@ -107,6 +107,10 @@
   }
 }
 
+.nt-table-edit-nav {
+  margin: 24px 14px 0 10px;
+}
+
 // Pagination styles
 .ninja-pagination-wrapper {
   display: flex;
@@ -189,6 +193,10 @@
   border: 1px solid #D6DAE1;
   border-radius: 8px;
   background: #F9FAFB;
+}
+
+.nt-code {
+  @apply bg-[#D3DCFF] py-[2px] px-[6px] rounded cursor-pointer;
 }
 
 .copy_shortcode {
@@ -302,6 +310,7 @@
     }
   }
 }
+
 .nt-modal-title {
   color: #0E121B;
   font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
@@ -360,6 +369,22 @@
   border-radius: 12px;
   border: 1px solid #E1E4EA;
   margin-top: 5px;
+}
+.nt-instruction {
+  padding: 10px 15px;
+  background: #EBF1FF;
+  margin-top: 20px;
+  border-radius: 12px;
+
+  ul {
+    margin-left: 30px;
+    list-style: disc;
+    font-size: 110%;
+  }
+
+  p {
+    margin: 3px 0;
+  }
 }
 
 
@@ -1977,12 +2002,12 @@ h2.nav-tab-wrapper {
   }
 }
 
-.table-rows {
-  .tablenav {
-    margin-bottom: 15px;
-  }
-
-}
+//.table-rows {
+//  .tablenav {
+//    margin-bottom: 15px;
+//  }
+//
+//}
 
 .ninja_tables_wpposts {
   .el-transfer {

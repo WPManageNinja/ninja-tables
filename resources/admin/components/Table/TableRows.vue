@@ -1,7 +1,7 @@
 <template>
     <div class="table-rows">
         <template v-if="!isEditable">
-            <div v-if="dataSourceType == 'fluent-form'" class="tablenav top">
+            <div v-if="dataSourceType === 'fluent-form'" class="nt-table-edit-nav">
                 <fluent-form-nav
                     :config="config"
                     :model="new_column"
@@ -10,13 +10,14 @@
                     :tableCreated="reloadSettingsAndData"
                 />
             </div>
-            <div v-else-if="dataSourceType.indexOf('csv') != -1" class="tablenav top">
-                <external-source-nav :is-editable-message="isEditableMessage"
-                                     :loading="syncing"
-                                     :config="config"
-                                     :hasPro="has_pro"
-                                     v-model="externalDataSourceUrl"
-                                     :tableCreated="reloadSettingsAndData"
+            <div v-else-if="dataSourceType.indexOf('csv') !== -1" class="nt-table-edit-nav">
+                <external-source-nav
+                    :is-editable-message="isEditableMessage"
+                    :loading="syncing"
+                    :config="config"
+                    :hasPro="has_pro"
+                    v-model="externalDataSourceUrl"
+                    :tableCreated="reloadSettingsAndData"
                 />
             </div>
 
@@ -31,18 +32,19 @@
                 />
             </div>
 
-            <div v-else-if="dataSourceType == 'raw_sql'" class="tablenav top">
-                <raw-sql-nav :is-editable-message="isEditableMessage"
-                             :loading="syncing"
-                             :config="config"
-                             :column_count="columns.length"
-                             :hasPro="has_pro"
-                             :tableCreated="reloadSettingsAndData"
+            <div v-else-if="dataSourceType === 'raw_sql'" class="nt-table-edit-nav">
+                <raw-sql-nav
+                    :is-editable-message="isEditableMessage"
+                    :loading="syncing"
+                    :config="config"
+                    :column_count="columns.length"
+                    :hasPro="has_pro"
+                    :tableCreated="reloadSettingsAndData"
                 />
             </div>
 
-            <div v-else-if="dataSourceType == 'wp_woo'" class="tablenav top">
-                <div class="woo_data_source_config">
+            <div v-else-if="dataSourceType === 'wp_woo'" class="nt-table-edit-nav">
+                <div>
                     <woo-nav-edit
                         :model="new_column"
                         :config="config"

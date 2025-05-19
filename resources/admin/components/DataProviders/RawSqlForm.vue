@@ -30,10 +30,6 @@
             <div class="my-[30px]">
                 <div class="nt-form-group">
                     <label class="nt-form-label">{{ $t('Table Title') }}</label>
-<!--                    <input v-model="post_title"-->
-<!--                           type="text" id="name" class="form-control"-->
-<!--                           placeholder="Enter a title to identify your table"-->
-<!--                    >-->
                     <NinjaInput
                         v-model="post_title"
                         :placeholder="$t('Enter a title to identify your table')"
@@ -55,8 +51,8 @@
                     </el-alert>
                 </div>
 
-                <div class="nt-form-group mt-4">
-                    <label class="nt-form-label">{{ $t('SQL Connection Type') }}</label>
+                <div class="nt-form-group mt-4 flex flex-col">
+                    <label class="nt-form-label mb-2">{{ $t('SQL Connection Type:') }}</label>
                     <el-radio-group v-model="connection_type" class="ninja_tables_radio_group">
                         <el-radio border value="local" label="Default WP SQL Table" class="mr-2"/>
                         <el-radio border value="external" label="Remote/External SQL" />
