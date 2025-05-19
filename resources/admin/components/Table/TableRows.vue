@@ -1,7 +1,7 @@
 <template>
     <div class="table-rows">
         <template v-if="!isEditable">
-            <div v-if="dataSourceType == 'fluent-form'" class="tablenav top">
+            <div v-if="dataSourceType === 'fluent-form'" class="nt-table-edit-nav">
                 <fluent-form-nav
                     :config="config"
                     :model="new_column"

@@ -107,6 +107,10 @@
   }
 }
 
+.nt-table-edit-nav {
+  margin: 24px 14px 0 10px;
+}
+
 // Pagination styles
 .ninja-pagination-wrapper {
   display: flex;
@@ -302,6 +306,7 @@
     }
   }
 }
+
 .nt-modal-title {
   color: #0E121B;
   font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
@@ -1977,12 +1982,12 @@ h2.nav-tab-wrapper {
   }
 }
 
-.table-rows {
-  .tablenav {
-    margin-bottom: 15px;
-  }
-
-}
+//.table-rows {
+//  .tablenav {
+//    margin-bottom: 15px;
+//  }
+//
+//}
 
 .ninja_tables_wpposts {
   .el-transfer {

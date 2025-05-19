@@ -279,6 +279,12 @@
         border-color: #335cff;
       }
     }
+    .is-indeterminate {
+      .el-checkbox__inner {
+        background: #335cff;
+        border-color: #335cff;
+      }
+    }
   }
 
   .el-switch {

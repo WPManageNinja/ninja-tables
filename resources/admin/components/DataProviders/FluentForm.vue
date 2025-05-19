@@ -12,7 +12,7 @@
                 </a>
             </p>
 
-            <div class="my-[30px]">
+            <div :class="!editing ? 'my-[30px]' : 'my-[20px]'">
                 <div class="nt-form-group" v-if="!editing">
                     <label for="name" class="nt-form-label">{{ $t('Table Title') }}</label>
                     <NinjaInput
@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="my-4">
-                    <p class="mb-2"><strong>Options (Optional)</strong></p>
+                    <p class="mb-2"><strong>{{ $t('Options (Optional)') }}</strong></p>
                     <hr>
                 </div>
 
@@ -108,7 +108,7 @@
                     </div>
                 </div>
 
-                <div class="nt-form-group">
+                <div class="nt-form-group mt-4">
                     <template v-if="config && config.table">
                         <el-checkbox
                             :true-value="'yes'"
@@ -121,10 +121,15 @@
                 </div>
             </div>
 
-            <div class="nt-modal-footer">
-                <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
-                <NinjaButton v-if="editing"  @click="save" :btnText="$t('Update')"/>
-                <NinjaButton v-else  @click="save" :btnText="$t('Save')" />
+            <div class="flex justify-between">
+                <div>
+<!--                    Empty div for maintain spacing in both edit & create-->
+                </div>
+               <div class="flex items-center gap-2">
+                   <NinjaButton v-if="!editing" type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
+                   <NinjaButton v-if="editing"  @click="save" :btnText="$t('Update')"/>
+                   <NinjaButton v-else  @click="save" :btnText="$t('Save')" />
+               </div>
             </div>
         </template>
 
