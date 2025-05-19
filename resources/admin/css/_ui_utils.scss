@@ -407,6 +407,23 @@
     z-index: 999 !important;
   }
 
+  .el-input {
+    .el-input__wrapper {
+      @apply border border-[#E1E4EA] rounded-[10px];
+
+      &:focus {
+        @apply border-[#409EFF] shadow-none;
+      }
+
+      .el-input__inner {
+        @apply border-none;
+        &:focus {
+          @apply border-none shadow-none;
+        }
+      }
+    }
+  }
+
   .nt-input-append {
     .el-input__wrapper {
       border-radius: 7px 0 0 7px !important;

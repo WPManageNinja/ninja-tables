@@ -90,7 +90,7 @@
 
 
 <!--  for table edit nav -->
-        <template v-else>
+        <div v-else class="mt-5">
             <div class="nt-checkbox-group-wrapper">
                 <div class="nt-checkbox-group-header"
                      style="border-bottom: 1px solid #E1E4EA">
@@ -116,7 +116,7 @@
                     </el-checkbox-group>
                 </div>
             </div>
-        </template>
+        </div>
 
         <template v-if="!hasPro">
             <premium-notice/>
@@ -137,33 +137,33 @@
             </div>
         </div>
 
-        <div style="margin-top: 15px;" v-if="editing">
-            <el-input
-                placeholder="Remote URL..."
-                v-model="table.remoteURL"
-                @keyup.enter="fatchRemoteData"
-            >
-                <template #prepend>
-                    <el-button
-                        :loading="fetching"
-                        @click="fatchRemoteData"
-                        size="default"
-                        :plain="true"
-                    >{{ $t('Fetch Columns') }}
-                    </el-button>
-                </template>
+        <div v-if="editing" class="mt-5 mb-2">
 
-                <template #append>
-                    <el-button
-                        :loading="saving"
-                        @click="save"
-                        size="default"
-                        :plain="true"
-                        type="primary"
-                    >{{ $t('Update Settings') }}
-                    </el-button>
-                </template>
-            </el-input>
+            <div class="flex gap-5">
+                <el-input
+                    size="small"
+                    :placeholder="$t('Remote URL...')"
+                    v-model="table.remoteURL"
+                    @keyup.enter="fatchRemoteData"
+                >
+                    <template #suffix>
+                        <NinjaButton
+                            size="small"
+                            :btn-text="$t('Fetch Columns')"
+                            :icon="assetUrl('icons/refresh.svg')"
+                            :loading="fetching"
+                            @click="fatchRemoteData"
+                            type="secondary"
+                            />
+                    </template>
+                </el-input>
+
+                <NinjaButton
+                    :loading="saving"
+                    @click="save"
+                    :btn-text="$t('Update')"
+                />
+            </div>
         </div>
     </div>
 </template>
@@ -173,6 +173,7 @@
     import UpgradeNotice from '../includes/UpgradeNotice';
     import NinjaInput from "../../@ui-utils/NinjaInput.vue";
     import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+    import {assetUrl} from "../../utils/ninjatablesadmin";
 
     export default {
         name: 'Remote-Data-Source',
@@ -229,6 +230,7 @@
             }
         },
         methods: {
+            assetUrl,
             nextStep() {
                 let message = '';
                 if (!this.table.post_title) {

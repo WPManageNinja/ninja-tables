@@ -10,13 +10,14 @@
                     :tableCreated="reloadSettingsAndData"
                 />
             </div>
-            <div v-else-if="dataSourceType.indexOf('csv') != -1" class="tablenav top">
-                <external-source-nav :is-editable-message="isEditableMessage"
-                                     :loading="syncing"
-                                     :config="config"
-                                     :hasPro="has_pro"
-                                     v-model="externalDataSourceUrl"
-                                     :tableCreated="reloadSettingsAndData"
+            <div v-else-if="dataSourceType.indexOf('csv') !== -1" class="nt-table-edit-nav">
+                <external-source-nav
+                    :is-editable-message="isEditableMessage"
+                    :loading="syncing"
+                    :config="config"
+                    :hasPro="has_pro"
+                    v-model="externalDataSourceUrl"
+                    :tableCreated="reloadSettingsAndData"
                 />
             </div>
 
