@@ -138,18 +138,18 @@
                 <div class="font-[500] text-[14px] mb-3">{{ $t("Button Position In Frontend") }}</div>
                 <div class="ninja_tables_radio_group mb-3">
                     <el-radio-group v-model="table_buttons.button_position">
-                        <el-radio value="after_search_box" size="large" border>{{ $t("After Search Box") }}</el-radio>
-                        <el-radio value="before_table" size="large" border>{{ $t("Top of the Table") }}</el-radio>
-                        <el-radio value="after_table" size="large" border>{{ $t("Bottom of the Table") }}</el-radio>
+                        <el-radio v-for="(title, key) in button_positions" :key="key" :value="key" size="large" border>
+                            {{ $t(title) }}
+                        </el-radio>
                     </el-radio-group>
                 </div>
             </div>
             <div class="font-[500] text-[14px] mb-3">{{ $t("Button Alignment") }}</div>
             <div class="ninja_tables_radio_group mb-3">
                 <el-radio-group v-model="table_buttons.button_alignment">
-                    <el-radio value="ninja_buttons_left" size="large" border>{{ $t("Left") }}</el-radio>
-                    <el-radio value="ninja_buttons_center" size="large" border>{{ $t("Center") }}</el-radio>
-                    <el-radio value="ninja_buttons_right" size="large" border>{{ $t("Right") }}</el-radio>
+                    <el-radio v-for="(title, key) in buttonAlignments" :key="key" :value="key" size="large" border>
+                        {{ $t(title) }}
+                    </el-radio>
                 </el-radio-group>
             </div>
         </div>
@@ -199,8 +199,8 @@ export default {
             saving: false,
             button_positions: {
                 after_search_box: 'After Search Box',
-                before_table: 'Before of the table',
-                after_table: 'Bottom of the table',
+                before_table: 'Top of the Table',
+                after_table: 'Bottom of the Table',
             },
             buttonAlignments: {
                 'ninja_buttons_left': 'Left',

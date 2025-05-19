@@ -12,6 +12,18 @@
     @apply bg-white text-[#FB3748] border border-solid border-[#FB3748];
   }
 
+  .nt-checkbox-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+
+    .el-checkbox {
+      display: flex;
+      align-items: center;
+    }
+  }
+
   //input style
   .ninja-input-wrapper {
     position: relative;

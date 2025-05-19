@@ -21,7 +21,6 @@
                         us!</a>
                 </div>
             </div>
-            <hr class="my-4">
         </div>
         <div v-loading="checkingLicense" class="nt-license-content mt-4">
             <div class="text-[16px] font-[500] text-center text-[#0E121B] my-4" v-if="is_valid == 'valid'">
