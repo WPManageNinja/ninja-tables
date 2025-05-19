@@ -61,8 +61,16 @@
             <router-view v-if="config" :config="config" :getColumnSettings="getSettings"></router-view>
 
         </fieldset>
-        <el-dialog title="Update Table Info" v-model="editTableModalShow" top="50px" :append-to-body="true">
-            <edit_table v-if="editTableModalShow" :table="table"
+        <el-dialog
+            class="ninja_create-table-modal"
+            title="Update Table Info"
+            v-model="editTableModalShow"
+            top="50px"
+            :append-to-body="true"
+        >
+            <edit_table
+                v-if="editTableModalShow"
+                :table="table"
                 @modal_close="editTableModalShow = !editTableModalShow"></edit_table>
         </el-dialog>
     </div>
