@@ -21,15 +21,21 @@
         <template v-for="(condition, i) in metas">
             <el-row :gutter="20">
                 <el-col :md="7" :sm="7">
-                    <el-input
-                        placeholder="Meta Key"
-                        v-model="condition.field"
-                        @change="setOperators($event, condition)"
-                    ></el-input>
+<!--                    <el-input-->
+<!--                        placeholder="Meta Key"-->
+<!--                        v-model="condition.field"-->
+<!--                        @change="setOperators($event, condition)"-->
+<!--                    ></el-input>-->
+
+                     <NinjaInput
+                         :placeholder="$t('Meta Key')"
+                         v-model="condition.field"
+                         @change="setOperators($event, condition)"
+                     />
                 </el-col>
 
                 <el-col :md="7" :sm="7">
-                    <el-select v-model="condition.operator" placeholder="Select">
+                    <el-select class="ninja-select" v-model="condition.operator" :placeholder="$t('Select')">
                         <el-option
                             v-for="operator in condition.operators"
                             :key="operator.key"
@@ -40,10 +46,10 @@
                 </el-col>
 
                 <el-col :md="7" :sm="7">
-                    <el-input
-                        placeholder="Value"
+                    <NinjaInput
+                        :placeholder="$t('Value')"
                         v-model="condition.value"
-                    ></el-input>
+                    />
 
                     <template v-if="shouldShowInfo(condition.operator)">
                         <el-alert
@@ -67,10 +73,12 @@
 
 <script>
 import {Delete, Plus} from "@element-plus/icons-vue";
+import NinjaInput from "../../@ui-utils/NinjaInput.vue";
     export default {
         name: 'WPPostMetaQuery',
         props: ['metas'],
         components: {
+            NinjaInput,
             Delete,
             Plus
         },

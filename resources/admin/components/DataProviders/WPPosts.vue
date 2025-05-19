@@ -84,37 +84,35 @@
                 </div>
             </div>
 
-            <template v-if="hasPLainLayout">
-                <div class="p-4 m-4 border-gray-700 rounded-[12px] w-full">
-                    <strong>Test: Has Pain Layout</strong>
-                    <p>From WPPosts.vue line 97, remove from here</p>
-                </div>
-                <el-row>
-                    <el-col :md="12" class="table-rows">
+            <div v-if="hasPLainLayout">
+                <div class="w-full flex flex-wrap gap-4 justify-center ">
+                    <div class="text-center">
                         <el-transfer
+                            filterable
                             :data="post_types"
                             v-model="selected_post_types"
                             :titles="['All Types', 'Selected Types']"
-                            style="text-align: left; display: block"
                             @change="handlePostTypeChange">
                         </el-transfer>
-                    </el-col>
-                    <el-col :md="12" class="table-rows">
+                    </div>
+
+                    <div class="text-center">
                         <el-transfer
+                            filterable
                             :data="post_types_fields"
                             v-model="selected_post_types_fields"
                             :titles="['All Properties', 'Selected Properties']"
-                            style="text-align: left; display: block">
+                            >
                         </el-transfer>
-                    </el-col>
-                </el-row>
+                    </div>
+                </div>
 
-                <el-row v-if="!loading">
-                    <el-collapse class="nt_conditions" v-model="conditions_section">
+                <div v-if="!loading" class="my-5">
+                    <el-collapse class="nt-post-edit-accordion" v-model="conditions_section">
                         <el-collapse-item name="1">
-                          <el-checkbox v-model="currentUserPosts">Logged in user posts</el-checkbox>
+                          <el-checkbox v-model="currentUserPosts" class="mt-5">{{$t('Logged in user posts')}}</el-checkbox>
                             <template #title>
-                                <h4 class="no-margin">Conditions</h4>
+                                <h4 class="no-margin">{{$t('Conditions')}}</h4>
                             </template>
                             <WPPostConditions
                                 :config="config"
@@ -126,10 +124,10 @@
                         </el-collapse-item>
                     </el-collapse>
 
-                    <el-collapse class="nt_conditions" v-model="meta_query">
+                    <el-collapse class="nt-post-edit-accordion mt-4" v-model="meta_query">
                         <el-collapse-item name="1">
                             <template #title>
-                                <h4 class="no-margin">Meta Query</h4>
+                                <h4 class="no-margin">{{$t('Meta Query')}}</h4>
                             </template>
 
                             <wp-post-meta-query
@@ -139,18 +137,16 @@
                             />
                         </el-collapse-item>
                     </el-collapse>
-                </el-row>
+                </div>
 
-                <el-row>
-                    <el-button
-                        type="success"
-                        size="small"
+                <div class="flex justify-end">
+                    <NinjaButton
                         :loading="saving"
-                        style="float:right;margin-top:12px;"
-                        @click="save">Update
-                    </el-button>
-                </el-row>
-            </template>
+                        @click="save"
+                        :btn-text="$t('Update')"
+                    />
+                </div>
+            </div>
         </div>
     </div>
 </template>
