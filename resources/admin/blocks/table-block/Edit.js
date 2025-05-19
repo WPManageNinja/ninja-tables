@@ -49,8 +49,8 @@ export default function Edit(props) {
         {...defaultSettings, ...tableConfig.settings} :
         defaultSettings;
 
-    useEffect(async () => {
-        await loadRequiredScripts(setScriptLoaded);
+    useEffect( () => {
+        loadRequiredScripts(setScriptLoaded);
     }, []);
 
     useEffect(() => {
