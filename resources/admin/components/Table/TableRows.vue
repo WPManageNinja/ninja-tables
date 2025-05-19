@@ -32,13 +32,14 @@
                 />
             </div>
 
-            <div v-else-if="dataSourceType == 'raw_sql'" class="tablenav top">
-                <raw-sql-nav :is-editable-message="isEditableMessage"
-                             :loading="syncing"
-                             :config="config"
-                             :column_count="columns.length"
-                             :hasPro="has_pro"
-                             :tableCreated="reloadSettingsAndData"
+            <div v-else-if="dataSourceType === 'raw_sql'" class="nt-table-edit-nav">
+                <raw-sql-nav
+                    :is-editable-message="isEditableMessage"
+                    :loading="syncing"
+                    :config="config"
+                    :column_count="columns.length"
+                    :hasPro="has_pro"
+                    :tableCreated="reloadSettingsAndData"
                 />
             </div>
 

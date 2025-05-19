@@ -195,6 +195,10 @@
   background: #F9FAFB;
 }
 
+.nt-code {
+  @apply bg-[#D3DCFF] py-[2px] px-[6px] rounded cursor-pointer;
+}
+
 .copy_shortcode {
   code {
     display: flex;
