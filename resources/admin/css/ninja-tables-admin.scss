@@ -370,6 +370,22 @@
   border: 1px solid #E1E4EA;
   margin-top: 5px;
 }
+.nt-instruction {
+  padding: 10px 15px;
+  background: #EBF1FF;
+  margin-top: 20px;
+  border-radius: 12px;
+
+  ul {
+    margin-left: 30px;
+    list-style: disc;
+    font-size: 110%;
+  }
+
+  p {
+    margin: 3px 0;
+  }
+}
 
 
 /*!=== old css ===*/

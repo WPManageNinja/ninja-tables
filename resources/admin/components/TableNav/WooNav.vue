@@ -17,7 +17,7 @@
                 Hide <b>out of stocks</b> items
             </el-checkbox>
         </div>
-        <div class="nt_each_selection">
+        <div class="nt_each_selection mt-4">
             <label class="nt-form-label mb-2">Initial Order By</label>
             <div class="flex justify-start items-center gap-4">
                 <el-select

@@ -43,8 +43,8 @@
                 />
             </div>
 
-            <div v-else-if="dataSourceType == 'wp_woo'" class="tablenav top">
-                <div class="woo_data_source_config">
+            <div v-else-if="dataSourceType === 'wp_woo'" class="nt-table-edit-nav">
+                <div>
                     <woo-nav-edit
                         :model="new_column"
                         :config="config"
