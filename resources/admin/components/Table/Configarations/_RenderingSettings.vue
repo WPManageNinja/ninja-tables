@@ -79,7 +79,7 @@
                             <p v-if="tableSettings.caching_interval > 60">Current Caching Interval:
                                 <b>{{ (tableSettings.caching_interval / 60).toFixed(2) }} hours</b></p>
                         </div>
-                        <hr v-if="tableSettings.enable_html_cache === 'yes'" class="mt-3">
+                        <hr v-if="tableSettings.enable_html_cache === 'yes' && tableSettings.shouldNotCache != 'yes'" class="mt-3">
 
 
                         <div class="my-4 w-1/2"

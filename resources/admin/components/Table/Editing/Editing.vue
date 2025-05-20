@@ -38,7 +38,7 @@
                         </div>
                     </template>
                     <div class="my-5">
-                        <div class="text-[18px] text-[500] my-2">{{$t("User Roles and Data Editing Permissions") }}
+                        <div class="text-[18px] text-[500] my-2">{{ $t("User Roles and Data Editing Permissions") }}
                         </div>
                         <div class="mb-3 text-[14px]">
                             {{
@@ -46,28 +46,70 @@
                             }}
                         </div>
 
-                        <div class="flex items-center">
-                            <div class="">
-                                <div class="text-[18px] text-[500] my-2">{{ $t("User Roles for Edit/Add Table Rows") }}</div>
-                                <el-checkbox-group v-model="settings.user_roles_editing">
-                                    <el-checkbox
-                                        v-for="(role, role_key) in editing_user_roles"
-                                        :key="role_key"
-                                        :label="role"
-                                        :value="role_key"
-                                    />
-                                </el-checkbox-group>
+                        <div class="flex items-center gap-6">
+                            <div class="mr-4 w-1/2">
+                                <div class="border border-solid border-[#E1E4EA] rounded-[8px] mb-4">
+                                    <div class="bg-[#F9FAFB] flex justify-between items-center px-4 py-2 rounded-t-[8px]"
+                                         style="border-bottom: 1px solid #E1E4EA">
+                                        <div>{{ $t('User Roles for Edit/Add Table Rows') }}</div>
+                                        <div>
+                                            <el-checkbox
+                                                v-model="editRolesCheckAll"
+                                                :indeterminate="editRolesIndeterminate"
+                                                @change="handleEditRolesCheckAllChange"
+                                            >
+                                                {{ $t('Select All') }}
+                                            </el-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <el-checkbox-group 
+                                            v-model="settings.user_roles_editing"
+                                            @change="handleEditRolesChange"
+                                            class="nt-checkbox-group">
+                                            <el-checkbox
+                                                v-for="(role, role_key) in editing_user_roles"
+                                                :key="role_key"
+                                                :value="role_key"
+                                                style="font-weight: 300"
+                                            >
+                                                {{ role }}
+                                            </el-checkbox>
+                                        </el-checkbox-group>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="">
-                                <div class="text-[18px] text-[500] my-2">{{ $t("User Roles for Deleting Table Rows") }}</div>
-                                <el-checkbox-group v-model="settings.user_roles_deleting">
-                                    <el-checkbox
-                                        v-for="(role, role_key) in user_roles"
-                                        :key="role_key"
-                                        :label="role"
-                                        :value="role_key"
-                                    />
-                                </el-checkbox-group>
+                            <div class="w-1/2">
+                                <div class="border border-solid border-[#E1E4EA] rounded-[8px] mb-4">
+                                    <div class="bg-[#F9FAFB] flex justify-between items-center px-4 py-2 rounded-t-[8px]"
+                                         style="border-bottom: 1px solid #E1E4EA">
+                                        <div>{{ $t('User Roles for Deleting Table Rows') }}</div>
+                                        <div>
+                                            <el-checkbox
+                                                v-model="deleteRolesCheckAll"
+                                                :indeterminate="deleteRolesIndeterminate"
+                                                @change="handleDeleteRolesCheckAllChange"
+                                            >
+                                                {{ $t('Select All') }}
+                                            </el-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <el-checkbox-group 
+                                            v-model="settings.user_roles_deleting"
+                                            @change="handleDeleteRolesChange"
+                                            class="nt-checkbox-group">
+                                            <el-checkbox
+                                                v-for="(role, role_key) in user_roles"
+                                                :key="role_key"
+                                                :value="role_key"
+                                                style="font-weight: 300"
+                                            >
+                                                {{ role }}
+                                            </el-checkbox>
+                                        </el-checkbox-group>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -82,7 +124,10 @@
                         </div>
 
                         <div class="mb-5">
-                            <div class="text-[18px] text-[500] my-2">{{$t("User Roles and Data Editing Permissions") }}</div>
+                            <div class="text-[18px] text-[500] my-2">{{
+                                    $t("User Roles and Data Editing Permissions")
+                                }}
+                            </div>
                             <div class="mb-3 text-[14px] font-[400]">
                                 {{
                                     $t("Please Specify which columns can be editable from front-end and also, You can specify which columns will be required")
@@ -122,7 +167,9 @@
 
                             <div>
                                 <div class="text-[18px] text-[500] my-2">{{ $t('Appearance Settings') }}</div>
-                                <div class="mb-3 text-[14px] font-[400]">{{ $t("You can set the Editing Component Labels and Appearances") }}</div>
+                                <div class="mb-3 text-[14px] font-[400]">
+                                    {{ $t("You can set the Editing Component Labels and Appearances") }}
+                                </div>
                                 <div>
                                     <div class="mb-4 text-[14px]">
                                         <el-checkbox
@@ -167,7 +214,7 @@
                                     </div>
                                 </div>
 
-                                <div class="text-[18px] text-[500] my-2">{{$t("Set your action icon position") }}</div>
+                                <div class="text-[18px] text-[500] my-2">{{ $t("Set your action icon position") }}</div>
                                 <div class="ninja_tables_radio_group my-2">
                                     <el-radio-group border v-model="appearance_settings.position">
                                         <el-radio border value="left">{{ $t('Left') }}</el-radio>
@@ -221,6 +268,10 @@ export default {
             hasPro: !!window.ninja_table_admin.hasPro,
             isActivated: !!window.ninja_table_admin.activated_features.ninja_table_front_editor,
             activeCollapse: [],
+            editRolesCheckAll: false,
+            editRolesIndeterminate: false,
+            deleteRolesCheckAll: false,
+            deleteRolesIndeterminate: false,
         }
     },
     methods: {
@@ -232,6 +283,19 @@ export default {
                 columns.forEach(column => {
                     target[column.key] = 'no';
                 });
+            }
+        },
+        initializeSettings() {
+            if (Object.keys(this.editing_items).length === 0) {
+                this.initializeFlags(this.editing_items, this.columns);
+            }
+
+            if (Object.keys(this.required_items).length === 0) {
+                this.initializeFlags(this.required_items, this.columns);
+            }
+
+            if (this.appearance_settings && !this.appearance_settings.position) {
+                this.appearance_settings.position = 'right';
             }
         },
         getEditSettings() {
@@ -253,11 +317,7 @@ export default {
                     this.default_values = response.data.editor_pref.default_values;
                     this.appearance_settings = response.data.editor_pref.appearance_settings;
 
-                    if (Object.keys(this.editing_items).length === 0) {
-                        this.initializeFlags(this.editing_items, this.columns);
-                    } else if (Object.keys(this.required_items).length === 0) {
-                        this.initializeFlags(this.required_items, this.columns);
-                    }
+                    this.initializeSettings();
                 })
                 .fail(error => {
 
@@ -300,7 +360,25 @@ export default {
                 .always(() => {
                     this.saving = false;
                 });
-        }
+        },
+        handleEditRolesCheckAllChange(val) {
+            this.settings.user_roles_editing = val ? Object.keys(this.editing_user_roles) : [];
+            this.editRolesIndeterminate = false;
+        },
+        handleEditRolesChange(value) {
+            let checkedCount = value.length;
+            this.editRolesCheckAll = checkedCount === Object.keys(this.editing_user_roles).length;
+            this.editRolesIndeterminate = checkedCount > 0 && checkedCount < Object.keys(this.editing_user_roles).length;
+        },
+        handleDeleteRolesCheckAllChange(val) {
+            this.settings.user_roles_deleting = val ? Object.keys(this.user_roles) : [];
+            this.deleteRolesIndeterminate = false;
+        },
+        handleDeleteRolesChange(value) {
+            let checkedCount = value.length;
+            this.deleteRolesCheckAll = checkedCount === Object.keys(this.user_roles).length;
+            this.deleteRolesIndeterminate = checkedCount > 0 && checkedCount < Object.keys(this.user_roles).length;
+        },
     },
     mounted() {
         this.getEditSettings();

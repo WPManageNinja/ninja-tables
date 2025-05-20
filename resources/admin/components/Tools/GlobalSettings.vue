@@ -4,7 +4,7 @@
         <div class="text-[14px] font-[400] text-[#0E121B] my-5">
             {{ $t('You can configure global settings for Ninja Tables here. This settings will apply to all the tables.') }}
         </div>
-        <div class="nt-global-settings-content">
+        <div class="nt-global-settings-content" v-loading="loading">
             <div class="text-[16px] font-[500] text-[#3C434A]">{{ $t('Global Javascript Error Handling') }}</div>
             <div class="ninja_tables_radio_group my-3">
                 <el-radio-group v-model="ninja_suppress_error">
@@ -13,7 +13,6 @@
                         <el-radio :value="'yes'"  border>Handle Error But don't Log</el-radio>
                         <el-radio :value="'no'" border>Don't Handle Global Javascript Errors (Default)</el-radio>
                     </el-space>
-
                 </el-radio-group>
                 <NinjaButton class="my-3" type="primary" @click="storeSettings" size="small" :btn-text="$t('Update Global Settings')"/>
             </div>
@@ -43,8 +42,8 @@
         components: {NinjaButton},
         data() {
             return {
-                loading: false,
-                ninja_suppress_error: 'log_silently'
+                loading: true,
+                ninja_suppress_error: ''
             };
         },
         methods: {
@@ -55,8 +54,12 @@
                     .then(response => {
                         this.ninja_suppress_error = response.data.ninja_suppress_error ?? 'log_silently';
                     })
-                    .catch(error => {})
-              this.loading = false;
+                    .catch(error => {
+                        // Handle error if needed
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
             },
             storeSettings() {
                 this.$post('tables/tools/global-settings', {
