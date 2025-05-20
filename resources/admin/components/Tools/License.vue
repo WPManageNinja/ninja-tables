@@ -2,7 +2,7 @@
     <div class="nt-table-license-content">
         <div class="nt-license-header">
             <div class="text-[18px] font-[600] text-[#0E121B]" v-if="is_valid == 'valid'">
-                {{ $t('CSV Export / Print Button Settings for Frontend') }}
+                {{ $t('Your License is Active') }}
             </div>
             <div class="text-[18px] font-[600] text-[#0E121B]" v-loading="checkingLicense"
                  v-else-if="is_valid == 'expired'">
@@ -10,7 +10,7 @@
             </div>
             <div v-else>
                 <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Licensing') }}</div>
-                <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
+                <div class="text-[14px] font-[400] text-[#0E121B] my-5">
                     {{
                         $t(`You need to activate your Ninja Table Pro by providing the license key below. If you don't have a license key please`)
                     }}
@@ -21,7 +21,6 @@
                         us!</a>
                 </div>
             </div>
-            <hr class="my-4">
         </div>
         <div v-loading="checkingLicense" class="nt-license-content mt-4">
             <div class="text-[16px] font-[500] text-center text-[#0E121B] my-4" v-if="is_valid == 'valid'">

@@ -4,14 +4,14 @@
             <div class="text-[18px] font-[600] text-[#0E121B]">
                 {{ $t('Permission') }} <span v-show="!hasPro">(Pro Feature)</span>
             </div>
-            <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
+            <div class="text-[14px] font-[400] text-[#0E121B] my-5">
                     {{$t(`By default, Only Administrator have access to manage the tables. By selecting additional roles bellow, You can give access to manage your Tables to other user roles.`) }}
             </div>
         </div>
 
         <div class="nt-permission-body">
             <div v-if="hasPro">
-                <div class="border border-solid border-[#E1E4EA] rounded-[8px] mb-4">
+                <div v-loading="fetching" class="border border-solid border-[#E1E4EA] rounded-[8px] mb-4">
                     <div class="bg-[#F9FAFB] flex justify-between items-center px-4 py-2 rounded-t-[8px]"
                          style="border-bottom: 1px solid #E1E4EA">
                         <div>Select</div>
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="p-4">
-                        <el-checkbox-group v-model="capability" @change="handleCheckedCapabilitiesChange">
+                        <el-checkbox-group v-model="capability" @change="handleCheckedCapabilitiesChange" class="nt-checkbox-group">
                             <el-checkbox style="font-weight: 300" v-for="role in roles" :key="role.key" :value="role.key">
                                 {{ role.name }}
                             </el-checkbox>
@@ -62,7 +62,7 @@
       data() {
             return {
                 hasPro: window.ninja_table_admin.hasPro === true || window.ninja_table_admin.hasPro === '1',
-                fetching: false,
+                fetching: true,
                 roles: [],
                 checkAll: false,
                 sql_permission: 'no',
@@ -82,7 +82,9 @@
                         this.handleCheckedCapabilitiesChange(this.capability);
                     })
                     .catch(e => {})
-                this.fetching = false;
+                    .finally(() => {
+                        this.fetching = false;
+                    });
             },
             store() {
                 let data = {
