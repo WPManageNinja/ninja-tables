@@ -224,6 +224,11 @@
   }
 
   .nt_tab_design {
+    border: 1px solid #E1E4EA;
+    border-radius: 8px;
+    .el-tabs__nav-wrap{
+      border-radius: 8px 8px 0 0;
+    }
     .el-tabs__header .is-top {
       color: #525866;
       font-weight: 500;
@@ -244,6 +249,24 @@
     }
     .el-tabs__header{
       margin: 0;
+    }
+  }
+
+  .nt_tab_design_drag{
+    .el-tabs__item{
+      padding: 0 8px;
+    }
+    .el-tabs__nav-scroll{
+      background: white;
+    }
+  }
+
+  .nt_slider_input{
+    .el-slider__bar{
+      background: #335cff;
+    }
+    .el-slider__button{
+      border-color: #335cff;
     }
   }
 

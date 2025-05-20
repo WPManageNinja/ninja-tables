@@ -2,7 +2,7 @@
     <button
         :disabled="disabled"
         :loading="loading"
-        class="ninja-button flex items-center"
+        class="ninja-button flex items-center justify-center"
         :class="{
             'ninja-button--primary': type === 'primary',
             'ninja-button--secondary': type === 'secondary',
@@ -11,7 +11,10 @@
         }"
     >
         <img v-if="icon" :src="icon" class="mr-1" />
-        {{ btnText }}
+        <template v-if="btnText">
+            {{ btnText }}
+        </template>
+        <slot v-else></slot>
     </button>
 </template>
 
@@ -41,7 +44,7 @@ export default {
         },
         btnText: {
             type: String,
-            default: 'Submit',
+            default: '',
         }
     }
 };

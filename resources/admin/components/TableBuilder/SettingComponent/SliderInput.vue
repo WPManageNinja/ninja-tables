@@ -10,6 +10,7 @@
             </el-icon>
         </el-tooltip>
         <el-slider
+            class="nt_slider_input"
             :model-value="mainValue"
             :max="maxValue"
             :min="minValue"
