@@ -12,18 +12,6 @@
     @apply bg-white text-[#FB3748] border border-solid border-[#FB3748];
   }
 
-  .nt-checkbox-group {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 4px;
-
-    .el-checkbox {
-      display: flex;
-      align-items: center;
-    }
-  }
-
   //input style
   .ninja-input-wrapper {
     position: relative;
@@ -306,9 +294,6 @@
 
   .el-checkbox-group, .el-checkbox,
   .el-checkbox {
-    display: flex !important;
-    align-items: center;
-
     &.is-checked {
       .el-checkbox__label {
         color: #335cff;
@@ -331,6 +316,18 @@
       .el-checkbox__inner {
         border-radius: 4px !important;
       }
+    }
+  }
+
+  .nt-checkbox-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+
+    .el-checkbox {
+      display: flex;
+      align-items: center;
     }
   }
 
