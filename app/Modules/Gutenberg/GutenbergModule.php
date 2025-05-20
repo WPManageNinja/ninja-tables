@@ -105,8 +105,12 @@ class GutenbergModule
 
         $blocks = parse_blocks($post->post_content);
 
+        if (!is_array($blocks) || empty($blocks)) {
+            return;
+        }
+
         foreach ($blocks as $block) {
-            if (isset($block['blockName']) && $block['blockName'] === 'ninja-tables/guten-block') {
+            if (isset($block['blockName']) && isset($block['attrs']) && $block['blockName'] === 'ninja-tables/guten-block') {
                 $this->updateTableSettings($block['attrs']);
             }
         }
