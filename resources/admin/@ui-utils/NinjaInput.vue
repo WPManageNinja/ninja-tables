@@ -104,6 +104,7 @@ export default {
       font-size: 14px;
       color: #606266;
       background: transparent;
+      box-shadow: none;
     }
 
     .ninja-input--large {

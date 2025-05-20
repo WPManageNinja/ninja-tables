@@ -161,9 +161,11 @@
                 a responsive, customizable, drag and drop form. Using this module, You can easily show your form entries
                 in Ninja Tables.
             </p>
-            <div>
-                <el-button v-loading="installing" @click="installFluentFrom" type="success"><span v-if="installing">Installing WP Fluent From...</span><span
-                        v-else>Install Fluent Form Now</span></el-button>
+            <div class="my-4">
+                <NinjaButton v-loading="installing" @click="installFluentFrom">
+                    <span v-if="installing">Installing WP Fluent From...</span><span
+                        v-else>Install Fluent Form Now</span>
+                </NinjaButton>
                 <p v-if="installing">Please wait while installing WP Fluent From</p>
             </div>
             <h4>See the form in action:</h4>
