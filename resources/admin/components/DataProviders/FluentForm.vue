@@ -12,7 +12,7 @@
                 </a>
             </p>
 
-            <div class="my-[30px]">
+            <div :class="!editing ? 'my-[30px]' : 'my-[20px]'">
                 <div class="nt-form-group" v-if="!editing">
                     <label for="name" class="nt-form-label">{{ $t('Table Title') }}</label>
                     <NinjaInput
@@ -66,36 +66,40 @@
                 </div>
 
                 <div class="my-4">
-                    <p class="mb-2"><strong>Options (Optional)</strong></p>
+                    <p class="mb-2"><strong>{{ $t('Options (Optional)') }}</strong></p>
                     <hr>
                 </div>
 
                 <div class="nt-form-group flex justify-start items-center gap-8">
-                    <div>
-                        <el-tooltip
-                            placement="right"
-                            effect="light"
-                            content="Maximum records to show in frontend, keep empty to show all."
-                        >
-                            <el-icon class="tooltip-icon-color">
-                                <InfoFilled/>
-                            </el-icon>
-                        </el-tooltip>
-                        <label class="nt-form-label">{{ $t('Max Records:') }}</label>
+                    <div class="flex flex-col">
+                        <div class="flex gap-1">
+                            <el-tooltip
+                                placement="right"
+                                effect="light"
+                                content="Maximum records to show in frontend, keep empty to show all."
+                            >
+                                <el-icon class="tooltip-icon-color">
+                                    <InfoFilled/>
+                                </el-icon>
+                            </el-tooltip>
+                            <label class="nt-form-label">{{ $t('Max Records:') }}</label>
+                        </div>
                         <NinjaInput v-model="form.entry_limit" />
                     </div>
 
-                    <div>
-                        <el-tooltip
-                            placement="right"
-                            effect="light"
-                            content="Select what type of entries you want to show from fluent form."
-                        >
-                            <el-icon class="tooltip-icon-color">
-                                <InfoFilled/>
-                            </el-icon>
-                        </el-tooltip>
-                        <label class="nt-form-label">{{ $t('Entry Type:') }}</label>
+                    <div class="flex flex-col">
+                        <div class="flex gap-1">
+                            <el-tooltip
+                                placement="right"
+                                effect="light"
+                                content="Select what type of entries you want to show from fluent form."
+                            >
+                                <el-icon class="tooltip-icon-color">
+                                    <InfoFilled/>
+                                </el-icon>
+                            </el-tooltip>
+                            <label class="nt-form-label">{{ $t('Entry Type:') }}</label>
+                        </div>
                         <el-radio-group v-model="form.entry_status" class="ninja_tables_radio_group">
                             <el-radio border value="all" :label="$t('All')" class="mr-2" />
                             <el-radio border value="read" :label="$t('Read')" class="mr-2" />
@@ -104,7 +108,7 @@
                     </div>
                 </div>
 
-                <div class="nt-form-group">
+                <div class="nt-form-group mt-4">
                     <template v-if="config && config.table">
                         <el-checkbox
                             :true-value="'yes'"
@@ -117,10 +121,15 @@
                 </div>
             </div>
 
-            <div class="nt-modal-footer">
-                <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
-                <NinjaButton v-if="editing"  @click="save" :btnText="$t('Update')"/>
-                <NinjaButton v-else  @click="save" :btnText="$t('Save')" />
+            <div class="flex justify-between">
+                <div>
+<!--                    Empty div for maintain spacing in both edit & create-->
+                </div>
+               <div class="flex items-center gap-2">
+                   <NinjaButton v-if="!editing" type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
+                   <NinjaButton v-if="editing"  @click="save" :btnText="$t('Update')"/>
+                   <NinjaButton v-else  @click="save" :btnText="$t('Save')" />
+               </div>
             </div>
         </template>
 

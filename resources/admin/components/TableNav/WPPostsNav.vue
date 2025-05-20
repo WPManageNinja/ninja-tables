@@ -1,31 +1,39 @@
 <template>
     <div class="fluent-form-nav">
-        <el-collapse v-model="activeNames">
-            <el-collapse-item title="Table Query Settings and New Column" name="1">
-                <el-tabs type="border-card">
-                    <el-tab-pane label="Table Info">
-                       <p>This table data is created from wp-posts. Use the "Query Settings" and "Add New Column" tab to customize the columns and query.</p>
-                    </el-tab-pane>
-                    <el-tab-pane label="Query Settings">
-                        <WPPosts
-                            :hasPLainLayout="true"
-                            :config="config"
-                            :tableCreated="tableCreated"
-                        />
-                    </el-tab-pane>
+        <el-collapse v-model="activeNames" class="nt_accordion_content_white">
+            <el-collapse-item :title="$t('Table Query Settings and New Column')" name="1">
 
-                    <el-tab-pane label="Add New Column">
-                        <columns-editor
-                            :model="model"
-                            :columns="config.columns"
-                            :hasPro="hasPro"
-                            :settings="config.settings"
-                            :hideCancel="true"
-                            dataSourceType="wp-posts"
-                            @add="addNewColumn()"
-                        />
-                    </el-tab-pane>
-                </el-tabs>
+                <div class="flex rounded-[8px] bg-[#F5F7FA] w-fit p-2 my-3 gap-3">
+                    <div @click="activeTab = 'table_info'" :class="`px-5 py-1 cursor-pointer ${activeTab==='table_info' ? 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300 text-[#0E121B]' : 'text-[#99A0AE]'}`">{{$t('Table Info')}}</div>
+                    <div @click="activeTab = 'query_settings'" :class="`px-5 py-1 cursor-pointer ${activeTab==='query_settings' ? 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300 text-[#0E121B]': 'text-[#99A0AE]'}`">{{$t('Query Settings')}}</div>
+                    <div @click="activeTab ='add_new_column'" :class="`px-5 py-1 cursor-pointer ${activeTab==='add_new_column' ? 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300 text-[#0E121B]':'text-[#99A0AE]'}`">{{$t('Add New Column')}}</div>
+                </div>
+
+                <div v-if="activeTab === 'table_info'">
+                    <p class="nt-instruction">{{$t('This table data is created from wp-posts. Use the "Query Settings" and "Add New Column" tab to customize the columns and query.')}}</p>
+                </div>
+
+                <div v-else-if="activeTab === 'query_settings'">
+                    <WPPosts
+                        :hasPLainLayout="true"
+                        :config="config"
+                        :tableCreated="tableCreated"
+                    />
+                </div>
+
+                <div v-else>
+                    <columns-editor
+                        :model="model"
+                        :columns="config.columns"
+                        :hasPro="hasPro"
+                        :settings="config.settings"
+                        :hideCancel="true"
+                        dataSourceType="wp-posts"
+                        @add="addNewColumn()"
+                    />
+                </div>
+
+
             </el-collapse-item>
         </el-collapse>
     </div>
@@ -57,7 +65,8 @@
         },
         data() {
             return {
-                activeNames: ['1']
+                activeNames: ['1'],
+                activeTab: 'table_info'
             }
         },
         methods: {
