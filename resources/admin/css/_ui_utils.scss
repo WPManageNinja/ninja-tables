@@ -534,4 +534,30 @@
     top: 2px;
   }
 
+  .nt-delete-confirm {
+    border-radius: 12px;
+    padding: 20px;
+
+    .el-message-box__btns {
+      .nt-delete-confirm-btn {
+        background: #335cff;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .nt-delete-cancel-btn {
+        background: #FFFFFF;
+        color: #335cff;
+        border: 1px solid #335cff;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+  }
+
 }
