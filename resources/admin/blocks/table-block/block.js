@@ -34,6 +34,10 @@ registerBlockType('ninja-tables/guten-block', {
         }
     },
 
+    supports: {
+        customClassName: false
+    },
+
     edit: Edit,
 
     save: Save
