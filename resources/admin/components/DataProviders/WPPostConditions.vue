@@ -1,6 +1,6 @@
 <template>
     <div class="wp-post-conditions-wrapper">
-        <div class="mt-4">{{$t("You can add additional conditions/where clauses here.")}}</div>
+        <div class="mt-4 nt-form-label">{{$t("You can add additional conditions/where clauses here.")}}</div>
         <div
             v-if="conditions.length === 0"
             @click="addCondition($event)"
@@ -109,8 +109,8 @@
                 <p><small>Please specify how many posts/CPTs you want to show in total, Leave blank to show all</small></p>
             </div>
 
-            <div class="ninja_form_group">
-                <label>{{ $t('Order By Column') }}
+            <div class="ninja_form_group mt-4">
+                <label class="nt-form-label">{{ $t('Order By Column') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
                         <template #content>
                             <h3>{{ $t('Order By Column') }}</h3>
@@ -130,8 +130,8 @@
                 </el-select>
             </div>
 
-            <div style="margin-top: 20px" class="ninja_form_group">
-                <label>{{ $t('Order By Type') }}
+            <div class="ninja_form_group mt-4">
+                <label class="nt-form-label">{{ $t('Order By Type') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
                         <template #content>
                             <h3>{{ $t('Order By Type') }}</h3>

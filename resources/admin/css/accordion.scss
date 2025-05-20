@@ -1,11 +1,11 @@
 .ninja-tables_rendering_accordion {
   border-left: 1px solid #E1E4EA;
   border-right: 1px solid #E1E4EA;
-  border-radius: 12px;
+  border-radius: 12px !important;
 
   .el-collapse-item {
     .el-collapse-item__header {
-      border-radius: 12px 12px 0 0;
+      border-radius: 12px 12px 0 0 !important;
       padding: 0 16px;
     }
 
@@ -17,26 +17,26 @@
     &:last-child {
       margin-bottom: 0;
 
-      .el-collapse-item__header {
-        border-radius: 12px;
+      .el-collapse-item__header:not( .is-active) {
+        border-radius: 12px !important;
         padding: 0 16px;
       }
 
       .el-collapse-item__wrap {
-        border-radius: 0 0 12px 12px;
+        border-radius: 0 0 12px 12px!important;
       }
     }
 
   }
 
-  .is-active {
-    .el-collapse-item__header {
-      border-bottom-right-radius: 0 !important;
-      border-bottom-left-radius: 0 !important;
-      border-bottom: 1px solid #E1E4EA;
-      padding: 0 16px;
-    }
-  }
+  //.is-active {
+  //  .el-collapse-item__header {
+  //    border-bottom-right-radius: 0 !important;
+  //    border-bottom-left-radius: 0 !important;
+  //    border-bottom: 1px solid #E1E4EA;
+  //    padding: 0 16px;
+  //  }
+  //}
 }
 
 .ninja-tables_edit_accordion {
@@ -167,4 +167,41 @@
         border-bottom: 1px solid #E1E4EA;
       }
     }
+}
+
+.nt-post-edit-accordion {
+  border-left: 1px solid #E1E4EA;
+  border-right: 1px solid #E1E4EA;
+  border-radius: 12px !important;
+
+  .el-collapse-item {
+    .el-collapse-item__header {
+      border-radius: 12px 12px 0 0 !important;
+      padding: 0 16px;
+    }
+
+    .el-collapse-item__wrap {
+      padding: 0 16px;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+
+      .el-collapse-item__header:not( .is-active) {
+        border-radius: 12px !important;
+        padding: 0 16px;
+      }
+
+      .el-collapse-item__wrap {
+        border-radius: 0 0 12px 12px!important;
+      }
+    }
+  }
+  .is-active {
+    .el-collapse-item__header {
+      background-color: #F9FAFB;
+      border-bottom: 1px solid #E1E4EA;
+      padding: 0 16px;
+    }
+  }
 }

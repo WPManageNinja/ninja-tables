@@ -21,7 +21,7 @@
                 />
             </div>
 
-            <div v-else-if="dataSourceType == 'wp-posts' && new_column" class="tablenav top">
+            <div v-else-if="dataSourceType === 'wp-posts' && new_column" class="nt-table-edit-nav">
                 <WPPostsNav
                     :config="config"
                     :model="new_column"

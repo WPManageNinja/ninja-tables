@@ -1,35 +1,37 @@
 <template>
-    <div class="wp-post-conditions">
-        <el-row>
-            <el-col :md="21">
-                <el-alert
-                    type="info"
-                    title=""
-                    :closable="false"
-                    description="You can add additional meta query here."
-                    show-icon>
-                </el-alert>
-            </el-col>
+    <div class="wp-post-conditions mt-5">
+        <div class="conditional-settings-header">
+            <div class="conditional-settings-title">
+                {{$t('You can add additional meta query here.')}}
+            </div>
 
-            <el-col :md="3" style="text-align:right;">
-                <el-button type="primary" @click="addCondition($event)">
-                    <el-icon><Plus /></el-icon>
-                </el-button>
-            </el-col>
-        </el-row>
+            <div
+                v-if="metas && metas.length < 1 "
+                @click="addCondition($event)"
+                class="flex items-center text-[#335CFF] cursor-pointer font-[300] mt-1"
+            >
+                <img :src="assetUrl('icons/add-line.svg')" alt="add"/> {{ $t('Add Meta Query') }}
+            </div>
+        </div>
 
-        <template v-for="(condition, i) in metas">
+
+        <div v-for="(condition, i) in metas" class="mt-2">
             <el-row :gutter="20">
                 <el-col :md="7" :sm="7">
-                    <el-input
-                        placeholder="Meta Key"
-                        v-model="condition.field"
-                        @change="setOperators($event, condition)"
-                    ></el-input>
+                     <NinjaInput
+                         :placeholder="$t('Meta Key')"
+                         v-model="condition.field"
+                         @change="setOperators($event, condition)"
+                     />
                 </el-col>
 
                 <el-col :md="7" :sm="7">
-                    <el-select v-model="condition.operator" placeholder="Select">
+                    <el-select
+                        size="small"
+                        class="ninja-select"
+                        v-model="condition.operator"
+                        :placeholder="$t('Select')"
+                    >
                         <el-option
                             v-for="operator in condition.operators"
                             :key="operator.key"
@@ -40,10 +42,10 @@
                 </el-col>
 
                 <el-col :md="7" :sm="7">
-                    <el-input
-                        placeholder="Value"
+                    <NinjaInput
+                        :placeholder="$t('Value')"
                         v-model="condition.value"
-                    ></el-input>
+                    />
 
                     <template v-if="shouldShowInfo(condition.operator)">
                         <el-alert
@@ -56,21 +58,31 @@
                 </el-col>
 
                 <el-col :md="3" :sm="3" style="text-align:right;">
-                    <el-button type="danger" @click="removeCondition(i, $event)">
-                        <el-icon><Delete /></el-icon>
-                    </el-button>
+                    <div class="flex items-center justify-center">
+                        <div @click="addCondition($event)"
+                             class="mr-3 cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                            <img :src="assetUrl('icons/add-01.svg')" alt="add"/>
+                        </div>
+                        <div @click="removeCondition(i, $event)"
+                             class="mr-3 cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                            <img :src="assetUrl('icons/delete-02.svg')" alt="delete"/>
+                        </div>
+                    </div>
                 </el-col>
             </el-row>
-        </template>
+        </div>
     </div>
 </template>
 
 <script>
 import {Delete, Plus} from "@element-plus/icons-vue";
+import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+import {assetUrl} from "../../utils/ninjatablesadmin";
     export default {
         name: 'WPPostMetaQuery',
         props: ['metas'],
         components: {
+            NinjaInput,
             Delete,
             Plus
         },
@@ -97,6 +109,7 @@ import {Delete, Plus} from "@element-plus/icons-vue";
             };
         },
         methods: {
+            assetUrl,
             addCondition(event) {
                 this.metas.push({ ...this.default_condition });
             },
