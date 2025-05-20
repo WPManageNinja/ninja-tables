@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="ninja_header">
+        <div class="ninja_header mb-4">
             <h2>{{ $t('Import Table') }}</h2>
         </div>
         <div class="ninja_content">
@@ -9,21 +9,55 @@
                     {{ $t('NinjaTables can import tables from existing data, like from a CSV or JSON file. You can also import existing tables from the other WordPress table plugins.') }}
                 </p>
             </div>
-
-            <hr/>
-            <div class="ninja_block_section">
-                <h3>Import Table from CSV / JSON File</h3>
-                <p>
+            <div class="my-4">
+                <p class="mb-1 text-[#525866]">Import Table from CSV / JSON File</p>
+                <p class="mb-1 text-[#525866]">
                     Browse and locate a CSV/JSON file you backed up before.
                 </p>
-                <p>
+                <p class="text-[#525866]">
                     Select the intended format and click <strong>Import</strong> button, we will do
                     the rest for you.
                 </p>
+            </div>
+            <div class="ninja_block_section">
+                <el-upload
+                    drag
+                    :on-change="handleChange"
+                    :auto-upload="false"
+                    name="file"
+                    ref="uploadRef"
+                    :limit="1"
+                    action=""
+                    :class="{ upload: true }+' mt-5'"
+                    :accept="'.json,.csv'"
+                    :show-file-list="false"
+           >
+               <div class="mb-5">
+                   <img class="mx-auto" :src="assetUrl('icons/upload-cloud-2-line.svg')"/>
+               </div>
+               <div class="el-upload__text">{{$t("Choose a file or drag & drop it here.")}}</div>
+               <div class="font-[300] text-[12px]">{{$t("CSV or JSON")}}</div>
+           </el-upload>
 
+           <div v-if="uploadedFile?.name" class="mt-3 flex justify-between items-center border border-solid border-[#e1e4ea] rounded-[10px] px-5 py-4">
+               <div class="flex items-center">
+                   <img class="mr-2" :src="getFileIcon(uploadedFile)"/>
+                   <div>
+                       <div>{{ uploadedFile.name }}</div>
+                       <div class="flex items-center">
+                           <small class="mr-2">{{(uploadedFile.size / 1024).toFixed(2)}} KB .</small>
+                           <img class="" :src="assetUrl('icons/check-box-fill.svg')"/>
+                           <small>{{$t('Completed')}}</small>
+                       </div>
+                   </div>
+               </div>
+               <div @click="clear" class="cursor-pointer">
+                   <img :src="assetUrl('icons/delete-02.svg')"/>
+               </div>
+           </div>
                 <div class="form">
                     <!--Import data-->
-                    <div class="form-item">
+                    <!-- <div class="form-item">
                         <template v-if="imports.source == 'file'">
                             <label>{{ $t('Select file:') }}</label>
                             <input type="file" id="fileUpload" @click="clear">
@@ -35,22 +69,23 @@
                             <label>{{ $t('Import data:') }}</label>
                             <textarea rows="10"></textarea>
                         </template>
-                    </div>
+                    </div> -->
 
                     <!--Import format-->
                     <div class="form-item">
-                        <label for="import_format">{{ $t('Import Format:') }}</label>
-                        <select id="import_format" v-model="imports.format">
-                            <option :value="format"
-                                    v-for="(option, format) in imports.formatOptions"
-                            >{{ $t(option) }}
-                            </option>
-                        </select>
+                        <label class="text-[#525866] font-[500]">{{ $t('Import Format:') }}</label>
+                        <el-select class="ninja-select" id="import_format" v-model="imports.format">
+                            <el-option :value="format" :key="option"
+                                    v-for="(option, format) in imports.formatOptions" :label="$t(option)"
+                            >
+                            </el-option>
+                        </el-select>
 
                         <template v-if="imports.format == 'csv'">
                             <span  class="help">
                                 Check tutorial for importing data from CSV file
                               <a
+                                class="text-blue-500"
                                     href="https://ninjatables.com/docs/import-table-data-from-a-csv/"
                                     target="_blank">here</a>
                             </span>
@@ -69,16 +104,17 @@
 
                         <span v-show="imports.format == 'json' || imports.format == 'ninjaJson'"
                               class="help">
-                                Check tutorial for importing Table from JSON file<a
+                                Check tutorial for importing Table from JSON file <a 
+                                class="text-blue-500"
                                 href="https://ninjatables.com/docs/import-ninja-table-json/"
                                 target="_blank">here</a>
-                            </span>
+                        </span>
                     </div>
 
                     <div class="form-item">
-                        <el-button type="primary" size="small" :loading="btnLoading" @click="importTable">
+                        <NinjaButton :disabled="!uploadedFile" size="small" :loading="btnLoading" @click="importTable">
                             {{ $t('Import') }}
-                        </el-button>
+                        </NinjaButton>
                     </div>
                 </div>
             </div>
@@ -86,93 +122,103 @@
             <hr/>
 
             <div class="ninja_block_section">
-                <h3>Import From Other WP Table Plugin</h3>
-                <p>
+                <h3 class="text-lg font-semibold">Import From Other WP Table Plugin</h3>
+                <p class="text-sm text-[#525866] my-2">
                     To import from other WordPress plugins click the respective <strong>Import</strong>
                     button.
                 </p>
-                <table style="min-width: 400px;">
-                    <tbody>
-                    <tr v-for="(plugin, plugin_key) in otherPlugins">
-                        <td>{{ plugin }}</td>
-                        <td>
-                            <button class="btn btn-default btn-sm"
-                                    @click="importFromOtherPlugin(plugin_key)"
-                            >
-                                <template v-if="btnsLoading[plugin_key]">
-                                    {{ $t('Processing...') }}
-                                    <i class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
-                                </template>
-                                <template v-else>
-                                    {{ $t('Import') }}
-                                </template>
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="w-full border border-solid border-[#e1e4ea] rounded-[10px] flex justify-between items-center py-2 px-3 mb-2 bg-gray-50/95"
+                v-for="(plugin, plugin_key) in otherPlugins">
+                    <div class="font-[500]">
+                        {{ plugin }}
+                    </div>
+                    <div>
+                        <NinjaButton size="small" class="btn btn-default btn-sm"
+                                @click="importFromOtherPlugin(plugin_key)">
+                            <template v-if="btnsLoading[plugin_key]">
+                                {{ $t('Processing...') }}
+                                <i class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
+                            </template>
+                            <template v-else>
+                                {{ $t('Import') }}
+                            </template>
+                        </NinjaButton>
+                    </div>
+                </div>
             </div>
 
         </div>
 
         <el-dialog
-                title="Your current tables"
-                v-model="showPluginModal"
-                @close="closePluginModal()"
+            title="Your current tables"
+            v-model="showPluginModal"
+            @close="closePluginModal()"
+            class="ninja_create-table-modal"
         >
-            <template v-if="otherPluginTables.length">
-                <el-table
+            <div class="p-5">
+                <template v-if="otherPluginTables.length">
+                    <el-table
                         :data="otherPluginTables"
-                        style="width: 100%"
-                >
-                    <el-table-column label="Name">
-                        <template #default="scope">
-                            <span v-if="scope.row.is_already_imported">( Already Imported )</span> {{
-                            scope.row.post_title }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            label="Action"
-                            fixed="right"
+                        class="nt-inner-table mt-4"
+                        border
                     >
-                        <template #default="scope">
-                            <el-button type="primary" size="small"
-                                       @click="importThisTable(scope.row, scope.$index)"
-                            >{{ $t('Import') }}
-                            </el-button>
-                            <router-link
-                                    :to="{ name: 'data_items', params: { table_id: scope.row.ninja_table_id } }"
-                                    class="el-button el-button--danger el-button--mini ninja_btn"
-                                    v-if="scope.row.ninja_table_id"
-                            >{{ $t('View Imported Table') }}
-                            </router-link>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                        <el-table-column label="Name">
+                            <template #default="scope">
+                                <span v-if="scope.row.is_already_imported">( Already Imported )</span> {{
+                                scope.row.post_title }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="Action"
+                                align="center"
+                        >
+                            <template #default="scope">
+                                <div class="flex items-center gap-2">
+                                   <NinjaButton type="primary" size="small"
+                                        @click="importThisTable(scope.row, scope.$index)"
+                                     >{{ $t('Import') }}
+                                   </NinjaButton>
+                                    <router-link
+                                            :to="{ name: 'data_items', params: { table_id: scope.row.ninja_table_id } }"
+                                            v-if="scope.row.ninja_table_id"
+                                    >
+                                        <NinjaButton type="secondary" size="small">
+                                            {{ $t('View Table') }}
+                                        </NinjaButton>
+                                    </router-link>  
+                                </div>
+                            </template>
+                        </el-table-column>
+                    </el-table>
 
-                <template v-if="importing">
-                    <br><br>
-                    <div class="updated notice notice-success"
-                         style="padding: 10px;"
-                    >
-                        {{ $t('Importing the table, please wait a bit ...') }}
-                    </div>
+                    <template v-if="importing">
+                        <br><br>
+                        <div class="updated notice notice-success"
+                            style="padding: 10px;"
+                        >
+                            {{ $t('Importing the table, please wait a bit ...') }}
+                        </div>
+                    </template>
                 </template>
-            </template>
 
-            <div class="updated notice notice-success"
-                 style="padding: 10px;"
-                 v-else
-            >
-                You don't have any tables in your {{ selectedPlugin }} plugin.
+                <div class="bg-red-50 text-red-500 border border-solid border-red-100 rounded-[10px] p-3 pb-5"
+                    v-else
+                >
+                    You don't have any tables in your {{ selectedPlugin }} plugin.
+                </div>   
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
+import { assetUrl } from '../../utils/ninjatablesadmin';
+import NinjaButton from '../../@ui-utils/NinjaButton.vue'; 
     export default {
         name: 'Tools',
+        components: {
+            NinjaButton
+        },
         data() {
             return {
                 has_pro: window.ninja_table_admin.hasPro,
@@ -204,23 +250,41 @@
                 showPluginModal: false,
                 selectedPlugin: null,
                 otherPluginTables: [],
-                importing: false
+                importing: false,
+                uploadedFile: null
             }
         },
         methods: {
+            assetUrl,
             clear() {
-               document.getElementById('fileUpload').value = '';
+               this.uploadedFile = null;
+               this.$refs.uploadRef.clearFiles();
             },
+            getFileIcon(file) {
+                const fileType = file.name.split('.').pop().toLowerCase();
+                    if (fileType === 'csv') {
+                        return this.assetUrl('icons/csv-file-ico.svg');
+                    } else if (fileType === 'json') {
+                        return this.assetUrl('icons/json-ico.svg');
+                    } else {
+                        return this.assetUrl('icons/default-file-icon.svg');
+                    }
+            },
+
+            handleChange(file) {
+                this.uploadedFile = file;
+                console.log(this.uploadedFile);
+            },
+            
             importTable() {
                 this.btnLoading = true;
-
                 // For now only execute when the import source is `file`
                 if (!this.imports.source == 'file') {
                     this.btnLoading = true;
                     return;
                 }
 
-                let file = document.getElementById('fileUpload').files[0];
+                let file = this.uploadedFile.raw;
 
                 if (!file) {
                     this.btnLoading = false;

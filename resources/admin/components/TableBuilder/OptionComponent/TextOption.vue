@@ -67,13 +67,15 @@ export default {
     margin: 0 2px;
     border-radius: 0;
     cursor: pointer;
+    color: gray;
 }
 
 .active-visual {
-    background-color: #409EFf;
-    color: white;
+    /* background-color: #335cff; */
+    color: #335cff;
     border-bottom: 1px solid #409EFF;
-    border-radius: 3px;
+    font-weight: 500;
+    /* border-radius: 3px; */
 
 }
 

@@ -3,8 +3,7 @@
         <div
             v-if="!tableId"
             :gutter="20"
-            style="height: 500px; overflow-y: scroll; padding: 0px 20px;box-sizing: border-box;"
-        >
+            style="height: 500px; overflow-y: scroll; padding: 0px 20px;box-sizing: border-box;">
             <template>
                 <h3>{{ $t('Create a Drag & Drop Table') }}</h3>
                 <p class="ninja_subtitle">
@@ -13,7 +12,7 @@
             </template>
             <div class="form-group">
                 <label for="name">{{ $t("Table Title") }}</label>
-                <input
+                <NinjaInput
                     style="width: 95%"
                     v-model="initialData.table_data.table_name"
                     type="text"
@@ -50,28 +49,24 @@
                             ></span>
                         </div>
                         <div class="create-button">
-                            <el-button
+                            <NinjaButton
                                 @click="createTable('default')"
                                 type="primary"
                                 size="small"
-                            >Create
-                            </el-button
                             >
-                            <div class="ntb-choose-template">
-                                <div>OR</div>
-                                <a href="#ntb-templates"> {{ $t('Choose a Template') }}</a>
-                            </div>
+                            <img :src="assetUrl('icons/add.svg')" alt="Create" />
+                            {{$t('Create')}}
+                            </NinjaButton>
                         </div>
+                       
                     </div>
                 </el-col>
                 <el-col :span="12">
                     <h4>{{ $t('Import Table from CSV / JSON File') }}</h4>
-                    <hr>
-                    <div v-if="!file.name">
-                        <el-input :disabled="!hasPro" @mouseover.native="upgradeToPro"
+                    <div v-if="!file.name" class="my-5">
+                        <NinjaInput :disabled="!hasPro" @mouseover.native="upgradeToPro"
                                   :placeholder="$t('Import CSV/JSON from URL')" v-model="url">
-                        </el-input>
-                        <hr>
+                        </NinjaInput>
                     </div>
                     <el-upload
                         v-if="!url"
@@ -97,6 +92,12 @@
                         </el-button>
                     </div>
                 </el-col>
+                <el-col :span="24">
+                    <div class="ntb-choose-template">
+                        <div>OR</div>
+                        <a href="#ntb-templates"> {{ $t('Choose a Template') }}</a>
+                    </div>
+                </el-col>
             </el-row>
 
             <el-row v-if="!newTable" class="new-table-wrapper" id="ntb-templates">
@@ -105,8 +106,8 @@
                     v-for="(table, key) in initialData.ready_made_tables"
                     :key="key"
                 >
-                    <div class="table-type-heading">
-                        <h2 class="ready-made-name">{{ table.name }}</h2>
+                    <div class="table-type-heading mb-[40px]">
+                        <h4 class="ready-made-name">{{ table.name }}</h4>
                     </div>
                     <el-row>
                         <el-col :span="8" v-for="(item, key) in table.tables" :key="key">
@@ -117,13 +118,13 @@
                                     alt=""
                                 />
                                 <div class="ready-made-table-button">
-                                    <el-button
+                                    <NinjaButton
                                         size="small"
                                         @click="createTable(item.key, item)"
                                         type="primary"
                                     >
                                         <span>{{ (!hasPro && item.has_pro) ? 'Unlock in Pro' : 'Create' }}</span>
-                                    </el-button
+                                    </NinjaButton
                                     >
                                 </div>
                             </div>
@@ -153,6 +154,9 @@ import draggable from "vuedraggable";
 import TableLayout from "../Table/Layout.vue";
 import {helpers} from "../Mixin/helpers";
 import {UploadFilled} from "@element-plus/icons-vue";
+import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
+import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+import { assetUrl } from "../../../utils/ninjatablesadmin";
 
 export default {
     name: "RightSideBar",
@@ -162,6 +166,8 @@ export default {
         UploadFilled,
         draggable,
         TableLayout,
+        NinjaInput,
+        NinjaButton
     },
     data() {
         return {
@@ -184,6 +190,7 @@ export default {
         }
     },
     methods: {
+        assetUrl,
         upgradeToPro() {
             if (!this.hasPro) {
                 return this.upgradeMessage();
@@ -285,21 +292,20 @@ export default {
 <style lang="scss">
 .new-table-wrapper {
     .table-type-heading {
-        h2 {
-            background-color: #1C2024;
+        h4 {
+            background-color: rgba(71, 108, 255, 0.1);
             text-align: center;
             padding: 10px;
-            color: #ffffff;
-
-            .ready-made-name {
-                margin-top: 40px;
-            }
+            color: #335CFF;
+            font-size: 16px;
+            font-weight: 600;
         }
     }
 
     .table-title-style {
         display: table;
         margin: 5px auto 20px;
+        font-size: 16px;
     }
 
     .ready-made-table-image {
@@ -343,7 +349,7 @@ export default {
         }
 
         .table-row-input {
-            left: -120px;
+            left: -124px;
             position: absolute;
             transform: rotate(-90deg);
             top: 80px;
@@ -357,12 +363,10 @@ export default {
     }
 
     .create-button {
-        .el-button {
-            margin-top: 10px;
-            width: 200px;
-            left: 42px;
-            position: relative;
-        }
+        margin-top: 10px;
+        width: 200px;
+        left: 42px;
+        position: relative;
     }
 
     .import-button {

@@ -18,7 +18,7 @@
                                 <el-col class="element-style" :span="12">
                                     <div :value="(!hasPro && item.has_pro) ? 'Pro' : ''" class="item w-full">
                                         <NinjaButton type="secondary" :disabled="!hasPro && item.has_pro" class="w-full" :class="!hasPro && item.has_pro ? 'pro-component' : ''">
-                                            <el-icon :is="getIconComponent(item.icon)" class="icon-component mr-2" >
+                                            <el-icon :is="getIconComponent(item.icon)" class="icon-component mr-1" >
                                                 <component :is="getIconComponent(item.icon)" />
                                             </el-icon>
                                            <span class="!text-xs font-normal"> {{ item.name }}</span>
@@ -32,7 +32,7 @@
             </el-collapse>
         </el-tab-pane>
         <el-tab-pane :label="$t('Options')" name="options"
-                     v-if="item?.data?.type && !manageCell.active && showOptions">
+                     v-if="item?.data?.type && !manageCell.active && showOptions" class="nt_tab_design_drag">
             <el-collapse v-model="activeOption" accordion @change="accorDianChange" class="accordions nt-design-collapse">
                 <el-collapse-item :title="$t(ucWords(item.data.type) + ' Options')" name="1">
                     <text-option v-if="item.data.type === 'text'" :item="item"/>
@@ -163,7 +163,7 @@
         </el-tab-pane>
         <el-tab-pane :label="$t('Manage cell')" name="cells" class="p-5" v-if="manageCell.activeTab === 'cells'">
             <cell-setting :manageCell="manageCell" :setting="initialData.settings"></cell-setting>
-            <NinjaButton @click="closeCellEditing" type="primary" class="ntb-manage-button mt-2"> {{ $t('Close') }}</NinjaButton>
+            <NinjaButton @click="closeCellEditing" type="primary" class="ntb-manage-button mt-1"> {{ $t('Close') }}</NinjaButton>
         </el-tab-pane>
         <el-tab-pane :label="$t('Background')" class="p-5" name="background" v-if="manageCell.activeTab === 'background'">
             <background-color :manageCell="manageCell"></background-color>
@@ -182,16 +182,16 @@ import StarRating from "../OptionComponent/StarRatingOption.vue";
 import IconOption from "../OptionComponent/IconOption.vue";
 import ProgressOption from "../OptionComponent/ProgressOption.vue";
 import ListOption from "../OptionComponent/ListOption.vue";
-import CustomHtmlOption from "../OptionComponent/CustomHTML";
-import ShortcodeOption from "../OptionComponent/ShortcodeOption";
-import StylistListOption from "../OptionComponent/StylistListOption";
-import ImageOption from "../OptionComponent/ImageOption";
-import SpacingInput from "../SettingComponent/SpacingInput";
-import TextIconOption from "../OptionComponent/TextIconOption";
-import RibbonOption from "../OptionComponent/RibbonOption";
-import ColorInput from "../SettingComponent/ColorInput";
-import BackgroundColor from "./_Background";
-import CellSetting from "./_CellSetting";
+import CustomHtmlOption from "../OptionComponent/CustomHTML.vue";
+import ShortcodeOption from "../OptionComponent/ShortcodeOption.vue";
+import StylistListOption from "../OptionComponent/StylistListOption.vue";
+import ImageOption from "../OptionComponent/ImageOption.vue";
+import SpacingInput from "../SettingComponent/SpacingInput.vue";
+import TextIconOption from "../OptionComponent/TextIconOption.vue";
+import RibbonOption from "../OptionComponent/RibbonOption.vue";
+import ColorInput from "../SettingComponent/ColorInput.vue";
+import BackgroundColor from "./_Background.vue";
+import CellSetting from "./_CellSetting.vue";
 import SelectInput from "../SettingComponent/SelectInput.vue";
 import {helpers} from "../Mixin/helpers";
 import GetPro from "../../Tools/GetPro";
