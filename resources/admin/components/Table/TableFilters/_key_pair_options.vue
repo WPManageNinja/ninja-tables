@@ -33,14 +33,14 @@
             </template>
 
             <template #default="scope">
-                <div class="flex items-center">
+                <div class="flex items-center gap-1">
                     <div v-show="value.length > 1" class="cursor-pointer" @click="deleteItem(scope.$index)">
                         <img :src="assetUrl('icons/delete-02.svg')"/>
                     </div>
 
                     <div v-show="(scope.$index + 1) == value.length" @click="add()"
                          class="mr-3 mt-[2px] cursor-pointer">
-                        <img :src="assetUrl('icons/edit-2.svg')"/>
+                        <img :src="assetUrl('icons/add-01.svg')"/>
                     </div>
                 </div>
             </template>
@@ -60,16 +60,15 @@ export default {
     data() {
         return {
             sortableInstance: null,
-            rowKeys: [], // Array to store unique keys for each row
-            nextKey: 1 // Counter for generating unique keys
+            rowKeys: [],
+            nextKey: 1
         }
     },
     methods: {
         assetUrl,
         getRowKey(row) {
-            // Find the index of the row in the value array
             const index = this.value.indexOf(row);
-            // Return the corresponding key from rowKeys, or generate a new one
+
             if (!this.rowKeys[index]) {
                 this.rowKeys[index] = `key-${this.nextKey++}`;
             }
@@ -77,7 +76,7 @@ export default {
         },
         deleteItem(index) {
             this.value.splice(index, 1);
-            this.rowKeys.splice(index, 1); // Remove the corresponding key
+            this.rowKeys.splice(index, 1);
             this.$nextTick(() => {
                 this.initSortable();
             });
@@ -121,7 +120,6 @@ export default {
         }
     },
     mounted() {
-        // Initialize rowKeys for existing rows
         this.rowKeys = this.value.map(() => `key-${this.nextKey++}`);
         this.$nextTick(() => {
             this.initSortable();
@@ -135,19 +133,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss">
-table.ninja_filter_table {
-    width: 100%;
-    text-align: left;
-    border-collapse: collapse;
-    tr, td, th {
-        border: 1px solid #eaeaea;
-        padding: 2px 10px;
-    }
-}
-.sortable-ghost {
-    opacity: 0.5;
-    background: #c8ebfb;
-}
-</style>
