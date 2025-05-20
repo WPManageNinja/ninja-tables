@@ -47,7 +47,7 @@
             v-if="setting ? (setting.general && setting.border && setting.background) : false"
             id="ninja_tables_builder_id" :style="[tableWrapperStyle, tableWrapperActivePadding]">
             <div class="pixel-bar-slider" v-if="responsiveIsEnabled && showPixelSlider.preview">
-                <el-slider v-model="pixelBarValue" :max="showPixelSlider.max" :min="showPixelSlider.min" show-input>
+                <el-slider class="nt_slider_input" v-model="pixelBarValue" :max="showPixelSlider.max" :min="showPixelSlider.min" show-input>
                 </el-slider>
             </div>
             <table id="ntb_table" :role="`${setting.accessibility.options.table_role.value}`"
@@ -291,7 +291,7 @@ export default {
         IceCreamSquare,
         Grid,
         draggable,
-        TableData
+        TableData,
     },
     methods: {
         handleEdit(data){
@@ -598,8 +598,9 @@ export default {
 </script>
 <style lang="scss">
 .ninja-tables-layout {
+    margin-top: 20px;
     .table-customize-button {
-        padding-bottom: 20px;
+        padding-bottom: 8px;
     }
 
     .sortable-ghost {
@@ -613,6 +614,14 @@ export default {
         display: flex !important;
         justify-content: center;
         margin: 5px auto;
+        button{
+            background: #335cff;
+            border-color: #335cff;
+            &:hover{
+                background: #335cff;
+                border-color: #335cff;
+            }
+        }
     }
 
     .manage-button {
@@ -627,15 +636,20 @@ export default {
         z-index: 1;
         //margin: auto;
         overflow: auto;
-        padding-top: 5px;
+        // padding-top: 5px;
         padding-left: var(--table-wrapper-padding);
 
         .pixel-bar-slider {
-            width: 50%;
-            margin: 10px auto;
-            background: #3b503f;
-            padding: 0 20px;
+            width: 65%;
+            margin:0 auto 10px;
+            // background: #3b503f;
+            background: white;
+            border: 1px solid #dbdbdb;
+            padding: 0 0 0 20px;
             border-radius: 10px;
+            .el-input__inner{
+                padding: 0;
+            }
         }
 
         .table {
@@ -938,4 +952,6 @@ export default {
         cursor: pointer;
     }
 }
+
+
 </style>

@@ -2,10 +2,10 @@
     <div class="block">
         <span>{{ label }}</span><br>
         <el-select
+            class="ninja-select w-full"
             :model-value="mainValue"
             @update:model-value="updateValue"
             placeholder="Select"
-            size="small"
             :disabled="disableResponsive || mobileDisableBreakpoint || tabletDisableBreakpoint">
             <el-option
                 v-for="item in items"

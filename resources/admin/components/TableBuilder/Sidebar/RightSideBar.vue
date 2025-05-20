@@ -112,11 +112,7 @@
                         <el-col :span="8" v-for="(item, key) in table.tables" :key="key">
                             <div class="ready-made-table-image">
                                 <img
-                                    style="
-                    margin: 0 auto;
-                    width: 180px;
-                    display: flex;
-                  "
+                                    style="margin: 0 auto;width: 180px;display: flex;"
                                     :src="getAsset(item.key + '.jpg')"
                                     alt=""
                                 />
@@ -138,7 +134,8 @@
                 </el-col>
             </el-row>
         </div>
-        <el-row v-else-if="tableId">
+        <el-row v-else-if="tableId" :justify="tableAlignment === 'left' ? 'start' : 
+           tableAlignment === 'right' ? 'end' : 'center'">
             <table-layout
                 @editItem="editItem"
                 :initialData="initialData"
@@ -181,6 +178,9 @@ export default {
         },
         hasPro() {
             return !!window.ninja_table_admin.hasPro;
+        },
+        tableAlignment() {
+            return this.initialData?.settings?.general?.options?.table_alignment?.value;
         }
     },
     methods: {

@@ -1,11 +1,11 @@
 <template>
   <div class="ninja-table-dg-wrapper">
-    <div class="ninja_main_nav">
+    <div class="ninja_main_nav !h-[70px]">
       <top-nav :initialData="initialData" :selectedDevice="selectedDevice" @deviceSelected="deviceSelected"
         :tableId="$route.params.table_id">
       </top-nav>
     </div>
-    <el-row align="middle" :gutter="20">
+    <el-row :gutter="20">
       <el-col :xs="24" :sm="10" :md="9" :lg="6" :xl="6" id="leftside">
         <left-side-bar :singleItem="singleItem" :initialData="initialData" :selectedDevice="selectedDevice"
           @deviceSelected="deviceSelected"></left-side-bar>
@@ -22,7 +22,7 @@
 <script>
 import TopNav from "./TopNav.vue";
 import LeftSideBar from "./Sidebar/LeftSideBar.vue";
-import RightSideBar from "./Sidebar/RightSideBar";
+import RightSideBar from "./Sidebar/RightSideBar.vue";
 import { useEventBus } from '../../../admin/eventBus';
 
 export default {
