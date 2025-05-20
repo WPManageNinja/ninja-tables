@@ -76,3 +76,66 @@ export default {
     emits: ['update:modelValue'],
 };
 </script>
+
+<style lang="scss" scoped>
+  .ninja-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    transition: border-color 0.2s;
+    background-color: #fff;
+    &:hover {
+      border-color: #c0c4cc;
+    }
+    &:focus-within {
+      border-color: #335cff;
+    }
+
+    .ninja-input {
+      flex: 1;
+      width: 100%;
+      border: none;
+      outline: none;
+      padding: 0 12px;
+      height: 32px;
+      font-size: 14px;
+      color: #606266;
+      background: transparent;
+    }
+
+    .ninja-input--large {
+      height: 36px;
+      font-size: 15px;
+    }
+
+    .ninja-input-prefix,
+    .ninja-input-suffix {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: #909399;
+    }
+
+    .ninja-input-prefix {
+      border-right: 1px solid #dcdfe6;
+    }
+
+    .ninja-input-suffix {
+      border-left: 1px solid #dcdfe6;
+    }
+    .prefix-icon,
+    .suffix-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .ninja-input:disabled,
+    .ninja-input-wrapper.disabled {
+      background-color: #f5f7fa;
+      cursor: not-allowed;
+    }
+  }
+</style>

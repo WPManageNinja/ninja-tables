@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import ColorInput from "../SettingComponent/ColorInput";
-import AlignmentInput from "../SettingComponent/Alignment";
-import Slider from "../SettingComponent/SliderInput";
-import Icon from "./SplitComponent/Icon";
+import ColorInput from "../SettingComponent/ColorInput.vue";
+import AlignmentInput from "../SettingComponent/Alignment.vue";
+import Slider from "../SettingComponent/SliderInput.vue";
+import Icon from "./SplitComponent/Icon.vue";
 
 export default {
   name: "IconOption",
