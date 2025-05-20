@@ -469,9 +469,8 @@
                     </el-select>
                 </el-form-item>
 
-
-                <wp-post-dynamic-column
-                    v-if="dataSourceType == 'wp-posts'"
+                <WPPostDynamicColumn
+                    v-if="dataSourceType === 'wp-posts'"
                     :columns="columns"
                     :column="model"
                 />
@@ -850,9 +849,9 @@
             GetPro,
             'wp_editor': wpEditor,
             'condition': conditional,
-            'wp-post-dynamic-column': WPPostDynamicColumn,
             'content-transformer': ContentTransformer,
             DynamicWooColumn,
+            WPPostDynamicColumn,
             NinjaColorPicker
         },
         props: {

@@ -425,6 +425,12 @@
             font-weight: 300;
           }
         }
+
+        .el-input {
+          .el-input__wrapper {
+            border: none !important;
+          }
+        }
       }
     }
   }
