@@ -47,7 +47,7 @@
             v-if="setting ? (setting.general && setting.border && setting.background) : false"
             id="ninja_tables_builder_id" :style="[tableWrapperStyle, tableWrapperActivePadding]">
             <div class="pixel-bar-slider" v-if="responsiveIsEnabled && showPixelSlider.preview">
-                <el-slider v-model="pixelBarValue" :max="showPixelSlider.max" :min="showPixelSlider.min" show-input>
+                <el-slider class="nt_slider_input" v-model="pixelBarValue" :max="showPixelSlider.max" :min="showPixelSlider.min" show-input>
                 </el-slider>
             </div>
             <table id="ntb_table" :role="`${setting.accessibility.options.table_role.value}`"
@@ -178,20 +178,32 @@
                 </draggable>
 
                 <tbody v-else :key="tableData">
-                    <tr v-for="(item, index) in responsiveInitial.tableData" :key="index"
-                        :class="`${selectedDevice === 'mobile' ? 'mobile-view tr_class_mobile_' + index : 'tablet-view tr_class_tablet_' + index}`"
-                        :id="`${selectedDevice === 'mobile' ? 'tr_id_mobile_' + index : 'tr_id_tablet_' + index}`"
-                        :style="[responsiveInitial.showHeader ? bottomBorderResponsive(index, responsiveInitial.cell_direction, responsiveInitial.itemsPerRow, responsive.mode_options.options.devices) : '']">
-                        <td v-for="singleTd in item" v-if="singleTd.style.rowspan > 0 && singleTd.style.colspan > 0"
-                            :id="`td_id_${singleTd.style.tdId}`" :colspan="calculateColSpan(singleTd.style)"
+                <tr v-for="(item, index) in responsiveInitial.tableData" :key="index"
+                    :class="`${selectedDevice === 'mobile' ? 'mobile-view tr_class_mobile_' + index : 'tablet-view tr_class_tablet_' + index}`"
+                    :id="`${selectedDevice === 'mobile' ? 'tr_id_mobile_' + index : 'tr_id_tablet_' + index}`"
+                    :style="[responsiveInitial.showHeader ? bottomBorderResponsive(index, responsiveInitial.cell_direction, responsiveInitial.itemsPerRow, responsive.mode_options.options.devices) : '']"
+                >
+                    <template v-for="(singleTd, tdIndex) in item" :key="tdIndex">
+                        <td v-if="singleTd && singleTd.style && singleTd.style.rowspan > 0 && singleTd.style.colspan > 0"
+                            :id="`td_id_${singleTd.style.tdId}`"
+                            :colspan="calculateColSpan(singleTd.style)"
                             :rowspan="calculateRowSpan(singleTd.style)"
-                            :style="[tdInlineStyleResponsive(singleTd.style, singleTd.rowStyle, singleTd.rowIndex, responsiveInitial.showHeader, responsiveInitial.itemsPerRow, selectedDevice, responsiveInitial.cell_direction), innerBorder(singleTd.rowIndex)]">
-                            <span v-for="(singleItem, idx) in singleTd.columns" :key="idx">
-                                <table-data class="responsive-mode" :reference="`${index}_${idx}`" :setting="setting" v-if="item.id != itemId"
-                                    :item="singleItem"></table-data>
-                            </span>
+                            :style="[tdInlineStyleResponsive(singleTd.style, singleTd.rowStyle, singleTd.rowIndex, responsiveInitial.showHeader, responsiveInitial.itemsPerRow, selectedDevice, responsiveInitial.cell_direction), innerBorder(singleTd.rowIndex)]"
+                        >
+                            <template v-if="singleTd.columns">
+                                    <span v-for="(singleItem, idx) in singleTd.columns" :key="idx">
+                                        <table-data
+                                            class="responsive-mode"
+                                            :reference="`${index}_${idx}`"
+                                            :setting="setting"
+                                            v-if="item.id != itemId"
+                                            :item="singleItem"
+                                        ></table-data>
+                                    </span>
+                            </template>
                         </td>
-                    </tr>
+                    </template>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -279,7 +291,7 @@ export default {
         IceCreamSquare,
         Grid,
         draggable,
-        TableData
+        TableData,
     },
     methods: {
         handleEdit(data){
@@ -586,8 +598,9 @@ export default {
 </script>
 <style lang="scss">
 .ninja-tables-layout {
+    margin-top: 20px;
     .table-customize-button {
-        padding-bottom: 20px;
+        padding-bottom: 8px;
     }
 
     .sortable-ghost {
@@ -601,6 +614,14 @@ export default {
         display: flex !important;
         justify-content: center;
         margin: 5px auto;
+        button{
+            background: #335cff;
+            border-color: #335cff;
+            &:hover{
+                background: #335cff;
+                border-color: #335cff;
+            }
+        }
     }
 
     .manage-button {
@@ -615,15 +636,20 @@ export default {
         z-index: 1;
         //margin: auto;
         overflow: auto;
-        padding-top: 5px;
+        // padding-top: 5px;
         padding-left: var(--table-wrapper-padding);
 
         .pixel-bar-slider {
-            width: 50%;
-            margin: 10px auto;
-            background: #3b503f;
-            padding: 0 20px;
+            width: 65%;
+            margin:0 auto 10px;
+            // background: #3b503f;
+            background: white;
+            border: 1px solid #dbdbdb;
+            padding: 0 0 0 20px;
             border-radius: 10px;
+            .el-input__inner{
+                padding: 0;
+            }
         }
 
         .table {
@@ -926,4 +952,6 @@ export default {
         cursor: pointer;
     }
 }
+
+
 </style>

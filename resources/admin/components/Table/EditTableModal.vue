@@ -1,42 +1,54 @@
 <template>
-    <div class="ninja_table_edit">
+    <div class="p-[20px]">
         <div class="ninja_modal-body">
             <div class="form-group">
-                <label>{{ $t('Table Title') }}</label>
-                <el-input v-model="table.post_title"
-                          type="text"
-                          size="small"
-                          placeholder="Enter a title to identify your table"
+                <label class="nt-form-label">{{ $t('Table Title') }}</label>
+                <NinjaInput
+                    v-model="table.post_title"
+                    :placeholder="$t('Enter a title to identify your table')"
                 />
             </div>
 
             <div class="form-group">
-                <label>{{ $t('Table Caption') }}</label>
-                <el-input size="small" v-model="table.table_caption"
-                          type="text"
-                          placeholder="Enter a table caption if you want to show"
+                <label class="nt-form-label">{{ $t('Table Caption') }}</label>
+                <NinjaInput
+                    v-model="table.table_caption"
+                    :placeholder="$t('Enter a table caption if you want to show')"
                 />
             </div>
 
             <div class="form-group">
-                <label>{{ $t('Table Description') }}</label>
+                <label class="nt-form-label">{{ $t('Table Description') }}</label>
                 <wp_editor v-model="table.post_content"></wp_editor>
             </div>
         </div>
-        <div class="modal-footer">
-            <el-button :loading="btnLoading" type="primary" size="small" @click="addTable">
-                {{ $t('Update') }}
-            </el-button>
+
+        <div class="pt-[16px] flex justify-end items-center gap-x-2">
+            <NinjaButton
+                type="secondary"
+                @click="closeModal"
+                :btn-text="$t('Cancel')"
+            />
+            <NinjaButton
+                :loading="btnLoading"
+                type="primary"
+                @click="addTable"
+                :btn-text="$t('Update')"
+            />
         </div>
     </div>
 </template>
 
 <script type="text/babel">
     import wp_editor from '../../../common/_wp_editor';
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
     export default {
         name: 'add_table',
         components: {
+            NinjaButton,
+            NinjaInput,
             wp_editor: wp_editor,
         },
         props: {

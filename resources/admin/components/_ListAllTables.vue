@@ -1,11 +1,10 @@
 <template>
     <div>
         <el-table
-            class="ninja-tables compact"
+            class="ninja_tables compact"
             @selection-change="handleSelectionChange"
             v-loading.body="pageLoading"
             :data="items"
-            border
             aria-label="all-tables"
             @sort-change="handleTableSort"
             style="width: 100%">
@@ -23,108 +22,142 @@
               </template>
             </el-table-column>
 
-            <el-table-column :label="$t('Title')" prop="post_title" sortable="custom">
+            <el-table-column :label="$t('Title')" prop="post_title" sortable="custom" width="200">
                 <template #default="scope">
-                    <strong>
-                        <template v-if="shouldBeVisible(scope.row)">
-                          <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
+                    <template v-if="shouldBeVisible(scope.row) && scope.row.ID">
+                        <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
                             {{$t(scope.row.post_title)}}
-                          </router-link>
-                          <router-link v-else :to="{ name: 'data_items', params: { table_id: scope.row.ID } }">
+                        </router-link>
+                        <router-link v-else :to="{ name: 'data_items', params: { table_id: scope.row.ID } }">
                             {{$t(scope.row.post_title)}}
-                          </router-link>
-                        </template>
+                        </router-link>
+                    </template>
+                    <template v-else-if="shouldBeVisible(scope.row) && !scope.row.ID">
+                        {{$t(scope.row.post_title)}}
+                    </template>
 
                         <template v-else>
                             {{ scope.row.post_title }}
                         </template>
 
-                        <span v-show="scope.row.post_status != 'publish'">
+                        <span v-show="scope.row.post_status !== 'publish'">
                             ({{ scope.row.post_status }})
                         </span>
-                    </strong>
-
-                    <div class="row-actions">
-                        <span class="row-edit" v-if="shouldBeVisible(scope.row)">
-                              <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
-                                {{$t('Edit')}}
-                              </router-link>
-                              <router-link v-else :to="{ name: 'data_items', params: { table_id: scope.row.ID } }">
-                                {{$t('Edit')}}
-                              </router-link> |
-                        </span>
-
-                        <span class="row-preview" v-if="shouldBeVisible(scope.row)">
-                            <a rel="noopener" :href="scope.row.preview_url" target="_blank">{{ $t('Preview') }}</a> |
-                        </span>
-
-                        <span class="row-duplicate" v-if="shouldBeVisible(scope.row)">
-                            <a href="#" @click.prevent="duplicate(scope.row.ID, scope.row.dataSourceType)">{{ $t('Duplicate') }}</a> |
-                        </span>
-                        <span class="row-duplicate" v-if="shouldBeVisible(scope.row) && scope.row.fluentfrom_url">
-                            <a :href="scope.row.fluentfrom_url" >{{ $t('Fluent Form Entries') }}</a> |
-                        </span>
-
-                        <span class="row-delete">
-                            <a @click.prevent="confirmDeleteTable(scope.row.ID)" href="#">{{ $t('Delete') }}</a>
-                        </span>
-                    </div>
                 </template>
             </el-table-column>
 
-            <el-table-column :label="$t('Description')" class-name="description">
+            <el-table-column :label="$t('Description')" class-name="description" width="300">
                 <template #default="scope">
                     <div class="nt_cell" v-html="scope.row.post_content"/>
                 </template>
             </el-table-column>
 
-            <el-table-column width="190" :label="$t('Data Source')">
+            <el-table-column :label="$t('Data Source')" width="200">
                 <template #default="scope">
-                    <strong v-if="scope.row.dataSourceType === 'drag_and_drop'">{{$t('Drag & Drop Table')}}</strong>
-                    <strong v-else>{{ dataSourceType(scope.row) }}</strong>
-                    <template v-if="scope.row.remoteURL">
-                        <el-tooltip class="item" effect="light" :content="scope.row.remoteURL" placement="top-start">
-                          <template #content>
-                            <h3>Source of data</h3>
-                            <p>{{scope.row.remoteURL}}</p>
-                          </template>
-                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                        </el-tooltip>
-                    </template>
+                    <span v-if="scope.row.dataSourceType === 'drag_and_drop'">{{$t('Drag & Drop Table')}}</span>
+                    <span v-else>{{ dataSourceType(scope.row) }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column width="250" :label="$t('ShortCode')">
+            <el-table-column :label="$t('ShortCode')" :min-width="200">
                 <template #default="scope">
-                    <el-tooltip effect="dark"
-                                content="Click to copy shortcode"
-                                title="Click to copy shortcode"
-                                placement="top">
-                        <code class="copy"
-                              v-if="scope.row.dataSourceType === 'drag_and_drop'"
-                                :data-clipboard-text='`[ninja_table_builder id="${scope.row.ID}"]`'>
-                            <el-icon><Document /></el-icon>[ninja_table_builder id="{{ scope.row.ID }}"]
-                        </code>
-                        <code class="copy"
-                              v-else
-                              :data-clipboard-text='`[ninja_tables id="${scope.row.ID}"]`'>
-                            <el-icon><Document /></el-icon> [ninja_tables id="{{ scope.row.ID }}"]
-                        </code>
-                    </el-tooltip>
+                    <div class="flex items-center" type="info" :style="{ cursor: 'pointer' }">
+                        <div class="bg-[#F5F6F7] px-2 py-1 rounded-[8px] flex items-center copy"
+                             :data-clipboard-text="scope.row.dataSourceType === 'drag_and_drop' ? 
+                                `[ninja_table_builder id='${scope.row.ID}']` : 
+                                `[ninja_tables id='${scope.row.ID}']`"
+                             style="border: 1px solid #E1E4EA">
+                            <img class="mr-2" :src="assetUrl('icons/copy-02.svg')"/> 
+                            <span class="text-sm">
+                                {{ scope.row.dataSourceType === 'drag_and_drop' ? 
+                                   `[ninja_table_builder id='${scope.row.ID}']` : 
+                                   `[ninja_tables id='${scope.row.ID}']` }}
+                            </span>
+                        </div>
+                    </div>
+                </template>
+            </el-table-column>
+
+            <el-table-column fixed="right" min-width="150">
+                <template #default="scope">
+                    <div class="flex justify-end items-center">
+                       <span
+                           v-if="shouldBeVisible(scope.row)"
+                           @click="()=>onRedirectPreview(scope.row.preview_url)"
+                           class="icons_bg"
+                       >
+                           <img :src="assetUrl('icons/view.svg')" alt="View"/>
+                       </span>
+
+                        <span
+                            v-if="shouldBeVisible(scope.row)"
+                            class="icons_bg ml-2"
+                        >
+                          <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
+                            <img :src="assetUrl('icons/setting-02.svg')" alt="Edit"/>
+                          </router-link>
+                          <router-link v-else :to="{ name: 'data_items', params: { table_id: scope.row.ID } }">
+                            <img :src="assetUrl('icons/setting-02.svg')" alt="Edit"/>
+                          </router-link>
+                        </span>
+
+                        <el-dropdown>
+                            <span class="el-dropdown-link no-hover">
+                                <img :src="assetUrl('/icons/more.svg')" alt="more"/>
+                            </span>
+
+                            <template #dropdown>
+                                <el-dropdown-menu>
+                                    <el-dropdown-item>
+                                         <span>
+                                             <a @click.prevent="confirmDeleteTable(scope.row.ID)" href="#">{{ $t('Delete') }}</a>
+                                         </span>
+                                    </el-dropdown-item>
+
+                                    <el-dropdown-item>
+                                        <span class="row-duplicate" v-if="shouldBeVisible(scope.row)">
+                                            <a href="#" @click.prevent="duplicate(scope.row.ID, scope.row.dataSourceType)">{{ $t('Duplicate') }}</a>
+                                        </span>
+                                        <span class="row-duplicate" v-if="shouldBeVisible(scope.row) && scope.row.fluentfrom_url">
+                                            <a :href="scope.row.fluentfrom_url" >{{ $t('Fluent Form Entries') }}</a> |
+                                        </span>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
+                    </div>
                 </template>
             </el-table-column>
         </el-table>
 
-        <div class="pull-right">
+        <div class="ninja-pagination-wrapper">
+
+            <div class="pagination-page-change-option">
+               <span class="flex-shrink-0">
+                  Page {{ paginate.current_page }}
+                  of {{ Math.ceil(paginate.total / Number(paginate.per_page)) }}
+               </span>
+
+                <el-select class="min-w-[100px]" v-model="paginate.per_page" @change="handleSizeChange">
+                    <el-option value="10">{{ $t('10/page') }}</el-option>
+                    <el-option value="15">{{ $t('15/page') }}</el-option>
+                    <el-option value="20">{{ $t('20/page') }}</el-option>
+                    <el-option value="50">{{ $t('50/page') }}</el-option>
+                    <el-option value="100">{{ $t('100/page') }}</el-option>
+                </el-select>
+            </div>
+
             <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="goToPage"
-                    :current-page.sync="paginate.current_page"
-                    :page-sizes="[10, 20, 50, 100]"
-                    :page-size="paginate.per_page"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="paginate.total">
-            </el-pagination>
+                class="ninja-pagination"
+                @size-change="handleSizeChange"
+                @current-change="goToPage"
+                :current-page.sync="paginate.current_page"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="paginate.per_page"
+                layout="prev, pager, next, jumper"
+                :total="paginate.total"
+            />
+
         </div>
 
         <div v-if="!loading && !is_installed && items.length > 2 && !hasPro">
@@ -143,13 +176,12 @@
 <script type="text/babel">
     import pagination from '../../common/NinjaPagination.vue';
     import GetPro from "./Tools/GetPro";
-    import { Document, InfoFilled } from '@element-plus/icons-vue';
-
+    import NinjaInput from "../@ui-utils/NinjaInput.vue";
+    import {assetUrl} from "../utils/ninjatablesadmin";
     export default {
         name: 'Home',
         components: {
-          Document,
-          InfoFilled,
+            NinjaInput,
           GetPro,
           'ninja_pagination': pagination
         },
@@ -182,6 +214,7 @@
             }
         },
         methods: {
+            assetUrl,
             fetchTables() {
                 this.pageLoading = true;
 
@@ -272,6 +305,10 @@
 
                 return true;
             },
+            onRedirectPreview(preview) {
+                return window.open(preview, '_blank');
+            },
+
             dataSourceType(table) {
                 let dataSource = table.dataSourceType || 'Default';
                 if(dataSource == 'raw_sql') {
@@ -311,5 +348,16 @@
             }
         }
     }
+
+    .el-dropdown-link {
+        outline: none;
+        &:hover {
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+    }
+
+
 </style>
 

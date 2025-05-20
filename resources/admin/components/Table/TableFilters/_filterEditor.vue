@@ -1,36 +1,38 @@
 <template>
-    <el-form ref="form" :model="activeEditor" label-width="250px" class="form-wrapper">
-        <el-form-item>
-            <template #label>
-                {{ $t('Filter Title') }}
-                <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <template #content>
-                        <h3>Filter Title</h3>
-                        <p>Just a Name to identify your Filter</p>
-                    </template>
-                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                </el-tooltip>
-            </template>
-            <el-input size="small" v-model="activeEditor.title" />
-        </el-form-item>
+    <el-form ref="form" :model="activeEditor" class="p-5">
+        <div class="grid grid-cols-2 gap-x-5">
+            <el-form-item>
+                <label class="nt-form-label">
+                    {{ $t('Filter Title') }}
+                    <el-tooltip class="item" placement="bottom-start" effect="light">
+                        <template #content>
+                            <h3>Filter Title</h3>
+                            <p>Just a Name to identify your Filter</p>
+                        </template>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                    </el-tooltip>
+                </label>
+                <NinjaInput v-model="activeEditor.title" :placeholder="$t('Enter Filter Title')" />
+            </el-form-item>
 
-        <el-form-item v-if="activeEditor.type != 'reset_filter'">
-            <template #label>
-                {{ $t('Filter Label') }}
-                <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <template #content>
-                        <h3>Prefix</h3>
-                        <p>This will show on your Table Filter</p>
-                    </template>
-                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                </el-tooltip>
-            </template>
-            <el-input size="small" v-model="activeEditor.filter_prefix" />
-            <small>Keep it blank if you don't need any filter instruction at the frontend</small>
-        </el-form-item>
+            <el-form-item v-if="activeEditor.type !== 'reset_filter'">
+                <label class="nt-form-label">
+                    {{ $t('Filter Label') }}
+                    <el-tooltip class="item" placement="bottom-start" effect="light">
+                        <template #content>
+                            <h3>Prefix</h3>
+                            <p>This will show on your Table Filter</p>
+                        </template>
+                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                    </el-tooltip>
+                </label>
+
+                <NinjaInput v-model="activeEditor.filter_prefix" :placeholder="$t(`Keep it blank if you don't need any filter instruction at the frontend`)"/>
+            </el-form-item>
+        </div>
 
         <el-form-item>
-            <template #label>
+            <label class="nt-form-label">
                 {{ $t('Filter UI Type') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
                     <template #content>
@@ -39,21 +41,22 @@
                     </template>
                     <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
-            </template>
-            <el-radio-group class="spaced" v-model="activeEditor.type">
-                <el-radio label="Select Dropdown" value="select"/>
-                <el-radio label="Radio" value="radio"/>
-                <el-radio label="Checkbox" value="checkbox"/>
-                <el-radio label="Date Picker" value="date_picker"/>
-                <el-radio label="Date Range" value="date_range"/>
-                <el-radio label="Text Input" value="text_input"/>
-                <el-radio label="Number Range" value="number_range"/>
-                <el-radio label="Reset Filter Button" value="reset_filter"/>
-            </el-radio-group>
+            </label>
+
+            <el-select v-model="activeEditor.type" class="ninja-select">
+                <el-option label="Select Dropdown" value="select"/>
+                <el-option label="Radio" value="radio"/>
+                <el-option label="Checkbox" value="checkbox"/>
+                <el-option label="Text Input" value="text_input"/>
+                <el-option label="Date Picker" value="date_picker"/>
+                <el-option label="Date Range" value="date_range"/>
+                <el-option label="Number Range" value="number_range"/>
+                <el-option label="Reset Filter Button" value="reset_filter"/>
+            </el-select>
         </el-form-item>
 
         <el-form-item v-if="need_placeholder">
-            <template #label>
+            <label class="nt-form-label">
                 {{ $t('Placeholder') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
                     <template #content>
@@ -62,13 +65,14 @@
                     </template>
                     <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
-            </template>
-            <el-input size="small" v-model="activeEditor.placeholder"></el-input>
+            </label>
+
+            <NinjaInput v-model="activeEditor.placeholder" />
         </el-form-item>
 
-        <template v-if="activeEditor.type == 'select'">
-            <el-form-item>
-                <template #label>
+        <div v-if="activeEditor.type === 'select'">
+            <div class="flex flex-col">
+                <label class="nt-form-label">
                     {{ $t('Value Type') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
                         <template #content>
@@ -77,16 +81,17 @@
                         </template>
                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
-                </template>
-                <el-radio-group size="small" v-model="activeEditor.select_value_type">
-                    <el-radio-button label="Manual Data" value="manual" />
-                    <el-radio-button label="Dynamic Data from Table Column" value="dynamic_data" />
-                </el-radio-group>
-            </el-form-item>
+                </label>
 
-            <template v-if="!is_manual_select_options && activeEditor.select_value_type">
-                <el-form-item>
-                    <template #label>
+                <el-radio-group class="ninja_tables_radio_group" v-model="activeEditor.select_value_type">
+                    <el-radio border label="Manual Data" value="manual"/>
+                    <el-radio border label="Dynamic Data from Table Column" value="dynamic_data"/>
+                </el-radio-group>
+            </div>
+
+            <div v-if="!is_manual_select_options && activeEditor.select_value_type" class="flex flex-col">
+                <div class="flex flex-col mt-4">
+                    <label class="nt-form-label">
                         {{ $t('Target Column') }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
                             <template #content>
@@ -95,8 +100,9 @@
                             </template>
                             <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
-                    </template>
-                    <el-radio-group class="spaced" v-model="activeEditor.dynamic_select_column">
+                    </label>
+
+                    <el-radio-group class="ninja_tables_radio_group" v-model="activeEditor.dynamic_select_column">
                         <el-radio
                             v-for="column in current_columns"
                             :key="column.key"
@@ -104,64 +110,86 @@
                             :value="column.name"
                         />
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item>
-                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.parse_comma_separated"> Parse Comma Separated Words</el-checkbox>
-                </el-form-item>
-                <el-form-item>
-                    <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.disable_auto_sorting"> Disable automatic filter value sorting</el-checkbox>
-                </el-form-item>
+                </div>
 
-                <template v-if="activeEditor.disable_auto_sorting != 'yes'">
-                    <el-form-item label="Sort Dynamic Value as: ">
-                        <el-radio-group v-model="activeEditor.sorting_type">
+                <div class="mt-4">
+                    <div class="flex items-center gap-2">
+                        <el-switch
+                            size="small"
+                            :true-value="'yes'"
+                            :false-value="'no'"
+                            v-model="activeEditor.parse_comma_separated"
+                        />
+                        <p class="text-[14px] font-[400]"> {{ $t('Parse Comma Separated Words') }}</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 mt-2">
+                    <el-switch
+                        size="small"
+                        :true-value="'yes'"
+                        :false-value="'no'"
+                        v-model="activeEditor.disable_auto_sorting"
+                    />
+                    <p class="text-[14px] font-[400]">{{ $t('Disable automatic filter value sorting') }}</p>
+                </div>
+
+                <div v-if="activeEditor.disable_auto_sorting != 'yes'" class="flex flex-col mt-4">
+                    <div class="flex flex-col">
+                        <label class="nt-form-label">{{ $t('Sort Dynamic Value as: ') }}</label>
+                        <el-radio-group class="ninja_tables_radio_group" v-model="activeEditor.sorting_type">
                             <el-radio label="Ascending Way" value="asc" />
                             <el-radio label="Descending Way" value="desc" />
                         </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="Sort Algorithm">
-                        <el-radio-group v-model="activeEditor.sorting_method">
+                    </div>
+
+                    <div class="flex flex-col mt-4">
+                        <label class="nt-form-label">{{ $t('Sort Algorithm ') }}</label>
+                        <el-radio-group class="ninja_tables_radio_group" v-model="activeEditor.sorting_method">
                             <el-radio label="As Text Basis" value="text" />
                             <el-radio label="As Numeric Basis" value="numeric" />
                         </el-radio-group>
-                    </el-form-item>
-                </template>
-            </template>
+                    </div>
+                </div>
+            </div>
 
-            <el-form-item>
-                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.is_multi_select">Enable Multi-Select</el-checkbox>
-            </el-form-item>
+            <div class="mt-4">
+                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.is_multi_select">
+                   {{ $t('Enable Multi-Select') }}
+                </el-checkbox>
+            </div>
+        </div>
 
-        </template>
-        <template v-if="has_filter_option || is_manual_select_options">
-            <el-form-item>
-                <template #label>
+        <div v-if="has_filter_option || is_manual_select_options">
+            <el-form-item class="mt-4">
+                <label class="nt-form-label">
                     {{ $t('Filter Options') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
                         <template #content>
-                            <h3>Options</h3>
-                            <p>Provide the values that you want to show on the frontend. Your values should match your table cell data</p>
+                            <h3>{{ $t('Options') }}</h3>
+                            <p>{{ $t('Provide the values that you want to show on the frontend.Your values should match your table cell data') }}</p>
                         </template>
                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
-                </template>
+                </label>
                 <key-pair-options :value="activeEditor.options"></key-pair-options>
             </el-form-item>
-        </template>
+        </div>
 
-        <template v-if="activeEditor.type == 'date_picker'">
-            <el-form-item >
-                <template #label>
+        <div v-if="activeEditor.type === 'date_picker'">
+            <div class="flex flex-col">
+                <label class="nt-form-label">
                     {{ $t('Date Filter Operator') }}
-                </template>
-                <el-radio-group v-model="activeEditor.filter_operator">
+                </label>
+                <el-radio-group class="ninja_tables_radio_group" v-model="activeEditor.filter_operator">
                     <el-radio label="Less Than Equal" value="less" />
                     <el-radio label="Equal" value="equal" />
                     <el-radio label="Greater Than Equal" value="greater" />
                 </el-radio-group>
-            </el-form-item>
-            <el-form-item>
-                <template #label>
+            </div>
+
+            <div class="flex flex-col mt-4">
+                <label class="nt-form-label">
                     {{ $t('First Day') }}
 
                     <el-tooltip class="item" placement="bottom-start" effect="light">
@@ -175,8 +203,9 @@
 
                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
-                </template>
-                <el-select class="nt_column_type_select" size="small" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
+                </label>
+
+                <el-select class="ninja-select" size="small" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
                     <el-option
                         v-for="(typeName, typeKey) in weekDays"
                         :key="typeKey"
@@ -184,24 +213,28 @@
                         :value="typeKey">
                     </el-option>
                 </el-select>
-            </el-form-item>
-        </template>
+            </div>
+        </div>
 
-        <template v-else-if="activeEditor.type == 'date_range' || activeEditor.type == 'number_range'">
-            <el-form-item >
-                <template #label>
+        <div v-else-if="activeEditor.type === 'date_range' || activeEditor.type === 'number_range'">
+            <div>
+                <label>
                     {{ $t('From Placeholder') }}
-                </template>
-                <el-input size="small" placeholder="From Placeholder" v-model="activeEditor.from_placeholder" />
-            </el-form-item>
-            <el-form-item>
-                <template #label>
+                </label>
+
+                <NinjaInput v-model="activeEditor.from_placeholder" :placeholder="$t('From Placeholder')"/>
+            </div>
+
+            <div class="mt-4">
+                <label>
                     {{ $t('To Placeholder') }}
-                </template>
-                <el-input size="small" placeholder="To Placeholder" v-model="activeEditor.to_placeholder" />
-            </el-form-item>
-            <el-form-item>
-                <template #label>
+                </label>
+
+                <NinjaInput v-model="activeEditor.to_placeholder" :placeholder="$t('To Placeholder')"/>
+            </div>
+
+            <div class="mt-4">
+                <label class="nt-form-label">
                     {{ $t('First Day') }}
 
                     <el-tooltip class="item" placement="bottom-start" effect="light">
@@ -215,8 +248,9 @@
 
                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
-                </template>
-                <el-select class="nt_column_type_select" size="small" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
+                </label>
+
+                <el-select class="ninja-select" size="small" v-model="activeEditor.firstDayOfWeek" placeholder="First day of the week">
                     <el-option
                         v-for="(typeName, typeKey) in weekDays"
                         :key="typeKey"
@@ -224,11 +258,11 @@
                         :value="typeKey">
                     </el-option>
                 </el-select>
-            </el-form-item>
-        </template>
+            </div>
+        </div>
 
-        <el-form-item v-if="activeEditor.type == 'text_input'">
-            <template #label>
+        <div v-if="activeEditor.type === 'text_input'">
+            <label class="nt-form-label">
                 {{ $t('Filter Prefix') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
                     <template #content>
@@ -237,56 +271,66 @@
                     </template>
                     <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
-            </template>
-            <el-input size="small" placeholder="Filter Prefix" v-model="activeEditor.filter_value_prefix" />
-        </el-form-item>
+            </label>
 
-        <el-form-item v-if="need_filter_columns">
-            <template #label>
+            <NinjaInput v-model="activeEditor.filter_value_prefix" :placeholder="$t('Filter Prefix')"/>
+        </div>
+
+        <div v-if="need_filter_columns" class="mt-4">
+            <label class="nt-form-label">
                 {{ $t('Filter Columns') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
                     <template #content>
-                        <h3>Columns</h3>
-                        <p>Select the columns that you want to apply this filter</p>
+                        <h3>{{ $t('Columns') }}</h3>
+                        <p>{{ $t('Select the columns that you want to apply this filter') }}</p>
                     </template>
                     <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                 </el-tooltip>
-            </template>
-            <el-checkbox-group v-if="current_columns.length" v-model="activeEditor.columns">
-                <el-checkbox
+            </label>
+
+            <el-select
+                class="ninja-select"
+                v-if="current_columns.length"
+                v-model="activeEditor.columns"
+                multiple
+                placeholder="Select columns"
+            >
+                <el-option
                     v-for="column in current_columns"
                     :key="column.key"
                     :label="column.key"
                     :value="column.name"
                 />
-            </el-checkbox-group>
-            <div v-else>
+            </el-select>
+
+            <div v-else class="bg-[#EBF1FF] p-3 mt-[10px] mb-[25px] rounded-[8px]">
                 Sorry, No corresponding columns found based on your selection and column's data type
             </div>
-        </el-form-item>
+        </div>
 
-        <el-form-item v-if="activeEditor.type == 'reset_filter'">
-            <template #label>
+        <div v-if="activeEditor.type === 'reset_filter'">
+            <label class="nt-form-label">
                 {{ $t('Button Text') }}
-            </template>
-            <el-input size="small" v-model="activeEditor.placeholder" />
-        </el-form-item>
+            </label>
 
-        <el-form-item>
+            <NinjaInput v-model="activeEditor.placeholder" />
+        </div>
+
+        <el-form-item class="mt-4">
             <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.strict">Enable Strict Mode (If Enable, Ninja Table will try to match exact value)</el-checkbox>
         </el-form-item>
     </el-form>
 </template>
 
-<script type="text/babel">
-    import { InfoFilled } from '@element-plus/icons-vue';
+<script>
     import KeyPairOptions from './_key_pair_options'
     import each from 'lodash/each'
+    import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
     export default {
         name: 'FilterEditor',
         components: {
+            NinjaInput,
             KeyPairOptions,
-            InfoFilled
         },
         props: ['activeEditor', 'columnKeyPairs', 'columns'],
         data() {
@@ -304,18 +348,18 @@
         },
         computed: {
             current_columns() {
-                if(this.activeEditor.type == 'date_picker' || this.activeEditor.type == 'date_range') {
+                if(this.activeEditor.type === 'date_picker' || this.activeEditor.type === 'date_range') {
                     let columns = [];
                     each(this.columns, (column) => {
-                        if(column.data_type == 'date') {
+                        if(column.data_type === 'date') {
                             columns.push(column);
                         }
                     });
                     return columns;
-                } else if(this.activeEditor.type == 'number_range') {
+                } else if(this.activeEditor.type === 'number_range') {
                     let columns = [];
                     each(this.columns, (column) => {
-                        if(column.data_type == 'number') {
+                        if(column.data_type === 'number') {
                             columns.push(column);
                         }
                     });
@@ -330,7 +374,7 @@
                 ].indexOf(this.activeEditor.type) !== -1;
             },
             is_manual_select_options() {
-                return this.activeEditor.type == 'select' && this.activeEditor.select_value_type == 'manual';
+                return this.activeEditor.type === 'select' && this.activeEditor.select_value_type === 'manual';
             },
             need_placeholder() {
                 return [
@@ -341,13 +385,13 @@
                 ].indexOf(this.activeEditor.type) !== -1;
             },
             need_filter_columns() {
-                let isDynamic = this.activeEditor.type == 'select' && this.activeEditor.select_value_type == 'dynamic_data' || this.activeEditor.type == 'reset_filter';
+                let isDynamic = this.activeEditor.type === 'select' && this.activeEditor.select_value_type === 'dynamic_data' || this.activeEditor.type === 'reset_filter';
                 return !isDynamic;
             }
         },
         watch: {
             'activeEditor.type': function (value) {
-                if(value == 'select') {
+                if(value === 'select') {
                     this.activeEditor.select_value_type = 'manual';
                 }
                 if(!Array.isArray(this.activeEditor.columns)) {

@@ -1,106 +1,111 @@
 <template>
-    <div class="wp-post-conditions">
-        <el-row>
-            <el-col :md="21">
-                <el-alert
-                        type="info"
-                        title=""
-                        :closable="false"
-                        description="You can add additional conditions/where clauses here."
-                        show-icon>
-                </el-alert>
-            </el-col>
+    <div class="wp-post-conditions-wrapper">
+        <div class="mt-4">{{$t("You can add additional conditions/where clauses here.")}}</div>
+        <div
+            v-if="conditions.length === 0"
+            @click="addCondition($event)"
+            class="flex items-center text-[#335CFF] cursor-pointer font-[300]"
+        >
+            <img :src="assetUrl('icons/add-line.svg')" alt="add" /> {{ $t('Add Meta Query') }}
+        </div>
 
-            <el-col :md="3" style="text-align:right;">
-                <el-button type="primary" @click="addCondition($event)">
-                    <el-icon><Plus /></el-icon>
-                </el-button>
-            </el-col>
-        </el-row>
-
-        <template v-for="(condition, i) in conditions">
-            <el-row :gutter="20">
+        <div class="nt-posts-conditions mt-4">
+            <el-row :gutter="20" v-for="(condition, i) in conditions">
                 <el-col :md="7" :sm="7">
                     <el-select
-                            v-model="condition.field"
-                            placeholder="Select"
-                            @change="setOperators($event, condition)">
+                        class="ninja-select"
+                        v-model="condition.field"
+                        placeholder="Select"
+                        @change="setOperators($event, condition)">
                         <el-option
-                                v-for="field in fields"
-                                :key="field.key"
-                                :label="field.label"
-                                :value="field.key">
+                            v-for="field in fields"
+                            :key="field.key"
+                            :label="field.label"
+                            :value="field.key">
                         </el-option>
                     </el-select>
                 </el-col>
 
                 <el-col :md="7" :sm="7">
-                    <el-select v-model="condition.operator" placeholder="Select">
+                    <el-select
+                        class="ninja-select"
+                        v-model="condition.operator"
+                        placeholder="Select"
+                    >
                         <el-option
-                                v-for="operator in condition.operators"
-                                :key="operator.key"
-                                :label="operator.value"
-                                :value="operator.key">
+                            v-for="operator in condition.operators"
+                            :key="operator.key"
+                            :label="operator.value"
+                            :value="operator.key">
                         </el-option>
                     </el-select>
                 </el-col>
 
                 <el-col :md="7" :sm="7">
-                    <el-input
-                            v-if="!isSelectable(condition) && !isDateField(condition)"
-                            placeholder="Value"
-                            v-model="condition.value"
-                    ></el-input>
+                    <NinjaInput
+                        v-if="!isSelectable(condition) && !isDateField(condition)"
+                        placeholder="Value"
+                        v-model="condition.value"
+                    />
 
                     <el-date-picker
-                            popper-class="wp-post-conditions-el-picker"
-                            v-else-if="!isSelectable(condition) && isDateField(condition)"
-                            type="datetime"
-                            placeholder="Pick a date"
-                            v-model="condition.value"
-                            format="yyyy-MM-dd HH:mm:ss"
-                            value-format="yyyy-MM-dd HH:mm:ss"
+                        popper-class="wp-post-conditions-el-picker"
+                        v-else-if="!isSelectable(condition) && isDateField(condition)"
+                        type="datetime"
+                        placeholder="Pick a date"
+                        v-model="condition.value"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
 
                     <el-select
-                            v-else-if="isSelectable(condition)"
-                            multiple
-                            :filterable
-                            collapse-tags
-                            v-model="condition.value"
-                            class="full-width"
-                            placeholder="Select">
+                        v-else-if="isSelectable(condition)"
+                        multiple
+                        filterable
+                        collapse-tags
+                        v-model="condition.value"
+                        class="ninja-select"
+                        placeholder="Select"
+                    >
                         <el-option
-                                v-for="selectable in condition.selectableOptions"
-                                :key="selectable.key"
-                                :label="selectable.label"
-                                :value="selectable.key">
+                            v-for="selectable in condition.selectableOptions"
+                            :key="selectable.key"
+                            :label="selectable.label"
+                            :value="selectable.key">
                         </el-option>
                     </el-select>
                 </el-col>
 
                 <el-col :md="3" :sm="3" style="text-align:right;">
-                    <el-button type="danger" @click="removeCondition(i, $event)">
-                        <el-icon><Delete /></el-icon>
-                    </el-button>
+                    <div class="flex">
+                        <div @click="addCondition($event)"
+                             class="mr-3 cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                            <img :src="assetUrl('icons/add-01.svg')" alt="add"/>
+                        </div>
+                        <div @click="removeCondition(i, $event)"
+                             class="mr-3 cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                            <img :src="assetUrl('icons/delete-02.svg')" alt="delete"/>
+                        </div>
+                    </div>
                 </el-col>
             </el-row>
-        </template>
+        </div>
 
-        <div v-if="config && config.table.query_extra" class="ninja_post_query_limit">
-            <div class="ninja_form_group">
-                <label>{{ $t('Query Limit for Frontend') }}
+        <div v-if="config && config.table.query_extra" class="nt-posts-query-limit mt-4">
+            <div class="nt-form-group">
+                <label class="nt-form-label">{{ $t('Query Limit for Frontend') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
                         <template #content>
-                            <h3>Query Limit</h3>
+                            <h3>{{ $t('Query Limit') }}</h3>
                             <p>
-                                Please specify how many posts/CPTs you want to show in total, Leave blank to show all
+                                {{ $t('Please specify how many posts/CPTs you want to show in total, Leave blank to show all') }}
                             </p>
                         </template>
                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </label>
-                <el-input type="number" size="small" v-model="config.table.query_extra.query_limit"/>
+
+                <NinjaInput v-model="config.table.query_extra.query_limit" />
                 <p><small>Please specify how many posts/CPTs you want to show in total, Leave blank to show all</small></p>
             </div>
 
@@ -108,16 +113,20 @@
                 <label>{{ $t('Order By Column') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
                         <template #content>
-                            <h3>Order By Column</h3>
+                            <h3>{{ $t('Order By Column') }}</h3>
                             <p>
-                                Please specify order by column. The script will order by with the selected column
+                                {{ $t('Please specify order by column. The script will order by with the selected column') }}
                             </p>
                         </template>
                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </label>
-                <el-select size="small" v-model="config.table.query_extra.order_by_column">
-                    <el-option v-for="field in orderByFields"  :value="field" :key="field" :label="field"></el-option>
+                <el-select
+                    class="ninja-select"
+                    size="small"
+                    v-model="config.table.query_extra.order_by_column"
+                >
+                    <el-option v-for="field in orderByFields"  :value="field" :key="field" :label="field" />
                 </el-select>
             </div>
 
@@ -125,17 +134,21 @@
                 <label>{{ $t('Order By Type') }}
                     <el-tooltip class="item" placement="bottom-start" effect="light">
                         <template #content>
-                            <h3>Order By Type</h3>
+                            <h3>{{ $t('Order By Type') }}</h3>
                             <p>
-                                Please specify order by type. The script will order with your selected type
+                                {{ $t('Please specify order by type. The script will order with your selected type') }}
                             </p>
                         </template>
                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </label>
-                <el-select size="small" v-model="config.table.query_extra.order_by">
-                    <el-option value="ASC" label="Ascending"></el-option>
-                    <el-option value="DESC" label="Descending"></el-option>
+                <el-select
+                    class="ninja-select"
+                    size="small"
+                    v-model="config.table.query_extra.order_by"
+                >
+                    <el-option value="ASC" :label="$t('Ascending')" />
+                    <el-option value="DESC" :label="$t('Descending')" />
                 </el-select>
             </div>
 
@@ -145,6 +158,8 @@
 
 <script>
 import {Delete, InfoFilled, Plus} from "@element-plus/icons-vue";
+import {assetUrl} from "../../utils/ninjatablesadmin";
+import NinjaInput from "../../@ui-utils/NinjaInput.vue";
 
     export default {
         name: 'WPPostConditions',
@@ -188,6 +203,7 @@ import {Delete, InfoFilled, Plus} from "@element-plus/icons-vue";
             };
         },
         components: {
+            NinjaInput,
             Delete,
             InfoFilled,
             Plus
@@ -198,6 +214,7 @@ import {Delete, InfoFilled, Plus} from "@element-plus/icons-vue";
             }
         },
         methods: {
+            assetUrl,
             addCondition(event) {
                 this.conditions.push({...this.default_condition});
             },

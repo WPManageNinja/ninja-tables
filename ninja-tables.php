@@ -20,7 +20,6 @@ define('NINJA_TABLES_DIR_URL', plugin_dir_url(__FILE__));
 define('NINJA_TABLES_DIR_PATH', plugin_dir_path(__FILE__));
 define('NINJA_TABLES_VERSION', '5.0.21');
 define('NINJA_TABLES_BASENAME', plugin_basename(__FILE__));
-define('NINJA_TABLES_DEVELOPMENT', true);
 
 call_user_func(function ($bootstrap) {
     $bootstrap(__FILE__);

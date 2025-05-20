@@ -1,40 +1,40 @@
 <template>
     <div>
-        <div class="table-column-settings">
-            <el-container>
-                <el-aside width="200px">
-                    <el-menu background-color="#545c64"
+        <div class="table-column-settings mx-4">
+            <el-container class="ninja-table-aside">
+                <el-aside width="300px">
+                    <el-menu background-color="white"
                              :default-active="active_menu"
-                             text-color="#fff"
+                             text-color="#525866"
                              active-text-color="#ffd04b"
                     >
                         <el-menu-item  @click="active_menu = 'columns'" index="columns">
-                            <i class="dashicons dashicons-editor-table"></i>
+                            <img :src="assetUrl('/icons/credit-card.svg')"/>
                             <span>Columns</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'rendering_settings'" index="rendering_settings">
-                            <i class="dashicons dashicons-album"></i>
+                             <img :src="assetUrl('/icons/credit-card.svg')"/>
                             <span>Rendering Settings</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'custom_filters'" index="custom_filters">
-                            <i class="dashicons dashicons-filter"></i>
+                             <img :src="assetUrl('/icons/customize.svg')"/>
                             <span>Custom Filters</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'button_settings'" index="button_settings">
-                            <i class="dashicons dashicons-images-alt"></i>
+                             <img :src="assetUrl('/icons/search-area.svg')"/>
                             <span>Buttons (CSV/Print)</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'language_settings'" index="language_settings">
-                            <i class="dashicons dashicons-translation"></i>
+                            <img :src="assetUrl('/icons/language-square.svg')"/>
                             <span>Language Settings</span>
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
-                <el-main>
+                <el-main class="ml-10">
                     <template v-if="active_menu == 'columns'">
                         <div class="ninja_header">
                             <h2>Table Column Settings</h2>
@@ -45,12 +45,16 @@
                                     <h3 v-if="addColumnStatus || !columns.length" class="title">{{ $t('Add Table Column') }}</h3>
                                     <h3 v-else class="title">{{ $t('Available Columns') }}</h3>
                                     <div v-show="!addColumnStatus" class="inline_action" v-if="addable">
-                                        <el-button size="small" type="primary" v-show="columns.length" @click="addColumnStatus = !addColumnStatus">
-                                            {{ $t('Add Column') }}
-                                        </el-button>
+                                        <NinjaButton 
+                                        v-show="columns.length" 
+                                        @click="addColumnStatus = !addColumnStatus" 
+                                        :btnText="$t('Add Column')"
+                                        type="secondary"
+                                        :icon="assetUrl('/icons/add-01.svg')"
+                                        />
                                     </div>
                                 </div>
-                                <div class="widget_body">
+                                <div class="widget_body border border-[#ebeef5]">
                                     <div v-if="addColumnStatus || !columns.length" class="column">
                                         <div class="add_column_wrapper">
                                             <columns-editor
@@ -73,10 +77,17 @@
                                     >
                                         <template #item="{element: column, index}">
                                             <div class="column drawer" :key="column.key">
-                                                <div class="header">
-                                                    <span class="dashicons dashicons-editor-justify handle" />
-                                                    <span @click="openDrawer(index)">{{ column.name || column.key }}</span>
-                                                    <span class="dashicons dashicons-edit edit_icon" @click="openDrawer(index)" />
+                                                <div class="header flex justify-between items-center" :class="{'border-b border-[#ebeef5]':currentIndex.includes(index)}">
+                                                    <div class="flex items-center gap-2">
+                                                        <!-- <span class="dashicons dashicons-editor-justify handle" /> -->
+                                                         <img class="cursor-move handle" :src="assetUrl('/icons/drag-drop.svg')"/>
+                                                        <span @click="openDrawer(index)" class="text-[14px]">{{ column.name || column.key }}</span>
+                                                    </div>
+                                                    <span @click="openDrawer(index)" class="cursor-pointer">
+                                                        <!-- <img v-if="currentIndex.includes(index)" :src="assetUrl('/icons/chevron-up.svg')"/>
+                                                        <img v-else :src="assetUrl('/icons/chevron-down.svg')"/> -->
+                                                        <img :src="assetUrl('/icons/edit-2.svg')"/>
+                                                    </span>
                                                 </div>
                                                 <div class="drawer_body" :class="'drawer_body_'+index">
                                                     <columns-editor
@@ -141,7 +152,7 @@
     import get from 'lodash/get'
     import size from 'lodash/size'
     import snakeCase from 'lodash/snakeCase'
-    import ColumnsEditor from './ColumnsEditor';
+    import ColumnsEditor from './ColumnsEditor.vue';
     import NinjaCustomFilters from '../TableFilters/CustomFilter';
     import NinjaLanguageSettings from '../Configarations/_LanguageSettings'
     import NinjaRenderingSettings from '../Configarations/_RenderingSettings'
@@ -149,6 +160,8 @@
     import { useEventBus } from '../../../eventBus';
 
     import { tableLibs } from '../../../data/data'
+    import { assetUrl } from '../../../utils/ninjatablesadmin';
+    import { NinjaButton } from '../../../@ui-utils';
 
     export default {
         name: 'TableConfiguration',
@@ -158,12 +171,14 @@
             NinjaCustomFilters,
             NinjaLanguageSettings,
             NinjaRenderingSettings,
-            NinjaButtonSettings
+            NinjaButtonSettings,
+            NinjaButton
         },
         props: ['config'],
         data() {
             return {
                 bus : useEventBus(),
+                currentIndex: [],
                 hasPro: !!window.ninja_table_admin.hasPro,
                 active_menu: 'columns',
                 table_color_primary: '#000',
@@ -209,6 +224,7 @@
             },
         },
         methods: {
+            assetUrl,
             storeSettings() {
                 this.bus.emit('tableDoingAjax', true);
 
@@ -234,6 +250,11 @@
             },
             openDrawer(index) {
                 jQuery('.drawer_body_' + index).slideToggle();
+                if(this.currentIndex.includes(index)){
+                    this.currentIndex = this.currentIndex.filter(i => i !== index);
+                } else {
+                    this.currentIndex.push(index);
+                }
             },
             validateColumn(column) {
                 if (!column.name) {

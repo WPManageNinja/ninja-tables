@@ -7,6 +7,8 @@ import Application from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css';
 import './css/ninja-tables-admin.scss';
+import ElementPlusIcons from './plugins/elementPlusIcons'
+
 
 // Initialize variables in wider scope
 let app
@@ -24,6 +26,7 @@ try {
 
     // Use Element Plus
     app.use(ElementPlus)
+    app.use(ElementPlusIcons)
 
     // Global properties and methods
     app.config.globalProperties.$t = (str) => {

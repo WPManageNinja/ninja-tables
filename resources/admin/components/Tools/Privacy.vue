@@ -1,62 +1,68 @@
 <template>
-    <div class="privacy">
-        <div class="ninja_header">
-            <h2>Permission <span v-show="!hasPro">(Pro Feature)</span></h2>
+    <div class="nt-table-permission-content">
+        <div class="nt-permission-header">
+            <div class="text-[18px] font-[600] text-[#0E121B]">
+                {{ $t('Permission') }} <span v-show="!hasPro">(Pro Feature)</span>
+            </div>
+            <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
+                    {{$t(`By default, Only Administrator have access to manage the tables. By selecting additional roles bellow, You can give access to manage your Tables to other user roles.`) }}
+            </div>
         </div>
 
-        <div v-loading="fetching" class="ninja_content">
-            <div class="ninja_block">
-                <p>By default, Only Administrator have access to manage the tables. By selecting additional roles bellow, You can give access to manage your Tables to other user roles.</p>
-            </div>
-            <hr />
-            <template v-if="hasPro">
-                <div class="form-group">
-                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
-                        {{ $t('Check all') }}
-                    </el-checkbox>
-                </div>
+        <div class="nt-permission-body">
+            <div v-if="hasPro">
+                <div v-loading="fetching" class="border border-solid border-[#E1E4EA] rounded-[8px] mb-4">
+                    <div class="bg-[#F9FAFB] flex justify-between items-center px-4 py-2 rounded-t-[8px]"
+                         style="border-bottom: 1px solid #E1E4EA">
+                        <div>Select</div>
+                        <div>
+                            <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">
+                                {{ $t('Select All') }}
+                            </el-checkbox>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <el-checkbox-group v-model="capability" @change="handleCheckedCapabilitiesChange" class="nt-checkbox-group">
+                            <el-checkbox style="font-weight: 300" v-for="role in roles" :key="role.key" :value="role.key">
+                                {{ role.name }}
+                            </el-checkbox>
+                        </el-checkbox-group>
 
-                <div class="form-group">
-                    <el-checkbox-group v-model="capability" @change="handleCheckedCapabilitiesChange">
-                        <el-checkbox v-for="role in roles" :value="role.key" :key="role.key">
-                            {{ role.name }}
+                        <el-checkbox
+                            v-if="capability && capability.length"
+                            :true-value="'yes'"
+                            :false-value="'no'"
+                            v-model="sql_permission">
+                            {{ $t('Enable SQL-Module Permission for selected user roles') }}
                         </el-checkbox>
-                    </el-checkbox-group>
+                    </div>
                 </div>
 
-                <div v-if="capability && capability.length" class="form-group">
-                    <el-checkbox
-                        :true-value="'yes'"
-                        :false-value="'no'"
-                        v-model="sql_permission">
-                        Enable SQL-Module Permission for selected user roles
-                    </el-checkbox>
+                <div>
+                    <NinjaButton type="primary" size="small" @click="store" :btn-text="$t('Save')" />
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <el-button @click="store" type="primary" size="small">Save</el-button>
-                </div>
-            </template>
-
-            <template v-else>
-                 {{ $t('Activate Ninja Tables Pro Add-on plugin to unlock this feature') }}
-               <p>
-                 <get-pro/>
-               </p>
-            </template>
+            <div v-else>
+                {{ $t('Activate Ninja Tables Pro Add-on plugin to unlock this feature') }}
+                <p>
+                    <GetPro />
+                </p>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import GetPro from "./GetPro";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
     export default {
         name: "Privacy",
-      components: {GetPro},
+      components: {NinjaButton, GetPro},
       data() {
             return {
-                hasPro: false,
-                fetching: false,
+                hasPro: window.ninja_table_admin.hasPro === true || window.ninja_table_admin.hasPro === '1',
+                fetching: true,
                 roles: [],
                 checkAll: false,
                 sql_permission: 'no',
@@ -76,7 +82,9 @@
                         this.handleCheckedCapabilitiesChange(this.capability);
                     })
                     .catch(e => {})
-                this.fetching = false;
+                    .finally(() => {
+                        this.fetching = false;
+                    });
             },
             store() {
                 let data = {
@@ -110,24 +118,9 @@
             }
         },
         mounted() {
-            this.hasPro = window.ninja_table_admin.hasPro === true;
             this.get();
         }
     };
 </script>
-
-<style>
-    .el-text-info {
-        color: #58b7ff;
-    }
-
-    .privacy label {
-        margin-bottom: initial;
-    }
-
-    #capability {
-        margin-left: 75px;
-    }
-</style>
 
 

@@ -1,53 +1,11 @@
-// @import 'element-plus/theme-chalk/base.css';
-// @import 'element-plus/theme-chalk/el-table.css';
-// @import 'element-plus/theme-chalk/el-popover.css';
-// @import 'element-plus/theme-chalk/el-loading.css';
-// @import 'element-plus/theme-chalk/el-message.css';
-// @import 'element-plus/theme-chalk/el-upload.css';
-// @import 'element-plus/theme-chalk/el-message-box.css';
-// @import 'element-plus/theme-chalk/el-tooltip.css';
-// @import 'element-plus/theme-chalk/el-pagination.css';
-// @import 'element-plus/theme-chalk/el-collapse.css';
-// @import 'element-plus/theme-chalk/el-collapse-item.css';
-// @import 'element-plus/theme-chalk/el-dialog.css';
-// @import 'element-plus/theme-chalk/el-aside.css';
-// @import 'element-plus/theme-chalk/el-main.css';
-// @import 'element-plus/theme-chalk/el-container.css';
-// @import 'element-plus/theme-chalk/el-menu.css';
-// @import 'element-plus/theme-chalk/el-menu-item.css';
-// @import 'element-plus/theme-chalk/el-header.css';
-// @import 'element-plus/theme-chalk/el-color-picker.css';
-// @import 'element-plus/theme-chalk/el-form.css';
-// @import 'element-plus/theme-chalk/el-form-item.css';
-// @import 'element-plus/theme-chalk/el-radio-group.css';
-// @import 'element-plus/theme-chalk/el-radio.css';
-// @import 'element-plus/theme-chalk/el-switch.css';
-// @import 'element-plus/theme-chalk/el-radio-button.css';
-// @import 'element-plus/theme-chalk/el-tabs.css';
-// @import 'element-plus/theme-chalk/el-tab-pane.css';
-// @import 'element-plus/theme-chalk/el-steps.css';
-// @import 'element-plus/theme-chalk/el-step.css';
-// @import 'element-plus/theme-chalk/el-alert.css';
-// @import 'element-plus/theme-chalk/el-option.css';
-// @import 'element-plus/theme-chalk/el-option-group.css';
-// @import 'element-plus/theme-chalk/el-row.css';
-// @import 'element-plus/theme-chalk/el-col.css';
-// @import 'element-plus/theme-chalk/el-transfer.css';
-// @import 'element-plus/theme-chalk/el-date-picker.css';
 
-// // Table builder components
-// @import 'element-plus/theme-chalk/el-slider.css';
-// @import 'element-plus/theme-chalk/el-card.css';
-// @import 'element-plus/theme-chalk/el-input-number.css';
-// @import 'element-plus/theme-chalk/el-rate.css';
-// @import 'element-plus/theme-chalk/el-progress.css';
-// @import 'element-plus/theme-chalk/el-button-group.css';
-// @import 'element-plus/theme-chalk/el-dropdown.css';
-// @import 'element-plus/theme-chalk/el-badge.css';
-// @import 'element-plus/theme-chalk/el-tag.css';
 
 // @import './ninja-tables-admin.scss';
 @use './ninja-tables-admin' as *;
+
+#wpcontent{
+    background: #F4F5FA;
+}
 
 .el-input {
     input[readonly] {
@@ -181,3 +139,6 @@ p#dolly {
 .tooltip-icon-color {
     color: #58B7FF !important;
 }
+
+@import './_tailwind.scss';
+@import './ui_utils';

@@ -1,10 +1,10 @@
 <template>
-    <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card" class="ninja-tables-component">
+    <el-tabs v-model="activeName" @tab-click="handleClick" class="ninja-tables-component nt_tab_design nt_tab_design_drag mt-[58px]">
         <el-tab-pane :label="$t('Elements')" name="elements" v-if="!manageCell.active">
             <el-collapse accordion v-model="activeNames" @change="handleChange"
-                         v-for="(component, index) in initialData.components" :key="component.key" class="accordions">
+                         v-for="(component, index) in initialData.components" :key="component.key" class="accordions nt-design-collapse">
                 <el-collapse-item v-if="component.key !== 'container'" :title="component.name" :name="index">
-                    <el-row :gutter="20" align="middle" justify="center">
+                    <el-row :gutter="20">
 
                         <draggable
                             :list="component.fields"
@@ -12,27 +12,28 @@
                             :clone="customClone"
                             item-key="name"
                             @end="end"
+                            class="el-row"
                         >
                             <template #item="{element: item, index: index}" :key="index">
                                 <el-col class="element-style" :span="12">
-                                    <el-badge :value="(!hasPro && item.has_pro) ? 'Pro' : ''" class="item">
-                                        <el-button :disabled="!hasPro && item.has_pro" class="button-component"
-                                                   :class="!hasPro && item.has_pro ? 'pro-component' : ''" size="small"
-                                                   plain
-                                                   :icon="item.icon !== null ? item.icon : 'el-icon-s-grid'">{{ item.name }}
-                                        </el-button>
-                                    </el-badge>
+                                    <div :value="(!hasPro && item.has_pro) ? 'Pro' : ''" class="item w-full">
+                                        <NinjaButton type="secondary" :disabled="!hasPro && item.has_pro" class="w-full" :class="!hasPro && item.has_pro ? 'pro-component' : ''">
+                                            <el-icon :is="getIconComponent(item.icon)" class="icon-component mr-2" >
+                                                <component :is="getIconComponent(item.icon)" />
+                                            </el-icon>
+                                           <span class="!text-xs font-normal"> {{ item.name }}</span>
+                                        </NinjaButton>
+                                    </div>
                                 </el-col>
                             </template>
                         </draggable>
-
                     </el-row>
                 </el-collapse-item>
             </el-collapse>
         </el-tab-pane>
         <el-tab-pane :label="$t('Options')" name="options"
                      v-if="item?.data?.type && !manageCell.active && showOptions">
-            <el-collapse v-model="activeOption" accordion @change="accorDianChange" class="accordions">
+            <el-collapse v-model="activeOption" accordion @change="accorDianChange" class="accordions nt-design-collapse">
                 <el-collapse-item :title="$t(ucWords(item.data.type) + ' Options')" name="1">
                     <text-option v-if="item.data.type === 'text'" :item="item"/>
                     <button-option v-else-if="item.data.type === 'button'" :item="item"></button-option>
@@ -58,7 +59,7 @@
         <el-tab-pane :label="$t('Settings')" name="settings" v-if="!manageCell.active">
             <el-collapse accordion v-model="activeNames" @change="handleChange"
                          v-for="(setting, key) in initialData.settings"
-                         :key="key" class="accordions">
+                         :key="key" class="accordions nt-design-collapse">
 
                 <el-collapse-item :name="key">
                     <template #title>
@@ -123,22 +124,22 @@
                 </el-collapse-item>
             </el-collapse>
 
-            <el-collapse v-model="activeNames" class="accordions" @change="handleChange">
-                <el-collapse-item :title="$t('Export Table')" class="export">
+            <el-collapse v-model="activeNames" class="accordions nt-design-collapse" @change="handleChange">
+                <el-collapse-item :title="$t('Export Table')" class="">
                     <select-input :items="exports.items" v-model="exports.format"
                                   :label="$t('Select Format')"></select-input>
-                    <el-button @click="exportTable" type="primary" size="small">Export</el-button>
+                    <NinjaButton @click="exportTable" class="w-full my-2" size="small">{{ $t('Export') }}</NinjaButton>
                 </el-collapse-item>
             </el-collapse>
         </el-tab-pane>
 
         <el-tab-pane :label="$t('Responsiveness')" name="responsiveness" v-if="!manageCell.active">
             <el-collapse accordion v-model="activeNames" @change="handleChangeResponsive"
-                         v-for="(responsiveItem, key) in initialData.responsive" :key="key" class="accordions">
+                         v-for="(responsiveItem, key) in initialData.responsive" :key="key" class="accordions nt-design-collapse">
                 <el-collapse-item :title="responsiveItem.name" :name="key">
                     <div class="component-spacing" v-for="(item, index) in responsiveItem.options" :key="index">
                         <div v-if="'devices' === index">
-                            <el-tabs v-model="deviceActiveName" @tab-click="handleDeviceClick">
+                            <el-tabs v-model="deviceActiveName" @tab-click="handleDeviceClick" class="nt-design-tabs">
                                 <el-tab-pane v-for="(devices, index) in item" :key="index" :label="devices.name"
                                              :name="devices.key">
                                     <div v-for="(device, index, key) in devices" :key="index"
@@ -160,13 +161,13 @@
                 </el-collapse-item>
             </el-collapse>
         </el-tab-pane>
-        <el-tab-pane :label="$t('Manage cell')" name="cells" v-if="manageCell.activeTab === 'cells'">
+        <el-tab-pane :label="$t('Manage cell')" name="cells" class="p-5" v-if="manageCell.activeTab === 'cells'">
             <cell-setting :manageCell="manageCell" :setting="initialData.settings"></cell-setting>
-            <el-button @click="closeCellEditing" type="primary" class="ntb-manage-button"> {{ $t('Close') }}</el-button>
+            <NinjaButton @click="closeCellEditing" type="primary" class="ntb-manage-button mt-2"> {{ $t('Close') }}</NinjaButton>
         </el-tab-pane>
-        <el-tab-pane :label="$t('Background')" name="background" v-if="manageCell.activeTab === 'background'">
+        <el-tab-pane :label="$t('Background')" class="p-5" name="background" v-if="manageCell.activeTab === 'background'">
             <background-color :manageCell="manageCell"></background-color>
-            <el-button @click="closeCellEditing" type="primary" class="ntb-manage-button"> {{ $t('Close') }}</el-button>
+            <NinjaButton @click="closeCellEditing" type="primary" class="ntb-manage-button mt-2"> {{ $t('Close') }}</NinjaButton>
         </el-tab-pane>
     </el-tabs>
 </template>
@@ -174,13 +175,13 @@
 <script>
 import ace_code_editor from '../../../../common/_ace_editor';
 import draggable from "vuedraggable";
-import AllInputElement from "../SettingComponent/AllInputElement";
-import TextOption from "../OptionComponent/TextOption";
-import ButtonOption from "../OptionComponent/ButtonOption";
-import StarRating from "../OptionComponent/StarRatingOption";
-import IconOption from "../OptionComponent/IconOption";
-import ProgressOption from "../OptionComponent/ProgressOption";
-import ListOption from "../OptionComponent/ListOption";
+import AllInputElement from "../SettingComponent/AllInputElement.vue";
+import TextOption from "../OptionComponent/TextOption.vue";
+import ButtonOption from "../OptionComponent/ButtonOption.vue";
+import StarRating from "../OptionComponent/StarRatingOption.vue";
+import IconOption from "../OptionComponent/IconOption.vue";
+import ProgressOption from "../OptionComponent/ProgressOption.vue";
+import ListOption from "../OptionComponent/ListOption.vue";
 import CustomHtmlOption from "../OptionComponent/CustomHTML";
 import ShortcodeOption from "../OptionComponent/ShortcodeOption";
 import StylistListOption from "../OptionComponent/StylistListOption";
@@ -191,11 +192,23 @@ import RibbonOption from "../OptionComponent/RibbonOption";
 import ColorInput from "../SettingComponent/ColorInput";
 import BackgroundColor from "./_Background";
 import CellSetting from "./_CellSetting";
-import SelectInput from "../SettingComponent/SelectInput";
+import SelectInput from "../SettingComponent/SelectInput.vue";
 import {helpers} from "../Mixin/helpers";
 import GetPro from "../../Tools/GetPro";
 import {useEventBus} from './../../../eventBus';
-import {InfoFilled} from "@element-plus/icons-vue";
+import {
+    Collection,
+    CopyDocument,
+    CreditCard,
+    Edit,
+    EditPen,
+    Finished,
+    Grid,
+    InfoFilled, List, Notebook,
+    Operation, Picture, Plus,
+    Star
+} from "@element-plus/icons-vue";
+import NinjaButton from '../../../@ui-utils/NinjaButton.vue';
 
 
 export default {
@@ -204,6 +217,19 @@ export default {
     mixins: [helpers],
     components: {
         InfoFilled,
+        Collection,
+        CopyDocument,
+        CreditCard,
+        Edit,
+        EditPen,
+        Finished,
+        Grid,
+        Notebook,
+        Operation,
+        Picture,
+        Plus,
+        Star,
+        List,
         ace_code_editor,
         GetPro,
         SelectInput,
@@ -224,7 +250,8 @@ export default {
         CustomHtmlOption,
         ShortcodeOption,
         StylistListOption,
-        ImageOption
+        ImageOption,
+        NinjaButton
     },
     data() {
         return {
@@ -279,14 +306,14 @@ export default {
         },
 
         handleClick(tab, event) {
-            const responsiveTabPress = tab.$options.propsData.name === 'responsiveness';
+            const responsiveTabPress = tab.$options?.propsData?.name === 'responsiveness';
             if (responsiveTabPress) {
                 this.deviceLastSelected === '' ? this.$emit('deviceSelected', '') : this.$emit('deviceSelected', this.deviceLastSelected);
             } else {
                 this.$emit('deviceSelected', '');
             }
 
-            if (tab.$options.propsData.name !== 'options') {
+            if (tab.$options?.propsData.name !== 'options') {
                 this.bus.emit('manageCell');
             }
         },
@@ -297,7 +324,7 @@ export default {
             }
         },
         handleDeviceClick(tab, event) {
-            const data = tab.$options.propsData.name;
+            const data = tab.props.name;
             this.deviceActiveName = data;
             this.deviceLastSelected = data;
             this.$emit('deviceSelected', data);
@@ -330,6 +357,30 @@ export default {
         },
         handleUpdateItem(updatedItem) {
             this.item = updatedItem;
+        },
+        getIconComponent(iconName) {
+            if (!iconName) {
+                return Grid;
+            }
+
+            const iconMapping = {
+                'edit-outline': EditPen,
+                'edit': Edit,
+                's-grid': Grid,
+                'bank-card': CreditCard,
+                'finished': Finished,
+                'star-off': Star,
+                's-operation': Operation,
+                'document-copy': CopyDocument,
+                'picture-outline': Picture,
+                'document': Document,
+                'collection-tag': Collection,
+                'circle-plus-outline': Plus,
+                'notebook-1': Notebook,
+                'notebook-2': List,
+            }
+
+            return iconMapping[iconName].name;
         }
     },
     created() {
@@ -439,54 +490,17 @@ export default {
 
 .ninja-tables-component {
 
-    .el-collapse-item__content {
-        padding-bottom: 6px;
-    }
+    // .el-collapse-item__content {
+    //     padding-bottom: 6px;
+    // }
 
-    .accordions {
-        .export {
-            .el-select {
-                width: 50%;
-            }
+    // .el-slider__runway {
+    //     margin-left: 12px;
+    // }
 
-            .el-button {
-                width: 100%;
-                margin-top: 10px;
-            }
-        }
-
-        > .is-active {
-            max-height: 410px;
-            overflow-y: scroll;
-
-            &::-webkit-scrollbar {
-                width: .2em;
-            }
-
-            &::-webkit-scrollbar-thumb {
-                background-color: #409EFF;
-                outline: 1px solid #409EFF;
-            }
-
-            .el-collapse-item__arrow.is-active {
-                margin-right: 6px;
-            }
-        }
-
-        .el-tabs__item {
-            &.is-active {
-                display: initial;
-            }
-        }
-    }
-
-    .el-slider__runway {
-        margin-left: 12px;
-    }
-
-    .el-slider {
-        margin-left: 10px;
-    }
+    // .el-slider {
+    //     margin-left: 10px;
+    // }
 
     .element-style {
         padding: 10px 0px;
@@ -513,18 +527,18 @@ export default {
             }
         }
 
-        .item {
-            .el-badge__content {
-                right: 33px;
-            }
-        }
+        // .item {
+        //     .el-badge__content {
+        //         right: 33px;
+        //     }
+        // }
     }
 
-    .ntb-manage-button {
-        display: block;
-        margin: 10px auto;
-        padding: 10px 20px
-    }
+    // .ntb-manage-button {
+    //     display: block;
+    //     margin: 10px auto;
+    //     padding: 10px 20px
+    // }
 
     .component-spacing,
     .component-wrapper > * {

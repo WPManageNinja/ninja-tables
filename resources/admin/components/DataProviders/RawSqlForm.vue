@@ -1,9 +1,16 @@
 <template>
     <div class="ninja_modal-body">
-        <h3>
+        <h3 class="nt-modal-title">
             Construct Table from Custom SQL Query
         </h3>
-        <hr />
+        <p class="nt-modal-description">
+            {{$t('Create table by generating a sql query to any custom SQL database.')}}
+            <a target="_blank"
+               href="https://ninjatables.com/docs/create-table-from-custom-sql/">
+                {{$t('Learn more about custom sql table integration')}}
+            </a>
+        </p>
+
         <template v-if="!hasPro">
             <premium-notice highlight="SQL module where you can write custom SQL to build your table with "/>
         </template>
@@ -20,23 +27,22 @@
         </template>
 
         <template v-else-if="isActivated">
-            <div class="ninja_modal-body">
-                <div class="form-group">
-                    <label for="name">{{ $t('Table Title') }}</label>
-                    <input v-model="post_title"
-                           type="text" id="name" class="form-control"
-                           placeholder="Enter a title to identify your table"
-                    >
+            <div class="my-[30px]">
+                <div class="nt-form-group">
+                    <label class="nt-form-label">{{ $t('Table Title') }}</label>
+                    <NinjaInput
+                        v-model="post_title"
+                        :placeholder="$t('Enter a title to identify your table')"
+                    />
                 </div>
 
-                <div class="form-group">
-                    <label>{{ $t('Custom SQL Query') }}</label>
-<!--                    <ace_code_editor mode="mysql" editor_id="ninja_mysql_editor" v-model="sql" />-->
+                <div class="nt-form-group">
+                    <label class="nt-form-label">{{ $t('Custom SQL Query') }}</label>
                     <ace_code_editor editor_id="ninja_mysql_editor" mode="mysql" v-model="sql"></ace_code_editor>
-                    <p>Please write valid SQL query. Your written SQL query will be passed to <code>$wpdb->get_results()</code> function</p>
+                    <p class="nt-form-description mt-2">Please write valid SQL query. Your written SQL query will be passed to <code>$wpdb->get_results()</code> function</p>
                 </div>
 
-                <div v-if="error_html" class="form-group">
+                <div v-if="error_html" class="nt-form-group">
                     <el-alert
                         title="SQL Error"
                         @close="error_html = ''"
@@ -45,26 +51,31 @@
                     </el-alert>
                 </div>
 
-                <div class="form-group">
-                    <label>{{ $t('SQL Connection Type') }}</label>
-                    <el-radio-group v-model="connection_type">
-                        <el-radio value="local" label="Default WP SQL Table" />
-                        <el-radio value="external" label="Remote/External SQL" />
+                <div class="nt-form-group mt-4 flex flex-col">
+                    <label class="nt-form-label mb-2">{{ $t('SQL Connection Type:') }}</label>
+                    <el-radio-group v-model="connection_type" class="ninja_tables_radio_group">
+                        <el-radio border value="local" label="Default WP SQL Table" class="mr-2"/>
+                        <el-radio border value="external" label="Remote/External SQL" />
                     </el-radio-group>
                 </div>
 
-                <div v-if="connection_type === 'external'" class="form-group">
-                    <label>{{ $t('MYSQL Connection Details') }}</label>
+                <div v-if="connection_type === 'external'" class="nt-form-group mt-4">
+                    <label class="nt-form-label">{{ $t('MYSQL Connection Details') }}</label>
                     <remote-sql-connection :connection="remote_connection" />
                 </div>
 
             </div>
 
-            <div class="modal-footer">
-                <el-button type="primary" size="small" @click="save">
-                    <span>{{ $t('Add') }}</span>
-                    <i v-if="btnLoading" class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
-                </el-button>
+            <div class="nt-modal-footer">
+                <NinjaButton
+                    type="secondary"
+                    @click="$emit('modalClose')"
+                    :btn-text="$t('Cancel')"
+                />
+                <NinjaButton
+                    @click="save"
+                    :btn-text="$t('Add')"
+                />
             </div>
         </template>
         <template v-else>
@@ -86,10 +97,14 @@
     import PremiumNotice from '../includes/PremiumNotice';
     import RemoteSqlConnection from '../TableNav/_RemoteSQLConnection'
     import ace_code_editor from "../../../common/_ace_editor.vue";
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
     export default {
         name: 'CustomSQLQuery',
         components: {
+            NinjaButton,
+            NinjaInput,
             ace_code_editor,
             PremiumNotice,
             RemoteSqlConnection

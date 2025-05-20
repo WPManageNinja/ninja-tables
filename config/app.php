@@ -10,5 +10,5 @@
   'hook_prefix' => 'ninjatables',
   'rest_namespace' => 'ninjatables',
   'rest_version' => 'v2',
-  'env'            => 'dev',
+  'env' => 'dev',
 );

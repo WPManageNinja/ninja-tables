@@ -1,0 +1,523 @@
+.toplevel_page_ninja_tables {
+  .ninja-button {
+    @apply rounded-[8px] p-[8px] px-5 leading-5 font-[500] text-[14px] cursor-pointer flex;
+  }
+  .ninja-button--primary {
+    @apply bg-[#335cff] text-white hover:bg-[#2547D0] delay-100 duration-100;
+  }
+  .ninja-button--secondary {
+    @apply bg-white text-[#525866] border border-solid border-[#E1E4EA];
+  }
+  .ninja-button--danger {
+    @apply bg-white text-[#FB3748] border border-solid border-[#FB3748];
+  }
+
+  .nt-checkbox-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+
+    .el-checkbox {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  //input style
+  .ninja-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    transition: border-color 0.2s;
+    background-color: #fff;
+    &:hover {
+      border-color: #c0c4cc;
+    }
+    &:focus-within {
+      border-color: #335cff;
+    }
+
+    .ninja-input {
+      flex: 1;
+      width: 100%;
+      border: none;
+      outline: none;
+      padding: 0 12px;
+      height: 32px;
+      font-size: 14px;
+      color: #606266;
+      background: transparent;
+    }
+
+    .ninja-input--large {
+      height: 36px;
+      font-size: 15px;
+    }
+
+    .ninja-input-prefix,
+    .ninja-input-suffix {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: #909399;
+    }
+
+    .ninja-input-prefix {
+      border-right: 1px solid #dcdfe6;
+    }
+
+    .ninja-input-suffix {
+      border-left: 1px solid #dcdfe6;
+    }
+    .prefix-icon,
+    .suffix-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .ninja-input:disabled,
+    .ninja-input-wrapper.disabled {
+      background-color: #f5f7fa;
+      cursor: not-allowed;
+    }
+  }
+
+  .ninja-select {
+    .el-select__wrapper {
+      border-radius: 8px;
+      height: 40px;
+    }
+  }
+
+  .ninja_tables {
+    &.el-table tr th {
+      @apply bg-[#F9FAFB] text-xs py-3 text-[#565865] text-[14px] font-[500] leading-5;
+    }
+  }
+
+  .nt-inner-table {
+    &.el-table tr th {
+      @apply bg-[#F9FAFB] text-xs py-3 text-[#565865] text-[14px] font-[500] leading-5;
+    }
+
+    &.el-table tr th:first-of-type {
+      border: 1px solid #E1E4EA;
+      border-radius: 12px 0 0 0;
+    }
+
+    &.el-table tr th:last-of-type {
+      border: 1px solid #E1E4EA;
+      border-radius: 0 12px 0 0;
+    }
+
+    tbody tr:last-child {
+      td:first-child {
+        border-radius: 0 0 0 12px;
+      }
+
+      td:last-child {
+        border-radius: 0 0 12px 0;
+      }
+    }
+
+    border-radius: 12px;
+  }
+
+  .ninja-table-aside {
+    aside {
+      height: fit-content;
+      .el-menu {
+        border-right: 0;
+      }
+      @apply bg-white rounded-[12px] p-5 border border-[#E1E4EA];
+      .el-menu-item {
+        @apply rounded-[8px] h-[40px] font-[500] hover:bg-white text-[#525866];
+        img {
+          filter: grayscale(100%);
+          margin-right: 12px;
+        }
+      }
+      .is-active {
+        @apply bg-[#F5F7FA] text-[#0e121b] hover:bg-[#F9FAFB];
+        img {
+          filter: grayscale(0);
+        }
+      }
+    }
+
+    main {
+      @apply bg-white rounded-[12px] p-5;
+    }
+  }
+
+  .ninja_tables_radio_group {
+    .el-radio.is-bordered {
+      border: 1px dashed #e1e4ea;
+      background: white;
+      border-radius: 10px !important;
+      margin-right: 10px;
+      margin-bottom: 0;
+    }
+    .el-radio__input.is-checked + .el-radio__label {
+      color: #335cff;
+    }
+    .el-radio__input.is-checked .el-radio__inner {
+      border-color: #335cff;
+      background: #335cff;
+      &::after {
+        height: 7px;
+        width: 7px;
+      }
+    }
+    .el-radio--small{
+         .el-radio__label{
+            padding-left: 3px;
+          }
+          margin-right: 5px;
+    }
+ 
+  }
+
+  .nt-steps.el-steps--horizontal {
+    .el-step__main {
+      .el-step__title {
+        font-weight: 400 !important;
+      }
+    }
+    .is-process {
+      .el-step__icon {
+        border: 1px solid #335CFF !important;
+        .el-step__icon-inner {
+          font-weight: 300;
+          color: #335CFF;
+        }
+      }
+    }
+    .is-wait {
+      .el-step__line {
+        background: #CACFD8;
+      }
+      .el-step__icon {
+        border: 1px solid #CACFD8 !important;
+        .el-step__icon-inner {
+          font-weight: 300;
+          color: #CACFD8;
+        }
+      }
+    }
+    .is-finish {
+      .el-step__line {
+        background: #335CFF;
+      }
+      .el-step__icon {
+        border: 1px solid #335CFF !important;
+        .el-step__icon-inner {
+          font-weight: 300;
+          color: #335CFF;
+        }
+      }
+    }
+  }
+
+  .nt_tab_design {
+    border: 1px solid #E1E4EA;
+    border-radius: 8px;
+    .el-tabs__nav-wrap{
+      border-radius: 8px 8px 0 0;
+    }
+    .el-tabs__header .is-top {
+      color: #525866;
+      font-weight: 500;
+      font-size: 14px;
+      margin: 0 !important;
+      .el-tabs__nav-scroll {
+        padding: 0 18px;
+      }
+      &::after {
+        height: 1px;
+      }
+      .is-active {
+        color: #0e121b;
+      }
+      .el-tabs__active-bar{
+        background: #335cff;
+      }
+    }
+    .el-tabs__header{
+      margin: 0;
+    }
+  }
+
+  .nt_tab_design_drag{
+    .el-tabs__item{
+      padding: 0 8px;
+    }
+    .el-tabs__nav-scroll{
+      background: white;
+    }
+  }
+
+  .nt_slider_input{
+    .el-slider__bar{
+      background: #335cff;
+    }
+    .el-slider__button{
+      border-color: #335cff;
+    }
+  }
+
+  .el-radio-group {
+    .is-active {
+      .el-radio-button__inner {
+        background: #335cff;
+        border-color: #335cff;
+      }
+    }
+  }
+
+ .el-input-number{
+  border-radius: 8px;
+  border-color: #335CFF;
+  .el-input-number__decrease{
+    border-radius: 8px 0 0 8px;
+  }
+  .el-input-number__increase{
+    border-radius: 0 8px 8px 0;
+  }
+  .el-input__wrapper{
+    border-radius: 8px;
+  }
+  .el-input__inner {
+    border: none;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #525866;
+    &:focus {
+      box-shadow: none;
+      border: none;
+      outline: none;
+    }
+  }
+}
+
+  .el-checkbox {
+    &.is-checked {
+      .el-checkbox__label {
+        color: #335cff;
+      }
+      .el-checkbox__inner {
+        background: #335cff;
+        border-color: #335cff;
+      }
+    }
+    .is-indeterminate {
+      .el-checkbox__inner {
+        background: #335cff;
+        border-color: #335cff;
+      }
+    }
+  }
+
+  .el-switch {
+    &.is-checked {
+      .el-switch__core {
+        background: #335cff;
+        border-color: #335cff;
+      }
+    }
+  }
+
+  .el-transfer {
+    width: 100%;
+
+    .el-input {
+      .el-input__wrapper {
+        border-radius: 8px;
+
+        &:focus {
+          border: 1px solid #409EFF;
+          box-shadow: none;
+        }
+        .el-input__inner {
+          border: none;
+
+          &:focus {
+            border: none;
+            box-shadow: none;
+          }
+        }
+      }
+    }
+
+    .el-transfer__buttons{
+      button{
+        background: white !important;
+        border: 1px solid #E1E4EA;
+        padding: 5px 8px;
+        svg{
+          color: #525866;
+        }
+      }
+      button:nth-of-type(1){
+        border-radius: 8px 0px 0px 8px;
+        &:hover{
+          border: 1px solid #E1E4EA;
+        }
+      }
+      button:nth-of-type(2){
+        border-radius: 0 8px 8px 0;
+        margin: 0;
+        border-left: none;
+        &:hover{
+          border-top: 1px solid ;
+          border-right: 1px solid;
+          border-bottom: 1px solid;
+          border-color: #E1E4EA;
+        }
+      }
+
+      .is-disabled{
+        background: #F5F7FA !important;
+        svg{
+          color: #CACFD8 !important;
+        }
+      }
+    }
+
+    .el-transfer-panel{
+      width: 40%;
+      border-radius: 12px;
+
+      .el-transfer-panel__header{
+        background: transparent;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        padding: 20px 16px 12px 16px;
+
+        .el-checkbox{
+          .el-checkbox__label{
+            font-size: 14px;
+            font-weight: 300;
+          }
+        }
+      }
+
+      .el-transfer-panel__body{
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        font-weight: 300;
+
+        .el-checkbox-group {
+          .el-checkbox__label {
+            font-weight: 300;
+          }
+        }
+      }
+    }
+  }
+
+  .el-textarea {
+    .el-textarea__inner {
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: #525866;
+      min-height: 100px;
+      resize: vertical;
+      &:focus {
+        border: 1px solid #409EFF;
+        box-shadow: none;
+      }
+    }
+  }
+
+  .el-overlay {
+    background: rgba(2, 13, 23, 0.30) !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+    z-index: 999 !important;
+  }
+
+  .el-input {
+    .el-input__wrapper {
+      @apply border border-[#E1E4EA] rounded-[10px];
+
+      &:focus {
+        @apply border-[#409EFF] shadow-none;
+      }
+
+      .el-input__inner {
+        @apply border-none;
+        &:focus {
+          @apply border-none shadow-none;
+        }
+      }
+    }
+  }
+
+  .nt-input-append {
+    .el-input__wrapper {
+      border-radius: 7px 0 0 7px !important;
+
+      .el-input__inner {
+        border: none;
+
+        &:focus {
+          border: none;
+          box-shadow: none;
+        }
+      }
+    }
+
+    .el-input-group__append {
+      .el-select {
+        .el-input__wrapper {
+          border: none;
+        }
+      }
+    }
+  }
+
+  .ndt-table-config_custom_filter {
+    .el-table--border {
+      th:first-of-type {
+        border: 1px solid #E1E4EA;
+        border-radius: 12px 0 0 0;
+      }
+      th:last-of-type {
+        border: 1px solid #E1E4EA;
+        border-radius: 0 12px 0 0;
+      }
+
+
+      tbody tr:last-child {
+        td:first-child {
+          border-radius: 0 0 0 12px;
+        }
+        td:last-child {
+          border-radius: 0 0 12px 0;
+        }
+      }
+
+      border-radius: 12px;
+    }
+  }
+
+  .el-date-editor {
+    .el-input__wrapper {
+      .el-input__inner {
+        border: none;
+
+        &:focus {
+          border: none;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+}

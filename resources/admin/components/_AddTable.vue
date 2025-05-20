@@ -1,20 +1,19 @@
 <template>
     <el-container class="ninja-add-table">
-        <el-aside v-if="!table.ID" style="background-color: rgb(35, 40, 45);">
-            <el-menu :collapse="isCollapse"
-                     :default-active="activeTabName"
-                     background-color="#23282d"
-                     text-color="#eee"
-                     active-text-color="#fff"
+        <el-aside v-if="!table.ID" class="ninja-tables-aside">
+            <el-menu
+                 :collapse="isCollapse"
+                 :default-active="activeTabName"
+                 background-color="#FFFFFF"
+                 text-color="#565865"
+                 active-text-color="#335CFF"
             >
                 <el-menu-item @click="activeTabName = 'default'" index='default'>
                     <span>Default</span>
                 </el-menu-item>
+
                 <el-menu-item @click="activeTabName = 'drag_and_drop'" index='drag_and_drop'>
                   <span>Drag & Drop Table</span>
-                </el-menu-item>
-                <el-menu-item @click="activeTabName = 'import_table'" index="import_table">
-                    <span>Import Table</span>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'fluent_form'" index='fluent_form'>
@@ -44,43 +43,41 @@
             </el-menu>
         </el-aside>
 
-        <el-main>
+        <el-main class="ninja-tables-main">
             <template v-if="activeTabName == 'default'">
                 <div class="ninja_modal-body">
                     <template v-if="!table.ID">
-                        <h3>Manually Create a Table</h3>
-                        <p class="ninja_subtitle">
+                        <h3 class="nt-modal-title">Manually Create a Table</h3>
+                        <p class="nt-modal-description">
                             Manually create your table columns and rows to get complete
                             control over your data with tons of customizations.
                         </p>
                     </template>
 
-                    <div class="form-group">
-                        <label for="name">{{ $t('Table Title') }}</label>
-                        <input v-model="table.post_title"
-                               type="text" id="name" class="form-control"
-                               placeholder="Enter a title to identify your table"
-                        >
-                    </div>
-                    <div class="form-group">
-                        <label>{{ $t('Table Description') }}</label>
-                        <wp_editor v-model="table.post_content"></wp_editor>
+                    <div class="my-[30px]">
+                        <div class="nt-form-group">
+                            <label class="nt-form-label">{{ $t('Table Title') }}</label>
+                            <NinjaInput
+                                v-model="table.post_title"
+                                :placeholder="$t('Enter a title to identify your table')"
+                            />
+                        </div>
+
+                        <div class="nt-form-group">
+                            <label class="nt-form-label">{{ $t('Table Description') }}</label>
+                            <wp_editor v-model="table.post_content"></wp_editor>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <el-button type="primary" size="small" @click="addTable">
-                        <span v-if="table.ID">{{ $t('Update') }}</span>
-                        <span v-else>{{ $t('Add') }}</span>
-                        <i v-if="btnLoading" class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
-                    </el-button>
+
+                <div class="nt-modal-footer">
+                    <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
+                    <NinjaButton v-if="table.ID" @click="addTable" :btnText="$t('Update')"/>
+                    <NinjaButton v-else @click="addTable" :btnText="$t('Add')" />
                 </div>
             </template>
             <template v-else-if="activeTabName === 'drag_and_drop'">
               <right-side-bar :initialData="initialData"></right-side-bar>
-            </template>
-
-            <template v-else-if="activeTabName === 'import_table'">
-                <import-table></import-table>
             </template>
 
             <template v-else-if="activeTabName == 'google_spread_sheet'">
@@ -89,6 +86,7 @@
                         :tableCreated="fireTableCreated"
                         :has-pro="hasPro"
                         :activated_features="activated_features"
+                        @modalClose="closeModal"
                 />
             </template>
 
@@ -98,19 +96,22 @@
                         :tableCreated="fireTableCreated"
                         :has-pro="hasPro"
                         :activated_features="activated_features"
+                        @modalClose="closeModal"
                 />
             </template>
 
             <template v-else-if="activeTabName == 'fluent_form'">
                 <fluent-form-data-source
                         :tableCreated="fireTableCreated"
+                        @modalClose="closeModal"
                 />
             </template>
 
             <template v-else-if="activeTabName == 'wp_posts'">
-                <wp-posts-data-source
+                <WPPosts
                         :tableCreated="fireTableCreated"
                         :activated_features="activated_features"
+                        @modalClose="closeModal"
                 />
             </template>
 
@@ -118,6 +119,7 @@
                 <woo-data-source
                     v-if="activated_features.woocommerce_table"
                     :tableCreated="fireTableCreated"
+                    @modalClose="closeModal"
                 />
                 <div v-else-if="has_woo && hasPro">
                     <p>Please update to latest version of <b>Ninja Tables Pro</b> to use WooCommerce integration</p>
@@ -133,6 +135,7 @@
                     :has_sql_permission="has_sql_permission"
                     :tableCreated="fireTableCreated"
                     :activated_features="activated_features"
+                    @modalClose="closeModal"
                 />
             </template>
         </el-main>
@@ -150,14 +153,18 @@
     import RawSqlForm from './DataProviders/RawSqlForm'
     import PremiumNotice from './includes/PremiumNotice';
     import RightSideBar from "./TableBuilder/Sidebar/RightSideBar";
-    import { useEventBus } from '../eventBus';
+    import {assetUrl} from "../utils/ninjatablesadmin";
+    import NinjaInput from "../@ui-utils/NinjaInput.vue";
+    import NinjaButton from "../@ui-utils/NinjaButton.vue";
 
     export default {
         name: 'add_table',
         components: {
+            NinjaInput,
+            NinjaButton,
             RightSideBar,
             wp_editor: wp_editor,
-            'wp-posts-data-source': WPPosts,
+            WPPosts,
             'woo-data-source': WooProducts,
             'fluent-form-data-source': FluentForm,
             'external-data-source': ExternalDataSource,
@@ -205,6 +212,7 @@
             }
         },
         methods: {
+            assetUrl,
             createDragAndDropTable() {
               this.$get("table-builder")
                   .then(response => {
@@ -303,35 +311,3 @@
     }
 </script>
 
-<style lang="scss">
-    .ninja-add-table {
-        .el-main {
-            padding: 0 1px 0 15px;
-            min-height: initial;
-        }
-
-        .el-menu {
-            border-right: initial;
-        }
-
-        .el-menu-item {
-            .el-icon-fluent-form {
-                height: 18px;
-            }
-
-            .dashicons {
-                width: 24px;
-                height: 18px;
-                margin-right: 5px;
-            }
-
-            &.is-active {
-                background-color: #0073aa !important;
-            }
-        }
-
-        .el-table .cell {
-            text-overflow: initial;
-        }
-    }
-</style>

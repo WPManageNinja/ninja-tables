@@ -1,65 +1,94 @@
 <template>
     <div class="nt-woo-nav">
 
-        <el-tabs type="border-card">
-            <el-tab-pane label="Appearance" class="nt-appearance">
-                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_before_table">Show Cart Details Before Table</el-checkbox>
-                <br />
-                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_after_table">Show Cart Details After Table</el-checkbox>
-                <br />
-                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_button">Show Go to Cart Button</el-checkbox>
-                <br />
-                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_checkout_button">Show Checkout Button</el-checkbox>
-                <br />
-                <div class="nt-form-group">
-                    <label for="cartBtnText">
-                        Cart Text
-                    </label>
+        <el-collapse class="nt_accordion_content_white">
+            <el-collapse-item name="1">
+                <template #title>
+                    <i class="header-icon el-icon-info el-text-info"></i>
+                    <p class="nt-form-label"> {{ $t('Edit: You may update the query settings here.') }}</p>
+                </template>
 
-                    <input type="text" id="cartBtnText" placeholder="Enter cart button text" v-model="appearance.cartBtnText">
+                <div class="flex rounded-[8px] bg-[#F5F7FA] w-fit p-2 my-3 gap-3">
+                    <div @click="activeTab = 'appearance'" :class="`px-5 py-1 cursor-pointer ${activeTab==='appearance' ? 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300 text-[#0E121B]' : 'text-[#99A0AE]'}`">{{$t('Appearance')}}</div>
+                    <div @click="activeTab = 'query_settings'" :class="`px-5 py-1 cursor-pointer ${activeTab==='query_settings' ? 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300 text-[#0E121B]': 'text-[#99A0AE]'}`">{{$t('Query Settings')}}</div>
+                    <div @click="activeTab ='add_new_column'" :class="`px-5 py-1 cursor-pointer ${activeTab==='add_new_column' ? 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300 text-[#0E121B]':'text-[#99A0AE]'}`">{{$t('Add New Column')}}</div>
                 </div>
 
-                <div class="nt-form-group">
-                    <label for="checkoutBtnText">
-                        Checkout Text
-                    </label>
+                <div v-if="activeTab === 'appearance'">
+                    <div class="mt-6">
+                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_before_table">{{$t('Show Cart Details Before Table')}}</el-checkbox>
+                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_button">{{$t('Show Go to Cart Button')}}</el-checkbox>
+                        <br>
+                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_after_table">{{$t('Show Cart Details After Table')}}</el-checkbox>
+                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_checkout_button">{{$t('Show Checkout Button')}}</el-checkbox>
+                    </div>
 
-                    <input type="text" id="checkoutBtnText" placeholder="Enter checkout button text" v-model="appearance.checkoutBtnText">
+                    <div class="flex items-center gap-4 mt-6">
+                        <div class="nt-form-group flex flex-col">
+                            <label for="cartBtnText" class="nt-form-label">
+                                Cart Text
+                            </label>
+
+                            <NinjaInput id="cartBtnText" :placeholder="$t('Enter cart button text')" v-model="appearance.cartBtnText" />
+                        </div>
+
+                        <div class="nt-form-group flex flex-col">
+                            <label for="checkoutBtnText" class="nt-form-label">
+                                Checkout Text
+                            </label>
+
+                            <NinjaInput id="checkoutBtnText" :placeholder="$t('Enter checkout button text')" v-model="appearance.checkoutBtnText" />
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-6">
+                        <NinjaButton
+                            @click="saveSettings"
+                            :btn-text="$t('Save Settings')"
+                        />
+                    </div>
                 </div>
 
-                <el-button @click="saveSettings()" type="primary" size="small">Save Settings</el-button>
-            </el-tab-pane>
-            <el-tab-pane label="Query Settings">
-                <woo-nav
-                    :query_selections="config.table.query_selections"
-                    :query_conditions="config.table.query_conditions"
-                />
-                <br />
-                <el-button @click="saveSettings()" type="primary" size="small">Save Settings</el-button>
-            </el-tab-pane>
-            <el-tab-pane label="Add New Column">
-                <columns-editor
-                    :model="model"
-                    :columns="config.columns"
-                    :hasPro="true"
-                    :settings="config.settings"
-                    :hideCancel="true"
-                    dataSourceType="wp_woo"
-                    @add="addNewColumn()"
-                />
-            </el-tab-pane>
-        </el-tabs>
+                <div v-else-if="activeTab === 'query_settings'">
+                    <woo-nav
+                        :query_selections="config.table.query_selections"
+                        :query_conditions="config.table.query_conditions"
+                    />
+
+                    <div class="flex justify-end mt-6">
+                        <NinjaButton @click="saveSettings()" :btn-text="$t('Save Settings')"/>
+                    </div>
+                </div>
+
+                <div v-else>
+                    <columns-editor
+                        :model="model"
+                        :columns="config.columns"
+                        :hasPro="true"
+                        :settings="config.settings"
+                        :hideCancel="true"
+                        dataSourceType="wp_woo"
+                        @add="addNewColumn()"
+                    />
+                </div>
+
+            </el-collapse-item>
+        </el-collapse>
     </div>
 </template>
 
 <script type="text/babel">
     import WooNav from './WooNav';
     import ColumnsEditor from '../Table/ColumnEditor/ColumnsEditor';
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
 
     export default {
         name: 'woo_nav_edit',
         props: ['config', 'model'],
         components: {
+            NinjaInput,
+            NinjaButton,
             WooNav,
             ColumnsEditor
         },
@@ -67,7 +96,8 @@
             return {
                 query_terms: [],
                 appearance: this.config.table.appearance_settings || {},
-                loading: false
+                loading: false,
+                activeTab: 'appearance'
             }
         },
         methods: {
@@ -104,21 +134,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .nt-woo-nav {
-        .nt-appearance {
-            label.el-checkbox {
-                display: block;
-            }
-        }
-
-        .nt-form-group {
-            margin-bottom: 15px;
-
-            label {
-                margin-right: 15px;
-            }
-        }
-    }
-</style>

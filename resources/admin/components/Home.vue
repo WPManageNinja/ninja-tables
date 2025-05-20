@@ -1,33 +1,37 @@
 <template>
   <div>
     <div class="ninja_main_nav">
-           <span class="plugin-name">
+       <div class="plugin-name">
+            <div class="logo">
                 <img style="height: 36px;" :src="imageUrl('ninja_table.svg')" alt="ninja-tables">
-                <span class="pro" v-if="has_pro">{{ $t('Pro') }}</span>
-          </span>
-      <el-menu
-          style="float: right"
-          :default-active="activeMenu"
-          :router="true"
-          mode="horizontal"
-          :ellipsis="false"
-      >
-        <el-menu-item
-            v-for="menuItem in topMenus"
-            :key="menuItem.route"
-            :index="menuItem.route"
-            :route="{ name: menuItem.route }"
-        >
-          <i :class="menuItem.icon_class"/>
-          <span>
-                        {{ menuItem.title }}
-                    </span>
-        </el-menu-item>
+            </div>
+            <div class="pro-text" v-if="has_pro">
+                <span class="pro">{{ $t('Pro') }}</span>
+            </div>
+      </div>
 
-        <el-menu-item index="buy-pro" v-if="!has_pro">
-          <get-pro size="small"/>
-        </el-menu-item>
-      </el-menu>
+      <div class="ninja_main_nav_right">
+          <el-menu
+              style="float: right"
+              :default-active="activeMenu"
+              :router="true"
+              mode="horizontal"
+              :ellipsis="false"
+          >
+              <el-menu-item
+                  v-for="menuItem in topMenus"
+                  :key="menuItem.route"
+                  :index="menuItem.route"
+                  :route="{ name: menuItem.route }"
+              >
+                 {{ menuItem.title }}
+              </el-menu-item>
+
+              <el-menu-item  class="get_pro" index="buy-pro" v-if="!has_pro">
+                  <get-pro size="small"/>
+              </el-menu-item>
+          </el-menu>
+      </div>
     </div>
 
     <router-view :has-pro="has_pro"></router-view>

@@ -1,6 +1,6 @@
 <template>
     <div class="fluent-form-nav">
-        <el-collapse>
+        <el-collapse class="nt_accordion_content_white">
             <el-collapse-item name="1">
                 <template #title>
                     <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>

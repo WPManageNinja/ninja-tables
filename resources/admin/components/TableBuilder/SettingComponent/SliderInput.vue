@@ -10,6 +10,7 @@
             </el-icon>
         </el-tooltip>
         <el-slider
+            class="nt_slider_input"
             :model-value="mainValue"
             :max="maxValue"
             :min="minValue"
@@ -24,13 +25,9 @@
 </template>
 
 <script>
-import { InfoFilled } from '@element-plus/icons-vue';
 
 export default {
     name: "SliderInput",
-    components: {
-        InfoFilled
-    },
     props: {
         modelValue: {
             type: [Number, String],

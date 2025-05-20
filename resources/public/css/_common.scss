@@ -514,6 +514,9 @@ table.ninja_footable col, table.ninja_footable > thead > tr > th {
   table thead .footable-filtering {
     .ninja_custom_radio, .ninja_custom_select_checkbox {
       > label {
+        @media (max-width: 767px) {
+          display: block;
+        }
         display: inline-block;
         margin-right: 15px;
 
@@ -523,10 +526,6 @@ table.ninja_footable col, table.ninja_footable > thead > tr > th {
 
         input {
           margin-right: 10px;
-        }
-
-        @media (max-width: 767px) {
-          display: block;
         }
       }
 
