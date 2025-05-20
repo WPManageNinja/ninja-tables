@@ -9,7 +9,7 @@
         </div>
 
         <div v-loading="fetching" class="nt-table-default-appearance-content">
-            <div class="text-[#0E121B] text-[16px] font-[400] mt-4 mb-2">{{ $t('Default Styling Library') }}</div>
+            <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Styling Library') }}</div>
             <div class="flex w-fit rounded-[8px] bg-[#F5F7FA] px-2 py-2 gap-3">
                 <div
                     @click="default_settings.css_lib = 'semantic_ui'"
@@ -36,9 +36,10 @@
                     <div class="flex items-center justify-between">
                                         <span>
                                             {{ tableStyle.title }}
-                                            <el-tooltip placement="right-start" effect="light" :content="tableStyle.description">
+                                            <el-tooltip placement="right-start" effect="light"
+                                                        :content="tableStyle.description">
                                             <el-icon class="tooltip-icon-color">
-                                                <InfoFilled />
+                                                <InfoFilled/>
                                             </el-icon>
                                         </el-tooltip>
                                         </span>
@@ -51,14 +52,15 @@
                 </label>
             </div>
 
-            <div class="text-[#0E121B] text-[16px] font-[400] mt-4 mb-2">{{ $t('Default Features') }}</div>
-            <div class="form_group label-normalize mt-4">
-                <div for="show_title" class="flex items-center justify-between">
+            <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Features') }}</div>
+            <div class="form_group label-normalize">
+                <div for="show_title" class="my-1 flex items-center justify-between">
                                         <span>
                                             {{ $t('Show Table Title') }}
-                                            <el-tooltip placement="top-end" effect="light" content="Enable this if you want to show table title in frontend">
+                                            <el-tooltip placement="top-end" effect="light"
+                                                        content="Enable this if you want to show table title in frontend">
                                                 <el-icon class="tooltip-icon-color">
-                                                    <InfoFilled />
+                                                    <InfoFilled/>
                                                 </el-icon>
                                             </el-tooltip>
                                         </span>
@@ -70,12 +72,13 @@
                     </el-switch>
                 </div>
 
-                <div for="show_description" class="flex items-center justify-between">
+                <div for="show_description" class="my-1 flex items-center justify-between">
                                         <span>
                                             {{ $t('Show Table Description') }}
-                                            <el-tooltip placement="top-end" effect="light" content="Enable this if you want to show table description in frontend">
+                                            <el-tooltip placement="top-end" effect="light"
+                                                        content="Enable this if you want to show table description in frontend">
                                                 <el-icon class="tooltip-icon-color">
-                                                    <InfoFilled />
+                                                    <InfoFilled/>
                                                 </el-icon>
                                             </el-tooltip>
                                         </span>
@@ -87,7 +90,7 @@
                     </el-switch>
                 </div>
 
-                <div for="enable_search" class="flex items-center justify-between">
+                <div for="enable_search" class="my-1 flex items-center justify-between">
                                         <span>
                                             {{ $t('Enable the visitor to filter or search the table.') }}
                                         </span>
@@ -99,8 +102,8 @@
                     </el-switch>
                 </div>
 
-                <div for="column_sorting" class="flex items-center justify-between">
-                          <span>{{ $t('Enable sorting of the table by the visitor') }}</span>
+                <div for="column_sorting" class="my-1 flex items-center justify-between">
+                    <span>{{ $t('Enable sorting of the table by the visitor') }}</span>
                     <el-switch
                         v-model="default_settings.column_sorting"
                         :active-value="1"
@@ -109,8 +112,8 @@
                     </el-switch>
                 </div>
 
-                <div for="hide_all_borders" class="flex items-center justify-between">
-                    <span>{{$t('Hide All Borders')}}</span>
+                <div for="hide_all_borders" class="my-1 flex items-center justify-between">
+                    <span>{{ $t('Hide All Borders') }}</span>
                     <el-switch
                         v-model="default_settings.hide_all_borders"
                         :active-value="1"
@@ -120,8 +123,8 @@
                 </div>
             </div>
 
-            <div class="text-[#0E121B] text-[16px] font-[400] mt-4 mb-2">{{ $t('Default Pagination Setting') }}</div>
-            <div class="form_group label-normalize mt-4">
+            <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Pagination Setting') }}</div>
+            <div class="form_group label-normalize">
                 <div for="hide_pagination" class="flex items-center justify-between">
                     <span>{{ $t('Hide Pagination (Show all data at once)') }}</span>
                     <el-switch
@@ -140,11 +143,12 @@
                 </div>
             </div>
 
-            <div class="text-[#0E121B] text-[16px] font-[400] mt-4 mb-2">{{ $t('Default Font Setting') }}</div>
+            <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Font Setting') }}</div>
             <div class="grid grid-cols-2 items-center gap-5">
                 <div>
                     <label class="font-[400]">{{ $t('Font Family') }}</label>
-                    <el-select class="ninja-select" v-model="default_settings.table_font_family" :placeholder="$t('Select Font')">
+                    <el-select class="ninja-select" v-model="default_settings.table_font_family"
+                               :placeholder="$t('Select Font')">
                         <el-option v-for="(family, key) in fontFamily" :key="key"
                                    :label="family === 'inherit' ? 'theme-font' : family"
                                    :value="family"></el-option>
@@ -153,12 +157,13 @@
 
                 <div>
                     <label class="font-[400] block">{{ $t('Font Size') }}</label>
-                    <el-input-number style="height: 40px; width: 100%;" :min="1" :max="50" v-model="default_settings.table_font_size"></el-input-number>
+                    <el-input-number style="height: 40px; width: 100%;" :min="1" :max="50"
+                                     v-model="default_settings.table_font_size"></el-input-number>
                 </div>
             </div>
 
 
-            <div class="text-[#0E121B] text-[16px] font-[400] mt-4 mb-2">{{ $t('Default Table Color') }}</div>
+            <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Table Color') }}</div>
             <div class="w-1/2">
                 <label class="font-[400]">{{ $t('Select Color') }}</label>
                 <el-select class="ninja-select" v-model="default_settings.table_color" placeholder="Select Color">
@@ -169,7 +174,7 @@
             </div>
 
             <div class="flex justify-end mt-4">
-                <NinjaButton type="primary" size="small" @click="store" :btn-text="$t('Save Settings')" />
+                <NinjaButton type="primary" size="small" @click="store" :btn-text="$t('Save Settings')"/>
             </div>
         </div>
     </div>
@@ -240,7 +245,7 @@ export default {
             this.$get('tables/tools/default-settings')
                 .then(response => {
                     const settings = response.data.default_settings;
-                    
+
                     // Convert string values to numbers for switch components
                     const switchFields = ['show_title', 'show_description', 'enable_search', 'column_sorting', 'hide_all_borders', 'table_font_size', 'perPage'];
                     switchFields.forEach(field => {
@@ -248,7 +253,7 @@ export default {
                             settings[field] = parseInt(settings[field]);
                         }
                     });
-                    
+
                     this.default_settings = settings;
                 })
                 .catch(e => {
