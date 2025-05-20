@@ -47,7 +47,7 @@
             v-if="setting ? (setting.general && setting.border && setting.background) : false"
             id="ninja_tables_builder_id" :style="[tableWrapperStyle, tableWrapperActivePadding]">
             <div class="pixel-bar-slider" v-if="responsiveIsEnabled && showPixelSlider.preview">
-                <el-slider v-model="pixelBarValue" :max="showPixelSlider.max" :min="showPixelSlider.min" show-input>
+                <el-slider class="nt_slider_input" v-model="pixelBarValue" :max="showPixelSlider.max" :min="showPixelSlider.min" show-input>
                 </el-slider>
             </div>
             <table id="ntb_table" :role="`${setting.accessibility.options.table_role.value}`"
@@ -636,15 +636,20 @@ export default {
         z-index: 1;
         //margin: auto;
         overflow: auto;
-        padding-top: 5px;
+        // padding-top: 5px;
         padding-left: var(--table-wrapper-padding);
 
         .pixel-bar-slider {
-            width: 50%;
-            margin: 10px auto;
-            background: #3b503f;
-            padding: 0 20px;
+            width: 65%;
+            margin:0 auto 10px;
+            // background: #3b503f;
+            background: white;
+            border: 1px solid #dbdbdb;
+            padding: 0 0 0 20px;
             border-radius: 10px;
+            .el-input__inner{
+                padding: 0;
+            }
         }
 
         .table {
