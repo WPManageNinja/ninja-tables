@@ -63,6 +63,9 @@ export default {
   }
   .ninja-button--secondary {
     @apply bg-white text-[#525866] border border-solid border-[#E1E4EA];
+    &:hover {
+      @apply bg-[#F5F6F7] delay-100 duration-100;
+    }
   }
   .ninja-button--danger {
     @apply bg-white text-[#FB3748] border border-solid border-[#FB3748];
