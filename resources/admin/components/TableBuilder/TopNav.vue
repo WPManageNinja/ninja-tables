@@ -21,7 +21,7 @@
         <a :href="previewURL" v-if="idExist" target="_blank">
             <NinjaButton type="secondary" :icon="assetUrl('icons/view.svg')" :btnText="$t('Preview')" />
         </a>
-        <NinjaButton @click="saveTableData" size="small" type="primary">{{ $t('Save Table') }}</NinjaButton>
+        <NinjaButton @click="saveTableData" type="primary">{{ $t('Save Table') }}</NinjaButton>
         <NinjaButton
             type="info"
             @click="fullScreenEnableDisable"

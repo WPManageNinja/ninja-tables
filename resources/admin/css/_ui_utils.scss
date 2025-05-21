@@ -71,8 +71,7 @@
     .ninja-input-wrapper.disabled {
       background-color: #f5f7fa;
       cursor: not-allowed;
-    }
-  }
+
 
   .ninja-select {
     .el-select__wrapper {
@@ -241,6 +240,9 @@
   }
 
   .nt_tab_design_drag{
+    .el-tabs__content{
+      overflow: visible;
+    }
     .el-tabs__item{
       padding: 0 8px;
     }
@@ -330,6 +332,7 @@
       align-items: center;
     }
   }
+      
 
   .el-switch {
     &.is-checked {

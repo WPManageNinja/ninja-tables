@@ -147,12 +147,12 @@
     import wp_editor from '../../common/_wp_editor';
     import WPPosts from './DataProviders/WPPosts';
     import WooProducts from './DataProviders/WooProducts';
-    import FluentForm from './DataProviders/FluentForm';
-    import ExternalDataSource from './DataProviders/ExternalDataSource';
+    import FluentForm from './DataProviders/FluentForm.vue';
+    import ExternalDataSource from './DataProviders/ExternalDataSource.vue';
     import ImportTable from './includes/ImportTable';
     import RawSqlForm from './DataProviders/RawSqlForm'
     import PremiumNotice from './includes/PremiumNotice';
-    import RightSideBar from "./TableBuilder/Sidebar/RightSideBar";
+    import RightSideBar from "./TableBuilder/Sidebar/RightSideBar.vue";
     import {assetUrl} from "../utils/ninjatablesadmin";
     import NinjaInput from "../@ui-utils/NinjaInput.vue";
     import NinjaButton from "../@ui-utils/NinjaButton.vue";
