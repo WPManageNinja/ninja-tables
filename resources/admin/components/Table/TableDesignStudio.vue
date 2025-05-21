@@ -152,8 +152,9 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.show_title"
-                                            :active-value="1"
-                                            :inactive-value="0"
+                                            :active-value="'1'"
+                                            :inactive-value="'0'"
+                                             size="small"
                                             :id="'show_title'">
                                         </el-switch>
                                     </div>
@@ -169,8 +170,9 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.show_description"
-                                            :active-value="1"
-                                            :inactive-value="0"
+                                             :active-value="'1'"
+                                            :inactive-value="'0'"
+                                             size="small"
                                             :id="'show_description'">
                                         </el-switch>
                                     </div>
@@ -181,8 +183,9 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.enable_search"
-                                            :active-value="1"
-                                            :inactive-value="0"
+                                             :active-value="'1'"
+                                            :inactive-value="'0'"
+                                             size="small"
                                             :id="'enable_search'">
                                         </el-switch>
                                     </div>
@@ -196,8 +199,9 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.column_sorting"
-                                            :active-value="1"
-                                            :inactive-value="0"
+                                             :active-value="'1'"
+                                            :inactive-value="'0'"
+                                             size="small"
                                             :id="'column_sorting'">
                                         </el-switch>
                                     </div>
@@ -208,6 +212,9 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.hide_header_row"
+                                             :active-value="'1'"
+                                            :inactive-value="'0'"
+                                             size="small"
                                             :id="'hide_header_row'">
                                         </el-switch>
                                     </div>
@@ -218,6 +225,9 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.hide_all_borders"
+                                             :active-value="'1'"
+                                            :inactive-value="'0'"
+                                             size="small"
                                             :id="'hide_all_borders'">
                                         </el-switch>
                                     </div>
@@ -234,6 +244,9 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.hide_on_empty"
+                                             :active-value="'1'"
+                                            :inactive-value="'0'"
+                                             size="small"
                                             :id="'hide_on_empty'">
                                         </el-switch>
                                     </div>
@@ -250,6 +263,9 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.hide_responsive_labels"
+                                             :active-value="'1'"
+                                            :inactive-value="'0'"
+                                            size="small"
                                             :id="'hide_responsive_labels'">
                                         </el-switch>
                                     </div>
@@ -328,8 +344,7 @@
                         </div>
                         <div v-if="tableSettings.table_color_type == 'pre_defined_color'" class="px-[18px]">
                             <el-select class="ninja-select" v-model="tableSettings.table_color">
-                                <el-option v-for="(colorName, colorKey) in colors" :key="colorKey" :value="colorKey">{{
-                                    colorName }}
+                                <el-option v-for="(colorName, colorKey) in colors" :key="colorKey" :value="colorKey" :label="colorName">
                                 </el-option>
                             </el-select>
                         </div>
