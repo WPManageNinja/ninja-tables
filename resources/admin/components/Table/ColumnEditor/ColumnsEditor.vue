@@ -489,7 +489,7 @@
             <el-tab-pane label="Advanced Settings" name="advanced" class="ninja_modal_body px-[10px]">
                 <div class="advanced-settings">
 
-                    <div class="ninja_table_inline_upgrade" v-if="!hasPro">
+                    <div class="nt-instruction mb-[20px]" v-if="!hasPro">
                         <h3 class="nt-modal-title">Advanced Column Settings</h3>
                         <p class="nt-modal-description">
                             Customize your table's column's width, custom css class, content alignments, column styling
@@ -498,7 +498,9 @@
                             Tables Pro.
                             Ninja Table Pro has lots of features that will help you to build any type of Tables.
                         </p>
-                        <get-pro size="small"/>
+                        <div class="py-2">
+                            <get-pro />
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-x-5">

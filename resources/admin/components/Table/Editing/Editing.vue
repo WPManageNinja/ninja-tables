@@ -3,15 +3,24 @@
         <div v-if="!hasPro || !config.table.isEditable"
              class="frontend-editing-conditional-content bg-white p-5 mt-5 rounded-[12px]">
             <h1 class="my-3">{{ $t('Frontend Editing Settings') }}</h1>
-            <div v-if="!hasPro">
-                <p class="my-3 text-sm inline-block">Frontend Editing is a pro only features. Please purchase <b>"Ninja
-                    Tables Pro"</b> to use this feature.
-                    Using this module, You can let your frontend users to add/edit/delete records based on user role.
-                    Also, You can separate the records by user submission. </p>
-                <p class="my-3 text-sm">Get Pro from here
-                    <GetPro/>
-                </p>
+
+            <div v-if="!hasPro" class="w-full overflow-hidden text-center p-[30px]">
+                <h3 class="text-[16px] font-[500] text-[#0E121B] mb-2">
+                    Frontend Editing is a pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
+                </h3>
+                <p class="nt-modal-description">Using this module, You can let your frontend users to add/edit/delete records based on user role. Also, You can separate the records by user submission.</p>
+                <div class="flex justify-center mt-4">
+                    <a v-if="!has_pro"
+                       href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
+                       target="_blank">
+                        <NinjaButton
+                            type="danger"
+                            :btnText="$t('Get Pro')"
+                        />
+                    </a>
+                </div>
             </div>
+
             <div v-else-if="!config.table.isEditable">
                 <p class="my-3 text-sm">This table can not be editable on frontend. Only "Default" data source tables
                     can be editable</p>
