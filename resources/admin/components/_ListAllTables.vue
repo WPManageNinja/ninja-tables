@@ -157,17 +157,17 @@
                 layout="prev, pager, next, jumper"
                 :total="paginate.total"
             />
-
         </div>
 
-        <div v-if="!loading && !is_installed && items.length > 2 && !hasPro">
-            <a style="display: block;width: 800px;margin: 40px auto 0px;max-width: 100%;" target="_blank" href="https://wordpress.org/plugins/fluentform">
+        <div v-if="!loading && !is_installed && items.length > 2 && !hasPro" class="mt-6 mb-4">
+            <a class="block w-[800px] max-w-full mx-auto text-center" target="_blank" href="https://wordpress.org/plugins/fluentform">
                 <img style="max-width: 100%" :src="img_url_path+'fluent_banner.png'"/>
             </a>
         </div>
-        <div style="margin-top: 100px;" class="text-center" v-else-if="items.length > 3 && !hasPro">
+
+        <div class="text-center my-4" v-else-if="items.length > 3 && !hasPro">
             <hr />
-            <h3>Love Ninja Tables? Upgrade to Pro and get more exciting features and Performance</h3>
+            <h3 class="mt-6 mb-4 text-[18px] font-[600] text-[#0E121B]">Love Ninja Tables? Upgrade to Pro and get more exciting features and Performance</h3>
             <get-pro/>
         </div>
     </div>

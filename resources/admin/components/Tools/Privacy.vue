@@ -43,11 +43,20 @@
                 </div>
             </div>
 
-            <div v-else>
-                {{ $t('Activate Ninja Tables Pro Add-on plugin to unlock this feature') }}
-                <p>
-                    <GetPro />
-                </p>
+            <div v-else class="w-full overflow-hidden text-center">
+                <h3 class="text-[16px] font-[500] text-[#0E121B] mb-4">
+                    Permission is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
+                </h3>
+                <div class="flex justify-center">
+                    <a v-if="!has_pro"
+                       href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
+                       target="_blank">
+                        <NinjaButton
+                            type="danger"
+                            :btnText="$t('Get Pro')"
+                        />
+                    </a>
+                </div>
             </div>
         </div>
     </div>

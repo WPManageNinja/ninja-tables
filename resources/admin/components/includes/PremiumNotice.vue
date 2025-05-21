@@ -1,9 +1,5 @@
 <template>
-    <el-alert title=""
-              type="warning"
-              :closable="false"
-              class="premium-notice"
-    >
+    <div class="nt-instruction">
         <p>
             This is a Premium feature. Get
             <b v-if="highlight">{{highlight}},</b>
@@ -14,8 +10,10 @@
             and so many things from the Pro version.
         </p>
 
-        <get-pro/>
-    </el-alert>
+        <div class="mt-2">
+            <get-pro/>
+        </div>
+    </div>
 </template>
 
 <script>

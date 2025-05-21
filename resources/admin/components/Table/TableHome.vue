@@ -39,7 +39,10 @@
                 <a v-if="!has_pro"
                     href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                     target="_blank">
-                    <el-button type="danger">{{ $t('Get Pro') }}</el-button>
+                    <NinjaButton
+                        type="danger"
+                        :btnText="$t('Get Pro')"
+                    />
                 </a>
                 <NinjaButton v-if="$route.name === 'design_studio'" :btnText="$t('Save')" :disabled="is_form_saving"
                     :loading="is_form_saving" @click="saveDesign" />
@@ -86,10 +89,12 @@ import { useEventBus } from '../../eventBus';
 import { assetUrl } from "../../utils/ninjatablesadmin";
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 import tableConfigStore from '../../store/tableConfigStore';
+import GetPro from "../Tools/GetPro.vue";
 
 export default {
     name: 'table_home',
     components: {
+        GetPro,
         NinjaButton,
         'edit_table': EditTable
     },
