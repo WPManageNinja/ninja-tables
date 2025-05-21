@@ -530,6 +530,7 @@
                     .then((response) => {
                         this.fetchTables();
                         alert(response.message);
+                        this.getData();
                     })
                     .catch((error) => {
                         alert(error.responseJSON.data.message);
@@ -718,6 +719,7 @@
                     this.setNewColumn();
                     this.columnModal = false;
                     this.storeSettings();
+                    window.location.reload();
                 }
             },
 
@@ -736,6 +738,7 @@
                     newColumn.source_type = 'custom';
                 }
                 this.new_column = newColumn;
+                // window.location.reload();
             },
 
             /**
@@ -876,6 +879,7 @@
                 this.currentEditingColumn = false;
                 this.config.columns.splice(targetIndex, 1);
                 this.$nextTick(() => this.storeSettings());
+                window.location.reload();
             },
             compare(key, order) {
                 let that = this;
