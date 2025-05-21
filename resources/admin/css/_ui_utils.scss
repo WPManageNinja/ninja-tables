@@ -138,8 +138,7 @@
   }
 
   .nt_tab_design {
-    border: 1px solid #E1E4EA;
-    border-radius: 8px;
+
     .el-tabs__nav-wrap{
       border-radius: 8px 8px 0 0;
     }
@@ -167,6 +166,8 @@
   }
 
   .nt_tab_design_drag{
+    border: 1px solid #E1E4EA;
+    border-radius: 8px;
     .el-tabs__content {
       overflow: visible;
     }

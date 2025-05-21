@@ -4,6 +4,7 @@
 // All tables page
 .all-tables-wrapper {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
@@ -1487,7 +1488,8 @@ ul.ninja_render_features li {
   }
 
   .design_preview {
-    padding: 10px 20px;
+    padding: 0px 20px;
+    margin: 24px 0;
     flex: 2;
     min-height: 800px;
     overflow: scroll;
@@ -2050,7 +2052,7 @@ h2.nav-tab-wrapper {
 }
 
 .nt-custom-css-js-editor-wrapper, .nt-export-import-wrapper {
-  @apply bg-white p-6 my-5 rounded-[12px];
+  @apply bg-white p-6 my-[24px] rounded-[12px];
 }
 
 

@@ -2,39 +2,54 @@
     <div>
         <div class="table-column-settings mx-4">
             <el-container class="ninja-table-aside">
-                <el-aside width="300px">
+                <el-aside class="!w-[70px] lg:!w-[300px] !p-[5px] md:!p-5">
                     <el-menu background-color="white"
                              :default-active="active_menu"
                              text-color="#525866"
                              active-text-color="#ffd04b"
                     >
                         <el-menu-item  @click="active_menu = 'columns'" index="columns">
-                            <img :src="assetUrl('/icons/credit-card.svg')"/>
-                            <span>Columns</span>
+                            <el-tooltip content="Columns" placement="right">
+                                <img class="lg:hidden" :src="assetUrl('/icons/credit-card.svg')"/>
+                            </el-tooltip>
+                            <img class="hidden lg:block" :src="assetUrl('/icons/credit-card.svg')"/>
+                            <span class="hidden lg:block">Columns</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'rendering_settings'" index="rendering_settings">
-                             <img :src="assetUrl('/icons/credit-card.svg')"/>
-                            <span>Rendering Settings</span>
+                            <el-tooltip content="Rendering Settings" placement="right">
+                                <img class="lg:hidden" :src="assetUrl('/icons/credit-card.svg')"/>
+                            </el-tooltip>
+                            <img class="hidden lg:block" :src="assetUrl('/icons/credit-card.svg')"/>
+                            <span class="hidden lg:block">Rendering Settings</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'custom_filters'" index="custom_filters">
-                             <img :src="assetUrl('/icons/customize.svg')"/>
-                            <span>Custom Filters</span>
+                            <el-tooltip content="Custom Filters" placement="right">
+                                <img class="lg:hidden" :src="assetUrl('/icons/customize.svg')"/>
+                            </el-tooltip>
+                            <img class="hidden lg:block" :src="assetUrl('/icons/customize.svg')"/>
+                            <span class="hidden lg:block">Custom Filters</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'button_settings'" index="button_settings">
-                             <img :src="assetUrl('/icons/search-area.svg')"/>
-                            <span>Buttons (CSV/Print)</span>
+                            <el-tooltip content="Buttons (CSV/Print)" placement="right">
+                                <img class="lg:hidden" :src="assetUrl('/icons/search-area.svg')"/>
+                            </el-tooltip>
+                            <img class="hidden lg:block" :src="assetUrl('/icons/search-area.svg')"/>
+                            <span class="hidden lg:block">Buttons (CSV/Print)</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'language_settings'" index="language_settings">
-                            <img :src="assetUrl('/icons/language-square.svg')"/>
-                            <span>Language Settings</span>
+                            <el-tooltip content="Language Settings" placement="right">
+                                <img class="lg:hidden" :src="assetUrl('/icons/language-square.svg')"/>
+                            </el-tooltip>
+                            <img class="hidden lg:block" :src="assetUrl('/icons/language-square.svg')"/>
+                            <span class="hidden lg:block">Language Settings</span>
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
-                <el-main class="ml-10">
+                <el-main class="ml-5 lg:ml-10">
                     <template v-if="active_menu == 'columns'">
                         <div class="ninja_header">
                             <h2>Table Column Settings</h2>
@@ -353,7 +368,7 @@
 
 <style lang="scss">
     .table-column-settings {
-        margin-top: 15px;
+        margin-top: 24px;
 
         .el-menu {
             border-right: initial;

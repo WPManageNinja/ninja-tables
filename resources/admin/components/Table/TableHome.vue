@@ -2,7 +2,7 @@
     <div>
         <span v-if="doingAjax" v-loading="doingAjax" class="doingAJaxLoading"></span>
 
-        <div class="ninja_inner_nav">
+        <div class="ninja_inner_nav flex-wrap">
             <div class="ninja_inner_nav_left">
                 <router-link to="/" class="nav-all-tables">All Tables</router-link>
                 <span class="mx-2">
@@ -17,7 +17,7 @@
                     :src="assetUrl('icons/edit-2.svg')" alt="Edit Table" />
             </div>
 
-            <div class="ninja_inner_nav_right">
+            <div class="ninja_inner_nav_right flex-wrap">
                 <div class="copy_shortcode">
                     <el-tooltip effect="dark" content="Click to copy shortcode" title="Click to copy shortcode"
                         placement="top">
@@ -51,16 +51,15 @@
         </div>
 
         <div :class="[is_form_saving ? 'disabled' : '']" :disabled="is_form_saving">
-            <div class="bg-white !-mx-5 py-4 px-4 border-b border-[#E1E4EA]">
+            <div class="bg-white !-mx-5 py-4 px-4 border-b border-[#E1E4EA] overflow-x-auto whitespace-nowrap">
                 <router-link v-for="tableTab in table_tabs" :key="tableTab.route"
-                    :to="{ name: tableTab.route, params: { table_id: tableId } }"
-                    exact-active-class="focus:shadow-none outline:none border-b-2 py-4 border-[#335cff] text-[#0e121b]"
-                    class="px-2 mx-4 py-3 focus:shadow-none font-[500] text-[#525866]">
-                    <span class="py-3"></span>
-                    {{ tableTab.title }}
+                :to="{ name: tableTab.route, params: { table_id: tableId } }"
+                exact-active-class="focus:shadow-none outline:none border-b-2 py-4 border-[#335cff] text-[#0e121b]"
+                class="px-2 mx-4 py-3 focus:shadow-none font-[500] text-[#525866]">
+                <span class="py-3"></span>
+                {{ tableTab.title }}
                 </router-link>
             </div>
-
             <router-view v-if="config" :config="config" :getColumnSettings="getSettings"></router-view>
         </div>
 
