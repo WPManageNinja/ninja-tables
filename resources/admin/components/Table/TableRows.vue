@@ -233,7 +233,7 @@
                                                 <span @click="duplicateData(scope)">Duplicate</span>
                                             </el-dropdown-item>
                                             <el-dropdown-item>
-                                                <span class="mb-1" @click="deleteItem(scope.row.id)">Delete</span>
+                                                <span class="mb-1" @click.prevent="confirmDeleteRows(scope.row.id)">Delete</span>
                                             </el-dropdown-item>
                                         </el-dropdown-menu>
                                     </template>
@@ -549,7 +549,10 @@
                 this.$confirm(this.$t('This will permanently delete the selected rows. Continue?'), 'Warning', {
                     confirmButtonText: this.$t('Yes, Delete'),
                     cancelButtonText: this.$t('Cancel'),
-                    type: 'warning'
+                    type: 'warning',
+                    customClass: 'nt-delete-confirm',
+                    confirmButtonClass: 'nt-delete-confirm-btn',
+                    cancelButtonClass: 'nt-delete-cancel-btn'
                 }).then(() => {
                     let ids = this.multipleSelection.map(item => item.id);
                     this.deleteItem(ids);
@@ -560,6 +563,23 @@
                     });
                 });
 
+            },
+            confirmDeleteRows(id) {
+                this.$confirm('Are you sure, You want to delete this rows?', 'Warning', {
+                    confirmButtonText: 'Yes, Delete',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning',
+                    customClass: 'nt-delete-confirm',
+                    confirmButtonClass: 'nt-delete-confirm-btn',
+                    cancelButtonClass: 'nt-delete-cancel-btn'
+                }).then(() => {
+                    this.deleteItem(id);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: 'Delete canceled'
+                    });
+                });
             },
             deleteItem(id) {
                 let data = {

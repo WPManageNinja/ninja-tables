@@ -77,6 +77,7 @@
                             <el-checkbox-group
                                 v-model="selectedFields"
                                 @change="handleFieldsSelectionChange"
+                                class="nt-checkbox-group"
                             >
                                 <el-checkbox v-for="field in fields" :key="field.name" :value="field.name">
                                     {{ field.name }}
@@ -109,6 +110,7 @@
                     <el-checkbox-group
                         v-model="selectedFields"
                         @change="handleFieldsSelectionChange"
+                        class="nt-checkbox-group "
                     >
                         <el-checkbox v-for="field in fields" :key="field.name" :value="field.name">
                             {{ field.name }}

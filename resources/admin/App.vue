@@ -10,12 +10,14 @@
         </el-alert>
 
         <router-view></router-view>
-        <div class="pro_feature_dialog">
+        <div class="bg-white">
             <el-dialog
+                class="ninja_create-table-modal"
                 title="NinjaTable Pro Features"
                 v-model="addVisible"
-                destroy-on-close>
-                <div class="add_content">
+                destroy-on-close
+            >
+                <div class="p-5">
                     <ul class="list_features">
                         <li>Use Unlimited Colors in Your Tables</li>
                         <li>Add Media to Your Table Cells</li>

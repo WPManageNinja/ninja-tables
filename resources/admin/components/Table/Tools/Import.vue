@@ -3,16 +3,64 @@
         <div class="text-[18px] font-[600] text-[#0E121B] my-5">{{ $t('Import Table') }}</div>
         <div v-if="config.table.isImportable">
             <div class="text-[14px] font-[400] text-[#0E121B] my-5 w-1/2">
-                {{$t("Import CSV data into the existing table. Please note that, your CSV data structure need to follow the sample CSV. Download the sample CSV to ensure correct data formatting.") }}
+                {{
+                    $t("Import CSV data into the existing table. Please note that, your CSV data structure need to follow the sample CSV. Download the sample CSV to ensure correct data formatting.")
+                }}
             </div>
             <div class="w-1/2 my-3">
+                <div class="mt-5 rounded-2xl border-solid border-gray-200 border">
+                    <div class="p-3 !border-gray-200" style="border-bottom: solid 1px">
+                        Import table from here
+                    </div>
+                    <div class="p-[16px]">
+                        <el-upload
+                            drag
+                            :on-change="handleChange"
+                            :auto-upload="false"
+                            name="file"
+                            ref="uploadRef"
+                            :limit="1"
+                            action=""
+                            accept=".csv"
+                            :show-file-list="false"
+                        >
+                            <div class="mb-3">
+                                <img class="mx-auto" :src="assetUrl('icons/upload-cloud-2-line.svg')"/>
+                            </div>
+                            <div class="el-upload__text">{{ $t("Choose a CSV file or drag & drop it here.") }}</div>
+                        </el-upload>
 
-                <input type="file" id="fileUpload" @click="clear">
+                        <div v-if="uploadedFile?.name"
+                             class="mt-3 flex justify-between items-center border border-solid border-[#e1e4ea] rounded-[10px] px-5 py-4">
+                            <div class="flex items-center">
+                                <img class="mr-2" :src="getFileIcon(uploadedFile)"/>
+                                <div>
+                                    <div>{{ uploadedFile.name }}</div>
+                                    <div class="flex items-center">
+                                        <small class="mr-2">{{ (uploadedFile.size / 1024).toFixed(2) }} KB .</small>
+                                        <img class="" :src="assetUrl('icons/check-box-fill.svg')"/>
+                                        <small>{{ $t('Completed') }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div @click="clear" class="cursor-pointer">
+                                <img :src="assetUrl('icons/delete-02.svg')"/>
+                            </div>
+                        </div>
+                        <div class="mt-4" v-if="uploadedFile?.status === 'ready'">
+                            <el-checkbox v-model="replace" :label="$t('Replace Existing Data')"/>
+                            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="do_unicode"
+                                         :label="$t('Convert to UTF-8 format ( Check this if your csv is non-unicode format)')"/>
+                        </div>
+                        <div v-if="uploadedFile?.status === 'error'" class="text-red-500">
+                            <small>{{ uploadedFile.message }}</small>
+                        </div>
+                    </div>
+                </div>
 
-                <el-checkbox v-model="replace">{{ $t('Replace Existing Data') }}</el-checkbox>
-                <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="do_unicode">Convert to UTF-8 format ( Check this if your csv is non-unicode format )</el-checkbox>
+
                 <div class="py-[16px]">
-                        <NinjaButton size="small" type="primary" :btnText="$t('Import Table')" @click.prevent="upload"/>
+                    <NinjaButton size="small" type="primary" :btnText="$t('Import Table')" @click.prevent="upload"/>
                 </div>
             </div>
         </div>
@@ -20,90 +68,79 @@
 </template>
 
 <script>
-    import each from 'lodash/each'
-    import {Download, Upload} from "@element-plus/icons-vue";
-    import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+import each from 'lodash/each'
+import {Download, Upload} from "@element-plus/icons-vue";
+import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+import {assetUrl} from "../../../utils/ninjatablesadmin";
 
-    export default {
-        name: "Import",
-        components: {NinjaButton, Download, Upload},
-        props: ['config', 'tableId'],
-        data() {
-            return {
-                btnLoading: false,
-                replace: false,
-                tutorial: "https://wpmanageninja.com/docs/ninja-tables/import-table-data-from-csv/?utm_source=ninja-tables",
-                do_unicode: 'no'
-            }
-        },
-        computed: {
-            columns() {
-                return this.config && this.config.columns ? this.config.columns : [];
-            },
-            sampleData() {
-                let row = {};
-                each(this.columns, item => {
-                    row[item.key] = 'column value';
-                });
-                return Array(3).fill(row);
-            }
-        },
-        methods: {
-            clear() {
-                jQuery('#fileUpload').val('');
-            },
-            upload() {
-                var that = this;
-
-                that.btnLoading = true;
-
-                let file = document.getElementById('fileUpload').files[0];
-
-                if (!file) {
-                    that.btnLoading = false;
-                    return;
-                }
-
-                let formData = new FormData();
-
-                formData.append('file', file);
-                formData.append('table_id', this.tableId);
-                formData.append('replace', this.replace);
-                formData.append('do_unicode', this.do_unicode);
-
-                this.$post('import/upload-csv-in-existing-table', formData)
-                    .then(response => {
-                        that.$emit('csvUploaded');
-
-                        that.clear();
-                        that.$message.success(response.data.message)
-                    })
-                    .catch(error => {
-                        that.$message.error(error.data.message)
-                    })
-                    that.btnLoading = false;
-
-            },
+export default {
+    name: "Import",
+    components: {NinjaButton, Download, Upload},
+    props: ['config', 'tableId'],
+    data() {
+        return {
+            btnLoading: false,
+            replace: false,
+            tutorial: "https://wpmanageninja.com/docs/ninja-tables/import-table-data-from-csv/?utm_source=ninja-tables",
+            do_unicode: 'no',
+            uploadedFile: null,
+            uploadRef: null,
         }
+    },
+    computed: {
+        columns() {
+            return this.config && this.config.columns ? this.config.columns : [];
+        },
+        sampleData() {
+            let row = {};
+            each(this.columns, item => {
+                row[item.key] = 'column value';
+            });
+            return Array(3).fill(row);
+        }
+    },
+    methods: {
+        assetUrl,
+        getFileIcon(file) {
+            return this.assetUrl('icons/csv-file-ico.svg');
+        },
+        clear() {
+            this.uploadedFile = null;
+            this.$refs.uploadRef.clearFiles();
+        },
+        handleChange(file) {
+            this.uploadedFile = file;
+        },
+        upload() {
+            this.btnLoading = true;
+            let that = this;
+            let file = this.uploadedFile.raw;
+            if (file && file.status === 'error') {
+                that.btnLoading = false;
+                that.$message.error(this.$t('File upload failed'));
+                return;
+            }
+
+            let formData = new FormData();
+
+            formData.append('file', file);
+            formData.append('table_id', this.tableId);
+            formData.append('replace', this.replace);
+            formData.append('do_unicode', this.do_unicode);
+
+            this.$post('import/upload-csv-in-existing-table', formData)
+                .then(response => {
+                    that.$emit('csvUploaded');
+
+                    that.clear();
+                    that.$message.success(response.data.message)
+                })
+                .catch(error => {
+                    that.$message.error(error.data.message)
+                })
+            that.btnLoading = false;
+
+        },
     }
+}
 </script>
-
-<style scoped lang="scss">
-    #fileUpload {
-        max-width: 200px;
-    }
-
-    .justify-items {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .ninja_content .ninja_suggest {
-        background: #f1f1f1;
-    }
-
-    .ninja_content {
-        margin: 1em 0;
-    }
-</style>

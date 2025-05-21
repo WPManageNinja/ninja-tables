@@ -1,15 +1,4 @@
 .toplevel_page_ninja_tables {
-  .nt-checkbox-group {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 4px;
-
-    .el-checkbox {
-      display: flex;
-      align-items: center;
-    }
-  }
 
   .ninja-select {
     .el-select__wrapper {
@@ -178,7 +167,7 @@
   }
 
   .nt_tab_design_drag{
-    .el-tabs__content{
+    .el-tabs__content {
       overflow: visible;
     }
     .el-tabs__item{
@@ -234,9 +223,6 @@
 
   .el-checkbox-group, .el-checkbox,
   .el-checkbox {
-    display: flex !important;
-    align-items: center;
-
     &.is-checked {
       .el-checkbox__label {
         color: #335cff;
@@ -259,6 +245,18 @@
       .el-checkbox__inner {
         border-radius: 4px !important;
       }
+    }
+  }
+
+  .nt-checkbox-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+
+    .el-checkbox {
+      display: flex;
+      align-items: center;
     }
   }
 
@@ -354,6 +352,12 @@
         .el-checkbox-group {
           .el-checkbox__label {
             font-weight: 300;
+          }
+        }
+
+        .el-input {
+          .el-input__wrapper {
+            border: none !important;
           }
         }
       }
@@ -463,6 +467,32 @@
   .el-icon.tooltip-icon-color {
     color: #335cff !important;
     top: 2px;
+  }
+
+  .nt-delete-confirm {
+    border-radius: 12px;
+    padding: 20px;
+
+    .el-message-box__btns {
+      .nt-delete-confirm-btn {
+        background: #335cff;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .nt-delete-cancel-btn {
+        background: #FFFFFF;
+        color: #525866;
+        border: 1px solid #E1E4EA;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
   }
 
 }

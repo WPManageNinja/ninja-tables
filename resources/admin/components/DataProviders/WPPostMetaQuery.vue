@@ -52,20 +52,17 @@
                             title="enter comma separated value"
                             type="info"
                             :closable="false"
-                            class="compact"
                         />
                     </template>
                 </el-col>
 
                 <el-col :md="3" :sm="3" style="text-align:right;">
-                    <div class="flex items-center justify-center">
-                        <div @click="addCondition($event)"
-                             class="mr-3 cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
-                            <img :src="assetUrl('icons/add-01.svg')" alt="add"/>
+                    <div class="flex justify-center items-center gap-2 w-full">
+                        <div  @click="addCondition($event)" class="min-w-[35px] h-[35px] cursor-pointer flex items-center justify-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                            <img :src="assetUrl('icons/add-01.svg')" alt="add" />
                         </div>
-                        <div @click="removeCondition(i, $event)"
-                             class="mr-3 cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
-                            <img :src="assetUrl('icons/delete-02.svg')" alt="delete"/>
+                        <div @click="removeCondition(i, $event)" class="min-w-[35px] h-[35px] cursor-pointer flex items-center justify-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                            <img :src="assetUrl('icons/delete-02.svg')" alt="delete" />
                         </div>
                     </div>
                 </el-col>
@@ -132,22 +129,3 @@ import {assetUrl} from "../../utils/ninjatablesadmin";
         }
     };
 </script>
-
-<style lang="scss">
-    .el-row {
-        margin-bottom: 20px;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
-
-    .wp-post-conditions-el-picker {
-        z-index: 9999 !important;
-    }
-
-    .compact {
-        padding: 0 !important;
-        margin-top: 3px !important;
-    }
-</style>

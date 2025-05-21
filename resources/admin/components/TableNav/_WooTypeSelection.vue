@@ -23,6 +23,7 @@
                 <el-checkbox-group
                     v-model="localSelections"
                     @change="handleSelectionChange"
+                    class="nt-checkbox-group"
                 >
                     <el-checkbox
                         v-for="taxonomy in term.terms"

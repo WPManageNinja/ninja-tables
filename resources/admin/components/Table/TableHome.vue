@@ -48,7 +48,7 @@
         </div>
 
         <div :class="[is_form_saving ? 'disabled' : '']" :disabled="is_form_saving">
-            <div class="bg-white !-mx-5 py-4 px-4 border-b border-[#E1E4EA] overflow-scroll">
+            <div class="bg-white !-mx-5 py-4 px-4 border-b border-[#E1E4EA]">
                 <router-link v-for="tableTab in table_tabs" :key="tableTab.route"
                     :to="{ name: tableTab.route, params: { table_id: tableId } }"
                     exact-active-class="focus:shadow-none outline:none border-b-2 py-4 border-[#335cff] text-[#0e121b]"
@@ -59,11 +59,11 @@
             </div>
 
             <router-view v-if="config" :config="config" :getColumnSettings="getSettings"></router-view>
-
         </div>
+
         <el-dialog
             class="ninja_create-table-modal"
-            title="Update Table Info"
+            :title="$t('Update Table Info')"
             v-model="editTableModalShow"
             top="50px"
             :append-to-body="true"
@@ -71,7 +71,8 @@
             <edit_table
                 v-if="editTableModalShow"
                 :table="table"
-                @modal_close="editTableModalShow = !editTableModalShow"></edit_table>
+                @modal_close="editTableModalShow = !editTableModalShow"
+            />
         </el-dialog>
     </div>
 </template>

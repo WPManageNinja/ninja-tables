@@ -177,14 +177,14 @@
 
                 <!--Number Format -->
                 <div v-else-if="model.data_type === 'number' && hasPro" class="flex flex-col">
-                    <label class="nt-form-label">
+                    <label class="nt-form-label mb-2">
                         {{ $t('Separator Style') }}
 
                         <el-tooltip class="item" placement="bottom-start" effect="light">
                             <template #content>
                                 <h3> {{ $t('Thousand Separator') }}</h3>
                                 <p>
-                                    Please Provide The Thousand/Decimal Separator If Any.
+                                    {{ $t('Please Provide The Thousand/Decimal Separator If Any.') }}
                                 </p>
                             </template>
                             <el-icon class="tooltip-icon-color">
@@ -196,10 +196,10 @@
                     <el-radio-group
                         @change="changeDecimalStyle()"
                         v-model="model.decimal_system"
-                        class="ninja_tables_radio_group mt-2"
+                        class="ninja_tables_radio_group"
                     >
-                        <el-radio value="us" border> {{ $t('US Style - decimal point (123,234.01)') }}</el-radio>
-                        <el-radio value="eu" border>{{ $t('European Style - decimal comma (123.234,01)') }}</el-radio>
+                        <el-radio value="us"> {{ $t('US Style - decimal point (123,234.01)') }}</el-radio>
+                        <el-radio value="eu">{{ $t('European Style - decimal comma (123.234,01)') }}</el-radio>
                     </el-radio-group>
                 </div>
 
@@ -211,9 +211,9 @@
 
                             <el-tooltip class="item" placement="bottom-start" effect="light">
                                 <template #content>
-                                    <h3>Select Field</h3>
+                                    <h3>{{ $t('Select Field') }}</h3>
                                     <p>
-                                        Use Select Field to add data in your table from predefined list
+                                        {{ $t('Use Select Field to add data in your table from predefined list') }}
                                     </p>
                                 </template>
 
@@ -223,16 +223,18 @@
 
                         <!-- Format input -->
                         <el-form-item class="nt-form-group mt-2">
-                            <p v-if="!has_pro"><b>Selection feature is only available on Pro version Please upgrade to
-                                pro to unlock this feature</b></p>
+                            <p v-if="!has_pro">
+                                <b> {{ $t(`Selection feature is only available on Pro version Please upgrade to
+                                pro to unlock this feature`) }} </b>
+                            </p>
                             <el-input type="textarea"
                                       size="small"
                                       :disabled="!has_pro"
                                       v-model="model.selections"
-                                      placeholder="Enter Select items one per line"
+                                      :placeholder="$t('Enter Select items one per line')"
                                       :autosize="{ minRows: 4, maxRows: 8}"
                             />
-                            <small>Enter Select items one per line</small>
+                            <small>{{ $t('Enter Select items one per line') }}</small>
                         </el-form-item>
                     </div>
 
@@ -242,9 +244,9 @@
 
                             <el-tooltip class="item" placement="bottom-start" effect="light">
                                 <template #content>
-                                    <h3>Placeholder</h3>
+                                    <h3>{{ $t('Placeholder') }}</h3>
                                     <p>
-                                        Enter the selection placeholder, default: 'Select'
+                                        {{ $t('Enter the selection placeholder, default: Select') }}
                                     </p>
                                 </template>
 
@@ -269,10 +271,10 @@
                             {{ $t('Enable Multi-Selection') }}
                             <el-tooltip class="item" placement="bottom-start" effect="light">
                                 <template #content>
-                                    <h3>Multiple Selection</h3>
+                                    <h3>{{ $t('Multiple Selection') }}</h3>
 
                                     <p>
-                                        If you select yes, Then admin can select multiple item on create data
+                                       {{ $t('If you select yes, Then admin can select multiple item on create data') }}
                                     </p>
                                 </template>
                                 <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
@@ -282,11 +284,12 @@
                 </div>
 
                 <!--Image Field -->
-                <template v-else-if="model.data_type == 'image'">
+                <template v-else-if="model.data_type === 'image'">
                     <template v-if="!hasPro">
                         <el-form-item class="nt-form-group">
-                            <p style="color: red">Image upload with lightbox, download link is a pro feature. It will
-                                not work without Pro Version <b>
+                            <p style="color: red"> {{ $t(`Image upload with lightbox, download link is a pro feature. It will
+                                not work without Pro Version`) }}
+                                <b>
                                     <get-pro/>
                                 </b>
                             </p>
@@ -317,7 +320,7 @@
                 <template v-else-if="model.data_type === 'button'">
                     <template v-if="!hasPro">
                         <el-form-item class="nt-form-group">
-                            <p style="color: red">Button on Table is a pro Feature. It will not work without Pro Version. <b>
+                            <p style="color: red"> {{$t('Button on Table is a pro Feature. It will not work without Pro Version.')}} <b>
                                 <get-pro/>
                             </b>
                             </p>
@@ -329,9 +332,9 @@
                             {{ $t('Button Text') }}
                             <el-tooltip class="item" placement="bottom-start" effect="light">
                                 <template #content>
-                                    <h3>Button Text</h3>
+                                    <h3>{{ $t('Button Text') }}</h3>
                                     <p>
-                                        Enter the button text you want to show on the button.
+                                        {{$t('Enter the button text you want to show on the button.')}}
                                     </p>
                                 </template>
                                 <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
@@ -341,18 +344,18 @@
                         <div class="flex flex-col mb-4">
                             <NinjaInput
                                 v-model="model.button_text"
-                                placeholder="Button Text (HTML supported)"
+                                :placeholder="$t('Button Text (HTML supported)')"
                             />
 
                             <div class="mt-2">
                                 <el-checkbox :disabled="!hasPro" :true-value="'_blank'" :false-value="'_self'" v-model="model.link_target">
-                                    Open Link in new tab
+                                    {{ $t('Open Link in new tab') }}
                                 </el-checkbox>
                                 <el-checkbox :disabled="!hasPro" :true-value="'nt_rounded_btn'" :false-value="''" v-model="model.btn_extra_class">
-                                    Make Button as rounded corner
+                                    {{ $t('Make Button as rounded corner') }}
                                 </el-checkbox>
                                 <el-checkbox :disabled="!hasPro" :true-value="'download'" :false-value="''" v-model="model.force_download">
-                                    Make Force download
+                                   {{ $t('Make Force download') }}
                                 </el-checkbox>
                             </div>
                         </div>
@@ -469,9 +472,8 @@
                     </el-select>
                 </el-form-item>
 
-
-                <wp-post-dynamic-column
-                    v-if="dataSourceType == 'wp-posts'"
+                <WPPostDynamicColumn
+                    v-if="dataSourceType === 'wp-posts'"
                     :columns="columns"
                     :column="model"
                 />
@@ -850,9 +852,9 @@
             GetPro,
             'wp_editor': wpEditor,
             'condition': conditional,
-            'wp-post-dynamic-column': WPPostDynamicColumn,
             'content-transformer': ContentTransformer,
             DynamicWooColumn,
+            WPPostDynamicColumn,
             NinjaColorPicker
         },
         props: {
