@@ -132,10 +132,14 @@
                <get-pro/>
             </div>
         </div>
-
             <div class="pt-[16px] flex justify-between items-center" :class="{ 'single-child': shouldNotContinueAdding }">
-                <div v-if="!shouldNotContinueAdding">
-                    <el-checkbox v-model="continueAdding">{{ $t('Continue Adding') }}</el-checkbox>
+                <div>
+                    <el-checkbox
+                        v-if="!shouldNotContinueAdding"
+                        v-model="continueAdding"
+                    >
+                        {{ $t('Continue Adding') }}
+                    </el-checkbox>
                 </div>
 
                 <div class="flex gap-2 items-center">

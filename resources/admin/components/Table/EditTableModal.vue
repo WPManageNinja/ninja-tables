@@ -19,11 +19,11 @@
 
             <div class="form-group">
                 <label class="nt-form-label">{{ $t('Table Description') }}</label>
-                <wp_editor v-model="table.post_content"></wp_editor>
+                <WPEditor v-model="table.post_content" />
             </div>
         </div>
 
-        <div class="pt-[16px] flex justify-end items-center gap-x-2">
+        <div class="pt-[10px] flex justify-end items-center gap-x-2">
             <NinjaButton
                 type="secondary"
                 @click="closeModal"
@@ -40,7 +40,7 @@
 </template>
 
 <script type="text/babel">
-    import wp_editor from '../../../common/_wp_editor';
+    import WPEditor from '../../../common/_wp_editor';
     import NinjaInput from "../../@ui-utils/NinjaInput.vue";
     import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
@@ -49,7 +49,7 @@
         components: {
             NinjaButton,
             NinjaInput,
-            wp_editor: wp_editor,
+            WPEditor,
         },
         props: {
             table: {

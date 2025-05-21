@@ -2,9 +2,10 @@
     <div class="column-condition-config">
         <div v-if="hasPro" class="conditional-settings-header">
             <div class="conditional-settings-title">
-                Customize your table's appearances based on the cell value. Add as many conditions as you like. <a
-                target="_blank" href="https://ninjatables.com/docs/conditional-formatting/">View
-                Documentation</a>
+                Customize your table's appearances based on the cell value. Add as many conditions as you like.
+                <a class="text-[#335CFF]" target="_blank" href="https://ninjatables.com/docs/conditional-formatting/">
+                    View Documentation
+                </a>
             </div>
 
             <div
@@ -106,7 +107,7 @@
             </el-col>
 
             <el-col :sm="1" :md="1">
-                <div class="flex items-center justify-center mt-2">Then</div>
+                <div class="flex items-center justify-center md:mt-2 mr-2">Then</div>
             </el-col>
 
             <el-col :sm="4" :md="4" class="mr-2">
@@ -163,39 +164,33 @@
             </el-col>
 
             <el-col :sm="2" :md="2">
-                <div class="flex items-center justify-center mt-1" v-if="hasPro">
-                    <div @click="addCondition"
-                         class="mr-3 cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
-                        <img :src="assetUrl('icons/add-01.svg')" alt="add"/>
+                <div class="flex justify-center items-center gap-2 w-full ml-3 mt-[2px]">
+                    <div  @click="addCondition" class="min-w-[35px] h-[35px] cursor-pointer flex items-center justify-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                        <img :src="assetUrl('icons/add-01.svg')" alt="add" />
                     </div>
-                    <div @click="removeCondition(index)"
-                         class="mr-3 cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
-                        <img :src="assetUrl('icons/delete-02.svg')" alt="delete"/>
+                    <div @click="removeCondition(index)" class="min-w-[35px] h-[35px] cursor-pointer flex items-center justify-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                        <img :src="assetUrl('icons/delete-02.svg')" alt="delete" />
                     </div>
                 </div>
             </el-col>
         </el-row>
 
         <div class="bg-[#F9FAFB] p-4 rounded-[8px]" v-if="column.data_type === 'date'">
-            <h4>You can use placeholder for dynamic dates to style your row/cell/column</h4>
-            <p>Example Usage</p>
+            <h4 class="my-2">You can use placeholder for dynamic dates to style your row/cell/column</h4>
+            <p class="nt-form-modal mb-2">Example Usage</p>
             <ul>
-                <li>Today's Date: <code>{date:{{column.dateFormat}}}</code></li>
-                <li>Tomorrow's Date: <code>{date+1:{{column.dateFormat}}}</code></li>
-                <li>Yesterday's Date: <code>{date-1:{{column.dateFormat}}}</code></li>
-                <li>Date After 10 Days: <code>{date+10:{{column.dateFormat}}}</code></li>
-                <li>Date Before 10 Days: <code>{date-10:{{column.dateFormat}}}</code></li>
+                <li>Today's Date: <code class="nt-code">{date:{{column.dateFormat}}}</code></li>
+                <li>Tomorrow's Date: <code class="nt-code">{date+1:{{column.dateFormat}}}</code></li>
+                <li>Yesterday's Date: <code class="nt-code">{date-1:{{column.dateFormat}}}</code></li>
+                <li>Date After 10 Days: <code class="nt-code">{date+10:{{column.dateFormat}}}</code></li>
+                <li>Date Before 10 Days: <code class="nt-code">{date-10:{{column.dateFormat}}}</code></li>
             </ul>
         </div>
 
         <el-row v-if="!column.conditions || !column.conditions.length">
-            <el-alert
-                center
-                :closable=false
-                title="You haven't added any conditions for the column yet!"
-                type="info"
-                class="rounded-[8px] mt-4"
-            ></el-alert>
+            <div class="nt-instruction w-full text-center">
+                <p>{{ $t(`You haven't added any conditions for the column yet!`) }}</p>
+            </div>
         </el-row>
     </div>
 </template>
@@ -266,49 +261,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    //.column-condition-config {
-    //    .el-row {
-    //        display: flex;
-    //        margin-bottom: 5px;
-    //    }
-    //    .el-col {
-    //        margin: 0 5px;
-    //        display: flex;
-    //        .conditional_color_block {
-    //            width: 100%;
-    //            .el-color-picker__trigger {
-    //                width: 100%;
-    //                height: 33px;
-    //            }
-    //        }
-    //    }
-    //    .el-col:first-child > .if-cell-value {
-    //        white-space: nowrap;
-    //        /*text-transform: uppercase;*/
-    //    }
-    //    .if-cell-value {
-    //        margin-top: 10px;
-    //        font-weight: 400;
-    //    }
-    //    .form_group {
-    //        margin: 0;
-    //        height: 35px;
-    //    }
-    //    .el-color-picker,
-    //    .el-color-picker__mask {
-    //        width: 100% !important;
-    //    }
-    //
-    //    .el-button--mini {
-    //        padding: 5px 13px;
-    //    }
-    //
-    //    .conditional-settings-header {
-    //        display: flex;
-    //        justify-content: space-between;
-    //        align-items: center;
-    //    }
-    //}
-</style>
