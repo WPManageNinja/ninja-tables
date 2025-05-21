@@ -246,7 +246,7 @@
                                 <template #content>
                                     <h3>{{ $t('Placeholder') }}</h3>
                                     <p>
-                                        {{ $t('Enter the selection placeholder, default: 'Select'') }}
+                                        {{ $t('Enter the selection placeholder, default: Select') }}
                                     </p>
                                 </template>
 
