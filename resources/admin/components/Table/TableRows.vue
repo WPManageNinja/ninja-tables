@@ -332,12 +332,12 @@
     import Alert from '../includes/alert.vue';
     import DeletePopOver from '../includes/DeletePopOver.vue';
     import SortableUpgradeNotice from '../includes/SortableUpgradeNotice.vue';
-    import columnsEditor from './ColumnEditor/ColumnsEditor';
-    import FluentFormNav from '../TableNav/Fluentform';
-    import ExternalSourceNav from '../TableNav/External';
-    import RawSqlNav from '../TableNav/RawSqlNav';
-    import WPPostsNav from '../TableNav/WPPostsNav';
-    import WooNavEdit from '../TableNav/WooNavEdit';
+    import columnsEditor from './ColumnEditor/ColumnsEditor.vue';
+    import FluentFormNav from '../TableNav/Fluentform.vue';
+    import ExternalSourceNav from '../TableNav/External.vue';
+    import RawSqlNav from '../TableNav/RawSqlNav.vue';
+    import WPPostsNav from '../TableNav/WPPostsNav.vue';
+    import WooNavEdit from '../TableNav/WooNavEdit.vue';
 
     import ShowEditableCell from './_ShowEditableCell'
     import { useEventBus } from '../../eventBus';
@@ -458,15 +458,15 @@
             },
             dataSourceType() {
                 const c = this.config;
-                return (c && 'dataSourceType' in c.table) ? c.table.dataSourceType : 'default';
+                return (c && c.table && 'dataSourceType' in c.table) ? c.table.dataSourceType : 'default';
             },
             isEditable() {
                 const c = this.config;
-                return (c && 'isEditable' in c.table) ? c.table.isEditable : true;
+                return (c && c.table && 'isEditable' in c.table) ? c.table.isEditable : true;
             },
             isEditableMessage() {
                 const c = this.config;
-                return (c && 'isEditableMessage' in c.table) ? c.table.isEditableMessage : null;
+                return (c && c.table && 'isEditableMessage' in c.table) ? c.table.isEditableMessage : null;
             }
         },
         methods: {
@@ -506,9 +506,9 @@
                       this.loading = false;
                     })
             },
-            addTableData() {
+            // addTableData() {
 
-            },
+            // },
             getItemNumber(index) {
                 return this.paginate.per_page * (this.paginate.current_page - 1) + (index + 1);
             },

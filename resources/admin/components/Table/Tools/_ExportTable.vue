@@ -9,7 +9,7 @@
 
 
             <el-form-item size="large" label-position="top" :label="$t('Format')" class="!mb-[10px] w-1/2">
-                <el-select class="ninja-data-tables_select" v-model="selected">
+                <el-select class="ninja-select" v-model="selected">
                     <el-option value="csv" label="CSV"/>
                     <el-option value="json" label="JSON"/>
                 </el-select>
