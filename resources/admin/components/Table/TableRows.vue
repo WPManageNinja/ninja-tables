@@ -77,7 +77,7 @@
         </template>
 
         <div class="all_tables_card">
-            <div class="default_nav">
+            <div class="default_nav flex-wrap gap-y-5">
                 <div class="default_nav_left">
                     <div class="bulk_action">
                         <select class="bulk_select" v-model="bulkAction">
@@ -90,7 +90,7 @@
                     </div>
                 </div>
 
-                <div class="default_nav_right">
+                <div class="default_nav_right flex-wrap gap-y-5">
                     <div class="search_option">
                         <NinjaInput
                             v-model="searchString"
