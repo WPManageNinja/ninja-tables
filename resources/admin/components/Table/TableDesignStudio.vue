@@ -32,10 +32,10 @@
                             class="footable_parent ninja_table_wrapper loading_ninja_table wp_table_data_press_parent"
                             :class="wrapperClasses">
 
-                            <h3 v-if="tableSettings.show_title && config?.table" class="table_title footable_title">
+                            <h3 v-if="Number(tableSettings.show_title )&& config?.table" class="table_title footable_title">
                                 {{ config.table.post_title }}
                             </h3>
-                            <div v-if="tableSettings.show_description && config?.table"
+                            <div v-if="Number(tableSettings.show_description) && config?.table"
                                 class="table_description footable_description" v-html="config.table.post_content">
                             </div>
                             <table v-show="app_ready" :id="'footable_' + tableId" :class="tableClasses"
@@ -126,6 +126,7 @@
                                         </span>
                                          <el-switch 
                                             :model-value="isStyleActive(tableStyle.key)"
+                                            size="small"
                                             @change="(val) => toggleStyle(tableStyle.key, val)"
                                             :id="'table_style_' + tableStyle.key">
                                         </el-switch>
@@ -141,7 +142,7 @@
                                     </div>
                                 </template>
                                  <div class="form_group label-normalize mt-4">
-                                    <div for="show_title" class="flex items-center justify-between">
+                                    <div for="show_title" class="flex items-center justify-between mb-2">
                                         <span>
                                             {{ $t('Show Table Title') }}
                                             <el-tooltip placement="top-end" effect="light" content="Enable this if you want to show table title in frontend">
@@ -152,14 +153,14 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.show_title"
-                                            :active-value="'1'"
-                                            :inactive-value="'0'"
+                                            active-value="1"
+                                            inactive-value="0"
                                              size="small"
                                             :id="'show_title'">
                                         </el-switch>
                                     </div>
 
-                                    <div for="show_description" class="flex items-center justify-between">
+                                    <div for="show_description" class="flex items-center justify-between mb-2">
                                         <span>
                                             {{ $t('Show Table Description') }}
                                             <el-tooltip placement="top-end" effect="light" content="Enable this if you want to show table description in frontend">
@@ -170,21 +171,21 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.show_description"
-                                             :active-value="'1'"
-                                            :inactive-value="'0'"
+                                            active-value="1"
+                                            inactive-value="0"
                                              size="small"
                                             :id="'show_description'">
                                         </el-switch>
                                     </div>
 
-                                    <div for="enable_search" class="flex items-center justify-between">
+                                    <div for="enable_search" class="flex items-center justify-between mb-2">
                                         <span>
                                             {{ $t('Enable the visitor to filter or search the table.') }}
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.enable_search"
-                                             :active-value="'1'"
-                                            :inactive-value="'0'"
+                                            active-value="1"
+                                            inactive-value="0"
                                              size="small"
                                             :id="'enable_search'">
                                         </el-switch>
@@ -193,46 +194,46 @@
                                     <div 
                                         v-if="tableLibs[tableSettings.library].supports.sorting && !tableSettings.enable_ajax"
                                         for="column_sorting" 
-                                        class="flex items-center justify-between">
+                                        class="flex items-center justify-between mb-2">
                                         <span>
                                             {{ $t('Enable sorting of the table by the visitor') }}
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.column_sorting"
-                                             :active-value="'1'"
-                                            :inactive-value="'0'"
+                                            active-value="1"
+                                            inactive-value="0"
                                              size="small"
                                             :id="'column_sorting'">
                                         </el-switch>
                                     </div>
 
-                                    <div for="hide_header_row" class="flex items-center justify-between">
+                                    <div for="hide_header_row" class="flex items-center justify-between mb-2">
                                         <span>
                                             Hide Header Row
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.hide_header_row"
-                                             :active-value="'1'"
-                                            :inactive-value="'0'"
+                                            active-value="1"
+                                            inactive-value="0"
                                              size="small"
                                             :id="'hide_header_row'">
                                         </el-switch>
                                     </div>
 
-                                    <div for="hide_all_borders" class="flex items-center justify-between">
+                                    <div for="hide_all_borders" class="flex items-center justify-between mb-2">
                                         <span>
                                             Hide All Borders
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.hide_all_borders"
-                                             :active-value="'1'"
-                                            :inactive-value="'0'"
+                                            active-value="1"
+                                            inactive-value="0"
                                              size="small"
                                             :id="'hide_all_borders'">
                                         </el-switch>
                                     </div>
 
-                                    <div for="hide_on_empty" class="flex items-center justify-between">
+                                    <div for="hide_on_empty" class="flex items-center justify-between mb-2">
                                         <span>
                                             Hide empty items on responsive breakdown 
                                             <span v-show="!has_pro">(Pro Only)</span>
@@ -244,14 +245,14 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.hide_on_empty"
-                                             :active-value="'1'"
-                                            :inactive-value="'0'"
+                                            active-value="1"
+                                            inactive-value="0"
                                              size="small"
                                             :id="'hide_on_empty'">
                                         </el-switch>
                                     </div>
 
-                                    <div for="hide_responsive_labels" class="flex items-center justify-between">
+                                    <div for="hide_responsive_labels" class="flex items-center justify-between mb-2">
                                         <span>
                                             Hide Labels on responsive breakdown 
                                             <span v-show="!has_pro">(Pro Only)</span>
@@ -263,8 +264,8 @@
                                         </span>
                                         <el-switch 
                                             v-model="tableSettings.hide_responsive_labels"
-                                             :active-value="'1'"
-                                            :inactive-value="'0'"
+                                            active-value="1"
+                                            inactive-value="0"
                                             size="small"
                                             :id="'hide_responsive_labels'">
                                         </el-switch>
@@ -903,10 +904,10 @@ export default {
                 classes.push('footable-paging-right');
             }
 
-            if (this.tableSettings.hide_header_row) {
+            if (Number(this.tableSettings.hide_header_row)) {
                 classes.push('ninjatable_hide_header_row');
             }
-            if (this.tableSettings.hide_all_borders) {
+            if (Number(this.tableSettings.hide_all_borders)) {
                 classes.push('hide_all_borders');
             }
             classes.push('ninja_table_pro');
@@ -920,7 +921,7 @@ export default {
                 table_css_classes = this.availableCssClasses.filter(value => -1 != this.tableSettings.css_classes.indexOf(value));
             }
 
-            if (this.tableSettings.hide_responsive_labels) {
+            if (Number(this.tableSettings.hide_responsive_labels)) {
                 classes.push('nt_hide_breakpoint_labels');
             }
 
@@ -1202,7 +1203,7 @@ export default {
             let NinjaTableApp = window.ninjaTableApp;
             let $table = jQuery('#footable_' + this.tableId);
 
-            if (this.tableSettings.hide_on_empty) {
+            if (Number(this.tableSettings.hide_on_empty)) {
                 $table.on('expanded.ft.row', function (e, ft, row) {
                     $table.find('table.footable-details td:empty').parent().addClass('nt_has_hide');
                 });
@@ -1395,10 +1396,10 @@ export default {
                 defualt_filter_column: null,
                 expandAll: this.tableSettings.expand_type === "expandAll",
                 expandFirst: this.tableSettings.expand_type === "expandFirst",
-                filtering: !!this.tableSettings.enable_search,
+                filtering: !Number(this.tableSettings.enable_search),
                 i18n: {},
                 use_parent_width: this.showingDevice !== 'desktop',
-                sorting: !!this.tableSettings.column_sorting,
+                sorting: Boolean(Number(this.tableSettings.column_sorting)),
                 togglePosition: this.tableSettings.togglePosition
             };
 
@@ -1411,7 +1412,7 @@ export default {
                 "expandAll": this.tableSettings.expand_type === "expandAll",
                 'empty': '',
                 filtering: {
-                    enabled: !!this.tableSettings.enable_search
+                    enabled: !Number(this.tableSettings.enable_search)
                 },
                 paging: {
                     enabled: this.tableSettings.show_all == '0' || this.tableSettings.show_all == 0,
@@ -1419,7 +1420,7 @@ export default {
                     "container": "#footable_parent_" + this.tableId + " .paging-ui-container",
                 },
                 sorting: {
-                    enabled: !!this.tableSettings.column_sorting
+                    enabled: Boolean(Number(this.tableSettings.column_sorting))
                 },
             };
 
