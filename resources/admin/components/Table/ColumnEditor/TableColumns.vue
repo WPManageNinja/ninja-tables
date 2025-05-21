@@ -368,7 +368,7 @@
 
 <style lang="scss">
     .table-column-settings {
-        margin-top: 15px;
+        margin-top: 24px;
 
         .el-menu {
             border-right: initial;

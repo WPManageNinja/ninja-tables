@@ -1,6 +1,6 @@
 <template>
     <el-form ref="form" :model="model" class="form-wrapper">
-        <el-tabs v-model="activeTab" @tab-click="onTabClick">
+        <el-tabs class="nt_tab_design" v-model="activeTab" @tab-click="onTabClick">
             <!-- Basic Settings -->
             <el-tab-pane class="basic_settings ninja_modal_body px-[10px]" label="Basic Settings" name="basic">
 
