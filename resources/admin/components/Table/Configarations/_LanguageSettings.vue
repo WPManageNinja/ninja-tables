@@ -26,7 +26,7 @@
         </div>
 
         <div class="flex justify-end mt-5">
-            <NinjaButton type="primary" size="small" @click="storeSettings" :btn-text="$t('Save Settings')"/>
+            <NinjaButton type="primary" @click="storeSettings" :btn-text="$t('Save Settings')"/>
         </div>
     </div>
 </template>

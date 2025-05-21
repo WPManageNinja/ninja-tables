@@ -102,7 +102,7 @@
         </el-collapse>
 
         <div class="flex justify-end mt-4">
-            <NinjaButton type="primary" size="small" :btn-text="$t('Save Settings')" @click="storeSettings"/>
+            <NinjaButton type="primary" :btn-text="$t('Save Settings')" @click="storeSettings"/>
         </div>
     </div>
 </template>
