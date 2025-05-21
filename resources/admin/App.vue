@@ -33,9 +33,9 @@
                         <li>And Many More feature</li>
                     </ul>
                 </div>
-                <template #footer>
+                <div class="flex justify-end p-4">
                     <get-pro/>
-                </template>
+                </div>
             </el-dialog>
         </div>
 

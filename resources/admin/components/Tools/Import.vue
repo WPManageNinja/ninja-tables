@@ -1,20 +1,16 @@
 <template>
-    <div>
-        <div class="ninja_header mb-4">
-            <h2>{{ $t('Import Table') }}</h2>
-        </div>
+    <div class="">
+        <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Import Table') }}</div>
         <div class="ninja_content">
-            <div class="ninja_block">
-                <p>
-                    {{ $t('NinjaTables can import tables from existing data, like from a CSV or JSON file. You can also import existing tables from the other WordPress table plugins.') }}
-                </p>
+            <div class="text-[14px] font-[400] text-[#0E121B] my-5">
+                {{ $t("NinjaTables can import tables from existing data, like from a CSV or JSON file. You can also import existing tables from the other WordPress table plugins.") }}
             </div>
-            <div class="my-4">
-                <p class="mb-1 text-[#525866]">Import Table from CSV / JSON File</p>
-                <p class="mb-1 text-[#525866]">
+            <div class="my-2">
+                <p class="mb-1 text-[#0E121B]">Import Table from CSV / JSON File</p>
+                <p class="mb-1 text-[#0E121B]">
                     Browse and locate a CSV/JSON file you backed up before.
                 </p>
-                <p class="text-[#525866]">
+                <p class="text-[#0E121B]">
                     Select the intended format and click <strong>Import</strong> button, we will do
                     the rest for you.
                 </p>
@@ -73,7 +69,7 @@
 
                     <!--Import format-->
                     <div class="form-item">
-                        <label class="text-[#525866] font-[500]">{{ $t('Import Format:') }}</label>
+                        <label class="font-[400] mt-4 mb-2">{{ $t('Import Format') }}</label>
                         <el-select class="ninja-select" id="import_format" v-model="imports.format">
                             <el-option :value="format" :key="option"
                                     v-for="(option, format) in imports.formatOptions" :label="$t(option)"
@@ -81,22 +77,22 @@
                             </el-option>
                         </el-select>
 
-                        <template v-if="imports.format == 'csv'">
-                            <span  class="help">
-                                Check tutorial for importing data from CSV file
+                        <template v-if="imports.format == 'csv'" class="mt-4 mb-2">
+                            <div class="text-[#0E121B] mt-4">
+                                {{ $t('Check tutorial for importing data from CSV file') }}
                               <a
                                 class="text-blue-500"
                                     href="https://ninjatables.com/docs/import-table-data-from-a-csv/"
                                     target="_blank">here</a>
-                            </span>
+                            </div>
 
                             <div class="form-item">
                                 <el-checkbox
+                                    class="text-[#0E121B]"
                                     :true-value="'yes'"
                                     :false-value="'no'"
                                     v-model="do_unicode"
-                                >
-                                    Convert to UTF-8 format (Check this if your CSV is non-unicode format)
+                                > {{ $t('Convert to UTF-8 format (Check this if your CSV is non-unicode format)') }}
                                 </el-checkbox>
                             </div>
                         </template>
@@ -111,8 +107,8 @@
                         </span>
                     </div>
 
-                    <div class="form-item">
-                        <NinjaButton :disabled="!uploadedFile" size="small" :loading="btnLoading" @click="importTable">
+                    <div class="flex justify-end">
+                        <NinjaButton :disabled="!uploadedFile" :loading="btnLoading" @click="importTable">
                             {{ $t('Import') }}
                         </NinjaButton>
                     </div>
@@ -123,7 +119,7 @@
 
             <div class="ninja_block_section">
                 <h3 class="text-lg font-semibold">Import From Other WP Table Plugin</h3>
-                <p class="text-sm text-[#525866] my-2">
+                <p class="text-sm text-[#0E121B] my-2">
                     To import from other WordPress plugins click the respective <strong>Import</strong>
                     button.
                 </p>
@@ -391,13 +387,3 @@ import NinjaButton from '../../@ui-utils/NinjaButton.vue';
         }
     }
 </script>
-
-<style scoped>
-    .form-item {
-        margin: 10px 0;
-    }
-
-    .form-item label {
-        width: 100px;
-    }
-</style>

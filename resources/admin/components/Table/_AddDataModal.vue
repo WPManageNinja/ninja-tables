@@ -125,11 +125,13 @@
                 </div>
             </div>
 
-            <div v-else class="bg-[#F9FAFB] p-4 rounded-[8px]">
+            <div v-else class="nt-instruction">
                 <h3 class="nt-modal-subtitle">{{ $t('Row and Cell Color Customization') }}</h3>
                 <p class="nt-modal-description">{{ $t(`Using this module, You can set cell and row level colors of your data, It's a pro feature, Please
                     purchase pro to unlock this feature`) }}</p>
-               <get-pro/>
+               <div class="mt-2">
+                   <get-pro/>
+               </div>
             </div>
         </div>
             <div class="pt-[16px] flex justify-between items-center" :class="{ 'single-child': shouldNotContinueAdding }">

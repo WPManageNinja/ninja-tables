@@ -342,7 +342,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="tableSettings.table_color_type == 'pre_defined_color'" class="px-[18px]">
+                        <div v-if="tableSettings.table_color_type == 'pre_defined_color'" class="px-[18px] pb-5">
                             <el-select class="ninja-select" v-model="tableSettings.table_color">
                                 <el-option v-for="(colorName, colorKey) in colors" :key="colorKey" :value="colorKey" :label="colorName">
                                 </el-option>
@@ -804,7 +804,7 @@
                     </ul>
                 </div>
 
-                <div v-if="!has_pro" class="upgrade_box">
+                <div v-if="!has_pro" class="flex justify-center my-4">
                     <get-pro text="Get Pro" />
                 </div>
             </div>
@@ -828,10 +828,12 @@ import { assetUrl } from '../../utils/ninjatablesadmin';
 import tableConfigStore from '../../store/tableConfigStore';
 import ColorPicker from '../../@ui-utils/ColorPicker.vue';
 import NinjaInput from '../../@ui-utils/NinjaInput.vue';
+import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
 export default {
     name: 'table_preview',
     components: {
+        NinjaButton,
         GetPro,
         SortableUpgradeNotice,
         NinjaColorPicker,

@@ -91,10 +91,20 @@
                 <h3>Custom Filters is introduced in version 2.4.0. Please update <b>Ninja tables pro</b> plugin to use
                     this feature</h3>
             </div>
-            <div v-else class="section_block text-center">
-                <h3>Custom Filters is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
+            <div v-else class="w-full overflow-hidden text-center">
+                <h3 class="text-[16px] font-[500] text-[#0E121B] mb-4">
+                    Custom Filters is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
                 </h3>
-                <get-pro/>
+              <div class="flex justify-center">
+                  <a v-if="!has_pro"
+                     href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
+                     target="_blank">
+                      <NinjaButton
+                          type="danger"
+                          :btnText="$t('Get Pro')"
+                      />
+                  </a>
+              </div>
             </div>
         </div>
 

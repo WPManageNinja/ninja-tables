@@ -18,14 +18,16 @@
         </div>
 
         <div v-else>
-            <div class="nt-modal-body">
-                <h3 class="nt-modal-subtitle">Conditional Formatting</h3>
+            <div class="nt-instruction">
+                <h3 class="nt-modal-title">Conditional Formatting</h3>
                 <p class="nt-modal-description">
                     Customize your table's appearances based on the cell value. Add as many conditions as you like.
                     Conditional Formatting is a pro feature which can be enabled by using Ninja Table pro Add-on. Ninja
                     Table Pro has lots of features that will help you to build any type of Tables.
                 </p>
-               <get-pro size="small"/>
+                <div class="py-2">
+                    <get-pro />
+                </div>
             </div>
         </div>
 
@@ -175,7 +177,7 @@
             </el-col>
         </el-row>
 
-        <div class="bg-[#F9FAFB] p-4 rounded-[8px]" v-if="column.data_type === 'date'">
+        <div class="bg-[#F9FAFB] p-4 rounded-[8px]" v-if="column.data_type === 'date' && hasPro">
             <h4 class="my-2">You can use placeholder for dynamic dates to style your row/cell/column</h4>
             <p class="nt-form-modal mb-2">Example Usage</p>
             <ul>
@@ -188,7 +190,7 @@
         </div>
 
         <el-row v-if="!column.conditions || !column.conditions.length">
-            <div class="nt-instruction w-full text-center">
+            <div class="nt-instruction w-full text-center" v-if="hasPro">
                 <p>{{ $t(`You haven't added any conditions for the column yet!`) }}</p>
             </div>
         </el-row>
