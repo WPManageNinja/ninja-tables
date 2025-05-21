@@ -9,8 +9,11 @@
             </div>
             <div class="w-1/2 my-3">
                 <div class="mt-5 rounded-2xl border-solid border-gray-200 border">
-                    <div class="p-3 !border-gray-200" style="border-bottom: solid 1px">
-                        Import table from here
+                    <div class="p-3 !border-gray-200 flex justify-between items-center"
+                         style="border-bottom: solid 1px">
+                        <p>{{ $t('Import table from here') }}</p>
+                        <NinjaButton type="secondary" :icon="assetUrl('icons/download-02.svg')" size="small"
+                                     @click="downloadSampleCSV" :btn-text="$t('Download Sample CSV')"/>
                     </div>
                     <div class="p-[16px]">
                         <el-upload
@@ -33,7 +36,7 @@
                         <div v-if="uploadedFile?.name"
                              class="mt-3 flex justify-between items-center border border-solid border-[#e1e4ea] rounded-[10px] px-5 py-4">
                             <div class="flex items-center">
-                                <img class="mr-2" :src="getFileIcon(uploadedFile)"/>
+                                <img class="mr-2" :src="getFileIcon()"/>
                                 <div>
                                     <div>{{ uploadedFile.name }}</div>
                                     <div class="flex items-center">
@@ -51,16 +54,31 @@
                             <el-checkbox v-model="replace" :label="$t('Replace Existing Data')"/>
                             <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="do_unicode"
                                          :label="$t('Convert to UTF-8 format ( Check this if your csv is non-unicode format)')"/>
+                            <div class="py-[16px] flex justify-end">
+                                <NinjaButton type="primary" :btnText="$t('Import Table')" @click.prevent="upload"/>
+                            </div>
                         </div>
                         <div v-if="uploadedFile?.status === 'error'" class="text-red-500">
                             <small>{{ uploadedFile.message }}</small>
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <div class="text-[18px] font-[600] text-[#0E121B] mt-5">{{ $t('Sample Header Structure') }}</div>
 
-                <div class="py-[16px]">
-                    <NinjaButton size="small" type="primary" :btnText="$t('Import Table')" @click.prevent="upload"/>
+            <div>
+                <el-table :data="getSampleTableData()" border class="nt-inner-table">
+                    <el-table-column
+                        v-for="column in config.columns"
+                        :key="column.key"
+                        :prop="column.key"
+                        :label="column.name"
+                        align="center"
+                    />
+                </el-table>
+                <div class="mt-3 text-sm text-gray-500">
+                    {{ $t('Your CSV file should follow this column structure.') }}
                 </div>
             </div>
         </div>
@@ -90,18 +108,11 @@ export default {
     computed: {
         columns() {
             return this.config && this.config.columns ? this.config.columns : [];
-        },
-        sampleData() {
-            let row = {};
-            each(this.columns, item => {
-                row[item.key] = 'column value';
-            });
-            return Array(3).fill(row);
         }
     },
     methods: {
         assetUrl,
-        getFileIcon(file) {
+        getFileIcon() {
             return this.assetUrl('icons/csv-file-ico.svg');
         },
         clear() {
@@ -109,6 +120,7 @@ export default {
             this.$refs.uploadRef.clearFiles();
         },
         handleChange(file) {
+            this.clear();
             this.uploadedFile = file;
         },
         upload() {
@@ -141,6 +153,32 @@ export default {
             that.btnLoading = false;
 
         },
+        getSampleTableData() {
+            const sampleData = [];
+            for (let i = 0; i < 3; i++) {
+                const row = {};
+                each(this.config.columns, column => {
+                    row[column.key] = "column value";
+                });
+                sampleData.push(row);
+            }
+            return sampleData;
+        },
+        downloadSampleCSV() {
+            const headers = this.config.columns.map(column => column.name).join(',');
+            const rows = this.getSampleTableData()
+                .map(row => this.config.columns.map(column => row[column.key]).join(','))
+                .join('\n');
+
+            // Download the CSV file
+            const link = document.createElement('a');
+            link.href = 'data:text/csv;charset=utf-8,' + encodeURI(headers + '\n' + rows);
+            link.download = `sample-${this.tableId}.csv`;
+            link.click();
+
+            this.$message.success(this.$t('Sample CSV downloaded successfully'));
+        }
+
     }
 }
 </script>
