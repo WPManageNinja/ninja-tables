@@ -80,6 +80,7 @@
                                                 :has-pro="has_pro"
                                                 @add="addNewColumn()"
                                                 @cancel="addColumnStatus = !addColumnStatus"
+                                                :hideCancel="true"
                                             />
                                         </div>
                                     </div>

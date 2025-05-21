@@ -298,6 +298,7 @@
                 @store="storeSettings()"
                 @delete="deleteColumn()"
                 @cancel="showColumnEditor = false"
+                :hideCancel="true"
             />
         </el-dialog>
 
