@@ -77,7 +77,7 @@ class ImportController extends Controller
         $data = file_get_contents($tmpName);
 
         if ($doUnicode && $doUnicode == 'yes') {
-            $data = utf8_encode($data);
+            $data = mb_convert_encoding($data, 'UTF-8', 'ISO-8859-1');
         }
 
         try {
@@ -307,8 +307,8 @@ class ImportController extends Controller
 
         $data = file_get_contents($tmpName);
 
-        if (Arr::get($request->all(), 'do_unicode') && $request->do_unicode == 'yes') {
-            $data = utf8_encode($data);
+        if (Arr::get($request->all(), 'do_unicode') === 'yes') {
+            $data = mb_convert_encoding($data, 'UTF-8', 'ISO-8859-1');
         }
 
         try {
