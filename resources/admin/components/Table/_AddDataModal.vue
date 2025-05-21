@@ -77,13 +77,13 @@
                 <div class="grid grid-cols-2 gap-x-5">
                     <div class="flex flex-col">
                         <label class="nt-form-label">Row Background Color</label>
-                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                             <ColorPicker v-model="item_settings.row_bg" />
                         </div>
                     </div>
                     <div class="flex flex-col">
                         <label class="nt-form-label">Row Text Color</label>
-                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                             <ColorPicker v-model="item_settings.text_color" />
                         </div>
                     </div>

@@ -376,7 +376,7 @@
                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                    </el-tooltip>
                                </label>
-                               <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                               <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                    <ColorPicker :disabled="!hasPro" v-model="model.btn_bg_color" />
                                </div>
                            </div>
@@ -394,7 +394,7 @@
                                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
-                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                     <ColorPicker :disabled="!hasPro" v-model="model.btn_text_color" />
                                 </div>
                             </div>
@@ -412,7 +412,7 @@
                                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
-                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                     <ColorPicker :disabled="!hasPro" v-model="model.btn_border_color" />
                                 </div>
                             </div>
@@ -658,7 +658,7 @@
                                 </el-tooltip>
                         </label>
 
-                        <div class="flex items-center gap-2 mt-1">
+                        <div class="flex items-center gap-2">
                             <el-switch
                                 size="small"
                                 v-model="model.unfilterable"
@@ -684,7 +684,7 @@
                             </el-tooltip>
                         </label>
 
-                        <div class="flex items-center gap-2 mt-1">
+                        <div class="flex items-center gap-2">
                             <el-switch
                                 size="small"
                                 v-model="model.unsortable"
@@ -712,7 +712,7 @@
                                 </el-tooltip>
                             </label>
 
-                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                 <ColorPicker :disabled="!hasPro" v-model="model.background_color" />
                             </div>
                         </div>
@@ -732,7 +732,7 @@
                                 </el-tooltip>
                             </label>
 
-                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                 <ColorPicker :disabled="!hasPro" v-model="model.text_color" />
                             </div>
                         </div>
