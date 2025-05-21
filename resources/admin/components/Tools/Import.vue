@@ -85,7 +85,7 @@
                             <span  class="help">
                                 Check tutorial for importing data from CSV file
                               <a
-                                class="text-blue-500"
+                                class="nt-link"
                                     href="https://ninjatables.com/docs/import-table-data-from-a-csv/"
                                     target="_blank">here</a>
                             </span>
@@ -105,7 +105,7 @@
                         <span v-show="imports.format == 'json' || imports.format == 'ninjaJson'"
                               class="help">
                                 Check tutorial for importing Table from JSON file <a 
-                                class="text-blue-500"
+                                class="nt-link"
                                 href="https://ninjatables.com/docs/import-ninja-table-json/"
                                 target="_blank">here</a>
                         </span>

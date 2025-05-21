@@ -9,7 +9,7 @@
                     <p class="nt-modal-description">
                         {{`Whenever your Google Sheets data changes it will be automatically reflected here.
                             You won't have to do a thing. Please provide the publishable public URL of your google sheet.`}}
-                        <a target="_blank"
+                        <a class="nt-link" target="_blank"
                            href="https://ninjatables.com/docs/google-sheets-integration/">
                             {{$t('View Documentation Here')}}
                         </a>

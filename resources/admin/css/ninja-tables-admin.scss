@@ -387,6 +387,21 @@
   }
 }
 
+.nt-link {
+  color: #335CFF;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.084px;
+
+  &:focus {
+    color: #335CFF;
+    box-shadow: none;
+  }
+
+}
+
 
 /*!=== old css ===*/
 

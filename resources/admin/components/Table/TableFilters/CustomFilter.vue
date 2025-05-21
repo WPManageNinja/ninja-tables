@@ -6,7 +6,7 @@
                 {{ $t(' Custom Search Filters is useful if you want to add select box / Radio Button to show a group of rows ofyour table.') }}
                 <br/>
                 {{ $t('To learn more about this') }}
-                <a target="_blank" href="https://ninjatables.com/docs/custom-filters/" class="text-[#335CFF]">{{ $t('click here') }}</a>
+                <a target="_blank" href="https://ninjatables.com/docs/custom-filters/" class="nt-link">{{ $t('click here') }}</a>
             </p>
         </div>
 

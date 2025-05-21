@@ -22,19 +22,19 @@
                 <ul>
                     <li class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15.6 12.0016L10.2 17.4016V6.60156L15.6 12.0016Z" fill="#0E121B"></path></svg>
-                        <a class="text-[#335cff]" target="_blank" href="https://wpmanageninja.com/ninja-tables/use-case/?ninja_intro=1">
+                        <a class="nt-link" target="_blank" href="https://wpmanageninja.com/ninja-tables/use-case/?ninja_intro=1">
                             Demo and Basic Settings
                         </a>
                     </li>
                     <li class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15.6 12.0016L10.2 17.4016V6.60156L15.6 12.0016Z" fill="#0E121B"></path></svg>
-                        <a class="text-[#335cff]" target="_blank" href="https://wpmanageninja.com/docs/ninja-tables/setting-up-a-table/?ninja_intro=1">
+                        <a class="nt-link" target="_blank" href="https://wpmanageninja.com/docs/ninja-tables/setting-up-a-table/?ninja_intro=1">
                             Setting Up a Table
                         </a>
                     </li>
                     <li class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15.6 12.0016L10.2 17.4016V6.60156L15.6 12.0016Z" fill="#0E121B"></path></svg>
-                        <a class="text-[#335cff]" target="_blank" href="https://wpmanageninja.com/docs/ninja-tables/configure-responsive-breakdowns-for-table/?ninja_intro=1">
+                        <a class="nt-link" target="_blank" href="https://wpmanageninja.com/docs/ninja-tables/configure-responsive-breakdowns-for-table/?ninja_intro=1">
                             Make Your Table Looks Great on All Devices
                         </a>
                     </li>

@@ -40,7 +40,7 @@
                     <template v-if="imports.format === 'csv'">
                         <p class="hint">
                             Check tutorial for importing data from CSV file
-                            <a href="https://ninjatables.com/docs/import-table-data-from-a-csv/"
+                            <a class="nt-link" href="https://ninjatables.com/docs/import-table-data-from-a-csv/"
                                target="_blank"
                             >here</a>
                         </p>
@@ -57,7 +57,7 @@
                     <p v-show="imports.format === 'json' || imports.format === 'ninjaJson'" class="hint">
                         Check tutorial for importing Table from JSON file
 
-                        <a href="https://ninjatables.com/docs/import-ninja-table-json/"
+                        <a class="nt-link" href="https://ninjatables.com/docs/import-ninja-table-json/"
                            target="_blank"
                         >here</a>
                     </p>

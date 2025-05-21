@@ -44,7 +44,7 @@
             style="margin-top: 90px;color: rgb(236, 62, 62);font-size: 16px;margin-bottom: 30px;">
             <b>Notice:</b> Ninja Tables Pro integrity is not valid. You may downloaded from other sources. 
             Please download ninja tables pro from 
-            <a href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?integrity=1">WPManageNinja</a> 
+            <a class="nt-link" href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?integrity=1">WPManageNinja</a>
             to keep it upto date.
         </div>
     </div>

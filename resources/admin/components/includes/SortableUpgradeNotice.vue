@@ -10,7 +10,7 @@
         <br>
         <br>
         <span>
-            <a :href="upgradeGuide" target="_blank">{{ $t('Click here') }}</a> {{ $t('to view the upgrade guide.') }}
+            <a class="nt-link" :href="upgradeGuide" target="_blank">{{ $t('Click here') }}</a> {{ $t('to view the upgrade guide.') }}
         </span>
         
     </el-dialog>

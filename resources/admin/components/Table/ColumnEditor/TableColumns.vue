@@ -109,7 +109,7 @@
                             <div class="proms">
                                 <div class="help_section">
                                     <p>Need help to configure the columns and responsive breakdowns, Please check tutorial with
-                                        video <a
+                                        video <a class="nt-link"
                                                 href="https://ninjatables.com/docs/column-responsive-breakpoints/"
                                                 target="_blank">here</a></p>
                                 </div>
