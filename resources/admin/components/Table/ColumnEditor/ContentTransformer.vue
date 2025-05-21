@@ -15,25 +15,19 @@
         <ninja-premium-notice v-if="!hasPro" highlight="Transform Column Value"></ninja-premium-notice>
 
         <div class="mt-4">
-<!--            <el-checkbox-->
-<!--                :disabled="!hasPro"-->
-<!--                :true-value="'yes'"-->
-<!--                :false-value="'no'"-->
-<!--                v-model="settings.formula_support"-->
-<!--            >-->
-<!--                Enable Excel Formula support for Transform Value-->
-<!--            </el-checkbox>-->
 
            <div class="flex gap-2 items-center">
                <el-switch
                    size="small"
+                   active-value="yes"
+                   inactive-value="no'"
                    v-model="settings.formula_support"
                    :disabled="!hasPro"
                />
-               <p class="tex-[14px] font-[400]">Enable Excel Formula support for Transform Value</p>
+               <p class="tex-[14px] font-[400]">{{ $t('Enable Excel Formula support for Transform Value') }}</p>
            </div>
 
-            <div class="bg-[#F9FAFB] p-4 rounded-[8px]" v-show="settings.formula_support == 'yes'">
+            <div class="bg-[#EBF1FF] p-4 mt-2 rounded-[8px]" v-show="settings.formula_support == 'yes'">
                 <p class="nt-modal-description mb-2">Note: Excel formula is an experimental feature so all formulas may not work. We are improving this feature day by day so please don't be mad if some formulas don't work properly.</p>
 
                 <NinjaButton
@@ -63,8 +57,8 @@
             </div>
         </div>
 
-        <div class="my-4">
-            <p>You can use the following Reference Shortcode Values to transform your cell value</p>
+        <div class="my-[24px]">
+            <p class="nt-modal-description">You can use the following Reference Shortcode Values to transform your cell value</p>
             <div>
                 <el-table :data="columns" border  class="nt-inner-table">
                     <el-table-column prop="name" label="Column Title" />

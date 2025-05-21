@@ -252,7 +252,10 @@
                 this.$confirm('Are you sure, You want to delete this table?', 'Warning', {
                     confirmButtonText: 'Yes, Delete',
                     cancelButtonText: 'Cancel',
-                    type: 'warning'
+                    type: 'warning',
+                    customClass: 'nt-delete-confirm',
+                    confirmButtonClass: 'nt-delete-confirm-btn',
+                    cancelButtonClass: 'nt-delete-cancel-btn'
                 }).then(() => {
                     this.deleteTable(tableId);
                 }).catch(() => {
