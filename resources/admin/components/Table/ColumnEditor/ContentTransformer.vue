@@ -29,8 +29,8 @@
            <div class="flex gap-2 items-center">
                <el-switch
                    size="small"
-                   active-value="yes"
-                   inactive-value="no'"
+                   :active-value="'yes'"
+                   :inactive-value="'no'"
                    v-model="settings.formula_support"
                    :disabled="!hasPro"
                />

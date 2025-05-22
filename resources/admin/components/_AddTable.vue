@@ -44,7 +44,7 @@
         </el-aside>
 
         <el-main class="ninja-tables-main">
-            <template v-if="activeTabName == 'default'">
+            <div v-if="activeTabName === 'default'" class="w-full">
                 <div class="ninja_modal-body">
                     <template v-if="!table.ID">
                         <h3 class="nt-modal-title">Manually Create a Table</h3>
@@ -65,7 +65,7 @@
 
                         <div class="nt-form-group">
                             <label class="nt-form-label">{{ $t('Table Description') }}</label>
-                            <wp_editor v-model="table.post_content"></wp_editor>
+                            <WPEditor v-model="table.post_content" />
                         </div>
                     </div>
                 </div>
@@ -75,48 +75,49 @@
                     <NinjaButton v-if="table.ID" @click="addTable" :btnText="$t('Update')"/>
                     <NinjaButton v-else @click="addTable" :btnText="$t('Add')" />
                 </div>
-            </template>
-            <template v-else-if="activeTabName === 'drag_and_drop'">
-              <right-side-bar :initialData="initialData"></right-side-bar>
-            </template>
+            </div>
 
-            <template v-else-if="activeTabName == 'google_spread_sheet'">
-                <external-data-source
-                        type="google-csv"
-                        :tableCreated="fireTableCreated"
-                        :has-pro="hasPro"
-                        :activated_features="activated_features"
-                        @modalClose="closeModal"
+            <div v-else-if="activeTabName === 'drag_and_drop'">
+              <RightSideBar :initialData="initialData" />
+            </div>
+
+            <div v-else-if="activeTabName === 'google_spread_sheet'">
+                <ExternalDataSource
+                    type="google-csv"
+                    :tableCreated="fireTableCreated"
+                    :has-pro="hasPro"
+                    :activated_features="activated_features"
+                    @modalClose="closeModal"
+                />
+            </div>
+
+            <div v-else-if="activeTabName === 'csv'" class="w-full">
+                <ExternalDataSource
+                    type="csv"
+                    :tableCreated="fireTableCreated"
+                    :has-pro="hasPro"
+                    :activated_features="activated_features"
+                    @modalClose="closeModal"
+                />
+            </div>
+
+            <template v-else-if="activeTabName === 'fluent_form'">
+                <FluentForm
+                    :tableCreated="fireTableCreated"
+                    @modalClose="closeModal"
                 />
             </template>
 
-            <template v-else-if="activeTabName == 'csv'">
-                <external-data-source
-                        type="csv"
-                        :tableCreated="fireTableCreated"
-                        :has-pro="hasPro"
-                        :activated_features="activated_features"
-                        @modalClose="closeModal"
-                />
-            </template>
-
-            <template v-else-if="activeTabName == 'fluent_form'">
-                <fluent-form-data-source
-                        :tableCreated="fireTableCreated"
-                        @modalClose="closeModal"
-                />
-            </template>
-
-            <template v-else-if="activeTabName == 'wp_posts'">
+            <template v-else-if="activeTabName === 'wp_posts'">
                 <WPPosts
-                        :tableCreated="fireTableCreated"
-                        :activated_features="activated_features"
-                        @modalClose="closeModal"
+                    :tableCreated="fireTableCreated"
+                    :activated_features="activated_features"
+                    @modalClose="closeModal"
                 />
             </template>
 
-            <template v-else-if="activeTabName == 'woo_table'">
-                <woo-data-source
+            <template v-else-if="activeTabName === 'woo_table'">
+                <WooProducts
                     v-if="activated_features.woocommerce_table"
                     :tableCreated="fireTableCreated"
                     @modalClose="closeModal"
@@ -126,12 +127,12 @@
                 </div>
                 <div v-else-if="has_woo && !hasPro" class="ninja_no_woo">
                     <h3>Upgrade to pro for using WooCommerce Integration</h3>
-                    <premium-notice highlight="WooCommerce Integration module where you can create and build table with Woocomerce produsts and increase your conversion rate"/>
+                    <PremiumNotice highlight="WooCommerce Integration module where you can create and build table with Woocomerce produsts and increase your conversion rate"/>
                 </div>
             </template>
 
-            <template v-else-if="activeTabName == 'raw_sql'">
-                <raw-sql-form
+            <template v-else-if="activeTabName === 'raw_sql'">
+                <RawSqlForm
                     :has_sql_permission="has_sql_permission"
                     :tableCreated="fireTableCreated"
                     :activated_features="activated_features"
@@ -144,7 +145,7 @@
 </template>
 
 <script type="text/babel">
-    import wp_editor from '../../common/_wp_editor';
+    import WPEditor from '../../common/_wp_editor';
     import WPPosts from './DataProviders/WPPosts';
     import WooProducts from './DataProviders/WooProducts';
     import FluentForm from './DataProviders/FluentForm.vue';
@@ -163,11 +164,11 @@
             NinjaInput,
             NinjaButton,
             RightSideBar,
-            wp_editor: wp_editor,
+            WPEditor,
             WPPosts,
-            'woo-data-source': WooProducts,
-            'fluent-form-data-source': FluentForm,
-            'external-data-source': ExternalDataSource,
+            WooProducts,
+            FluentForm,
+            ExternalDataSource,
             ImportTable,
             RawSqlForm,
             PremiumNotice

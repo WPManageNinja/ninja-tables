@@ -146,12 +146,11 @@
 
                 <div class="flex gap-2 items-center">
                     <div @click="row_config = !row_config"
-                         class="cursor-pointer flex items-center px-2 py-[7px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                         class="cursor-pointer flex items-center px-[9px] py-[9px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
                         <img :src="assetUrl('icons/setting-02.svg')" alt="settings"/>
                     </div>
 
                     <NinjaButton
-                        size="small"
                         @click="closeModal"
                         type="secondary"
                         :btn-text="$t('Cancel')"
@@ -159,14 +158,12 @@
 
                     <NinjaButton
                         v-if="editId"
-                        size="small"
                         @click="addData"
                         :disabled="btnLoading"
                         :btn-text="$t('Update')"
                     />
                     <NinjaButton
                         v-else
-                        size="small"
                         @click="addData"
                         :disabled="btnLoading"
                         :btn-text="$t('Add')"

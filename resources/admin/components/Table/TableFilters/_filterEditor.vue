@@ -106,8 +106,8 @@
                         <el-radio
                             v-for="column in current_columns"
                             :key="column.key"
-                            :label="column.key"
-                            :value="column.name"
+                            :label="column.name"
+                            :value="column.key"
                         />
                     </el-radio-group>
                 </div>
@@ -116,8 +116,8 @@
                     <div class="flex items-center gap-2">
                         <el-switch
                             size="small"
-                            :true-value="'yes'"
-                            :false-value="'no'"
+                            :active-value="'yes'"
+                            :inactive-value="'no'"
                             v-model="activeEditor.parse_comma_separated"
                         />
                         <p class="text-[14px] font-[400]"> {{ $t('Parse Comma Separated Words') }}</p>
@@ -127,8 +127,8 @@
                 <div class="flex items-center gap-2 mt-2">
                     <el-switch
                         size="small"
-                        :true-value="'yes'"
-                        :false-value="'no'"
+                        :active-value="'yes'"
+                        :inactive-value="'no'"
                         v-model="activeEditor.disable_auto_sorting"
                     />
                     <p class="text-[14px] font-[400]">{{ $t('Disable automatic filter value sorting') }}</p>

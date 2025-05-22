@@ -109,16 +109,17 @@
         </div>
 
         <el-dialog
+            class="ninja_create-table-modal"
             title="Edit Custom Filter"
             v-model="editorModal"
             width="70%"
             top="50px"
             :append-to-body="true">
             <ninja-filter-editor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor"></ninja-filter-editor>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editorModal = false">Cancel</el-button>
-                <el-button type="primary" @click="updateFilter(activeEditor)">Update</el-button>
-            </span>
+            <div class="flex justify-end items-center gap-2 p-5">
+                <NinjaButton type="secondary" @click="editorModal = false" :btn-text="$t('Cancel')" />
+                <NinjaButton @click="updateFilter(activeEditor)" :btn-text="$t('Update')" />
+            </div>
         </el-dialog>
 
         <el-dialog

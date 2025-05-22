@@ -1,10 +1,17 @@
 <template>
     <div class="flex items-center gap-3 bg-white rounded-[8px]">
         <p v-if="labelShow" class="text-base text-black dark:text-neutral-100">{{ label }}</p>
-        <el-color-picker class="ml-2 ninja-data-tables_color_picker" popper-class="ninja-data-tables_color_picker"
-                         :model-value="modelValue" :predefine="predefineColors" @change="activeColorChange"
-                         @active-change="activeColorChange" :disabled="disabled"/>
-        <span class="font-[500]">{{ modelValue }}</span>
+        <el-color-picker
+            class="ml-2 ninja-data-tables_color_picker"
+            popper-class="ninja-data-tables_color_picker"
+            :model-value="modelValue"
+            :predefine="predefineColors"
+            @change="activeColorChange"
+            @active-change="activeColorChange"
+            :disabled="disabled"
+            show-alpha
+        />
+            <span class="font-[500]">{{ modelValue }}</span>
     </div>
 </template>
 

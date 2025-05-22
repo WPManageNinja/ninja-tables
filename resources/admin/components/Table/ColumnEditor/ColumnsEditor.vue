@@ -662,6 +662,8 @@
                             <el-switch
                                 size="small"
                                 v-model="model.unfilterable"
+                                :active-value="'yes'"
+                                :inactive-value="'no'"
                                 :disabled="!hasPro"
                             />
                             <p class="text-[14px] font-[400]">{{ $t('Disable frontend search for this column data') }}</p>
@@ -688,6 +690,8 @@
                             <el-switch
                                 size="small"
                                 v-model="model.unsortable"
+                                :active-value="'yes'"
+                                :inactive-value="'no'"
                                 :disabled="!hasPro"
                             />
                             <p class="text-[14px] font-[400]">{{ $t('Disable frontend sorting for this column') }}</p>
@@ -771,43 +775,15 @@
 
             <div v-else class="flex justify-between items-center px-[10px] py-4">
                 <div>
-                    <el-popover
+                    <el-button
+                        link
                         v-if="!hideDelete"
-                        placement="top"
-                        width="170"
-                        v-model:visible="showConfirm"
-                        trigger="click"
+                        type="danger"
+                        class="underline"
+                        @click="handleColumnDelete"
                     >
-                        <p>Are you sure to delete this?</p>
-                        <div style="text-align: right; margin: 0">
-                            <el-button
-                                link
-                                size="small"
-                                @click="showConfirm = false"
-                            >
-                                {{ $t('cancel') }}
-                            </el-button>
-
-                            <el-button
-                                type="primary"
-                                size="small"
-                                @click="deleteColumn"
-                            >
-                                {{ $t('confirm') }}
-                            </el-button>
-                        </div>
-
-                        <template #reference>
-                            <el-button
-                                link
-                                v-if="!hideDelete"
-                                type="danger"
-                                class="underline"
-                            >
-                                {{ $t('Delete Column') }}
-                            </el-button>
-                        </template>
-                    </el-popover>
+                        {{ $t('Delete Column') }}
+                    </el-button>
                 </div>
 
 
@@ -1001,6 +977,25 @@
             },
             cancel() {
                 this.$emit('cancel');
+            },
+
+            handleColumnDelete() {
+                this.$confirm(this.$t('Are you sure to delete this column?'), 'Warning', {
+                    confirmButtonText: this.$t('Yes, Delete'),
+                    cancelButtonText: this.$t('Cancel'),
+                    type: 'warning',
+                    customClass: 'nt-delete-confirm',
+                    confirmButtonClass: 'nt-delete-confirm-btn',
+                    cancelButtonClass: 'nt-delete-cancel-btn'
+                }).then(() => {
+                    this.deleteColumn();
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: this.$t('Delete canceled')
+                    });
+                    this.hideDelete = false;
+                });
             },
             deleteColumn() {
                 this.$emit('delete');
