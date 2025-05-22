@@ -52,9 +52,11 @@
             <ace_code_editor editor_id="ninja_custom_js" mode="javascript" v-model="custom_js"></ace_code_editor>
             <p v-html="scriptTagInfo" class="ndt-editor-info mt-2"></p>
 
-            <div class="my-4" v-if="!hasPro">
-                <p class="nt-modal-description mb-2">{{ $t('Custom Javascript feature is a pro feature along with many awesome features.') }}</p>
-                <get-pro size="small"/>
+            <div class="nt-instruction" v-if="!hasPro">
+                <p class="nt-modal-description">{{ $t(`Custom Javascript feature is a pro feature along with many awesome features.`) }}</p>
+                <div class="mt-2">
+                    <get-pro/>
+                </div>
             </div>
 
             <div class="flex justify-end mt-0">
