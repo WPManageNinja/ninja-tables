@@ -1396,7 +1396,7 @@ export default {
                 defualt_filter_column: null,
                 expandAll: this.tableSettings.expand_type === "expandAll",
                 expandFirst: this.tableSettings.expand_type === "expandFirst",
-                filtering: !Number(this.tableSettings.enable_search),
+                filtering: !!Number(this.tableSettings.enable_search),
                 i18n: {},
                 use_parent_width: this.showingDevice !== 'desktop',
                 sorting: Boolean(Number(this.tableSettings.column_sorting)),
@@ -1412,7 +1412,7 @@ export default {
                 "expandAll": this.tableSettings.expand_type === "expandAll",
                 'empty': '',
                 filtering: {
-                    enabled: !Number(this.tableSettings.enable_search)
+                    enabled: !!Number(this.tableSettings.enable_search)
                 },
                 paging: {
                     enabled: this.tableSettings.show_all == '0' || this.tableSettings.show_all == 0,

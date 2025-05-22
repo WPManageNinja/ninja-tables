@@ -107,7 +107,7 @@
                             </span>
 
                             <template #dropdown>
-                                <el-dropdown-menu>
+                                <el-dropdown-menu class="ninja-dropdown-menu">
                                     <el-dropdown-item>
                                          <span>
                                              <a @click.prevent="confirmDeleteTable(scope.row.ID)" href="#">{{ $t('Delete') }}</a>

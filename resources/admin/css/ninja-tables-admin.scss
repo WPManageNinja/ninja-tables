@@ -169,11 +169,13 @@
      .el-input {
        .el-input__wrapper {
          padding: 0;
+         border: none;
          .el-input__inner {
            border: 1px solid #E1E4EA;
-
+           box-shadow: none;
+           border-radius: 8px;
            &:focus {
-             border: 1px solid #409EFF;
+             border: 1px solid #335cff;
              box-shadow: none;
            }
          }

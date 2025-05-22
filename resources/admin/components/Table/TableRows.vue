@@ -228,7 +228,7 @@
                                     </span>
 
                                     <template #dropdown>
-                                        <el-dropdown-menu>
+                                        <el-dropdown-menu class="ninja-dropdown-menu">
                                             <el-dropdown-item>
                                                 <span @click="duplicateData(scope)">Duplicate</span>
                                             </el-dropdown-item>

@@ -514,4 +514,17 @@
     }
   }
 
+  .ninja-dropdown-menu{
+    .el-dropdown-menu__item{
+      &:hover{
+        @apply bg-[#F5F7FA] text-[#335cff];
+      }
+      a{
+        &:hover{
+          @apply text-[#335cff];
+        }
+      }
+    }
+  }
+
 }

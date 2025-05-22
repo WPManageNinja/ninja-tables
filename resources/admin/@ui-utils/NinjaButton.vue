@@ -14,7 +14,8 @@
             'ninja-button--default': size === 'default',
         }"
     >
-        <img v-if="icon" :src="icon" class="mr-1" />
+        <div v-if="loading" class="ninja-button-spinner mr-2"> </div>
+        <img v-else-if="icon" :src="icon" class="mr-1" />
         <template v-if="btnText">
             {{ btnText }}
         </template>
@@ -90,5 +91,10 @@ export default {
   }
   .ninja-button--large {
     @apply p-[12px] px-7 text-[16px];
+  }
+  .ninja-button-spinner{
+    @apply w-4 h-4 border-2 border-solid border-t-transparent rounded-full animate-spin;
+    border-color: currentColor;
+    border-top-color: transparent;
   }
 </style>
