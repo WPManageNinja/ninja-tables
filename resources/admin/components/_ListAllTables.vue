@@ -153,7 +153,7 @@
                 @current-change="goToPage"
                 :current-page.sync="paginate.current_page"
                 :page-sizes="[10, 20, 50, 100]"
-                :page-size="paginate.per_page"
+                :page-size="Number(paginate.per_page)"
                 layout="prev, pager, next, jumper"
                 :total="paginate.total"
             />

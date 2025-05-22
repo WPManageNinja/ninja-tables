@@ -78,6 +78,8 @@
                                 v-model="selectedFields"
                                 @change="handleFieldsSelectionChange"
                                 class="nt-checkbox-group"
+                                v-loading="fetching"
+                                element-loading-text="Loading fields..."
                             >
                                 <el-checkbox v-for="field in fields" :key="field.name" :value="field.name">
                                     {{ field.name }}
@@ -107,10 +109,13 @@
                     </div>
                 </div>
                 <div class="p-4">
+
                     <el-checkbox-group
                         v-model="selectedFields"
                         @change="handleFieldsSelectionChange"
-                        class="nt-checkbox-group "
+                        class="nt-checkbox-group pb-2"
+                        v-loading="fetching"
+                        element-loading-text="Loading fields..."
                     >
                         <el-checkbox v-for="field in fields" :key="field.name" :value="field.name">
                             {{ field.name }}

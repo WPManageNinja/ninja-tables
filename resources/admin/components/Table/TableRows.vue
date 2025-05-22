@@ -109,7 +109,7 @@
                         </div>
 
                         <div class="nav_options">
-                            <div class="flex items-center">
+                            <div class="flex items-center gap-x-2">
                                 <label for="compact_view" class="form_group font-normal">
                                     <input id="compact_view" type="checkbox" v-model="isCompact"/> Compact View
                                 </label>
@@ -272,7 +272,7 @@
                         @current-change="goToPage"
                         :current-page.sync="paginate.current_page"
                         :page-sizes="[10, 20, 50, 100, 500, 2000]"
-                        :page-size="paginate.per_page"
+                        :page-size="Number(paginate.per_page)"
                         layout="prev, pager, next, jumper"
                         :total="paginate.total">
                     </el-pagination>
