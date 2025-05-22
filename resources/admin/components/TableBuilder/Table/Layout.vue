@@ -67,16 +67,17 @@
                                 :style="[tdThActiveMargin, thInlineStyle(header)]">
                                 <template
                                     v-if="(headerName(table.columnIndex) === header) && tdIds.length === 1 && ((!merge.visible) || split.visible)">
-                                    <el-dropdown trigger="click" placement="top-start" class="column-options">
-                                    <span class="el-dropdown-link">
-                                        <el-icon
-                                            :class="index === table.columnIndex ? 'i-active' : ''"
-                                            class="el-icon--right"
-                                        >
-                                            <CaretBottom />
-                                        </el-icon>
-                                    </span>
-                                        <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown trigger="click" >
+                                        <span class="el-dropdown-link">
+                                            <el-icon
+                                                :class="index === table.columnIndex ? 'i-active' : ''"
+                                                class="el-icon--right"
+                                            >
+                                                <CaretBottom />
+                                            </el-icon>
+                                        </span>
+                                        <template #dropdown>
+                                            <el-dropdown-menu>
                                             <el-dropdown-item @click.native="insertColumnBefore()">{{ $t('Insert column before') }}
                                             </el-dropdown-item>
                                             <el-dropdown-item @click.native="insertColumnAfter">{{ $t('Insert column after')
@@ -94,6 +95,7 @@
                                                 <p style="color:red"> {{ $t('Remove column') }}</p>
                                             </el-dropdown-item>
                                         </el-dropdown-menu>
+                                        </template>
                                     </el-dropdown>
                                 </template>
                             </th>
@@ -118,8 +120,8 @@
                                 <span class="el-dropdown-link">
                                     <el-icon><CaretRight /></el-icon>
                                 </span>
-
-                                    <el-dropdown-menu slot="dropdown">
+                                <template #dropdown>
+                                    <el-dropdown-menu >
                                         <el-dropdown-item @click.native="insertRowBefore()">
                                             {{ $t('Insert row before') }}
                                         </el-dropdown-item>
@@ -139,6 +141,8 @@
                                             <p style="color:red"> {{ $t('Remove row') }}</p>
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
+                                </template>
+                                   
                                 </el-dropdown>
                             </td>
 
@@ -213,10 +217,10 @@
 <script>
 import draggable from "vuedraggable";
 import TableData from "./_Datas"
-import { manageRowColumn } from "../Mixin/manageRowColumn";
-import { manageResponsiveData } from "../Mixin/manageResponsiveData";
-import { helpers } from "../Mixin/helpers";
-import { useEventBus } from './../../../eventBus';
+import { manageRowColumn } from "../Mixin/manageRowColumn.js";
+import { manageResponsiveData } from "../Mixin/manageResponsiveData.js";
+import { helpers } from "../Mixin/helpers.js";
+import { useEventBus } from './../../../eventBus.js';
 import {
     CaretBottom,
     CaretRight,

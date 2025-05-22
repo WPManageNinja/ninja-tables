@@ -59,7 +59,7 @@
                 {{ tableTab.title }}
                 </router-link>
             </div>
-            <router-view v-if="config" :config="config" :getColumnSettings="getSettings"></router-view>
+            <router-view ref="childComponent" v-if="config" :config="config" :getColumnSettings="getSettings"></router-view>
         </div>
 
         <el-dialog
@@ -86,7 +86,6 @@ import toArray from 'lodash/values';
 import { useEventBus } from '../../eventBus';
 import { assetUrl } from "../../utils/ninjatablesadmin";
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
-// import tableConfigStore from '../../store/tableConfigStore';
 import GetPro from "../Tools/GetPro.vue";
 
 export default {
@@ -111,6 +110,12 @@ export default {
             editTableModalShow: false,
             preview_url: '#',
             has_pro: window.ninja_table_admin.hasPro
+        }
+    },
+    provide() {
+        return {
+            registerSaveFunction: this.registerSaveFunction,
+            parentData: this.$data
         }
     },
     methods: {
@@ -189,6 +194,16 @@ export default {
                     title: 'Import - Export'
                 }
             ]);
+        },
+        registerSaveFunction(saveFunc) {
+            this.childSaveFunction = saveFunc;
+        },
+        saveDesign() {
+            if (this.childSaveFunction) {
+                this.childSaveFunction();
+            } else {
+                console.warn('No save function registered by child component');
+            }
         }
     },
     mounted() {
@@ -219,8 +234,6 @@ export default {
         });
 
         this.bus.emit('addedTable');
-
-        // window.ninjaTableBus.$emit('addedTable');
     }
 }
 </script>

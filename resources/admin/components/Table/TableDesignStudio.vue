@@ -1,9 +1,6 @@
 <template>
     <div class="ninja_design">
         <div class="ninja_design_wrapper !-mx-5">
-            <el-button :loading="savingSettings" :disabled="savingSettings" size="small" type="primary"
-                       @click="storeSettings()">Update Settings
-            </el-button>
             <div v-loading="!app_ready" class="w-[70%]">
                 <div class="design_preview">
                     <div class="flex justify-center items-center mb-5">
@@ -34,8 +31,7 @@
                         <div :id="'footable_parent_' + tableId"
                             class="footable_parent ninja_table_wrapper loading_ninja_table wp_table_data_press_parent"
                             :class="wrapperClasses">
-
-                            <h3 v-if="Number(tableSettings.show_title )&& config?.table" class="table_title footable_title">
+                            <h3 v-if="Number(tableSettings.show_title) && config?.table" class="table_title footable_title">
                                 {{ config.table.post_title }}
                             </h3>
                             <div v-if="Number(tableSettings.show_description) && config?.table"
@@ -189,7 +185,7 @@
                                             v-model="tableSettings.enable_search"
                                             active-value="1"
                                             inactive-value="0"
-                                             size="small"
+                                            size="small"
                                             :id="'enable_search'">
                                         </el-switch>
                                     </div>
@@ -1392,10 +1388,10 @@ export default {
                     defualt_filter_column: null,
                     expandAll: this.tableSettings.expand_type === "expandAll",
                     expandFirst: this.tableSettings.expand_type === "expandFirst",
-                    filtering: !!this.tableSettings.enable_search,
+                    filtering: !!Number(this.tableSettings.enable_search),
                     i18n: {},
                     use_parent_width: this.showingDevice !== 'desktop',
-                    sorting: !!this.tableSettings.column_sorting,
+                    sorting: !!Number(this.tableSettings.column_sorting),
                     togglePosition: this.tableSettings.togglePosition
                 };
 
@@ -1408,7 +1404,7 @@ export default {
                     "expandAll" :  this.tableSettings.expand_type === "expandAll",
                     'empty' : '',
                     filtering: {
-                        enabled: !!this.tableSettings.enable_search
+                        enabled: !!Number(this.tableSettings.enable_search)
                     },
                     paging: {
                         enabled: this.tableSettings.show_all == '0' || this.tableSettings.show_all == 0,
@@ -1416,7 +1412,7 @@ export default {
                         "container" : "#footable_parent_"+this.tableId+" .paging-ui-container",
                     },
                     sorting: {
-                        enabled: !!this.tableSettings.column_sorting
+                        enabled: !!Number(this.tableSettings.column_sorting)
                     },
                 };
 
@@ -1431,6 +1427,11 @@ export default {
                     init_config: initConfig
                 };
             }
+    },
+    inject: ['registerSaveFunction', 'parentData'],
+    beforeDestroy() {
+        // Clean up when component is destroyed
+        this.registerSaveFunction(null);
     },
     mounted() {
            
@@ -1452,6 +1453,7 @@ export default {
             });
             this.generateDefaultCss();
             this.generateColorCss();
+            this.registerSaveFunction(this.storeSettings);
         }
 
 }
