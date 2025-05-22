@@ -39,7 +39,7 @@
                 </div>
 
                 <div>
-                    <NinjaButton type="primary" size="small" @click="store" :btn-text="$t('Save')" />
+                    <NinjaButton type="primary" @click="store" :btn-text="$t('Save')" />
                 </div>
             </div>
 
