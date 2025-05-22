@@ -100,23 +100,19 @@
                         />
                     </div>
 
-                    <div class="nav_options">
+                    <div class="flex items-center gap-3 ml-3">
                         <div class="flex items-center">
-                            <label for="compact_view" class="form_group font-normal">
-                                <input id="compact_view" type="checkbox" v-model="isCompact"/> Compact View
-                            </label>
-
-                            <label>
-                                | <el-icon @click="show_meta = !show_meta"><Notification /></el-icon>
-                            </label>
+                            <el-checkbox v-model="isCompact" label="Compact View" class="!mr-1"/> 
+                            <span class="mr-1 -mt-1">|</span>
+                            <span>
+                                <el-icon @click="show_meta = !show_meta"><Notification /></el-icon>
+                            </span>
+                         
                         </div>
-
-                        <label class="sorting_option form_group font-normal">
-                            <input type="checkbox" name="checkbox" v-model="sorting">
-                            Sort Manually
-                            <template v-if="!has_pro">(Pro Feature)</template>
-                        </label>
-
+                            <el-checkbox name="checkbox" v-model="sorting">
+                                Sort Manually
+                                <template v-if="!has_pro">(Pro Feature)</template>
+                            </el-checkbox>
                     </div>
 
                     <div class="actions_buttons">
