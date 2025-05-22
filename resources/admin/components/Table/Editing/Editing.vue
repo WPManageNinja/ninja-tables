@@ -30,11 +30,10 @@
             <el-collapse v-model="activeCollapse" class="ninja-tables_rendering_accordion my-5" accordion>
                 <el-collapse-item name="collapse1">
                     <template #title>
-                        <div>
+                        <div class="flex items-center gap-2">
                             <el-switch
                                 size="small"
                                 v-model="settings.allow_frontend"
-                                class="mr-2"
                                 @click="(e)=>{
                                  activeCollapse = settings.allow_frontend === 'yes' ? ['collapse1'] : []
                                  e.stopPropagation();
@@ -43,7 +42,7 @@
                                 active-value="yes"
                                 inactive-value="no"
                             />
-                            <span style="font-weight: 400; font-size: 14px;">{{ $t('Enable Frontend Editing') }}</span>
+                            <span class="font-[400] text-[14px]">{{ $t('Enable Frontend Editing') }}</span>
                         </div>
                     </template>
                     <div class="my-5">
@@ -55,10 +54,10 @@
                             }}
                         </div>
 
-                        <div class="flex items-center gap-6">
-                            <div class="mr-4 w-1/2">
-                                <div class="border border-solid border-[#E1E4EA] rounded-[8px] mb-4">
-                                    <div class="bg-[#F9FAFB] flex justify-between items-center px-4 py-2 rounded-t-[8px]"
+                        <div class="grid grid-cols-2 gap-5">
+                            <div>
+                                <div class="nt-checkbox-group-wrapper">
+                                    <div class="nt-checkbox-group-header"
                                          style="border-bottom: 1px solid #E1E4EA">
                                         <div>{{ $t('User Roles for Edit/Add Table Rows') }}</div>
                                         <div>
@@ -71,8 +70,8 @@
                                             </el-checkbox>
                                         </div>
                                     </div>
-                                    <div class="p-4">
-                                        <el-checkbox-group 
+                                    <div class="p-4 rounded-b-[8px] bg-white">
+                                        <el-checkbox-group
                                             v-model="settings.user_roles_editing"
                                             @change="handleEditRolesChange"
                                             class="nt-checkbox-group">
@@ -88,9 +87,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-1/2">
-                                <div class="border border-solid border-[#E1E4EA] rounded-[8px] mb-4">
-                                    <div class="bg-[#F9FAFB] flex justify-between items-center px-4 py-2 rounded-t-[8px]"
+
+                            <div>
+                                <div class="nt-checkbox-group-wrapper">
+                                    <div class="nt-checkbox-group-header"
                                          style="border-bottom: 1px solid #E1E4EA">
                                         <div>{{ $t('User Roles for Deleting Table Rows') }}</div>
                                         <div>
@@ -103,7 +103,7 @@
                                             </el-checkbox>
                                         </div>
                                     </div>
-                                    <div class="p-4">
+                                    <div class="p-4 rounded-b-[8px] bg-white">
                                         <el-checkbox-group 
                                             v-model="settings.user_roles_deleting"
                                             @change="handleDeleteRolesChange"
@@ -143,7 +143,7 @@
                                 }}
                             </div>
                             <div class="ninja-tables_table_edit">
-                                <el-table border :data="columns" class="mb-5">
+                                <el-table border :data="columns" class="mb-5 nt-inner-table">
                                     <el-table-column :label="$t('Column Name')" prop="name"></el-table-column>
                                     <el-table-column :label="$t('Is Editable?')" prop="label">
                                         <template #default="scope">
@@ -232,8 +232,7 @@
                                 </div>
 
                                 <div class="flex justify-end">
-                                    <NinjaButton type="primary" @click="updateSettings" size="small"
-                                                 :btn-text="$t('Save Settings')"/>
+                                    <NinjaButton @click="updateSettings" :btn-text="$t('Save Settings')" />
                                 </div>
                             </div>
                         </div>

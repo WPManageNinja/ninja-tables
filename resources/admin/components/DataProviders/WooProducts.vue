@@ -6,7 +6,7 @@
 
         <p class="nt-modal-description">
             {{ $t('Displays products content in a searchable, sortable with Ninja Tables.') }}
-            <a target="_blank" href="https://ninjatables.com/docs/woocommerce-integration/">
+            <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/woocommerce-integration/">
                {{ $t('Learn more about woocommerece integration') }}
             </a>
         </p>

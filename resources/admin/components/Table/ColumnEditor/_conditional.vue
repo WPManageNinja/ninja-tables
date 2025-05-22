@@ -3,7 +3,7 @@
         <div v-if="hasPro" class="conditional-settings-header">
             <div class="conditional-settings-title">
                 Customize your table's appearances based on the cell value. Add as many conditions as you like.
-                <a class="text-[#335CFF]" target="_blank" href="https://ninjatables.com/docs/conditional-formatting/">
+                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/conditional-formatting/">
                     View Documentation
                 </a>
             </div>

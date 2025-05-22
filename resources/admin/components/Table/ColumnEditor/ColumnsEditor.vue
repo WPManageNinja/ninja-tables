@@ -2,7 +2,7 @@
     <el-form ref="form" :model="model" class="form-wrapper">
         <el-tabs class="nt_tab_design" v-model="activeTab" @tab-click="onTabClick">
             <!-- Basic Settings -->
-            <el-tab-pane class="basic_settings ninja_modal_body px-[10px]" label="Basic Settings" name="basic">
+            <el-tab-pane class="basic_settings ninja_modal_body px-[10px] pt-[18px]" label="Basic Settings" name="basic">
 
                 <div class="grid grid-cols-2 gap-x-5">
                     <!-- Column Name -->
@@ -486,7 +486,7 @@
             </el-tab-pane>
 
             <!-- Advanced Settings -->
-            <el-tab-pane label="Advanced Settings" name="advanced" class="ninja_modal_body px-[10px]">
+            <el-tab-pane label="Advanced Settings" name="advanced" class="ninja_modal_body px-[10px] pt-[10px]">
                 <div class="advanced-settings">
 
                     <div class="nt-instruction mb-[20px]" v-if="!hasPro">
@@ -741,12 +741,12 @@
             </el-tab-pane>
 
             <!-- Conditional Settings -->
-            <el-tab-pane label="Conditional Formatting" name="conditional" class="ninja_modal_body px-[10px]">
+            <el-tab-pane label="Conditional Formatting" name="conditional" class="ninja_modal_body px-[10px] pt-[16px]">
                 <condition :column="model" :has-pro="hasPro"/>
             </el-tab-pane>
 
             <!-- Transform Value -->
-            <el-tab-pane label="Transform Value" name="transformer" class="ninja_modal_body px-[10px]">
+            <el-tab-pane label="Transform Value" name="transformer" class="ninja_modal_body px-[10px] pt-[16px]">
                 <content-transformer :settings="settings" :columns="columns" :column="model"/>
             </el-tab-pane>
 
@@ -802,8 +802,9 @@
                                 link
                                 v-if="!hideDelete"
                                 type="danger"
+                                class="underline"
                             >
-                                {{ $t('Delete') }}
+                                {{ $t('Delete Column') }}
                             </el-button>
                         </template>
                     </el-popover>
@@ -812,8 +813,7 @@
 
                 <div class="flex items-center gap-2">
                     <NinjaButton
-                        size="small"
-                        v-if="!hideCancel"
+                        v-show="hideCancel"
                         @click.prevent="cancel"
                         type="secondary"
                         :btnText="$t('Cancel')"
@@ -822,7 +822,6 @@
                     <NinjaButton
                         :loading="doingAjax"
                         @click.prevent="store"
-                        size="small"
                         :btnText="$t('Update')"
                     />
                 </div>

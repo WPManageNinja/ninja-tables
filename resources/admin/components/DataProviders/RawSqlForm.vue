@@ -5,7 +5,7 @@
         </h3>
         <p class="nt-modal-description">
             {{$t('Create table by generating a sql query to any custom SQL database.')}}
-            <a target="_blank"
+            <a class="nt-link" target="_blank"
                href="https://ninjatables.com/docs/create-table-from-custom-sql/">
                 {{$t('Learn more about custom sql table integration')}}
             </a>

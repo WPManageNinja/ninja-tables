@@ -7,7 +7,7 @@
         <template v-if="isFluentFormUpdated">
             <p class="nt-modal-description" v-if="!editing">
                 {{ $t('Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase your form submissions.') }}
-                <a target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
+                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
                    {{ $t('Click here to learn more about WP Fluent From Integration') }}
                 </a>
             </p>
@@ -157,7 +157,7 @@
 
         <div v-else class="fluent-form-promo">
             <p>
-                <a href="https://wordpress.org/plugins/fluentform" target="_blank">WP Fluent Form</a> is a WordPress
+                <a class="nt-link" href="https://wordpress.org/plugins/fluentform" target="_blank">WP Fluent Form</a> is a WordPress
                 Contact Form plugin packed with all the premium features you would need to create
                 a responsive, customizable, drag and drop form. Using this module, You can easily show your form entries
                 in Ninja Tables.

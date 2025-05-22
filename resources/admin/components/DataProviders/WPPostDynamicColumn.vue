@@ -70,7 +70,7 @@
                 <div class="nt-instruction" v-if="selectedField && selectedField.instruction">
                     <p v-html="selectedField.instruction"></p>
                     <p v-if="selectedField.learn_more_url">
-                        <a class="text-[#335CFF]" target="_blank" :href="selectedField.learn_more_url">
+                        <a class="nt-link" target="_blank" :href="selectedField.learn_more_url">
                             {{selectedField.learn_more_text}}
                         </a>
                     </p>

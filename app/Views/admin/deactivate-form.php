@@ -1,6 +1,8 @@
 <div class="ninja-deactivation-feedback <?php echo esc_attr($slug); ?>_modal no-confirmation-message">
     <div class="ninja-modal-dialog">
-        <div class="ninja-modal-header"><h4>Quick feedback</h4></div>
+        <div class="ninja-modal-header">
+            <h3 class="nt-deactivation-title">Quick feedback</h3>
+        </div>
         <div class="ninja-modal-body">
             <div class="ninja-modal-panel" data-panel-id="confirm"><p></p></div>
             <div class="ninja-modal-panel active" data-panel-id="reasons">
@@ -10,7 +12,7 @@
                         <li class="reason">
                             <label>
                             <span>
-                                <input class="<?php echo $reason['has_custom'] ? 'has_custom' : ''; ?>" type="radio"
+                                <input class="<?php echo $reason['has_custom'] ? 'has_custom nt-radio' : 'nt-radio'; ?>" type="radio"
                                        name="selected-reason" value="<?php echo esc_attr($reason_key); ?>">
                             </span>
                                 <span><?php echo esc_attr($reason['label']); ?></span>
@@ -91,18 +93,6 @@
         background: rgba(0, 0, 0, 0.6);
     }
 
-    .ninja-deactivation-feedback h4 {
-        margin: 0;
-        padding: 0;
-        text-transform: uppercase;
-        font-size: 1.2em;
-        font-weight: bold;
-        color: #cacaca;
-        text-shadow: 1px 1px 1px #fff;
-        letter-spacing: 0.6px;
-        -webkit-font-smoothing: antialiased;
-    }
-
     .ninja-deactivation-feedback.active {
         display: block;
     }
@@ -115,20 +105,33 @@
         top: 15%;
         z-index: 100001;
         width: 600px;
+        border-radius: 12px;
     }
 
     .ninja-modal-header {
         border-bottom: #eeeeee solid 1px;
-        background: #fbfbfb;
-        padding: 15px 20px;
+        background: #ffffff;
+        color: #0E121B !important;
+        padding: 20px;
         position: relative;
         margin-bottom: -10px;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .nt-deactivation-title {
+        color: #0E121B;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 28px;
+        text-transform: uppercase;
+        margin: 0;
     }
 
     .ninja-modal-body {
         border: 0;
         background: #fefefe;
-        padding: 20px;
+        padding: 10px 20px 20px 20px;
     }
 
     .ninja-modal-footer {
@@ -137,6 +140,7 @@
         padding: 20px;
         border-top: #eeeeee solid 1px;
         text-align: right;
+        border-radius: 0 0 12px 12px;
     }
 
     .ninja_custom_feedback {
@@ -150,6 +154,7 @@
     .ninja_custom_feedback.active label {
         display: block;
         margin-top: 10px;
+        margin-bottom: 4px;
     }
 
     .ninja_custom_feedback.active label span {
@@ -160,10 +165,53 @@
 
     .ninja_custom_feedback.active input {
         display: block;
-        margin-top: 0px;
+        margin-top: 0;
         margin-bottom: 15px;
         width: 100%;
         padding: 5px 10px;
+        border-radius: 12px;
+        border: 1px solid #335cff;
+    }
+
+    .reason {
+        margin-bottom: 10px;
+    }
+    .nt-radio {
+        border-color: #335cff !important;
+        box-shadow: 0 0 0 1px #335cff !important;
+    }
+    .nt-radio:before {
+        background-color: #335cff !important;
+    }
+
+    .ninja-modal-footer .ninja_action_deactivate {
+        background: #FFFFFF;
+        color: #525866;
+        border: 1px solid #E1E4EA;
+        border-radius: 8px;
+        padding: 0 12px ;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    .ninja-modal-footer .ninja_action_deactivate:hover {
+        background: #F5F6F7 !important;
+        color: #525866 !important;
+        border: 1px solid #E1E4EA !important;
+    }
+
+    .ninja-modal-footer .ninja_action_close {
+        background: #335cff;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 8px;
+        padding: 0 12px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    .ninja-modal-footer .ninja_action_close:hover {
+        background: #2547D0 !important;
+        color: #FFFFFF !important;
+        border: none;
     }
 
 </style>

@@ -8,7 +8,7 @@
                     <li v-for="(doc, index) in popular_searches" :key="index" class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M15.6 12.0016L10.2 17.4016V6.60156L15.6 12.0016Z" fill="#0E121B"/>
-                        </svg>  <a :href="doc.url" class="text-[#335CFF]" target="_blank">{{$t(doc.title)}}</a>
+                        </svg>  <a :href="doc.url" class="nt-link" target="_blank">{{$t(doc.title)}}</a>
                     </li>
                 </ul>
             </div>
@@ -19,7 +19,7 @@
                     <li v-for="(doc, index) in user_guides" :key="index" class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M15.6 12.0016L10.2 17.4016V6.60156L15.6 12.0016Z" fill="#0E121B"/>
-                        </svg> <a :href="doc.url" target="_blank" class="text-[#335CFF]">{{doc.title}}</a>
+                        </svg> <a :href="doc.url" target="_blank" class="nt-link">{{doc.title}}</a>
                     </li>
                 </ul>
             </div>

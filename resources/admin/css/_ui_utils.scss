@@ -221,6 +221,10 @@
     }
   }
 }
+  .el-checkbox {
+    display: flex;
+    align-items: center;
+  }
 
   .el-checkbox-group, .el-checkbox,
   .el-checkbox {
@@ -246,6 +250,12 @@
       .el-checkbox__inner {
         border-radius: 4px !important;
       }
+    }
+  }
+
+  .el-checkbox-group {
+    .el-checkbox {
+      display: block;
     }
   }
 
@@ -468,6 +478,14 @@
   .el-icon.tooltip-icon-color {
     color: #335cff !important;
     top: 2px;
+  }
+  .el-icon.el-tooltip__trigger {
+    color: #335cff !important;
+    top: 2px;
+  }
+
+  .el-button--danger.is-link {
+    color: #FB3748;
   }
 
   .nt-delete-confirm {
