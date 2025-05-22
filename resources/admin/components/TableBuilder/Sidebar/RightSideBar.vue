@@ -83,13 +83,13 @@
                         </div>
                     </el-upload>
                     <div class="import-button" v-if="(file.name || url)">
-                        <el-button
+                        <NinjaButton
                             :loading="loading"
                             @click="importCJ"
                             type="primary"
                             size="small"
                         >Import
-                        </el-button>
+                        </NinjaButton>
                     </div>
                 </el-col>
                 <el-col :span="24">

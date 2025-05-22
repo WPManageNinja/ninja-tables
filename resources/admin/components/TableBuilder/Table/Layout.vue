@@ -1,5 +1,5 @@
 <template>
-    <div class="ninja-tables-layout">
+    <div class="ninja-tables-layout w-full">
         <div class="table-customize-button" v-if="selectedDevice === ''">
             <el-button-group v-if="activeTab === 'background'" class="button-group" style="margin-top: 0">
                 <el-button
