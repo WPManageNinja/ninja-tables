@@ -68,8 +68,8 @@
                     <el-switch
                         size="small"
                         v-model="default_settings.show_title"
-                        :active-value="1"
-                        :inactive-value="0"
+                        active-value="1"
+                        inactive-value="0"
                         :id="'show_title'">
                     </el-switch>
                 </div>
@@ -87,8 +87,8 @@
                     <el-switch
                         size="small"
                         v-model="default_settings.show_description"
-                        :active-value="1"
-                        :inactive-value="0"
+                        active-value="1"
+                        inactive-value="0"
                         :id="'show_description'">
                     </el-switch>
                 </div>
@@ -100,8 +100,8 @@
                     <el-switch
                         size="small"
                         v-model="default_settings.enable_search"
-                        :active-value="1"
-                        :inactive-value="0"
+                        active-value="1"
+                        inactive-value="0"
                         :id="'enable_search'">
                     </el-switch>
                 </div>
@@ -111,8 +111,8 @@
                     <el-switch
                         size="small"
                         v-model="default_settings.column_sorting"
-                        :active-value="1"
-                        :inactive-value="0"
+                        active-value="1"
+                        inactive-value="0"
                         :id="'column_sorting'">
                     </el-switch>
                 </div>
@@ -122,8 +122,8 @@
                     <el-switch
                         size="small"
                         v-model="default_settings.hide_all_borders"
-                        :active-value="1"
-                        :inactive-value="0"
+                        active-value="1"
+                        inactive-value="0"
                         :id="'hide_all_borders'">
                     </el-switch>
                 </div>
@@ -136,16 +136,20 @@
                     <el-switch
                         size="small"
                         v-model="default_settings.show_all"
-                        :active-value="1"
-                        :inactive-value="0"
+                        active-value="1"
+                        inactive-value="0"
                         :id="'hide_pagination'">
                     </el-switch>
                 </div>
 
                 <div class="w-1/2">
                     <label class="font-[400] block">{{ $t('Items Per Page') }}</label>
-                    <el-input-number style="height: 40px; width: 100%;" :min="1" v-model="default_settings.perPage"
-                                     :disabled="default_settings.show_all == true || default_settings.show_all == '1'"
+                    <el-input-number
+                        style="height: 40px; width: 100%;"
+                        :min="1"
+                        :model-value="Number(default_settings.perPage)"
+                        @update:model-value="default_settings.perPage = Number($event)"
+                        :disabled="default_settings.show_all == true || default_settings.show_all == '1'"
                     />
                 </div>
             </div>
@@ -164,8 +168,13 @@
 
                 <div>
                     <label class="font-[400] block">{{ $t('Font Size') }}</label>
-                    <el-input-number style="height: 40px; width: 100%;" :min="1" :max="50"
-                                     v-model="default_settings.table_font_size"></el-input-number>
+                    <el-input-number
+                        style="height: 40px; width: 100%;"
+                        :min="1"
+                        :max="50"
+                        :model-value="Number(default_settings.table_font_size)"
+                        @update:model-value="default_settings.table_font_size = Number($event)"
+                    />
                 </div>
             </div>
 
@@ -181,7 +190,7 @@
             </div>
 
             <div class="flex justify-end mt-4">
-                <NinjaButton type="primary" size="small" @click="store" :btn-text="$t('Save Settings')"/>
+                <NinjaButton type="primary" @click="store" :btn-text="$t('Save Settings')"/>
             </div>
         </div>
     </div>
@@ -251,17 +260,7 @@ export default {
             this.fetching = true;
             this.$get('tables/tools/default-settings')
                 .then(response => {
-                    const settings = response.data.default_settings;
-
-                    // Convert string values to numbers for switch components
-                    const switchFields = ['show_title', 'show_description', 'enable_search', 'column_sorting', 'hide_all_borders', 'table_font_size', 'perPage'];
-                    switchFields.forEach(field => {
-                        if (settings[field] !== undefined) {
-                            settings[field] = parseInt(settings[field]);
-                        }
-                    });
-
-                    this.default_settings = settings;
+                    this.default_settings = response.data.default_settings;
                 })
                 .catch(e => {
                 })

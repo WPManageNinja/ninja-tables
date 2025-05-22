@@ -105,7 +105,7 @@
                         </span>
                     </div>
 
-                    <div class="flex justify-end">
+                    <div class="flex justify-end mt-2">
                         <NinjaButton :disabled="!uploadedFile" :loading="btnLoading" @click="importTable">
                             {{ $t('Import') }}
                         </NinjaButton>
@@ -308,7 +308,7 @@ import NinjaButton from '../../@ui-utils/NinjaButton.vue';
                     })
                     .catch(error => {
                         this.btnLoading = false;
-                        alert(error.responseJSON.message);
+                        this.$message.error(error.message);
                     })
             },
             importFromOtherPlugin(plugin) {
