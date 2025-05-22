@@ -106,8 +106,8 @@
                         <el-radio
                             v-for="column in current_columns"
                             :key="column.key"
-                            :label="column.key"
-                            :value="column.name"
+                            :label="column.name"
+                            :value="column.key"
                         />
                     </el-radio-group>
                 </div>

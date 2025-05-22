@@ -662,6 +662,8 @@
                             <el-switch
                                 size="small"
                                 v-model="model.unfilterable"
+                                :active-value="'yes'"
+                                :inactive-value="'no'"
                                 :disabled="!hasPro"
                             />
                             <p class="text-[14px] font-[400]">{{ $t('Disable frontend search for this column data') }}</p>
@@ -688,6 +690,8 @@
                             <el-switch
                                 size="small"
                                 v-model="model.unsortable"
+                                :active-value="'yes'"
+                                :inactive-value="'no'"
                                 :disabled="!hasPro"
                             />
                             <p class="text-[14px] font-[400]">{{ $t('Disable frontend sorting for this column') }}</p>
