@@ -46,11 +46,7 @@ class ToolsController extends Controller
             }
         }
 
-        $capability = get_option('_ninja_tables_permission');
-
-        if (is_string($capability)) {
-            $capability = [];
-        }
+        $capability = get_option('_ninja_tables_permission', []);
 
         $this->json(array(
             'capability'     => $capability,

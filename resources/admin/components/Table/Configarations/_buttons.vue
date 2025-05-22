@@ -166,7 +166,7 @@
             </div>
 
             <div class="flex justify-end mt-5">
-                <NinjaButton size="small" @click="saveSettings" type="primary" :btnText="$t('Save Settings')"/>
+                <NinjaButton @click="saveSettings" type="primary" :btnText="$t('Save Settings')"/>
             </div>
         </div>
 

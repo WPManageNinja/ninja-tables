@@ -28,7 +28,7 @@
             </div>
             <div class="my-3 flex gap-3">
                 <NinjaButton type="primary" @click="clearTableCache" size="small" :btn-text="$t('Clear Table Cache')"/>
-                <NinjaButton type="primary" @click="clearExternalCache" size="small" :btn-text="$t('Clear External Caches')"/>
+                <NinjaButton type="danger" @click="clearExternalCache" size="small" :btn-text="$t('Clear External Caches')"/>
             </div>
         </div>
     </div>

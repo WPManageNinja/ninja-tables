@@ -44,6 +44,7 @@
                                         </el-tooltip>
                                         </span>
                         <el-switch
+                            size="small"
                             :model-value="isStyleActive(tableStyle.key)"
                             @change="(val) => toggleStyle(tableStyle.key, val)"
                             :id="'table_style_' + tableStyle.key">
@@ -65,6 +66,7 @@
                                             </el-tooltip>
                                         </span>
                     <el-switch
+                        size="small"
                         v-model="default_settings.show_title"
                         :active-value="1"
                         :inactive-value="0"
@@ -83,6 +85,7 @@
                                             </el-tooltip>
                                         </span>
                     <el-switch
+                        size="small"
                         v-model="default_settings.show_description"
                         :active-value="1"
                         :inactive-value="0"
@@ -95,6 +98,7 @@
                                             {{ $t('Enable the visitor to filter or search the table.') }}
                                         </span>
                     <el-switch
+                        size="small"
                         v-model="default_settings.enable_search"
                         :active-value="1"
                         :inactive-value="0"
@@ -105,6 +109,7 @@
                 <div for="column_sorting" class="my-1 flex items-center justify-between">
                     <span>{{ $t('Enable sorting of the table by the visitor') }}</span>
                     <el-switch
+                        size="small"
                         v-model="default_settings.column_sorting"
                         :active-value="1"
                         :inactive-value="0"
@@ -115,6 +120,7 @@
                 <div for="hide_all_borders" class="my-1 flex items-center justify-between">
                     <span>{{ $t('Hide All Borders') }}</span>
                     <el-switch
+                        size="small"
                         v-model="default_settings.hide_all_borders"
                         :active-value="1"
                         :inactive-value="0"
@@ -128,6 +134,7 @@
                 <div for="hide_pagination" class="flex items-center justify-between">
                     <span>{{ $t('Hide Pagination (Show all data at once)') }}</span>
                     <el-switch
+                        size="small"
                         v-model="default_settings.show_all"
                         :active-value="1"
                         :inactive-value="0"
