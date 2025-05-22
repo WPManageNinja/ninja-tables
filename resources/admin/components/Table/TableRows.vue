@@ -284,17 +284,16 @@
             :width="'70%'"
         >
             <columns-editor
-                v-if="showColumnEditor && currentEditingColumn"
-                :dataSourceType="config.table.dataSourceType"
-                :model="currentEditingColumn"
-                :hasPro="has_pro"
-                :updating="true"
-                :columns="columns"
-                :settings="config.settings"
-                @store="storeSettings()"
-                @delete="deleteColumn()"
-                @cancel="showColumnEditor = false"
-                :hideCancel="true"
+            :dataSourceType="config.table.dataSourceType"
+            :model="currentEditingColumn"
+            :hasPro="has_pro"
+            :updating="true"
+            :columns="columns"
+            :settings="config.settings"
+            v-if="showColumnEditor && currentEditingColumn"
+            @store="storeSettings()"
+            @delete="deleteColumn()"
+            @cancel="showColumnEditor = false"
             />
         </el-dialog>
 
@@ -455,15 +454,15 @@
             },
             dataSourceType() {
                 const c = this.config;
-                return (c && c.table && 'dataSourceType' in c.table) ? c.table.dataSourceType : 'default';
+                return (c && 'dataSourceType' in c.table) ? c.table.dataSourceType : 'default';
             },
             isEditable() {
                 const c = this.config;
-                return (c && c.table && 'isEditable' in c.table) ? c.table.isEditable : true;
+                return (c && 'isEditable' in c.table) ? c.table.isEditable : true;
             },
             isEditableMessage() {
                 const c = this.config;
-                return (c && c.table && 'isEditableMessage' in c.table) ? c.table.isEditableMessage : null;
+                return (c && 'isEditableMessage' in c.table) ? c.table.isEditableMessage : null;
             }
         },
         methods: {
@@ -503,9 +502,9 @@
                       this.loading = false;
                     })
             },
-            // addTableData() {
+            addTableData() {
 
-            // },
+            },
             getItemNumber(index) {
                 return this.paginate.per_page * (this.paginate.current_page - 1) + (index + 1);
             },
@@ -523,11 +522,10 @@
                 }
             },
             deleteTable(tableId) {
-                this.$del("tables/"+tableId)
+                this.$get("tables/"+tableId)
                     .then((response) => {
                         this.fetchTables();
                         alert(response.message);
-                        this.getData();
                     })
                     .catch((error) => {
                         alert(error.responseJSON.data.message);
@@ -547,10 +545,7 @@
                 this.$confirm(this.$t('This will permanently delete the selected rows. Continue?'), 'Warning', {
                     confirmButtonText: this.$t('Yes, Delete'),
                     cancelButtonText: this.$t('Cancel'),
-                    type: 'warning',
-                    customClass: 'nt-delete-confirm',
-                    confirmButtonClass: 'nt-delete-confirm-btn',
-                    cancelButtonClass: 'nt-delete-cancel-btn'
+                    type: 'warning'
                 }).then(() => {
                     let ids = this.multipleSelection.map(item => item.id);
                     this.deleteItem(ids);
@@ -562,23 +557,6 @@
                 });
 
             },
-            confirmDeleteRows(id) {
-                this.$confirm('Are you sure, You want to delete this rows?', 'Warning', {
-                    confirmButtonText: 'Yes, Delete',
-                    cancelButtonText: 'Cancel',
-                    type: 'warning',
-                    customClass: 'nt-delete-confirm',
-                    confirmButtonClass: 'nt-delete-confirm-btn',
-                    cancelButtonClass: 'nt-delete-cancel-btn'
-                }).then(() => {
-                    this.deleteItem(id);
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: 'Delete canceled'
-                    });
-                });
-            },
             deleteItem(id) {
                 let data = {
 
@@ -588,7 +566,7 @@
 
                 let that = this;
 
-                this.$del('tables/'+this.tableId+'/item', data)
+                this.$get('tables/'+this.tableId+'/item/delete', data)
                     .then(response => {
                         this.$message({
                             showClose: true,
@@ -669,13 +647,6 @@
 
             addColumn() {
                 this.columnModal = true;
-                // Force Vue to update the component state
-                this.$nextTick(() => {
-                    // Ensure the modal is visible
-                    if (!this.columnModal) {
-                        this.columnModal = true;
-                    }
-                });
             },
 
             validateColumn(column) {
@@ -716,7 +687,6 @@
                     this.setNewColumn();
                     this.columnModal = false;
                     this.storeSettings();
-                    window.location.reload();
                 }
             },
 
@@ -735,7 +705,6 @@
                     newColumn.source_type = 'custom';
                 }
                 this.new_column = newColumn;
-                // window.location.reload();
             },
 
             /**
@@ -843,6 +812,7 @@
                 this.showColumnEditor = true;
             },
             storeSettings() {
+                console.log('storeSettings');
                 this.bus.emit('updateTableColumns', () => {
                     this.showColumnEditor = false;
                     this.currentEditingColumn = false;
@@ -876,7 +846,6 @@
                 this.currentEditingColumn = false;
                 this.config.columns.splice(targetIndex, 1);
                 this.$nextTick(() => this.storeSettings());
-                window.location.reload();
             },
             compare(key, order) {
                 let that = this;

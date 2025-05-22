@@ -26,7 +26,8 @@ export const manageRowColumn = {
         },
         addLeftColumn() {
             this.tableData.data.forEach((row, rowIndex) => {
-                this.$set(row.rows, this.columnName, this.defaultTd())
+                // this.$set(row.rows, this.columnName, this.defaultTd())
+                row.rows[this.columnName] = this.defaultTd();
             })
             this.tableData.headers.unshift(this.columnName);
             this.tableData.table.tc = Number(this.tableData.table.tc) + 1;
@@ -34,7 +35,8 @@ export const manageRowColumn = {
         },
         addRightColumn() {
             this.tableData.data.forEach((row, rowIndex) => {
-                this.$set(row.rows, this.columnName, this.defaultTd())
+                // this.$set(row.rows, this.columnName, this.defaultTd())
+                row.rows[this.columnName] = this.defaultTd();
             })
             this.tableData.headers.push(this.columnName);
             this.tableData.table.tc = Number(this.tableData.table.tc) + 1;
@@ -377,7 +379,8 @@ export const manageRowColumn = {
                         }
                     }
 
-                    this.$set(row.rows, this.columnName, cloneColumn);
+                    // this.$set(row.rows, this.columnName, cloneColumn);
+                    row.rows[this.columnName] = cloneColumn;
 
                     let history = this.merge.history[column.style.tdId];
                     if (history) {
@@ -419,7 +422,8 @@ export const manageRowColumn = {
         insertColumnBefore(index = this.table.columnIndex, position = 'before') {
             const insertColumn = (position) => {
                 this.tableData.data.forEach((row, rowIndex) => {
-                    this.$set(row.rows, this.columnName, this.defaultTd())
+                    // this.$set(row.rows, this.columnName, this.defaultTd())
+                    row.rows[this.columnName] = this.defaultTd();
                 })
                 this.tableData.headers.splice(position, 0, this.columnName);
                 this.tableData.table.tc = Number(this.tableData.table.tc) + 1;

@@ -1,6 +1,9 @@
 <template>
     <div class="ninja_design">
         <div class="ninja_design_wrapper !-mx-5">
+            <el-button :loading="savingSettings" :disabled="savingSettings" size="small" type="primary"
+                       @click="storeSettings()">Update Settings
+            </el-button>
             <div v-loading="!app_ready" class="w-[70%]">
                 <div class="design_preview">
                     <div class="flex justify-center items-center mb-5">
@@ -826,13 +829,14 @@ import NinjaColorPicker from '../Extras/ColorPicker';
 import GetPro from "../Tools/GetPro";
 import { useEventBus } from './../../eventBus';
 import { assetUrl } from '../../utils/ninjatablesadmin';
-import tableConfigStore from '../../store/tableConfigStore';
+// import tableConfigStore from '../../store/tableConfigStore';
 import ColorPicker from '../../@ui-utils/ColorPicker.vue';
 import NinjaInput from '../../@ui-utils/NinjaInput.vue';
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
 export default {
     name: 'table_preview',
+    props: ['config'],
     components: {
         NinjaButton,
         GetPro,
@@ -844,12 +848,11 @@ export default {
     data() {
         return {
             activeTab: 'desktop',
-            store: tableConfigStore,
             fontFamily: ['inherit', 'cursive', 'fantasy', 'monospace', 'sans-serif', 'serif', 'system-ui', 'ui-monospace', 'ui-rounded', 'ui-sans-serif', 'ui-serif'],
             rows: [],
             activeDesign: 'features',
             tableId: this.$route.params.table_id,
-            tableSettings: tableConfigStore.state.config ? JSON.parse(JSON.stringify(tableConfigStore.state.config.settings)) : {},
+            tableSettings: this.config.settings,
             table_body_html: '',
             data_loaded: false,
             script_loaded: false,
@@ -863,12 +866,10 @@ export default {
             sortableUpgradeNotice: false,
             columnCss: '',
             bus: useEventBus()
+            
         }
     },
     computed: {
-        config() {
-            return this.store.state.config || { table: {} };
-        },
         fontSetting() {
             return {
                 '--ninja-table-font-family': this.tableSettings.table_font_family,
@@ -937,21 +938,21 @@ export default {
             return [...table_css_classes, ...classes];
         },
         formattedColumns() {
-            let columns = this.store.state.config.columns; // Use store for columns
-            let formattedColumns = [];
-            jQuery.each(columns, (index, column) => {
-                formattedColumns.push({
-                    name: column.key,
-                    title: column.name,
-                    breakpoints: column.breakpoints,
-                    type: column.data_type,
-                    sortable: true,
-                    classes: ['ninja_column_' + index],
-                    visible: (column.breakpoints == 'hidden') ? false : true
+                let columns = this.config.columns;
+                let formattedColumns = [];
+                jQuery.each(columns, (index, column) => {
+                    formattedColumns.push({
+                        name: column.key,
+                        title: column.name,
+                        breakpoints: column.breakpoints,
+                        type: column.data_type,
+                        sortable: true,
+                        classes: ['ninja_column_' + index],
+                        visible: (column.breakpoints == 'hidden') ? false : true
+                    });
                 });
-            });
-            return formattedColumns;
-        },
+                return formattedColumns;
+            },
         app_ready() {
             return this.data_loaded && this.script_loaded
         },
@@ -1007,14 +1008,6 @@ export default {
             }
             return tips;
         },
-        tableFontSize: {
-            get() {
-                return Number(this.tableSettings.table_font_size);
-            },
-            set(value) {
-                this.tableSettings.table_font_size = value;
-            }
-        }
     },
     watch: {
         data_loaded() {
@@ -1096,7 +1089,7 @@ export default {
     },
     methods: {
         assetUrl,
-         isStyleActive(styleKey) {
+     isStyleActive(styleKey) {
             if (!Array.isArray(this.tableSettings.css_classes)) {
                 this.tableSettings.css_classes = [];
             }
@@ -1140,133 +1133,136 @@ export default {
             })
         },
         storeSettings() {
-            this.checkColorPro();
-            this.savingSettings = true;
+                this.checkColorPro();
+                this.savingSettings = true;
+                let filteredTableSettings = this.filterTableSettings(this.tableSettings);
+                let data = {
+                    columns: this.columns,
+                    table_settings: this.tableSettings
+                };
+                this.$post(`settings/${this.tableId}`, data)
+                    .then((res) => {
+                        this.$message({
+                            showClose: true,
+                            message: res.message,
+                            type: 'success'
+                        });
+                    })
+                    .catch((error) => {
 
-            let filteredTableSettings = this.filterTableSettings(this.tableSettings);
-            let data = {
-                columns: this.columns,
-                table_settings: this.tableSettings
-            };
-
-            return this.$post(`settings/${this.tableId}`, data)
-                .then((res) => {
-                    // Update the store with the new settings
-                    this.store.updateSettings({ ...this.tableSettings });
-
-                    this.$message({
-                        showClose: true,
-                        message: res.message,
-                        type: 'success'
+                    })
+                    .finally(() => {
+                        this.savingSettings = false;
                     });
-
-                    return res;
-                })
-                .catch((error) => {
-                    // Error handling
-                    this.$message.error('Could not save table design');
-                    return Promise.reject(error);
-                })
-                .finally(() => {
-                    this.savingSettings = false;
+            },
+            filterTableSettings(settings) {
+                let validStyles = [];
+                forEach(this.availableStyles, (style) => {
+                    validStyles.push(style.key);
                 });
-        },
-        filterTableSettings(settings) {
-            let validStyles = [];
-            forEach(this.availableStyles, (style) => {
-                validStyles.push(style.key);
-            });
-            settings.css_classes = intersection(validStyles, this.tableSettings.css_classes);
+                settings.css_classes = intersection(validStyles, this.tableSettings.css_classes);
 
-            return settings;
-        },
-        reInitFootables() {
-            if (!this.app_ready) {
-                return;
-            }
-            if (typeof FooTable == 'object') {
-                let ft = FooTable.get('#footable_' + this.tableId);
-                if (ft) {
-                    ft.destroy();
+                return settings;
+            },
+            reInitFootables() {
+                if (!this.app_ready) {
+                    return;
                 }
-            }
-            jQuery('#footable_' + this.tableId).find('thead,tbody,tfoot').remove();
-            this.footableLoading = false;
-            jQuery('#footable_' + this.tableId).append(this.tableInnerHtml);
-            this.initFootables();
-        },
-        initFootables() {
-            if (this.footableLoading || !this.script_loaded) {
-                return;
-            }
-            this.footableLoading = true;
-            let NinjaTableApp = window.ninjaTableApp;
-            let $table = jQuery('#footable_' + this.tableId);
+                if (typeof FooTable == 'object') {
+                    let ft = FooTable.get('#footable_' + this.tableId);
+                    if (ft) {
+                        ft.destroy();
+                    }
+                }
+                jQuery('#footable_' + this.tableId).find('thead,tbody,tfoot').remove();
+                this.footableLoading = false;
+                jQuery('#footable_' + this.tableId).append(this.tableInnerHtml);
+                this.initFootables();
+            },
+            initFootables() {
+                if (this.footableLoading || !this.script_loaded) {
+                    return;
+                }
+                this.footableLoading = true;
+                let NinjaTableApp = window.ninjaTableApp;
+                let $table = jQuery('#footable_' + this.tableId);
 
-            if (Number(this.tableSettings.hide_on_empty)) {
-                $table.on('expanded.ft.row', function (e, ft, row) {
-                    $table.find('table.footable-details td:empty').parent().addClass('nt_has_hide');
-                });
-            }
+                if (this.tableSettings.hide_on_empty) {
+                    $table.on('expanded.ft.row', function (e, ft, row) {
+                        $table.find('table.footable-details td:empty').parent().addClass('nt_has_hide');
+                    });
+                }
 
-            let config = this.getTableConfig();
-            NinjaTableApp.initTable($table, config);
+                let config = this.getTableConfig();
+                NinjaTableApp.initTable($table, config);
+                this.footableLoading = false;
+            },
+            dysel(options) {
+                // get options
+                var links = options.links;
+                var callback = options.callback;
+                var nocache = options.nocache;
+                var debug = options.debug;
 
-            this.footableLoading = false;
-        },
-        dysel(options) {
-            const links = options.links;
-            const callback = options.callback;
-            const nocache = options.nocache;
-            const debug = options.debug;
-
-            const loadjscssfile = (filename, cb) => {
-                return new Promise((resolve, reject) => {
+                // js and css file loader
+                var loadjscssfile = function (filename, cb) {
                     filename = filename.toString();
-                    const ext = filename.split('.').pop();
-                    let fileref = null;
-                    if (ext === "js") {
+                    var ext = filename.split('.').pop();
+                    var fileref = null;
+                    if (ext == "js") {
+                        // for Javascript
                         fileref = document.createElement('script');
                         fileref.setAttribute("type", "text/javascript");
                         fileref.setAttribute("src", filename);
-                    } else if (ext === "css" || ext === 'scss' || filename.includes('googleapis.com/css?')) {
+                    } else if (ext == "css" || filename.indexOf('googleapis.com/css?') > -1) {
+                        // for CSS + google fonts
                         fileref = document.createElement("link");
                         fileref.setAttribute("rel", "stylesheet");
                         fileref.setAttribute("type", "text/css");
                         fileref.setAttribute("href", filename);
                     }
+                    // callback trigger (w/debug if needed)
+                    if (typeof fileref != "undefined") {
+                        if (cb) {
+                            var mycallback = cb;
+                            if (debug) { // if debug redefine callback and add console.log
+                                mycallback = function () {
 
-                    if (fileref) {
-                        fileref.onload = () => {
-                            if (debug) {
-                                console.log('Loaded:', filename);
+                                    cb();
+                                }
                             }
-                            resolve();
-                        };
-                        fileref.onerror = (error) => reject(error);
-                        document.head.appendChild(fileref);
-                    } else {
-                        reject(new Error('Invalid file type'));
+                            // trigger the callback when resource is loaded
+                            fileref.onreadystatechange = mycallback;
+                            fileref.onload = mycallback
+                        }
+                        if (debug) {
+
+                        }
+                        // push it into the header
+                        document.getElementsByTagName("head")[0].appendChild(fileref);
                     }
-                });
-            };
-
-            // Load files sequentially
-            const loadSequentially = async () => {
-                for (const link of links) {
-                    const currentLink = nocache ? `${link}?_=${Date.now()}` : link;
-
-                    await loadjscssfile(currentLink);
                 }
-                if (callback) {
-                    callback();
-                }
-            };
 
-            loadSequentially().catch(error => {
-                console.error('Failed to load resources:', error);
-            });
-        },
+                // START HERE, i nest the final callback at the deepest
+                // (callbacks will be stacked in reverse order from here)
+                var totalScript = callback;
+
+                // create nested functions as callbacks,
+                // at the end, if needed, the callback from options is executed
+                // like func_1(loadfile_1, func_2(loadfile_2, func_3(loadfile_3, cbFromOptions)))
+                for (var i = links.length - 1; i >= 0; i--) {
+                    var old = totalScript;
+                    let currentLink = links[i];
+                    if (nocache) {
+                        currentLink += '?' + +new Date().getTime();
+                    }
+                    totalScript = function (oldcb) {
+                        loadjscssfile(this, oldcb);
+                    }.bind(currentLink, old);
+                }
+                // execute the nested callbacks
+                totalScript();
+            },
         loadRequiredScripts() {
             let that = this;
             this.dysel({
@@ -1279,12 +1275,12 @@ export default {
         size,
         get,
         generateColorCss() {
-            if (this.tableSettings.table_color_type == 'pre_defined_color') {
-                jQuery('#table_designer_css').html('');
-                return;
-            }
-            let prefix = '#footable_' + this.tableId;
-            let css = `
+                if (this.tableSettings.table_color_type == 'pre_defined_color') {
+                    jQuery('#table_designer_css').html('');
+                    return;
+                }
+                let prefix = '#footable_' + this.tableId;
+                let css = `
                     ${prefix} {
                         background-color: ${this.tableSettings.table_color_primary} !important;
                         color: ${this.tableSettings.table_color_secondary} !important;
@@ -1353,133 +1349,110 @@ export default {
                         border-color: ${this.tableSettings.table_footer_border} !important;
                     }
                 `;
-            jQuery('#table_designer_css').html(css);
+                jQuery('#table_designer_css').html(css);
         },
         changeColor(color, element) {
-            this.tableSettings[element] = color;
-        },
-        checkColorPro() {
-            if (this.has_pro) {
-                return;
-            }
-            if (this.tableSettings.table_color &&
-                this.tableSettings.table_color != 'ninja_no_color_table' ||
-                this.tableSettings.table_color_type != 'pre_defined_color'
-            ) {
-                this.tableSettings.table_color_type = 'pre_defined_color';
-                this.tableSettings.table_color = 'ninja_no_color_table';
-            }
-        },
-        generateDefaultCss() {
-            let columnContentCss = this.store.state.config.table.custom_css; // Use store for custom_css
-            this.store.state.config.columns.forEach((column, index) => { // Use store for columns
-                if (column.background_color || column.text_color || column.contentAlign) {
-                    columnContentCss += `#footable_parent_${this.tableId} thead tr th.ninja_column_${index}, #footable_parent_${this.tableId} tbody tr td.ninja_column_${index} { background-color: ${column.background_color}; color: ${column.text_color}; }`;
-                    columnContentCss += `#footable_parent_${this.tableId} tbody tr td.ninja_column_${index} { text-align: ${column.contentAlign}; }`;
+                this.tableSettings[element] = color;
+            },
+            checkColorPro() {
+                if (this.has_pro) {
+                    return;
                 }
-            });
-            jQuery('#ninja_table_designer_common_css').html(columnContentCss);
-        },
-        getTableConfig() {
-            let custom_css = {};
-            this.store.state.config.columns.forEach((column, index) => { // Use store for columns
+                if (this.tableSettings.table_color &&
+                    this.tableSettings.table_color != 'ninja_no_color_table' ||
+                    this.tableSettings.table_color_type != 'pre_defined_color'
+                ) {
+                    this.tableSettings.table_color_type = 'pre_defined_color';
+                    this.tableSettings.table_color = 'ninja_no_color_table';
+                }
+            },
+            generateDefaultCss() {
+                let columnContentCss = this.config.table.custom_css;
+                this.config.columns.forEach((column, index) => {
+                    if (column.background_color || column.text_color || column.contentAlign) {
+                        columnContentCss += `#footable_parent_${this.tableId} thead tr th.ninja_column_${index}, #footable_parent_${this.tableId} tbody tr td.ninja_column_${index} { background-color: ${column.background_color}; color: ${column.text_color}; }`;
+                        columnContentCss += `#footable_parent_${this.tableId} tbody tr td.ninja_column_${index} { text-align: ${column.contentAlign}; }`;
+                    }
+                });
+                jQuery('#ninja_table_designer_common_css').html(columnContentCss);
+            },
+            getTableConfig() {
+                let custom_css = {};
+                this.config.columns.forEach((column, index) => {
 
-                custom_css['ninja_column_' + index] = {
-                    'text-align': column.textAlign,
-                    'width': column.width + 'px'
+                    custom_css['ninja_column_' + index] = {
+                        'text-align': column.textAlign,
+                        'width': column.width + 'px'
+                    };
+                });
+
+                let settings = {
+                    default_sorting: 'old_first',
+                    defualt_filter: false,
+                    defualt_filter_column: null,
+                    expandAll: this.tableSettings.expand_type === "expandAll",
+                    expandFirst: this.tableSettings.expand_type === "expandFirst",
+                    filtering: !!this.tableSettings.enable_search,
+                    i18n: {},
+                    use_parent_width: this.showingDevice !== 'desktop',
+                    sorting: !!this.tableSettings.column_sorting,
+                    togglePosition: this.tableSettings.togglePosition
                 };
-            });
 
-            let settings = {
-                default_sorting: 'old_first',
-                defualt_filter: false,
-                defualt_filter_column: null,
-                expandAll: this.tableSettings.expand_type === "expandAll",
-                expandFirst: this.tableSettings.expand_type === "expandFirst",
-                filtering: !!Number(this.tableSettings.enable_search),
-                i18n: {},
-                use_parent_width: this.showingDevice !== 'desktop',
-                sorting: Boolean(Number(this.tableSettings.column_sorting)),
-                togglePosition: this.tableSettings.togglePosition
-            };
+                let initConfig = {
+                    "toggleColumn" : this.tableSettings.togglePosition,
+                    "cascade" : true,
+                    "useParentWidth" : this.showingDevice !== 'desktop',
+                    "columns" : this.config.columns,
+                    "expandFirst" : this.tableSettings.expand_type === "expandFirst",
+                    "expandAll" :  this.tableSettings.expand_type === "expandAll",
+                    'empty' : '',
+                    filtering: {
+                        enabled: !!this.tableSettings.enable_search
+                    },
+                    paging: {
+                        enabled: this.tableSettings.show_all == '0' || this.tableSettings.show_all == 0,
+                        "size" : 10,
+                        "container" : "#footable_parent_"+this.tableId+" .paging-ui-container",
+                    },
+                    sorting: {
+                        enabled: !!this.tableSettings.column_sorting
+                    },
+                };
 
-            let initConfig = {
-                "toggleColumn": this.tableSettings.togglePosition,
-                "cascade": true,
-                "useParentWidth": this.showingDevice !== 'desktop',
-                "columns": this.store.state.config.columns, // Use store for columns
-                "expandFirst": this.tableSettings.expand_type === "expandFirst",
-                "expandAll": this.tableSettings.expand_type === "expandAll",
-                'empty': '',
-                filtering: {
-                    enabled: !!Number(this.tableSettings.enable_search)
-                },
-                paging: {
-                    enabled: this.tableSettings.show_all == '0' || this.tableSettings.show_all == 0,
-                    "size": 10,
-                    "container": "#footable_parent_" + this.tableId + " .paging-ui-container",
-                },
-                sorting: {
-                    enabled: Boolean(Number(this.tableSettings.column_sorting))
-                },
-            };
-
-            return {
-                columns: this.formattedColumns.forEach(item => Object.assign({}, item)),
-                custom_css: custom_css,
-                settings: settings,
-                render_type: 'legacy_table',
-                instance_name: 'ninja_table_instance_0',
-                table_id: this.table_id,
-                title: '',
-                init_config: initConfig
-            };
-        }
+                return {
+                    columns: this.formattedColumns.forEach(item => Object.assign({}, item)),
+                    custom_css: custom_css,
+                    settings: settings,
+                    render_type: 'legacy_table',
+                    instance_name: 'ninja_table_instance_0',
+                    table_id: this.table_id,
+                    title: '',
+                    init_config: initConfig
+                };
+            }
     },
     mounted() {
-        this.fetchTableBody();
-        this.loadRequiredScripts();
-        if (!this.tableSettings.table_color_type) {
-            if (this.tableSettings.table_color == 'ninja_table_custom_color') {
-                this.tableSettings.table_color_type = 'custom_color';
-            } else {
-                this.tableSettings.table_color_type = 'pre_defined_color';
-            }
-        }
-        if (this.tableSettings.alternate_color_status === undefined) {
-            this.tableSettings.alternate_color_status = 'no';
-        }
-        // jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
-        jQuery(window).on('resize', function () {
-            jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
-        });
-        this.generateDefaultCss();
-        this.generateColorCss();
-        this.bus.on('saveTableDesign', () => {
-            this.storeSettings();
-        });
-
-        if (this.store.state.config && this.store.state.config.settings) {
-            // Create a deep copy to prevent readonly issues
-            this.tableSettings = JSON.parse(JSON.stringify(this.store.state.config.settings));
-
-            // Set defaults if needed
+           
+            this.fetchTableBody();
+            this.loadRequiredScripts();
             if (!this.tableSettings.table_color_type) {
                 if (this.tableSettings.table_color == 'ninja_table_custom_color') {
-                    this.tableSettings.table_color_type = 'custom_color';
+                    this.tableSettings['table_color_type']='custom_color';
                 } else {
-                    this.tableSettings.table_color_type = 'pre_defined_color';
+                    this.tableSettings['table_color_type']='pre_defined_color';
                 }
             }
-
             if (this.tableSettings.alternate_color_status === undefined) {
-                this.tableSettings.alternate_color_status = 'no';
+                this.tableSettings['alternate_color_status']='no';
             }
+            jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
+            jQuery(window).on('resize', function () {
+                jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
+            });
+            this.generateDefaultCss();
+            this.generateColorCss();
         }
-    },
-    beforeUnmount() {
-        this.bus.off('saveTableDesign');
-    }
 
 }
 </script>

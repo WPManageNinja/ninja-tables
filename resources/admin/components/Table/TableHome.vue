@@ -1,7 +1,6 @@
 <template>
     <div>
         <span v-if="doingAjax" v-loading="doingAjax" class="doingAJaxLoading"></span>
-
         <div class="ninja_inner_nav flex-wrap">
             <div class="ninja_inner_nav_left">
                 <router-link to="/" class="nav-all-tables">All Tables</router-link>
@@ -87,7 +86,7 @@ import toArray from 'lodash/values';
 import { useEventBus } from '../../eventBus';
 import { assetUrl } from "../../utils/ninjatablesadmin";
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
-import tableConfigStore from '../../store/tableConfigStore';
+// import tableConfigStore from '../../store/tableConfigStore';
 import GetPro from "../Tools/GetPro.vue";
 
 export default {
@@ -101,103 +100,68 @@ export default {
         return {
             bus: useEventBus(),
             table_tabs: [],
-            tableSettings: tableConfigStore.state.config ? tableConfigStore.state.config.settings : {},
             is_data_saving: false,
             is_form_saving: false,
             tableId: this.$route.params.table_id,
+            config: null,
             table: {},
             doingAjax: false,
             doingAjaxTest: false,
             user_tab: this.$route.query.user_tab,
             editTableModalShow: false,
             preview_url: '#',
-            has_pro: window.ninja_table_admin.hasPro,
-            store: tableConfigStore
-        }
-    },
-    computed: {
-        config() {
-            return this.store.state.config;
+            has_pro: window.ninja_table_admin.hasPro
         }
     },
     methods: {
         assetUrl,
         updateTableColumns(callback) {
-            let tableId = this.tableId;
+              let tableId = this.tableId;
 
-            let data = {
+              let data = {
                 table_id: this.tableId,
-                columns: this.store.state.config.columns // Get from store
-            }
+                columns: this.config.columns
+              }
 
-            this.$post('settings/' + tableId, data)
-                .then((res) => {
-                    // Update the store with any returned data if needed
-                    this.store.setConfig(res.data || res);
+              this.$post('settings/'+tableId, data)
+                  .then((res) => {
+                      this.$message({
+                          showClose: true,
+                          message: res.message,
+                          type: 'success'
+                      });
+                      callback(res)
+                  })
+            },
+            getSettings() {
+              let tableId = this.tableId;
 
-                    this.$message({
-                        showClose: true,
-                        message: res.message,
-                        type: 'success'
-                    });
-
-                    if (callback) callback(res);
-                    window.location.reload();
-                })
-        },
-        getSettings() {
-            let tableId = this.tableId;
-            this.store.setTableId(tableId); // Set tableId in the store
-
-            this.$get('settings/' + tableId)
-                .then(response => {
-                    if (Object.prototype.toString.call(response.columns) == '[object Object]') {
-                        response.columns = toArray(response.columns);
-                    }
-
-                    // Set the data in the store
-                    this.store.setConfig(response);
-
-                    // You can still set local references if needed
-                    this.table = response.table;
-                    this.preview_url = response.preview_url;
-                })
-                .catch((error) => {
-                    this.$message.error(error.responseJSON.data.message);
-                    if (error.responseJSON.data.route) {
-                        this.$router.push({ name: error.responseJSON.data.route });
-                    }
-                })
-        },
-        goToTab(key) {
-            this.user_tab = key;
-            this.$router.push({
-                name: 'custom_tab',
-                params: { table_id: this.tableId },
-                query: { user_tab: key }
-            });
-        },
-        saveDesign() {
-            if (this.is_form_saving) return; // Prevent double-clicks
-
-            this.is_form_saving = true;
-
-            // Create a timeout promise for error handling
-            const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error('Save operation timed out')), 10000);
-            });
-
-            // Emit event and wait for response
-            this.bus.emit('saveTableDesign');
-
-            // Reset the form state after 2 seconds if no response 
-            // (This is a fallback in case the event doesn't complete the operation)
-            setTimeout(() => {
-                this.is_form_saving = false;
-            }, 2000);
-        },
-        size,
-        each,
+                this.$get('settings/'+tableId)
+                    .then(response => {
+                        if (Object.prototype.toString.call(response.columns) == '[object Object]') {
+                            response.columns = toArray(response.columns);
+                        }
+                        this.config = response;
+                        this.table = response.table;
+                        this.preview_url = response.preview_url;
+                    })
+                    .catch((error) => {
+                        this.$message.error(error.responseJSON.data.message);
+                        if(error.responseJSON.data.route) {
+                            this.$router.push({ name: error.responseJSON.data.route });
+                        }
+                    })
+            },
+            goToTab(key) {
+                this.user_tab = key;
+                this.$router.push({
+                    name: 'custom_tab',
+                    params: {table_id: this.tableId},
+                    query: {user_tab: key}
+                });
+            },
+            size,
+            each,
         initTableTabs() {
             this.table_tabs = this.applyFilters('ninja_table_table_tabs', [
                 {
