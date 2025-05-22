@@ -105,13 +105,17 @@
     .el-input.nt-date-input {
         width: 100%;
         .el-input__wrapper {
-            border: none;
             border-radius: 8px 0 0 8px !important;
-
+            box-shadow: none;
+            &:hover{
+                box-shadow: none;
+            }
             .el-input__inner {
-                border: none;
                 background: transparent !important;
             }
+        }
+        .el-input__wrapper.is-focus{
+            box-shadow: none;
         }
 
         .el-input-group__append {
@@ -124,7 +128,6 @@
                     background: transparent !important;
 
                     .el-input__inner {
-                        border: none;
                         background: transparent !important;
                     }
                 }
