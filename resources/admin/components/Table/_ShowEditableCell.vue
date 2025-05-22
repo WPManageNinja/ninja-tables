@@ -7,14 +7,24 @@
                 v-if="column.data_type == 'selection'"
                 :newColumn="row['values']"
                 :column="column"></may-be-select>
-            <ninja-date-picker
+<!--            <ninja-date-picker-->
+<!--                @blur="maybeSave('blur')"-->
+<!--                only_picker="yes"-->
+<!--                v-focus-->
+<!--                v-else-if="column.data_type == 'date'"-->
+<!--                :column="column"-->
+<!--                :new_column="row['values']">-->
+<!--            </ninja-date-picker>-->
+
+            <NinjaDatePicker
                 @blur="maybeSave('blur')"
                 only_picker="yes"
                 v-focus
                 v-else-if="column.data_type == 'date'"
                 :column="column"
-                :new_column="row['values']">
-            </ninja-date-picker>
+                :new_column="row['values']"
+            />
+
             <textarea
                 v-else-if="column.data_type == 'textarea'"
                 v-focus

@@ -25,7 +25,7 @@
                         <wp_editor :editor_id="slugify(column.key)" v-model="newColumn[column.key]"></wp_editor>
                     </div>
                     <div v-else-if="column.data_type === 'date'">
-                        <ninja-date-picker :column="column" :new_column="newColumn"></ninja-date-picker>
+                        <NinjaDatePicker :column="column" :new_column="newColumn" />
                     </div>
                     <div v-else-if="column.data_type === 'selection'">
                         <may-be-select :column="column" :newColumn="newColumn"></may-be-select>
