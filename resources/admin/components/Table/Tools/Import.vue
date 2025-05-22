@@ -12,8 +12,10 @@
                     <div class="p-3 !border-gray-200 flex justify-between items-center"
                          style="border-bottom: solid 1px">
                         <p>{{ $t('Import table from here') }}</p>
-                        <NinjaButton type="secondary" :icon="assetUrl('icons/download-02.svg')" size="small"
-                                     @click="downloadSampleCSV" :btn-text="$t('Download Sample CSV')"/>
+                        <a class="flex items-center cursor-pointer" @click="downloadSampleCSV">
+                            <img class="mr-1" :src="assetUrl('icons/file-02.svg')"/>
+                            <span class="text-[#335CFF]">{{$t('Download Sample CSV')}}</span>
+                        </a>
                     </div>
                     <div class="p-[16px]">
                         <el-upload

@@ -33,11 +33,13 @@ class ImportController extends Controller
         if ($format == 'dragAndDrop') {
             return $this->extracted($request->all());
         } else {
-            if ($format == 'csv') {
+            $fileExtension = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+
+            if ($fileExtension === 'csv' && $format == 'csv') {
                 $this->uploadTableCsv($doUnicode);
-            } elseif ($format == 'json') {
+            } elseif ($fileExtension === 'json' && $format == 'json') {
                 $this->uploadTableJson();
-            } elseif ($format == 'ninjaJson') {
+            } elseif ($fileExtension === 'json' && $format == 'ninjaJson') {
                 $this->uploadTableNinjaJson();
             }
 
@@ -192,10 +194,10 @@ class ImportController extends Controller
         }
 
         // validation
-        if ( ! $content['post'] || ! $content['columns'] || ! $content['settings']) {
+        if ( ! Arr::get($content, 'post') || ! Arr::get($content, 'columns') || ! Arr::get($content, 'settings')) {
             $this->json([
                 'message' => __(
-                    'You have a faulty JSON file. Please export a new one.',
+                    'Please upload a JSON file exported from Ninja Tables',
                     'ninja-tables'
                 )
             ], 423);
