@@ -8,17 +8,17 @@
                             style="border: 1px solid #E1E4EA">
                             <div class="mr-3 pr-2 flex items-center" style="border-right: 1px solid #E1E4EA">
                                 <img @click="showingDevice = 'desktop'"
-                                    :class="`cursor-pointer ${(activeTab !== 'desktop' && activeTab !== undefined) && 'non-selected'}`"
+                                    :class="`cursor-pointer ${(showingDevice !== 'desktop' && showingDevice !== undefined) && 'non-selected'}`"
                                     :src="assetUrl('icons/computer.svg')" />
                             </div>
                             <div class="mr-3 pr-2 flex items-center" style="border-right: 1px solid #E1E4EA">
                                 <img @click="showingDevice = 'tablet'"
-                                    :class="`cursor-pointer ${activeTab !== 'tablet' && 'non-selected'}`"
+                                    :class="`cursor-pointer ${showingDevice !== 'tablet' && 'non-selected'}`"
                                     :src="assetUrl('icons/tablet-pen.svg')" />
                             </div>
                             <div class="flex items-center">
                                 <img @click="showingDevice = 'mobile'"
-                                    :class="`cursor-pointer ${activeTab !== 'mobile' && 'non-selected'}`"
+                                    :class="`cursor-pointer ${showingDevice !== 'mobile' && 'non-selected'}`"
                                     :src="assetUrl('icons/smart-phone-01.svg')" />
                             </div>
                         </div>
@@ -587,29 +587,29 @@
                                     <el-radio value="right" size="small" border>{{ $t("Right") }}</el-radio>
                                 </el-radio-group>
                             </div>
-                            <label class="font-[500]"><input v-model="tableSettings.paginate_to_top" type="checkbox">
-                                Scroll to table top for pagination change <span v-show="!has_pro">(Pro Only)</span>
+                            <div class="font-[500] flex items-baseline gap-1">
+                                <el-checkbox v-model="tableSettings.paginate_to_top" :label="$t(`Scroll to table top for pagination change ${!has_pro ? '(Pro Only)' : ''}`)" :disabled="!has_pro"/>
                                 <el-tooltip placement="top-end" effect="light"
                                     content="If you enable this then on pagination change, the table will be scrolled to top">
-                                    <el-icon class="tooltip-icon-color">
+                                    <el-icon class="tooltip-icon-color !top-0">
                                         <InfoFilled />
                                     </el-icon>
                                 </el-tooltip>
-                            </label>
+                            </div>
 
-                            <label class="font-[500]"><input :disabled="!has_pro" v-model="tableSettings.show_pager" type="checkbox">
-                                Show Page sizes change option <span v-show="!has_pro">(Pro Only)</span>
+                            <div class="font-[500] flex items-baseline gap-1">
+                                <el-checkbox v-model="tableSettings.show_pager" :label="$t(`Show Page sizes change option ${!has_pro ? '(Pro Only)' : ''}`)" :disabled="!has_pro"/>
                                 <el-tooltip placement="top-end" effect="light"
                                     content="If you enable this then Users can change the items per page on frontend">
-                                    <el-icon class="tooltip-icon-color">
-                                        <InfoFilled />
+                                    <el-icon class="tooltip-icon-color !top-0">
+                                        <InfoFilled/>
                                     </el-icon>
                                 </el-tooltip>
-                            </label>
+                            </div>
 
-                            <div v-if="tableSettings.show_pager" class="form_group">
+                            <div v-if="tableSettings.show_pager" class="">
                                 <label>{{ $t('Page Sizes (Number as Comma Separated)') }}</label>
-                                <input class="form_control" type="text" placeholder="Default: 10,20,50,100"
+                                <NinjaInput class="form_control" type="text" placeholder="Default: 10,20,50,100"
                                     v-model="tableSettings.paze_sizes" />
                             </div>
 
@@ -625,15 +625,15 @@
                                     <el-radio value="" size="small" border>{{ $t("Default") }}</el-radio>
                                 </el-radio-group>
                             </div>
-                            <label class="font-[500]"><input v-model="tableSettings.nt_search_full_width" type="checkbox">
-                                Make search input as full width <span v-show="!has_pro">(Pro Only)</span>
+                            <div class="font-[500] flex items-baseline gap-1">
+                                <el-checkbox v-model="tableSettings.nt_search_full_width" :label="$t(`Make search input as full width ${!has_pro ? '(Pro Only)' : ''}`)" :disabled="!has_pro"/>
                                 <el-tooltip placement="top-end" effect="light"
                                     content="If You enable this, Then the search input will take all the available space (100% width)">
-                                    <el-icon class="tooltip-icon-color">
+                                    <el-icon class="tooltip-icon-color !top-0">
                                         <InfoFilled />
                                     </el-icon>
                                 </el-tooltip>
-                            </label>
+                            </div>
                         </div>
 
                         <div class="form_group">
@@ -674,9 +674,9 @@
                                     checkbox to sort the data using drag and drop feature</p>
                             </div>
 
-                            <el-button v-if="tableSettings.sorting_type" size="small"
+                            <NinjaButton type="secondary" v-if="tableSettings.sorting_type" size="small"
                                 @click="tableSettings.sorting_type = ''">reset
-                            </el-button>
+                            </NinjaButton>
 
                         </div>
 
@@ -1518,5 +1518,8 @@ export default {
             }
         }
     }
+}
+.non-selected{
+    filter: contrast(0);
 }
 </style>
