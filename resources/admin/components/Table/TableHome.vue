@@ -141,7 +141,8 @@ export default {
                         type: 'success'
                     });
 
-                    if (callback) callback(res)
+                    if (callback) callback(res);
+                    window.location.reload();
                 })
         },
         getSettings() {
