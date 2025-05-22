@@ -2,11 +2,11 @@
     <div class="nt-custom-css-js-editor-wrapper mx-5">
         <div class="flex justify-between rounded-[8px] bg-[#F5F7FA] w-[250px] px-2 py-2 gap-3">
             <div @click="current_tab ='additional_css'"
-                 :class="`${current_tab ==='additional_css' && 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
+                 :class="`${current_tab ==='additional_css' && 'bg-white rounded-[8px] shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
                 {{ $t('Custom CSS') }}
             </div>
             <div @click="current_tab ='additional_js'"
-                 :class="`${current_tab ==='additional_js' && 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
+                 :class="`${current_tab ==='additional_js' && 'bg-white rounded-[8px]  shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
                 {{ $t('Custom JS') }}
             </div>
         </div>
@@ -28,7 +28,16 @@
             </p>
             <ace_code_editor editor_id="ninja_custom_css" mode="css" v-model="custom_css"></ace_code_editor>
             <p v-html="styleTagInfo" class="ndt-editor-info mt-2"></p>
+
+            <div class="flex justify-end mt-0">
+                <NinjaButton
+                    type="primary"
+                    :btnText="$t('Save Custom Css')"
+                    @click="saveScripts"
+                />
+            </div>
         </div>
+
         <div v-else-if="current_tab === 'additional_js'">
             <p class="my-4">
                 {{
@@ -42,26 +51,35 @@
             </p>
             <ace_code_editor editor_id="ninja_custom_js" mode="javascript" v-model="custom_js"></ace_code_editor>
             <p v-html="scriptTagInfo" class="ndt-editor-info mt-2"></p>
+
+            <div class="my-4" v-if="!hasPro">
+                <p class="nt-modal-description mb-2">{{ $t('Custom Javascript feature is a pro feature along with many awesome features.') }}</p>
+                <get-pro size="small"/>
+            </div>
+
+            <div class="flex justify-end mt-0">
+                <NinjaButton
+                    v-if="hasPro"
+                    type="primary"
+                    :btnText="$t('Save Custom Js')"
+                    @click="saveScripts"
+                />
+            </div>
         </div>
 
-        <div class="flex justify-end mt-0">
-            <NinjaButton
-                type="primary"
-                :btnText="$t('Save Settings')"
-                @click="saveScripts"
-            />
-        </div>
     </div>
 </template>
 
 <script type="text/babel">
 import ace_code_editor from '../../../common/_ace_editor';
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+import GetPro from "../Tools/GetPro.vue";
 
 export default {
     name: 'ninja_css_editor',
     props: ['config'],
     components: {
+        GetPro,
         NinjaButton,
         ace_code_editor
     },

@@ -29,7 +29,7 @@
                     <label class="nt-form-label">{{ $t('Custom SQL Query') }}</label>
                     <ace-code-editor mode="mysql" editor_id="ninja_mysql_editor" v-model="config.table.sql" />
                     <p class="nt-form-description mt-2">Please write valid SQL query. Your written SQL query will be passed to <code class="nt-code">$wpdb->get_results()</code> function</p>
-                    <p class="nt-form-description my-1">Check the documentation for advanced use cases: <a class="text-[#335CFF]" target="_blank" rel="noopener" href="https://ninjatables.com/docs/create-table-from-custom-sql/">Ninja Tables SQL Integration Documentation</a></p>
+                    <p class="nt-form-description my-1">Check the documentation for advanced use cases: <a class="nt-link" target="_blank" rel="noopener" href="https://ninjatables.com/docs/create-table-from-custom-sql/">Ninja Tables SQL Integration Documentation</a></p>
                     <p class="nt-form-description">Available Dynamic Placeholders: <code class="nt-code">{current_user_id}</code> <code class="nt-code">{current_date}</code> <code class="nt-code">{current_date_time}</code> <code class="nt-code">{current_post_id}</code> <code class="nt-code">{current_post_title}</code> <code class="nt-code">{prefix}</code></p>
                 </div>
 

@@ -38,6 +38,7 @@ const actions = {
   // Add any other update methods you need
   updateSettings(settings) {
     if (state.config) {
+      
       state.config.settings = settings
     }
   }

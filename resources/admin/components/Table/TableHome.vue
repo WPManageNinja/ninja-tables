@@ -2,7 +2,7 @@
     <div>
         <span v-if="doingAjax" v-loading="doingAjax" class="doingAJaxLoading"></span>
 
-        <div class="ninja_inner_nav">
+        <div class="ninja_inner_nav flex-wrap">
             <div class="ninja_inner_nav_left">
                 <router-link to="/" class="nav-all-tables">All Tables</router-link>
                 <span class="mx-2">
@@ -17,7 +17,7 @@
                     :src="assetUrl('icons/edit-2.svg')" alt="Edit Table" />
             </div>
 
-            <div class="ninja_inner_nav_right">
+            <div class="ninja_inner_nav_right flex-wrap">
                 <div class="copy_shortcode">
                     <el-tooltip effect="dark" content="Click to copy shortcode" title="Click to copy shortcode"
                         placement="top">
@@ -39,7 +39,10 @@
                 <a v-if="!has_pro"
                     href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                     target="_blank">
-                    <el-button type="danger">{{ $t('Get Pro') }}</el-button>
+                    <NinjaButton
+                        type="danger"
+                        :btnText="$t('Get Pro')"
+                    />
                 </a>
                 <NinjaButton v-if="$route.name === 'design_studio'" :btnText="$t('Save')" :disabled="is_form_saving"
                     :loading="is_form_saving" @click="saveDesign" />
@@ -48,16 +51,15 @@
         </div>
 
         <div :class="[is_form_saving ? 'disabled' : '']" :disabled="is_form_saving">
-            <div class="bg-white !-mx-5 py-4 px-4 border-b border-[#E1E4EA]">
+            <div class="bg-white !-mx-5 py-4 px-4 border-b border-[#E1E4EA] overflow-x-auto whitespace-nowrap">
                 <router-link v-for="tableTab in table_tabs" :key="tableTab.route"
-                    :to="{ name: tableTab.route, params: { table_id: tableId } }"
-                    exact-active-class="focus:shadow-none outline:none border-b-2 py-4 border-[#335cff] text-[#0e121b]"
-                    class="px-2 mx-4 py-3 focus:shadow-none font-[500] text-[#525866]">
-                    <span class="py-3"></span>
-                    {{ tableTab.title }}
+                :to="{ name: tableTab.route, params: { table_id: tableId } }"
+                exact-active-class="focus:shadow-none outline:none border-b-2 py-4 border-[#335cff] text-[#0e121b]"
+                class="px-2 mx-4 py-3 focus:shadow-none font-[500] text-[#525866]">
+                <span class="py-3"></span>
+                {{ tableTab.title }}
                 </router-link>
             </div>
-
             <router-view v-if="config" :config="config" :getColumnSettings="getSettings"></router-view>
         </div>
 
@@ -86,10 +88,12 @@ import { useEventBus } from '../../eventBus';
 import { assetUrl } from "../../utils/ninjatablesadmin";
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 import tableConfigStore from '../../store/tableConfigStore';
+import GetPro from "../Tools/GetPro.vue";
 
 export default {
     name: 'table_home',
     components: {
+        GetPro,
         NinjaButton,
         'edit_table': EditTable
     },

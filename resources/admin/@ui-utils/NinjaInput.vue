@@ -137,6 +137,7 @@ export default {
     .ninja-input-wrapper.disabled {
       background-color: #f5f7fa;
       cursor: not-allowed;
+      border-radius: 8px;
     }
   }
 </style>

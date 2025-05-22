@@ -1,8 +1,8 @@
 <template>
     <el-form ref="form" :model="model" class="form-wrapper">
-        <el-tabs v-model="activeTab" @tab-click="onTabClick">
+        <el-tabs class="nt_tab_design" v-model="activeTab" @tab-click="onTabClick">
             <!-- Basic Settings -->
-            <el-tab-pane class="basic_settings ninja_modal_body px-[10px]" label="Basic Settings" name="basic">
+            <el-tab-pane class="basic_settings ninja_modal_body px-[10px] pt-[18px]" label="Basic Settings" name="basic">
 
                 <div class="grid grid-cols-2 gap-x-5">
                     <!-- Column Name -->
@@ -376,7 +376,7 @@
                                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                    </el-tooltip>
                                </label>
-                               <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                               <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                    <ColorPicker :disabled="!hasPro" v-model="model.btn_bg_color" />
                                </div>
                            </div>
@@ -394,7 +394,7 @@
                                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
-                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                     <ColorPicker :disabled="!hasPro" v-model="model.btn_text_color" />
                                 </div>
                             </div>
@@ -412,7 +412,7 @@
                                         <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                                     </el-tooltip>
                                 </label>
-                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                                <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                     <ColorPicker :disabled="!hasPro" v-model="model.btn_border_color" />
                                 </div>
                             </div>
@@ -486,10 +486,10 @@
             </el-tab-pane>
 
             <!-- Advanced Settings -->
-            <el-tab-pane label="Advanced Settings" name="advanced" class="ninja_modal_body px-[10px]">
+            <el-tab-pane label="Advanced Settings" name="advanced" class="ninja_modal_body px-[10px] pt-[10px]">
                 <div class="advanced-settings">
 
-                    <div class="ninja_table_inline_upgrade" v-if="!hasPro">
+                    <div class="nt-instruction mb-[20px]" v-if="!hasPro">
                         <h3 class="nt-modal-title">Advanced Column Settings</h3>
                         <p class="nt-modal-description">
                             Customize your table's column's width, custom css class, content alignments, column styling
@@ -498,7 +498,9 @@
                             Tables Pro.
                             Ninja Table Pro has lots of features that will help you to build any type of Tables.
                         </p>
-                        <get-pro size="small"/>
+                        <div class="py-2">
+                            <get-pro />
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-x-5">
@@ -656,7 +658,7 @@
                                 </el-tooltip>
                         </label>
 
-                        <div class="flex items-center gap-2 mt-1">
+                        <div class="flex items-center gap-2">
                             <el-switch
                                 size="small"
                                 v-model="model.unfilterable"
@@ -682,7 +684,7 @@
                             </el-tooltip>
                         </label>
 
-                        <div class="flex items-center gap-2 mt-1">
+                        <div class="flex items-center gap-2">
                             <el-switch
                                 size="small"
                                 v-model="model.unsortable"
@@ -710,7 +712,7 @@
                                 </el-tooltip>
                             </label>
 
-                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                 <ColorPicker :disabled="!hasPro" v-model="model.background_color" />
                             </div>
                         </div>
@@ -730,7 +732,7 @@
                                 </el-tooltip>
                             </label>
 
-                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                 <ColorPicker :disabled="!hasPro" v-model="model.text_color" />
                             </div>
                         </div>
@@ -739,12 +741,12 @@
             </el-tab-pane>
 
             <!-- Conditional Settings -->
-            <el-tab-pane label="Conditional Formatting" name="conditional" class="ninja_modal_body px-[10px]">
+            <el-tab-pane label="Conditional Formatting" name="conditional" class="ninja_modal_body px-[10px] pt-[16px]">
                 <condition :column="model" :has-pro="hasPro"/>
             </el-tab-pane>
 
             <!-- Transform Value -->
-            <el-tab-pane label="Transform Value" name="transformer" class="ninja_modal_body px-[10px]">
+            <el-tab-pane label="Transform Value" name="transformer" class="ninja_modal_body px-[10px] pt-[16px]">
                 <content-transformer :settings="settings" :columns="columns" :column="model"/>
             </el-tab-pane>
 
@@ -800,8 +802,9 @@
                                 link
                                 v-if="!hideDelete"
                                 type="danger"
+                                class="underline"
                             >
-                                {{ $t('Delete') }}
+                                {{ $t('Delete Column') }}
                             </el-button>
                         </template>
                     </el-popover>
@@ -810,8 +813,7 @@
 
                 <div class="flex items-center gap-2">
                     <NinjaButton
-                        size="small"
-                        v-if="!hideCancel"
+                        v-show="hideCancel"
                         @click.prevent="cancel"
                         type="secondary"
                         :btnText="$t('Cancel')"
@@ -820,7 +822,6 @@
                     <NinjaButton
                         :loading="doingAjax"
                         @click.prevent="store"
-                        size="small"
                         :btnText="$t('Update')"
                     />
                 </div>

@@ -15,7 +15,7 @@
                 <p class="nt-modal-description">
                     Displays website content in a searchable, sortable with Ninja Tables. It supports custom posts,
                     pages, & custom post types.
-                    <a target="_blank" href="https://ninjatables.com/docs/create-custom-column-in-wp-post-cpt-woocommerce-table/">
+                    <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/create-custom-column-in-wp-post-cpt-woocommerce-table/">
                         Learn more about this module
                     </a>
                 </p>

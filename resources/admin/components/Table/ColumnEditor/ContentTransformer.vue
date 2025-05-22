@@ -1,5 +1,15 @@
 <template>
     <div class="ninja_modal-body ">
+        <div class="nt-instruction mb-[20px]" v-if="!hasPro">
+            <h3 class="nt-modal-title">Transform Column Value</h3>
+            <p class="nt-modal-description">
+                Transform Value is a Premium feature. Get Transform Column Value, unlimited customizations, data filters, professional looks, Many More Integrations and so many things from the Pro version.
+            </p>
+            <div class="py-2">
+                <get-pro />
+            </div>
+        </div>
+
         <p class="nt-modal-description">
             Data Transformer is a powerful tool where you can concat any column values easily into any valid html and show as computed value.
         </p>
@@ -12,7 +22,7 @@
           class="mt-2"
         ></el-input>
 
-        <ninja-premium-notice v-if="!hasPro" highlight="Transform Column Value"></ninja-premium-notice>
+<!--        <ninja-premium-notice v-if="!hasPro" highlight="Transform Column Value"></ninja-premium-notice>-->
 
         <div class="mt-4">
 
@@ -82,6 +92,7 @@
     import parser from '../../../../public/js/parser';
     import { useEventBus } from '../../../eventBus';
     import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+    import GetPro from "../../Tools/GetPro.vue";
 
 
     export default {
@@ -100,6 +111,7 @@
             }
         },
         components: {
+            GetPro,
             NinjaButton,
             ninja_alert,
             NinjaPremiumNotice

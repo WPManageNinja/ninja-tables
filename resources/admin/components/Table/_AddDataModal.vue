@@ -77,13 +77,13 @@
                 <div class="grid grid-cols-2 gap-x-5">
                     <div class="flex flex-col">
                         <label class="nt-form-label">Row Background Color</label>
-                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                             <ColorPicker v-model="item_settings.row_bg" />
                         </div>
                     </div>
                     <div class="flex flex-col">
                         <label class="nt-form-label">Row Text Color</label>
-                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg mt-1">
+                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                             <ColorPicker v-model="item_settings.text_color" />
                         </div>
                     </div>
@@ -125,11 +125,13 @@
                 </div>
             </div>
 
-            <div v-else class="bg-[#F9FAFB] p-4 rounded-[8px]">
+            <div v-else class="nt-instruction">
                 <h3 class="nt-modal-subtitle">{{ $t('Row and Cell Color Customization') }}</h3>
                 <p class="nt-modal-description">{{ $t(`Using this module, You can set cell and row level colors of your data, It's a pro feature, Please
                     purchase pro to unlock this feature`) }}</p>
-               <get-pro/>
+               <div class="mt-2">
+                   <get-pro/>
+               </div>
             </div>
         </div>
             <div class="pt-[16px] flex justify-between items-center" :class="{ 'single-child': shouldNotContinueAdding }">

@@ -2,6 +2,7 @@
 
 namespace NinjaTables\Database\Migrations;
 
+use NinjaTables\Framework\Database\Schema;
 use NinjaTables\Framework\Support\Arr;
 
 class NinjaTablesSupsysticTableMigration extends NinjaTablesMigration
@@ -11,8 +12,9 @@ class NinjaTablesSupsysticTableMigration extends NinjaTablesMigration
         global $wpdb;
         $tables = array();
         try {
-            $tables = $wpdb->get_results("SELECT id as ID,title as post_title FROM {$wpdb->prefix}supsystic_tbl_tables",
-                OBJECT);
+            if (Schema::hasTable($wpdb->prefix. 'supsystic_tbl_tables')) {
+                $tables = $wpdb->get_results("SELECT id as ID,title as post_title FROM {$wpdb->prefix}supsystic_tbl_tables", \OBJECT);
+            }
         } catch (\Exception $exception) {
 
         }
@@ -62,7 +64,6 @@ class NinjaTablesSupsysticTableMigration extends NinjaTablesMigration
                 }
 
             }
-
 
             $headerRow     = $this->formatHeader($headers);
             $formattedRows = $this->prepareTableRows(array_keys($headerRow), $rows);

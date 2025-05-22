@@ -15,9 +15,9 @@
                         $t(`You need to activate your Ninja Table Pro by providing the license key below. If you don't have a license key please`)
                     }}
                     <a href="https://wpmanageninja.com/checkout/purchase-history/" target="_blank"
-                       class="text-blue-500 underline">Click Here</a>
+                       class="nt-link">Click Here</a>
                     {{ $t('to get a license key from your purchase. Any questions or problems with your license?') }}
-                    <a href="https://wpmanageninja.com/contact/" target="_blank" class="text-blue-500 underline">Contact
+                    <a href="https://wpmanageninja.com/contact/" target="_blank" class="nt-link">Contact
                         us!</a>
                 </div>
             </div>

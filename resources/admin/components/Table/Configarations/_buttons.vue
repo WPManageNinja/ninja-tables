@@ -8,10 +8,22 @@
             {{ $t("You can enable/disable print and csv export settings here") }}
         </div>
 
-
-        <div v-if="!hasPro">
-            <h3>Export CSV and Table Print is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature <get-pro/></h3>
+        <div v-if="!hasPro" class="w-full overflow-hidden text-center my-6">
+            <h3 class="text-[16px] font-[500] text-[#0E121B] mb-4">
+                Export CSV and Table Print is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
+            </h3>
+            <div class="flex justify-center">
+                <a v-if="!has_pro"
+                   href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
+                   target="_blank">
+                    <NinjaButton
+                        type="danger"
+                        :btnText="$t('Get Pro')"
+                    />
+                </a>
+            </div>
         </div>
+
         <div v-else v-loading="fetching">
             <div class="mb-3 text-[16px] font-[500]">{{ $t("Toolbar Button Settings") }}</div>
             <div>
@@ -130,33 +142,34 @@
                     </el-collapse-item>
                 </el-collapse>
             </div>
-        </div>
 
-        <div class="mb-3 text-[16px] font-[500]">{{ $t("Buttons Placement") }}</div>
-        <div class="p-5 border-solid border border-[#E1E4EA] rounded-[12px]">
-            <div class="mb-5">
-                <div class="font-[500] text-[14px] mb-3">{{ $t("Button Position In Frontend") }}</div>
+            <div class="mb-3 text-[16px] font-[500]">{{ $t("Buttons Placement") }}</div>
+            <div class="p-5 border-solid border border-[#E1E4EA] rounded-[12px]">
+                <div class="mb-5">
+                    <div class="font-[500] text-[14px] mb-3">{{ $t("Button Position In Frontend") }}</div>
+                    <div class="ninja_tables_radio_group mb-3">
+                        <el-radio-group v-model="table_buttons.button_position">
+                            <el-radio v-for="(title, key) in button_positions" :key="key" :value="key" size="large" border>
+                                {{ $t(title) }}
+                            </el-radio>
+                        </el-radio-group>
+                    </div>
+                </div>
+                <div class="font-[500] text-[14px] mb-3">{{ $t("Button Alignment") }}</div>
                 <div class="ninja_tables_radio_group mb-3">
-                    <el-radio-group v-model="table_buttons.button_position">
-                        <el-radio v-for="(title, key) in button_positions" :key="key" :value="key" size="large" border>
+                    <el-radio-group v-model="table_buttons.button_alignment">
+                        <el-radio v-for="(title, key) in buttonAlignments" :key="key" :value="key" size="large" border>
                             {{ $t(title) }}
                         </el-radio>
                     </el-radio-group>
                 </div>
             </div>
-            <div class="font-[500] text-[14px] mb-3">{{ $t("Button Alignment") }}</div>
-            <div class="ninja_tables_radio_group mb-3">
-                <el-radio-group v-model="table_buttons.button_alignment">
-                    <el-radio v-for="(title, key) in buttonAlignments" :key="key" :value="key" size="large" border>
-                        {{ $t(title) }}
-                    </el-radio>
-                </el-radio-group>
+
+            <div class="flex justify-end mt-5">
+                <NinjaButton size="small" @click="saveSettings" type="primary" :btnText="$t('Save Settings')"/>
             </div>
         </div>
 
-        <div class="flex justify-end mt-5">
-            <NinjaButton size="small" @click="saveSettings" type="primary" :btnText="$t('Save Settings')"/>
-        </div>
     </div>
 
 </template>
