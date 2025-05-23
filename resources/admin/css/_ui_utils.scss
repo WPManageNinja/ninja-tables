@@ -480,6 +480,13 @@
     }
   }
 
+  .nt-custom-tooltip {
+    max-width: 400px;
+    word-wrap: break-word;
+    line-height: 1.4;
+    padding: 10px;
+  }
+
   .el-icon.tooltip-icon-color {
     color: #335cff !important;
     top: 2px;

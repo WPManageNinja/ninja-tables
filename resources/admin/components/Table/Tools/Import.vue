@@ -1,7 +1,7 @@
 <template>
     <div class="import-table-wrapper ml-2">
-        <div class="text-[18px] font-[600] text-[#0E121B] my-5">{{ $t('Import Table') }}</div>
         <div v-if="config.table.isImportable">
+            <div class="text-[18px] font-[600] text-[#0E121B] my-5">{{ $t('Import Table') }}</div>
             <div class="text-[14px] font-[400] text-[#0E121B] my-5 w-1/2">
                 {{
                     $t("Import CSV data into the existing table. Please note that, your CSV data structure need to follow the sample CSV. Download the sample CSV to ensure correct data formatting.")
@@ -12,8 +12,10 @@
                     <div class="p-3 !border-gray-200 flex justify-between items-center"
                          style="border-bottom: solid 1px">
                         <p>{{ $t('Import table from here') }}</p>
-                        <NinjaButton type="secondary" :icon="assetUrl('icons/download-02.svg')" size="small"
-                                     @click="downloadSampleCSV" :btn-text="$t('Download Sample CSV')"/>
+                        <a class="flex items-center cursor-pointer" @click="downloadSampleCSV">
+                            <img class="mr-1" :src="assetUrl('icons/file-02.svg')"/>
+                            <span class="text-[#335CFF]">{{$t('Download Sample CSV')}}</span>
+                        </a>
                     </div>
                     <div class="p-[16px]">
                         <el-upload
@@ -82,6 +84,10 @@
                 </div>
             </div>
         </div>
+        <div v-else class="nt-instruction text-center">
+            <h3 class="nt-modal-subtitle mb-3">{{ $t('Import Table') }}</h3>
+            <p class="nt-modal-description">{{ $t(`Sorry! You can not import any data as the table data is configured as external source (${config.table.dataSourceType})`) }}</p>
+        </div>
     </div>
 </template>
 
@@ -90,10 +96,11 @@ import each from 'lodash/each'
 import {Download, Upload} from "@element-plus/icons-vue";
 import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
 import {assetUrl} from "../../../utils/ninjatablesadmin";
+import GetPro from "../../Tools/GetPro.vue";
 
 export default {
     name: "Import",
-    components: {NinjaButton, Download, Upload},
+    components: {GetPro, NinjaButton, Download, Upload},
     props: ['config', 'tableId'],
     data() {
         return {
