@@ -81,25 +81,26 @@
             <el-table-column fixed="right" min-width="150">
                 <template #default="scope">
                     <div class="flex justify-end items-center">
-                       <span
+                       <div
                            v-if="shouldBeVisible(scope.row)"
                            @click="()=>onRedirectPreview(scope.row.preview_url)"
                            class="icons_bg"
                        >
                            <img :src="assetUrl('icons/view.svg')" alt="View"/>
-                       </span>
+                       </div>
 
-                        <span
-                            v-if="shouldBeVisible(scope.row)"
-                            class="icons_bg ml-2"
-                        >
+                        <div v-if="shouldBeVisible(scope.row)">
                           <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
-                            <img :src="assetUrl('icons/setting-02.svg')" alt="Edit"/>
+                              <div class="icons_bg ml-2">
+                                  <img :src="assetUrl('icons/setting-02.svg')" alt="Edit"/>
+                              </div>
                           </router-link>
                           <router-link v-else :to="{ name: 'data_items', params: { table_id: scope.row.ID } }">
-                            <img :src="assetUrl('icons/setting-02.svg')" alt="Edit"/>
+                              <div class="icons_bg ml-2">
+                                  <img :src="assetUrl('icons/setting-02.svg')" alt="Edit"/>
+                              </div>
                           </router-link>
-                        </span>
+                        </div>
 
                         <el-dropdown>
                             <span class="el-dropdown-link no-hover">
@@ -108,19 +109,16 @@
 
                             <template #dropdown>
                                 <el-dropdown-menu class="ninja-dropdown-menu">
-                                    <el-dropdown-item>
-                                         <span>
-                                             <a @click.prevent="confirmDeleteTable(scope.row.ID)" href="#">{{ $t('Delete') }}</a>
-                                         </span>
+                                    <el-dropdown-item @click.prevent="confirmDeleteTable(scope.row.ID)">
+                                        {{ $t('Delete') }}
                                     </el-dropdown-item>
 
-                                    <el-dropdown-item>
-                                        <span class="row-duplicate" v-if="shouldBeVisible(scope.row)">
-                                            <a href="#" @click.prevent="duplicate(scope.row.ID, scope.row.dataSourceType)">{{ $t('Duplicate') }}</a>
-                                        </span>
-                                        <span class="row-duplicate" v-if="shouldBeVisible(scope.row) && scope.row.fluentfrom_url">
-                                            <a :href="scope.row.fluentfrom_url" >{{ $t('Fluent Form Entries') }}</a> |
-                                        </span>
+                                    <el-dropdown-item  v-if="shouldBeVisible(scope.row) && scope.row.fluentfrom_url">
+                                        <a :href="scope.row.fluentfrom_url" >{{ $t('Fluent Form Entries') }}</a>
+                                    </el-dropdown-item>
+
+                                    <el-dropdown-item  v-else  @click.prevent="duplicate(scope.row.ID, scope.row.dataSourceType)">
+                                        {{ $t('Duplicate') }}
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>

@@ -234,11 +234,12 @@
 
                                     <template #dropdown>
                                         <el-dropdown-menu class="ninja-dropdown-menu">
-                                            <el-dropdown-item>
-                                                <span @click="duplicateData(scope)">Duplicate</span>
+                                            <el-dropdown-item  @click="duplicateData(scope)">
+                                               {{ $t('Duplicate') }}
                                             </el-dropdown-item>
-                                            <el-dropdown-item>
-                                                <span class="mb-1" @click.prevent="confirmDeleteRows(scope.row.id)">Delete</span>
+
+                                            <el-dropdown-item  @click.prevent="confirmDeleteRows(scope.row.id)">
+                                                {{ $t('Delete') }}
                                             </el-dropdown-item>
                                         </el-dropdown-menu>
                                     </template>
