@@ -89,7 +89,7 @@
                            <img :src="assetUrl('icons/view.svg')" alt="View"/>
                        </div>
 
-                        <div v-if="shouldBeVisible(scope.row)">
+                        <div v-if="shouldBeVisible(scope.row)" class="all-tables-action-icons">
                           <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
                               <div class="icons_bg ml-2">
                                   <img :src="assetUrl('icons/setting-02.svg')" alt="Edit"/>

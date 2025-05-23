@@ -499,7 +499,7 @@
                             Ninja Table Pro has lots of features that will help you to build any type of Tables.
                         </p>
                         <div class="py-2">
-                            <get-pro />
+                            <GetPro />
                         </div>
                     </div>
 

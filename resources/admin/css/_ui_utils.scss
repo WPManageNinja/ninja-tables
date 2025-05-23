@@ -442,6 +442,12 @@
     }
   }
 
+  .el-input.el-date-editor--datetime {
+    .el-input__wrapper {
+      border: none;
+    }
+  }
+
   .ndt-table-config_custom_filter {
     .el-table--border {
       th:first-of-type {
@@ -506,9 +512,9 @@
 
     .el-message-box__btns {
       .nt-delete-confirm-btn {
-        background: #335cff;
-        color: #FFFFFF;
-        border: none;
+        background: #FFFFFF;
+        color: #FB3748;
+        border: 1px solid #FB3748;
         border-radius: 8px;
         padding: 10px 16px;
         font-size: 14px;
