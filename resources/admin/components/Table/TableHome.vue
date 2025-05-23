@@ -191,7 +191,7 @@ export default {
                 },
                 {
                     route: 'import-export',
-                    title: 'Import - Export'
+                    title: 'Import / Export'
                 }
             ]);
         },
