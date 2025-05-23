@@ -1447,7 +1447,7 @@ export default {
             if (this.tableSettings.alternate_color_status === undefined) {
                 this.tableSettings['alternate_color_status']='no';
             }
-            jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
+            // jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
             jQuery(window).on('resize', function () {
                 jQuery('.ninja_design_wrapper').css('width', jQuery('.wrap').width() + 'px');
             });
