@@ -8,6 +8,9 @@ const assetVersion = '3.1.0';
 mix.setPublicPath('assets');
 mix.setResourceRoot('../');
 
+mix
+    .js('resources/admin/blocks/table-block/block.js', `assets/blocks/table-block/block.js`)
+    .react();
 // Configure webpack
 mix.webpackConfig({
     resolve: {
@@ -18,13 +21,13 @@ mix.webpackConfig({
 });
 
 // JS Compilation
-mix.js('resources/admin/gutenblock.js', `assets/js/ninja-tables-gutenblock.js`).react()
+mix
     .js('resources/admin/Boot.js', `assets/js/ninja-tables-boot.js`)
     .js('resources/admin/main.js', `assets/js/ninja-tables-admin.js`)
     .js('resources/public/js/ninja-tables-footable.js', `assets/js/ninja-tables-footable.js`)
     .js('resources/admin/ninja-table-tinymce-button.js', `assets/js/ninja-table-tinymce-button.js`)
     .js('resources/public/js/ninja-tables-builder.js', `assets/js/ninja-table-builder-public.js`);
-  
+
 
 // Vue Configuration
 mix.vue({
@@ -44,8 +47,7 @@ mix.sass('resources/public/css/_public.scss', `assets/css/ninjatables-public.css
         postCss: [require('tailwindcss')],
       });
 
-mix.sass('resources/admin/css/gutenblock.scss', 'assets/css/ninja-tables-gutenblock.css')
-    .sass('resources/preview/preview.scss', 'assets/css/ninja-tables-preview.css')
+    mix.sass('resources/preview/preview.scss', 'assets/css/ninja-tables-preview.css')
 // Asset Copying
 mix.copy('resources/libs', 'assets/libs')
     .copy('resources/img', 'assets/img')

@@ -173,6 +173,7 @@
                         :key="index">
                         <template #default="scope">
                             <show-editable-cell
+                                :table_id="tableId"
                                 :row="scope.row"
                                 :column="column"
                                 :columns="columns"
@@ -593,7 +594,7 @@
 
                 let that = this;
 
-                this.$del('tables/'+this.tableId+'/item', data)
+                this.$get('tables/'+this.tableId+'/item/delete', data)
                     .then(response => {
                         this.$message({
                             showClose: true,

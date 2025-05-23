@@ -9,26 +9,6 @@ class EditorBlockHandler
 {
     public $cpt_name = 'ninja-table';
 
-    public function loadGutenBlock()
-    {
-        add_action('enqueue_block_editor_assets', function () {
-            wp_enqueue_script(
-                'ninja-tables-gutenberg-block',
-                NINJA_TABLES_DIR_URL . 'assets/js/ninja-tables-gutenblock.js',
-                array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor'),
-                NINJA_TABLES_VERSION,
-                true
-            );
-
-            wp_enqueue_style(
-                'ninja-tables-gutenberg-block',
-                NINJA_TABLES_DIR_URL . 'assets/css/ninja-tables-gutenblock.css',
-                array('wp-edit-blocks'),
-                NINJA_TABLES_VERSION
-            );
-        });
-    }
-
     public function addTablesToEditor()
     {
         $pages_with_editor_button = array('post.php', 'post-new.php');

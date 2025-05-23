@@ -7,5 +7,5 @@ window.ninjaTableApp.diacriticsRemoval = diacriticsRemoval;
 jQuery(document).ready(function () {
     setTimeout(() => {
         ninjaTableApp.initTables();
-    }, ninja_footables.delay | 0)
+    }, window?.ninja_footables?.delay || 0);
 });

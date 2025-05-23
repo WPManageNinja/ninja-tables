@@ -66,7 +66,7 @@
 
     export default {
         name: 'show_cell',
-        props: ['row', 'columns', 'column', 'formula_support', 'is_editable'],
+        props: ['table_id', 'row', 'columns', 'column', 'formula_support', 'is_editable'],
         components: {
             mayBeSelect,
             NinjaDatePicker
@@ -87,6 +87,10 @@
                     return;
                 }
 
+                if (this.btnLoading) {
+                    return;
+                }
+
                 let columnKey = this.column.key;
                 let columnValue = this.row.values[columnKey];
 
@@ -97,7 +101,6 @@
 
                 this.inital_value = JSON.stringify(columnValue);
 
-                let rowId = this.row.id;
                 let data = {
                     row_id: this.row.id,
                     column_key: columnKey,
@@ -107,18 +110,20 @@
                 this.btnLoading = true;
                 this.is_editing = false;
 
-                this.$put('tables/'+rowId+'/item', data)
+                this.$post('tables/'+this.table_id+'/item/update', data)
                     .then((response) => {
-                      this.$message.success({
-                        showClose: true,
-                        message: response.data.message,
-                        type: "success"
-                      });
+                        this.$message.success({
+                            showClose: true,
+                            message: response.data.message,
+                            type: "success"
+                        });
                     })
                     .catch((error) => {
                         this.$message.error('Failed to update!');
                     })
-              this.btnLoading = false;
+                    .finally(() => {
+                        this.btnLoading = false; // Move this to finally to ensure it runs
+                    });
             },
             renderTableCell(value, column, row) {
                 if (column.data_type == 'image') {

@@ -77,7 +77,7 @@ class TableItemsController extends Controller
 
     public function update(Request $request, $id)
     {
-        $rowId = intval($id);
+        $rowId = intval(Arr::get($request->all(), 'row_id'));
 
         $row = NinjaTableItem::where('id', $rowId)->first();
 
