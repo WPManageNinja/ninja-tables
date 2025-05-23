@@ -15,12 +15,16 @@
                 </div>
 
                 <div v-if="activeTab === 'appearance'">
-                    <div class="mt-6">
-                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_before_table">{{$t('Show Cart Details Before Table')}}</el-checkbox>
-                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_button">{{$t('Show Go to Cart Button')}}</el-checkbox>
-                        <br>
-                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_after_table">{{$t('Show Cart Details After Table')}}</el-checkbox>
-                        <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_checkout_button">{{$t('Show Checkout Button')}}</el-checkbox>
+                    <div class="flex items-center gap-4  mt-6">
+                        <div>
+                            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_before_table">{{$t('Show Cart Details Before Table')}}</el-checkbox>
+                            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_after_table">{{$t('Show Cart Details After Table')}}</el-checkbox>
+                        </div>
+
+                        <div>
+                            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_cart_button">{{$t('Show Go to Cart Button')}}</el-checkbox>
+                            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="appearance.show_checkout_button">{{$t('Show Checkout Button')}}</el-checkbox>
+                        </div>
                     </div>
 
                     <div class="flex items-center gap-4 mt-6">

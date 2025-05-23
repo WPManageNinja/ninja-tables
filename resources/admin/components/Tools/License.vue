@@ -1,12 +1,13 @@
 <template>
     <div class="nt-table-license-content">
         <div class="nt-license-header">
-            <div class="text-[18px] font-[600] text-[#0E121B]" v-if="is_valid == 'valid'">
-                {{ $t('Your License is Active') }}
+            <div v-if="is_valid == 'valid'">
+                <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('License') }}</div>
+                <div class="nt-instruction text-[14px] font-[400] text-[#0E121B] my-5">{{ $t('Your License is Active') }}</div>
             </div>
-            <div class="text-[18px] font-[600] text-[#0E121B]" v-loading="checkingLicense"
-                 v-else-if="is_valid == 'expired'">
-                {{ $t('Licensing has been expired') }}
+            <div v-loading="checkingLicense" v-else-if="is_valid == 'expired'">
+                <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('License') }}</div>
+                <div class="nt-instruction text-[14px] font-[400] text-[#0E121B] my-5">{{ $t('Licensing has been expired') }}</div>
             </div>
             <div v-else>
                 <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Licensing') }}</div>
@@ -23,34 +24,32 @@
             </div>
         </div>
         <div v-loading="checkingLicense" class="nt-license-content mt-4">
-            <div class="text-[16px] font-[500] text-center text-[#0E121B] my-4" v-if="is_valid == 'valid'">
+            <div class="text-[16px] font-[500] text-center text-[#0E121B] my-4 nt-instruction" v-if="is_valid == 'valid'">
                 {{ $t('Your license is active! Enjoy Ninja Tables Pro Add On') }}
-                <NinjaButton size="small" class="m-auto my-3" @click="deactivateLicense"
+                <NinjaButton class="m-auto my-3" @click="deactivateLicense"
                              :btn-text="$t('Deactivate License')"/>
                 <p v-if="renewHtml" v-html="renewHtml"></p>
             </div>
             <div v-else-if="is_valid == 'expired'">
                 <div v-html="renewLicenseHtml"></div>
-                <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
+                <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px] nt-instruction">
                         <span>
                             {{ $t('If you already renewed your license then please') }}
-                        <a @click.prevent="get_license_info" class="text-blue-500 underline"
-                           href="#">{{ $t('click here to check again') }}</a>
+                        <a @click.prevent="get_license_info" class="nt-link" target="_blank"
+                           href="#">{{ $t('click here to check again.') }}</a>
                         </span>
-
-                    <span>
-                        {{ $t('Have a new license key? Please ') }}
+                        <span>
+                        {{ $t(' Have a new license key? Please ') }}
                         <a href="#" @click.prevent="enter_new_license = true"
-                           class="text-blue-500 underline">{{ $t('click here') }}</a>
-                    </span>
+                           class="nt-link">{{ $t('click here') }}</a>
+                        </span>
 
                 </div>
                 <div v-if="enter_new_license" class="my-4 flex flex-col">
                     <p class="my-2 text-[16px] font-[500] text-[#3C434A]">{{ $t('Enter your license key') }}</p>
                     <div class="w-1/2">
                         <NinjaInput size="small" v-model="licenseKey" placeholder="License Key"/>
-                        <NinjaButton class="my-3" v-loading="doing_ajax" @click="activateLicense" type="primary"
-                                     size="small" :btn-text="$t('Activate Pro')"/>
+                        <NinjaButton class="my-3" v-loading="doing_ajax" @click="activateLicense" type="primary" :btn-text="$t('Activate Pro')"/>
                         <p v-html="error_message" v-if="error_message"></p>
                     </div>
                 </div>
@@ -59,8 +58,7 @@
                 <p class="my-2 text-[16px] font-[400] text-[#3C434A]">{{ $t('Enter your license key') }}</p>
                 <div class="w-1/2">
                     <NinjaInput size="small" v-model="licenseKey" placeholder="License Key"/>
-                    <NinjaButton class="my-3" v-loading="doing_ajax" @click="activateLicense" type="primary"
-                                 size="small" :btn-text="$t('Activate Pro')"/>
+                    <NinjaButton class="my-3" v-loading="doing_ajax" @click="activateLicense" type="primary" :btn-text="$t('Activate Pro')"/>
                     <p v-html="error_message" v-if="error_message"></p>
                 </div>
             </div>

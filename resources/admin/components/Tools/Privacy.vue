@@ -39,16 +39,14 @@
                 </div>
 
                 <div>
-                    <NinjaButton type="primary" size="small" @click="store" :btn-text="$t('Save')" />
+                    <NinjaButton type="primary" @click="store" :btn-text="$t('Save')" />
                 </div>
             </div>
 
-            <div v-else class="w-full overflow-hidden text-center">
-                <h3 class="text-[16px] font-[500] text-[#0E121B] mb-4">
-                    Permission is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
-                </h3>
-                <div class="flex justify-center">
-                    <a v-if="!has_pro"
+            <div v-else class="w-full overflow-hidden text-center nt-instruction">
+                <h3 class="text-[16px] font-[500] text-[#0E121B] my-4">{{ $t('Activate Ninja Tables Pro Add-on plugin to unlock this feature') }}</h3>
+                <div class="flex justify-center mb-4">
+                    <a v-if="!hasPro"
                        href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                        target="_blank">
                         <NinjaButton
