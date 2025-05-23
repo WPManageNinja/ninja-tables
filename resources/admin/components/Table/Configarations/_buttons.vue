@@ -8,15 +8,16 @@
             {{ $t("You can enable/disable print and csv export settings here") }}
         </div>
 
-        <div v-if="!hasPro" class="w-full overflow-hidden text-center my-6">
-            <h3 class="text-[16px] font-[500] text-[#0E121B] mb-4">
+        <div v-if="!hasPro" class="nt-instruction w-full overflow-hidden text-center my-6">
+            <h3 class="text-[16px] font-[500] text-[#0E121B] my-4">
                 Export CSV and Table Print is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
             </h3>
-            <div class="flex justify-center">
+            <div class="flex justify-center mb-4">
                 <a v-if="!has_pro"
                    href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                    target="_blank">
                     <NinjaButton
+                        size="small"
                         type="danger"
                         :btnText="$t('Get Pro')"
                     />
