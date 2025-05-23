@@ -442,6 +442,12 @@
     }
   }
 
+  .el-input.el-date-editor--datetime {
+    .el-input__wrapper {
+      border: none;
+    }
+  }
+
   .ndt-table-config_custom_filter {
     .el-table--border {
       th:first-of-type {
