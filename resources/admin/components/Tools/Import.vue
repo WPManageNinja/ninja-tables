@@ -163,8 +163,8 @@
                             </template>
                         </el-table-column>
                         <el-table-column
+                                width="250"
                                 label="Action"
-                                align="center"
                         >
                             <template #default="scope">
                                 <div class="flex items-center gap-2">

@@ -9,9 +9,9 @@
             <div class="ninja_tables_radio_group my-3">
                 <el-radio-group v-model="ninja_suppress_error">
                     <el-space direction="vertical" alignment="start">
-                        <el-radio :value="'log_silently'"  border>Console Log JS Errors Silently</el-radio>
-                        <el-radio :value="'yes'"  border>Handle Error But don't Log</el-radio>
-                        <el-radio :value="'no'" border>Don't Handle Global Javascript Errors (Default)</el-radio>
+                        <el-radio :value="'log_silently'"  border>{{ $t('Console Log JS Errors Silently') }}</el-radio>
+                        <el-radio :value="'yes'"  border>{{ $t(`Handle Error But don't Log`) }}</el-radio>
+                        <el-radio :value="'no'" border>{{ $t(`Don't Handle Global Javascript Errors (Default)`) }}</el-radio>
                     </el-space>
                 </el-radio-group>
                 <NinjaButton class="my-3" type="primary" @click="storeSettings" :btn-text="$t('Update Global Settings')"/>

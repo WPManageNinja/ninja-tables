@@ -36,6 +36,12 @@ export const manageDataElement = {
                 'text-align': this.item.data.style.alignment
             }
         },
+        ratingTextAlign () {
+           return {
+               'display': 'flex',
+               'justify-content': this.item.data.style.alignment
+           }
+        },
         dBlockAlign() {
             const alignment = this.item.data.style.alignment;
             if (alignment === 'left') {

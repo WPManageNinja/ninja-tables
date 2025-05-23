@@ -42,7 +42,7 @@
                 :show-score="showRatingScore"
                 :text-color="`${item.data.style.color === '' ? setting.global_styling.options.color.value : item.data.style.color}`"
                 :max="item.data.style.maxStar" :colors='starRatingStyling'
-                :style="[ratingStyle, textAlign, padding]"></el-rate>
+                :style="[ratingStyle, padding, ratingTextAlign]"></el-rate>
         </span>
         <span v-else-if="item.data.type === 'icon'">
             <span :style="[padding, displayBlock]" class="hover-item">

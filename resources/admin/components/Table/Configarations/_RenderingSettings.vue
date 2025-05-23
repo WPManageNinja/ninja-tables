@@ -62,7 +62,7 @@
                         <div v-if="config.table.hasCacheFeature" class="mb-3 text-[16px] font-[500]">{{ $t("Disable Caching") }}
                             <el-tooltip placement="right" effect="light"
                                         popper-class="nt-custom-tooltip"
-                                        content="To optimize and load faster, we cache the table contents. It's not recommended to disable caching unless you know what you are doing.">
+                                        :content="$t(`To optimize and load faster, we cache the table contents. It's not recommended to disable caching unless you know what you are doing.`)">
                                 <el-icon class="tooltip-icon-color">
                                     <InfoFilled/>
                                 </el-icon>
@@ -82,7 +82,7 @@
                         <div v-if="config.table.hasExternalCachingInterval" class="w-1/2">
                             <div class="mb-2 text-[14px] font-[500]">{{ $t('Caching Interval (In Minutes)') }}</div>
                             <NinjaInput type="number" size="small" v-model="tableSettings.caching_interval"/>
-                            <p>Keep Blank or 0 to disable caching for table data</p>
+                            <p>{{ $t('Keep Blank or 0 to disable caching for table data') }}</p>
                             <p v-if="tableSettings.caching_interval > 60">Current Caching Interval:
                                 <b>{{ (tableSettings.caching_interval / 60).toFixed(2) }} hours</b></p>
                         </div>
@@ -94,7 +94,7 @@
                             <div class="mb-3 text-[16px] font-[500]">{{ $t("Enable Full HTML Cache") }}
                                 <el-tooltip placement="right" effect="light"
                                             popper-class="nt-custom-tooltip"
-                                            content="If you enable this then ninja tables will cache the full html of the table and render that without interact with database. You can set the time how many minutes it will cache each iteration.">
+                                            :content="$t('If you enable this then ninja tables will cache the full html of the table and render that without interact with database. You can set the time how many minutes it will cache each iteration.')">
                                     <el-icon class="tooltip-icon-color">
                                         <InfoFilled/>
                                     </el-icon>
