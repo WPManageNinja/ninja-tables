@@ -74,7 +74,12 @@
                             </div>
                         </div>
                         <div class="p-4">
+                            <el-icon v-if="fetching" class="is-loading">
+                                <Loading/>
+                            </el-icon>
+
                             <el-checkbox-group
+                                v-else
                                 v-model="selectedFields"
                                 @change="handleFieldsSelectionChange"
                                 class="nt-checkbox-group"
@@ -109,8 +114,12 @@
                     </div>
                 </div>
                 <div class="p-4">
+                    <el-icon v-if="fetching" class="is-loading">
+                        <Loading/>
+                    </el-icon>
 
                     <el-checkbox-group
+                        v-else
                         v-model="selectedFields"
                         @change="handleFieldsSelectionChange"
                         class="nt-checkbox-group pb-2"

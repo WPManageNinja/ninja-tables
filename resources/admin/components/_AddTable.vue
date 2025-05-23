@@ -2,11 +2,11 @@
     <el-container class="ninja-add-table">
         <el-aside v-if="!table.ID" class="ninja-tables-aside">
             <el-menu
-                 :collapse="isCollapse"
                  :default-active="activeTabName"
                  background-color="#FFFFFF"
                  text-color="#565865"
                  active-text-color="#335CFF"
+                 min-width="200px"
             >
                 <el-menu-item @click="activeTabName = 'default'" index='default'>
                     <span>Default</span>
@@ -207,7 +207,6 @@
                         ]
                     }
                 },
-                isCollapse: false,
                 has_woo: !!window.ninja_table_admin.has_woocommerce,
                 initialData : {},
             }
@@ -294,20 +293,9 @@
             fireTableCreated(table_id) {
                 this.$emit('table_inserted', table_id);
             },
-            checkScreenSize() {
-                if (window.innerWidth < 1000) {
-                    this.isCollapse = true;
-                } else {
-                    this.isCollapse = false;
-                }
-            }
         },
         mounted() {
-            this.checkScreenSize();
             this.createDragAndDropTable();
-            jQuery(window).resize(() => {
-                this.checkScreenSize();
-            });
         }
     }
 </script>

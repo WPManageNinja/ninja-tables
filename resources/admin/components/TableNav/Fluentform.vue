@@ -3,8 +3,7 @@
         <el-collapse class="nt_accordion_content_white">
             <el-collapse-item name="1">
                 <template #title>
-                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                    <strong>Edit:</strong> {{isEditableMessage}}
+                    {{isEditableMessage}}
                 </template>
                 <FluentForm :tableCreated="tableCreated" :editing="true" :config="config" />
             </el-collapse-item>
