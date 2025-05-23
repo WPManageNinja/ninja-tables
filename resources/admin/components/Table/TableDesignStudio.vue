@@ -653,20 +653,20 @@
                                     </el-select>
                                 </span>
                             </div>
-                            <div v-else-if="tableSettings.sorting_type == 'by_column'">
-                                <label>{{ $t('Select Column') }}
-                                    <select v-model="tableSettings.sorting_column">
+                            <div v-else-if="tableSettings.sorting_type == 'by_column'" class="flex items-center justify-between gap-2">
+                                <div class="w-full">{{ $t('Select Column') }}
+                                    <el-select size="small" class="ninja-select" v-model="tableSettings.sorting_column">
                                         <option v-for="column in config.columns" :key="column.key" :value="column.key">
                                             {{ column.name }}
                                         </option>
-                                    </select>
-                                </label>
-                                <label>{{ $t('Sort Type') }}
-                                    <select v-model="tableSettings.sorting_column_by">
-                                        <option value="ASC">Ascending Way</option>
-                                        <option value="DESC">Descending Way</option>
-                                    </select>
-                                </label>
+                                    </el-select>
+                                </div>
+                                <div class="w-full">{{ $t('Sort Type') }}
+                                    <el-select size="small" class="ninja-select" v-model="tableSettings.sorting_column_by">
+                                        <el-option value="ASC">Ascending Way</el-option>
+                                        <el-option value="DESC">Descending Way</el-option>
+                                    </el-select>
+                                </div>
                             </div>
                             <div v-else-if="config.table.isSortable && tableSettings.sorting_type == 'manual_sort'">
                                 <p>You can sort the table data from <b>Table Rows</b> Manually. Click Sort Manually
@@ -791,7 +791,7 @@
                             </div>
                             <div class="font">
                                 <label>{{ $t('Font Size') }}</label>
-                                <el-input :min="1" :max="50" v-model="tableSettings.table_font_size" />
+                                <NinjaInput size="small" type="number" :min="1" :max="50" v-model="tableSettings.table_font_size" />
                             </div>
                         </div>
                     </el-tab-pane>
