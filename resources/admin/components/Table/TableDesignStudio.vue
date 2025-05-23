@@ -673,7 +673,7 @@
                                     checkbox to sort the data using drag and drop feature</p>
                             </div>
 
-                            <NinjaButton type="secondary" v-if="tableSettings.sorting_type" size="small"
+                            <NinjaButton type="secondary" v-if="tableSettings.sorting_type" size="small" class="mt-2"
                                 @click="tableSettings.sorting_type = ''">reset
                             </NinjaButton>
 
@@ -791,7 +791,7 @@
                             </div>
                             <div class="font">
                                 <label>{{ $t('Font Size') }}</label>
-                                <el-input-number :min="1" :max="50" v-model="tableFontSize"></el-input-number>
+                                <el-input :min="1" :max="50" v-model="tableSettings.table_font_size" />
                             </div>
                         </div>
                     </el-tab-pane>
