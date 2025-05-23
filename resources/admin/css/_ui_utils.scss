@@ -539,4 +539,13 @@
     }
   }
 
+  .el-color-predefine {
+    .el-color-predefine__colors {
+      .el-color-predefine__color-selector div {
+        border: 1px solid #E1E4EA;
+        margin: 1px;
+      }
+    }
+  }
+
 }

@@ -22,18 +22,18 @@
                         placement="top">
                         <code class="copy flex p-[8px] rounded-[8px] border border-[#E1E4EA]"
                             :data-clipboard-text='`[ninja_tables id="${tableId}"]`'>
-                            <img :src="assetUrl('icons/copy-02.svg')" class="mr-2" alt="copy" />
+                            <img :src="assetUrl('icons/copy-02.svg')" width="18" height="18" class="mr-2 ml-1" alt="copy" />
                             [ninja_tables id="{{ tableId }}"]
                         </code>
                     </el-tooltip>
                 </div>
 
                 <router-link :to="{ name: 'help' }">
-                    <NinjaButton type="secondary" :icon="assetUrl('icons/computer.svg')"
-                        :btnText="$t('Documentation')" />
+                    <NinjaButton type="secondary" :icon="assetUrl('icons/document.svg')"
+                        :btnText="$t('Documentation')" iconSize="18px" />
                 </router-link>
                 <a :href="preview_url" target="_blank">
-                    <NinjaButton type="secondary" :icon="assetUrl('icons/view.svg')" :btnText="$t('Preview')" />
+                    <NinjaButton type="secondary" :icon="assetUrl('icons/view.svg')" :btnText="$t('Preview')" iconSize="18px" />
                 </a>
                 <a v-if="!has_pro"
                     href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"

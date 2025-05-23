@@ -5,7 +5,7 @@
             <el-collapse-item name="1">
                 <template #title>
                     <i class="header-icon el-icon-info el-text-info"></i>
-                    <p class="nt-form-label"> {{ $t('Edit: You may update the query settings here.') }}</p>
+                    <p class="nt-form-label"> {{ $t('You may update the query settings here.') }}</p>
                 </template>
 
                 <div class="flex rounded-[8px] bg-[#F5F7FA] w-fit p-2 my-3 gap-3">

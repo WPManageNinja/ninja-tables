@@ -15,7 +15,7 @@
         }"
     >
         <div v-if="loading" class="ninja-button-spinner mr-2"> </div>
-        <img v-else-if="icon" :src="icon" class="mr-1" />
+        <img v-else-if="icon" :src="icon" :width="iconSize" :height="iconSize" class="mr-1" />
         <template v-if="btnText">
             {{ btnText }}
         </template>
@@ -38,6 +38,10 @@ export default {
         icon: {
             type: String,
             default: null,
+        },
+        iconSize: {
+            type: String,
+            default: "18px",
         },
         disabled: {
             type: Boolean,

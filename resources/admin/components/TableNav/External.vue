@@ -3,8 +3,7 @@
         <el-collapse class="nt_accordion_content_white">
             <el-collapse-item name="1">
                 <template #title>
-                    <i class="header-icon el-icon-info el-text-info"></i>
-                    <strong>Edit:</strong> {{isEditableMessage}}
+                    {{isEditableMessage}}
                 </template>
 
                 <external-data-source

@@ -21,8 +21,7 @@
         >
             <el-collapse-item name="1">
                 <template #title>
-                    <i class="header-icon el-icon-info el-text-info"></i>
-                    <p class="nt-form-label"> {{ $t('Edit:') }} {{ $t(isEditableMessage) }}</p>
+                    {{ $t(isEditableMessage) }}
                 </template>
 
                 <div class="form-group my-5">
