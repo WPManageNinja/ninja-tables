@@ -35,12 +35,6 @@
                         <image-selector :adding_counter="adding_counter" :column="column" :newColumn="newColumn"></image-selector>
                     </div>
                     <div v-else-if="column.data_type === 'button' && has_pro">
-<!--                        <input-->
-<!--                            placeholder="Valid button URL"-->
-<!--                            type="url" :id="slugify(column.key)"-->
-<!--                            class="form-control"-->
-<!--                            v-model="newColumn[column.key]"-->
-<!--                        >-->
                         <NinjaInput
                             placeholder="Valid button URL"
                             type="url"
@@ -94,12 +88,12 @@
                     <el-table-column prop="name" label="Column" />
                     <el-table-column label="Background Color">
                         <template #default="scope">
-                            <el-color-picker v-model="item_settings.cell[scope.row.key]['background-color']" show-alpha />
+                            <ColorPicker :showValue="false" v-model="item_settings.cell[scope.row.key]['background-color']" />
                         </template>
                     </el-table-column>
                     <el-table-column label="Text Color">
                         <template #default="scope">
-                            <el-color-picker v-model="item_settings.cell[scope.row.key]['color']" show-alpha />
+                            <ColorPicker :showValue="false" v-model="item_settings.cell[scope.row.key]['color']" />
                         </template>
                     </el-table-column>
                 </el-table>
@@ -188,6 +182,7 @@
     import {assetUrl} from "../../utils/ninjatablesadmin";
     import NinjaButton from "../../@ui-utils/NinjaButton.vue";
     import ColorPicker from "../../@ui-utils/ColorPicker.vue";
+    import NinjaColorPicker from "../Extras/ColorPicker.vue";
 
     export default {
         name: 'add_data',
@@ -368,6 +363,7 @@
             this.initNewColumnObj();
         },
         components: {
+            NinjaColorPicker,
             ColorPicker,
             NinjaButton,
             NinjaInput,

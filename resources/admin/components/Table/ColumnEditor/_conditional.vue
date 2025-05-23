@@ -156,12 +156,8 @@
                     :disabled="!hasPro"
                 />
 
-                <div class="conditional_color_block" v-show="shouldShowColorPicker(condition)">
-                    <ninja-color-picker
-                        size="small"
-                        v-model="condition.targetValueColor"
-                        :disabled="!hasPro"
-                    ></ninja-color-picker>
+                <div v-show="shouldShowColorPicker(condition)" class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                    <ColorPicker :showValue="false" :disabled="!hasPro" v-model="condition.targetValueColor" />
                 </div>
             </el-col>
 
@@ -203,6 +199,7 @@
     import {Minus} from "@element-plus/icons-vue";
     import {assetUrl} from "../../../utils/ninjatablesadmin";
     import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
+    import ColorPicker from "../../../@ui-utils/ColorPicker.vue";
 
     export default {
         name: "Conditional",
@@ -217,10 +214,11 @@
             }
         },
         components: {
+            ColorPicker,
+            GetPro,
+            Minus,
             NinjaInput,
-          GetPro,
             NinjaColorPicker,
-            Minus
         },
         data() {
             return {

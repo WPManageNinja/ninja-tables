@@ -233,7 +233,7 @@
                 <NinjaInput v-model="activeEditor.to_placeholder" :placeholder="$t('To Placeholder')"/>
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" v-if="activeEditor.type === 'date_range'">
                 <label class="nt-form-label">
                     {{ $t('First Day') }}
 
