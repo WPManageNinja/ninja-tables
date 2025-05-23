@@ -67,7 +67,7 @@
                                 :style="[tdThActiveMargin, thInlineStyle(header)]">
                                 <template
                                     v-if="(headerName(table.columnIndex) === header) && tdIds.length === 1 && ((!merge.visible) || split.visible)">
-                                    <el-dropdown trigger="click" >
+                                    <el-dropdown trigger="click" class="column-options mt-[6px]">
                                         <span class="el-dropdown-link">
                                             <el-icon
                                                 :class="index === table.columnIndex ? 'i-active' : ''"
@@ -683,7 +683,7 @@ export default {
 
                     &.th-active {
                         display: block;
-                        background-color: #409EFF;
+                        background-color: #335cff;
                         margin-left: var(--td-th-active-margin);
                         margin-top: var(--margin-top);
 
@@ -817,7 +817,7 @@ export default {
                     }
 
                     .td-active {
-                        background-color: #409EFF;
+                        background-color: #335cff;
                         position: sticky;
                         position: -webkit-sticky;
                         z-index: 99;

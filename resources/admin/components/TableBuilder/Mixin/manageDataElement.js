@@ -198,8 +198,13 @@ export const manageDataElement = {
             return false;
         },
         scoreTemplate() {
+            // const ratingValue = this.item.data.value;
+            // return Number.isInteger(ratingValue) ? (`${ratingValue}/${this.item.data.style.maxStar}`) : (`${ratingValue.toFixed(1)}/${this.item.data.style.maxStar}`)
             const ratingValue = this.item.data.value;
-            return Number.isInteger(ratingValue) ? (`${ratingValue}/${this.item.data.style.maxStar}`) : (`${ratingValue.toFixed(1)}/${this.item.data.style.maxStar}`)
+            const numericValue = Number(ratingValue);
+            return Number.isInteger(numericValue) ? 
+                `${numericValue}/${this.item.data.style.maxStar}` : 
+                `${Number.isNaN(numericValue) ? 0 : numericValue.toFixed(1)}/${this.item.data.style.maxStar}`;
         },
         starRatingStyling() {
             const starRatingColor = this.item.data.style.color;
