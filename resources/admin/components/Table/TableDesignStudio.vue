@@ -625,7 +625,7 @@
                                 </el-radio-group>
                             </div>
                             <div class="font-[500] flex items-baseline gap-1">
-                                <el-checkbox v-model="tableSettings.nt_search_full_width" :label="$t(`Make search input as full width ${!has_pro ? '(Pro Only)' : ''}`)" :disabled="!has_pro"/>
+                                <el-checkbox true-value="1" false-value="0" v-model="tableSettings.nt_search_full_width" :label="$t(`Make search input as full width ${!has_pro ? '(Pro Only)' : ''}`)" :disabled="!has_pro"/>
                                 <el-tooltip placement="top-end" effect="light"
                                     content="If You enable this, Then the search input will take all the available space (100% width)">
                                     <el-icon class="tooltip-icon-color !top-0">
@@ -922,7 +922,7 @@ export default {
                 classes.push('nt_hide_breakpoint_labels');
             }
 
-            if (this.tableSettings.nt_search_full_width) {
+            if (Number(this.tableSettings.nt_search_full_width)) {
                 classes.push('nt_search_full_width');
             }
 
