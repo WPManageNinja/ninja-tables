@@ -157,7 +157,7 @@
                 />
 
                 <div v-show="shouldShowColorPicker(condition)" class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                    <ColorPicker :disabled="!hasPro" v-model="condition.targetValueColor" />
+                    <ColorPicker :showValue="false" :disabled="!hasPro" v-model="condition.targetValueColor" />
                 </div>
             </el-col>
 

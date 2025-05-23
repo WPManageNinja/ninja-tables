@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center gap-3 bg-white rounded-[8px]">
+    <div class="flex items-center gap-3 rounded-[8px]">
         <p v-if="labelShow" class="text-base text-black dark:text-neutral-100">{{ label }}</p>
         <el-color-picker
             class="ml-2 ninja-data-tables_color_picker"
@@ -10,8 +10,9 @@
             @active-change="activeColorChange"
             :disabled="disabled"
             show-alpha
+            color-format="hex"
         />
-            <span class="font-[500]">{{ modelValue }}</span>
+            <span class="font-[500]" v-if="showValue">{{ modelValue }}</span>
     </div>
 </template>
 
@@ -22,6 +23,10 @@ export default {
         label: String,
         modelValue: String,
         labelShow: {
+            type: Boolean,
+            default: true
+        },
+        showValue: {
             type: Boolean,
             default: true
         },
