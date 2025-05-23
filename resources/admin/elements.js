@@ -56,7 +56,6 @@ import {
     ElTag
 } from 'element-plus'
 import 'element-plus/dist/index.css'
-import { createApp } from 'vue'
 
 // Create a plugin to install all Element Plus components
 const ElementPlus = {

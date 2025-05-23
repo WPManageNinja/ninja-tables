@@ -6,9 +6,9 @@
             <div v-if="!hasPro" class="nt-instruction w-full overflow-hidden text-center p-[30px] mb-4">
                 <h1 class="my-3">{{ $t('Frontend Editing Settings') }}</h1>
                 <h3 class="text-[16px] font-[500] text-[#0E121B] mb-2">
-                    Frontend Editing is a pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
+                    {{ $t('Frontend Editing is a pro only features. Please purchase') }} <b>"Ninja Tables Pro"</b> {{ $t('to use this feature') }}
                 </h3>
-                <p class="nt-modal-description">Using this module, You can let your frontend users to add/edit/delete records based on user role. Also, You can separate the records by user submission.</p>
+                <p class="nt-modal-description">{{ $t('Using this module, You can let your frontend users to add/edit/delete records based on user role. Also, You can separate the records by user submission.') }} </p>
                 <div class="flex justify-center my-4">
                     <a v-if="!hasPro"
                        href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"

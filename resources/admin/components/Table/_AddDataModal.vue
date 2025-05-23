@@ -306,7 +306,9 @@
                             type: 'error'
                         });
                     })
-                   this.btnLoading = false;
+                    .finally(() => {
+                        this.btnLoading = false;
+                    });
             },
             closeModal() {
                 this.$emit('modal_close');
@@ -333,10 +335,14 @@
                     this.item_settings.cell = {};
                 }
                 each(this.columns, (column) => {
-                    if (!this.item_settings.cell[column.key]) {
-                        this.item_settings.cell[column.key] = {};
-                    }
+                    this.item_settings.cell[column.key] = {};
                 });
+
+                if (this.item_settings.text_color || this.item_settings.bg_color) {
+                    this.item_settings.text_color = '';
+                    this.item_settings.row_bg = '';
+                }
+
                 if (this.item) {
                     this.created_at = this.item.created_at;
                 }

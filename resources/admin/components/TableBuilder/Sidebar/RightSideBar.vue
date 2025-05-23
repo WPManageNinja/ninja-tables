@@ -50,6 +50,7 @@
                         </div>
                         <div class="create-button">
                             <NinjaButton
+                                class="w-full"
                                 @click="createTable('default')"
                                 type="primary"
                                 size="small"
@@ -78,8 +79,8 @@
                         :on-success="handleFileSuccess"
                         :on-remove="handleRemove"
                     >
-                        <el-icon><UploadFilled /></el-icon>
-                        <div class="el-upload__text">{{ $t('Drop file here or ') }}<em>{{ $t('click to upload') }}</em>
+                        <img class="mx-auto" :src="assetUrl('icons/upload-cloud-2-line.svg')"/>
+                        <div class="el-upload__text">{{ $t('Drop file here or ') }}<span class="nt-link">{{ $t('click to upload') }}</span>
                         </div>
                     </el-upload>
                     <div class="import-button" v-if="(file.name || url)">

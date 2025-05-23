@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" class="nt_tab_design_drag">
+    <el-tabs v-model="activeName" class="nt_tab_design_drag !border-none">
       <i @click="lock = !lock"
          style="font-size: 25px; text-align: right; display: block"
          :class="`el-icon-${lock === false ? 'unlock' : 'lock'}`">

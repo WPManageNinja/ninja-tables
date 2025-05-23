@@ -59,7 +59,7 @@
                 {{ tableTab.title }}
                 </router-link>
             </div>
-            <router-view ref="childComponent" v-if="config" :config="config" :getColumnSettings="getSettings"></router-view>
+            <router-view v-if="config" :config="config" :getColumnSettings="getSettings"></router-view>
         </div>
 
         <el-dialog
@@ -191,7 +191,7 @@ export default {
                 },
                 {
                     route: 'import-export',
-                    title: 'Import - Export'
+                    title: 'Import / Export'
                 }
             ]);
         },
