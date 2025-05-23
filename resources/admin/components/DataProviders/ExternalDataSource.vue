@@ -74,9 +74,11 @@
                             </div>
                         </div>
                         <div class="p-4">
-                            <el-icon v-if="fetching" class="is-loading">
-                                <Loading/>
-                            </el-icon>
+                            <div v-if="fetching" class="text-center mt-2 text-gray-500 text-sm">
+                                <el-icon class="is-loading">
+                                    <Loading />
+                                </el-icon>
+                            </div>
 
                             <el-checkbox-group
                                 v-else
@@ -114,9 +116,12 @@
                     </div>
                 </div>
                 <div class="p-4">
-                    <el-icon v-if="fetching" class="is-loading">
-                        <Loading/>
-                    </el-icon>
+
+                    <div v-if="fetching" class="text-center mt-2 text-gray-500 text-sm">
+                        <el-icon class="is-loading">
+                            <Loading />
+                        </el-icon>
+                    </div>
 
                     <el-checkbox-group
                         v-else

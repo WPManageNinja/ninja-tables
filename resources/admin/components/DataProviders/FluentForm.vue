@@ -55,7 +55,14 @@
                         </div>
                     </div>
                     <div class="p-4">
+                        <div v-if="fetching" class="text-center mt-2 text-gray-500 text-sm">
+                            <el-icon class="is-loading">
+                                <Loading />
+                            </el-icon>
+                        </div>
+
                         <el-checkbox-group
+                            v-else
                             v-model="selectedFields"
                             @change="handleFieldsSelectionChange"
                             class="nt-checkbox-group"
