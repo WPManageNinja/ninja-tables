@@ -14,7 +14,7 @@
                         <el-radio :value="'no'" border>Don't Handle Global Javascript Errors (Default)</el-radio>
                     </el-space>
                 </el-radio-group>
-                <NinjaButton class="my-3" type="primary" @click="storeSettings" size="small" :btn-text="$t('Update Global Settings')"/>
+                <NinjaButton class="my-3" type="primary" @click="storeSettings" :btn-text="$t('Update Global Settings')"/>
             </div>
             <hr class="my-3">
 
@@ -27,8 +27,8 @@
                 }}
             </div>
             <div class="my-3 flex gap-3">
-                <NinjaButton type="primary" @click="clearTableCache" size="small" :btn-text="$t('Clear Table Cache')"/>
-                <NinjaButton type="danger" @click="clearExternalCache" size="small" :btn-text="$t('Clear External Caches')"/>
+                <NinjaButton type="primary" @click="clearTableCache" :btn-text="$t('Clear Table Cache')"/>
+                <NinjaButton type="danger" @click="clearExternalCache" :btn-text="$t('Clear External Caches')"/>
             </div>
         </div>
     </div>

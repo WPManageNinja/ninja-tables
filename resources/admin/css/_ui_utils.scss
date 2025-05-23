@@ -416,7 +416,8 @@
 
   .nt-input-append {
     .el-input__wrapper {
-      border-radius: 7px 0 0 7px !important;
+      border-radius: 8px 0 0 8px !important;
+      box-shadow: none;
 
       .el-input__inner {
         border: none;
@@ -430,8 +431,12 @@
 
     .el-input-group__append {
       .el-select {
+        border-radius: 0 8px 8px 0;
         .el-input__wrapper {
-          border: none;
+          border-radius: 0 8px 8px 0;
+          .el-input__inner {
+            border-radius: 0 8px 8px 0;
+          }
         }
       }
     }
@@ -473,6 +478,13 @@
         }
       }
     }
+  }
+
+  .nt-custom-tooltip {
+    max-width: 400px;
+    word-wrap: break-word;
+    line-height: 1.4;
+    padding: 10px;
   }
 
   .el-icon.tooltip-icon-color {

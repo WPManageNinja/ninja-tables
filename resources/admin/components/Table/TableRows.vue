@@ -10,6 +10,7 @@
                     :tableCreated="reloadSettingsAndData"
                 />
             </div>
+
             <div v-else-if="dataSourceType.indexOf('csv') !== -1" class="nt-table-edit-nav">
                 <external-source-nav
                     :is-editable-message="isEditableMessage"
@@ -77,71 +78,79 @@
         </template>
 
         <div class="all_tables_card">
-            <div class="default_nav flex-wrap gap-y-5">
-                <div class="default_nav_left">
-                    <div class="bulk_action">
-                        <select class="bulk_select" v-model="bulkAction">
-                            <option value="-1" selected>{{ $t('Bulk Actions') }}</option>
-                            <option value="delete" label="Delete">{{ $t('Delete Tables') }}</option>
-                        </select>
-                        <button class="bulk_action_btn" @click="handleBulkAction">
-                            Apply
-                        </button >
-                    </div>
+
+            <div v-if="dataSourceType === 'default'">
+                <div v-if="!loading && !columns.length && isEditable" class="w-full flex flex-col justify-center items-center h-[200px]" >
+                    <h3 class="nt-modal-title mb-4">{{ $t('To get started please add table columns') }}</h3>
+                    <NinjaButton size="small" @click="addColumn" :icon="assetUrl('icons/add.svg')" :btnText="$t('Add Column')" />
                 </div>
 
-                <div class="default_nav_right flex-wrap gap-y-5">
-                    <div class="search_option">
-                        <NinjaInput
-                            v-model="searchString"
-                            placeholder="Search"
-                            prefix-icon="icons/search.svg"
-                            @keyup.enter="getData"
-                        />
+                <div v-else class="default_nav flex-wrap gap-y-5">
+                    <div class="default_nav_left">
+                        <div class="bulk_action">
+                            <select class="bulk_select" v-model="bulkAction">
+                                <option value="-1" selected>{{ $t('Bulk Actions') }}</option>
+                                <option value="delete" label="Delete">{{ $t('Delete Tables') }}</option>
+                            </select>
+                            <button class="bulk_action_btn" @click="handleBulkAction">
+                                Apply
+                            </button >
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-3 ml-3">
-                        <div class="flex items-center">
-                            <el-checkbox v-model="isCompact" label="Compact View" class="!mr-1"/> 
-                            <span class="mr-1 -mt-1">|</span>
-                            <span>
-                                <el-icon @click="show_meta = !show_meta"><Notification /></el-icon>
-                            </span>
-                         
+                    <div class="default_nav_right flex-wrap gap-y-5">
+                        <div class="search_option">
+                            <NinjaInput
+                                v-model="searchString"
+                                placeholder="Search"
+                                prefix-icon="icons/search.svg"
+                                @keyup.enter="getData"
+                            />
                         </div>
-                            <el-checkbox name="checkbox" v-model="sorting">
+
+                        <div class="nav_options">
+                            <div class="flex items-center gap-x-2">
+                                <label for="compact_view" class="form_group font-normal">
+                                    <input id="compact_view" type="checkbox" v-model="isCompact"/> Compact View
+                                </label>
+
+                                <label>
+                                    | <el-icon @click="show_meta = !show_meta"><Notification /></el-icon>
+                                </label>
+                            </div>
+
+                            <label class="sorting_option form_group font-normal">
+                                <input type="checkbox" name="checkbox" v-model="sorting">
                                 Sort Manually
                                 <template v-if="!has_pro">(Pro Feature)</template>
-                            </el-checkbox>
-                    </div>
+                            </label>
 
-                    <div class="actions_buttons">
-                        <NinjaButton
-                            @click="add"
-                            type="secondary"
-                            :btnText="$t('Add Data')"
-                            class="mx-2"
-                        />
+                        </div>
 
-                        <NinjaButton
-                            @click="addColumn"
-                            :icon="assetUrl('icons/add.svg')"
-                            :btnText="$t('Add Column')"
-                        />
+                        <div class="actions_buttons">
+                            <NinjaButton
+                                @click="add"
+                                type="secondary"
+                                :btnText="$t('Add Data')"
+                                class="mx-2"
+                            />
 
+                            <NinjaButton
+                                @click="addColumn"
+                                :icon="assetUrl('icons/add.svg')"
+                                :btnText="$t('Add Column')"
+                            />
+
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div v-if="!loading && !columns.length && isEditable" type="warning"
-                 style="margin-top: 15px; text-align: center" class="instruction_block">
-                <h3>{{ $t('To get started please add table columns') }}</h3>
-                <el-button @click="addColumn()" type="primary" size="small">
-                    Add Column
-                </el-button>
+            <div v-else class="default_nav flex-wrap -mb-2">
+                 {{ dataSourceType }} Table
             </div>
 
-            <template v-if="columns.length">
+            <div v-if="columns.length">
                 <el-table
                     @sort-change="onSortChange"
                     class="ninja_tables js-sortable-table"
@@ -241,33 +250,33 @@
                         </el-table-column>
                     </template>
                 </el-table>
-            </template>
 
-            <div class="ninja-pagination-wrapper flex-wrap gap-y-5 overflow-scroll">
-                <div class="pagination-page-change-option">
+                <div class="ninja-pagination-wrapper flex-wrap gap-y-5 overflow-scroll">
+                    <div class="pagination-page-change-option">
                        <span class="flex-shrink-0">
                            Total {{ paginate.total }}
                        </span>
 
-                    <el-select class="min-w-[100px]" v-model="paginate.per_page" @change="handleSizeChange">
-                        <el-option value="10">{{ $t('10/page') }}</el-option>
-                        <el-option value="15">{{ $t('15/page') }}</el-option>
-                        <el-option value="20">{{ $t('20/page') }}</el-option>
-                        <el-option value="50">{{ $t('50/page') }}</el-option>
-                        <el-option value="100">{{ $t('100/page') }}</el-option>
-                    </el-select>
-                </div>
+                        <el-select class="min-w-[100px]" v-model="paginate.per_page" @change="handleSizeChange">
+                            <el-option value="10">{{ $t('10/page') }}</el-option>
+                            <el-option value="15">{{ $t('15/page') }}</el-option>
+                            <el-option value="20">{{ $t('20/page') }}</el-option>
+                            <el-option value="50">{{ $t('50/page') }}</el-option>
+                            <el-option value="100">{{ $t('100/page') }}</el-option>
+                        </el-select>
+                    </div>
 
-                <el-pagination
-                    class="ninja-pagination"
-                    @size-change="handleSizeChange"
-                    @current-change="goToPage"
-                    :current-page.sync="paginate.current_page"
-                    :page-sizes="[10, 20, 50, 100, 500, 2000]"
-                    :page-size="paginate.per_page"
-                    layout="prev, pager, next, jumper"
-                    :total="paginate.total">
-                </el-pagination>
+                    <el-pagination
+                        class="ninja-pagination"
+                        @size-change="handleSizeChange"
+                        @current-change="goToPage"
+                        :current-page.sync="paginate.current_page"
+                        :page-sizes="[10, 20, 50, 100, 500, 2000]"
+                        :page-size="Number(paginate.per_page)"
+                        layout="prev, pager, next, jumper"
+                        :total="paginate.total">
+                    </el-pagination>
+                </div>
             </div>
 
         </div>
@@ -284,16 +293,17 @@
             :width="'70%'"
         >
             <columns-editor
-            :dataSourceType="config.table.dataSourceType"
-            :model="currentEditingColumn"
-            :hasPro="has_pro"
-            :updating="true"
-            :columns="columns"
-            :settings="config.settings"
-            v-if="showColumnEditor && currentEditingColumn"
-            @store="storeSettings()"
-            @delete="deleteColumn()"
-            @cancel="showColumnEditor = false"
+                v-if="showColumnEditor && currentEditingColumn"
+                :dataSourceType="config.table.dataSourceType"
+                :model="currentEditingColumn"
+                :hasPro="has_pro"
+                :updating="true"
+                :columns="columns"
+                :settings="config.settings"
+                @store="storeSettings()"
+                @delete="deleteColumn()"
+                @cancel="showColumnEditor = false"
+                :hideCancel="true"
             />
         </el-dialog>
 
@@ -454,15 +464,15 @@
             },
             dataSourceType() {
                 const c = this.config;
-                return (c && 'dataSourceType' in c.table) ? c.table.dataSourceType : 'default';
+                return (c && c.table && 'dataSourceType' in c.table) ? c.table.dataSourceType : 'default';
             },
             isEditable() {
                 const c = this.config;
-                return (c && 'isEditable' in c.table) ? c.table.isEditable : true;
+                return (c && c.table && 'isEditable' in c.table) ? c.table.isEditable : true;
             },
             isEditableMessage() {
                 const c = this.config;
-                return (c && 'isEditableMessage' in c.table) ? c.table.isEditableMessage : null;
+                return (c && c.table && 'isEditableMessage' in c.table) ? c.table.isEditableMessage : null;
             }
         },
         methods: {
@@ -502,9 +512,9 @@
                       this.loading = false;
                     })
             },
-            addTableData() {
+            // addTableData() {
 
-            },
+            // },
             getItemNumber(index) {
                 return this.paginate.per_page * (this.paginate.current_page - 1) + (index + 1);
             },
@@ -522,10 +532,11 @@
                 }
             },
             deleteTable(tableId) {
-                this.$get("tables/"+tableId)
+                this.$del("tables/"+tableId)
                     .then((response) => {
                         this.fetchTables();
                         alert(response.message);
+                        this.getData();
                     })
                     .catch((error) => {
                         alert(error.responseJSON.data.message);
@@ -545,7 +556,10 @@
                 this.$confirm(this.$t('This will permanently delete the selected rows. Continue?'), 'Warning', {
                     confirmButtonText: this.$t('Yes, Delete'),
                     cancelButtonText: this.$t('Cancel'),
-                    type: 'warning'
+                    type: 'warning',
+                    customClass: 'nt-delete-confirm',
+                    confirmButtonClass: 'nt-delete-confirm-btn',
+                    cancelButtonClass: 'nt-delete-cancel-btn'
                 }).then(() => {
                     let ids = this.multipleSelection.map(item => item.id);
                     this.deleteItem(ids);
@@ -557,6 +571,23 @@
                 });
 
             },
+            confirmDeleteRows(id) {
+                this.$confirm('Are you sure, You want to delete this rows?', 'Warning', {
+                    confirmButtonText: 'Yes, Delete',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning',
+                    customClass: 'nt-delete-confirm',
+                    confirmButtonClass: 'nt-delete-confirm-btn',
+                    cancelButtonClass: 'nt-delete-cancel-btn'
+                }).then(() => {
+                    this.deleteItem(id);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: 'Delete canceled'
+                    });
+                });
+            },
             deleteItem(id) {
                 let data = {
 
@@ -566,7 +597,7 @@
 
                 let that = this;
 
-                this.$get('tables/'+this.tableId+'/item/delete', data)
+                this.$del('tables/'+this.tableId+'/item', data)
                     .then(response => {
                         this.$message({
                             showClose: true,
@@ -812,7 +843,6 @@
                 this.showColumnEditor = true;
             },
             storeSettings() {
-                console.log('storeSettings');
                 this.bus.emit('updateTableColumns', () => {
                     this.showColumnEditor = false;
                     this.currentEditingColumn = false;

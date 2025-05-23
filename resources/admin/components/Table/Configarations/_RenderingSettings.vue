@@ -59,17 +59,24 @@
                 </template>
                 <div class="mt-5">
                     <div class="border-b-solid">
+                        <div v-if="config.table.hasCacheFeature" class="mb-3 text-[16px] font-[500]">{{ $t("Disable Caching") }}
+                            <el-tooltip placement="right" effect="light"
+                                        popper-class="nt-custom-tooltip"
+                                        content="To optimize and load faster, we cache the table contents. It's not recommended to disable caching unless you know what you are doing.">
+                                <el-icon class="tooltip-icon-color">
+                                    <InfoFilled/>
+                                </el-icon>
+                            </el-tooltip>
+                        </div>
                         <div class="flex gap-6 mb-4" v-if="config.table.hasCacheFeature">
                             <div class="frontend-loader">
-                                <el-checkbox true-value="yes" false-value="no" v-model="tableSettings.frontend_loader"
+                                <el-checkbox :label="$t('Display Frontend Loader')" true-value="yes" false-value="no" v-model="tableSettings.frontend_loader"
                                              style="font-weight: 400;"/>
-                                <span class="ml-2 text-[14px]">{{ $t('Display Frontend Loader') }}</span>
                             </div>
 
                             <div class="disable-cache">
-                                <el-checkbox true-value="yes" false-value="no" v-model="tableSettings.shouldNotCache"
+                                <el-checkbox :label="$t('Disable Caching')" true-value="yes" false-value="no" v-model="tableSettings.shouldNotCache"
                                              style="font-weight: 400;"/>
-                                <span class=" ml-2 text-[14px]">{{ $t('Disable Caching') }}</span>
                             </div>
                         </div>
                         <div v-if="config.table.hasExternalCachingInterval" class="w-1/2">
@@ -79,15 +86,25 @@
                             <p v-if="tableSettings.caching_interval > 60">Current Caching Interval:
                                 <b>{{ (tableSettings.caching_interval / 60).toFixed(2) }} hours</b></p>
                         </div>
-                        <hr v-if="tableSettings.enable_html_cache === 'yes' && tableSettings.shouldNotCache != 'yes'" class="mt-3">
 
 
                         <div class="my-4 w-1/2"
                              v-if="config.settings.render_type == 'legacy_table' && tableSettings.shouldNotCache != 'yes'">
-                            <span class="mb-2 text-[14px] font-[500] mr-2">{{ $t('Enable Full HTML Cache') }}</span>
-                            <el-switch active-value="yes" inactive-value="no" v-model="tableSettings.enable_html_cache"
-                                       style="font-weight: 400;"/>
 
+                            <div class="mb-3 text-[16px] font-[500]">{{ $t("Enable Full HTML Cache") }}
+                                <el-tooltip placement="right" effect="light"
+                                            popper-class="nt-custom-tooltip"
+                                            content="If you enable this then ninja tables will cache the full html of the table and render that without interact with database. You can set the time how many minutes it will cache each iteration.">
+                                    <el-icon class="tooltip-icon-color">
+                                        <InfoFilled/>
+                                    </el-icon>
+                                </el-tooltip>
+                            </div>
+
+                            <div>
+                                <el-checkbox :label="$t('Enable HTML Cache')" true-value="yes" false-value="no" v-model="tableSettings.enable_html_cache"
+                                             style="font-weight: 400;"/>
+                            </div>
                             <div v-if="tableSettings.enable_html_cache == 'yes'">
                                 <div class="mb-2 text-[14px] font-[500]">{{ $t('Caching Interval (In Minutes)') }}</div>
                                 <NinjaInput type="number" size="small" v-model="tableSettings.html_caching_minutes"
