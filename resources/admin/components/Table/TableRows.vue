@@ -219,7 +219,7 @@
                         >
 
                         <template #default="scope">
-                            <div class="flex justify-end">
+                            <div class="flex justify-end items-center">
                                 <span v-if="has_pro" @click="addAfter(scope)" class="cursor-pointer mr-2">
                                     <img :src="assetUrl('icons/add-ico.svg')" class="mb-[3px]" alt="Add"/>
                                 </span>
