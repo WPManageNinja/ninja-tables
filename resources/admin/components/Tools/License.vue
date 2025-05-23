@@ -59,7 +59,10 @@
                 <div class="w-1/2">
                     <NinjaInput size="small" v-model="licenseKey" placeholder="License Key"/>
                     <NinjaButton class="my-3" v-loading="doing_ajax" @click="activateLicense" type="primary" :btn-text="$t('Activate Pro')"/>
-                    <p v-html="error_message" v-if="error_message"></p>
+                </div>
+                <div class="nt-instruction text-center" v-if="error_message">
+                    <h3 class="nt-modal-title my-3">{{ $t('Invalid License Key') }}</h3>
+                    <p style="margin-bottom: 16px" v-html="error_message" class="nt-modal-description"></p>
                 </div>
             </div>
         </div>
