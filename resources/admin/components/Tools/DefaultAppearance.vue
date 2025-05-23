@@ -36,7 +36,7 @@
                     <div class="flex items-center justify-between">
                                         <span>
                                             {{ tableStyle.title }}
-                                            <el-tooltip placement="right-start" effect="light"
+                                            <el-tooltip placement="right" effect="light"
                                                         :content="tableStyle.description">
                                             <el-icon class="tooltip-icon-color">
                                                 <InfoFilled/>
@@ -58,7 +58,7 @@
                 <div for="show_title" class="my-1 flex items-center justify-between">
                                         <span>
                                             {{ $t('Show Table Title') }}
-                                            <el-tooltip placement="top-end" effect="light"
+                                            <el-tooltip placement="right" effect="light"
                                                         content="Enable this if you want to show table title in frontend">
                                                 <el-icon class="tooltip-icon-color">
                                                     <InfoFilled/>
@@ -77,7 +77,7 @@
                 <div for="show_description" class="my-1 flex items-center justify-between">
                                         <span>
                                             {{ $t('Show Table Description') }}
-                                            <el-tooltip placement="top-end" effect="light"
+                                            <el-tooltip placement="right" effect="light"
                                                         content="Enable this if you want to show table description in frontend">
                                                 <el-icon class="tooltip-icon-color">
                                                     <InfoFilled/>
