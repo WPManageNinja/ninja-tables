@@ -293,7 +293,9 @@ import NinjaButton from '../../@ui-utils/NinjaButton.vue';
 
               this.$post('import/default', formData)
                     .then(response => {
-                      alert(response.message ? response.message : this.$t("Successfully added a table."));
+                        if (response.message) {
+                            this.$message.success(response.message);
+                        }
                       if (this.imports.format === 'dragAndDrop') {
                         this.$router.push({
                           name: "table_builder_edit_table",
