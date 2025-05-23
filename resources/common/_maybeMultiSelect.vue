@@ -1,5 +1,5 @@
 <template>
-    <div v-if="appReady" style="max-width: 90%" class="maybe_nt_multi_select">
+    <div v-if="appReady" class="maybe_nt_multi_select">
         <template v-if="column.isMultiple === 'yes'">
             <el-select
                 class="ninja-select"
