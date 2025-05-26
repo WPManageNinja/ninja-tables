@@ -8,15 +8,24 @@
             </div>
 
 
-            <el-form-item size="large" label-position="top" :label="$t('Format')" class="!mb-[10px] w-1/2">
+            <div class="text-[14px] font-[400] text-[#0E121B] my-2 w-1/2">
+                {{ $t('Format') }}
+                <el-tooltip placement="right" effect="light"
+                            popper-class="nt-custom-tooltip"
+                            :content="$t('Select the format in which you want to export your table data. CSV format is suitable for spreadsheet applications, while JSON format preserves all table settings for importing into another Ninja Tables installation.')">
+                    <el-icon class="tooltip-icon-color">
+                        <InfoFilled/>
+                    </el-icon>
+                </el-tooltip>
+            </div>
+            <div class="flex w-1/2 gap-2">
                 <el-select class="ninja-select" v-model="selected">
                     <el-option value="csv" label="CSV"/>
                     <el-option value="json" label="JSON"/>
                 </el-select>
-            </el-form-item>
 
-            <NinjaButton class="my-3" type="primary" @click="doExport"
-                         :btnText="$t('Export Table')"/>
+                <NinjaButton class="min-w-[130px]" type="primary" @click="doExport" :btnText="$t('Export Table')"/>
+            </div>
 
 
         </div>
@@ -30,7 +39,7 @@
 </template>
 
 <script>
-import {Download} from "@element-plus/icons-vue";
+import {Download, InfoFilled} from "@element-plus/icons-vue";
 import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
 
 export default {
@@ -38,7 +47,8 @@ export default {
     props: ['config'],
     components: {
         NinjaButton,
-        Download
+        Download,
+        InfoFilled
     },
 
     data() {
