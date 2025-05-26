@@ -22,7 +22,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column :label="$t('Title')" prop="post_title" sortable="custom" width="200">
+            <el-table-column :label="$t('Title')" class-name="title" prop="post_title" sortable="custom" width="200">
                 <template #default="scope">
                     <template v-if="shouldBeVisible(scope.row) && scope.row.ID">
                         <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
@@ -333,7 +333,7 @@
 </script>
 
 <style lang="scss">
-    .ninja-tables.el-table {
+    .ninja_tables.el-table {
         td, th {
             padding: 5px 0;
         }
@@ -346,6 +346,11 @@
         .description {
             .cell {
                 max-height: 60px;
+            }
+        }
+        .title {
+            .cell {
+                font-weight: 600;
             }
         }
     }
