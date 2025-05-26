@@ -40,9 +40,11 @@
 
 <script type="text/babel">
     import GetPro from "./Tools/GetPro";
+    import NinjaButton from "../@ui-utils/NinjaButton.vue";
+    import {assetUrl} from "../utils/ninjatablesadmin";
     export default {
         name: 'home',
-      components: {GetPro},
+      components: {NinjaButton, GetPro},
       data() {
             return {
                 has_pro: window.ninja_table_admin.hasPro,
@@ -56,6 +58,7 @@
             }
         },
         methods: {
+            assetUrl,
             setTopMenu() {
                 this.topMenus = this.applyFilters('ninja_table_top_menus', [
                     {

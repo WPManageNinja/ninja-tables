@@ -13,12 +13,13 @@
                 Export CSV and Table Print is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
             </h3>
             <div class="flex justify-center mb-4">
-                <a v-if="!has_pro"
+                <a v-if="!hasPro"
                    href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                    target="_blank">
                     <NinjaButton
                         size="small"
-                        type="danger"
+                        type="pro"
+                        :icon="assetUrl('icons/get-pro.svg')"
                         :btnText="$t('Get Pro')"
                     />
                 </a>
@@ -181,6 +182,7 @@ import GetPro from "../../Tools/GetPro";
 import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
 import ColorPicker from "../../../@ui-utils/ColorPicker.vue";
 import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+import {assetUrl} from "../../../utils/ninjatablesadmin";
 
 export default {
     name: 'button_settings',
@@ -225,6 +227,7 @@ export default {
         }
     },
     methods: {
+        assetUrl,
         getSettings() {
             this.fetching = true;
             this.$get('settings/' + this.table_id + '/button')

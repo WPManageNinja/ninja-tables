@@ -1,5 +1,13 @@
 <template>
-    <div>
+    <div v-if="!hasPro" class="mb-4">
+        <premium-notice/>
+    </div>
+
+    <div v-else-if="!activated_features.external_data_source" class="mb-4">
+        <UpgradeNotice/>
+    </div>
+
+    <div v-else>
         <div class="ninja_modal-body" v-if="!editing">
             <div class="external-link-heading">
                 <template v-if="type === 'google-csv'">
@@ -98,7 +106,6 @@
             </div>
         </div>
 
-
 <!--  for table edit nav -->
         <div v-else class="mt-5">
             <div class="nt-checkbox-group-wrapper">
@@ -139,14 +146,6 @@
             </div>
         </div>
 
-        <div v-if="!hasPro" class="mb-4">
-            <premium-notice/>
-        </div>
-
-        <div v-else-if="!activated_features.external_data_source" class="mb-4">
-            <UpgradeNotice/>
-        </div>
-
         <div class="nt-modal-footer" v-if="!editing">
             <div v-if="active_step > 0" class="flex items-center gap-4">
                 <NinjaButton @click="nextStep" type="secondary" :btnText="$t('Previous')" />
@@ -155,7 +154,7 @@
 
             <div v-else class="flex items-center gap-4">
                 <NinjaButton @click="$emit('modalClose')" :btnText="$t('Cancel')" type="secondary" />
-                <NinjaButton @click="nextStep" :btnText="$t('Next')"/>
+                <NinjaButton :disables="!hasPro" @click="nextStep" :btnText="$t('Next')"/>
             </div>
         </div>
 
