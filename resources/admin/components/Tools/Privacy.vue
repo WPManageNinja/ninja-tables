@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="flex justify-end">
                     <NinjaButton type="primary" @click="store" :btn-text="$t('Save')" />
                 </div>
             </div>

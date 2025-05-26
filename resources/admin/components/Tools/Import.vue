@@ -361,6 +361,18 @@ import NinjaButton from '../../@ui-utils/NinjaButton.vue';
                         this.$message.success(response.data.message);
                         this.importing = false;
                         this.otherPluginTables[index].ninja_table_id = response.data.tableId;
+
+                        this.$router.push({
+                            name: 'data_items',
+                            params: {table_id: response.data.tableId}
+                        }).then(() => {
+                            this.$nextTick(() => {
+                                document.documentElement.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth'
+                                });
+                            });
+                        });
                     })
                     .catch(error => {
                         this.$message.error(error.data.message);
