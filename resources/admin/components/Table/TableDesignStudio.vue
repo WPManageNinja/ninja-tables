@@ -114,7 +114,13 @@
                             <div v-if="availableStyles" class="form_group label-normalize">
                                 <label v-for="tableStyle in availableStyles" :key="tableStyle.key"
                                     :for="'table_style_' + tableStyle.key">
-                                    <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                         <el-switch
+                                            :model-value="isStyleActive(tableStyle.key)"
+                                            size="small"
+                                            @change="(val) => toggleStyle(tableStyle.key, val)"
+                                            :id="'table_style_' + tableStyle.key">
+                                        </el-switch>
                                         <span>
                                             {{ tableStyle.title }}
                                             <el-tooltip placement="top-end" effect="light" :content="tableStyle.description">
@@ -123,12 +129,6 @@
                                             </el-icon>
                                         </el-tooltip>
                                         </span>
-                                         <el-switch 
-                                            :model-value="isStyleActive(tableStyle.key)"
-                                            size="small"
-                                            @change="(val) => toggleStyle(tableStyle.key, val)"
-                                            :id="'table_style_' + tableStyle.key">
-                                        </el-switch>
                                     </div>
                                 </label>
                             </div>
@@ -141,7 +141,14 @@
                                     </div>
                                 </template>
                                  <div class="form_group label-normalize mt-4">
-                                    <div for="show_title" class="flex items-center justify-between mb-2">
+                                    <div for="show_title" class="flex items-center gap-2 mb-2">
+                                        <el-switch
+                                            v-model="tableSettings.show_title"
+                                            active-value="1"
+                                            inactive-value="0"
+                                             size="small"
+                                            :id="'show_title'">
+                                        </el-switch>
                                         <span>
                                             {{ $t('Show Table Title') }}
                                             <el-tooltip placement="top-end" effect="light" content="Enable this if you want to show table title in frontend">
@@ -150,16 +157,16 @@
                                                 </el-icon>
                                             </el-tooltip>
                                         </span>
-                                        <el-switch 
-                                            v-model="tableSettings.show_title"
+                                    </div>
+
+                                    <div for="show_description" class="flex items-center gap-2 mb-2">
+                                        <el-switch
+                                            v-model="tableSettings.show_description"
                                             active-value="1"
                                             inactive-value="0"
                                              size="small"
-                                            :id="'show_title'">
+                                            :id="'show_description'">
                                         </el-switch>
-                                    </div>
-
-                                    <div for="show_description" class="flex items-center justify-between mb-2">
                                         <span>
                                             {{ $t('Show Table Description') }}
                                             <el-tooltip placement="top-end" effect="light" content="Enable this if you want to show table description in frontend">
@@ -168,73 +175,67 @@
                                                 </el-icon>
                                             </el-tooltip>
                                         </span>
-                                        <el-switch 
-                                            v-model="tableSettings.show_description"
-                                            active-value="1"
-                                            inactive-value="0"
-                                             size="small"
-                                            :id="'show_description'">
-                                        </el-switch>
                                     </div>
 
-                                    <div for="enable_search" class="flex items-center justify-between mb-2">
-                                        <span>
-                                            {{ $t('Enable the visitor to filter or search the table.') }}
-                                        </span>
-                                        <el-switch 
+                                    <div for="enable_search" class="flex items-center gap-2 mb-2">
+                                        <el-switch
                                             v-model="tableSettings.enable_search"
                                             active-value="1"
                                             inactive-value="0"
                                             size="small"
                                             :id="'enable_search'">
                                         </el-switch>
+                                        <span>{{ $t('Enable the visitor to filter or search the table.') }}</span>
                                     </div>
 
                                     <div 
                                         v-if="tableLibs[tableSettings.library].supports.sorting && !tableSettings.enable_ajax"
                                         for="column_sorting" 
-                                        class="flex items-center justify-between mb-2">
-                                        <span>
-                                            {{ $t('Enable sorting of the table by the visitor') }}
-                                        </span>
-                                        <el-switch 
+                                        class="flex items-center gap-2 mb-2">
+                                        <el-switch
                                             v-model="tableSettings.column_sorting"
                                             active-value="1"
                                             inactive-value="0"
                                              size="small"
                                             :id="'column_sorting'">
                                         </el-switch>
+                                        <span>
+                                            {{ $t('Enable sorting of the table by the visitor') }}
+                                        </span>
                                     </div>
 
-                                    <div for="hide_header_row" class="flex items-center justify-between mb-2">
-                                        <span>
-                                            Hide Header Row
-                                        </span>
-                                        <el-switch 
+                                    <div for="hide_header_row" class="flex items-center gap-2 mb-2">
+                                        <el-switch
                                             v-model="tableSettings.hide_header_row"
                                             active-value="1"
                                             inactive-value="0"
                                              size="small"
                                             :id="'hide_header_row'">
                                         </el-switch>
+                                        <span>{{ $t('Hide Header Row') }}</span>
                                     </div>
 
-                                    <div for="hide_all_borders" class="flex items-center justify-between mb-2">
-                                        <span>
-                                            Hide All Borders
-                                        </span>
-                                        <el-switch 
+                                    <div for="hide_all_borders" class="flex items-center gap-2 mb-2">
+                                        <el-switch
                                             v-model="tableSettings.hide_all_borders"
                                             active-value="1"
                                             inactive-value="0"
                                              size="small"
                                             :id="'hide_all_borders'">
                                         </el-switch>
+                                        <span>{{ $t('Hide All Borders') }}</span>
                                     </div>
 
-                                    <div for="hide_on_empty" class="flex items-center justify-between mb-2">
+                                    <div for="hide_on_empty" class="flex items-center gap-2 mb-2">
+                                        <el-switch
+                                            v-model="tableSettings.hide_on_empty"
+                                            active-value="1"
+                                            inactive-value="0"
+                                             size="small"
+                                            :id="'hide_on_empty'">
+                                        </el-switch>
                                         <span>
-                                            Hide empty items on responsive breakdown 
+                                            {{ $t('Hide empty items on responsive breakdown') }}
                                             <span v-show="!has_pro">(Pro Only)</span>
                                             <el-tooltip placement="top-end" effect="light" content="If You enable this then the empty items will not show into responsive drawer / Stackable View">
                                                 <el-icon class="tooltip-icon-color">
@@ -242,18 +243,18 @@
                                                 </el-icon>
                                             </el-tooltip>
                                         </span>
-                                        <el-switch 
-                                            v-model="tableSettings.hide_on_empty"
-                                            active-value="1"
-                                            inactive-value="0"
-                                             size="small"
-                                            :id="'hide_on_empty'">
-                                        </el-switch>
                                     </div>
 
-                                    <div for="hide_responsive_labels" class="flex items-center justify-between mb-2">
+                                    <div for="hide_responsive_labels" class="flex items-center gap-2 mb-2">
+                                        <el-switch
+                                            v-model="tableSettings.hide_responsive_labels"
+                                            active-value="1"
+                                            inactive-value="0"
+                                            size="small"
+                                            :id="'hide_responsive_labels'">
+                                        </el-switch>
                                         <span>
-                                            Hide Labels on responsive breakdown 
+                                            {{ $t('Hide Labels on responsive breakdown') }}
                                             <span v-show="!has_pro">(Pro Only)</span>
                                             <el-tooltip placement="top-end" effect="light" content="If You enable this then columns headings will not show into responsive drawer / Stackable View">
                                                 <el-icon class="tooltip-icon-color">
@@ -261,13 +262,6 @@
                                                 </el-icon>
                                             </el-tooltip>
                                         </span>
-                                        <el-switch 
-                                            v-model="tableSettings.hide_responsive_labels"
-                                            active-value="1"
-                                            inactive-value="0"
-                                            size="small"
-                                            :id="'hide_responsive_labels'">
-                                        </el-switch>
                                     </div>
                                 </div>
                             </el-collapse-item>
