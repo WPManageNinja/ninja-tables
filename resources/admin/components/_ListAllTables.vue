@@ -3,11 +3,12 @@
         <el-table
             class="ninja_tables compact"
             @selection-change="handleSelectionChange"
-            v-loading.body="pageLoading"
             :data="items"
+            v-loading="pageLoading"
             aria-label="all-tables"
             @sort-change="handleTableSort"
-            style="width: 100%">
+            style="width: 100%"
+            >
 
             <!-- <el-table-column type="selection" fixed width="55" /> -->
 
