@@ -1,8 +1,8 @@
 <template>
     <div class="nt-custom-css-js-editor-wrapper mx-5">
-        <div class="flex justify-between rounded-[8px] bg-[#F5F7FA] w-[250px] px-2 py-2 gap-3">
+        <div class="flex h-[36px] items-center justify-between rounded-[8px] bg-[#F5F7FA] w-[250px] px-2 py-2 gap-3">
             <div @click="current_tab ='additional_css'"
-                 :class="`${current_tab ==='additional_css' && 'bg-white rounded-[8px] shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
+                 :class="`${current_tab ==='additional_css' && 'bg-white flex items-center justify-center rounded-[8px] shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
                 {{ $t('Custom CSS') }}
             </div>
             <div @click="current_tab ='additional_js'"
