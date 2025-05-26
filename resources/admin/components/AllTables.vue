@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import Welcome from './Welcome';
+import Welcome from './Welcome.vue';
 import ListAllTables from './_ListAllTables.vue';
 import AddTableModal from './_AddTable.vue';
 import leadModal from './Extras/lead';

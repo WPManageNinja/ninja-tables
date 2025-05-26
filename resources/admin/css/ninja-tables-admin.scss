@@ -397,7 +397,9 @@
   font-weight: 400;
   line-height: 20px;
   letter-spacing: -0.084px;
-
+  &:hover {
+    color: #335CFF;
+  }
   &:focus {
     color: #335CFF;
     box-shadow: none;
