@@ -9,35 +9,83 @@
                  min-width="200px"
             >
                 <el-menu-item @click="activeTabName = 'default'" index='default'>
-                    <span>Default</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Default')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'drag_and_drop'" index='drag_and_drop'>
-                  <span>Drag & Drop Table</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Drag & Drop Table')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'fluent_form'" index='fluent_form'>
-                    <span>Connect Fluent Forms</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Connect Fluent Forms')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'wp_posts'" index='wp_posts'>
-                    <span>WP Posts</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('WP Posts')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item v-if="has_woo" @click="activeTabName = 'woo_table'" index='woo_table'>
-                    <span>WooCommerce Table</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('WooCommerce Table')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'google_spread_sheet'" index='google_spread_sheet'>
-                    <span>Connect Google Sheets</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Connect Google Sheets')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'csv'" index='csv'>
-                    <span>Connect External CSV</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Connect External CSV')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'raw_sql'" index='raw_sql'>
-                    <span>Custom SQL Query</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Custom SQL Query')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
             </el-menu>

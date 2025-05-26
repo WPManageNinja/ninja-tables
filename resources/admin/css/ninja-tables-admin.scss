@@ -259,6 +259,8 @@
             .el-menu-item {
               height: 36px;
               display: flex;
+              justify-content: start;
+              border-radius: 8px;
               width: 225px;
               padding: 8px 12px;
               align-items: center;
@@ -270,6 +272,50 @@
               font-weight: 500;
               line-height: 20px;
               letter-spacing: -0.084px;
+
+              img {
+                filter: grayscale(100%);
+              }
+
+              .tab-label{
+                display: flex;
+                width: 100%;
+                height: 100%;
+                .tab-title{
+                  height: 100%;
+                  width: 100%;
+                  text-align: start;
+                  border-radius: 10px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+
+                  span{
+                    padding-right: 20px;
+                  }
+                  img{
+                    display: none;
+                  }
+                }
+              }
+              .active-bar{
+                @apply bg-white w-[4px] mr-2 rounded-r-[10px] absolute left-[-20px] top-1 h-[24px];
+              }
+
+              &.is-active {
+                position: relative;
+                .active-bar {
+                  @apply bg-[#335CFF] w-[4px] mr-2 h-[80%] my-auto rounded-r-[10px];
+                }
+                img{
+                  filter: grayscale(0);
+                }
+                .tab-title{
+                  img{
+                    display: block !important;
+                  }
+                }
+              }
 
               &.is-active,
               &.is-active:hover {
@@ -397,7 +443,9 @@
   font-weight: 400;
   line-height: 20px;
   letter-spacing: -0.084px;
-
+  &:hover {
+    color: #335CFF;
+  }
   &:focus {
     color: #335CFF;
     box-shadow: none;
