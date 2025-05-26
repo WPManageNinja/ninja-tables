@@ -46,7 +46,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column :label="$t('Description')" class-name="description" width="300">
+            <el-table-column :label="$t('Description')" class-name="description">
                 <template #default="scope">
                     <div class="nt_cell" v-html="scope.row.post_content"/>
                 </template>
@@ -62,7 +62,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column :label="$t('ShortCode')" :min-width="200">
+            <el-table-column :label="$t('ShortCode')" :width="250">
                 <template #default="scope">
                     <div class="flex items-center" type="info" :style="{ cursor: 'pointer' }">
                         <div class="bg-[#F5F6F7] px-2 py-1 rounded-[8px] flex items-center copy"
@@ -71,7 +71,7 @@
                                 `[ninja_tables id='${scope.row.ID}']`"
                              style="border: 1px solid #E1E4EA">
                             <img class="mr-2" :src="assetUrl('icons/copy-02.svg')"/> 
-                            <span class="text-sm">
+                            <span class="text-sm overflow-hidden text-ellipsis whitespace-nowrap max-w-[140px]">
                                 {{ scope.row.dataSourceType === 'drag_and_drop' ? 
                                    `[ninja_table_builder id='${scope.row.ID}']` : 
                                    `[ninja_tables id='${scope.row.ID}']` }}
@@ -81,7 +81,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column fixed="right" min-width="150">
+            <el-table-column fixed="right" :width="120">
                 <template #default="scope">
                     <div class="flex justify-end items-center">
                        <div
@@ -354,9 +354,10 @@
         a {
             text-decoration: none;
         }
-        .description {
+        .title, .description, .shortcode {
             .cell {
-                max-height: 60px;
+                max-height: 30px;
+                white-space: nowrap;
             }
         }
         .title {
