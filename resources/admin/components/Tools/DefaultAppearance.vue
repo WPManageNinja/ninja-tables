@@ -142,13 +142,14 @@
                     <span>{{ $t('Hide Pagination (Show all data at once)') }}</span>
                 </div>
 
-                <div class="w-1/2">
+                <div class="w-1/2 mt-2">
                     <label class="font-[400] block">{{ $t('Items Per Page') }}</label>
-                    <el-input-number
-                        style="height: 40px; width: 100%;"
+                    <NinjaInput
+                        type="number"
+                        style="height: 38px;"
                         :min="1"
-                        :model-value="Number(default_settings.perPage)"
-                        @update:model-value="default_settings.perPage = Number($event)"
+                        :model-value="Number(default_settings.perPage) || 10"
+                        @update:model-value="default_settings.perPage = Number($event) || 10"
                         :disabled="default_settings.show_all == true || default_settings.show_all == '1'"
                     />
                 </div>
@@ -168,12 +169,13 @@
 
                 <div>
                     <label class="font-[400] block">{{ $t('Font Size') }}</label>
-                    <el-input-number
-                        style="height: 40px; width: 100%;"
+                    <NinjaInput
+                        type="number"
+                        style="height: 38px;"
                         :min="1"
                         :max="50"
-                        :model-value="Number(default_settings.table_font_size)"
-                        @update:model-value="default_settings.table_font_size = Number($event)"
+                        :model-value="Number(default_settings.table_font_size) || 14"
+                        @update:model-value="default_settings.table_font_size = Number($event) || 14"
                     />
                 </div>
             </div>
