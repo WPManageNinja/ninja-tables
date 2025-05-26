@@ -120,8 +120,8 @@
 
                 <div class="nt-modal-footer">
                     <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
-                    <NinjaButton v-if="table.ID" @click="addTable" :btnText="$t('Update')"/>
-                    <NinjaButton v-else @click="addTable" :btnText="$t('Add')" />
+                    <NinjaButton v-if="table.ID" :loading="btnLoading" @click="addTable" :btnText="$t('Update')"/>
+                    <NinjaButton v-else @click="addTable" :loading="btnLoading" :btnText="$t('Add')" />
                 </div>
             </div>
 

@@ -155,12 +155,14 @@
                         @click="addData"
                         :disabled="btnLoading"
                         :btn-text="$t('Update')"
+                        :loading="btnLoading"
                     />
                     <NinjaButton
                         v-else
                         @click="addData"
                         :disabled="btnLoading"
                         :btn-text="$t('Add')"
+                        :loading="btnLoading"
                     />
 
                 </div>

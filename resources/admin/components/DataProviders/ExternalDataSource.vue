@@ -150,12 +150,12 @@
         <div class="nt-modal-footer" v-if="!editing">
             <div v-if="active_step > 0" class="flex items-center gap-4">
                 <NinjaButton @click="nextStep" type="secondary" :btnText="$t('Previous')" />
-                <NinjaButton @click="save" :btnText="$t('Save')" :disabled="!activated_features.external_data_source"/>
+                <NinjaButton @click="save" :loading="saving" :btnText="$t('Save')" :disabled="!activated_features.external_data_source"/>
             </div>
 
             <div v-else class="flex items-center gap-4">
                 <NinjaButton @click="$emit('modalClose')" :btnText="$t('Cancel')" type="secondary" />
-                <NinjaButton @click="nextStep" :btnText="$t('Next')"/>
+                <NinjaButton @click="nextStep" :loading="fetching" :btnText="$t('Next')"/>
             </div>
         </div>
 
@@ -175,6 +175,7 @@
                             :icon="assetUrl('icons/refresh.svg')"
                             :loading="fetching"
                             @click="fatchRemoteData"
+                            loading="fetching"
                             type="secondary"
                             />
                     </template>
