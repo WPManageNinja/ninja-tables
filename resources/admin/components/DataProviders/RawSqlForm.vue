@@ -1,5 +1,9 @@
 <template>
-    <div class="ninja_modal-body">
+    <template v-if="!hasPro">
+        <premium-notice highlight="SQL module where you can write custom SQL to build your table with "/>
+    </template>
+
+    <div v-else class="ninja_modal-body">
         <h3 class="nt-modal-title">
             Construct Table from Custom SQL Query
         </h3>
@@ -11,11 +15,7 @@
             </a>
         </p>
 
-        <template v-if="!hasPro">
-            <premium-notice highlight="SQL module where you can write custom SQL to build your table with "/>
-        </template>
-
-        <template v-else-if="!has_sql_permission">
+        <template v-if="!has_sql_permission">
             <el-alert title=""
                       type="error"
                       :closable="false"

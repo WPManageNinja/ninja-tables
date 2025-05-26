@@ -39,7 +39,8 @@
                     href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                     target="_blank">
                     <NinjaButton
-                        type="danger"
+                        type="pro"
+                        :icon="assetUrl('icons/get-pro.svg')"
                         :btnText="$t('Get Pro')"
                     />
                 </a>

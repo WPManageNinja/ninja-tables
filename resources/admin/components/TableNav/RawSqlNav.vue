@@ -53,11 +53,11 @@
 
             <el-collapse-item v-if="config.table.connection_type === 'external'" name="2">
                 <template #title>
-                    <p class="nt-form-label">SQL Connection Details</p>
+                    <p>SQL Connection Details</p>
                 </template>
 
                 <div class="py-5">
-                    <remote-sql-connection :connection="connection_details" />
+                    <RemoteSqlConnection :connection="connection_details" />
                 </div>
 
                 <div v-if="error_html" class="form-group">

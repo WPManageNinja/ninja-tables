@@ -55,8 +55,10 @@
 
             <el-table-column :label="$t('Data Source')" width="200">
                 <template #default="scope">
-                    <span v-if="scope.row.dataSourceType === 'drag_and_drop'">{{$t('Drag & Drop Table')}}</span>
-                    <span v-else>{{ dataSourceType(scope.row) }}</span>
+                    <div class="flex items-center gap-2">
+                        <img class="w-5 h-5" :src="assetUrl('icons/' + scope.row.dataSourceType + '.svg')" alt="">
+                        <div>{{ dataSourceType(scope.row) }}</div>
+                    </div>
                 </template>
             </el-table-column>
 
@@ -166,8 +168,10 @@
 
         <div class="text-center my-4" v-else-if="items.length > 3 && !hasPro">
             <hr />
-            <h3 class="mt-6 mb-4 text-[18px] font-[600] text-[#0E121B]">Love Ninja Tables? Upgrade to Pro and get more exciting features and Performance</h3>
-            <get-pro/>
+            <h3 class="mt-6 mb-4 text-[18px] font-[600] text-[#0E121B]">Love Ninja Tables? Upgrade to Pro and get more exciting features!</h3>
+            <div class="flex justify-center">
+                <GetPro/>
+            </div>
         </div>
     </div>
 </template>
@@ -312,13 +316,21 @@
             },
 
             dataSourceType(table) {
-                let dataSource = table.dataSourceType || 'Default';
-                if(dataSource == 'raw_sql') {
-                    return 'SQL';
-                }
+                const dataSource = table.dataSourceType || 'Default';
 
-                dataSource = dataSource.indexOf('google') > -1 ? 'Google SpreadSheet' : dataSource;
-                return dataSource;
+                const sourceMap = {
+                    'raw_sql': 'SQL',
+                    'wp-posts': 'WP Posts',
+                    'wp_woo': 'WooCommerce',
+                    'fluent-form': 'Fluent Forms',
+                    'csv': 'CSV',
+                    'google-csv': 'Google Sheets',
+                    'google': 'Google Sheets',
+                    'external-csv': 'External CSV',
+                    'drag_and_drop': 'Drag & Drop'
+                };
+                
+                return sourceMap[dataSource] || 'Default';
             },
             handleTableSort(column) {
                 this.orderBy = column.prop;

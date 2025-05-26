@@ -96,12 +96,13 @@
                     Custom Filters is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
                 </h3>
               <div class="flex justify-center mb-4">
-                  <a v-if="!has_pro"
-                     href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
+                  <a v-if="!hasPro"
+                     href="hasPro://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                      target="_blank">
                       <NinjaButton
                           size="small"
-                          type="danger"
+                          type="pro"
+                          :icon="assetUrl('icons/get-pro.svg')"
                           :btnText="$t('Get Pro')"
                       />
                   </a>

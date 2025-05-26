@@ -14,7 +14,8 @@
                        href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                        target="_blank">
                         <NinjaButton
-                            type="danger"
+                            type="pro"
+                            :icon="assetUrl('icons/get-pro.svg')"
                             :btnText="$t('Get Pro')"
                         />
                     </a>
@@ -247,6 +248,7 @@
 import GetPro from "../../Tools/GetPro";
 import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
 import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+import {assetUrl} from "../../../utils/ninjatablesadmin";
 
 export default {
     name: 'frontend-editing-settings',
@@ -283,6 +285,7 @@ export default {
         }
     },
     methods: {
+        assetUrl,
         handleDisable(val) {
             val === 'no' && this.updateSettings();
         },

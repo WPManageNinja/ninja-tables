@@ -12,6 +12,7 @@
             'ninja-button--small': size === 'small',
             'ninja-button--large': size === 'large',
             'ninja-button--default': size === 'default',
+            'ninja-button--pro': type === 'pro' && !disabled,
         }"
     >
         <div v-if="loading" class="ninja-button-spinner mr-2"> </div>
@@ -84,6 +85,10 @@ export default {
 
   .ninja-button--disabled {
     @apply bg-[#E9ECEF] text-[#ADB5BD] border border-solid border-[#DEE2E6] cursor-not-allowed hover:bg-[#E9ECEF];
+  }
+
+  .ninja-button--pro {
+      @apply bg-[#0E121B] hover:bg-[#222530] text-white delay-100 duration-100;
   }
   
   /* Size variations */
