@@ -139,12 +139,13 @@
             </div>
         </div>
 
-        <template v-if="!hasPro">
+        <div v-if="!hasPro" class="mb-4">
             <premium-notice/>
-        </template>
-        <template v-else-if="!activated_features.external_data_source">
+        </div>
+
+        <div v-else-if="!activated_features.external_data_source" class="mb-4">
             <UpgradeNotice/>
-        </template>
+        </div>
 
         <div class="nt-modal-footer" v-if="!editing">
             <div v-if="active_step > 0" class="flex items-center gap-4">
