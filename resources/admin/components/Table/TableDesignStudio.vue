@@ -37,7 +37,7 @@
                             <div v-if="Number(tableSettings.show_description) && config?.table"
                                 class="table_description footable_description" v-html="config.table.post_content">
                             </div>
-                            <table v-show="app_ready" :id="'footable_' + tableId" :class="tableClasses"
+                            <table v-if="formattedColumns.length" v-show="app_ready" :id="'footable_' + tableId" :class="tableClasses"
                                 :style="fontSetting" class="table foo-table ninja_footable">
                                 <colgroup>
                                     <col v-for="(column, column_index) in formattedColumns" :key="column_index"
@@ -46,8 +46,12 @@
                                 </colgroup>
                                 <thead></thead>
                             </table>
+                            <div v-else class="nt-instruction my-4 text-center">
+                                <h3 class="nt-modal-subtitle my-3">{{ $t('Table Configuration Required') }}</h3>
+                                <p class="my-3">{{ $t('Please configure the table columns before viewing the table design.' )}}</p>
+                            </div>
                         </div>
-                        <div class="ninja_demo_disclaimer">
+                        <div class="ninja_demo_disclaimer" v-if="formattedColumns.length">
                             <hr />
                             <p v-if="tableSettings.stackable == 'yes'">
                                 <b>For Stackable Tables, Live preview is disabled here. Please check on preview url</b>

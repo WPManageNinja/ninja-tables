@@ -1,6 +1,6 @@
 <template>
     <div class="import-table-wrapper ml-2">
-        <div v-if="config.table.isImportable">
+        <div v-if="config.table.isImportable && config.columns.length">
             <div class="text-[18px] font-[600] text-[#0E121B] my-5">{{ $t('Import Table') }}</div>
             <div class="text-[14px] font-[400] text-[#0E121B] my-5 w-1/2">
                 {{
@@ -83,6 +83,10 @@
                     {{ $t('Your CSV file should follow this column structure.') }}
                 </div>
             </div>
+        </div>
+        <div v-else-if="config.table.isImportable && !config.columns.length" class="nt-instruction text-center my-4 w-1/2">
+            <h3 class="nt-modal-subtitle my-3">{{ $t('Table Configuration Required') }}</h3>
+            <p class="nt-modal-description">{{ $t('Please configure the table columns before importing data.' )}}</p>
         </div>
         <div v-else class="nt-instruction text-center">
             <h3 class="nt-modal-subtitle mb-3">{{ $t('Import Table') }}</h3>
