@@ -81,11 +81,11 @@
                                     </div>
                                 </template>
                                 <div class="flex justify-center my-4">
-                                   <div class="flex rounded-[8px] bg-[#F5F7FA] px-2 py-2 gap-3">
+                                   <div class="flex items-center w-fit rounded-[8px] bg-[#F5F7FA] px-2 gap-3 h-[36px]">
                                         <div 
                                             @click="tableSettings.css_lib = 'semantic_ui'" 
                                             :class="{
-                                                'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.css_lib === 'semantic_ui',
+                                                'bg-white rounded-[8px] h-[26px] flex items-center shadow-md shadow-gray-300': tableSettings.css_lib === 'semantic_ui',
                                                 'px-2 py-1 cursor-pointer': true
                                             }"
                                         >
@@ -94,7 +94,7 @@
                                         <div 
                                             @click="tableSettings.css_lib = 'bootstrap4'" 
                                             :class="{
-                                                'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.css_lib === 'bootstrap4',
+                                                'bg-white rounded-[8px] h-[26px] flex items-center shadow-md shadow-gray-300': tableSettings.css_lib === 'bootstrap4',
                                                 'px-2 py-1 cursor-pointer': true
                                             }"
                                         >
@@ -103,7 +103,7 @@
                                         <div 
                                             @click="tableSettings.css_lib = 'bootstrap3'" 
                                             :class="{
-                                                'bg-white rounded-[8px] shadow-md shadow-gray-300': tableSettings.css_lib === 'bootstrap3',
+                                                'bg-white rounded-[8px] h-[26px] flex items-center shadow-md shadow-gray-300': tableSettings.css_lib === 'bootstrap3',
                                                 'px-2 py-1 cursor-pointer': true
                                             }"
                                         >
@@ -114,7 +114,7 @@
                             <div v-if="availableStyles" class="form_group label-normalize">
                                 <label v-for="tableStyle in availableStyles" :key="tableStyle.key"
                                     :for="'table_style_' + tableStyle.key">
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-2 mb-3">
                                          <el-switch
                                             :model-value="isStyleActive(tableStyle.key)"
                                             size="small"
@@ -141,7 +141,7 @@
                                     </div>
                                 </template>
                                  <div class="form_group label-normalize mt-4">
-                                    <div for="show_title" class="flex items-center gap-2 mb-2">
+                                    <div for="show_title" class="flex items-center gap-2 mb-3">
                                         <el-switch
                                             v-model="tableSettings.show_title"
                                             active-value="1"
@@ -159,7 +159,7 @@
                                         </span>
                                     </div>
 
-                                    <div for="show_description" class="flex items-center gap-2 mb-2">
+                                    <div for="show_description" class="flex items-center gap-2 mb-3">
                                         <el-switch
                                             v-model="tableSettings.show_description"
                                             active-value="1"
@@ -177,7 +177,7 @@
                                         </span>
                                     </div>
 
-                                    <div for="enable_search" class="flex items-center gap-2 mb-2">
+                                    <div for="enable_search" class="flex items-center gap-2 mb-3">
                                         <el-switch
                                             v-model="tableSettings.enable_search"
                                             active-value="1"
@@ -191,7 +191,7 @@
                                     <div 
                                         v-if="tableLibs[tableSettings.library].supports.sorting && !tableSettings.enable_ajax"
                                         for="column_sorting" 
-                                        class="flex items-center gap-2 mb-2">
+                                        class="flex items-center gap-2 mb-3">
                                         <el-switch
                                             v-model="tableSettings.column_sorting"
                                             active-value="1"
@@ -204,7 +204,7 @@
                                         </span>
                                     </div>
 
-                                    <div for="hide_header_row" class="flex items-center gap-2 mb-2">
+                                    <div for="hide_header_row" class="flex items-center gap-2 mb-3">
                                         <el-switch
                                             v-model="tableSettings.hide_header_row"
                                             active-value="1"
@@ -215,7 +215,7 @@
                                         <span>{{ $t('Hide Header Row') }}</span>
                                     </div>
 
-                                    <div for="hide_all_borders" class="flex items-center gap-2 mb-2">
+                                    <div for="hide_all_borders" class="flex items-center gap-2 mb-3">
                                         <el-switch
                                             v-model="tableSettings.hide_all_borders"
                                             active-value="1"
@@ -226,7 +226,7 @@
                                         <span>{{ $t('Hide All Borders') }}</span>
                                     </div>
 
-                                    <div for="hide_on_empty" class="flex items-center gap-2 mb-2">
+                                    <div for="hide_on_empty" class="flex items-center gap-2 mb-3">
                                         <el-switch
                                             v-model="tableSettings.hide_on_empty"
                                             active-value="1"
@@ -245,7 +245,7 @@
                                         </span>
                                     </div>
 
-                                    <div for="hide_responsive_labels" class="flex items-center gap-2 mb-2">
+                                    <div for="hide_responsive_labels" class="flex items-center gap-2 mb-3">
                                         <el-switch
                                             v-model="tableSettings.hide_responsive_labels"
                                             active-value="1"

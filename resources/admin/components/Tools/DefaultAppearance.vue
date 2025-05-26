@@ -30,10 +30,10 @@
                     {{ $t('Bootstrap 3') }}
                 </div>
             </div>
-            <div v-if="availableStyles" class="my-2 form_group label-normalize">
+            <div v-if="availableStyles" class="my-3 form_group label-normalize">
                 <label v-for="tableStyle in availableStyles" :key="tableStyle.key"
                        :for="'table_style_' + tableStyle.key">
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 mb-3">
                         <el-switch
                             size="small"
                             :model-value="isStyleActive(tableStyle.key)"
@@ -55,7 +55,7 @@
 
             <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Features') }}</div>
             <div class="form_group label-normalize">
-                <div for="show_title" class="my-1 flex items-center gap-2">
+                <div for="show_title" class="my-1 flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.show_title"
@@ -74,7 +74,7 @@
                     </span>
                 </div>
 
-                <div for="show_description" class="my-1 flex items-center gap-2">
+                <div for="show_description" class="my-1 flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.show_description"
@@ -93,7 +93,7 @@
                     </span>
                 </div>
 
-                <div for="enable_search" class="my-1 flex items-center gap-2">
+                <div for="enable_search" class="my-1 flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.enable_search"
@@ -106,7 +106,7 @@
                     </span>
                 </div>
 
-                <div for="column_sorting" class="my-1 flex items-center gap-2">
+                <div for="column_sorting" class="my-1 flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.column_sorting"
@@ -117,7 +117,7 @@
                     <span>{{ $t('Enable sorting of the table by the visitor') }}</span>
                 </div>
 
-                <div for="hide_all_borders" class="my-1 flex items-center gap-2">
+                <div for="hide_all_borders" class="my-1 flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.hide_all_borders"
@@ -131,7 +131,7 @@
 
             <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Pagination Setting') }}</div>
             <div class="form_group label-normalize">
-                <div for="hide_pagination" class="flex items-center gap-2">
+                <div for="hide_pagination" class="flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.show_all"
