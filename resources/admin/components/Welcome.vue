@@ -1,6 +1,6 @@
 <template>
     <div class="ninja_intro_welcome" :style="{ background: `url(${assetUrl('img/on-board.png')})` }">
-        <div class="bg-white w-[475px] mx-auto border border-gray-200 rounded-2xl p-8">
+        <div class="bg-white w-full lg:w-[475px] mx-auto border border-gray-200 rounded-2xl p-8">
             <div class="flex justify-center">
                 <img width="36" height="36" :src="assetUrl('img/ninja_table.svg')" alt="Ninja Tables">
             </div>
@@ -8,8 +8,8 @@
                 <h2>{{ $t('Welcome to Ninja Tables') }}</h2>
                 <p class="text-[#525866] text-[14px] font-[300]">{{ $t('Thank you for installing Ninja Tables - Best Responsive Table Plugin for WordPress') }}</p>
             </div>
-            <div class="flex items-center gap-4">
-                <NinjaButton @click="create" class="w-full">
+            <div class="block lg:flex items-center gap-4">
+                <NinjaButton @click="create" class="w-full mb-4 lg:mb-0">
                     {{$t('Create Your First Table')}}
                 </NinjaButton>
                 <router-link :to="{ name: 'import_tables' }" class="w-full">

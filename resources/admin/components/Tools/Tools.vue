@@ -1,11 +1,11 @@
 <template>
-    <div class="px-32" style="margin-top: 20px">
+    <div class="px-5 lg:px-32" style="margin-top: 20px">
       <!-- <h1 class="wp-heading-inline">
         {{ $t('Tools and Settings') }}
       </h1>
       <hr> -->
         <el-container class="ninja-table-aside">
-            <el-aside width="300px">
+            <el-aside class="!w-[80px] lg:!w-[300px] !p-[5px]">
                 <el-menu :default-active="active_menu"
                          :router="true"
                          background-color="white"
@@ -16,13 +16,16 @@
                             v-if="menuItem.status"
                             :index="menuItem.route" 
                             :route="{ name: menuItem.route }">
-                            <el-icon><component :is="menuItem.icon_class" /></el-icon>
-                            <span>{{ menuItem.title }}</span>
+                            <el-tooltip :content="menuItem.title" placement="right">
+                                <el-icon><component  class="lg:hidden" :is="menuItem.icon_class" /></el-icon>
+                            </el-tooltip>
+                            <el-icon><component class="hidden lg:block" :is="menuItem.icon_class" /></el-icon>
+                            <span class="hidden lg:block">{{ menuItem.title }}</span>
                         </el-menu-item>
                     </template>
                 </el-menu>
             </el-aside>
-            <el-main class="ml-10">
+            <el-main class="ml-5 lg:ml-10">
                 <router-view></router-view>
             </el-main>
         </el-container>

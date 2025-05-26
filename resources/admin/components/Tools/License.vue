@@ -63,9 +63,9 @@
             </div>
             <div v-else class="my-4 flex flex-col">
                 <p class="my-2 text-[16px] font-[400] text-[#3C434A]">{{ $t('Enter your license key') }}</p>
-                <div class="flex gap-2 items-center">
+                <div class="flex-col lg:flex-row gap-2 items-center">
                     <NinjaInput v-model="licenseKey" placeholder="License Key"/>
-                    <NinjaButton class="min-w-[130px]" @click="activateLicense" type="primary"
+                    <NinjaButton class="w-full lg:min-w-[130px] mt-2 lg:mt-0" @click="activateLicense" type="primary"
                                  :btn-text="$t('Activate Pro')"/>
                 </div>
                 <div class="nt-instruction text-center" v-if="error_message">

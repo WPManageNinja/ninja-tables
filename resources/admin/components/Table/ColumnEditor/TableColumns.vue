@@ -2,7 +2,7 @@
     <div>
         <div class="table-column-settings mx-4">
             <el-container class="ninja-table-aside">
-                <el-aside class="!w-[70px] lg:!w-[300px] !p-[5px] md:!p-5">
+                <el-aside class="!w-[70px] lg:!w-[300px] !p-[5px]">
                     <el-menu background-color="white"
                              :default-active="active_menu"
                              text-color="#525866"
