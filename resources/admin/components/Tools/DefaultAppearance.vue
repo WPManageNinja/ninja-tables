@@ -10,61 +10,52 @@
 
         <div v-loading="fetching" class="nt-table-default-appearance-content">
             <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Styling Library') }}</div>
-            <div class="flex w-fit rounded-[8px] bg-[#F5F7FA] px-2 py-2 gap-3">
+            <div class="flex items-center w-fit rounded-[8px] bg-[#F5F7FA] px-2 gap-3 h-[36px]">
                 <div
                     @click="default_settings.css_lib = 'semantic_ui'"
-                    :class="{'bg-white rounded-[8px] shadow-md shadow-gray-300': default_settings.css_lib === 'semantic_ui', 'px-2 py-1 cursor-pointer': true}"
+                    :class="{'bg-white rounded-[8px] h-[26px] flex items-center shadow-md shadow-gray-300': default_settings.css_lib === 'semantic_ui', 'px-2 cursor-pointer': true}"
                 >
                     {{ $t('Semantic UI') }}
                 </div>
                 <div
                     @click="default_settings.css_lib = 'bootstrap4'"
-                    :class="{'bg-white rounded-[8px] shadow-md shadow-gray-300': default_settings.css_lib === 'bootstrap4', 'px-2 py-1 cursor-pointer': true}"
+                    :class="{'bg-white rounded-[8px] h-[26px] shadow-md flex items-center shadow-gray-300': default_settings.css_lib === 'bootstrap4', 'px-2 cursor-pointer': true}"
                 >
                     {{ $t('Bootstrap 4') }}
                 </div>
                 <div
                     @click="default_settings.css_lib = 'bootstrap3'"
-                    :class="{'bg-white rounded-[8px] shadow-md shadow-gray-300': default_settings.css_lib === 'bootstrap3', 'px-2 py-1 cursor-pointer': true}"
+                    :class="{'bg-white rounded-[8px] h-[26px] flex items-center shadow-md shadow-gray-300': default_settings.css_lib === 'bootstrap3', 'px-2 cursor-pointer': true}"
                 >
                     {{ $t('Bootstrap 3') }}
                 </div>
             </div>
-            <div v-if="availableStyles" class="my-2 form_group label-normalize">
+            <div v-if="availableStyles" class="my-3 form_group label-normalize">
                 <label v-for="tableStyle in availableStyles" :key="tableStyle.key"
                        :for="'table_style_' + tableStyle.key">
-                    <div class="flex items-center justify-between">
-                                        <span>
-                                            {{ tableStyle.title }}
-                                            <el-tooltip placement="right" effect="light"
-                                                        :content="tableStyle.description">
-                                            <el-icon class="tooltip-icon-color">
-                                                <InfoFilled/>
-                                            </el-icon>
-                                        </el-tooltip>
-                                        </span>
+                    <div class="flex items-center gap-2 mb-3">
                         <el-switch
                             size="small"
                             :model-value="isStyleActive(tableStyle.key)"
                             @change="(val) => toggleStyle(tableStyle.key, val)"
                             :id="'table_style_' + tableStyle.key">
                         </el-switch>
+                        <span>
+                             {{ tableStyle.title }}
+                             <el-tooltip placement="right" effect="light"
+                                         :content="tableStyle.description">
+                                 <el-icon class="tooltip-icon-color">
+                                     <InfoFilled/>
+                                 </el-icon>
+                             </el-tooltip>
+                        </span>
                     </div>
                 </label>
             </div>
 
             <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Features') }}</div>
             <div class="form_group label-normalize">
-                <div for="show_title" class="my-1 flex items-center justify-between">
-                                        <span>
-                                            {{ $t('Show Table Title') }}
-                                            <el-tooltip placement="right" effect="light"
-                                                        content="Enable this if you want to show table title in frontend">
-                                                <el-icon class="tooltip-icon-color">
-                                                    <InfoFilled/>
-                                                </el-icon>
-                                            </el-tooltip>
-                                        </span>
+                <div for="show_title" class="my-1 flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.show_title"
@@ -72,18 +63,18 @@
                         inactive-value="0"
                         :id="'show_title'">
                     </el-switch>
+                    <span>
+                         {{ $t('Show Table Title') }}
+                        <el-tooltip placement="right" effect="light"
+                                    content="Enable this if you want to show table title in frontend">
+                            <el-icon class="tooltip-icon-color">
+                                <InfoFilled/>
+                            </el-icon>
+                        </el-tooltip>
+                    </span>
                 </div>
 
-                <div for="show_description" class="my-1 flex items-center justify-between">
-                                        <span>
-                                            {{ $t('Show Table Description') }}
-                                            <el-tooltip placement="right" effect="light"
-                                                        content="Enable this if you want to show table description in frontend">
-                                                <el-icon class="tooltip-icon-color">
-                                                    <InfoFilled/>
-                                                </el-icon>
-                                            </el-tooltip>
-                                        </span>
+                <div for="show_description" class="my-1 flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.show_description"
@@ -91,12 +82,18 @@
                         inactive-value="0"
                         :id="'show_description'">
                     </el-switch>
+                    <span>
+                        {{ $t('Show Table Description') }}
+                        <el-tooltip placement="right" effect="light"
+                                    content="Enable this if you want to show table description in frontend">
+                            <el-icon class="tooltip-icon-color">
+                                <InfoFilled/>
+                            </el-icon>
+                        </el-tooltip>
+                    </span>
                 </div>
 
-                <div for="enable_search" class="my-1 flex items-center justify-between">
-                                        <span>
-                                            {{ $t('Enable the visitor to filter or search the table.') }}
-                                        </span>
+                <div for="enable_search" class="my-1 flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.enable_search"
@@ -104,10 +101,12 @@
                         inactive-value="0"
                         :id="'enable_search'">
                     </el-switch>
+                    <span>
+                        {{ $t('Enable the visitor to filter or search the table.') }}
+                    </span>
                 </div>
 
-                <div for="column_sorting" class="my-1 flex items-center justify-between">
-                    <span>{{ $t('Enable sorting of the table by the visitor') }}</span>
+                <div for="column_sorting" class="my-1 flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.column_sorting"
@@ -115,10 +114,10 @@
                         inactive-value="0"
                         :id="'column_sorting'">
                     </el-switch>
+                    <span>{{ $t('Enable sorting of the table by the visitor') }}</span>
                 </div>
 
-                <div for="hide_all_borders" class="my-1 flex items-center justify-between">
-                    <span>{{ $t('Hide All Borders') }}</span>
+                <div for="hide_all_borders" class="my-1 flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.hide_all_borders"
@@ -126,13 +125,13 @@
                         inactive-value="0"
                         :id="'hide_all_borders'">
                     </el-switch>
+                    <span>{{ $t('Hide All Borders') }}</span>
                 </div>
             </div>
 
             <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Pagination Setting') }}</div>
             <div class="form_group label-normalize">
-                <div for="hide_pagination" class="flex items-center justify-between">
-                    <span>{{ $t('Hide Pagination (Show all data at once)') }}</span>
+                <div for="hide_pagination" class="flex items-center gap-2 mb-3">
                     <el-switch
                         size="small"
                         v-model="default_settings.show_all"
@@ -140,15 +139,17 @@
                         inactive-value="0"
                         :id="'hide_pagination'">
                     </el-switch>
+                    <span>{{ $t('Hide Pagination (Show all data at once)') }}</span>
                 </div>
 
-                <div class="w-1/2">
+                <div class="w-1/2 mt-2">
                     <label class="font-[400] block">{{ $t('Items Per Page') }}</label>
-                    <el-input-number
-                        style="height: 40px; width: 100%;"
+                    <NinjaInput
+                        type="number"
+                        style="height: 38px;"
                         :min="1"
-                        :model-value="Number(default_settings.perPage)"
-                        @update:model-value="default_settings.perPage = Number($event)"
+                        :model-value="Number(default_settings.perPage) || 10"
+                        @update:model-value="default_settings.perPage = Number($event) || 10"
                         :disabled="default_settings.show_all == true || default_settings.show_all == '1'"
                     />
                 </div>
@@ -168,12 +169,13 @@
 
                 <div>
                     <label class="font-[400] block">{{ $t('Font Size') }}</label>
-                    <el-input-number
-                        style="height: 40px; width: 100%;"
+                    <NinjaInput
+                        type="number"
+                        style="height: 38px;"
                         :min="1"
                         :max="50"
-                        :model-value="Number(default_settings.table_font_size)"
-                        @update:model-value="default_settings.table_font_size = Number($event)"
+                        :model-value="Number(default_settings.table_font_size) || 14"
+                        @update:model-value="default_settings.table_font_size = Number($event) || 14"
                     />
                 </div>
             </div>
