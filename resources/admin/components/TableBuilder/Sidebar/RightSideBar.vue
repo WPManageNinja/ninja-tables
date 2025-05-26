@@ -11,7 +11,7 @@
                 </p>
             </template>
             <div class="form-group">
-                <label for="name">{{ $t("Table Title") }}</label>
+                <div>{{ $t("Table Title") }}</div>
                 <NinjaInput
                     style="width: 95%"
                     v-model="initialData.table_data.table_name"
@@ -63,8 +63,8 @@
                     </div>
                 </el-col>
                 <el-col :span="12">
-                    <h4>{{ $t('Import Table from CSV / JSON File') }}</h4>
-                    <div v-if="!file.name" class="my-5">
+                    <div>{{ $t('Import Table from CSV / JSON File') }}</div>
+                    <div v-if="!file.name" class="mb-3 mt-1">
                         <NinjaInput :disabled="!hasPro" @mouseover.native="upgradeToPro"
                                   :placeholder="$t('Import CSV/JSON from URL')" v-model="url">
                         </NinjaInput>
@@ -107,11 +107,11 @@
                     v-for="(table, key) in initialData.ready_made_tables"
                     :key="key"
                 >
-                    <div class="table-type-heading mb-[40px]">
-                        <h4 class="ready-made-name">{{ table.name }}</h4>
+                    <div class="table-type-heading mb-[20px]">
+                        <h4 class="ready-made-name text-center text-lg font-semibold">{{ table.name }}</h4>
                     </div>
                     <el-row>
-                        <el-col :span="8" v-for="(item, key) in table.tables" :key="key">
+                        <el-col class="mb-[20px]" :span="8" v-for="(item, key) in table.tables" :key="key">
                             <div class="ready-made-table-image">
                                 <img
                                     style="margin: 0 auto;width: 180px;display: flex;"
