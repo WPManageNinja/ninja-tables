@@ -35,6 +35,8 @@
                 <a :href="preview_url" target="_blank">
                     <NinjaButton type="secondary" :icon="assetUrl('icons/view.svg')" :btnText="$t('Preview')" iconSize="18px" />
                 </a>
+                <NinjaButton v-if="$route.name === 'design_studio'" :btnText="$t('Save')" :disabled="is_form_saving"
+                :loading="is_form_saving" @click="saveDesign" />
                 <a v-if="!has_pro"
                     href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                     target="_blank">
@@ -44,8 +46,7 @@
                         :btnText="$t('Get Pro')"
                     />
                 </a>
-                <NinjaButton v-if="$route.name === 'design_studio'" :btnText="$t('Save')" :disabled="is_form_saving"
-                    :loading="is_form_saving" @click="saveDesign" />
+
             </div>
 
         </div>

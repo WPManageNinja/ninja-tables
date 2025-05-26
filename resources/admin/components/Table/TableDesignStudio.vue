@@ -24,9 +24,9 @@
                         </div>
                     </div>
                     <div style="background: white; padding: 10px 20px;">
-                        <div class="ninja_upgrade_bar" v-if="showProNotice">
+                        <div class="nt-instruction" v-if="showProNotice">
                             {{ $t('Color customization is a PRO feature. Please upgrade to pro apply this feature.') }}
-                            <get-pro type="primary" />
+                            <GetPro class="mt-2" type="primary" />
                         </div>
                         <div :id="'footable_parent_' + tableId"
                             class="footable_parent ninja_table_wrapper loading_ninja_table wp_table_data_press_parent"
@@ -80,8 +80,8 @@
                             <el-collapse-item name="styles">
                                  <template #title>
                                     <div class="flex items-center">
-                                    <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
-                                    <span style="font-weight: 500; font-size: 14px;">{{ $t('Styles') }}</span>
+                                        <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
+                                        <span style="font-weight: 500; font-size: 14px;">{{ $t('Styles') }}</span>
                                     </div>
                                 </template>
                                 <div class="flex justify-center my-4">
@@ -319,7 +319,7 @@
                     <el-tab-pane label="Table Colors" name="color_customization">
                         <div class="px-[18px]">
                             <h3 class="text-[16px] mt-4">Select Color Scheme</h3>
-                            <div class="flex rounded-[8px] bg-[#F5F7FA] px-2 py-2 my-4 gap-3">
+                            <div class="flex rounded-[8px] bg-[#F5F7FA] p-2 h-[36px] items-center my-4 gap-3">
                                 <div 
                                     @click="tableSettings.table_color_type = 'pre_defined_color'" 
                                     :class="{
@@ -803,12 +803,12 @@
                 </div>
 
                 <div v-if="!has_pro" class="flex justify-center my-4">
-                    <get-pro text="Get Pro" />
+                    <GetPro text="Get Pro" />
                 </div>
             </div>
         </div>
-        <sortable-upgrade-notice :show="sortableUpgradeNotice"
-            @close="sortableUpgradeNotice = false"></sortable-upgrade-notice>
+        <SortableUpgradeNotice :show="sortableUpgradeNotice"
+            @close="sortableUpgradeNotice = false"></SortableUpgradeNotice>
     </div>
 </template>
 
