@@ -17,9 +17,10 @@
                             :index="menuItem.route" 
                             :route="{ name: menuItem.route }">
                             <el-tooltip :content="menuItem.title" placement="right">
-                                <el-icon><component  class="lg:hidden" :is="menuItem.icon_class" /></el-icon>
+                                <img :src="assetUrl(menuItem.iconSrc)" class="w-[20px] h-[20px] lg:hidden">
                             </el-tooltip>
-                            <el-icon><component class="hidden lg:block" :is="menuItem.icon_class" /></el-icon>
+                            <!-- <el-icon><component class="hidden lg:block" :is="menuItem.icon_class" /></el-icon> -->
+                            <img :src="assetUrl(menuItem.iconSrc)" class="w-[20px] h-[20px] hidden lg:block">
                             <span class="hidden lg:block">{{ menuItem.title }}</span>
                         </el-menu-item>
                     </template>
@@ -33,6 +34,8 @@
 </template>
 
 <script>
+import { assetUrl } from '../../utils/ninjatablesadmin';
+
     export default {
         name: 'Tools',
         data() {
@@ -47,36 +50,37 @@
             }
         },
         methods: {
+            assetUrl,
             setUpMenuItems() {
                 this.menuItems = this.applyFilters('ninja_table_settings_tools', [
                     {
                         route: 'import_tables',
                         title: this.$t('Import'),
-                        icon_class: 'UploadFilled',
+                        iconSrc: '/icons/import.svg',
                         status: true
                     },
                     {
                         route: 'default_table_appearance',
                         title: this.$t('Global Appearance'),
-                        icon_class: 'Star',
+                        iconSrc: '/icons/global-appear.svg',
                         status: true
                     },
                     {
                         route: 'permission',
                         title: this.$t('Permission'),
-                        icon_class: 'Setting',
+                        iconSrc: '/icons/permission_user.svg',
                         status: true
                     },
                     {
                         route: 'licensing',
                         title: this.$t('License'),
-                        icon_class: 'SetUp',
+                        iconSrc: '/icons/license.svg',
                         status: this.has_pro
                     },
                     {
                         route: 'global_settings',
                         title: this.$t('Global Settings'),
-                        icon_class: 'Menu',
+                        iconSrc: '/icons/global_setting.svg',
                         status: true
                     },
                 ]);
