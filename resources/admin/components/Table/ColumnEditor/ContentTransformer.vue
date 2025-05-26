@@ -5,8 +5,8 @@
             <p class="nt-modal-description">
                 Transform Value is a Premium feature. Get Transform Column Value, unlimited customizations, data filters, professional looks, Many More Integrations and so many things from the Pro version.
             </p>
-            <div class="py-2">
-                <get-pro />
+            <div class="py-2 flex">
+                <GetPro />
             </div>
         </div>
 

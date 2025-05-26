@@ -2,12 +2,10 @@
     <a v-if="!has_pro"
        href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&amp;utm_medium=wp&amp;utm_campaign=wp_plugin&amp;utm_term=upgrade"
        target="_blank" >
-        <div class="flex">
-            <div class="flex w-auto items-center gap-x-2 flex-wrap bg-[#0E121B] :hover:bg-[#222530] text-white px-4 py-2 rounded-[8px]">
+            <span class="flex items-center w-fit gap-x-2  bg-[#0E121B] :hover:bg-[#222530] text-white px-4 py-2 rounded-[8px]">
                 <img :src="assetUrl('icons/get-pro.svg')" alt="">
                 <span class="ml-1">{{ $t('Get Pro') }}</span>
-            </div>
-        </div>
+            </span>
     </a>
 </template>
 
