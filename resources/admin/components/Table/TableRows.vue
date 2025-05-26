@@ -34,7 +34,7 @@
             </div>
 
             <div v-else-if="dataSourceType === 'raw_sql'" class="nt-table-edit-nav">
-                <raw-sql-nav
+                <RawSqlNav
                     :is-editable-message="isEditableMessage"
                     :loading="syncing"
                     :config="config"
@@ -142,7 +142,7 @@
             </div>
 
             <div v-else class="default_nav flex-wrap -mb-2">
-                 {{ dataSourceType }} Table
+                 {{ formateDataSourceType(dataSourceType) }} Table
             </div>
 
             <div v-if="columns.length">
@@ -485,6 +485,22 @@
                     .finally(() => {
                         this.savingSettings = false;
                     });
+            },
+
+            formateDataSourceType(dataSource) {
+                const sourceMap = {
+                    'raw_sql': 'SQL',
+                    'wp-posts': 'WP Posts',
+                    'wp_woo': 'WooCommerce',
+                    'fluent-form': 'Fluent Forms',
+                    'csv': 'CSV',
+                    'google-csv': 'Google Sheets',
+                    'google': 'Google Sheets',
+                    'external-csv': 'External CSV',
+                    'drag_and_drop': 'Drag & Drop'
+                };
+
+                return sourceMap[dataSource] || 'Default';
             },
 
             getData() {

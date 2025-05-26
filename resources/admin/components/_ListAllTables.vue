@@ -55,8 +55,7 @@
             <el-table-column :label="$t('Data Source')" width="200">
                 <template #default="scope">
                     <div class="flex items-center gap-2">
-                        <img v-if="scope.row.dataSourceType === 'raw_sql'" class="w-4 h-4 mt-[2px]" :src="assetUrl('icons/' + scope.row.dataSourceType + '.ico')" alt="">
-                        <img v-else class="w-4 h-4 mt-[2px]" :src="assetUrl('icons/' + scope.row.dataSourceType + '.svg')" alt="">
+                        <img class="w-5 h-5" :src="assetUrl('icons/' + scope.row.dataSourceType + '.svg')" alt="">
                         <div>{{ dataSourceType(scope.row) }}</div>
                     </div>
                 </template>
@@ -168,7 +167,7 @@
 
         <div class="text-center my-4" v-else-if="items.length > 3 && !hasPro">
             <hr />
-            <h3 class="mt-6 mb-4 text-[18px] font-[600] text-[#0E121B]">Love Ninja Tables? Upgrade to Pro and get more exciting features and Performance</h3>
+            <h3 class="mt-6 mb-4 text-[18px] font-[600] text-[#0E121B]">Love Ninja Tables? Upgrade to Pro and get more exciting features!</h3>
             <get-pro/>
         </div>
     </div>
