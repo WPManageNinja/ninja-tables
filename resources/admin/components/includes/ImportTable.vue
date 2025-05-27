@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="ninja_modal-body">
-            <h3>Import Table</h3>
+            <h3>{{ $t('Import Table') }}</h3>
 
             <p class="ninja_subtitle">
-                Import table from existing CSV or JSON file.
+                {{ $t('Import table from existing CSV or JSON file.') }}
             </p>
 
             <div class="form">

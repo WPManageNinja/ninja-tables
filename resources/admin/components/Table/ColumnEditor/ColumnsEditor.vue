@@ -12,9 +12,7 @@
                             <el-tooltip class="item" placement="bottom-start" effect="light">
                                 <template #content>
                                     <h3>Column Name</h3>
-                                    <p>
-                                        Enter a column name to set the header title.
-                                    </p>
+                                    <p>{{ $t('Enter a column name to set the header title.') }}</p>
                                 </template>
                                 <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
@@ -32,9 +30,7 @@
                             <el-tooltip class="item" placement="bottom-start" effect="light">
                                 <template #content>
                                     <h3>Column Key</h3>
-                                    <p>
-                                        Column key is for data mapping, export and import table data.
-                                    </p>
+                                    <p>{{ $t('Column key is for data mapping, export and import table data.') }}</p>
                                 </template>
                                 <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                             </el-tooltip>
@@ -55,9 +51,7 @@
                         <el-tooltip class="item" placement="bottom-start" effect="light">
                             <template #content>
                                 <h3>{{ $t('Data Type') }}</h3>
-                                <p>
-                                    Choose the data type of the column.
-                                </p>
+                                <p>{{ $t('Choose the data type of the column.') }}</p>
                             </template>
                             <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
                         </el-tooltip>
@@ -70,7 +64,7 @@
                             :value="typeKey">
                         </el-option>
                     </el-select>
-                    <p v-show="hasPro" class="mt-1">Select HTML Field if you want to add Link, media or any type of html</p>
+                    <p v-show="hasPro" class="mt-1">{{ $t('Select HTML Field if you want to add Link, media or any type of html') }}</p>
                 </el-form-item>
 
                 <div v-if="model.data_type === 'date'">
@@ -83,7 +77,7 @@
                                     <template #content>
                                         <h3>Date Format</h3>
                                         <p>
-                                            Choose the date format of the column.
+                                            {{ $t('Choose the date format of the column.') }}
                                         </p>
                                     </template>
                                     <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
@@ -126,7 +120,7 @@
                                     <h3>Show Time</h3>
 
                                     <p>
-                                        If you select yes, then time picker will be available
+                                        {{ $t('If you select yes, then time picker will be available') }}
                                     </p>
                                 </template>
 
@@ -155,7 +149,7 @@
                                     <h3>First Day</h3>
 
                                     <p>
-                                        The first day of the week, e.g. Sunday, Monday, etc.
+                                        {{ $t('The first day of the week, e.g. Sunday, Monday, etc.') }}
                                     </p>
                                 </template>
 
@@ -490,13 +484,11 @@
                 <div class="advanced-settings">
 
                     <div class="nt-instruction mb-[20px]" v-if="!hasPro">
-                        <h3 class="nt-modal-title">Advanced Column Settings</h3>
+                        <h3 class="nt-modal-title">{{ $t('Advanced Column Settings') }}</h3>
                         <p class="nt-modal-description">
-                            Customize your table's column's width, custom css class, content alignments, column styling
-                            with this feature.
-                            Advanced Column Settings is a pro feature and You can use it once you upgrade to Ninja
-                            Tables Pro.
-                            Ninja Table Pro has lots of features that will help you to build any type of Tables.
+                            {{ $t(`Customize your table's column's width, custom css class, content alignments, column styling
+                            with this feature. Advanced Column Settings is a pro feature and You can use it once you upgrade to Ninja
+                            Tables Pro. Ninja Table Pro has lots of features that will help you to build any type of Tables. `) }}
                         </p>
                         <div class="py-2 flex">
                             <GetPro />
@@ -513,7 +505,7 @@
                                         <h3>Extra Classes</h3>
 
                                         <p>
-                                            Add extra classes to this column. This will be applied for the entire column
+                                            {{ $t('Add extra classes to this column. This will be applied for the entire column') }}
                                         </p>
                                     </template>
                                     <el-icon class="tooltip-icon-color">
@@ -535,11 +527,8 @@
                                 {{ $t("Column Width") }}
                                 <el-tooltip class="item" placement="bottom-start" effect="light">
                                     <template #content>
-                                        <h3>Column Width</h3>
-
-                                        <p>
-                                            Set the column width. This will be applied for the entire column
-                                        </p>
+                                        <h3>{{ $t('Column Width') }}</h3>
+                                        <p>{{ $t('Set the column width. This will be applied for the entire column') }}</p>
                                     </template>
                                     <el-icon class="tooltip-icon-color">
                                         <InfoFilled/>
@@ -596,7 +585,7 @@
                                 <el-tooltip class="item" placement="bottom-start" effect="light">
                                     <template #content>
                                         <h3>Content Text Alignment</h3>
-                                        <p> Choose the text alignment for Column Rows</p>
+                                        <p> {{ $t('Choose the text alignment for Column Rows') }}</p>
                                     </template>
                                     <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
                                 </el-tooltip>
@@ -631,9 +620,7 @@
                                 <template #content>
                                     <h3>Header HTML Content</h3>
 
-                                    <p>
-                                        Provide content for table column header if you want to show html content.
-                                    </p>
+                                    <p>{{ $t('Provide content for table column header if you want to show html content.') }}</p>
                                 </template>
                                 <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
                             </el-tooltip>
@@ -650,9 +637,7 @@
                                 <template #content>
                                     <h3>Filterable</h3>
 
-                                    <p>
-                                        If You enable this then this column data will not be filterable at the frontend.
-                                    </p>
+                                    <p>{{ $t('If You enable this then this column data will not be filterable at the frontend.') }}</p>
                                 </template>
                                 <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
                                 </el-tooltip>
@@ -678,9 +663,7 @@
                                 <template #content>
                                     <h3>Sortable</h3>
 
-                                    <p>
-                                        If You enable this then this column data will not be sortable at the frontend.
-                                    </p>
+                                    <p>{{ $t('If You enable this then this column data will not be sortable at the frontend.') }}</p>
                                 </template>
                                 <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
                             </el-tooltip>
@@ -707,10 +690,7 @@
                                     <template #content>
                                         <h3>Column Background Color</h3>
 
-                                        <p>
-                                            You can set Column Background color of this particular column that will show on the
-                                            frontend table.
-                                        </p>
+                                        <p>{{ $t('You can set Column Background color of this particular column that will show on the frontend table.') }}</p>
                                     </template>
                                     <el-icon class="tooltip-icon-color"><InfoFilled/></el-icon>
                                 </el-tooltip>
