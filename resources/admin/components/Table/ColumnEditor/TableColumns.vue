@@ -124,9 +124,9 @@
                             <div class="proms">
                                 <div class="help_section">
                                     <p>Need help to configure the columns and responsive breakdowns, Please check tutorial with
-                                        video <a class="nt-link"
+                                         <a class="nt-link"
                                                 href="https://ninjatables.com/docs/column-responsive-breakpoints/"
-                                                target="_blank">here</a></p>
+                                                target="_blank">video here</a></p>
                                 </div>
                                 <div v-if="!is_fluent_installed" class="help_section">
                                     <p>Have you checked out FluentForm yet? We have developed a powerful Drag & Drop WordPress Form

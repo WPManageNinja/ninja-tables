@@ -97,7 +97,7 @@
                 </h3>
               <div class="flex justify-center mb-4">
                   <a v-if="!hasPro"
-                     href="hasPro://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
+                     href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                      target="_blank">
                       <NinjaButton
                           size="small"
