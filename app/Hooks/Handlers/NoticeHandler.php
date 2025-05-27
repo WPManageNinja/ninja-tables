@@ -10,10 +10,23 @@ class NoticeHandler
     private const TEMP_DISMISS_DAYS = 30;
     private const SECONDS_IN_A_DAY = 86400;
 
+    private static $customNotices = [];
+
     public function register()
     {
         add_action('admin_notices', [$this, 'appendNotices']);
         add_action('wp_ajax_ninja_tables_dismiss_notice', [$this, 'handleDismissNotice']);
+    }
+
+    public static function addAdminNotice($key, $config)
+    {
+        if (!isset($config['type']) || !isset($config['callback'])) {
+            return;
+        }
+
+        self::$customNotices[$key] = wp_parse_args($config, [
+            'condition' => true,
+        ]);
     }
 
     public function handleDismissNotice()
@@ -87,7 +100,7 @@ class NoticeHandler
 
     private function getAllNoticeDefinitions()
     {
-        return [
+        $builtIn = [
             'review_notice'  => [
                 'type'      => 'temp',
                 'callback'  => [$this, 'getReviewHtml'],
@@ -100,6 +113,10 @@ class NoticeHandler
                                version_compare(NINJAPROPLUGIN_VERSION, '5.0.0', '<'),
             ],
         ];
+
+        $custom = self::$customNotices;
+
+        return apply_filters('ninja_tables_notices', array_merge($builtIn, $custom));
     }
 
     private function getReviewHtml($key)
@@ -143,9 +160,7 @@ HTML;
             </p>
         </div>
         <div class="nt-notice-actions">
-            <a class="nt-btn nt-btn-secondary remind-me-later" href="#" data-notice-type="temp">
-                Remind Me Later
-            </a>
+            <a class="nt-btn nt-btn-secondary remind-me-later" href="#" data-notice-type="temp">Remind Me Later</a>
         </div>
     </div>
 </div>
