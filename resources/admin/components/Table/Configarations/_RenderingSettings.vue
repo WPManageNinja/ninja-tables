@@ -21,7 +21,10 @@
             <div :class="`nt_rendering_card ${tableSettings.render_type === 'legacy_table' && 'is_active'}`"
                  @click="()=>changeTableType('legacy_table')">
                 <div>
-                    <div class="mb-2 font-[500] text-[14px]">Classic</div>
+                    <div class="mb-2 font-[500] text-[14px] flex items-center gap-1">
+                        Classic
+                        <img v-if="!hasPro" class="h-4 w-4" :src="assetUrl('icons/get-pro.svg')" alt="">
+                    </div>
                     <div class="text-[12px] text-[#525866]">
                         <span>{{ $t("Recommended settings for advanced features") }}</span>
                         <div class="flex gap-4 mt-2">
@@ -128,6 +131,7 @@
 import {useEventBus} from "../../../eventBus";
 import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
 import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+import {assetUrl} from "../../../utils/ninjatablesadmin";
 
 export default {
     name: 'ninja-rendering_settings',
@@ -140,6 +144,7 @@ export default {
         }
     },
     methods: {
+        assetUrl,
         storeSettings() {
             this.$emit('storeSettings');
         },

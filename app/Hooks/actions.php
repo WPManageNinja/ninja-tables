@@ -58,8 +58,6 @@ if ($pagenow == 'plugins.php') {
 $app->addAction('wp_ajax_ninja-tables_deactivate_feedback', [DeactivationHandler::class, 'saveDeactivationFeedback']);
 
 $app->addAction('wp_head', [NinjaTableAdminHandler::class, 'addNinjaTableAdminScript']);
-$app->addAction('admin_notices', [NinjaTableAdminHandler::class, 'adminNotices']);
-$app->addAction('init', [NinjaTableAdminHandler::class, 'remindMeLater']);
 
 $app->addAction('save_post', [NinjaTableAdminHandler::class, 'saveNinjaTableFlagOnShortCode']);
 
@@ -86,3 +84,4 @@ $app->addAction('wp_ajax_ninja-tables-default-export', [ExportHandler::class, 'd
 $app->addAction('wp_ajax_ninja-tables-drag-and-drop-export', [ExportHandler::class, 'dragAndDropExport']);
 
 (new \NinjaTables\App\Modules\Gutenberg\GutenbergModule())->register();
+(new \NinjaTables\App\Hooks\Handlers\NoticeHandler())->register();

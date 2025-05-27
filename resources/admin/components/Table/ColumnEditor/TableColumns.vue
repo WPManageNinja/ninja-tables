@@ -30,6 +30,7 @@
                             </el-tooltip>
                             <img class="hidden lg:block" :src="assetUrl('/icons/customize.svg')"/>
                             <span class="hidden lg:block">Custom Filters</span>
+                            <img v-if="!hasPro" class="h-4 w-4 ml-1 !grayscale-0" :src="assetUrl('icons/get-pro.svg')" alt="">
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'button_settings'" index="button_settings">
@@ -38,6 +39,7 @@
                             </el-tooltip>
                             <img class="hidden lg:block" :src="assetUrl('/icons/search-area.svg')"/>
                             <span class="hidden lg:block">Buttons (CSV/Print)</span>
+                            <img v-if="!hasPro" class="h-4 w-4 ml-1 !grayscale-0" :src="assetUrl('icons/get-pro.svg')" alt="">
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'language_settings'" index="language_settings">
@@ -126,7 +128,7 @@
                                     <p class="text-[14px]">Need help to configure the columns and responsive breakdowns, Please check tutorial with
                                         video <a class="nt-link"
                                                 href="https://ninjatables.com/docs/column-responsive-breakpoints/"
-                                                target="_blank">here</a></p>
+                                                target="_blank">video here</a></p>
                                 </div>
                                 <div v-if="!is_fluent_installed" class="nt-instruction">
                                     <p class="text-[14px]">Have you checked out FluentForm yet? We have developed a powerful Drag & Drop WordPress Form
