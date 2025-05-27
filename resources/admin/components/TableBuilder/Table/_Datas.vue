@@ -368,14 +368,15 @@ export default {
                 visibility: hidden;
 
                 i {
-                    background: #3f9eff;
+                    background: #335cff;
                     padding: 0px 1px;
                     font-weight: bold;
+                    font-size: 18px;
                 }
             }
 
             &:hover {
-                border-color: #3f9eff;
+                border-color: #335cff;
                 cursor: pointer;
 
                 .icon-styles {

@@ -141,14 +141,14 @@
         </div>
         <el-row v-else-if="tableId" :justify="tableAlignment === 'left' ? 'start' : 
            tableAlignment === 'right' ? 'end' : 'center'">
-            <table-layout
+            <TableLayout
                 @editItem="editItem"
                 :initialData="initialData"
                 :tableData="initialData.table_data"
                 :setting="initialData.settings"
                 :responsive="initialData.responsive"
                 :selectedDevice="selectedDevice"
-            ></table-layout>
+            ></TableLayout>
         </el-row>
     </div>
     
