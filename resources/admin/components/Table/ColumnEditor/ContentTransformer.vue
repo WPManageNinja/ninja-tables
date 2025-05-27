@@ -51,18 +51,24 @@
                     class="ninja_create-table-modal"
                     title="Supported Excel Formulas"
                     v-model="show_formulas"
-                    width="30%">
-                    <ul style="margin: 0px 20px; padding-top: 20px">
-                        <li v-for="line_item in supported_formullas">{{line_item}}</li>
-                    </ul>
+                    width="60%">
+
+                    <div class="py-5 px-6 h-[400px] overflow-y-scroll scrollbar-always-visible">
+                        <ul class="grid grid-cols-5 gap-2">
+                            <li v-for="line_item in supported_formullas">{{line_item}}</li>
+                        </ul>
+                    </div>
+
+                    <hr>
+
                     <div class="flex justify-end p-4">
                         <NinjaButton
-                            size="small"
                             type="secondary"
                             @click.prevent="show_formulas = false"
                             :btnText="$t('Close')"
                         />
                     </div>
+
                 </el-dialog>
             </div>
         </div>
@@ -167,3 +173,29 @@
         }
     };
 </script>
+
+<style scoped>
+.scrollbar-always-visible {
+    overflow-y: scroll !important;
+    scrollbar-width: auto;
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+.scrollbar-always-visible::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollbar-always-visible::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.scrollbar-always-visible::-webkit-scrollbar-thumb {
+    background: #a2a1a1;
+    border-radius: 8px;
+}
+
+.scrollbar-always-visible::-webkit-scrollbar-thumb:hover {
+    background: #828282;
+    border-radius: 8px;
+}
+</style>
