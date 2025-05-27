@@ -112,16 +112,16 @@
 
                             <template #dropdown>
                                 <el-dropdown-menu class="ninja-dropdown-menu">
-                                    <el-dropdown-item @click.prevent="confirmDeleteTable(scope.row.ID)">
-                                        {{ $t('Delete') }}
-                                    </el-dropdown-item>
-
                                     <el-dropdown-item  v-if="shouldBeVisible(scope.row) && scope.row.fluentfrom_url">
                                         <a :href="scope.row.fluentfrom_url" >{{ $t('Fluent Form Entries') }}</a>
                                     </el-dropdown-item>
 
                                     <el-dropdown-item  v-else  @click.prevent="duplicate(scope.row.ID, scope.row.dataSourceType)">
                                         {{ $t('Duplicate') }}
+                                    </el-dropdown-item>
+
+                                    <el-dropdown-item @click.prevent="confirmDeleteTable(scope.row.ID)">
+                                        {{ $t('Delete') }}
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
