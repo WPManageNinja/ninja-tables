@@ -68,7 +68,7 @@
                                         />
                                     </div>
                                 </div>
-                                <div v-if="addColumnStatus || !columns.length" class="column border border-[#ebeef5] rounded-[8px] mb-2">
+                                <div v-if="addColumnStatus || !columns.length" class="column border border-[#ebeef5] rounded-[8px] mb-4">
                                         <div class="add_column_wrapper">
                                             <ColumnsEditor
                                                 :columns="columns"
