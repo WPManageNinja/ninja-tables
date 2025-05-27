@@ -48,19 +48,31 @@ class NinjaTableAdminHandler
                 $message = <<<HTML
 <div class="nt_review_notice">
     <div class="nt-notice-content">
-        <p class="nt-notice-text">
+        <div class="nt-notice-text">
             In love with Ninja Tables?
             <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Please leave a 5-star review for us!</a>
             It will encourage us to come up with more and more features.
-        </p>
+            
+        </div>
+        <div class="nt-notice-actions">
+            <a class="nt-btn nt-btn-secondary remind-me-later" href="{$remind_url}">Remind Me Later</a>
+            <div class="nt-divider"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+             <path d="M9.9992 14.695L4.70945 17.656L5.8907 11.71L1.43945 7.594L7.4597 6.88L9.9992 1.375L12.5387 6.88L18.559 7.594L14.1077 11.71L15.289 17.656L9.9992 14.695Z" fill="#F6B51E"/>
+            </svg>
+            <a class="nt-btn nt-btn-primary" target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a>
+            <!-- <a class="nt-btn-close" href="{$dismiss_url}">
+                <span class="nt-close-icon dashicons dashicons-no"></span>
+            </a> -->
+        </div>
     </div>
-    <div class="nt-notice-actions">
+    <!-- <div class="nt-notice-actions">
         <a class="nt-btn nt-btn-primary" target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a>
         <a class="nt-btn nt-btn-secondary" href="{$remind_url}">Remind Me Later</a>
         <a class="nt-btn-close" href="{$dismiss_url}">
             <span class="nt-close-icon dashicons dashicons-no"></span>
         </a>
-    </div>
+    </div> -->
 </div>
 HTML;
 
