@@ -4,7 +4,7 @@
             <el-button-group v-if="activeTab === 'background'" class="button-group" style="margin-top: 0">
                 <el-button
                     type="primary"
-                    size="small"
+                    size="default"
                     @click="manageCell(true, 'cells')"
                 >
                     <el-icon><Grid /></el-icon>
@@ -13,7 +13,7 @@
 
                 <el-button
                     type="primary"
-                    size="small"
+                    size="default"
                     @click="manageCell(true, 'background')"
                 >
                     <el-icon><IceCreamSquare /></el-icon>
@@ -161,12 +161,12 @@
                                         <div class="single-item"
                                              :class="[item.id === itemId ? 'item-active' : '', manage ? 'single-item-edit' : (selectedDevice === '' ? item.data.type === 'ribbon' ? 'only-ribbon' : 'other-item' : 'responsive-mode')]"
                                              :key="ind">
-                                            <table-data :manage="manage" :setting="setting" :reference="`${index}_${key}_${row.rows[header].columns.length-(ind+1)}`"
+                                            <TableData :manage="manage" :setting="setting" :reference="`${index}_${key}_${row.rows[header].columns.length-(ind+1)}`"
                                                         @click.native="!manage && selectedDevice === '' ? styleChange(item, index, key, row.rows[header], row) : ''"
                                                         :item="item">
-                                            </table-data>
+                                            </TableData>
                                             <template v-if="!manage && selectedDevice === ''">
-                                                <div class="icon-style remove-elements" :style="iconSpacing(item)">
+                                                <div class="icon-style remove-elements text-[20px]" :style="iconSpacing(item)">
                                                     <el-icon><Rank/></el-icon>
                                                     <el-icon @click="copyItem(index, header, item)"><CopyDocument/></el-icon>
                                                     <el-icon @click="deleteItem(index, header, ind)"><Delete/></el-icon>
@@ -196,13 +196,13 @@
                         >
                             <template v-if="singleTd.columns">
                                     <span v-for="(singleItem, idx) in singleTd.columns" :key="idx">
-                                        <table-data
+                                        <TableData
                                             class="responsive-mode"
                                             :reference="`${index}_${idx}`"
                                             :setting="setting"
                                             v-if="item.id != itemId"
                                             :item="singleItem"
-                                        ></table-data>
+                                        ></TableData>
                                     </span>
                             </template>
                         </td>
@@ -216,7 +216,7 @@
 </template>
 <script>
 import draggable from "vuedraggable";
-import TableData from "./_Datas"
+import TableData from "./_Datas.vue"
 import { manageRowColumn } from "../Mixin/manageRowColumn.js";
 import { manageResponsiveData } from "../Mixin/manageResponsiveData.js";
 import { helpers } from "../Mixin/helpers.js";
@@ -861,21 +861,23 @@ export default {
                     position: absolute;
                     top: -15px;
                     height: auto;
+                    font-size: 14px;
                     width: 100%;
                     opacity: 0;
                     left: 0;
                     right: 0;
                     display: flex;
                     justify-content: flex-end;
-                    font-size: 14px;
                     color: #ffffff;
-
+                    .el-icon{
+                        font-size: 18px;
+                    }
                     .el-icon-rank {
                         cursor: move;
                     }
 
                     i {
-                        background: #3f9eff;
+                        background: #335cff;
                         padding: 0px 2px;
                         font-weight: bold;
                     }
@@ -889,7 +891,7 @@ export default {
 
                 &.item-active {
                     .hover-item {
-                        border-color: #3f9eff;
+                        border-color: #335cff;
                     }
                 }
 
@@ -897,7 +899,7 @@ export default {
                     cursor: pointer;
 
                     .hover-item {
-                        border-color: #3f9eff;
+                        border-color: #335cff;
                     }
 
                     .icon-style {
@@ -915,7 +917,7 @@ export default {
                     .corner,
                     .bookmark,
                     .side {
-                        border: 1px solid #3f9eff;
+                        border: 1px solid #335cff;
                     }
 
                     .icon-style {

@@ -7,14 +7,14 @@
     </div>
     <el-row :gutter="20">
       <el-col :xs="24" :sm="10" :md="9" :lg="6" :xl="6" id="leftside">
-        <left-side-bar :singleItem="singleItem" :initialData="initialData" :selectedDevice="selectedDevice"
-          @deviceSelected="deviceSelected"></left-side-bar>
+        <LeftSideBar :singleItem="singleItem" :initialData="initialData" :selectedDevice="selectedDevice"
+          @deviceSelected="deviceSelected"></LeftSideBar>
       </el-col>
       <el-col :xs="24" :sm="14" :md="15" :lg="18" :xl="18">
-        <right-side-bar v-if="initialData" @editItem="editItem" :table="initialData.table"
+        <RightSideBar v-if="initialData" @editItem="editItem" :table="initialData.table"
           :selectedDevice="selectedDevice" :initialData="initialData" :tableId="$route.params.table_id"
           style="height: auto; padding-bottom: 25px;">
-        </right-side-bar>
+        </RightSideBar>
       </el-col>
     </el-row>
   </div>
