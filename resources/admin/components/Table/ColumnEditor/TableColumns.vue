@@ -122,14 +122,14 @@
                                 </div>
                             </div>
                             <div class="proms">
-                                <div class="help_section">
-                                    <p>Need help to configure the columns and responsive breakdowns, Please check tutorial with
+                                <div class="nt-instruction">
+                                    <p class="text-[14px]">Need help to configure the columns and responsive breakdowns, Please check tutorial with
                                         video <a class="nt-link"
                                                 href="https://ninjatables.com/docs/column-responsive-breakpoints/"
                                                 target="_blank">here</a></p>
                                 </div>
-                                <div v-if="!is_fluent_installed" class="help_section">
-                                    <p>Have you checked out FluentForm yet? We have developed a powerful Drag & Drop WordPress Form
+                                <div v-if="!is_fluent_installed" class="nt-instruction">
+                                    <p class="text-[14px]">Have you checked out FluentForm yet? We have developed a powerful Drag & Drop WordPress Form
                                         Builder plugin with some amazing Premium features <a :href="fluent_url">Download from
                                             WordPress.org</a></p>
                                 </div>

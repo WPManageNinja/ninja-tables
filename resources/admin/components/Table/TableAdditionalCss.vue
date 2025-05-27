@@ -12,7 +12,7 @@
         </div>
 
         <div v-if="current_tab === 'additional_css'">
-            <p class="my-[16px]">{{ $t('You may add') }}
+            <p class="my-[16px] text-[14px]">{{ $t('You may add') }}
                 <code
                     class='bg-[#D3DCFF] py-[2px] px-[6px] rounded cursor-pointer copy'
                     :data-clipboard-text="'#footable_parent_'+ config.table.ID"
@@ -39,12 +39,12 @@
         </div>
 
         <div v-else-if="current_tab === 'additional_js'">
-            <p class="my-4">
+            <p class="my-4 text-[14px]">
                 {{
                     $t(`Your additional JS code will run after the table initialized. Please provide valid javascript code. Invalid JS code may break the table UI.`)
                 }}
             </p>
-            <p class="mb-4">
+            <p class="mb-4 text-[14px]">
                 {{ $t('The Following Javascript variables are available that you can use:') }} <br>
                 <b>$table:</b> {{ $t('The Javascript DOM object of the table') }} <br>
                 <b>tableConfig:</b> {{ $t('The configuration object of the table.') }}

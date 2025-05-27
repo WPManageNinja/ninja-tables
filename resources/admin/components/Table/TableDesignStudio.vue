@@ -51,8 +51,7 @@
                                 <p class="my-3">{{ $t('Please configure the table columns before viewing the table design.' )}}</p>
                             </div>
                         </div>
-                        <div class="ninja_demo_disclaimer" v-if="formattedColumns.length">
-                            <hr />
+                        <div class="ninja_demo_disclaimer text-[14px] mt-4" v-if="formattedColumns.length">
                             <p v-if="tableSettings.stackable == 'yes'">
                                 <b>For Stackable Tables, Live preview is disabled here. Please check on preview url</b>
                             </p>

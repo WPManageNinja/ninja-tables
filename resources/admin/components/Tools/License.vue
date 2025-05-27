@@ -55,8 +55,8 @@
                     <p class="my-2 text-[16px] font-[500] text-[#3C434A]">{{ $t('Enter your license key') }}</p>
                     <div class="flex gap-2 items-center">
                         <NinjaInput v-model="licenseKey" placeholder="License Key"/>
-                        <NinjaButton class="min-w-[130px]" v-loading="doing_ajax" @click="activateLicense"
-                                     type="primary" :btn-text="$t('Activate Pro')"/>
+                        <NinjaButton class="w-full lg:max-w-[150px] mt-2 lg:mt-0" @click="activateLicense"
+                                     type="primary" :btn-text="$t('Activate Pro')" :loading="doing_ajax"/>
                         <p v-html="error_message" v-if="error_message"></p>
                     </div>
                 </div>
@@ -65,8 +65,8 @@
                 <p class="my-2 text-[16px] font-[400] text-[#3C434A]">{{ $t('Enter your license key') }}</p>
                 <div class="flex flex-col lg:!flex-row gap-2 items-center">
                     <NinjaInput class="w-full" v-model="licenseKey" placeholder="License Key"/>
-                    <NinjaButton class="w-full lg:max-w-[130px] mt-2 lg:mt-0" @click="activateLicense" type="primary"
-                                 :btn-text="$t('Activate Pro')"/>
+                    <NinjaButton class="w-full lg:max-w-[150px] mt-2 lg:mt-0" @click="activateLicense" type="primary"
+                                 :btn-text="$t('Activate Pro')" :loading="doing_ajax"/>
                 </div>
                 <div class="nt-instruction text-center" v-if="error_message">
                     <h3 class="nt-modal-title my-3">{{ $t('Invalid License Key') }}</h3>
