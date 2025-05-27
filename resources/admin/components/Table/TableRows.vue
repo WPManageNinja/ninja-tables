@@ -216,13 +216,17 @@
 
                         <template #default="scope">
                             <div class="flex justify-end items-center">
-                                <span v-if="has_pro" @click="addAfter(scope)" class="cursor-pointer mr-2">
-                                    <img :src="assetUrl('icons/add-ico.svg')" class="mb-[3px]" alt="Add"/>
-                                </span>
+                                <el-tooltip content="Add data after this row" placement="top" effect="light">
+                                    <span v-if="has_pro" @click="addAfter(scope)" class="cursor-pointer mr-2">
+                                        <img :src="assetUrl('icons/add-ico.svg')" class="mb-[3px]" alt="Add"/>
+                                    </span>
+                                </el-tooltip>
 
-                                <span @click="showUpdateModal(scope)" class="cursor-pointer mr-2" >
-                                    <img :src="assetUrl('icons/edit-2.svg')" alt="Edit"/>
-                                </span>
+                                <el-tooltip content="Edit Row" placement="top" effect="light">
+                                    <span @click="showUpdateModal(scope)" class="cursor-pointer mr-2" >
+                                        <img :src="assetUrl('icons/edit-2.svg')" alt="Edit"/>
+                                    </span>
+                                </el-tooltip>
                                 <el-dropdown>
                                     <span class="el-dropdown-link">
                                       <img :src="assetUrl('/icons/more.svg')" alt="more"/>

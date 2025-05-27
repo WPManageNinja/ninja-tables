@@ -1,7 +1,7 @@
 <template>
     <div class="ninja_modal-body">
         <h3 v-if="!editing" class="nt-modal-title">
-            {{ $t('Construct Table from WP Fluent Form Entries') }}
+            {{ $t('Construct Table from Fluent Forms Entries') }}
         </h3>
 
         <template v-if="isFluentFormUpdated">
@@ -157,7 +157,7 @@
             <br/>
             <div style="position: relative;padding-bottom: 56.25%;padding-top: 25px;height: 0;">
                 <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;" width="700" height="394"
-                        src="https://www.youtube.com/embed/XxBrmuhu6yQ" frameborder="0"
+                        src="https://www.youtube.com/embed/uMVnTYnKWM4" frameborder="0"
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen></iframe>
             </div>
@@ -165,10 +165,12 @@
 
         <div v-else class="fluent-form-promo">
             <p>
-                <a class="nt-link" href="https://wordpress.org/plugins/fluentform" target="_blank">WP Fluent Form</a> is a WordPress
-                Contact Form plugin packed with all the premium features you would need to create
-                a responsive, customizable, drag and drop form. Using this module, You can easily show your form entries
-                in Ninja Tables.
+                <a class="nt-link" href="https://wordpress.org/plugins/fluentform" target="_blank">Fluent Form</a>
+                is a leading WordPress Contact Form plugin packed with all the premium features you need for a smart form. And integrating Fluent Forms with Ninja Tables, you can easily create tables using form entries.
+                <br>
+                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/fluent-forms-integration/">
+                    Learn more about this module
+                </a>
             </p>
             <div class="my-4">
                 <NinjaButton v-loading="installing" @click="installFluentFrom">
@@ -181,7 +183,7 @@
             <br/>
             <div style="position: relative;padding-bottom: 56.25%;padding-top: 25px;height: 0;">
                 <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;" width="700" height="394"
-                        src="https://www.youtube.com/embed/XxBrmuhu6yQ" frameborder="0"
+                        src="https://www.youtube.com/embed/uMVnTYnKWM4" frameborder="0"
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen></iframe>
             </div>
