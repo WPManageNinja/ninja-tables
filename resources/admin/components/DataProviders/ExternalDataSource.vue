@@ -15,8 +15,7 @@
                         {{ $t('Construct Table from Google Sheets') }}
                     </h3>
                     <p class="nt-modal-description">
-                        {{`Whenever your Google Sheets data changes it will be automatically reflected here.
-                            You won't have to do a thing. Please provide the publishable public URL of your google sheet.`}}
+                        {{`Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro.`}}
                         <a class="nt-link" target="_blank"
                            href="https://ninjatables.com/docs/google-sheets-integration/">
                             {{$t('View Documentation Here')}}
