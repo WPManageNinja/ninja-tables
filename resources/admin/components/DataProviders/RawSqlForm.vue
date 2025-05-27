@@ -5,13 +5,13 @@
 
     <div v-else class="ninja_modal-body">
         <h3 class="nt-modal-title">
-            Construct Table from Custom SQL Query
+           {{$t('Construct Table from Custom SQL Query')}}
         </h3>
         <p class="nt-modal-description">
-            {{$t('Create table by generating a sql query to any custom SQL database.')}}
+            {{$t('Construct Table from Custom SQL Query. Create a table by generating a sql query to any custom SQL database.')}}
             <a class="nt-link" target="_blank"
                href="https://ninjatables.com/docs/create-table-from-custom-sql/">
-                {{$t('Learn more about custom sql table integration')}}
+                {{$t('View documentation of this feature.')}}
             </a>
         </p>
 

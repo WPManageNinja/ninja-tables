@@ -3,13 +3,16 @@
         <div
             v-if="!tableId"
             :gutter="20"
-            style="height: 500px; overflow-y: scroll; padding: 0px 20px;box-sizing: border-box;">
-            <template>
-                <h3>{{ $t('Create a Drag & Drop Table') }}</h3>
-                <p class="ninja_subtitle">
+            style="height: 500px; overflow-y: scroll;box-sizing: border-box;">
+            <div class="mb-[30px]">
+                <h3 class="nt-modal-title">{{ $t('Create a Drag & Drop Table') }}</h3>
+                <p class="nt-modal-description">
                     {{ $t("Create your drag & drop table columns and rows to get complete control over your data with lots of customizations.") }}
                 </p>
-            </template>
+                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs-category/simple-mode/">
+                    {{ $t('Learn more about drag & drop table') }}
+                </a>
+            </div>
             <div class="form-group">
                 <div class="font-semibold">{{ $t("Table Title") }}</div>
                 <NinjaInput

@@ -9,6 +9,10 @@
             <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/woocommerce-integration/">
                {{ $t('Learn more about woocommerece integration') }}
             </a>
+            {{$t('or')}}
+            <a class="nt-link" target="_blank" href="https://youtu.be/uIBQoLCFs_M?si=Qtp1zji5ANsGxPSD">
+                {{ $t('watch tutorial here') }}
+            </a>
         </p>
 
         <div class="my-[30px]">
