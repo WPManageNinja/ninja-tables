@@ -11,7 +11,7 @@
                 </p>
             </template>
             <div class="form-group">
-                <div>{{ $t("Table Title") }}</div>
+                <div class="font-semibold">{{ $t("Table Title") }}</div>
                 <NinjaInput
                     style="width: 95%"
                     v-model="initialData.table_data.table_name"
@@ -63,7 +63,7 @@
                     </div>
                 </el-col>
                 <el-col :span="12">
-                    <div>{{ $t('Import Table from CSV / JSON File') }}</div>
+                    <div class="font-semibold">{{ $t('Import Table from CSV / JSON File') }}</div>
                     <div v-if="!file.name" class="mb-3 mt-1">
                         <NinjaInput :disabled="!hasPro" @mouseover.native="upgradeToPro"
                                   :placeholder="$t('Import CSV/JSON from URL')" v-model="url">
