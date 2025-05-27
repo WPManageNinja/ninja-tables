@@ -15,15 +15,15 @@
                         {{ $t('Construct Table from Google Sheets') }}
                     </h3>
                     <p class="nt-modal-description">
-                        {{`Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro.`}}
+                        {{ $t('Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro.') }}
                         <a class="nt-link" target="_blank"
                            href="https://ninjatables.com/docs/google-sheets-integration/">
-                            {{$t('View Documentation Here')}}
+                            {{ $t('View Documentation Here') }}
                         </a>
-                        {{$t('or')}}
+                        {{ $t('or') }}
                         <a class="nt-link" target="_blank"
                            href="https://youtu.be/wcJ3m7krRRM?si=22JC8p6O8FjPtQDu/">
-                            {{$t('Watch Tutorial Here')}}
+                            {{ $t('Watch Tutorial Here') }}
                         </a>
                     </p>
                 </template>
@@ -88,7 +88,7 @@
                         <div class="p-4">
                             <div v-if="fetching" class="text-center mt-2 text-gray-500 text-sm">
                                 <el-icon class="is-loading">
-                                    <Loading />
+                                    <Loading/>
                                 </el-icon>
                             </div>
 
@@ -110,7 +110,7 @@
             </div>
         </div>
 
-<!--  for table edit nav -->
+        <!--  for table edit nav -->
         <div v-else class="mt-5">
             <div class="nt-checkbox-group-wrapper">
                 <div class="nt-checkbox-group-header"
@@ -130,7 +130,7 @@
 
                     <div v-if="fetching" class="text-center mt-2 text-gray-500 text-sm">
                         <el-icon class="is-loading">
-                            <Loading />
+                            <Loading/>
                         </el-icon>
                     </div>
 
@@ -152,12 +152,13 @@
 
         <div class="nt-modal-footer" v-if="!editing">
             <div v-if="active_step > 0" class="flex items-center gap-4">
-                <NinjaButton @click="nextStep" type="secondary" :btnText="$t('Previous')" />
-                <NinjaButton @click="save" :loading="saving" :btnText="$t('Save')" :disabled="!activated_features.external_data_source"/>
+                <NinjaButton @click="nextStep" type="secondary" :btnText="$t('Previous')"/>
+                <NinjaButton @click="save" :loading="saving" :btnText="$t('Save')"
+                             :disabled="!activated_features.external_data_source"/>
             </div>
 
             <div v-else class="flex items-center gap-4">
-                <NinjaButton @click="$emit('modalClose')" :btnText="$t('Cancel')" type="secondary" />
+                <NinjaButton @click="$emit('modalClose')" :btnText="$t('Cancel')" type="secondary"/>
                 <NinjaButton :disables="!hasPro" :loading="fetching" @click="nextStep" :btnText="$t('Next')"/>
             </div>
         </div>
@@ -180,7 +181,7 @@
                             @click="fatchRemoteData"
                             loading="fetching"
                             type="secondary"
-                            />
+                        />
                     </template>
                 </el-input>
 
@@ -195,166 +196,166 @@
 </template>
 
 <script>
-    import PremiumNotice from '../includes/PremiumNotice';
-    import UpgradeNotice from '../includes/UpgradeNotice';
-    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
-    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
-    import {assetUrl} from "../../utils/ninjatablesadmin";
+import PremiumNotice from '../includes/PremiumNotice';
+import UpgradeNotice from '../includes/UpgradeNotice';
+import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+import {assetUrl} from "../../utils/ninjatablesadmin";
 
-    export default {
-        name: 'Remote-Data-Source',
-        components: {
-            NinjaButton,
-            NinjaInput,
-            PremiumNotice,
-            UpgradeNotice
+export default {
+    name: 'Remote-Data-Source',
+    components: {
+        NinjaButton,
+        NinjaInput,
+        PremiumNotice,
+        UpgradeNotice
+    },
+    props: {
+        columns: {
+            type: Array
         },
-        props: {
-            columns: {
-                type: Array
-            },
-            type: {
-                type: String,
-                required: true
-            },
-            tableCreated: {
-                type: Function,
-                required: true
-            },
-            hasPro: {
-                required: true
-            },
-            table: {
-                type: Object,
-                default: () => ({
-                    post_title: '',
-                    remote_url: '',
-                    fields: [],
-                    table_id: null,
-                })
-            },
-            editing: {
-                type: Boolean,
-                default: false
-            },
-            activated_features: {
-                type: Object,
-                default: function () {
-                    return {}
-                }
-            }
+        type: {
+            type: String,
+            required: true
         },
-        data() {
-            return {
+        tableCreated: {
+            type: Function,
+            required: true
+        },
+        hasPro: {
+            required: true
+        },
+        table: {
+            type: Object,
+            default: () => ({
+                post_title: '',
+                remote_url: '',
                 fields: [],
-                active_step: 0,
-                saving: false,
-                fetching: false,
-                selectedFields: [],
-                checkAll: false,
-                isIndeterminate: false
-            }
+                table_id: null,
+            })
         },
-        methods: {
-            assetUrl,
-            nextStep() {
-                let message = '';
-                if (!this.table.post_title) {
-                    message += ' The title field is required.';
-                }
-                if (!this.table.remote_url) {
-                    message += ' The url field is required.';
-                }
-
-                if ((message = jQuery.trim(message))) {
-                    this.active_step = 0;
-                    this.$message({showClose: true, message: message, type: 'error'});
-                    return;
-                }
-
-                if (this.active_step++ >= 1) {
-                    this.active_step = 0;
-                } else {
-                    this.fatchRemoteData();
-                }
-            },
-            fatchRemoteData() {
-                // if (this.fields.length) return;
-                this.fetching = true;
-
-                let data = {
-                    action: 'ninja_table_external_data_source_create',
-                    ...this.table,
-                    type: this.type,
-                    get_headers_only: true
-                }
-
-                delete data.custom_css;
-
-                this.$post(data)
-                    .then(res => {
-                        let fields = [];
-                        jQuery.each(res.data, v => fields.push({name: v}));
-                        this.fields = fields;
-
-                        if (this.editing) {
-                            let selected = this.columns.map(c => c.original_name);
-                            this.selectedFields = selected.filter(name =>
-                                this.fields.some(f => f.name === name)
-                            );
-                            this.updateCheckAllState();
-                        }
-                    })
-                    .fail(res => {
-                        let message = '';
-                        let messages = res.responseJSON.data.message;
-                        for (let key in messages) {
-                            message += ' ' + messages[key];
-                        }
-                        this.$message({showClose: true, message: message, type: 'error'});
-                    })
-                    .always(res => this.fetching = false);
-            },
-            handleCheckAllChange(val) {
-                this.selectedFields = val ? this.fields.map(field => field.name) : [];
-                this.handleFieldsSelectionChange(this.selectedFields);
-            },
-            handleFieldsSelectionChange(value) {
-                this.table.fields = this.fields.filter(field => value.includes(field.name));
-                this.updateCheckAllState();
-            },
-            updateCheckAllState() {
-                const fieldsCount = this.fields.length;
-                const selectedCount = this.selectedFields.length;
-                this.checkAll = fieldsCount > 0 && selectedCount === fieldsCount;
-                this.isIndeterminate = selectedCount > 0 && selectedCount < fieldsCount;
-            },
-            save(event) {
-                this.saving = true;
-                let data = {
-                    ...this.table,
-                    type: this.type,
-                    action: 'ninja_table_external_data_source_create'
-                }
-                delete data.custom_css;
-                this.$post(data)
-                    .then(({data}) => this.tableCreated(data.ID))
-                    .fail(error => {
-                        let message = '';
-                        let messages = error.responseJSON.data.message;
-                        for (let key in messages) {
-                            message += ' ' + messages[key];
-                        }
-                        this.$message({showClose: true, message: message, type: 'error'});
-                    })
-                    .always(() => this.saving = false);
-            }
+        editing: {
+            type: Boolean,
+            default: false
         },
-        created() {
-            if (this.editing) {
-                this.table.table_id = this.table.ID;
-                this.fatchRemoteData();
+        activated_features: {
+            type: Object,
+            default: function () {
+                return {}
             }
         }
-    };
+    },
+    data() {
+        return {
+            fields: [],
+            active_step: 0,
+            saving: false,
+            fetching: false,
+            selectedFields: [],
+            checkAll: false,
+            isIndeterminate: false
+        }
+    },
+    methods: {
+        assetUrl,
+        nextStep() {
+            let message = '';
+            if (!this.table.post_title) {
+                message += ' The title field is required.';
+            }
+            if (!this.table.remote_url) {
+                message += ' The url field is required.';
+            }
+
+            if ((message = jQuery.trim(message))) {
+                this.active_step = 0;
+                this.$message({showClose: true, message: message, type: 'error'});
+                return;
+            }
+
+            if (this.active_step++ >= 1) {
+                this.active_step = 0;
+            } else {
+                this.fatchRemoteData();
+            }
+        },
+        fatchRemoteData() {
+            // if (this.fields.length) return;
+            this.fetching = true;
+
+            let data = {
+                action: 'ninja_table_external_data_source_create',
+                ...this.table,
+                type: this.type,
+                get_headers_only: true
+            }
+
+            delete data.custom_css;
+
+            this.$post(data)
+                .then(res => {
+                    let fields = [];
+                    jQuery.each(res.data, v => fields.push({name: v}));
+                    this.fields = fields;
+
+                    if (this.editing) {
+                        let selected = this.columns.map(c => c.original_name);
+                        this.selectedFields = selected.filter(name =>
+                            this.fields.some(f => f.name === name)
+                        );
+                        this.updateCheckAllState();
+                    }
+                })
+                .fail(res => {
+                    let message = '';
+                    let messages = res.responseJSON.data.message;
+                    for (let key in messages) {
+                        message += ' ' + messages[key];
+                    }
+                    this.$message({showClose: true, message: message, type: 'error'});
+                })
+                .always(res => this.fetching = false);
+        },
+        handleCheckAllChange(val) {
+            this.selectedFields = val ? this.fields.map(field => field.name) : [];
+            this.handleFieldsSelectionChange(this.selectedFields);
+        },
+        handleFieldsSelectionChange(value) {
+            this.table.fields = this.fields.filter(field => value.includes(field.name));
+            this.updateCheckAllState();
+        },
+        updateCheckAllState() {
+            const fieldsCount = this.fields.length;
+            const selectedCount = this.selectedFields.length;
+            this.checkAll = fieldsCount > 0 && selectedCount === fieldsCount;
+            this.isIndeterminate = selectedCount > 0 && selectedCount < fieldsCount;
+        },
+        save(event) {
+            this.saving = true;
+            let data = {
+                ...this.table,
+                type: this.type,
+                action: 'ninja_table_external_data_source_create'
+            }
+            delete data.custom_css;
+            this.$post(data)
+                .then(({data}) => this.tableCreated(data.ID))
+                .fail(error => {
+                    let message = '';
+                    let messages = error.responseJSON.data.message;
+                    for (let key in messages) {
+                        message += ' ' + messages[key];
+                    }
+                    this.$message({showClose: true, message: message, type: 'error'});
+                })
+                .always(() => this.saving = false);
+        }
+    },
+    created() {
+        if (this.editing) {
+            this.table.table_id = this.table.ID;
+            this.fatchRemoteData();
+        }
+    }
+};
 </script>
