@@ -13,10 +13,13 @@
                     Construct Table from Posts / CPTs
                 </h3>
                 <p class="nt-modal-description">
-                    Displays website content in a searchable, sortable with Ninja Tables. It supports custom posts,
-                    pages, & custom post types.
-                    <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/create-custom-column-in-wp-post-cpt-woocommerce-table/">
-                        Learn more about this module
+                    {{ $t('This is a Premium feature. Create responsive and customizable WP posts tables from your existing posts/pages/custom post types with Ninja Tables pro. Enjoy unlimited customizations, data filters, professional design and more.') }}
+                    <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/create-wp-posts-table/">
+                       {{ $t('Learn more about this module') }}
+                    </a>
+                    {{ $t('or') }}
+                    <a class="nt-link" target="_blank" href="https://youtu.be/icQs-GwuG28?si=Q1k3ZmpM3_YiJ3rU/">
+                        {{ $t('Watch Tutorial Here') }}
                     </a>
                 </p>
 
