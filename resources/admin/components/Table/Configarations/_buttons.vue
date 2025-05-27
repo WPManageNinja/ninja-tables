@@ -9,7 +9,7 @@
         </div>
 
         <div v-if="!hasPro" class="nt-instruction w-full overflow-hidden text-center my-6">
-            <h3 class="text-[16px] font-[500] text-[#0E121B] my-4">
+            <h3 class="text-[16px] font-[400] text-[#525866] my-4">
                 Export CSV and Table Print is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
             </h3>
             <div class="flex justify-center mb-4">

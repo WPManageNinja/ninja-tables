@@ -1,6 +1,6 @@
 <template>
     <template v-if="!hasPro">
-        <premium-notice highlight="SQL module where you can write custom SQL to build your table with "/>
+        <PremiumNotice title="Custom SQL Query" highlight="SQL module where you can write custom SQL to build your table with "/>
     </template>
 
     <div v-else class="ninja_modal-body">
