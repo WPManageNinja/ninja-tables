@@ -485,6 +485,8 @@
 
                     <div class="nt-instruction mb-[20px]" v-if="!hasPro">
                         <h3 class="nt-modal-title">{{ $t('Advanced Column Settings') }}</h3>
+                    <div class="nt-instruction mb-[20px] mt-[5px]" v-if="!hasPro">
+                        <h3 class="nt-modal-title">Advanced Column Settings</h3>
                         <p class="nt-modal-description">
                             {{ $t(`Customize your table's column's width, custom css class, content alignments, column styling
                             with this feature. Advanced Column Settings is a pro feature and You can use it once you upgrade to Ninja
