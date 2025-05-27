@@ -144,10 +144,6 @@ export default {
                     url: 'https://ninjatables.com/docs-category/advanced-mode/'
                 },
                 {
-                    title: 'Ninja Charts Documentations',
-                    url: 'https://ninjatables.com/docs-category/simple-mode/'
-                },
-                {
                     title: 'Ninja Tables Demo',
                     url: 'https://ninjatables.com/demo/'
                 },
