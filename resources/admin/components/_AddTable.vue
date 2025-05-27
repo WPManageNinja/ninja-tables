@@ -120,8 +120,8 @@
 
                 <div class="nt-modal-footer">
                     <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
-                    <NinjaButton v-if="table.ID" @click="addTable" :btnText="$t('Update')"/>
-                    <NinjaButton v-else @click="addTable" :btnText="$t('Add')" />
+                    <NinjaButton v-if="table.ID" :loading="btnLoading" @click="addTable" :btnText="$t('Update')"/>
+                    <NinjaButton v-else @click="addTable" :loading="btnLoading" :btnText="$t('Add')" />
                 </div>
             </div>
 
@@ -174,7 +174,7 @@
                     <p>Please update to latest version of <b>Ninja Tables Pro</b> to use WooCommerce integration</p>
                 </div>
                 <div v-else-if="has_woo && !hasPro" class="ninja_no_woo">
-                    <h3>Upgrade to pro for using WooCommerce Integration</h3>
+<!--                    <h3>Upgrade to pro for using WooCommerce Integration</h3>-->
                     <PremiumNotice highlight="WooCommerce Integration module where you can create and build table with Woocomerce produsts and increase your conversion rate"/>
                 </div>
             </template>

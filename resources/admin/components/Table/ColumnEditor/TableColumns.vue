@@ -2,7 +2,7 @@
     <div>
         <div class="table-column-settings mx-4">
             <el-container class="ninja-table-aside">
-                <el-aside class="!w-[70px] lg:!w-[300px] !p-[5px] md:!p-5">
+                <el-aside class="!w-[70px] lg:!w-[300px] !p-[5px]">
                     <el-menu background-color="white"
                              :default-active="active_menu"
                              text-color="#525866"
@@ -51,9 +51,8 @@
                 </el-aside>
                 <el-main class="ml-5 lg:ml-10">
                     <template v-if="active_menu == 'columns'">
-                        <div class="ninja_header">
-                            <h2>Table Column Settings</h2>
-                        </div>
+                        <h2 class="text-[18px] font-[600] text-[#0E121B]">Table Column Settings</h2>
+                  
                         <div class="ninja_content">
                             <div class="section_widget">
                                 <div class="heading">
@@ -69,10 +68,9 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="widget_body border border-[#ebeef5]">
-                                    <div v-if="addColumnStatus || !columns.length" class="column">
+                                <div v-if="addColumnStatus || !columns.length" class="column border border-[#ebeef5] rounded-[8px] mb-2">
                                         <div class="add_column_wrapper">
-                                            <columns-editor
+                                            <ColumnsEditor
                                                 :columns="columns"
                                                 :dataSourceType="config.table.dataSourceType"
                                                 :model="new_column"
@@ -80,10 +78,11 @@
                                                 :has-pro="has_pro"
                                                 @add="addNewColumn()"
                                                 @cancel="addColumnStatus = !addColumnStatus"
-                                                :hideCancel="true"
+                                                :hideCancel="false"
                                             />
                                         </div>
                                     </div>
+                                <div class="widget_body border border-[#ebeef5]">
                                     <draggable 
                                         @end="storeSettings" 
                                         v-model="columns" 
@@ -139,7 +138,7 @@
                     </template>
 
                     <template v-else-if="active_menu == 'rendering_settings'">
-                        <ninja-rendering-settings
+                        <NinjaRenderingSettings
                                 @storeSettings="storeSettings"
                                 :tableSettings="tableSettings"
                                 :config="config"
@@ -147,15 +146,15 @@
                     </template>
 
                     <template v-else-if="active_menu == 'language_settings'">
-                        <ninja-language-settings @storeSettings="storeSettings" :tableSettings="tableSettings"></ninja-language-settings>
+                        <NinjaLanguageSettings @storeSettings="storeSettings" :tableSettings="tableSettings"></NinjaLanguageSettings>
                     </template>
 
                     <template v-else-if="active_menu == 'custom_filters'">
-                        <ninja-custom-filters :columns="columns" :table_id="tableId"></ninja-custom-filters>
+                        <NinjaCustomFilters :columns="columns" :table_id="tableId"></NinjaCustomFilters>
                     </template>
 
                     <template v-else-if="active_menu = 'button_settings'">
-                        <ninja-button-settings :table_id="tableId" />
+                        <NinjaButtonSettings :table_id="tableId" />
                     </template>
                 </el-main>
             </el-container>
@@ -169,10 +168,10 @@
     import size from 'lodash/size'
     import snakeCase from 'lodash/snakeCase'
     import ColumnsEditor from './ColumnsEditor.vue';
-    import NinjaCustomFilters from '../TableFilters/CustomFilter';
-    import NinjaLanguageSettings from '../Configarations/_LanguageSettings'
-    import NinjaRenderingSettings from '../Configarations/_RenderingSettings'
-    import NinjaButtonSettings from '../Configarations/_buttons'
+    import NinjaCustomFilters from '../TableFilters/CustomFilter.vue';
+    import NinjaLanguageSettings from '../Configarations/_LanguageSettings.vue'
+    import NinjaRenderingSettings from '../Configarations/_RenderingSettings.vue'
+    import NinjaButtonSettings from '../Configarations/_buttons.vue'
     import { useEventBus } from '../../../eventBus';
 
     import { tableLibs } from '../../../data/data'

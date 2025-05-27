@@ -35,7 +35,7 @@
 
                 </div>
 
-                <list-all-tables v-show="published_tables" @total_table="handleTotalTables" :searchString="searchString"
+                <ListAllTables v-show="published_tables" @total_table="handleTotalTables" :searchString="searchString"
                     :searchAction="searchAction" @selection="makeSelection" />
             </div>
         </template>
@@ -44,9 +44,9 @@
         <el-dialog id="data-tables-app" :close-on-click-modal="false"
             :title="$t('How would you like to create your table?')" v-model="modalVisible" top="50px" width="75%"
             :append-to-body="true" custom-class="create-table-modal" class="ninja_create-table-modal">
-            <add-table-modal @table_inserted="addTableAction" @modal_close="modalVisible = false" :hasPro="hasPro" />
+            <AddTableModal @table_inserted="addTableAction" @modal_close="modalVisible = false" :hasPro="hasPro" />
         </el-dialog>
-        <lead-modal></lead-modal>
+        <leadModal></leadModal>
     </div>
 </template>
 
@@ -67,9 +67,9 @@ export default {
         NinjaInput,
         NinjaButton,
         Welcome,
-        'list-all-tables': ListAllTables,
-        'add-table-modal': AddTableModal,
-        'lead-modal': leadModal,
+        ListAllTables,
+        AddTableModal,
+        leadModal,
         NinjaReviewDialog
     },
     props: ['hasPro'],

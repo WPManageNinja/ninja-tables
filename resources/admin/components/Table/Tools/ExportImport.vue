@@ -3,11 +3,11 @@
         <div>
             <div class="flex justify-between rounded-[8px] bg-[#F5F7FA] w-[280px] px-2 py-2 gap-3">
                 <div @click="active_menu ='export'"
-                     :class="`${active_menu ==='export' && 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
+                     :class="`${active_menu ==='export' && 'bg-white rounded-[8px] shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
                     {{ $t('Export Table') }}
                 </div>
                 <div @click="active_menu ='import'"
-                     :class="`${active_menu ==='import' && 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
+                     :class="`${active_menu ==='import' && 'bg-white rounded-[8px] shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
                     {{ $t('Import Table') }}
                 </div>
             </div>

@@ -25,8 +25,8 @@
                     Conditional Formatting is a pro feature which can be enabled by using Ninja Table pro Add-on. Ninja
                     Table Pro has lots of features that will help you to build any type of Tables.
                 </p>
-                <div class="py-2">
-                    <get-pro />
+                <div class="py-2 flex">
+                    <GetPro />
                 </div>
             </div>
         </div>

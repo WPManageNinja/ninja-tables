@@ -10,7 +10,7 @@
             and so many things from the Pro version.
         </p>
 
-        <div class="mt-2">
+        <div class="my-2">
             <get-pro/>
         </div>
     </div>

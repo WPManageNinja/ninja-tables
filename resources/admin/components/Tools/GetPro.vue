@@ -1,16 +1,21 @@
 <template>
     <a v-if="!has_pro"
        href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&amp;utm_medium=wp&amp;utm_campaign=wp_plugin&amp;utm_term=upgrade"
-       target="_blank" >
-       <span class="get-pro-button">{{ $t('Get Pro') }}</span>
+       target="_blank" class="flex w-fit" >
+            <span class="flex items-center w-fit gap-x-2  bg-[#0E121B] :hover:bg-[#222530] text-white px-4 py-2 rounded-[8px]">
+                <img :src="assetUrl('icons/get-pro.svg')" alt="">
+                <span class="ml-1">{{ $t('Get Pro') }}</span>
+            </span>
     </a>
 </template>
 
 <script>
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+import {assetUrl} from "../../utils/ninjatablesadmin";
 
 export default {
     name: 'GetPro',
+    methods: {assetUrl},
     components: {NinjaButton},
     data() {
         return {
@@ -38,18 +43,5 @@ export default {
 a:focus{
     box-shadow: none;
 
-}
-.get-pro-button {
-    background: #fff;
-    border: 1px solid #FB3748;
-    color: #fb3748;
-    padding: 5px 10px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 8px;
-}
-.get-pro-button:hover {
-    background: #FCEBE6;
-    transition: all 0.3s ease;
 }
 </style>

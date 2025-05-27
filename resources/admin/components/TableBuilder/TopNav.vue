@@ -21,7 +21,7 @@
         <a :href="previewURL" v-if="idExist" target="_blank">
             <NinjaButton type="secondary" :icon="assetUrl('icons/view.svg')" :btnText="$t('Preview')" />
         </a>
-        <NinjaButton @click="saveTableData" type="primary">{{ $t('Save Table') }}</NinjaButton>
+        <NinjaButton @click="saveTableData" :loading="saving" type="primary">{{ $t('Save Table') }}</NinjaButton>
         <NinjaButton
             type="info"
             @click="fullScreenEnableDisable"
@@ -47,11 +47,13 @@ export default {
     return {
       bus : useEventBus(),
       id: '',
+      saving: false,
     };
   },
   methods: {
     assetUrl,
     saveTableData() {
+      this.saving = true;
       this.bus.emit('closeManageCell');
       this.bus.emit('saveData');
 
@@ -93,6 +95,9 @@ export default {
                 message: this.$t('Something went wrong, please try again.'),
                 type: 'warning'
               });
+            })
+            .finally(() => {
+              this.saving = false;
             })
       })
     },

@@ -1,11 +1,11 @@
 <template>
-    <div class="px-32" style="margin-top: 20px">
+    <div class="px-5 lg:px-32" style="margin-top: 20px">
       <!-- <h1 class="wp-heading-inline">
         {{ $t('Tools and Settings') }}
       </h1>
       <hr> -->
         <el-container class="ninja-table-aside">
-            <el-aside width="300px">
+            <el-aside class="!w-[80px] lg:!w-[300px] !p-[5px]">
                 <el-menu :default-active="active_menu"
                          :router="true"
                          background-color="white"
@@ -16,13 +16,17 @@
                             v-if="menuItem.status"
                             :index="menuItem.route" 
                             :route="{ name: menuItem.route }">
-                            <el-icon><component :is="menuItem.icon_class" /></el-icon>
-                            <span>{{ menuItem.title }}</span>
+                            <el-tooltip :content="menuItem.title" placement="right">
+                                <img :src="assetUrl(menuItem.iconSrc)" class="w-[20px] h-[20px] lg:hidden">
+                            </el-tooltip>
+                            <!-- <el-icon><component class="hidden lg:block" :is="menuItem.icon_class" /></el-icon> -->
+                            <img :src="assetUrl(menuItem.iconSrc)" class="w-[20px] h-[20px] hidden lg:block">
+                            <span class="hidden lg:block">{{ menuItem.title }}</span>
                         </el-menu-item>
                     </template>
                 </el-menu>
             </el-aside>
-            <el-main class="ml-10">
+            <el-main class="ml-5 lg:ml-10">
                 <router-view></router-view>
             </el-main>
         </el-container>
@@ -30,6 +34,8 @@
 </template>
 
 <script>
+import { assetUrl } from '../../utils/ninjatablesadmin';
+
     export default {
         name: 'Tools',
         data() {
@@ -44,36 +50,37 @@
             }
         },
         methods: {
+            assetUrl,
             setUpMenuItems() {
                 this.menuItems = this.applyFilters('ninja_table_settings_tools', [
                     {
                         route: 'import_tables',
                         title: this.$t('Import'),
-                        icon_class: 'UploadFilled',
+                        iconSrc: '/icons/import.svg',
                         status: true
                     },
                     {
                         route: 'default_table_appearance',
                         title: this.$t('Global Appearance'),
-                        icon_class: 'Star',
+                        iconSrc: '/icons/global-appear.svg',
                         status: true
                     },
                     {
                         route: 'permission',
                         title: this.$t('Permission'),
-                        icon_class: 'Setting',
+                        iconSrc: '/icons/permission_user.svg',
                         status: true
                     },
                     {
                         route: 'licensing',
                         title: this.$t('License'),
-                        icon_class: 'SetUp',
+                        iconSrc: '/icons/license.svg',
                         status: this.has_pro
                     },
                     {
                         route: 'global_settings',
                         title: this.$t('Global Settings'),
-                        icon_class: 'Menu',
+                        iconSrc: '/icons/global_setting.svg',
                         status: true
                     },
                 ]);
