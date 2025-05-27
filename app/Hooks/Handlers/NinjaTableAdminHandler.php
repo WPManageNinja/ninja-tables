@@ -2,9 +2,6 @@
 
 namespace NinjaTables\App\Hooks\Handlers;
 
-use NinjaTables\Framework\Support\Arr;
-use NinjaTables\Framework\Support\Sanitizer;
-
 class NinjaTableAdminHandler
 {
     public function addNinjaTableAdminScript()
@@ -31,86 +28,6 @@ class NinjaTableAdminHandler
         endif;
     }
 
-    public function adminNotices()
-    {
-        $this->noticeForProVersion();
-
-        if (ninjaTablesIsNotice('review_notice')) {
-            if (isset($_GET['page']) && Sanitizer::sanitizeTextField($_GET['page']) == 'ninja_tables') {
-                $nonce       = wp_create_nonce('ninja_table_admin_nonce');
-                $remind_url  = admin_url(
-                    'admin.php?action=remindMeLater&key=review_notice&ninja_table_admin_nonce=' . $nonce
-                );
-                $dismiss_url = admin_url(
-                    'admin.php?action=dismissNotice&key=review_notice&ninja_table_admin_nonce=' . $nonce
-                );
-
-                $message = <<<HTML
-<div class="nt_review_notice">
-    <div class="nt-notice-content">
-        <div class="nt-notice-text">
-            In love with Ninja Tables?
-            <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Please leave a 5-star review for us!</a>
-            It will encourage us to come up with more and more features.
-            
-        </div>
-        <div class="nt-notice-actions">
-            <a class="nt-btn nt-btn-secondary remind-me-later" href="{$remind_url}">Remind Me Later</a>
-            <div class="nt-divider"></div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-             <path d="M9.9992 14.695L4.70945 17.656L5.8907 11.71L1.43945 7.594L7.4597 6.88L9.9992 1.375L12.5387 6.88L18.559 7.594L14.1077 11.71L15.289 17.656L9.9992 14.695Z" fill="#F6B51E"/>
-            </svg>
-            <a class="nt-btn nt-btn-primary" target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a>
-            <!-- <a class="nt-btn-close" href="{$dismiss_url}">
-                <span class="nt-close-icon dashicons dashicons-no"></span>
-            </a> -->
-        </div>
-    </div>
-    <!-- <div class="nt-notice-actions">
-        <a class="nt-btn nt-btn-primary" target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">Rate Now</a>
-        <a class="nt-btn nt-btn-secondary" href="{$remind_url}">Remind Me Later</a>
-        <a class="nt-btn-close" href="{$dismiss_url}">
-            <span class="nt-close-icon dashicons dashicons-no"></span>
-        </a>
-    </div> -->
-</div>
-HTML;
-
-                $js_message = json_encode($message);
-
-                $script = "
-                jQuery(document).ready(function($) {
-                    var message = {$js_message};
-                    if (message) {
-                        var container = $('.ninja_main_nav');
-                        if (container.length) {
-                            container.after(message);
-                        }
-                    }
-                });
-                ";
-                wp_add_inline_script('ninja-tables', $script, 'after');
-            }
-        }
-    }
-
-    public function remindMeLater()
-    {
-        $key    = Sanitizer::sanitizeTextField(Arr::get($_GET, 'key', 'admin_notice'));
-        $action = Sanitizer::sanitizeTextField(Arr::get($_GET, 'action', ''));
-        $prefix = 'ninja_tables_';
-
-        if ($key && $action === 'remindMeLater') {
-            ninjaTablesValidateNonce('ninja_table_admin_nonce');
-            setcookie(
-                $prefix . $key,
-                NINJA_TABLES_VERSION,
-                time() + (60 * 60 * 24 * 30)
-            );
-            wp_redirect(admin_url('admin.php?page=ninja_tables#home'));
-        }
-    }
-
     /**
      * Save a flag if the a post/page/cpt have [ninja_tables] shortcode
      *
@@ -133,51 +50,6 @@ HTML;
             update_post_meta($post_id, '_has_ninja_tables', $ids);
         } elseif (get_post_meta($post_id, '_has_ninja_tables', true)) {
             update_post_meta($post_id, '_has_ninja_tables', 0);
-        }
-    }
-
-    /**
-     * Show a notice if the pro version is installed but not updated and version is less than 4.3.5
-     *
-     * @return void
-     */
-    public function noticeForProVersion()
-    {
-        $page = Arr::get($_GET, 'page', '');
-        if ($page === 'ninja_tables') {
-            if (defined('NINJAPROPLUGIN_VERSION') && version_compare(
-                    NINJAPROPLUGIN_VERSION,
-                    '5.0.0',
-                    '<'
-                ) && ninjaTablesIsNotice('upgrade_to_pro')) {
-                echo '<div class="ntb-version-update-notice">
-                <h3>Update Ninja Tables Pro Plugin</h3>
-                <p>
-                   You are using an outdated version of Ninja Tables Pro. You should update to the latest version; otherwise, some pro features may not work properly.
-                    <a href="' . admin_url('plugins.php?s=ninja-tables-pro&plugin_status=all') . '">' . __(
-                        'Please update to the latest version',
-                        'ninja-tables'
-                    ) . '</a>
-                </p>
-                   <a href=' . admin_url(
-                         'admin.php?action=remindMeLater&key=upgrade_to_pro&ninja_table_admin_nonce='
-                     ) . wp_create_nonce('ninja_table_admin_nonce') . '>
-                          <span class="close-icon dashicons dashicons-no"></span>
-                    </a>
-        </div>';
-            } elseif (!defined('NINJAPROPLUGIN_VERSION') && ninjaTablesIsNotice('get_pro')) {
-                echo '<div class="ntb-version-update-notice">
-                    <p>
-                        Get the Pro add-on and unlock the full potential of Ninja Tables! 
-                        <a href="https://ninjatables.com/pricing/">Get Pro Now</a>
-                    </p>
-                    <a href=' . admin_url(
-                        'admin.php?action=remindMeLater&key=get_pro&ninja_table_admin_nonce='
-                    ) . wp_create_nonce('ninja_table_admin_nonce') . '>
-                          <span class="close-icon dashicons dashicons-no"></span>
-                    </a>
-                </div>';
-            }
         }
     }
 }
