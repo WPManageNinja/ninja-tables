@@ -1,10 +1,13 @@
 <template>
     <div class="ninja_modal-body ">
         <div class="nt-instruction mb-[20px]" v-if="!hasPro">
-            <h3 class="nt-modal-title mb-3">Transform Column Value</h3>
-            <p class="text-[14px] font-[400] text-[#525866]">
-                Transform Value is a Premium feature. Get Transform Column Value, unlimited customizations, data filters, professional looks, Many More Integrations and so many things from the Pro version.
-            </p>
+            <h3 class="nt-modal-title mb-3">{{ $t('Transform Column Value') }}</h3>
+            <div class="text-[14px] font-[400] text-[#525866]">
+                {{ $t('Use simple HTML code to transform a column’s data value. Transform value is a Pro feature.') }}
+                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/transform-value/">
+                    {{ $t('View documentation') }}
+                </a>
+            </div>
             <div class="mt-4">
                 <GetPro />
             </div>
