@@ -19,12 +19,13 @@
 
         <div v-else>
             <div class="nt-instruction mb-[20px]">
-                <h3 class="nt-modal-title mb-3">Conditional Formatting</h3>
-                <p class="text-[14px] font-[400] text-[#525866]">
-                    Customize your table's appearances based on the cell value. Add as many conditions as you like.
-                    Conditional Formatting is a pro feature which can be enabled by using Ninja Table pro Add-on. Ninja
-                    Table Pro has lots of features that will help you to build any type of Tables.
-                </p>
+                <h3 class="nt-modal-title mb-3">{{ $t('Conditional Formatting') }}</h3>
+                <div class="text-[14px] font-[400] text-[#525866]">
+                   {{ $t('Customize table appearance based on the cell value. Add as many conditions as you like. Conditional formatting is a pro feature.') }}
+                    <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/conditional-formatting/">
+                        {{ $t('View documentation') }}
+                    </a>
+                </div>
                 <div class="mt-4">
                     <GetPro />
                 </div>

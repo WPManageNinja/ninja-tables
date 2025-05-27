@@ -7,7 +7,7 @@
             <div class="mb-[30px]">
                 <h3 class="nt-modal-title">{{ $t('Create a Drag & Drop Table') }}</h3>
                 <p class="nt-modal-description">
-                    {{ $t("Create your drag & drop table columns and rows to get complete control over your data with lots of customizations.") }}
+                    {{ $t("Create tables fast using drag & drop table mode. Add columns and rows manually, import, or pick a template.") }}
                 </p>
                 <a class="nt-link" target="_blank" href="https://ninjatables.com/docs-category/simple-mode/">
                     {{ $t('Learn more about drag & drop table') }}

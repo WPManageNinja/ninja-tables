@@ -93,7 +93,7 @@
             </div>
             <div v-else class="nt-instruction w-full overflow-hidden text-center">
                 <h3 class="text-[16px] font-[400] text-[#525866] my-4">
-                    Custom Filters is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
+                   {{$t('Set up custom filters to find the data you want! It’s a Pro feature.')}}
                 </h3>
               <div class="flex justify-center mb-4">
                   <a v-if="!hasPro"
