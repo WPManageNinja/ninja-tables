@@ -68,7 +68,7 @@
                                         />
                                     </div>
                                 </div>
-                                <div v-if="addColumnStatus || !columns.length" class="column border border-[#ebeef5] rounded-[8px] mb-2">
+                                <div v-if="addColumnStatus || !columns.length" class="column border border-[#ebeef5] rounded-[8px] mb-4">
                                         <div class="add_column_wrapper">
                                             <ColumnsEditor
                                                 :columns="columns"
@@ -121,15 +121,15 @@
                                     </draggable>
                                 </div>
                             </div>
-                            <div class="proms">
-                                <div class="help_section">
-                                    <p>Need help to configure the columns and responsive breakdowns, Please check tutorial with
+                            <div class="proms my-4">
+                                <div class="nt-instruction">
+                                    <p class="text-[14px]">Need help to configure the columns and responsive breakdowns, Please check tutorial with
                                         video <a class="nt-link"
                                                 href="https://ninjatables.com/docs/column-responsive-breakpoints/"
-                                                target="_blank">here</a></p>
+                                                target="_blank">video here</a></p>
                                 </div>
-                                <div v-if="!is_fluent_installed" class="help_section">
-                                    <p>Have you checked out FluentForm yet? We have developed a powerful Drag & Drop WordPress Form
+                                <div v-if="!is_fluent_installed" class="nt-instruction">
+                                    <p class="text-[14px]">Have you checked out FluentForm yet? We have developed a powerful Drag & Drop WordPress Form
                                         Builder plugin with some amazing Premium features <a :href="fluent_url">Download from
                                             WordPress.org</a></p>
                                 </div>

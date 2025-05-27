@@ -56,7 +56,7 @@
             </div>
 
             <div v-if="!columns.length && !loading">
-                <h3 style="text-align: center">No Data found based on your data source configaration</h3>
+                <h3 style="text-align: center">No Data found based on your data source configuration</h3>
             </div>
         </template>
 
