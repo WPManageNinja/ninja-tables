@@ -6,9 +6,9 @@
                 {{ $t("NinjaTables can import tables from existing data, like from a CSV or JSON file. You can also import existing tables from the other WordPress table plugins.") }}
             </div>
             <div class="my-2">
-                <p class="mb-1 text-[#0E121B] text-[16px] font-[600]">{{ $t('Import Table from CSV / JSON File') }}</p>
-                <p class="mb-1 text-[#0E121B]">{{$t('Browse and locate a CSV/JSON file you backed up before')}}</p>
-                <p class="text-[#0E121B]">
+                <p class="mb-2 text-[#0E121B] text-[16px] font-[500]">{{ $t('Import Table from CSV / JSON File') }}</p>
+                <p class="mb-1 text-[#0E121B] text-[14px]">{{$t('Browse and locate a CSV/JSON file you backed up before')}}</p>
+                <p class="text-[#0E121B] text-[14px]">
                     Select the intended format and click <strong>Import</strong> button, we will do
                     the rest for you.
                 </p>
@@ -116,8 +116,8 @@
             <hr/>
 
             <div class="ninja_block_section">
-                <h3 class="text-lg font-semibold">Import From Other WP Table Plugin</h3>
-                <p class="text-sm text-[#0E121B] my-2">
+                <h3 class="text-[#0E121B] text-[16px] font-[500] mb-2">Import From Other WP Table Plugin</h3>
+                <p class="text-[14px] font-[400] text-[#0E121B] my-2">
                     To import from other WordPress plugins click the respective <strong>Import</strong>
                     button.
                 </p>

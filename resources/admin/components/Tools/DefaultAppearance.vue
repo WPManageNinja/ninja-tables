@@ -148,8 +148,8 @@
                         type="number"
                         style="height: 38px;"
                         :min="1"
-                        :model-value="Number(default_settings.perPage) || 10"
-                        @update:model-value="default_settings.perPage = Number($event) || 10"
+                        :model-value="Number(default_settings.perPage) || 20"
+                        @update:model-value="default_settings.perPage = Number($event) || 20"
                         :disabled="default_settings.show_all == true || default_settings.show_all == '1'"
                     />
                 </div>
