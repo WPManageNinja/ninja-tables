@@ -21,6 +21,11 @@
                            href="https://ninjatables.com/docs/google-sheets-integration/">
                             {{$t('View Documentation Here')}}
                         </a>
+                        {{$t('or')}}
+                        <a class="nt-link" target="_blank"
+                           href="https://youtu.be/wcJ3m7krRRM?si=22JC8p6O8FjPtQDu/">
+                            {{$t('Watch Tutorial Here')}}
+                        </a>
                     </p>
                 </template>
 
