@@ -489,7 +489,7 @@
             <el-tab-pane label="Advanced Settings" name="advanced" class="ninja_modal_body px-[10px] pt-[10px]">
                 <div class="advanced-settings">
 
-                    <div class="nt-instruction mb-[20px]" v-if="!hasPro">
+                    <div class="nt-instruction mb-[20px] mt-[5px]" v-if="!hasPro">
                         <h3 class="nt-modal-title">Advanced Column Settings</h3>
                         <p class="nt-modal-description">
                             Customize your table's column's width, custom css class, content alignments, column styling

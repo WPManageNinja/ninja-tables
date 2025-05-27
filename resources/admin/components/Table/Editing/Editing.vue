@@ -3,7 +3,7 @@
         <div v-if="!hasPro || !config.table.isEditable"
              class="frontend-editing-conditional-content bg-white p-5 rounded-[12px] my-3">
 
-            <div v-if="!hasPro" class="nt-instruction w-full overflow-hidden text-center p-[30px] mb-4">
+            <div v-if="!hasPro" class="nt-instruction w-full overflow-hidden text-center p-[30px] mb-1">
                 <h1 class="my-3">{{ $t('Frontend Editing Settings') }}</h1>
                 <h3 class="text-[16px] font-[500] text-[#0E121B] mb-2">
                     {{ $t('Frontend Editing is a pro only features. Please purchase') }} <b>"Ninja Tables Pro"</b> {{ $t('to use this feature') }}
