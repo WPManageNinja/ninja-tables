@@ -92,7 +92,7 @@
                     this feature</h3>
             </div>
             <div v-else class="nt-instruction w-full overflow-hidden text-center">
-                <h3 class="text-[16px] font-[500] text-[#0E121B] my-4">
+                <h3 class="text-[16px] font-[400] text-[#525866] my-4">
                     Custom Filters is pro only features. Please purchase <b>"Ninja Tables Pro"</b> to use this feature
                 </h3>
               <div class="flex justify-center mb-4">

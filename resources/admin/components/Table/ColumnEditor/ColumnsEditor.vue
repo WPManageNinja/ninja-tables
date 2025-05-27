@@ -483,13 +483,13 @@
             <el-tab-pane label="Advanced Settings" name="advanced" class="ninja_modal_body px-[10px] pt-[10px]">
                 <div class="advanced-settings">
                     <div class="nt-instruction mb-[20px] mt-[5px]" v-if="!hasPro">
-                        <h3 class="nt-modal-title">Advanced Column Settings</h3>
-                        <p class="nt-modal-description">
+                        <h3 class="nt-modal-title mb-3">Advanced Column Settings</h3>
+                        <p class="text-[14px] font-[400] text-[#525866]">
                             {{ $t(`Customize your table's column's width, custom css class, content alignments, column styling
                             with this feature. Advanced Column Settings is a pro feature and You can use it once you upgrade to Ninja
                             Tables Pro. Ninja Table Pro has lots of features that will help you to build any type of Tables. `) }}
                         </p>
-                        <div class="py-2 flex">
+                        <div class="mt-4">
                             <GetPro />
                         </div>
                     </div>

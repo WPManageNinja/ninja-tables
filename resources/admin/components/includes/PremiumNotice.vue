@@ -1,6 +1,7 @@
 <template>
     <div class="nt-instruction">
-        <p>
+        <h3 class="nt-modal-title mb-3">{{title}}</h3>
+        <p class="text-[14px] font-[400] text-[#525866]">
             This is a Premium feature. Get
             <b v-if="highlight">{{highlight}},</b>
             <b>unlimited customizations</b>,
@@ -10,8 +11,8 @@
             and so many things from the Pro version.
         </p>
 
-        <div class="my-2">
-            <get-pro/>
+        <div class="mt-4">
+            <GetPro/>
         </div>
     </div>
 </template>
@@ -21,7 +22,7 @@
     export default {
       name: "PremiumNotice",
       components: {GetPro},
-      props: ['highlight']
+      props: ['highlight', 'title']
     }
 </script>
 

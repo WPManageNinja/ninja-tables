@@ -120,10 +120,10 @@
             </div>
 
             <div v-else class="nt-instruction">
-                <h3 class="nt-modal-subtitle">{{ $t('Row and Cell Color Customization') }}</h3>
-                <p class="nt-modal-description">{{ $t(`Using this module, You can set cell and row level colors of your data, It's a pro feature, Please
+                <h3 class="nt-modal-title mb-3">{{ $t('Row and Cell Color Customization') }}</h3>
+                <p class="text-[14px] font-[400] text-[#525866]">{{ $t(`Using this module, You can set cell and row level colors of your data, It's a pro feature, Please
                     purchase pro to unlock this feature`) }}</p>
-               <div class="mt-2">
+               <div class="mt-4">
                    <get-pro/>
                </div>
             </div>

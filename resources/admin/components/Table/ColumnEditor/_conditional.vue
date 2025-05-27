@@ -18,14 +18,14 @@
         </div>
 
         <div v-else>
-            <div class="nt-instruction">
-                <h3 class="nt-modal-title">Conditional Formatting</h3>
-                <p class="nt-modal-description">
+            <div class="nt-instruction mb-[20px]">
+                <h3 class="nt-modal-title mb-3">Conditional Formatting</h3>
+                <p class="text-[14px] font-[400] text-[#525866]">
                     Customize your table's appearances based on the cell value. Add as many conditions as you like.
                     Conditional Formatting is a pro feature which can be enabled by using Ninja Table pro Add-on. Ninja
                     Table Pro has lots of features that will help you to build any type of Tables.
                 </p>
-                <div class="py-2 flex">
+                <div class="mt-4">
                     <GetPro />
                 </div>
             </div>

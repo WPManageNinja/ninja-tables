@@ -175,7 +175,7 @@
                 </div>
                 <div v-else-if="has_woo && !hasPro" class="ninja_no_woo">
 <!--                    <h3>Upgrade to pro for using WooCommerce Integration</h3>-->
-                    <PremiumNotice highlight="WooCommerce Integration module where you can create and build table with Woocomerce produsts and increase your conversion rate"/>
+                    <PremiumNotice title="WooCommerce Table" highlight="WooCommerce Integration module where you can create and build table with Woocomerce produsts and increase your conversion rate"/>
                 </div>
             </template>
 

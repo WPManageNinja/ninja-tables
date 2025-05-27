@@ -1,11 +1,11 @@
 <template>
     <div class="ninja_modal-body ">
         <div class="nt-instruction mb-[20px]" v-if="!hasPro">
-            <h3 class="nt-modal-title">Transform Column Value</h3>
-            <p class="nt-modal-description">
+            <h3 class="nt-modal-title mb-3">Transform Column Value</h3>
+            <p class="text-[14px] font-[400] text-[#525866]">
                 Transform Value is a Premium feature. Get Transform Column Value, unlimited customizations, data filters, professional looks, Many More Integrations and so many things from the Pro version.
             </p>
-            <div class="py-2 flex">
+            <div class="mt-4">
                 <GetPro />
             </div>
         </div>

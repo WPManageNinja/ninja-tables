@@ -53,8 +53,8 @@
             <p v-html="scriptTagInfo" class="ndt-editor-info mt-2"></p>
 
             <div class="nt-instruction mt-4" v-if="!hasPro">
-                <p class="nt-modal-description">{{ $t(`Custom Javascript feature is a pro feature along with many awesome features.`) }}</p>
-                <div class="mt-2">
+                <p class="text-[16px] font-[400] text-[#525866]">{{ $t(`Custom Javascript feature is a pro feature along with many awesome features.`) }}</p>
+                <div class="my-2">
                     <GetPro />
                 </div>
             </div>

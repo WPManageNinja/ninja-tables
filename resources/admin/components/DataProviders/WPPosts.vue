@@ -1,7 +1,7 @@
 <template>
     <div v-loading="loading" class="ninja_modal-body ninja_tables_wpposts">
         <template v-if="!hasPro">
-            <premium-notice highlight="Create nice tables from your existings posts/pages/custom post types"/>
+            <PremiumNotice title="WP Posts Table" highlight="Create nice tables from your existings posts/pages/custom post types"/>
         </template>
         <template v-else-if="!activated_features.wp_posts_table">
             <upgrade-notice/>

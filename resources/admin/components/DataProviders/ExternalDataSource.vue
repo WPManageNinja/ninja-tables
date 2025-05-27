@@ -1,6 +1,7 @@
 <template>
     <div v-if="!hasPro" class="mb-4">
-        <premium-notice/>
+        <PremiumNotice v-if="type === 'google-csv'" title="Connect External CSV" />
+        <PremiumNotice v-else title="Connect Google Sheets" />
     </div>
 
     <div v-else-if="!activated_features.external_data_source" class="mb-4">
