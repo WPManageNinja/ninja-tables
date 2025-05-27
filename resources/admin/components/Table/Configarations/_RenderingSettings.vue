@@ -23,7 +23,7 @@
                 <div>
                     <div class="mb-2 font-[500] text-[14px] flex items-center gap-1">
                         Classic
-                        <img class="h-4 w-4" :src="assetUrl('icons/get-pro.svg')" alt="">
+                        <img v-if="!hasPro" class="h-4 w-4" :src="assetUrl('icons/get-pro.svg')" alt="">
                     </div>
                     <div class="text-[12px] text-[#525866]">
                         <span>{{ $t("Recommended settings for advanced features") }}</span>
