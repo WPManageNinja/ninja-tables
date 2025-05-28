@@ -87,6 +87,13 @@ export default {
     @apply bg-[#E9ECEF] text-[#ADB5BD] border border-solid border-[#DEE2E6] cursor-not-allowed hover:bg-[#E9ECEF];
   }
 
+  .ninja-button--disabled.pro-component {
+    @apply bg-white text-[#525866] border border-solid border-[#E1E4EA];
+    &:hover {
+      @apply bg-[#F5F6F7] delay-100 duration-100;
+    }
+  }
+
   .ninja-button--pro {
       @apply bg-[#0E121B] hover:bg-[#222530] text-white delay-100 duration-100;
   }
