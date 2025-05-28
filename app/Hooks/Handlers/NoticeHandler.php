@@ -125,10 +125,7 @@ class NoticeHandler
 <div class="nt_review_notice" data-notice-key="$key">
     <div class="nt-notice-content">
         <div class="nt-notice-text">
-            In love with Ninja Tables?
-            <a target="_blank" href="https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5">
-                Please leave a 5-star review for us!
-            </a>
+            In love with Ninja Tables? <strong>Please leave a 5-star review for us! </strong>
             It will encourage us to come up with more and more features.
         </div>
         <div class="nt-notice-actions">
