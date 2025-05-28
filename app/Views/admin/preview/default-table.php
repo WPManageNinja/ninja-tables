@@ -38,7 +38,7 @@
     </div>
     <div class="nt_preview_fotter">
         <p class="nt_preview_fotter_text">You are seeing preview version of Ninja Tables. This table is only accessible for Admin users. Other users
-            may not access this page. To use this for in a page please use the following shortcode: [ninja_tables
+            may not access this page. To use this in a page please use the following shortcode: [ninja_tables
             id='<?php echo esc_attr($table_id) ?>']</p>
     </div>
 </div>

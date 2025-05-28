@@ -16,7 +16,7 @@
                        title="Connect External CSV"
         >
             <template #default>
-                <p class="text-[14px] font-[400] text-[#525866]">Construct table from remote CSV file. Whenever your remote CSV data changes it will be synced here automatically.
+                <p class="text-[14px] font-[400] text-[#525866]">Construct table from remote CSV file. Whenever your remote CSV data changes it will automatically sync here.
                     <a href="https://ninjatables.com/docs/construct-table-from-csv/" class="nt-link" > View Documentation. </a>
                 </p>
             </template>
@@ -53,7 +53,7 @@
                         {{ $t('Construct Table from Remote CSV File') }}
                     </h3>
                     <p class="nt-modal-description">
-                        {{ $t('Whenever your remote CSV data changes it will be synced here automatically.') }}
+                        {{ $t('Construct table from remote CSV file. Whenever your remote CSV data changes it will automatically sync here.') }}
                     </p>
                 </template>
             </div>

@@ -51,21 +51,13 @@
                                 <p class="my-3">{{ $t('Please configure the table columns before viewing the table design.' )}}</p>
                             </div>
                         </div>
-                        <div class="ninja_demo_disclaimer text-[14px] mt-4" v-if="formattedColumns.length">
-                            <p v-if="tableSettings.stackable == 'yes'">
-                                <b>For Stackable Tables, Live preview is disabled here. Please check on preview url</b>
+                        <div class="ninja_demo_disclaimer mt-4 flex flex-col gap-2 nt-instruction" v-if="formattedColumns.length">
+                            <p v-if="tableSettings.stackable == 'yes'" class="text-[14px] font-[500]">
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon> {{ $t('For Stackable Tables, Live preview is disabled here. Please check on preview url') }}
                             </p>
-                            <p>
-                                <b>Note: </b> For preview purpose, you are seeing up to 25 latest rows here and and per
-                                page
-                                10
-                                items if you enable pagination. Also note that, the table style may differ at the frontend
-                                as
-                                your
-                                theme may override few CSS elements.
+                            <p class="text-[14px]">
+                                <b>Note: </b> {{ $t('This preview shows the latest 25 rows. Enable pagination for 10 items per page. Styles may differ on the frontend due to theme CSS. Custom filters and row-inline styling are not supported here. Check the live preview or embedded page for full functionality.') }}
                             </p>
-                            <p>Some elements like custom filters and row-inline styling is not available in this design mode.
-                                Please check on live preview or in your embedded page.</p>
                         </div>
                     </div>
 

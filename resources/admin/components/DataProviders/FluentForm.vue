@@ -150,8 +150,7 @@
                       show-icon
                       class="premium-notice"
             >
-                <p>To use this feature your WP Fluent Form need to be updated. Please update WP Fluent From from plugins
-                    screen</p>
+                <p>To use this feature your WP Fluent Form need to be updated. Please update WP Fluent From from plugins screen</p>
             </el-alert>
 
             <h4>See the form in action:</h4>
@@ -170,7 +169,7 @@
                 is a leading WordPress Contact Form plugin packed with all the premium features you need for a smart form. And integrating Fluent Forms with Ninja Tables, you can easily create tables using form entries.
                 <br>
                 <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/fluent-forms-integration/">
-                    Learn more about this module
+                    <span class="text-[14px]">Learn more about this module</span>
                 </a>
             </p>
             <div class="my-4">
