@@ -64,7 +64,7 @@
 
         <div class="mt-10">
             <h2 class="m-0 text-center text-[24px] font-[500]">{{$t('Our Products')}}</h2>
-            <p class="m-auto py-5 text-gray-400 text-center max-w-[500px]">{{$t('We need your help to keep developing the plugin. Please review it and spread the love to keep us motivated.')}}</p>
+            <p class="m-auto py-5 text-gray-400 text-center max-w-[500px] text-[14px]">{{$t('We need your help to keep developing the plugin. Please review it and spread the love to keep us motivated.')}}</p>
             <div class="grid md:grid-cols-3 gap-5">
                 <div v-for="prod in products" :key="prod.name" class="flex flex-col justify-between border border-solid p-5 rounded-xl border-[#E1E4EA] gap-5">
                     <div>
@@ -202,7 +202,7 @@ export default {
                 </linearGradient>
             </defs>
         </svg>`,
-                    description: "Join the 400K+ happy users who use the fastest contact form plugin for their websites.",
+                    description: "Try the best contact form plugin in WordPress and create forms faster than ever! 500k+ users worldwide enjoy this plugin to build smart forms everyday.",
                     link: "https://wordpress.org/plugins/fluentform/",
                     linkText: "Try Fluent Forms for Free"
                 },
@@ -214,7 +214,7 @@ export default {
               <path fill-rule="evenodd" clip-rule="evenodd" d="M34.6913 30.9883C34.6913 30.9883 21.0729 34.6375 13.9857 36.5365C11.5217 37.1967 9.80829 39.4295 9.80829 41.9805C9.80829 43.9197 9.80829 45.7783 9.80829 45.7783C9.80829 45.7783 19.5525 43.1675 26.8453 41.2133C31.4733 39.9733 34.6913 35.7795 34.6913 30.9885V30.9883Z" fill="white"/>
             </svg>`,
                     image: "fluentcrm-logo.png",
-                    description: "The easiest and fastest email newsletter, email marketing plugin & CRM solutions for WordPress.",
+                    description: "Get the fastest email newsletter and CRM solution in WordPress for smart and effective email marketing. Join 60k+ users for happy emailing!",
                     link: "https://wordpress.org/plugins/fluent-crm/",
                     linkText: "Try FluentCRM for Free"
                 },
@@ -226,7 +226,7 @@ export default {
               <path d="M19.7486 21.1241L3.43172 15.7001C2.07197 15.2481 1.35973 13.763 1.81298 12.407C2.00723 11.7613 2.46047 11.2447 3.10797 10.9219C1.23023 11.7613 -1.52588e-05 13.6339 -1.52588e-05 15.6356V49.5354C-1.52588e-05 51.7309 1.42448 53.7326 3.56122 54.4428L19.9429 59.8668C21.3026 60.3188 22.7919 59.6085 23.2451 58.2525C23.3099 57.9943 23.3746 57.736 23.3746 57.4131V26.0315C23.3099 23.8361 21.8854 21.8344 19.7486 21.1241Z" fill="#FF7519"/>
               <path opacity="0.5" d="M3.43173 10.795C3.30224 10.8596 3.17274 10.8596 3.10799 10.9242C3.30224 10.8596 3.43173 10.795 3.62598 10.7305L3.43173 10.795Z" fill="#1D1D1B"/>
             </svg>`,
-                    description: "Get the best payment and donation plugin for your business, fundraising, or membership program.",
+                    description: "Get the best payment and donation plugin for your WordPress website. It's an ideal solution for businesses, fundraising, or membership programs.",
                     link: "https://wordpress.org/plugins/wp-payment-form/",
                     linkText: "Try Paymattic for Free"
                 },
@@ -238,7 +238,7 @@ export default {
               <path d="M49.2522 14.6637C49.2522 18.4542 49.2522 22.2446 49.2522 26.035C48.2418 23.5925 45.9284 21.9401 43.2924 21.7788C42.5428 21.7224 41.7877 21.795 41.0594 21.9911C32.033 24.4111 23.0065 26.8312 13.9801 29.2512C13.8055 29.3024 13.6255 29.3319 13.4454 29.3398C13.3218 29.3615 13.1982 29.3721 13.0746 29.3721C11.8144 29.3776 10.788 28.3645 10.7746 27.1044C10.7585 26.9969 10.7504 26.8895 10.7504 26.7793C10.7504 25.4967 10.7504 24.2141 10.7504 22.9316C10.7504 22.8465 10.7504 22.7614 10.7504 22.6763C10.7558 22.6064 10.7611 22.5366 10.7746 22.4694C10.7746 22.4497 10.7746 22.43 10.7746 22.4103C10.7746 22.3915 10.8014 22.2786 10.8176 22.2114C10.823 22.1846 10.8283 22.1577 10.8364 22.1308C10.8364 22.0798 10.8632 22.0261 10.8794 21.975C10.8955 21.9239 10.9143 21.8675 10.9358 21.8138C10.9466 21.7923 10.9573 21.7681 10.9627 21.7466C11.3388 20.7927 12.1476 20.0726 13.1391 19.8093C23.7178 16.9763 34.2964 14.1433 44.8751 11.3104C45.0874 11.2513 45.3076 11.211 45.5278 11.1895C45.6893 11.1545 45.8556 11.1357 46.0198 11.125C46.0681 11.125 46.1164 11.125 46.1648 11.125C47.8601 11.125 49.2333 12.498 49.2333 14.1935C49.2333 14.1989 49.2333 14.2043 49.2333 14.2096C49.2333 14.2293 49.2333 14.249 49.2333 14.2687C49.2439 14.3923 49.2522 14.524 49.2522 14.6637Z" fill="white"/>
               <path d="M41.9258 26.32C41.9251 26.3212 41.9241 26.3219 41.9227 26.3219C41.7783 26.3219 41.6339 26.3219 41.4895 26.3219C41.0676 26.3219 40.6485 26.3784 40.2428 26.4858C38.841 26.862 37.4393 27.2382 36.0375 27.6143C28.4603 29.6466 20.883 31.6789 13.3058 33.7111C12.9622 33.764 12.6317 33.8819 12.3294 34.0543C12.3195 34.0602 12.3083 34.0633 12.2969 34.0633C12.2854 34.0633 12.2741 34.066 12.2642 34.0719C11.3274 34.6246 10.7532 35.6302 10.7505 36.7178C10.7505 40.5951 10.7505 44.4724 10.7505 48.3497C10.7478 48.4195 10.8015 48.4813 10.8714 48.4841C10.9225 48.4841 10.9708 48.4573 10.995 48.4088C12.0644 46.4314 13.596 44.7412 15.4635 43.4835C16.283 42.9032 17.1777 42.4357 18.1236 42.0946C18.4164 41.987 18.712 41.8956 19.0156 41.8098C19.5485 41.6655 20.0815 41.5212 20.6144 41.3769C27.8531 39.4378 35.0918 37.4988 42.3305 35.5597C42.48 35.5185 42.6296 35.4773 42.7791 35.4361C42.9997 35.3986 43.2144 35.3395 43.424 35.2643C45.8264 34.4205 47.0892 31.7925 46.2455 29.3904C45.5996 27.5525 43.8695 26.321 41.9254 26.3086C41.9217 26.3086 41.9206 26.3136 41.9241 26.3151C41.9258 26.3159 41.9268 26.3182 41.9258 26.32C41.9258 26.32 41.9258 26.3199 41.9258 26.32Z" fill="white"/>
             </svg>`,
-                    description: "Transform your support agents into superheroes with the WordPress helpdesk plugin.",
+                    description: "Turn your support agents into superheroes with the best WordPress helpdesk plugin. Streamline customer support with this intuitive and powerful tool.",
                     link: "https://wordpress.org/plugins/fluent-support/",
                     linkText: "Try Fluent Support for Free"
                 },
@@ -253,7 +253,7 @@ export default {
               <path fill-rule="evenodd" clip-rule="evenodd" d="M11.8691 6.66498H45.1026C49.56 6.66498 53.1735 10.2893 53.1735 14.7602V41.707H56.9716V14.7602C56.9716 8.18539 51.6577 2.85547 45.1026 2.85547H11.8691C5.31397 2.85547 0 8.18539 0 14.7602V48.0934C0 54.6681 5.31397 59.9981 11.8691 59.9981H38.5846V56.1886H11.8691C7.41161 56.1886 3.79811 52.5642 3.79811 48.0934V14.7602C3.79811 10.2893 7.41161 6.66498 11.8691 6.66498Z" fill="#2653C7"/>
               <path fill-rule="evenodd" clip-rule="evenodd" d="M39.2092 60.0019L57 42.1577V41.5312H38.5846V60.0019H39.2092Z" fill="#2653C7"/>
             </svg>`,
-                    description: "The ultimate solution for booking appointments, meetings, webinars, events, sales calls, and more.",
+                    description: "The ultimate WordPress scheduling solution for appointments, events, webinars, meetings, sales calls etc. Start scheduling smarter today!",
                     link: "https://fluentbooking.com/",
                     linkText: "Try FluentBooking"
                 },
@@ -283,7 +283,7 @@ export default {
                 </linearGradient>
               </defs>
             </svg>`,
-                    description: "WordPress social tool that fetches social feeds, user reviews, and social chat widgets to your website.",
+                    description: "Get this WordPress social tool to embed live social feeds, reviews, and chat widgets directly into your website to boost engagement and social proof.",
                     link: "https://wordpress.org/plugins/wp-social-reviews/",
                     linkText: "Try WP Social Ninja for Free"
                 }
