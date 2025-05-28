@@ -4,7 +4,7 @@
             <img :src="image_url('banner_premium.png')"/>
         </div>
         <div class="ninja_fluent_copy">
-            <p>Have you checked out NinjaTables Pro Add-On yet? We have added some exciting features in Ninja Tables with Pro Add-On</p>
+            <p>Have you checked out Ninja Tables Pro Add-On yet? We have added some exciting features in Ninja Tables with Pro Add-On</p>
             <a class="button button-primary" target="_blank" href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade">Download Now</a>
             <a target="_blank" class="button" href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade">View Details</a>
         </div>

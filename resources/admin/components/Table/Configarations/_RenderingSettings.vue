@@ -3,7 +3,7 @@
     <div class="nt_rendering nt-table-configuration-content">
         <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Table Render Settings') }}</div>
         <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">{{
-                $t("Please the select the settings for your table render method. Using Legacy table you can use shortcodes in your cells and it will render the full table from php side. Table styles will be same for both tables. Most of the cases you will need Ajax Table which is recommended settings.")
+                $t("Please select the settings for your table render method. Using Legacy table you can use shortcodes in your cells and it will render the full table from php side. Table styles will be same for both tables. Most of the cases you will need Ajax Table which is recommended settings.")
             }}
         </div>
 

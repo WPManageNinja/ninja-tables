@@ -23,7 +23,7 @@
             <div class="text-[16px] font-[500] text-[#3C434A]">{{ $t('Clear Cache') }}</div>
             <div class="text-[14px] font-[400] text-[#3C434A] mt-[10px] mb-[20px]">
                 {{
-                    $t(`If you want to clear all the Ninja table cache, please click on the "Clear Table Cache" button or if you want to clear the cache by popular external plugins please click "Clear External Caches`)
+                    $t(`If you want to clear all the Ninja table cache, please click on the "Clear Table Cache" button or if you want to clear the cache by popular external plugins please click "Clear External Caches".`)
                 }}
             </div>
             <div class="my-3 flex gap-3">

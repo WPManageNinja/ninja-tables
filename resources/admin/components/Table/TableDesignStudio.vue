@@ -59,14 +59,13 @@
                                 <b>Note: </b> For preview purpose, you are seeing up to 25 latest rows here and and per
                                 page
                                 10
-                                items if you enable paginate. Also note that, The table style may differ at the frontend
+                                items if you enable pagination. Also note that, the table style may differ at the frontend
                                 as
                                 your
-                                theme may overwrite few css elements.
+                                theme may override few CSS elements.
                             </p>
-                            <p>Some elements like custom filters and row-inline styling is not available in this design
-                                mode.
-                                Please check on live preview or in your embeded page.</p>
+                            <p>Some elements like custom filters and row-inline styling is not available in this design mode.
+                                Please check on live preview or in your embedded page.</p>
                         </div>
                     </div>
 

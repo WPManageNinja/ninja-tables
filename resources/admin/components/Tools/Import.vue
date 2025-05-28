@@ -3,7 +3,7 @@
         <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Import Table') }}</div>
         <div class="ninja_content">
             <div class="text-[14px] font-[400] text-[#0E121B] my-5">
-                {{ $t("NinjaTables can import tables from existing data, like from a CSV or JSON file. You can also import existing tables from the other WordPress table plugins.") }}
+                {{ $t("Ninja Tables can import tables from existing data, like from a CSV or JSON file. You can also import existing tables from the other WordPress table plugins.") }}
             </div>
             <div class="my-2">
                 <p class="mb-2 text-[#0E121B] text-[16px] font-[500]">{{ $t('Import Table from CSV / JSON File') }}</p>

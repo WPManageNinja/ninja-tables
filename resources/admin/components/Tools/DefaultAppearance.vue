@@ -3,7 +3,7 @@
         <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Global Appearance Settings') }}</div>
         <div class="text-[14px] font-[400] text-[#0E121B] my-5">
             {{
-                $t(`The following settings will be applied to the newly created tables. Of course, You can customize the
+                $t(`The following settings will be applied to the newly created tables. Of course, you can customize the
                     appearance settings to each table level.`)
             }}
         </div>

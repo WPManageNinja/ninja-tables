@@ -5,7 +5,7 @@
                 {{ $t('Permission') }}
             </div>
             <div class="text-[14px] font-[400] text-[#0E121B] my-5">
-                    {{$t(`By default, Only Administrator have access to manage the tables. By selecting additional roles bellow, You can give access to manage your Tables to other user roles.`) }}
+                    {{$t(`By default, Only Administrator have access to manage the tables. By selecting additional roles below, You can give access to manage your Tables to other user roles.`) }}
             </div>
         </div>
 
