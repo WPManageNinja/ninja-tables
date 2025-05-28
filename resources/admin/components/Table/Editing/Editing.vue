@@ -50,7 +50,7 @@
                         </div>
                         <div class="mb-3 text-[14px]">
                             {{
-                                $t("Please specific user roles to be able to edit/delete this table. Only selected user roles can edit/delete the data.")
+                                $t("Please specify user roles to be able to edit/delete this table. Only selected user roles can edit/delete the data.")
                             }}
                         </div>
 
@@ -139,7 +139,7 @@
                             </div>
                             <div class="mb-3 text-[14px] font-[400]">
                                 {{
-                                    $t("Please Specify which columns can be editable from front-end and also, You can specify which columns will be required")
+                                    $t("Please specify which columns should be editable from the front-end. You can also define which columns are required.")
                                 }}
                             </div>
                             <div class="ninja-tables_table_edit">

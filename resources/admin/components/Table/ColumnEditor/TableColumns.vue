@@ -125,7 +125,7 @@
                             </div>
                             <div class="proms my-4">
                                 <div class="nt-instruction">
-                                    <p class="text-[14px]">Need help to configure the columns and responsive breakdowns, Please check
+                                    <p class="text-[14px]">Need help to configure the columns and responsive breakdowns? Please check
                                         <a class="nt-link"
                                                 href="https://ninjatables.com/docs/column-responsive-breakpoints/"
                                                 target="_blank">tutorial</a></p>
