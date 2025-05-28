@@ -8,9 +8,6 @@
                     <h1 class="heading-text">
                         {{ $t('All Tables') }}
                     </h1>
-<!--                    <p class="caption-text">-->
-<!--                        {{ $t('Display all the tables and essential.') }}-->
-<!--                    </p>-->
                 </div>
 
                 <div class="all-tables-header-right">
