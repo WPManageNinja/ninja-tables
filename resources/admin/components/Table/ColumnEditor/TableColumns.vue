@@ -13,7 +13,7 @@
                                 <img class="lg:hidden" :src="assetUrl('/icons/credit-card.svg')"/>
                             </el-tooltip>
                             <img class="hidden lg:block" :src="assetUrl('/icons/credit-card.svg')"/>
-                            <span class="hidden lg:block">Columns</span>
+                            <span class="hidden lg:block">{{$t('Columns')}}</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'rendering_settings'" index="rendering_settings">
@@ -21,7 +21,7 @@
                                 <img class="lg:hidden" :src="assetUrl('/icons/credit-card.svg')"/>
                             </el-tooltip>
                             <img class="hidden lg:block" :src="assetUrl('/icons/credit-card.svg')"/>
-                            <span class="hidden lg:block">Rendering Settings</span>
+                            <span class="hidden lg:block">{{$t('Rendering Settings')}}</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'custom_filters'" index="custom_filters">
@@ -29,7 +29,7 @@
                                 <img class="lg:hidden" :src="assetUrl('/icons/customize.svg')"/>
                             </el-tooltip>
                             <img class="hidden lg:block" :src="assetUrl('/icons/customize.svg')"/>
-                            <span class="hidden lg:block">Custom Filters</span>
+                            <span class="hidden lg:block">{{$t('Custom Filters')}}</span>
                             <img v-if="!hasPro" class="h-4 w-4 ml-1 !grayscale-0" :src="assetUrl('icons/get-pro.svg')" alt="">
                         </el-menu-item>
 
@@ -38,7 +38,7 @@
                                 <img class="lg:hidden" :src="assetUrl('/icons/search-area.svg')"/>
                             </el-tooltip>
                             <img class="hidden lg:block" :src="assetUrl('/icons/search-area.svg')"/>
-                            <span class="hidden lg:block">Buttons (CSV/Print)</span>
+                            <span class="hidden lg:block">{{$t('Buttons (CSV/Print)')}}</span>
                             <img v-if="!hasPro" class="h-4 w-4 ml-1 !grayscale-0" :src="assetUrl('icons/get-pro.svg')" alt="">
                         </el-menu-item>
 
@@ -47,13 +47,13 @@
                                 <img class="lg:hidden" :src="assetUrl('/icons/language-square.svg')"/>
                             </el-tooltip>
                             <img class="hidden lg:block" :src="assetUrl('/icons/language-square.svg')"/>
-                            <span class="hidden lg:block">Language Settings</span>
+                            <span class="hidden lg:block">{{$t('Language Settings')}}</span>
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
                 <el-main class="ml-5 lg:ml-10">
                     <template v-if="active_menu == 'columns'">
-                        <h2 class="text-[18px] font-[600] text-[#0E121B]">Table Column Settings</h2>
+                        <h2 class="text-[18px] font-[600] text-[#0E121B]">{{$t('Table Column Settings')}}</h2>
                   
                         <div class="ninja_content">
                             <div class="section_widget">
@@ -125,15 +125,14 @@
                             </div>
                             <div class="proms my-4">
                                 <div class="nt-instruction">
-                                    <p class="text-[14px]">Need help to configure the columns and responsive breakdowns, Please check
+                                    <p class="text-[14px]">{{$t('Need help to configure the columns and responsive breakdowns, Please check')}}
                                         <a class="nt-link"
                                                 href="https://ninjatables.com/docs/column-responsive-breakpoints/"
-                                                target="_blank">tutorial</a></p>
+                                                target="_blank">{{$t('tutorial')}}</a></p>
                                 </div>
-                                <div v-if="!is_fluent_installed" class="nt-instruction">
-                                    <p class="text-[14px]">Have you checked out FluentForm yet? We have developed a powerful Drag & Drop WordPress Form
-                                        Builder plugin with some amazing Premium features <a :href="fluent_url">Download from
-                                            WordPress.org</a></p>
+                                <div v-if="!is_fluent_installed" class="nt-instruction mt-4">
+                                    <p class="text-[14px]">{{$t('Have you checked out FluentForm yet? We have developed a powerful Drag & Drop WordPress Form')}}
+                                        <a :href="fluent_url">{{$t('Download from WordPress.org')}}</a></p>
                                 </div>
                             </div>
                         </div>

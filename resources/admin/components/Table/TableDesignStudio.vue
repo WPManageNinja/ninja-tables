@@ -53,20 +53,12 @@
                         </div>
                         <div class="ninja_demo_disclaimer text-[14px] mt-4" v-if="formattedColumns.length">
                             <p v-if="tableSettings.stackable == 'yes'">
-                                <b>For Stackable Tables, Live preview is disabled here. Please check on preview url</b>
+                                <b>{{$t("For Stackable Tables, Live preview is disabled here. Please check on preview url")}}</b>
                             </p>
                             <p>
-                                <b>Note: </b> For preview purpose, you are seeing up to 25 latest rows here and and per
-                                page
-                                10
-                                items if you enable paginate. Also note that, The table style may differ at the frontend
-                                as
-                                your
-                                theme may overwrite few css elements.
+                                <b>{{$t("Note:")}}</b> {{$t("For preview purpose, you are seeing up to 25 latest rows here and and per page 10 items if you enable paginate. Also note that, The table style may differ at the frontend as your theme may overwrite few css elements.")}}
                             </p>
-                            <p>Some elements like custom filters and row-inline styling is not available in this design
-                                mode.
-                                Please check on live preview or in your embeded page.</p>
+                            <p>{{$t("Some elements like custom filters and row-inline styling is not available in this design mode. Please check on live preview or in your embeded page.")}}</p>
                         </div>
                     </div>
 
@@ -74,8 +66,8 @@
             </div>
             <div class="w-[30%] bg-white border-r border-l border-b border-[#E1E4EA]">
                 <el-tabs v-model="activeDesign" tab-position="top" class="nt_tab_design">
-                    <el-tab-pane label="Styling" name="features">
-                        <el-collapse accordion class="nt-design-collapse">
+                    <el-tab-pane :label="$t('Styling')" name="features">
+                        <el-collapse v-model="activeDesignCollapse" accordion class="nt-design-collapse" active="styles" default-active="styles">
                             <el-collapse-item name="styles">
                                  <template #title>
                                     <div class="flex items-center">
@@ -280,7 +272,7 @@
                                 <div class="form_group label-normalize mt-4">
                                     <div class="form_group">
                                         <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="tableSettings.stackable">
-                                            Enable Stackable Table
+                                            {{ $t('Enable Stackable Table') }}
                                         </el-checkbox>
                                         <template v-if="tableSettings.stackable == 'yes'">
                                             <h3 style="margin-top: 15px" class="ninja_inner_title">Target Devices
@@ -317,9 +309,9 @@
                             </el-collapse-item>
                         </el-collapse>
                     </el-tab-pane>
-                    <el-tab-pane label="Table Colors" name="color_customization">
+                    <el-tab-pane :label="$t('Table Colors')" name="color_customization">
                         <div class="px-[18px]">
-                            <h3 class="text-[16px] mt-4">Select Color Scheme</h3>
+                            <h3 class="text-[16px] mt-4">{{ $t('Select Color Scheme') }}</h3>
                             <div class="flex rounded-[8px] bg-[#F5F7FA] p-2 h-[36px] items-center my-4 gap-3">
                                 <div 
                                     @click="tableSettings.table_color_type = 'pre_defined_color'" 
@@ -856,8 +848,8 @@ export default {
             hasSortable: !!window.ninja_table_admin.hasSortable,
             sortableUpgradeNotice: false,
             columnCss: '',
-            bus: useEventBus()
-            
+            bus: useEventBus(),
+            activeDesignCollapse: 'styles'
         }
     },
     computed: {
