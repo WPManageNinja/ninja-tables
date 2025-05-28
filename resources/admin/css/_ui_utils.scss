@@ -46,10 +46,11 @@
       height: fit-content;
       .el-menu {
         border-right: 0;
+        padding: 8px;
       }
       @apply bg-white rounded-[12px] p-5 border border-[#E1E4EA];
       .el-menu-item {
-        @apply rounded-[8px] h-[40px] font-[500] hover:bg-white text-[#525866];
+        @apply rounded-[8px] h-[40px] font-[500] hover:bg-white text-[#525866] mb-0;
         img {
           filter: grayscale(100%);
           margin-right: 12px;
