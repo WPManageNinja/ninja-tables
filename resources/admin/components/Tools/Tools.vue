@@ -21,7 +21,10 @@
                             </el-tooltip>
                             <!-- <el-icon><component class="hidden lg:block" :is="menuItem.icon_class" /></el-icon> -->
                             <img :src="assetUrl(menuItem.iconSrc)" class="w-[20px] h-[20px] hidden lg:block">
-                            <span class="hidden lg:block">{{ menuItem.title }}</span>
+                            <span class="hidden lg:block">
+                                {{ menuItem.title }}
+                            </span>
+                            <img v-if="!has_pro && menuItem.route === 'permission'" class="h-4 w-4 ml-1 !grayscale-0" :src="assetUrl('icons/get-pro.svg')" alt="">
                         </el-menu-item>
                     </template>
                 </el-menu>

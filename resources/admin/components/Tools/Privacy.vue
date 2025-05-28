@@ -2,7 +2,7 @@
     <div class="nt-table-permission-content">
         <div class="nt-permission-header">
             <div class="text-[18px] font-[600] text-[#0E121B]">
-                {{ $t('Permission') }} <span v-show="!hasPro">(Pro Feature)</span>
+                {{ $t('Permission') }}
             </div>
             <div class="text-[14px] font-[400] text-[#0E121B] my-5">
                     {{$t(`By default, Only Administrator have access to manage the tables. By selecting additional roles bellow, You can give access to manage your Tables to other user roles.`) }}
@@ -44,15 +44,12 @@
             </div>
 
             <div v-else class="w-full overflow-hidden text-center nt-instruction">
-                <h3 class="text-[16px] font-[500] text-[#0E121B] my-4">{{ $t('Activate Ninja Tables Pro Add-on plugin to unlock this feature') }}</h3>
+                <h3 class="text-[16px] font-[500] text-[#0E121B] my-4">{{ $t('Activate Ninja Tables Pro plugin to unlock this feature') }}</h3>
                 <div class="flex justify-center mb-4">
                     <a v-if="!hasPro"
                        href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
                        target="_blank">
-                        <NinjaButton
-                            type="danger"
-                            :btnText="$t('Get Pro')"
-                        />
+                        <GetPro/>
                     </a>
                 </div>
             </div>

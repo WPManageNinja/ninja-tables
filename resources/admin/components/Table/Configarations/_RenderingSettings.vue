@@ -22,7 +22,7 @@
                  @click="()=>changeTableType('legacy_table')">
                 <div>
                     <div class="mb-2 font-[500] text-[14px] flex items-center gap-1">
-                        Classic
+                        Legacy
                         <img v-if="!hasPro" class="h-4 w-4" :src="assetUrl('icons/get-pro.svg')" alt="">
                     </div>
                     <div class="text-[12px] text-[#525866]">
@@ -58,7 +58,7 @@
         <el-collapse v-if="config.table.hasCacheFeature || (config.settings.render_type == 'legacy_table' && tableSettings.shouldNotCache != 'yes') || tableSettings.enable_html_cache == 'yes' || config.table.hasExternalCachingInterval" class="ninja-tables_rendering_accordion">
             <el-collapse-item name="1">
                 <template #title>
-                    <span style="font-weight: 400; font-size: 14px;">{{ $t('Caching Config') }}</span>
+                    <span style="font-weight: 400; font-size: 14px;">{{ $t('Caching Configuration') }}</span>
                 </template>
                 <div class="mt-5">
                     <div class="border-b-solid">

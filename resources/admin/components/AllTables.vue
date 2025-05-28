@@ -20,7 +20,7 @@
                     </router-link>
 
                     <NinjaButton @click="openCreateModal" :icon="assetUrl('icons/add.svg')"
-                        :btnText="$t('Create New table')" />
+                        :btnText="$t('Create New Table')" />
 
                 </div>
             </div>

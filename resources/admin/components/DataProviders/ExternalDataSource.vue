@@ -1,7 +1,26 @@
 <template>
     <div v-if="!hasPro" class="mb-4">
-        <PremiumNotice v-if="type === 'google-csv'" title="Connect External CSV" />
-        <PremiumNotice v-else title="Connect Google Sheets" />
+        <PremiumNotice v-if="type === 'google-csv'"
+                       title="Connect Google Sheets"
+                       content="Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro."
+        >
+            <template #default>
+                <p class="text-[14px] font-[400] text-[#525866]">Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro.
+                    <a href="https://ninjatables.com/docs/google-sheets-integration/" class="nt-link" > View Documentation. </a>
+                </p>
+            </template>
+        </PremiumNotice>
+
+
+        <PremiumNotice v-else-if="type === 'csv'"
+                       title="Connect External CSV"
+        >
+            <template #default>
+                <p class="text-[14px] font-[400] text-[#525866]">Construct table from remote CSV file. Whenever your remote CSV data changes it will be synced here automatically.
+                    <a href="https://ninjatables.com/docs/construct-table-from-csv/" class="nt-link" > View Documentation. </a>
+                </p>
+            </template>
+        </PremiumNotice>
     </div>
 
     <div v-else-if="!activated_features.external_data_source" class="mb-4">

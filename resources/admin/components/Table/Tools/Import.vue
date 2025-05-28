@@ -88,7 +88,7 @@
             <h3 class="nt-modal-subtitle my-3">{{ $t('Table Configuration Required') }}</h3>
             <p class="nt-modal-description">{{ $t('Please configure the table columns before importing data.' )}}</p>
         </div>
-        <div v-else class="nt-instruction text-center">
+        <div v-else class="nt-instruction text-center mt-4">
             <h3 class="nt-modal-subtitle mb-3">{{ $t('Import Table') }}</h3>
             <p class="nt-modal-description">{{ $t(`Sorry! You can not import any data as the table data is configured as external source (${config.table.dataSourceType})`) }}</p>
         </div>
