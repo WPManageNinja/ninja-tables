@@ -235,7 +235,7 @@ import NinjaButton from '../../@ui-utils/NinjaButton.vue';
                 do_unicode: 'no',
                 btnLoading: false,
                 otherPlugins: {
-                    'TablePress': 'Table Press',
+                    'TablePress': 'TablePress',
                     'supsystic': 'Data Tables Generator by Supsystic',
                 },
                 btnsLoading: {

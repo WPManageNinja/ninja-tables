@@ -116,8 +116,12 @@
                             </div>
 
                             <el-checkbox name="checkbox" v-model="sorting">
-                                Sort Manually
-                                <template v-if="!has_pro">(Pro Feature)</template>
+                                <div class="flex items-center cursor-pointer">
+                                    Sort Manually
+                                    <template v-if="!has_pro">
+                                        <img :src="assetUrl('icons/get-pro.svg')" class="h-4 w-4 ml-1 !grayscale-0" alt="">
+                                    </template>
+                                </div>
                             </el-checkbox>
 
                         </div>

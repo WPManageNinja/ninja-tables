@@ -1,6 +1,12 @@
 <template>
     <template v-if="!hasPro">
-        <PremiumNotice title="Custom SQL Query" highlight="SQL module where you can write custom SQL to build your table with "/>
+        <PremiumNotice title="Custom SQL Query">
+            <template #default>
+                <p class="text-[14px] font-[400] text-[#525866]">Create a table by generating a sql query to any custom SQL database.
+                    <a href="https://ninjatables.com/docs/create-table-from-custom-sql/" class="nt-link" > View Documentation. </a>
+                </p>
+            </template>
+        </PremiumNotice>
     </template>
 
     <div v-else class="ninja_modal-body">

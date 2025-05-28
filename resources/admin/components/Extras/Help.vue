@@ -162,6 +162,10 @@ export default {
                     url: 'https://ninjatables.com/how-to-create-woocommerce-product-table/'
                 },
                 {
+                    title: 'Free table templates',
+                    url: 'https://ninjatables.com/free-table-templates/'
+                },
+                {
                     title: 'How to export-import tables in Ninja Tables?',
                     url: 'https://ninjatables.com/docs-category/import-export/'
                 },

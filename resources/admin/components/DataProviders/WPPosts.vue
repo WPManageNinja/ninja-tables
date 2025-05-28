@@ -1,7 +1,11 @@
 <template>
     <div v-loading="loading" class="ninja_modal-body ninja_tables_wpposts">
         <template v-if="!hasPro">
-            <PremiumNotice title="WP Posts Table" highlight="Create nice tables from your existings posts/pages/custom post types"/>
+            <PremiumNotice title="WP Posts Table">
+            <template #default>
+                <p class="text-[14px] font-[400] text-[#525866]">This is a Premium feature. Create responsive and customizable <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/create-wp-posts-table/">WP posts tables</a> from your existing posts/pages/custom post types with Ninja Tables pro.</p>
+            </template>
+            </PremiumNotice>
         </template>
         <template v-else-if="!activated_features.wp_posts_table">
             <upgrade-notice/>

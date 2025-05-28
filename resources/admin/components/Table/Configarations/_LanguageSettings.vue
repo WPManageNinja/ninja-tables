@@ -9,7 +9,7 @@
         <div class="px-6 py-5 border-solid border border-[#E1E4EA] rounded-[10px]">
             <div class="grid grid-cols-2 gap-5">
                 <div class="w-full">
-                    <div class="mb-2 text-[14px] font-[500]">{{ $t('Empty Results Text:') }}</div>
+                    <div class="mb-2 text-[14px] font-[500]">{{ $t('Search Empty Results Text') }}</div>
                     <NinjaInput v-model="tableSettings.no_result_text"/>
                 </div>
 

@@ -175,7 +175,15 @@
                 </div>
                 <div v-else-if="has_woo && !hasPro" class="ninja_no_woo">
 <!--                    <h3>Upgrade to pro for using WooCommerce Integration</h3>-->
-                    <PremiumNotice title="WooCommerce Table" highlight="WooCommerce Integration module where you can create and build table with Woocomerce produsts and increase your conversion rate"/>
+                    <PremiumNotice title="WooCommerce Table">
+                        <template #default>
+                            <p class="text-[14px] font-[400] text-[#525866]">This is a Premium feature. Create customizable, smart, and organized
+                                <a href="https://ninjatables.com/docs/woocommerce-integration/" class="nt-link" target="_blank" >
+                                    WooCommerce product tables
+                                </a>
+                                with Ninja Tables Pro and get more sales.</p>
+                        </template>
+                    </PremiumNotice>
                 </div>
             </template>
 
