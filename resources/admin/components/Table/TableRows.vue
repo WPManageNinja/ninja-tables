@@ -54,10 +54,6 @@
                     />
                 </div>
             </div>
-
-            <div v-if="!columns.length && !loading">
-                <h3 style="text-align: center">No Data found based on your data source configuration</h3>
-            </div>
         </template>
 
         <template v-if="columns.length && isEditable">
@@ -142,7 +138,12 @@
             </div>
 
             <div v-else class="default_nav flex-wrap -mb-2">
-                 {{ formateDataSourceType(dataSourceType) }} Table
+                <div v-if="!columns.length && !loading" class="flex justify-center w-full text-[18px] font-[600] text-[#525866] mb-2">
+                    {{ $t('No Data found based on your data source configuration') }}
+                </div>
+                <div v-else>
+                    {{ formateDataSourceType(dataSourceType) }} Table
+                </div>
             </div>
 
             <div v-if="columns.length">

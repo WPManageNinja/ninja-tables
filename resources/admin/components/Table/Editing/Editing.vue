@@ -21,7 +21,7 @@
                 </div>
             </div>
 
-            <div v-else-if="!config.table.isEditable" class="nt-instruction mb-4 text-center">
+            <div v-else-if="!config.table.isEditable" class="nt-instruction text-center my-[2px]">
                 <h3 class="nt-modal-subtitle mb-3">{{ $t('Frontend Editing Settings') }}</h3>
                 <p class="nt-modal-description">{{ $t(`This table can not be editable on frontend. Only "Default" data source tables can be editable`) }}</p>
             </div>
