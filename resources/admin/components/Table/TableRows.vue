@@ -76,9 +76,10 @@
         <div class="all_tables_card">
 
             <div v-if="dataSourceType === 'default'">
-                <div v-if="!loading && !columns.length && isEditable" class="w-full flex flex-col justify-center items-center h-[200px]" >
-                    <h3 class="nt-modal-title mb-4">{{ $t('To get started please add table columns') }}</h3>
-                    <NinjaButton size="small" @click="addColumn" :icon="assetUrl('icons/add.svg')" :btnText="$t('Add Column')" />
+                <div v-if="!loading && !columns.length && isEditable" class="w-full flex flex-col justify-center items-center py-6" >
+                    <img :src="assetUrl('icons/monitor.svg')" alt="">
+                    <p class="text-[14px] mt-2 font-[400] text-[#99A0AE]">{{ $t('To get started please add table columns') }}</p>
+                    <NinjaButton class="mt-5" @click="addColumn" :icon="assetUrl('icons/add.svg')" :btnText="$t('Add Column')" />
                 </div>
 
                 <div v-else class="default_nav flex-wrap gap-y-5">
