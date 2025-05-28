@@ -245,7 +245,7 @@
         .ninja-tables-aside {
           display: flex;
           width: 260px;
-          padding: 30px 20px;
+          padding: 30px 17px;
           flex-direction: column;
           align-items: flex-start;
           gap: 20px;
@@ -299,7 +299,7 @@
                 }
               }
               .active-bar{
-                @apply bg-white w-[4px] mr-2 rounded-r-[10px] absolute left-[-20px] top-1 h-[24px];
+                @apply bg-white w-[4px] mr-2 rounded-r-[10px] absolute left-[-17px] top-1 h-[24px];
               }
 
               &.is-active {

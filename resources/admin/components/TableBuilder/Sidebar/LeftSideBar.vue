@@ -17,11 +17,12 @@
                             <template #item="{element: item, index: index}" :key="index">
                                 <el-col class="element-style" :span="12">
                                     <div :value="(!hasPro && item.has_pro) ? 'Pro' : ''" class="item w-full">
-                                        <NinjaButton type="secondary" :disabled="!hasPro && item.has_pro" class="w-full" :class="!hasPro && item.has_pro ? 'pro-component' : ''">
+                                        <NinjaButton type="secondary" :disabled="!hasPro && item.has_pro" class="w-full !pr-1 !pl-1" :class="!hasPro && item.has_pro ? 'pro-component' : ''">
                                             <el-icon :is="getIconComponent(item.icon)" class="icon-component mr-1" >
                                                 <component :is="getIconComponent(item.icon)" />
                                             </el-icon>
                                            <span class="!text-xs font-normal"> {{ item.name }}</span>
+                                           <img v-if="!hasPro && item.has_pro" :src="assetUrl('icons/get-pro.svg')" class="w-4 h-4 ml-1"/>
                                         </NinjaButton>
                                     </div>
                                 </el-col>
@@ -209,6 +210,7 @@ import {
     Star
 } from "@element-plus/icons-vue";
 import NinjaButton from '../../../@ui-utils/NinjaButton.vue';
+import { assetUrl } from '../../../utils/ninjatablesadmin';
 
 
 export default {
@@ -274,6 +276,7 @@ export default {
         };
     },
     methods: {
+        assetUrl,
         exportTable() {
             location.href = this.downloadLink(this.exports.format);
         },
