@@ -22,11 +22,12 @@
             <NinjaButton type="secondary" :icon="assetUrl('icons/view.svg')" :btnText="$t('Preview')" />
         </a>
         <NinjaButton @click="saveTableData" :loading="saving" type="primary">{{ $t('Save Table') }}</NinjaButton>
-        <NinjaButton
-            type="info"
-            @click="fullScreenEnableDisable"
-            :icon="assetUrl('icons/full-screen.svg')"
-          ></NinjaButton>
+            <NinjaButton
+                type="info"
+                @click="fullScreenEnableDisable"
+                :icon="assetUrl(isFullScreen ? 'icons/fullscreen-exit.svg' : 'icons/fullscreen.svg')"
+                iconSize="20"
+            />
         </div>
       </el-col>
     </el-row>
@@ -48,6 +49,7 @@ export default {
       bus : useEventBus(),
       id: '',
       saving: false,
+      isFullScreen: false
     };
   },
   methods: {
@@ -105,6 +107,7 @@ export default {
     fullScreenEnableDisable() {
       const $body = jQuery("body");
       $body.toggleClass("folded");
+      this.isFullScreen = !this.isFullScreen;
     }
   },
   computed: {
