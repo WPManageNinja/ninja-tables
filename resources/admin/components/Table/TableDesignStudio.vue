@@ -231,6 +231,7 @@
 
                                     <div for="hide_on_empty" class="flex items-center gap-2 mb-3">
                                         <el-switch
+                                            :disabled="!has_pro"
                                             v-model="tableSettings.hide_on_empty"
                                             active-value="1"
                                             inactive-value="0"
@@ -250,6 +251,7 @@
 
                                     <div for="hide_responsive_labels" class="flex items-center gap-2 mb-3">
                                         <el-switch
+                                            :disabled="!has_pro"
                                             v-model="tableSettings.hide_responsive_labels"
                                             active-value="1"
                                             inactive-value="0"
@@ -799,10 +801,6 @@
                         <li v-for="design_tip in design_tips"><i class="el-icon-warning"></i> <span
                                 v-html="design_tip"></span></li>
                     </ul>
-                </div>
-
-                <div v-if="!has_pro" class="flex justify-center my-4">
-                    <GetPro text="Get Pro" />
                 </div>
             </div>
         </div>

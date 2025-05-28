@@ -1,13 +1,14 @@
 <template>
     <div class="nt-custom-css-js-editor-wrapper mx-5">
-        <div class="flex h-[36px] items-center justify-between rounded-[8px] bg-[#F5F7FA] w-[250px] px-2 py-2 gap-3">
+        <div class="flex h-[36px] items-center justify-between rounded-[8px] bg-[#F5F7FA] w-[270px] px-2 py-2 gap-3">
             <div @click="current_tab ='additional_css'"
                  :class="`${current_tab ==='additional_css' && 'bg-white flex items-center justify-center rounded-[8px] shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
                 {{ $t('Custom CSS') }}
             </div>
             <div @click="current_tab ='additional_js'"
-                 :class="`${current_tab ==='additional_js' && 'bg-white rounded-[8px]  shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
-                {{ $t('Custom JS') }}
+                 :class="`${current_tab ==='additional_js' && 'bg-white rounded-[8px]  shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer flex items-center justify-center`">
+                <span>{{ $t('Custom JS') }}</span>
+                <img v-if="!hasPro" :src="assetUrl('icons/get-pro.svg')" class="h-4 w-4 ml-1 !grayscale-0" alt="">
             </div>
         </div>
 
@@ -76,6 +77,7 @@
 import ace_code_editor from '../../../common/_ace_editor';
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 import GetPro from "../Tools/GetPro.vue";
+import {assetUrl} from "../../utils/ninjatablesadmin";
 
 export default {
     name: 'ninja_css_editor',
@@ -97,6 +99,7 @@ export default {
         }
     },
     methods: {
+        assetUrl,
         saveScripts() {
             if (!this.hasPro) {
                 this.custom_js = '';
