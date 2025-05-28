@@ -131,9 +131,9 @@
             </el-table-column>
         </el-table>
 
-        <div class="ninja-pagination-wrapper overflow-x-auto">
+        <div class="ninja-pagination-wrapper flex-wrap gap-y-5 overflow-scroll">
 
-            <div class="pagination-page-change-option flex-wrap">
+            <div class="pagination-page-change-option">
                <span class="flex-shrink-0">
                   Page {{ paginate.current_page }}
                   of {{ Math.ceil(paginate.total / Number(paginate.per_page)) }}
