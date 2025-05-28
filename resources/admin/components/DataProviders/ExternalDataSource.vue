@@ -72,7 +72,7 @@
             <div>
                 <template v-if="active_step === 0">
                     <div class="nt-form-group">
-                        <label for="nt-form-label">{{ $t('Table Title') }}</label>
+                        <label for="nt-form-label">{{ $t('Table Title') }} <span class="text-[#FB3748]">*</span></label>
                         <NinjaInput
                             v-model="table.post_title"
                             :placeholder="$t('Enter a title to identify your table')"
@@ -81,7 +81,7 @@
                     </div>
 
                     <div class="nt-form-group">
-                        <label for="remote_url" class="nt-form-label">{{ $t('Data Source URL') }}</label>
+                        <label for="remote_url" class="nt-form-label">{{ $t('Data Source URL') }} <span class="text-[#FB3748]">*</span></label>
                         <NinjaInput
                             v-model="table.remote_url"
                             :placeholder="$t('Enter your source URL')"

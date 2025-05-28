@@ -6,8 +6,7 @@
 
         <template v-if="isFluentFormUpdated">
             <p class="nt-modal-description" v-if="!editing">
-                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase your form submissions.') }}
-                <span>Click here to learn more about </span>
+                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase your form submissions. Click here to learn more about') }}
                 <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
                    {{ $t('Fluent Forms Integration') }}
                 </a>
@@ -15,7 +14,7 @@
 
             <div :class="!editing ? 'my-[30px]' : 'my-[20px]'">
                 <div class="nt-form-group" v-if="!editing">
-                    <label for="name" class="nt-form-label">{{ $t('Table Title') }}</label>
+                    <label for="name" class="nt-form-label">{{ $t('Table Title') }}<span class="text-[#FB3748] ml-[2px]">*</span></label>
                     <NinjaInput
                         v-model="post_title"
                         :placeholder="$t('Enter a title to identify your table')"
@@ -23,7 +22,7 @@
                 </div>
 
                 <div class="nt-form-group" v-if="!editing">
-                    <label for="name" class="nt-form-label">{{ $t('Choose Form') }}</label>
+                    <label for="name" class="nt-form-label">{{ $t('Choose Form') }}<span class="text-[#FB3748] ml-[2px]">*</span></label>
                     <el-select
                         filterable
                         class="ninja-select"
@@ -44,7 +43,7 @@
                 <div v-if="fields.length > 0 && form.id" class="nt-checkbox-group-wrapper">
                     <div class="nt-checkbox-group-header"
                          style="border-bottom: 1px solid #E1E4EA">
-                        <div>{{ $t('Select Form Fields') }}</div>
+                        <div>{{ $t('Select Form Fields') }}<span class="text-[#FB3748] ml-[2px]">*</span></div>
                         <div>
                             <el-checkbox
                                 v-model="checkAll"
@@ -164,12 +163,10 @@
         </template>
 
         <div v-else class="fluent-form-promo">
-            <p>
-                <a class="nt-link" href="https://wordpress.org/plugins/fluentform" target="_blank">Fluent Form</a>
-                is a leading WordPress Contact Form plugin packed with all the premium features you need for a smart form. And integrating Fluent Forms with Ninja Tables, you can easily create tables using form entries.
-                <br>
-                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/fluent-forms-integration/">
-                    <span class="text-[14px]">Learn more about this module</span>
+            <p class="nt-modal-description">
+                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase your form submissions. Click here to learn more about') }}
+                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
+                    {{ $t('Fluent Forms Integration') }}
                 </a>
             </p>
             <div class="my-4">

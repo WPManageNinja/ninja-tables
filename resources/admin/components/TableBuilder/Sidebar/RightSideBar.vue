@@ -14,7 +14,7 @@
                 </a>
             </div>
             <div class="form-group">
-                <div class="font-semibold">{{ $t("Table Title") }}</div>
+                <div class="font-semibold">{{ $t("Table Title") }}<span class="text-[#FB3748] ml-[2px]">*</span></div>
                 <NinjaInput
                     style="width: 95%"
                     v-model="initialData.table_data.table_name"
