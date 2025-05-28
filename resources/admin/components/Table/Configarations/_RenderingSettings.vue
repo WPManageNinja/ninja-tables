@@ -55,7 +55,7 @@
             </div>
         </div>
 
-        <el-collapse class="ninja-tables_rendering_accordion">
+        <el-collapse v-if="config.table.hasCacheFeature || (config.settings.render_type == 'legacy_table' && tableSettings.shouldNotCache != 'yes') || tableSettings.enable_html_cache == 'yes' || config.table.hasExternalCachingInterval" class="ninja-tables_rendering_accordion">
             <el-collapse-item name="1">
                 <template #title>
                     <span style="font-weight: 400; font-size: 14px;">{{ $t('Caching Configuration') }}</span>
