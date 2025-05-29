@@ -25,7 +25,6 @@
                 <div class="nt-form-group" v-if="!editing">
                     <label for="name" class="nt-form-label">{{ $t('Choose Form') }}</label>
                     <el-select
-                        filterable
                         class="ninja-select"
                         v-loading="fetching"
                         v-model="form.id"

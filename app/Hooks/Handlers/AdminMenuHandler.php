@@ -311,6 +311,8 @@ class AdminMenuHandler
 
         $hasFluentFrom       = defined('FLUENTFORM_VERSION');
         $isFluentFromUpdated = false;
+        $hasTablePress       = defined('TABLEPRESS_ABSPATH');
+        $hasSupsystic        = defined('SUPSYSTIC_TABLES_VALUE_SHORTCODE_NAME');
 
         // check for right version
         if ($hasFluentFrom) {
@@ -356,6 +358,8 @@ class AdminMenuHandler
             'isInstalled'              => $isInstalled,
             'hasPro'                   => defined('NINJATABLESPRO'),
             'hasFluentForm'            => $hasFluentFrom,
+            'hasTablePress'            => $hasTablePress,
+            'hasSupsystic'             => $hasSupsystic,
             'isFluentFormUpdated'      => $isFluentFromUpdated,
             'hasAdvancedFilters'       => class_exists('NinjaTablesPro\App\Hooks\Handlers\CustomFilterHandler'),
             'hasSortable'              => defined('NINJATABLESPRO_SORTABLE'),
