@@ -104,7 +104,7 @@
 
                     <div class="my-[30px]">
                         <div class="nt-form-group">
-                            <label class="nt-form-label">{{ $t('Table Title') }}</label>
+                            <label class="nt-form-label">{{ $t('Table Title') }}<span class="text-[#FB3748] ml-[2px]">*</span></label>
                             <NinjaInput
                                 v-model="table.post_title"
                                 :placeholder="$t('Enter a title to identify your table')"

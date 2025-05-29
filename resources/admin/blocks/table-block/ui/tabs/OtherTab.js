@@ -44,14 +44,14 @@ export default function OtherTab({ tableSettings, updateTableSettings, tableConf
                             onChange={(val) => updateTableSettings('pagination_position', val)}
                         />
                         <CheckboxControl
-                            label={<span>{__('Scroll to table top for pagination change')} {!hasPro && <span> ({__('Pro Only')})</span>}</span>}
+                            label={<span>{__('Scroll to table top for pagination change')} {!hasPro && <span> ({__('Pro')})</span>}</span>}
                             checked={tableSettings.paginate_to_top}
                             onChange={(val) => updateTableSettings('paginate_to_top', val, false)}
                             disabled={!hasPro}
                             help={__('If enabled, table will scroll to top when pagination changes')}
                         />
                         <CheckboxControl
-                            label={<span>{__('Show page size changer')} {!hasPro && <span> ({__('Pro Only')})</span>}</span>}
+                            label={<span>{__('Show page size changer')} {!hasPro && <span> ({__('Pro')})</span>}</span>}
                             checked={tableSettings.show_pager}
                             onChange={(val) => updateTableSettings('show_pager', val)}
                             disabled={!hasPro}
@@ -78,7 +78,7 @@ export default function OtherTab({ tableSettings, updateTableSettings, tableConf
                     disabled={!hasPro}
                 />
                 <CheckboxControl
-                    label={<span>{__('Full-width Search Input')} {!hasPro && <span> ({__('Pro Only')})</span>}</span>}
+                    label={<span>{__('Full-width Search Input')} {!hasPro && <span> ({__('Pro')})</span>}</span>}
                     checked={tableSettings.nt_search_full_width}
                     onChange={(val) => updateTableSettings('nt_search_full_width', val)}
                     disabled={!hasPro}

@@ -8,8 +8,7 @@
         <div v-loading="loading" class="p-5">
             <h3 class="nt-modal-subtitle">Hello {{display_name}},</h3>
             <p class="nt-modal-description">
-                Never miss an important update - opt in to our security & feature updates notifications. We will never
-                spam / share your data, We will only send emails about important updates
+                Never miss an important update - opt in to receive security and feature update notifications. We’ll never spam you or share your data. You’ll only receive emails about essential updates.
             </p>
 
            <div class="my-5 flex justify-end items-center gap-2">

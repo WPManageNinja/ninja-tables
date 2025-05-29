@@ -7,7 +7,7 @@
                 <h1 class="my-3">{{ $t('Frontend Editing Settings') }}</h1>
                 <p class="text-[14px] font-[400] text-[#525866]">
                     {{ $t('Frontend Editing is a pro only features. Please purchase') }} <b>"Ninja Tables Pro"</b> {{ $t('to use this feature.') }} <br>
-                    {{ $t('Using this module, You can let your frontend users to add/edit/delete records based on user role. Also, You can separate the records by user submission.') }} </p>
+                    {{ $t('Using this module, you can let your frontend users to add/edit/delete records based on user role. Also, you can separate the records by user submission.') }} </p>
                 <div class="flex justify-center my-4">
                     <a v-if="!hasPro"
                        href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=wp_plugin&utm_term=upgrade"
@@ -50,7 +50,7 @@
                         </div>
                         <div class="mb-3 text-[14px]">
                             {{
-                                $t("Please specific user roles to be able to edit/delete this table. Only selected user roles can edit/delete the data.")
+                                $t("Please specify user roles to be able to edit/delete this table. Only selected user roles can edit/delete the data.")
                             }}
                         </div>
 
@@ -139,7 +139,7 @@
                             </div>
                             <div class="mb-3 text-[14px] font-[400]">
                                 {{
-                                    $t("Please Specify which columns can be editable from front-end and also, You can specify which columns will be required")
+                                    $t("Please specify which columns should be editable from the front-end. You can also define which columns are required.")
                                 }}
                             </div>
                             <div class="ninja-tables_table_edit">

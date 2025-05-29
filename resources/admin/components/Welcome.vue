@@ -13,7 +13,7 @@
                     {{$t('Create Your First Table')}}
                 </NinjaButton>
                 <router-link :to="{ name: 'import_tables' }" class="w-full">
-                    <NinjaButton type="secondary" class="w-full">{{ $t('Import From CSV') }}</NinjaButton>
+                    <NinjaButton type="secondary" class="w-full">{{ $t('Import Table') }}</NinjaButton>
                 </router-link>
             </div>
             <hr class="my-4 border-[0.5px] border-gray-200" />

@@ -76,9 +76,10 @@
         <div class="all_tables_card">
 
             <div v-if="dataSourceType === 'default'">
-                <div v-if="!loading && !columns.length && isEditable" class="w-full flex flex-col justify-center items-center h-[200px]" >
-                    <h3 class="nt-modal-title mb-4">{{ $t('To get started please add table columns') }}</h3>
-                    <NinjaButton size="small" @click="addColumn" :icon="assetUrl('icons/add.svg')" :btnText="$t('Add Column')" />
+                <div v-if="!loading && !columns.length && isEditable" class="w-full flex flex-col justify-center items-center py-6" >
+                    <img :src="assetUrl('icons/monitor.svg')" alt="">
+                    <p class="text-[14px] mt-2 font-[400] text-[#99A0AE]">{{ $t('To get started please add table columns') }}</p>
+                    <NinjaButton class="mt-5" @click="addColumn" :icon="assetUrl('icons/add.svg')" :btnText="$t('Add Column')" />
                 </div>
 
                 <div v-else class="default_nav flex-wrap gap-y-5">
@@ -221,12 +222,13 @@
 
                         <template #default="scope">
                             <div class="flex justify-end items-center">
-                                <el-tooltip content="Add data after this row" placement="top" effect="light">
-                                    <span v-if="has_pro" @click="addAfter(scope)" class="cursor-pointer mr-2">
+                                <template  v-if="has_pro">
+                                    <el-tooltip content="Add data after this row" placement="top" effect="light">
+                                    <span @click="addAfter(scope)" class="cursor-pointer mr-2">
                                         <img :src="assetUrl('icons/add-ico.svg')" class="mb-[3px]" alt="Add"/>
                                     </span>
-                                </el-tooltip>
-
+                                    </el-tooltip>
+                                </template>
                                 <el-tooltip content="Edit Row" placement="top" effect="light">
                                     <span @click="showUpdateModal(scope)" class="cursor-pointer mr-2" >
                                         <img :src="assetUrl('icons/edit-2.svg')" alt="Edit"/>

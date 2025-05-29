@@ -51,14 +51,13 @@
                                 <p class="my-3">{{ $t('Please configure the table columns before viewing the table design.' )}}</p>
                             </div>
                         </div>
-                        <div class="ninja_demo_disclaimer text-[14px] mt-4" v-if="formattedColumns.length">
-                            <p v-if="tableSettings.stackable == 'yes'">
-                                <b>{{$t("For Stackable Tables, Live preview is disabled here. Please check on preview url")}}</b>
+                        <div class="ninja_demo_disclaimer mt-4 flex flex-col gap-2 nt-instruction" v-if="formattedColumns.length">
+                            <p v-if="tableSettings.stackable == 'yes'" class="text-[14px] font-[500]">
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon> {{ $t('For Stackable Tables, Live preview is disabled here. Please check on preview url') }}
                             </p>
-                            <p>
-                                <b>{{$t("Note:")}}</b> {{$t("For preview purpose, you are seeing up to 25 latest rows here and and per page 10 items if you enable paginate. Also note that, The table style may differ at the frontend as your theme may overwrite few css elements.")}}
+                            <p class="text-[14px]">
+                                <b>Note: </b> {{ $t('This preview shows the latest 25 rows. Enable pagination for 10 items per page. Styles may differ on the frontend due to theme CSS. Custom filters and row-inline styling are not supported here. Check the live preview or embedded page for full functionality.') }}
                             </p>
-                            <p>{{$t("Some elements like custom filters and row-inline styling is not available in this design mode. Please check on live preview or in your embeded page.")}}</p>
                         </div>
                     </div>
 
@@ -232,7 +231,7 @@
                                         </el-switch>
                                         <span>
                                             {{ $t('Hide empty items on responsive breakdown') }}
-                                            <span v-show="!has_pro">(Pro Only)</span>
+                                            <span v-show="!has_pro">(Pro)</span>
                                             <el-tooltip placement="top-end" effect="light" content="If You enable this then the empty items will not show into responsive drawer / Stackable View">
                                                 <el-icon class="tooltip-icon-color">
                                                     <InfoFilled />
@@ -252,7 +251,7 @@
                                         </el-switch>
                                         <span>
                                             {{ $t('Hide Labels on responsive breakdown') }}
-                                            <span v-show="!has_pro">(Pro Only)</span>
+                                            <span v-show="!has_pro">(Pro)</span>
                                             <el-tooltip placement="top-end" effect="light" content="If You enable this then columns headings will not show into responsive drawer / Stackable View">
                                                 <el-icon class="tooltip-icon-color">
                                                     <InfoFilled />
@@ -578,7 +577,7 @@
                                 </el-radio-group>
                             </div>
                             <div class="font-[500] flex items-baseline gap-1">
-                                <el-checkbox v-model="tableSettings.paginate_to_top" :label="$t(`Scroll to table top for pagination change ${!has_pro ? '(Pro Only)' : ''}`)" :disabled="!has_pro"/>
+                                <el-checkbox v-model="tableSettings.paginate_to_top" :label="$t(`Scroll to table top for pagination change ${!has_pro ? '(Pro)' : ''}`)" :disabled="!has_pro"/>
                                 <el-tooltip placement="top-end" effect="light"
                                     content="If you enable this then on pagination change, the table will be scrolled to top">
                                     <el-icon class="tooltip-icon-color !top-0">
@@ -588,7 +587,7 @@
                             </div>
 
                             <div class="font-[500] flex items-baseline gap-1">
-                                <el-checkbox v-model="tableSettings.show_pager" :label="$t(`Show Page sizes change option ${!has_pro ? '(Pro Only)' : ''}`)" :disabled="!has_pro"/>
+                                <el-checkbox v-model="tableSettings.show_pager" :label="$t(`Show Page sizes change option ${!has_pro ? '(Pro)' : ''}`)" :disabled="!has_pro"/>
                                 <el-tooltip placement="top-end" effect="light"
                                     content="If you enable this then Users can change the items per page on frontend">
                                     <el-icon class="tooltip-icon-color !top-0">
@@ -616,7 +615,7 @@
                                 </el-radio-group>
                             </div>
                             <div class="font-[500] flex items-baseline gap-1">
-                                <el-checkbox true-value="1" false-value="0" v-model="tableSettings.nt_search_full_width" :label="$t(`Make search input as full width ${!has_pro ? '(Pro Only)' : ''}`)" :disabled="!has_pro"/>
+                                <el-checkbox true-value="1" false-value="0" v-model="tableSettings.nt_search_full_width" :label="$t(`Make search input as full width ${!has_pro ? '(Pro)' : ''}`)" :disabled="!has_pro"/>
                                 <el-tooltip placement="top-end" effect="light"
                                     content="If You enable this, Then the search input will take all the available space (100% width)">
                                     <el-icon class="tooltip-icon-color !top-0">
@@ -787,13 +786,6 @@
                         </div>
                     </el-tab-pane>
                 </el-tabs>
-
-                <div class="ninja_design_tips" v-if="design_tips.length">
-                    <ul class="ninja_design_tips_lists">
-                        <li v-for="design_tip in design_tips"><i class="el-icon-warning"></i> <span
-                                v-html="design_tip"></span></li>
-                    </ul>
-                </div>
             </div>
         </div>
         <SortableUpgradeNotice :show="sortableUpgradeNotice"
@@ -976,21 +968,7 @@ export default {
                 return true;
             }
             return false;
-        },
-        design_tips() {
-            let tips = [];
-            if (this.tableSettings.table_color_type == 'custom_color') {
-                if (
-                    !this.tableSettings.table_search_color_primary ||
-                    !this.tableSettings.table_header_color_primary ||
-                    !this.tableSettings.table_color_primary ||
-                    !this.tableSettings.table_color_secondary
-                ) {
-                    tips.push('You should set colors at <b>"Table Colors"</b> Tab');
-                }
-            }
-            return tips;
-        },
+        }
     },
     watch: {
         data_loaded() {

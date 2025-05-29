@@ -14,7 +14,7 @@
 
             <div v-if="!hasPLainLayout">
                 <h3 class="nt-modal-title">
-                    Construct Table from Posts / CPTs
+                   {{ $t('Construct Table from Posts / CPTs') }}
                 </h3>
                 <p class="nt-modal-description">
                     {{ $t('This is a Premium feature. Create responsive and customizable WP posts tables from your existing posts/pages/custom post types with Ninja Tables pro. Enjoy unlimited customizations, data filters, professional design and more.') }}
@@ -30,7 +30,7 @@
                 <div class="my-[30px]">
                     <div class="nt-form-group">
                         <el-row>
-                            <label class="nt-form-label">{{ $t('Table Title') }}</label>
+                            <label class="nt-form-label">{{ $t('Table Title') }} <span class="text-[#FB3748]">*</span></label>
                             <NinjaInput v-model="title" placeholder="Title"/>
                         </el-row>
                     </div>

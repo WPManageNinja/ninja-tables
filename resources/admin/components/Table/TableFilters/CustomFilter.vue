@@ -3,7 +3,7 @@
         <div class="ninja_table_filters">
             <h2 class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Custom Search Filters') }}</h2>
             <p class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
-                {{ $t(' Custom Search Filters is useful if you want to add select box / Radio Button to show a group of rows ofyour table.') }}
+                {{ $t('Custom Search Filters is useful if you want to add select box / Radio Button to show a group of rows of your table.') }}
                 <br/>
                 {{ $t('To learn more about this') }}
                 <a target="_blank" href="https://ninjatables.com/docs/custom-filters/" class="nt-link">{{ $t('click here') }}</a>
