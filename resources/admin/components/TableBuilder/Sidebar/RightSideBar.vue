@@ -3,7 +3,7 @@
         <div
             v-if="!tableId"
             :gutter="20"
-            style="height: 500px; overflow-y: scroll;box-sizing: border-box;">
+            style="height: 60vh; overflow-y: scroll;box-sizing: border-box;">
             <div class="mb-[30px]">
                 <h3 class="nt-modal-title">{{ $t('Create a Drag & Drop Table') }}</h3>
                 <p class="nt-modal-description">
