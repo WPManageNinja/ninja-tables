@@ -40,7 +40,10 @@
                                 :disabled="updating"
                                 :placeholder="$t('Enter a colum key')"
                             />
-                            <small v-if="!updating">{{ $t('Please use english letters only') }}</small>
+                            <small v-if="!updating">
+                                <el-icon class="top-[1px] mr-[2px]"><InfoFilled/></el-icon>
+                                {{ $t('Please use english letters only') }}
+                            </small>
                         </el-form-item>
                     </el-col>
                 </el-row>
