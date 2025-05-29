@@ -64,7 +64,7 @@
 
         <div class="mt-10">
             <h2 class="m-0 text-center text-[24px] font-[500]">{{$t('Our Products')}}</h2>
-            <p class="m-auto my-2 text-gray-500 text-center max-w-[500px] text-[16px]">{{$t('Check out some more WPManageNinja’s finest plugins made for you.')}}</p>
+            <p class="m-auto my-2 text-gray-500 text-center max-w-[550px] text-[16px]">{{$t('Check out some more WPManageNinja’s finest plugins made for you.')}}</p>
             <div class="grid md:grid-cols-3 gap-5 mt-6">
                 <div v-for="prod in products" :key="prod.name" class="flex flex-col justify-between border border-solid p-5 rounded-xl border-[#E1E4EA] gap-5">
                     <div>

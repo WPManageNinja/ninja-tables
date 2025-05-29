@@ -17,7 +17,7 @@
                     class="rounded-[12px]"
                     width="100%"
                     height="250"
-                    src="https://www.youtube.com/embed/vIHR3_vNOFM"
+                    src="https://www.youtube.com/embed/v-mU6LIb7jQ"
                     frameborder="0"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen
