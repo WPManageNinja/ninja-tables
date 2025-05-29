@@ -30,7 +30,7 @@
                 <div class="my-[30px]">
                     <div class="nt-form-group">
                         <el-row>
-                            <label class="nt-form-label">{{ $t('Table Title') }} <span class="text-[#FB3748]">*</span></label>
+                            <label class="nt-form-label">{{ $t('Table Title') }} <span class="nt-required">*</span></label>
                             <NinjaInput v-model="title" placeholder="Title"/>
                         </el-row>
                     </div>

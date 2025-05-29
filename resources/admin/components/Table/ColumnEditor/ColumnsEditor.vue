@@ -8,7 +8,7 @@
                     <el-col :span="12">
                         <el-form-item>
                             <label class="nt-form-label">
-                                {{ $t('Column Name') }}
+                                {{ $t('Column Name') }} <span class="nt-required mr-1">*</span>
                                 <el-tooltip class="item" placement="bottom-start" effect="light">
                                     <template #content>
                                         <h3>Column Name</h3>
@@ -26,7 +26,7 @@
                     <el-col :span="12">
                         <el-form-item>
                             <label class="nt-form-label">
-                                {{ $t('Column Key') }}
+                                {{ $t('Column Key') }}<span class="nt-required mx-1">*</span>
                                 <el-tooltip class="item" placement="bottom-start" effect="light">
                                     <template #content>
                                         <h3>Column Key</h3>
