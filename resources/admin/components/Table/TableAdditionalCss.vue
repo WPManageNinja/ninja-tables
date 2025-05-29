@@ -28,7 +28,7 @@
                 {{ $t('where') }} <strong>NT_ID</strong> {{ $t(' will be replaced with your table ID dynamically.') }}
             </p>
             <ace_code_editor editor_id="ninja_custom_css" mode="css" v-model="custom_css"></ace_code_editor>
-            <p v-html="styleTagInfo" class="ndt-editor-info mt-2"></p>
+            <p v-html="styleTagInfo" class="nt-editor-info mt-2"></p>
 
             <div class="flex justify-end mt-0">
                 <NinjaButton
@@ -51,7 +51,7 @@
                 <b>tableConfig:</b> {{ $t('The configuration object of the table.') }}
             </p>
             <ace_code_editor editor_id="ninja_custom_js" mode="javascript" v-model="custom_js"></ace_code_editor>
-            <p v-html="scriptTagInfo" class="ndt-editor-info mt-2"></p>
+            <p v-html="scriptTagInfo" class="nt-editor-info mt-2"></p>
 
             <div class="nt-instruction mt-4" v-if="!hasPro">
                 <p class="text-[16px] font-[400] text-[#525866]">{{ $t(`Custom Javascript feature is a pro feature along with many awesome features.`) }}</p>

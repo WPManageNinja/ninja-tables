@@ -8,9 +8,9 @@
                 </template>
 
                 <div class="flex rounded-[8px] bg-[#F5F7FA] w-fit p-2 my-3 gap-3 items-center h-[36px]">
-                    <div @click="activeTab = 'appearance'" :class="`px-5 h-[26px] cursor-pointer ${activeTab==='appearance' ? 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300 text-[#0E121B]' : 'text-[#99A0AE]'}`">{{$t('Appearance')}}</div>
-                    <div @click="activeTab = 'query_settings'" :class="`px-5 h-[26px] cursor-pointer ${activeTab==='query_settings' ? 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300 text-[#0E121B]': 'text-[#99A0AE]'}`">{{$t('Query Settings')}}</div>
-                    <div @click="activeTab ='add_new_column'" :class="`px-5 h-[26px] cursor-pointer ${activeTab==='add_new_column' ? 'bg-white rounded-[8px] shadow shadow-md shadow-gray-300 text-[#0E121B]':'text-[#99A0AE]'}`">{{$t('Add New Column')}}</div>
+                    <div @click="activeTab = 'appearance'" :class="`px-5 h-[26px] cursor-pointer ${activeTab==='appearance' ? 'bg-white rounded-[8px] shadow-md shadow-gray-300 text-[#0E121B]' : 'text-[#99A0AE]'}`">{{$t('Appearance')}}</div>
+                    <div @click="activeTab = 'query_settings'" :class="`px-5 h-[26px] cursor-pointer ${activeTab==='query_settings' ? 'bg-white rounded-[8px] shadow-md shadow-gray-300 text-[#0E121B]': 'text-[#99A0AE]'}`">{{$t('Query Settings')}}</div>
+                    <div @click="activeTab ='add_new_column'" :class="`px-5 h-[26px] cursor-pointer ${activeTab==='add_new_column' ? 'bg-white rounded-[8px] shadow-md shadow-gray-300 text-[#0E121B]':'text-[#99A0AE]'}`">{{$t('Add New Column')}}</div>
                 </div>
 
                 <div v-if="activeTab === 'appearance'">

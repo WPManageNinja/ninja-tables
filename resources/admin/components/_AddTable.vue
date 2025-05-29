@@ -104,7 +104,7 @@
 
                     <div class="my-[30px]">
                         <div class="nt-form-group">
-                            <label class="nt-form-label">{{ $t('Table Title') }}<span class="text-[#FB3748] ml-[2px]">*</span></label>
+                            <label class="nt-form-label">{{ $t('Table Title') }}<span class="nt-required ml-[4px]">*</span></label>
                             <NinjaInput
                                 v-model="table.post_title"
                                 :placeholder="$t('Enter a title to identify your table')"
@@ -175,13 +175,18 @@
                 </div>
                 <div v-else-if="has_woo && !hasPro" class="ninja_no_woo">
 <!--                    <h3>Upgrade to pro for using WooCommerce Integration</h3>-->
-                    <PremiumNotice title="WooCommerce Table">
+                    <PremiumNotice title="Construct Table from Your WooCommerce Products">
                         <template #default>
-                            <p class="text-[14px] font-[400] text-[#525866]">This is a Premium feature. Create customizable, smart, and organized
-                                <a href="https://ninjatables.com/docs/woocommerce-integration/" class="nt-link" target="_blank" >
-                                    WooCommerce product tables
+                            <p class="text-[14px] font-[400] text-[#525866]">
+                                {{ $t('This is a Premium feature. Displays products content in a searchable, sortable with Ninja Tables.') }}
+                                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/woocommerce-integration/">
+                                    {{ $t('View Documentation') }}
                                 </a>
-                                with Ninja Tables Pro and get more sales.</p>
+                                {{$t('or')}}
+                                <a class="nt-link" target="_blank" href="https://youtu.be/uIBQoLCFs_M?si=Qtp1zji5ANsGxPSD">
+                                    {{ $t('Watch Video.') }}
+                                </a>
+                            </p>
                         </template>
                     </PremiumNotice>
                 </div>

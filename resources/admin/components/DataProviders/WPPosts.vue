@@ -1,9 +1,18 @@
 <template>
     <div v-loading="loading" class="ninja_modal-body ninja_tables_wpposts">
         <template v-if="!hasPro">
-            <PremiumNotice title="WP Posts Table">
+            <PremiumNotice title="Construct Table from Posts / CPTs">
             <template #default>
-                <p class="text-[14px] font-[400] text-[#525866]">This is a Premium feature. Create responsive and customizable <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/create-wp-posts-table/">WP posts tables</a> from your existing posts/pages/custom post types with Ninja Tables pro.</p>
+                <p class="text-[14px] font-[400] text-[#525866]">
+                    {{ $t('This is a Premium feature. Create responsive and customizable WP posts tables from your existing posts/pages/custom post types with Ninja Tables pro.') }}
+                    <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/create-wp-posts-table/">
+                        {{ $t('View Documentation') }}
+                    </a>
+                    {{ $t('or') }}
+                    <a class="nt-link" target="_blank" href="https://youtu.be/icQs-GwuG28?si=Q1k3ZmpM3_YiJ3rU/">
+                        {{ $t('Watch Video.') }}
+                    </a>
+                </p>
             </template>
             </PremiumNotice>
         </template>
@@ -17,20 +26,20 @@
                    {{ $t('Construct Table from Posts / CPTs') }}
                 </h3>
                 <p class="nt-modal-description">
-                    {{ $t('This is a Premium feature. Create responsive and customizable WP posts tables from your existing posts/pages/custom post types with Ninja Tables pro. Enjoy unlimited customizations, data filters, professional design and more.') }}
+                    {{ $t('Create responsive and customizable WP posts tables from your existing posts/pages/custom post types with Ninja Tables pro.') }}
                     <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/create-wp-posts-table/">
-                       {{ $t('Learn more about this module') }}
+                       {{ $t('View Documentation') }}
                     </a>
                     {{ $t('or') }}
                     <a class="nt-link" target="_blank" href="https://youtu.be/icQs-GwuG28?si=Q1k3ZmpM3_YiJ3rU/">
-                        {{ $t('Watch Tutorial Here') }}
+                        {{ $t('Watch Video.') }}
                     </a>
                 </p>
 
                 <div class="my-[30px]">
                     <div class="nt-form-group">
                         <el-row>
-                            <label class="nt-form-label">{{ $t('Table Title') }} <span class="text-[#FB3748]">*</span></label>
+                            <label class="nt-form-label">{{ $t('Table Title') }} <span class="nt-required">*</span></label>
                             <NinjaInput v-model="title" placeholder="Title"/>
                         </el-row>
                     </div>

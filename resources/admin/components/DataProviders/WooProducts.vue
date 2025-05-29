@@ -7,17 +7,17 @@
         <p class="nt-modal-description">
             {{ $t('Displays products content in a searchable, sortable with Ninja Tables.') }}
             <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/woocommerce-integration/">
-               {{ $t('Learn more about WooCommerce integration') }}
+               {{ $t('View Documentation') }}
             </a>
             {{$t('or')}}
             <a class="nt-link" target="_blank" href="https://youtu.be/uIBQoLCFs_M?si=Qtp1zji5ANsGxPSD">
-                {{ $t('watch tutorial here') }}
+                {{ $t('Watch Video.') }}
             </a>
         </p>
 
         <div class="my-[30px]">
             <div class="nt-form-group">
-                <label class="nt-form-label">{{ $t('Table Title') }} <span class="text-[#FB3748]">*</span></label>
+                <label class="nt-form-label">{{ $t('Table Title') }} <span class="nt-required">*</span></label>
                 <NinjaInput
                     v-model="post_title"
                     :placeholder="$t('Enter a title to identify your table')"

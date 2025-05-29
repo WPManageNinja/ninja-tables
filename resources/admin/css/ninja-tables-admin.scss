@@ -16,7 +16,6 @@
     .heading-text {
       color: #171717;
       font-feature-settings: "ss11" on, "liga" off, "calt" off;
-      // font-family: Inter;
       font-size: 18px;
       font-style: normal;
       font-weight: 500;
@@ -26,7 +25,6 @@
     .caption-text {
       color: #5c5c5c;
       font-feature-settings: "ss11" on, "liga" off, "calt" off;
-      font-family: Inter;
       font-size: 14px;
       font-style: normal;
       font-weight: 400;
@@ -221,6 +219,7 @@
   }
 }
 
+
 .ninja_create-table-modal {
   &.el-dialog {
     border-radius: 20px;
@@ -267,7 +266,7 @@
               align-items: center;
               gap: 8px;
               font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
-              font-family: Inter;
+            
               font-size: 14px;
               font-style: normal;
               font-weight: 500;
@@ -333,6 +332,8 @@
         }
 
         .ninja-tables-main {
+          height: 80vh;
+          overflow-y: auto;
           display: flex;
           padding: 30px;
           flex-direction: column;
@@ -364,7 +365,7 @@
 .nt-modal-title {
   color: #0E121B;
   font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
-  font-family: Inter;
+
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
@@ -374,7 +375,7 @@
 .nt-modal-subtitle {
   color: #0E121B;
   font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
-  font-family: Inter;
+
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -385,7 +386,7 @@
 .nt-modal-description {
   color: #0E121B;
   font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
-  font-family: Inter;
+
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -397,7 +398,7 @@
 .nt-form-label {
   color: #0E121B;
   font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
-  font-family: Inter;
+
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -450,7 +451,12 @@
     color: #335CFF;
     box-shadow: none;
   }
-
+}
+.nt-required {
+    color: #335CFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
 }
 
 .all-tables-action-icons {
@@ -824,10 +830,8 @@ textarea.form-control {
   clear: both;
   height: auto;
   margin: 6px 0 4px;
-  vertical-align: middle;
   overflow: hidden;
   display: block;
-  // transform: translateY(-20%);
   .form_group {
     padding-top: 0px;
     padding-bottom: 0px;
