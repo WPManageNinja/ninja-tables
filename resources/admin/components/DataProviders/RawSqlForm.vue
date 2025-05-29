@@ -1,8 +1,8 @@
 <template>
     <template v-if="!hasPro">
-        <PremiumNotice title="Custom SQL Query">
+        <PremiumNotice title="Construct Table from Custom SQL Query">
             <template #default>
-                <p class="text-[14px] font-[400] text-[#525866]">Create a table by generating a sql query to any custom SQL database.
+                <p class="text-[14px] font-[400] text-[#525866]">This is a Premium feature. Create a table by generating a sql query to any custom SQL database.
                     <a href="https://ninjatables.com/docs/create-table-from-custom-sql/" class="nt-link" > View Documentation. </a>
                 </p>
             </template>
@@ -17,7 +17,7 @@
             {{$t('Create a table by generating a sql query to any custom SQL database.')}}
             <a class="nt-link" target="_blank"
                href="https://ninjatables.com/docs/create-table-from-custom-sql/">
-                {{$t('View documentation of this feature.')}}
+                {{$t('View documentation.')}}
             </a>
         </p>
 
@@ -35,7 +35,7 @@
         <template v-else-if="isActivated">
             <div class="my-[30px]">
                 <div class="nt-form-group">
-                    <label class="nt-form-label">{{ $t('Table Title') }} <span class="text-[#FB3748]">*</span></label>
+                    <label class="nt-form-label">{{ $t('Table Title') }} <span class="nt-required">*</span></label>
                     <NinjaInput
                         v-model="post_title"
                         :placeholder="$t('Enter a title to identify your table')"
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="nt-form-group">
-                    <label class="nt-form-label">{{ $t('Custom SQL Query') }} <span class="text-[#FB3748]">*</span></label>
+                    <label class="nt-form-label">{{ $t('Custom SQL Query') }} <span class="nt-required">*</span></label>
                     <ace_code_editor editor_id="ninja_mysql_editor" mode="mysql" v-model="sql"></ace_code_editor>
                     <p class="nt-form-description mt-2">Please write valid SQL query. Your written SQL query will be passed to <code>$wpdb->get_results()</code> function</p>
                 </div>

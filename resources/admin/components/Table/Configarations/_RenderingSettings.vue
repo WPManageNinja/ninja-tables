@@ -13,7 +13,7 @@
                 <div>
                     <div class="mb-2 font-[500] text-[14px]">Ajax</div>
                     <div class="text-[12px] text-[#525866]">
-                        {{ $t("Use this setting if you want to use serverside processing") }}
+                        {{ $t("Use this settings if you have lots of data and don't need cell merge features. It will load your data over ajax. Please note that, shortcodes in table will not work here.") }}
                     </div>
                 </div>
                 <div class="radio_button"></div>

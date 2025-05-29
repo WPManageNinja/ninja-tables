@@ -7,14 +7,15 @@
             <div class="mb-[30px]">
                 <h3 class="nt-modal-title">{{ $t('Create a Drag & Drop Table') }}</h3>
                 <p class="nt-modal-description">
-                    {{ $t("Create tables fast using drag & drop table mode. Add columns and rows manually, import, or pick a template.") }}
+                    {{ $t("Create tables fast using drag & drop table mode. Add columns and rows manually, import, or pick a template. Learn more about drag & drop table.") }}
+                    <a class="nt-link" target="_blank" href="https://ninjatables.com/docs-category/simple-mode/">
+                        {{ $t('View Documentation') }}
+                    </a>
                 </p>
-                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs-category/simple-mode/">
-                    {{ $t('Learn more about drag & drop table') }}
-                </a>
+
             </div>
             <div class="form-group">
-                <div class="font-semibold">{{ $t("Table Title") }}<span class="text-[#FB3748] ml-[2px]">*</span></div>
+                <div class="font-semibold">{{ $t("Table Title") }}<span class="nt-required ml-[4px]">*</span></div>
                 <NinjaInput
                     style="width: 95%"
                     v-model="initialData.table_data.table_name"

@@ -48,14 +48,6 @@ class AdminMenuHandler
             'ninja_table_import_menu'
         );
 
-        $submenu['ninja_tables']['tools'] = array(
-            __('Tools', 'ninja-tables'),
-            $capability,
-            'admin.php?page=ninja_tables#/tools',
-            '',
-            'ninja_table_tools_menu'
-        );
-
         if (!defined('NINJA_CHARTS_VERSION')) {
             $submenu['ninja_tables']['ninja_charts'] = array(
                 __('Charts', 'ninja-tables'),

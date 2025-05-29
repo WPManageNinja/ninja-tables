@@ -393,9 +393,6 @@ import NinjaButton from '../../@ui-utils/NinjaButton.vue';
             if (this.$route.query.active_menu) {
                 this.active_menu = this.$route.query.active_menu;
             }
-            jQuery('.ninja_table_tools_menu').on('click', () => {
-                this.active_menu = 'import';
-            });
 
             jQuery('.ninja_table_import_menu').on('click', () => {
                 this.active_menu = 'import';

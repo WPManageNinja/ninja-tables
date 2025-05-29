@@ -6,15 +6,15 @@
 
         <template v-if="isFluentFormUpdated">
             <p class="nt-modal-description" v-if="!editing">
-                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase your form submissions. Click here to learn more about') }}
+                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. Click here to learn more about fluent forms integration') }}
                 <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
-                   {{ $t('Fluent Forms Integration') }}
+                   {{ $t('View Documentation.') }}
                 </a>
             </p>
 
             <div :class="!editing ? 'my-[30px]' : 'my-[20px]'">
                 <div class="nt-form-group" v-if="!editing">
-                    <label for="name" class="nt-form-label">{{ $t('Table Title') }}<span class="text-[#FB3748] ml-[2px]">*</span></label>
+                    <label for="name" class="nt-form-label">{{ $t('Table Title') }}<span class="nt-required ml-[4px]">*</span></label>
                     <NinjaInput
                         v-model="post_title"
                         :placeholder="$t('Enter a title to identify your table')"
@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="nt-form-group" v-if="!editing">
-                    <label for="name" class="nt-form-label">{{ $t('Choose Form') }}<span class="text-[#FB3748] ml-[2px]">*</span></label>
+                    <label for="name" class="nt-form-label">{{ $t('Choose Form') }}<span class="nt-required ml-[4px]">*</span></label>
                     <el-select
                         filterable
                         class="ninja-select"
@@ -43,7 +43,7 @@
                 <div v-if="fields.length > 0 && form.id" class="nt-checkbox-group-wrapper">
                     <div class="nt-checkbox-group-header"
                          style="border-bottom: 1px solid #E1E4EA">
-                        <div>{{ $t('Select Form Fields') }}<span class="text-[#FB3748] ml-[2px]">*</span></div>
+                        <div>{{ $t('Select Form Fields') }}<span class="nt-required ml-[4px]">*</span></div>
                         <div>
                             <el-checkbox
                                 v-model="checkAll"
