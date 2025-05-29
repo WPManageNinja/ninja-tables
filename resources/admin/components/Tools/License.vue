@@ -68,7 +68,7 @@
                     <NinjaButton class="w-full lg:max-w-[150px] mt-2 lg:mt-0" @click="activateLicense" type="primary"
                                  :btn-text="$t('Activate Pro')" :loading="doing_ajax"/>
                 </div>
-                <div class="nt-instruction text-center" v-if="error_message">
+                <div class="nt-instruction text-center mt-3" v-if="error_message">
                     <h3 class="nt-modal-title my-3">{{ $t('Invalid License Key') }}</h3>
                     <p style="margin-bottom: 16px" v-html="error_message" class="nt-modal-description"></p>
                 </div>

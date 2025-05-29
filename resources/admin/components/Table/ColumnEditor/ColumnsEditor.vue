@@ -1,5 +1,5 @@
 <template>
-    <el-form ref="form" :model="model" class="form-wrapper">
+    <el-form ref="form" :model="model" class="form-wrapper" style="max-height: 70vh; overflow-y: auto;">
         <el-tabs class="nt_tab_design" v-model="activeTab" @tab-click="onTabClick">
             <!-- Basic Settings -->
             <el-tab-pane class="basic_settings ninja_modal_body px-[10px] pt-[18px]" label="Basic Settings" name="basic">

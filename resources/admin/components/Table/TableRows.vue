@@ -300,7 +300,7 @@
             :title="currentEditingColumn ? 'Edit Table Column : ' + currentEditingColumn.name : ''"
             :width="'70%'"
         >
-            <columns-editor
+            <columnsEditor
                 v-if="showColumnEditor && currentEditingColumn"
                 :dataSourceType="config.table.dataSourceType"
                 :model="currentEditingColumn"
@@ -324,7 +324,7 @@
             :title="'Add Table Column'"
             :width="'70%'"
         >
-            <columns-editor
+            <columnsEditor
                 v-if="columnModal"
                 :model="new_column"
                 :hasPro="has_pro"

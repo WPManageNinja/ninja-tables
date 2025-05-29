@@ -148,7 +148,7 @@
             @close="closePluginModal()"
             class="ninja_create-table-modal"
         >
-            <div class="p-5">
+            <div class="p-5" style="max-height: 70vh; overflow-y: auto;">
                 <template v-if="otherPluginTables.length">
                     <el-table
                         :data="otherPluginTables"
