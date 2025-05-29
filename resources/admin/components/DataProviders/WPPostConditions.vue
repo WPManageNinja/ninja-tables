@@ -6,7 +6,7 @@
             @click="addCondition($event)"
             class="flex items-center text-[#335CFF] cursor-pointer font-[300]"
         >
-            <img :src="assetUrl('icons/add-line.svg')" alt="add" /> {{ $t('Add Meta Query') }}
+            <img :src="assetUrl('icons/add-line.svg')" alt="add" /> {{ $t('Add Condition') }}
         </div>
 
         <div class="nt-posts-conditions mt-4">
