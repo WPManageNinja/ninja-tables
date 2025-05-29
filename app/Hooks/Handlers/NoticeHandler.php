@@ -15,18 +15,19 @@ class NoticeHandler
 
     public function register()
     {
+        $this->ensureInstalledAtTimestamp();
+
         add_action('admin_notices', [$this, 'appendNotices']);
         add_action('wp_ajax_ninja_tables_dismiss_notice', [$this, 'handleDismissNotice']);
     }
 
-    /**
-     * Add a custom admin notice
-     *
-     * @param string $key Unique notice identifier
-     * @param array $config Notice configuration
-     *
-     * @return bool Success status
-     */
+    private function ensureInstalledAtTimestamp()
+    {
+        if (!get_option('ninja_tables_installed_at')) {
+            add_option('ninja_tables_installed_at', current_time('mysql'));
+        }
+    }
+
     public static function addAdminNotice($key, $config)
     {
         if (empty($key) || !is_string($key)) {
@@ -171,51 +172,81 @@ class NoticeHandler
 
     private function getAllNoticeDefinitions()
     {
-        $builtIn = [
-            'review_notice'  => [
+        $segment = $this->detectUserReviewSegment();
+        $notices = [];
+
+        if ($segment !== '') {
+            $reviewKey = "review_notice_{$segment}";
+
+            $notices[$reviewKey] = [
                 'type'      => 'temp',
-                'callback'  => [$this, 'getReviewHtml'],
-                'condition' => $this->shouldShowReviewNotice(),
-            ],
-            'upgrade_to_pro' => [
-                'type'      => 'temp',
-                'callback'  => [$this, 'getUpgradeNoticeHtml'],
-                'condition' => $this->shouldShowUpgradeNotice(),
-            ],
+                'callback'  => function () use ($reviewKey, $segment) {
+                    return $this->getReviewHtml($reviewKey, $segment);
+                },
+                'condition' => true,
+            ];
+        }
+
+        $notices['upgrade_to_pro'] = [
+            'type'      => 'temp',
+            'callback'  => [$this, 'getUpgradeNoticeHtml'],
+            'condition' => $this->shouldShowUpgradeNotice(),
         ];
 
-        return apply_filters('ninja_tables_admin_notices', array_merge($builtIn, self::$customNotices));
+        return apply_filters('ninja_tables_admin_notices', array_merge($notices, self::$customNotices));
     }
 
-    private function shouldShowReviewNotice()
+    private function detectUserReviewSegment()
     {
-        return true; // Simplified for now
+        global $wpdb;
+
+        $tables = $wpdb->get_results(
+            "SELECT ID, post_date FROM {$wpdb->posts} WHERE post_type = 'ninja-table' AND post_status = 'publish' ORDER BY post_date DESC LIMIT 10"
+        );
+
+        $installTime      = strtotime(get_option('ninja_tables_installed_at'));
+        $daysSinceInstall = (current_time('timestamp') - $installTime) / self::SECONDS_IN_A_DAY;
+
+        $usedDragDrop        = false;
+        $usedAdvanced        = false;
+        $createdWithin10Days = false;
+
+        foreach ($tables as $table) {
+            $provider = ninja_table_get_data_provider($table->ID);
+            if ($provider === 'drag_and_drop') {
+                $usedDragDrop = true;
+            } else {
+                $usedAdvanced = true;
+            }
+
+            if ((current_time('timestamp') - strtotime($table->post_date)) <= self::SECONDS_IN_A_DAY) {
+                $createdWithin10Days = true;
+            }
+        }
+
+        if (empty($tables) && $daysSinceInstall >= 7) {
+            return 'no_tables';
+        }
+
+        if ($usedDragDrop && !$usedAdvanced && $daysSinceInstall >= 7) {
+            return 'only_drag';
+        }
+
+        if ($usedAdvanced && !$usedDragDrop && $daysSinceInstall >= 7) {
+            return 'only_advanced';
+        }
+
+        if ($usedDragDrop && $usedAdvanced && count($tables) >= 2 && $daysSinceInstall >= 7 && $createdWithin10Days) {
+            return 'both_modes_recent';
+        }
+
+        return ''; // No segment eligible
     }
 
     private function shouldShowUpgradeNotice()
     {
         return defined('NINJAPROPLUGIN_VERSION') &&
                version_compare(NINJAPROPLUGIN_VERSION, '5.0.0', '<');
-    }
-
-    private function getReviewHtml($key)
-    {
-        $key       = esc_attr($key);
-        $reviewUrl = esc_url('https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5');
-
-        return <<<HTML
-<div class="nt_review_notice" data-notice-key="{$key}">
-    <div class="nt-notice-content">
-        <div class="nt-notice-text">
-            <p>Love using Ninja Tables? <strong>Please leave us a 5-star review!</strong> It helps us improve and add more features.</p>
-        </div>
-        <div class="nt-notice-actions">
-            <a class="button button-secondary remind-me-later" href="#" data-notice-type="temp">Remind Me Later</a>
-            <a class="button button-primary" target="_blank" href="{$reviewUrl}" rel="noopener">Leave Review</a>
-        </div>
-    </div>
-</div>
-HTML;
     }
 
     private function getUpgradeNoticeHtml($key)
@@ -226,12 +257,72 @@ HTML;
         return <<<HTML
 <div class="nt_review_notice" data-notice-key="{$key}">
     <div class="nt-notice-content">
+        <div class="nt-notice-text">
         <h3>Update Ninja Tables Pro Plugin</h3>
         <p>You are using an outdated version. Some features may not work properly. 
            <a href="{$url}" target="_blank" rel="noopener">Please update to the latest version</a>
         </p>
+</div>
         <div class="nt-notice-actions">
-            <a class="button button-secondary remind-me-later" href="#" data-notice-type="temp">Remind Me Later</a>
+            <a class="nt-btn nt-btn-secondary remind-me-later" href="#" data-notice-type="temp">Remind Me Later</a>
+        </div>
+    </div>
+</div>
+HTML;
+    }
+
+
+    private function getReviewHtml($key, $segment)
+    {
+        $docUrl              = esc_url('https://ninjatables.com/docs/');
+        $videoUrl            = esc_url(
+            'https://youtube.com/playlist?list=PLXpD0vT4thWGhHDY0X7UpN9JoR0vu2O_C&si=XMx60a-0AGu7KxZB'
+        );
+        $reviewUrl           = esc_url('https://wordpress.org/support/plugin/ninja-tables/reviews/?filter=5');
+        $advanceTableDocsUrl = esc_url('https://ninjatables.com/docs-category/advanced-mode/');
+        $tableBuilderDocUrl  = esc_url('https://ninjatables.com/docs-category/simple-mode/');
+
+        switch ($segment) {
+            case 'no_tables':
+                $message = "Having trouble creating your first table? Check out Ninja Tables <a class='nt-link' href='{$docUrl}' target='_blank'>documentation</a> or watch <a class='nt-link' href='{$videoUrl}' target='_blank'>tutorial videos</a> to get you started.";
+                break;
+            case 'only_drag':
+                $message = "Looks like you’re having fun with Drag & Drop!<br>Did you know Ninja Tables has a lot more fun features in the Advanced Table mode? See the <a class='nt-link' href='{$advanceTableDocsUrl}' target='_blank'>documentation</a> and try it!";
+                break;
+            case 'only_advanced':
+                $message = "Looks like you’re having fun using Advanced mode for your tables.<br>Did you know Ninja Tables makes things even easier in Drag and Drop mode? See the <a class='nt-link' href='{$tableBuilderDocUrl}' target='_blank'>documentation</a> and try it!";
+                break;
+            case 'both_modes_recent':
+                $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" style="vertical-align: middle; margin-right: 2px;">
+                <path d="M9.9992 14.695L4.70945 17.656L5.8907 11.71L1.43945 7.594L7.4597 6.88L9.9992 1.375L12.5387 6.88L18.559 7.594L14.1077 11.71L15.289 17.656L9.9992 14.695Z" fill="#F6B51E"/>
+            </svg>';
+
+                $stars = str_repeat($svg, 5);
+
+                $message = "You’re doing amazing!<br><div class='flex items-center'>
+Loving Ninja Tables? Leave us a {$stars} review. It will encourage us to come up with more and more features.
+</div>";
+                break;
+
+            default:
+                return '';
+        }
+
+        $rateButton = '';
+        if ($segment === 'both_modes_recent') {
+            $rateButton = <<<HTML
+            <a class="nt-btn nt-btn-primary" target="_blank" href="{$reviewUrl}" rel="noopener">Rate Now</a>
+            <div class="nt-divider"></div>
+HTML;
+        }
+
+        return <<<HTML
+<div class="nt_review_notice" data-notice-key="{$key}">
+    <div class="nt-notice-content">
+        <div class="nt-notice-text">{$message}</div>
+        <div class="nt-notice-actions">
+            {$rateButton}
+            <a class="nt-btn nt-btn-secondary remind-me-later" href="#" data-notice-type="temp">Remind Me Later</a>
         </div>
     </div>
 </div>
@@ -248,16 +339,11 @@ HTML;
         }
 
         $this->enqueueNoticeScript();
-
         $this->injectNoticesScript($notices);
     }
 
     private function injectNoticesScript($notices)
     {
-        if (empty($notices)) {
-            return;
-        }
-
         $jsonNotices = wp_json_encode($notices);
 
         $script = <<<JS
@@ -294,9 +380,7 @@ jQuery(document).ready(function($) {
         var noticeKey = \$notice.data("notice-key");
         var noticeType = \$button.data("notice-type");
 
-        if (!noticeKey || !noticeType) {
-            return;
-        }
+        if (!noticeKey || !noticeType) return;
 
         \$button.prop("disabled", true);
 
@@ -316,7 +400,7 @@ jQuery(document).ready(function($) {
                     \$button.prop("disabled", false);
                 }
             },
-            error: function(xhr) {
+            error: function() {
                 \$button.prop("disabled", false);
             }
         });
