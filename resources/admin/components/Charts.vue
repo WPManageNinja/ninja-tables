@@ -14,6 +14,7 @@
             </div>
             <div class="ninja_charts_promo w-full my-6">
                 <iframe
+                    class="rounded-[12px]"
                     width="100%"
                     height="250"
                     src="https://www.youtube.com/embed/vIHR3_vNOFM"

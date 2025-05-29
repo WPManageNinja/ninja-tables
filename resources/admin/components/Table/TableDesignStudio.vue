@@ -53,7 +53,7 @@
                         </div>
                         <div class="ninja_demo_disclaimer mt-4 flex flex-col gap-2 nt-instruction" v-if="formattedColumns.length">
                             <p v-if="tableSettings.stackable == 'yes'" class="text-[14px] font-[500]">
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon> {{ $t('For Stackable Tables, Live preview is disabled here. Please check on preview url') }}
+                                <el-icon class="tooltip-icon-color mr-1"><InfoFilled /></el-icon> {{ $t('For Stackable Tables, Live preview is disabled here. Please check on preview url') }}
                             </p>
                             <p class="text-[14px]">
                                 <b>Note: </b> {{ $t('This preview shows the latest 25 rows. Enable pagination for 10 items per page. Styles may differ on the frontend due to theme CSS. Custom filters and row-inline styling are not supported here. Check the live preview or embedded page for full functionality.') }}
