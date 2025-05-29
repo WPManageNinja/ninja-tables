@@ -1,33 +1,41 @@
 <template>
-    <div class="ninja_intro_welcome rounded-[12px] border border-[#E1E4EA] bg-white max-w-[600px]">
-        <div class="ninja_charts_promo_banner">
-            <img :src="imageUrl('ninja-charts-promo.png')" alt="Ninja Charts">
-        </div>
-
-        <div class="text-[18px] font-[600] text-[#0E121B] mt-6">{{ $t('Welcome to Ninja Charts') }}</div>
-        <div class="text-[14px] font-[400] text-[#0E121B] mt-[10px] mb-[20px]">
-            {{ $t("Best WP Charts Plugin for WordPress") }}
-        </div>
-
-        <div class="ninja_charts_promo w-full">
-            <iframe
-                width="100%"
-                height="315"
-                src="https://www.youtube.com/embed/vIHR3_vNOFM"
-                frameborder="0"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-            ></iframe>
-        </div>
-        <div class="ninja_actions my-6">
-            <NinjaButton class="mx-auto" type="primary" @click="click" :loading="loading"
-                         :btn-text="$t('Enable Ninja Charts')"/>
+    <div class="ninja_charts_welcome_page" :style="{ background: `url(${assetUrl('img/on-board.png')})` }">
+        <div class="bg-white w-full lg:w-[550px] mx-auto border border-gray-200 rounded-2xl p-8">
+            <div class="flex justify-center">
+                <img width="36" height="36" :src="assetUrl('img/ninja_charts.png')" alt="Ninja Tables">
+            </div>
+            <div class="my-3 text-center">
+                <h2>{{ $t('Welcome to Ninja Charts') }}</h2>
+                <p class="text-[#525866] text-[14px] font-[300] my-2">
+                    {{
+                        $t('Create visually impressive and dynamic data charts with this free WordPress charts plugin.')
+                    }}
+                </p>
+            </div>
+            <div class="ninja_charts_promo w-full my-6">
+                <iframe
+                    width="100%"
+                    height="250"
+                    src="https://www.youtube.com/embed/vIHR3_vNOFM"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                ></iframe>
+            </div>
+            <div class="block flex items-center gap-4 justify-center">
+                <a class="w-full" href="https://ninjatables.com/docs-category/ninja-charts/" target="_blank">
+                    <NinjaButton class="w-full" type="secondary" :btnText="$t('Documentation')"/>
+                </a>
+                <NinjaButton class="w-full" type="primary" @click="click" :loading="loading"
+                             :btn-text="$t('Enable Ninja Charts')"/>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import NinjaButton from "../@ui-utils/NinjaButton.vue";
+import {assetUrl} from "../utils/ninjatablesadmin";
 
 export default {
     name: "Charts",
@@ -46,6 +54,7 @@ export default {
         }
     },
     methods: {
+        assetUrl,
         imageUrl(imageName) {
             return this.imgUrl + imageName;
         },
@@ -86,3 +95,14 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.ninja_charts_welcome_page {
+    margin: 45px auto 0px;
+    padding: 30px 20px;
+
+    h2 {
+        font-size: 30px;
+    }
+}
+</style>
