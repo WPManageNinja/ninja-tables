@@ -26,7 +26,7 @@
         >
             <template #default>
                 <p class="text-[14px] font-[400] text-[#525866]">{{ $t('This is a Premium feature. Construct table from remote CSV file. Whenever your remote CSV data changes it will automatically sync here.') }}
-                    <a href="https://ninjatables.com/docs/construct-table-from-csv/" class="nt-link" > View Documentation </a>
+                    <a href="https://ninjatables.com/docs/construct-table-from-csv/" target="_blank" class="nt-link" > View Documentation </a>
                 </p>
             </template>
         </PremiumNotice>
@@ -63,7 +63,7 @@
                     </h3>
                     <p class="nt-modal-description">
                         {{ $t('Construct table from remote CSV file. Whenever your remote CSV data changes it will automatically sync here.') }}
-                        <a href="https://ninjatables.com/docs/construct-table-from-csv/" class="nt-link" > {{ $t('View Documentation') }} </a>
+                        <a href="https://ninjatables.com/docs/construct-table-from-csv/" target="_blank" class="nt-link" > {{ $t('View Documentation') }} </a>
                     </p>
                 </template>
             </div>

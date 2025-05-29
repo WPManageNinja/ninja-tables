@@ -401,10 +401,14 @@
     backdrop-filter: blur(5px) !important;
     overflow: hidden;
     -webkit-backdrop-filter: blur(2px) !important;
-    z-index: 9999 !important;
+    z-index: 9991 !important;
     .el-overlay-dialog{
       overflow: hidden;
     }
+  }
+
+  .el-select__popper{
+    z-index: 9992 !important;
   }
 
   .el-input {
