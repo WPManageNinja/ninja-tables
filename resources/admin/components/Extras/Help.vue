@@ -322,7 +322,7 @@ export default {
                         <path d="M22.6289 31.25L14.6344 35.8657L10.0187 27.8711L18.0133 23.2555L22.6289 31.25Z" fill="white"/>
                         <path d="M14.6348 35.8516V35.8516C12.4271 37.1261 9.60424 36.3697 8.32967 34.1621L6.02184 30.1648L10.0191 27.857L14.6348 35.8516Z" fill="white"/>
                         </svg>`,
-                    description: "Create online communities inside WordPress with user profiles, forums, activity feeds, and messaging - all managed from your dashboard with 0 server issues.",
+                    description: "Create communities in WordPress with user profiles, forums, activity feeds, and messaging - all from your dashboard with 0 server issues.",
                     link: "https://wordpress.org/plugins/fluent-community/",
                     linkText: "Try FluentCommunity"
                 },
