@@ -5,6 +5,11 @@
       border-radius: 8px;
       height: 40px;
     }
+    .is-filterable{
+     .el-select__selected-item.el-select__placeholder{
+       z-index: 9;
+     }
+    }
   }
 
   .ninja_tables {

@@ -24,6 +24,7 @@
                 <div class="nt-form-group" v-if="!editing">
                     <label for="name" class="nt-form-label">{{ $t('Choose Form') }}<span class="text-[#FB3748] ml-[2px]">*</span></label>
                     <el-select
+                        filterable
                         class="ninja-select"
                         v-loading="fetching"
                         v-model="form.id"
