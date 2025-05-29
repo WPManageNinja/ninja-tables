@@ -1,5 +1,5 @@
 <template>
-    <el-form ref="form" :model="activeEditor" class="p-5">
+    <el-form ref="form" :model="activeEditor" class="p-5" style="max-height: 70vh; overflow-y: auto;">
         <div class="grid grid-cols-2 gap-x-5">
             <el-form-item>
                 <label class="nt-form-label">

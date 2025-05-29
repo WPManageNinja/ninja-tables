@@ -1,51 +1,52 @@
 <template>
-    <el-form ref="form" :model="model" class="form-wrapper">
+    <el-form ref="form" :model="model" class="form-wrapper" style="max-height: 70vh; overflow-y: auto;">
         <el-tabs class="nt_tab_design" v-model="activeTab" @tab-click="onTabClick">
             <!-- Basic Settings -->
             <el-tab-pane class="basic_settings ninja_modal_body px-[10px] pt-[18px]" label="Basic Settings" name="basic">
 
-                <div class="grid grid-cols-2 gap-x-5">
-                    <!-- Column Name -->
-                    <el-form-item class="nt-form-group">
-                        <label class="nt-form-label">
-                            {{ $t('Column Name') }}
-                            <el-tooltip class="item" placement="bottom-start" effect="light">
-                                <template #content>
-                                    <h3>Column Name</h3>
-                                    <p>{{ $t('Enter a column name to set the header title.') }}</p>
-                                </template>
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </label>
-                        <NinjaInput
-                            v-model="model.name"
-                            :placeholder="$t('Enter a column name to set the header title')"
-                        />
-                    </el-form-item>
-                    <!-- Column Key -->
-                    <el-form-item class="nt-form-group">
-
-                        <label class="nt-form-label">
-                            {{ $t('Column Key') }}
-                            <el-tooltip class="item" placement="bottom-start" effect="light">
-                                <template #content>
-                                    <h3>Column Key</h3>
-                                    <p>{{ $t('Column key is for data mapping, export and import table data.') }}</p>
-                                </template>
-                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                            </el-tooltip>
-                        </label>
-                        <NinjaInput
-                            size="small" v-model="model.key"
-                            :disabled="updating"
-                            :placeholder="$t('Enter a colum key')"
-                        />
-<!--                        <small v-if="!updating">Please use english letters only</small>-->
-                    </el-form-item>
-                </div>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item>
+                            <label class="nt-form-label">
+                                {{ $t('Column Name') }}
+                                <el-tooltip class="item" placement="bottom-start" effect="light">
+                                    <template #content>
+                                        <h3>Column Name</h3>
+                                        <p>{{ $t('Enter a column name to set the header title.') }}</p>
+                                    </template>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                </el-tooltip>
+                            </label>
+                            <NinjaInput
+                                v-model="model.name"
+                                :placeholder="$t('Enter a column name to set the header title')"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item>
+                            <label class="nt-form-label">
+                                {{ $t('Column Key') }}
+                                <el-tooltip class="item" placement="bottom-start" effect="light">
+                                    <template #content>
+                                        <h3>Column Key</h3>
+                                        <p>{{ $t('Column key is for data mapping, export and import table data.') }}</p>
+                                    </template>
+                                    <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                                </el-tooltip>
+                            </label>
+                            <NinjaInput
+                                size="small" v-model="model.key"
+                                :disabled="updating"
+                                :placeholder="$t('Enter a colum key')"
+                            />
+                            <small v-if="!updating">{{ $t('Please use english letters only') }}</small>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
                 <!-- Data Type -->
-                <el-form-item class="nt-form-group">
+                <el-form-item class="nt-form-group mt-[-40px]">
                     <label class="nt-form-label">
                         {{ $t('Data Type') }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
@@ -456,7 +457,7 @@
                         </el-tooltip>
                     </label>
 
-                    <el-select class="ninja-select" v-model="model.breakpoints" placeholder="Select Responsive Breakpoint">
+                    <el-select :empty-values="[undefined, null]" class="ninja-select" v-model="model.breakpoints" placeholder="Select Responsive Breakpoint">
                         <el-option
                             v-for="(option, optionKey) in breakPointsOptions"
                             :key="optionKey"
@@ -485,10 +486,10 @@
                     <div class="nt-instruction mb-[20px] mt-[5px]" v-if="!hasPro">
                         <h3 class="nt-modal-title mb-3">{{ $t('Advanced Column Settings') }}</h3>
                         <div class="text-[14px] font-[400] text-[#525866]">
-                            {{ $t(`Customize your table's column width, custom CSS class, content alignment, column styling with this Pro feature.`) }}
-<!--                            <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/conditional-formatting/">-->
-<!--                                {{ $t('View documentation') }}-->
-<!--                            </a>-->
+                            {{ $t(`Customize your table's column width, custom CSS class, column styling with this Pro feature.`) }}
+                            <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/advanced-settings/">
+                                {{ $t('View documentation') }}
+                            </a>
                         </div>
                         <div class="mt-4">
                             <GetPro />
@@ -568,7 +569,7 @@
                                 </el-tooltip>
                             </label>
 
-                            <el-select class="ninja-select" v-model="model.textAlign" placeholder="Text Align">
+                            <el-select :empty-values="[undefined, null]" class="ninja-select" v-model="model.textAlign" placeholder="Text Align">
                                 <el-option
                                     v-for="(alignmentLabel, alignmentVal) in alignmentOptions"
                                     :key="alignmentVal"
@@ -592,7 +593,7 @@
                             </label>
 
 
-                            <el-select class="ninja-select" v-model="model.contentAlign" placeholder="Content Alignment">
+                            <el-select :empty-values="[undefined, null]" class="ninja-select" v-model="model.contentAlign" placeholder="Content Alignment">
                                 <el-option
                                     v-for="(alignmentLabel, alignmentVal) in contentAlignmentOptions"
                                     :key="alignmentVal"
@@ -651,7 +652,7 @@
                                 :inactive-value="'no'"
                                 :disabled="!hasPro"
                             />
-                            <p class="text-[14px] font-[400]">{{ $t('Disable frontend search for this column data') }}</p>
+                            <p class="text-[14px] font-[400]" :class="{ 'text-[#a8abb2]': !hasPro }">{{ $t('Disable frontend search for this column data') }}</p>
                         </div>
                     </div>
 
@@ -677,7 +678,7 @@
                                 :inactive-value="'no'"
                                 :disabled="!hasPro"
                             />
-                            <p class="text-[14px] font-[400]">{{ $t('Disable frontend sorting for this column') }}</p>
+                            <p class="text-[14px] font-[400]" :class="{ 'text-[#a8abb2]': !hasPro }">{{ $t('Disable frontend sorting for this column') }}</p>
                         </div>
                     </div>
 

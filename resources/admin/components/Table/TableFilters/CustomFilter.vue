@@ -132,7 +132,7 @@
             :append-to-body="true"
             class="ninja_create-table-modal"
         >
-            <ninja-filter-editor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor" />
+            <NinjaFilterEditor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor" />
 
             <div class="flex items-center justify-end px-5 py-4 gap-2">
                 <NinjaButton
