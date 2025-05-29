@@ -48,14 +48,6 @@ class AdminMenuHandler
             'ninja_table_import_menu'
         );
 
-        $submenu['ninja_tables']['tools'] = array(
-            __('Tools', 'ninja-tables'),
-            $capability,
-            'admin.php?page=ninja_tables#/tools',
-            '',
-            'ninja_table_tools_menu'
-        );
-
         if (!defined('NINJA_CHARTS_VERSION')) {
             $submenu['ninja_tables']['ninja_charts'] = array(
                 __('Charts', 'ninja-tables'),
@@ -311,6 +303,8 @@ class AdminMenuHandler
 
         $hasFluentFrom       = defined('FLUENTFORM_VERSION');
         $isFluentFromUpdated = false;
+        $hasTablePress       = defined('TABLEPRESS_ABSPATH');
+        $hasSupsystic        = defined('SUPSYSTIC_TABLES_VALUE_SHORTCODE_NAME');
 
         // check for right version
         if ($hasFluentFrom) {
@@ -356,6 +350,8 @@ class AdminMenuHandler
             'isInstalled'              => $isInstalled,
             'hasPro'                   => defined('NINJATABLESPRO'),
             'hasFluentForm'            => $hasFluentFrom,
+            'hasTablePress'            => $hasTablePress,
+            'hasSupsystic'             => $hasSupsystic,
             'isFluentFormUpdated'      => $isFluentFromUpdated,
             'hasAdvancedFilters'       => class_exists('NinjaTablesPro\App\Hooks\Handlers\CustomFilterHandler'),
             'hasSortable'              => defined('NINJATABLESPRO_SORTABLE'),

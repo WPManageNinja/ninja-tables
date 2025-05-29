@@ -113,23 +113,22 @@
                 </div>
             </div>
 
-            <hr/>
-
-            <div class="ninja_block_section">
+            <hr v-if="migrationTables.length>0"/>
+            <div class="ninja_block_section" v-if="migrationTables.length>0">
                 <h3 class="text-[#0E121B] text-[16px] font-[500] mb-2">Import From Other WP Table Plugin</h3>
                 <p class="text-[14px] font-[400] text-[#0E121B] my-2">
                     To import from other WordPress plugins click the respective <strong>Import</strong>
                     button.
                 </p>
                 <div class="w-full border border-solid border-[#e1e4ea] rounded-[10px] flex justify-between items-center py-2 px-3 mb-2 bg-gray-50/95"
-                v-for="(plugin, plugin_key) in otherPlugins">
+                v-for="(plugin) in migrationTables" :key="plugin.key">
                     <div class="font-[500]">
-                        {{ plugin }}
+                        {{ plugin.title }}
                     </div>
                     <div>
                         <NinjaButton size="small" class="btn btn-default btn-sm"
-                                @click="importFromOtherPlugin(plugin_key)">
-                            <template v-if="btnsLoading[plugin_key]">
+                                @click="importFromOtherPlugin(plugin.key)">
+                            <template v-if="btnsLoading[plugin.key]">
                                 {{ $t('Processing...') }}
                                 <i class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
                             </template>
@@ -149,7 +148,7 @@
             @close="closePluginModal()"
             class="ninja_create-table-modal"
         >
-            <div class="p-5">
+            <div class="p-5" style="max-height: 70vh; overflow-y: auto;">
                 <template v-if="otherPluginTables.length">
                     <el-table
                         :data="otherPluginTables"
@@ -245,7 +244,8 @@ import NinjaButton from '../../@ui-utils/NinjaButton.vue';
                 selectedPlugin: null,
                 otherPluginTables: [],
                 importing: false,
-                uploadedFile: null
+                uploadedFile: null,
+                migrationTables: []
             }
         },
         methods: {
@@ -331,6 +331,7 @@ import NinjaButton from '../../@ui-utils/NinjaButton.vue';
                         }
                         this.showPluginModal = true;
                         this.otherPluginTables = response.tables;
+                        console.log(response.tables);
                     })
                     .catch(error => {
                         this.btnsLoading[plugin] = false;
@@ -378,15 +379,20 @@ import NinjaButton from '../../@ui-utils/NinjaButton.vue';
                         this.$message.error(error.data.message);
                         this.importing = false;
                     })
+            },
+            getMigrationTables() {
+               if(window.ninja_table_admin.hasTablePress) {
+                this.migrationTables.push({key:'TablePress', title: 'TablePress'});
+               }
+               if(window.ninja_table_admin.hasSupsystic) {
+                this.migrationTables.push({key:'supsystic', title: 'Data Tables Generator by Supsystic'});
+               }
             }
         },
         mounted() {
             if (this.$route.query.active_menu) {
                 this.active_menu = this.$route.query.active_menu;
             }
-            jQuery('.ninja_table_tools_menu').on('click', () => {
-                this.active_menu = 'import';
-            });
 
             jQuery('.ninja_table_import_menu').on('click', () => {
                 this.active_menu = 'import';
@@ -395,6 +401,8 @@ import NinjaButton from '../../@ui-utils/NinjaButton.vue';
             jQuery('.ninja_table_license_menu').on('click', () => {
                 this.active_menu = 'license';
             });
+
+            this.getMigrationTables();
 
         }
     }

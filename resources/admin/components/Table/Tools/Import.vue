@@ -14,7 +14,9 @@
                         <p>{{ $t('Import table from here') }}</p>
                         <a class="flex items-center cursor-pointer" @click="downloadSampleCSV">
                             <img class="mr-1" :src="assetUrl('icons/file-02.svg')"/>
-                            <span class="text-[#335CFF]">{{$t('Download Sample CSV')}}</span>
+                            <el-tooltip placement="top-start" effect="light" :content="$t('You can download a sample CSV file to ensure correct data formatting.')">
+                                <span class="text-[#335CFF]">{{$t('Download Sample CSV')}}</span>
+                            </el-tooltip>
                         </a>
                     </div>
                     <div class="p-[16px]">

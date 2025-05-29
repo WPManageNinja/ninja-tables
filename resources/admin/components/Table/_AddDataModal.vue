@@ -8,7 +8,7 @@
         :append-to-body="true"
         @close="closeModal"
     >
-        <div class="ninja_modal-body p-[20px]">
+        <div class="ninja_modal-body p-[20px]" style="max-height: 75vh; overflow-y: auto;">
             <div v-if="showModal">
                 <div v-for="column in columns" :key="column.key" class="form-group">
                     <label :for="slugify(column.key)" class="nt-form-label">{{ column.name || column.key }}</label>
