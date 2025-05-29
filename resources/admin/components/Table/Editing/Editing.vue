@@ -123,13 +123,18 @@
                         </div>
 
                         <div class="text-[18px] text-[500] my-2">{{ $t("Own Data Only") }}</div>
-                        <div class="mb-4 text-[14px]">
+                        <div class="mb-2 text-[14px]">
                             <el-checkbox
                                 true-value="yes"
                                 false-value="no"
                                 v-model="settings.own_data_only"
                             >{{ $t('Users can see and edit/delete only own data') }}
                             </el-checkbox>
+                        </div>
+
+                        <div v-show="settings.own_data_only === 'yes'" class="bg-[#EBF1FF] p-4 mb-4 rounded-[8px]">
+                            {{ $t(`Your Selected user roles only see their own data and manage those data. Other user roles can not see any data. If you want to show all the data without editing tools to all users, you can use the following shortcode:`) }}
+                            <br /><pre class="mt-1"><b>[ninja_tables disable_edit="yes" id="{{ tableId }}"]</b></pre>
                         </div>
 
                         <div class="mb-5">

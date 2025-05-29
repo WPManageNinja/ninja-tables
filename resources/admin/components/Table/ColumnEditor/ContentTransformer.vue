@@ -41,7 +41,9 @@
            </div>
 
             <div class="bg-[#EBF1FF] p-4 mt-2 rounded-[8px]" v-show="settings.formula_support == 'yes'">
-                <p class="nt-modal-description mb-2">Note: Excel formula is an experimental feature so all formulas may not work. We are improving this feature day by day so please don't be mad if some formulas don't work properly.</p>
+                <p class="nt-modal-description mb-2">
+                    {{ $t(`Note: Excel formula is an experimental feature so all formulas may not work. We are improving this feature day by day so please don't be mad if some formulas don't work properly.`) }}
+                </p>
 
                 <NinjaButton
                     size="small"
