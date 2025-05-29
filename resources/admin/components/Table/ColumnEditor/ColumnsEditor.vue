@@ -457,7 +457,7 @@
                         </el-tooltip>
                     </label>
 
-                    <el-select class="ninja-select" v-model="model.breakpoints" placeholder="Select Responsive Breakpoint">
+                    <el-select :empty-values="[undefined, null]" class="ninja-select" v-model="model.breakpoints" placeholder="Select Responsive Breakpoint">
                         <el-option
                             v-for="(option, optionKey) in breakPointsOptions"
                             :key="optionKey"
@@ -569,7 +569,7 @@
                                 </el-tooltip>
                             </label>
 
-                            <el-select class="ninja-select" v-model="model.textAlign" placeholder="Text Align">
+                            <el-select :empty-values="[undefined, null]" class="ninja-select" v-model="model.textAlign" placeholder="Text Align">
                                 <el-option
                                     v-for="(alignmentLabel, alignmentVal) in alignmentOptions"
                                     :key="alignmentVal"
@@ -593,7 +593,7 @@
                             </label>
 
 
-                            <el-select class="ninja-select" v-model="model.contentAlign" placeholder="Content Alignment">
+                            <el-select :empty-values="[undefined, null]" class="ninja-select" v-model="model.contentAlign" placeholder="Content Alignment">
                                 <el-option
                                     v-for="(alignmentLabel, alignmentVal) in contentAlignmentOptions"
                                     :key="alignmentVal"
