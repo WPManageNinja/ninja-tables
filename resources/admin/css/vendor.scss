@@ -1,10 +1,10 @@
 
-
 // @import './ninja-tables-admin.scss';
 @use './ninja-tables-admin' as *;
 
 .toplevel_page_ninja_tables{
     background: #F4F5FA;
+    font-family: 'Inter', sans-serif;
 }
 
 .el-input {
