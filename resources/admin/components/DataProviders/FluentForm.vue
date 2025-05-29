@@ -6,9 +6,9 @@
 
         <template v-if="isFluentFormUpdated">
             <p class="nt-modal-description" v-if="!editing">
-                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase your form submissions. Click here to learn more about') }}
+                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. Click here to learn more about fluent forms integration') }}
                 <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
-                   {{ $t('Fluent Forms Integration') }}
+                   {{ $t('View Documentation.') }}
                 </a>
             </p>
 

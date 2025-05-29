@@ -1,8 +1,8 @@
 <template>
     <template v-if="!hasPro">
-        <PremiumNotice title="Custom SQL Query">
+        <PremiumNotice title="Construct Table from Custom SQL Query">
             <template #default>
-                <p class="text-[14px] font-[400] text-[#525866]">Create a table by generating a sql query to any custom SQL database.
+                <p class="text-[14px] font-[400] text-[#525866]">This is a Premium feature. Create a table by generating a sql query to any custom SQL database.
                     <a href="https://ninjatables.com/docs/create-table-from-custom-sql/" class="nt-link" > View Documentation. </a>
                 </p>
             </template>
@@ -17,7 +17,7 @@
             {{$t('Create a table by generating a sql query to any custom SQL database.')}}
             <a class="nt-link" target="_blank"
                href="https://ninjatables.com/docs/create-table-from-custom-sql/">
-                {{$t('View documentation of this feature.')}}
+                {{$t('View documentation.')}}
             </a>
         </p>
 

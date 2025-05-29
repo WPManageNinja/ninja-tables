@@ -2,11 +2,20 @@
     <div v-if="!hasPro" class="mb-4">
         <PremiumNotice v-if="type === 'google-csv'"
                        title="Connect Google Sheets"
-                       content="Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro."
+                       content="This is a Premium feature. Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro."
         >
             <template #default>
-                <p class="text-[14px] font-[400] text-[#525866]">Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro.
-                    <a href="https://ninjatables.com/docs/google-sheets-integration/" class="nt-link" > View Documentation. </a>
+                <p class="text-[14px] font-[400] text-[#525866]">
+                    {{ $t('This is a Premium feature. Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro.') }}
+                    <a class="nt-link" target="_blank"
+                       href="https://ninjatables.com/docs/google-sheets-integration/">
+                        {{ $t('View Documentation') }}
+                    </a>
+                    {{ $t('or') }}
+                    <a class="nt-link" target="_blank"
+                       href="https://youtu.be/wcJ3m7krRRM?si=22JC8p6O8FjPtQDu/">
+                        {{ $t('Watch Video.') }}
+                    </a>
                 </p>
             </template>
         </PremiumNotice>
@@ -16,8 +25,8 @@
                        title="Connect External CSV"
         >
             <template #default>
-                <p class="text-[14px] font-[400] text-[#525866]">{{ $t('Construct table from remote CSV file. Whenever your remote CSV data changes it will automatically sync here.') }}
-                    <a href="https://ninjatables.com/docs/construct-table-from-csv/" class="nt-link" > View Documentation. </a>
+                <p class="text-[14px] font-[400] text-[#525866]">{{ $t('This is a Premium feature. Construct table from remote CSV file. Whenever your remote CSV data changes it will automatically sync here.') }}
+                    <a href="https://ninjatables.com/docs/construct-table-from-csv/" class="nt-link" > View Documentation </a>
                 </p>
             </template>
         </PremiumNotice>
@@ -32,28 +41,29 @@
             <div class="external-link-heading">
                 <template v-if="type === 'google-csv'">
                     <h3 class="nt-modal-title">
-                        {{ $t('Construct Table from Google Sheets') }}
+                        {{ $t('Connect Google Sheets') }}
                     </h3>
                     <p class="nt-modal-description">
                         {{ $t('Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro.') }}
                         <a class="nt-link" target="_blank"
                            href="https://ninjatables.com/docs/google-sheets-integration/">
-                            {{ $t('View Documentation Here') }}
+                            {{ $t('View Documentation') }}
                         </a>
                         {{ $t('or') }}
                         <a class="nt-link" target="_blank"
                            href="https://youtu.be/wcJ3m7krRRM?si=22JC8p6O8FjPtQDu/">
-                            {{ $t('Watch Tutorial Here') }}
+                            {{ $t('Watch Video.') }}
                         </a>
                     </p>
                 </template>
 
                 <template v-if="type === 'csv'">
                     <h3 class="nt-modal-title">
-                        {{ $t('Construct Table from Remote CSV File') }}
+                        {{ $t('Connect External CSV') }}
                     </h3>
                     <p class="nt-modal-description">
                         {{ $t('Construct table from remote CSV file. Whenever your remote CSV data changes it will automatically sync here.') }}
+                        <a href="https://ninjatables.com/docs/construct-table-from-csv/" class="nt-link" > {{ $t('View Documentation') }} </a>
                     </p>
                 </template>
             </div>
