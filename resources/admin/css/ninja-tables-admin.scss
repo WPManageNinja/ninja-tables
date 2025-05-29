@@ -221,6 +221,7 @@
   }
 }
 
+
 .ninja_create-table-modal {
   &.el-dialog {
     border-radius: 20px;
@@ -333,6 +334,8 @@
         }
 
         .ninja-tables-main {
+          height: 80vh;
+          overflow-y: auto;
           display: flex;
           padding: 30px;
           flex-direction: column;
