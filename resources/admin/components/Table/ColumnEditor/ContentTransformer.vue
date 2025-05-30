@@ -91,7 +91,7 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <p>You may <a class="text-[#335CFF]" href="https://wpmanageninja.com/docs/ninja-tables/configuring-tables/value-transformation/" target="_blank">check the documentation here.</a></p>
+            <p>You may <a class="text-[#335CFF]" href="https://ninjatables.com/docs/transform-value/" target="_blank">check the documentation here.</a></p>
             <p style="font-weight: bold" v-show="settings.formula_support == 'yes'">You can use any Excel formula into the transform value box</p>
         </div>
 
