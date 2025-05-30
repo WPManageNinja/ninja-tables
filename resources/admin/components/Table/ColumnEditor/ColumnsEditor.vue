@@ -685,7 +685,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-x-5">
+                    <div class="grid grid-cols-2 gap-x-5 mb-4">
                         <!-- Column Background Color-->
                         <div class="flex flex-col mt-4">
                             <label class="nt-form-label">
