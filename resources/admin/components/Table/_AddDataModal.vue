@@ -142,7 +142,7 @@
             </div>
 
             <div class="flex gap-2 items-center">
-                <div @click="row_config = !row_config"
+                <div @click="showRowConfig"
                      class="cursor-pointer flex items-center px-[9px] py-[9px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
                     <img :src="assetUrl('icons/setting-02.svg')" alt="settings"/>
                 </div>
@@ -316,6 +316,19 @@
             },
             closeModal() {
                 this.$emit('modal_close');
+            },
+            showRowConfig() {
+                this.row_config = !this.row_config;
+
+                this.$nextTick(() => {
+                    const modalBody = document.querySelector('.ninja_create-table-modal .ninja_modal-body');
+                    if (modalBody) {
+                        modalBody.scrollTo({
+                            top: modalBody.scrollHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
             },
             initNewColumnObj() {
                 let columnObj = {};
