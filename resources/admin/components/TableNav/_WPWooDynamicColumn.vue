@@ -78,7 +78,7 @@
             >
             </el-input>
 
-            <div class="nt-instruction" v-if="selectedField && selectedField.instruction">
+            <div class="nt-instruction my-4" v-if="selectedField && selectedField.instruction">
                 <p v-html="selectedField.instruction"></p>
                 <p v-if="selectedField.learn_more_url">
                     <a target="_blank" :href="selectedField.learn_more_url" class="nt-link">

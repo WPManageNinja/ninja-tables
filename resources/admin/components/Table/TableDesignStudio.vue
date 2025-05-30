@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="background: white; padding: 10px 20px;">
+                    <div class="bg-white p-[20px] rounded-[12px]" >
                         <div class="nt-instruction" v-if="showProNotice">
                             {{ $t('Color customization is a PRO feature. Please upgrade to pro apply this feature.') }}
                             <GetPro class="mt-2" type="primary" />
