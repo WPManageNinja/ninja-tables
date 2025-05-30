@@ -18,7 +18,7 @@
                 <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Licensing') }}</div>
                 <div class="text-[14px] font-[400] text-[#0E121B] my-5">
                     {{
-                        $t(`You need to activate your Ninja Table Pro by providing the license key below. If you don't have a license key please`)
+                        $t(`You need to activate your Ninja Tables Pro by providing the license key below. If you don't have a license key please`)
                     }}
                     <a href="https://wpmanageninja.com/checkout/purchase-history/" target="_blank"
                        class="nt-link">Click Here</a>

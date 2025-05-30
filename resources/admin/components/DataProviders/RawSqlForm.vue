@@ -92,7 +92,7 @@
                       class="update-notice"
             >
                 <p>
-                    Please update Ninja Tables Pro Plugin to latest version. Required Ninja Table Version: 3.3 or later
+                    Please update Ninja Tables Pro Plugin to latest version. Required Ninja Tables Version: 3.3 or later
                 </p>
             </el-alert>
         </template>

@@ -6,7 +6,7 @@
 
         <template v-if="isFluentFormUpdated">
             <p class="nt-modal-description" v-if="!editing">
-                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. Click here to learn more about fluent forms integration') }}
+                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. Click here to learn more about Fluent Forms integration') }}
                 <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
                    {{ $t('View Documentation.') }}
                 </a>
@@ -101,7 +101,7 @@
                             <el-tooltip
                                 placement="right"
                                 effect="light"
-                                content="Select what type of entries you want to show from fluent form."
+                                content="Select what type of entries you want to show from Fluent Forms."
                             >
                                 <el-icon class="tooltip-icon-color">
                                     <InfoFilled/>
@@ -149,7 +149,7 @@
                       show-icon
                       class="premium-notice"
             >
-                <p>To use this feature your WP Fluent Form need to be updated. Please update WP Fluent From from plugins screen</p>
+                <p>To use this feature your WP Fluent Forms need to be updated. Please update WP Fluent From from plugins screen</p>
             </el-alert>
 
             <h4>See the form in action:</h4>
@@ -172,7 +172,7 @@
             <div class="my-4">
                 <NinjaButton v-loading="installing" @click="installFluentFrom">
                     <span v-if="installing">Installing WP Fluent From...</span><span
-                        v-else>Install Fluent Form Now</span>
+                        v-else>Install Fluent Forms Now</span>
                 </NinjaButton>
                 <p v-if="installing">Please wait while installing WP Fluent From</p>
             </div>
