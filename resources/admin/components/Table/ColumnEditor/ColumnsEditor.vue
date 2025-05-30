@@ -451,7 +451,7 @@
 
                                 <p>
                                     Choose responsive breakpoints of your table columns. <br>
-                                    For more details check <a
+                                    For more details check <a class="nt-link"
                                     href="https://ninjatables.com/docs/column-responsive-breakpoints">documentation</a>.
                                 </p>
                             </template>
