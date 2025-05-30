@@ -73,13 +73,13 @@ export default {
             'Use Unlimited Colors in Your Tables',
             'Add Media to Your Table Cells',
             'Drag and Drop Table Data Sorting',
-            'Use Advanced Date Sorting',
+            'Use Advanced Data Sorting',
             'Colspan/Cell Merging Feature',
             'Create Custom Filter UI in Table',
             'Use Shortcode in your table cell',
             'Use Advanced Customization Features',
             'Use Advanced Data Filtering',
-            'Get VIP Support for any Issue',
+            'Get Priority Support for any Issue',
             'Incremental New Premium Features',
             'And Many More features'
         ]);
