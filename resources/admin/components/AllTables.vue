@@ -38,7 +38,7 @@
         </template>
 
         <!--Select your table type and create-->
-        <el-dialog id="data-tables-app" :close-on-click-modal="false"
+        <el-dialog id="data-tables-app" :close-on-click-modal="false"  align-center
             :title="$t('How would you like to create your table?')" v-model="modalVisible" top="50px" width="75%"
             :append-to-body="true" custom-class="create-table-modal" class="ninja_create-table-modal">
             <AddTableModal @table_inserted="addTableAction" @modal_close="modalVisible = false" :hasPro="hasPro" />

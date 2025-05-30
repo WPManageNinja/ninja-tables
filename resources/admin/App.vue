@@ -17,6 +17,7 @@
                 v-model="addVisible"
                 destroy-on-close
                 width="650px"
+                align-center
             >
                 <div class="p-5">
                     <div class="grid grid-cols-2 gap-4 ">

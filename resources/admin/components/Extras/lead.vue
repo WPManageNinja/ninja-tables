@@ -4,6 +4,7 @@
         v-if="leadVisible"
         v-model="leadVisible"
         title="We made a few tweaks to Ninja Tables"
+        align-center
     >
         <div v-loading="loading" class="p-5">
             <h3 class="nt-modal-subtitle">Hello {{display_name}},</h3>

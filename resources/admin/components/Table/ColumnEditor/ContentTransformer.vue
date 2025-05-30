@@ -56,6 +56,7 @@
                     class="ninja_create-table-modal"
                     title="Supported Excel Formulas"
                     v-model="show_formulas"
+                    align-center
                     width="60%">
 
                     <div class="py-5 px-6 h-[400px] overflow-y-scroll scrollbar-always-visible">

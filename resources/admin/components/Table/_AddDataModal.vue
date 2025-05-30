@@ -7,6 +7,7 @@
         :close-on-click-modal="false"
         :append-to-body="true"
         @close="closeModal"
+        align-center
     >
         <div class="ninja_modal-body p-[20px]" style="max-height: 75vh; overflow-y: auto;">
             <div v-if="showModal">

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="visible" class="sortable-upgrade-notice">
+    <el-dialog v-model="visible" class="sortable-upgrade-notice"  align-center>
         <h1 slot="title" class="el-notifications">
             <i class="el-icon-warning text-warning"></i> {{ $t('Upgrade Notice') }}
         </h1>

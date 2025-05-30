@@ -19,10 +19,10 @@
             <el-col :span="12">
                 <el-form-item v-if="activeEditor.type !== 'reset_filter'">
                     <label class="nt-form-label">
-                        {{ $t('Filter Label') }}
+                        Filter Label
                         <el-tooltip class="item" placement="bottom-start" effect="light">
                             <template #content>
-                                <h3>Prefix</h3>
+                                <h3>Filter Label </h3>
                                 <p>{{ $t(`This will show on your Table Filter. Keep it blank if you don't need any filter instruction at the frontend`) }}</p>
                             </template>
                             <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
