@@ -192,14 +192,14 @@
                 </div>
             </template>
 
-            <template v-else-if="activeTabName === 'raw_sql'">
+            <div v-else-if="activeTabName === 'raw_sql'" class="w-full">
                 <RawSqlForm
                     :has_sql_permission="has_sql_permission"
                     :tableCreated="fireTableCreated"
                     :activated_features="activated_features"
                     @modalClose="closeModal"
                 />
-            </template>
+            </div>
         </el-main>
     </el-container>
 
