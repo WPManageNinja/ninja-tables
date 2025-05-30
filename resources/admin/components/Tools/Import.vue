@@ -7,7 +7,7 @@
             </div>
             <div class="my-2">
                 <p class="mb-2 text-[#0E121B] text-[16px] font-[500]">{{ $t('Import Table from CSV / JSON File') }}</p>
-                <p class="mb-1 text-[#0E121B] text-[14px]">{{$t('Browse and locate a CSV/JSON file you backed up before')}}</p>
+                <p class="mb-1 text-[#0E121B] text-[14px]">{{$t('Browse and locate a CSV / JSON file you backed up before')}}</p>
                 <p class="text-[#0E121B] text-[14px]">
                     Select the intended format and click <strong>Import</strong> button, we will do
                     the rest for you.

@@ -106,7 +106,7 @@ class ToolsController extends Controller
         return $this->sendSuccess([
             'data' => [
                 'posts'   => $posts,
-                'message' => __('Table cache successfully cleared', 'ninja_tables')
+                'message' => __('Table cache successfully cleared', 'ninja-tables')
             ]
         ], 200);
     }
@@ -117,7 +117,7 @@ class ToolsController extends Controller
 
         return $this->sendSuccess([
             'data' => [
-                'message' => __('All caches successfully cleared', 'ninja_tables')
+                'message' => __('All caches successfully cleared', 'ninja-tables')
             ]
         ], 200);
     }

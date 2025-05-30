@@ -1,5 +1,5 @@
 <template>
-    <div class="column-condition-config">
+    <div class="column-condition-config mb-4">
         <div v-if="hasPro" class="conditional-settings-header">
             <div class="conditional-settings-title">
                 Customize your table's appearances based on the cell value. Add as many conditions as you like.
