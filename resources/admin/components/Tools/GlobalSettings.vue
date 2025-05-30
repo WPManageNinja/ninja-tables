@@ -14,12 +14,9 @@
                         <el-radio :value="'no'" border>{{ $t(`Don't Handle Global Javascript Errors (Default)`) }}</el-radio>
                     </el-space>
                 </el-radio-group>
-                <NinjaButton class="my-3" type="secondary" @click="storeSettings" :btn-text="$t('Update Global Settings')"/>
+                <NinjaButton class="my-6" type="secondary" @click="storeSettings" :btn-text="$t('Update Global Settings')"/>
             </div>
-            <hr class="my-3">
-
-
-
+            <hr class="mb-4 border-[gray-200]">
             <div class="text-[16px] font-[500] text-[#3C434A]">{{ $t('Clear Cache') }}</div>
             <div class="text-[14px] font-[400] text-[#3C434A] mt-[10px] mb-[20px]">
                 {{
