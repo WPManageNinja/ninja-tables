@@ -49,7 +49,7 @@
                 </el-row>
 
                 <!-- Data Type -->
-                <el-form-item class="nt-form-group mt-[-40px]">
+                <el-form-item class="nt-form-group" :class="updating ? 'mt-[-20px]' : 'mt-[-40px]'">
                     <label class="nt-form-label">
                         {{ $t('Data Type') }}
                         <el-tooltip class="item" placement="bottom-start" effect="light">
@@ -68,7 +68,7 @@
                             :value="typeKey">
                         </el-option>
                     </el-select>
-                    <p v-show="hasPro" class="mt-1">{{ $t('Select HTML Field if you want to add Link, media or any type of html') }}</p>
+                    <small v-show="hasPro"> <el-icon class="tooltip-icon-color mr-1"><InfoFilled /></el-icon>{{ $t('Select HTML Field if you want to add Link, media or any type of html') }}</small>
                 </el-form-item>
 
                 <div v-if="model.data_type === 'date'">
