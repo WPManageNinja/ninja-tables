@@ -1,37 +1,41 @@
 <template>
     <el-form ref="form" :model="activeEditor" class="p-5" style="max-height: 70vh; overflow-y: auto;">
-        <div class="grid grid-cols-2 gap-x-5">
-            <el-form-item>
-                <label class="nt-form-label">
-                    {{ $t('Filter Title') }}
-                    <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <template #content>
-                            <h3>Filter Title</h3>
-                            <p>Just a Name to identify your Filter</p>
-                        </template>
-                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                    </el-tooltip>
-                </label>
-                <NinjaInput v-model="activeEditor.title" :placeholder="$t('Enter Filter Title')" />
-            </el-form-item>
+        <el-row :gutter="20">
+            <el-col :span="12">
+                <el-form-item>
+                    <label class="nt-form-label">
+                        {{ $t('Filter Title') }}
+                        <el-tooltip class="item" placement="bottom-start" effect="light">
+                            <template #content>
+                                <h3>Filter Title</h3>
+                                <p>Just a Name to identify your Filter</p>
+                            </template>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                        </el-tooltip>
+                    </label>
+                    <NinjaInput v-model="activeEditor.title" :placeholder="$t('Enter Filter Title')" />
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item v-if="activeEditor.type !== 'reset_filter'">
+                    <label class="nt-form-label">
+                        Filter Label
+                        <el-tooltip class="item" placement="bottom-start" effect="light">
+                            <template #content>
+                                <h3>Filter Label </h3>
+                                <p>{{ $t(`This will show on your Table Filter. Keep it blank if you don't need any filter instruction at the frontend`) }}</p>
+                            </template>
+                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                        </el-tooltip>
+                    </label>
 
-            <el-form-item v-if="activeEditor.type !== 'reset_filter'">
-                <label class="nt-form-label">
-                    {{ $t('Filter Label') }}
-                    <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <template #content>
-                            <h3>Prefix</h3>
-                            <p>This will show on your Table Filter</p>
-                        </template>
-                        <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                    </el-tooltip>
-                </label>
+                    <NinjaInput v-model="activeEditor.filter_prefix" :placeholder="$t(`Enter Filter Label`)"/>
+                    <small> <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon> {{$t(`Keep it blank if you don't need any filter instruction.`)}}</small>
+                </el-form-item>
+            </el-col>
+        </el-row>
 
-                <NinjaInput v-model="activeEditor.filter_prefix" :placeholder="$t(`Keep it blank if you don't need any filter instruction at the frontend`)"/>
-            </el-form-item>
-        </div>
-
-        <el-form-item>
+        <el-form-item class="mt-[-40px]">
             <label class="nt-form-label">
                 {{ $t('Filter UI Type') }}
                 <el-tooltip class="item" placement="bottom-start" effect="light">
@@ -317,7 +321,7 @@
         </div>
 
         <el-form-item class="mt-4">
-            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.strict">Enable Strict Mode (If Enable, Ninja Table will try to match exact value)</el-checkbox>
+            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.strict">Enable Strict Mode (If Enable, Ninja Tables will try to match exact value)</el-checkbox>
         </el-form-item>
     </el-form>
 </template>
@@ -326,9 +330,11 @@
     import KeyPairOptions from './_key_pair_options'
     import each from 'lodash/each'
     import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
+    import {InfoFilled} from "@element-plus/icons-vue";
     export default {
         name: 'FilterEditor',
         components: {
+            InfoFilled,
             NinjaInput,
             KeyPairOptions,
         },

@@ -353,11 +353,14 @@ jQuery(document).ready(function($) {
     Object.entries(notices).forEach(function([key, html]) {
         var \$notice = \$(html);
         var \$container = $('.ninja_main_nav');
+        var \$innerNav = $('.ninja_inner_nav');
 
         if (\$container.length) {
             \$container.after(\$notice);
+        } else if (\$innerNav.length) {
+            \$innerNav.after(\$notice);
         } else {
-            $('body').prepend(\$notice);
+            $('#data-tables-app').prepend(\$notice);
         }
     });
 });

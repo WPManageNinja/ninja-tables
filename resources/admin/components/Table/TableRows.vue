@@ -299,6 +299,7 @@
             :top="'50px'"
             :title="currentEditingColumn ? 'Edit Table Column : ' + currentEditingColumn.name : ''"
             :width="'70%'"
+            align-center
         >
             <columnsEditor
                 v-if="showColumnEditor && currentEditingColumn"
@@ -323,6 +324,7 @@
             :append-to-body="true"
             :title="'Add Table Column'"
             :width="'70%'"
+            align-center
         >
             <columnsEditor
                 v-if="columnModal"

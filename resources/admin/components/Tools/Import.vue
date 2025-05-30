@@ -147,6 +147,7 @@
             v-model="showPluginModal"
             @close="closePluginModal()"
             class="ninja_create-table-modal"
+            align-center
         >
             <div class="p-5" style="max-height: 70vh; overflow-y: auto;">
                 <template v-if="otherPluginTables.length">

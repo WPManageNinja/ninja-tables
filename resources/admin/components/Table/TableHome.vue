@@ -70,6 +70,7 @@
             v-model="editTableModalShow"
             top="50px"
             :append-to-body="true"
+            align-center
         >
             <edit_table
                 v-if="editTableModalShow"
