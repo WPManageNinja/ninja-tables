@@ -11,20 +11,26 @@
             <div :class="`nt_rendering_card ${tableSettings.render_type === 'ajax_table' && 'is_active'}`"
                  @click="()=>changeTableType('ajax_table')">
                 <div>
-                    <div class="mb-2 font-[500] text-[14px]">Ajax</div>
+                    <div class="flex justify-between items-baseline">
+                        <div class="mb-2 font-[500] text-[14px]">Ajax</div>
+                        <div class="radio_button"></div>
+                    </div>
                     <div class="text-[12px] text-[#525866]">
                         {{ $t("Use this settings if you have lots of data and don't need cell merge features. It will load your data over ajax. Please note that, shortcodes in table will not work here.") }}
                     </div>
                 </div>
-                <div class="radio_button"></div>
             </div>
             <div :class="`nt_rendering_card ${tableSettings.render_type === 'legacy_table' && 'is_active'}`"
                  @click="()=>changeTableType('legacy_table')">
                 <div>
-                    <div class="mb-2 font-[500] text-[14px] flex items-center gap-1">
-                        Legacy
-                        <img v-if="!hasPro" class="h-4 w-4" :src="assetUrl('icons/get-pro.svg')" alt="">
+                    <div class="flex justify-between items-baseline">
+                        <div class="mb-2 font-[500] text-[14px] flex items-center gap-1">
+                            Legacy
+                            <img v-if="!hasPro" class="h-4 w-4" :src="assetUrl('icons/get-pro.svg')" alt="">
+                        </div>
+                        <div class="radio_button"></div>
                     </div>
+                    
                     <div class="text-[12px] text-[#525866]">
                         <span>{{ $t("Recommended settings for advanced features") }}</span>
                         <div class="flex gap-4 mt-2">
@@ -51,7 +57,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="radio_button"></div>
             </div>
         </div>
 
