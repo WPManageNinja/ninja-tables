@@ -553,7 +553,7 @@
                 this.getData();
             },
             confirmDeleteTable(tableId) {
-                if (confirm(this.$t('Are you sure, You want to delete this table'))) {
+                if (confirm(this.$t('Are you sure, you want to delete this table'))) {
                     this.deleteTable(tableId);
                 }
             },
@@ -598,7 +598,7 @@
 
             },
             confirmDeleteRows(id) {
-                this.$confirm('Are you sure, You want to delete this rows?', 'Warning', {
+                this.$confirm('Are you sure, you want to delete this row?', 'Warning', {
                     confirmButtonText: 'Yes, Delete',
                     cancelButtonText: 'Cancel',
                     type: 'warning',

@@ -252,7 +252,7 @@
                 this.fetchTables();
             },
             confirmDeleteTable(tableId) {
-                this.$confirm('Are you sure, You want to delete this table?', 'Warning', {
+                this.$confirm('Are you sure, you want to delete this table?', 'Warning', {
                     confirmButtonText: 'Yes, Delete',
                     cancelButtonText: 'Cancel',
                     type: 'warning',

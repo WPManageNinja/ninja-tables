@@ -14,7 +14,7 @@
                         <el-radio :value="'no'" border>{{ $t(`Don't Handle Global Javascript Errors (Default)`) }}</el-radio>
                     </el-space>
                 </el-radio-group>
-                <NinjaButton class="my-6" type="secondary" @click="storeSettings" :btn-text="$t('Update Global Settings')"/>
+                <NinjaButton :icon="assetUrl('icons/equalizer-2-line.svg')" class="my-6" type="secondary" @click="storeSettings" :btn-text="$t('Update Global Settings')"/>
             </div>
             <hr class="mb-4 border-[gray-200]">
             <div class="text-[16px] font-[500] text-[#3C434A]">{{ $t('Clear Cache') }}</div>
@@ -33,6 +33,7 @@
 
 <script>
     import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+    import {assetUrl} from "../../utils/ninjatablesadmin";
 
     export default {
         name: "GlobalSettings",
@@ -44,6 +45,7 @@
             };
         },
         methods: {
+            assetUrl,
             getSettings() {
                 this.loading = true;
 
