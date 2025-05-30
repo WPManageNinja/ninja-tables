@@ -134,7 +134,7 @@
         >
             <NinjaFilterEditor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor" />
 
-            <div class="flex items-center justify-end px-5 py-4 gap-2">
+            <div class="flex items-center justify-end px-5 pb-4 gap-2">
                 <NinjaButton
                     type="secondary"
                     @click="addFilterModal = false"

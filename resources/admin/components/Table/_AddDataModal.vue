@@ -65,107 +65,108 @@
                 </div>
             </div>
 
-        <div v-if="row_config">
-            <div v-if="has_pro" class="mt-[30px] border border-[#E1E4EA] p-[20px] rounded-[12px]">
-                <h3 class="nt-modal-subtitle mb-4">Row Settings</h3>
-                <div class="grid grid-cols-2 gap-x-5">
-                    <div class="flex flex-col">
-                        <label class="nt-form-label">Row Background Color</label>
-                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                            <ColorPicker v-model="item_settings.row_bg" />
+            <div v-if="row_config">
+                <div v-if="has_pro" class="mt-[30px] border border-[#E1E4EA] p-[20px] rounded-[12px]">
+                    <h3 class="nt-modal-subtitle mb-4">Row Settings</h3>
+                    <div class="grid grid-cols-2 gap-x-5">
+                        <div class="flex flex-col">
+                            <label class="nt-form-label">Row Background Color</label>
+                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                <ColorPicker v-model="item_settings.row_bg" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="nt-form-label">Row Text Color</label>
+                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                <ColorPicker v-model="item_settings.text_color" />
+                            </div>
                         </div>
                     </div>
-                    <div class="flex flex-col">
-                        <label class="nt-form-label">Row Text Color</label>
-                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                            <ColorPicker v-model="item_settings.text_color" />
-                        </div>
-                    </div>
-                </div>
 
-                <h3 class="nt-modal-subtitle mt-4">Cell Color Customization</h3>
-                <el-table :data="columns" border class="nt-inner-table">
-                    <el-table-column prop="name" label="Column" />
-                    <el-table-column label="Background Color">
-                        <template #default="scope">
-                            <ColorPicker :showValue="false" v-model="item_settings.cell[scope.row.key]['background-color']" />
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="Text Color">
-                        <template #default="scope">
-                            <ColorPicker :showValue="false" v-model="item_settings.cell[scope.row.key]['color']" />
-                        </template>
-                    </el-table-column>
-                </el-table>
-
-                <div v-if="!insertAfterPosition"  class="flex flex-col mt-4">
-                    <label class="nt-form-label">
-                        Data Create Date
-                        <el-tooltip placement="top-start" effect="light">
-                            <template #content>
-                              <h3 class="font-bold">Create Date</h3>
-                              Set the date of the data creation.<br>
-                              This is useful when you want to sort the data by date
+                    <h3 class="nt-modal-subtitle mt-4">Cell Color Customization</h3>
+                    <el-table :data="columns" border class="nt-inner-table">
+                        <el-table-column prop="name" label="Column" />
+                        <el-table-column label="Background Color">
+                            <template #default="scope">
+                                <ColorPicker :showValue="false" v-model="item_settings.cell[scope.row.key]['background-color']" />
                             </template>
-                            <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
-                        </el-tooltip>
-                    </label>
-                    <el-date-picker
-                        v-model="created_at"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        type="datetime"
-                        placeholder="Select date and time">
-                    </el-date-picker>
-                </div>
-            </div>
+                        </el-table-column>
+                        <el-table-column label="Text Color">
+                            <template #default="scope">
+                                <ColorPicker :showValue="false" v-model="item_settings.cell[scope.row.key]['color']" />
+                            </template>
+                        </el-table-column>
+                    </el-table>
 
-            <div v-else class="nt-instruction">
-                <h3 class="nt-modal-title mb-3">{{ $t('Row and Cell Color Customization') }}</h3>
-                <p class="text-[14px] font-[400] text-[#525866]">{{ $t(`Using this module, You can set cell and row level colors of your data, It's a pro feature, Please
-                    purchase pro to unlock this feature`) }}</p>
-               <div class="mt-4">
-                   <get-pro/>
-               </div>
+                    <div v-if="!insertAfterPosition"  class="flex flex-col mt-4">
+                        <label class="nt-form-label">
+                            Data Create Date
+                            <el-tooltip placement="top-start" effect="light">
+                                <template #content>
+                                  <h3 class="font-bold">Create Date</h3>
+                                  Set the date of the data creation.<br>
+                                  This is useful when you want to sort the data by date
+                                </template>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                            </el-tooltip>
+                        </label>
+                        <el-date-picker
+                            v-model="created_at"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            type="datetime"
+                            placeholder="Select date and time">
+                        </el-date-picker>
+                    </div>
+                </div>
+
+                <div v-else class="nt-instruction">
+                    <h3 class="nt-modal-title mb-3">{{ $t('Row and Cell Color Customization') }}</h3>
+                    <p class="text-[14px] font-[400] text-[#525866]">{{ $t(`Using this module, You can set cell and row level colors of your data, It's a pro feature, Please
+                        purchase pro to unlock this feature`) }}</p>
+                   <div class="mt-4">
+                       <get-pro/>
+                   </div>
+                </div>
             </div>
         </div>
-            <div class="pt-[16px] flex justify-between items-center" :class="{ 'single-child': shouldNotContinueAdding }">
-                <div>
-                    <el-checkbox
-                        v-if="!shouldNotContinueAdding"
-                        v-model="continueAdding"
-                    >
-                        {{ $t('Continue Adding') }}
-                    </el-checkbox>
+
+        <div class="px-[20px] py-[16px] flex justify-between items-center" :class="{ 'single-child': shouldNotContinueAdding }">
+            <div>
+                <el-checkbox
+                    v-if="!shouldNotContinueAdding"
+                    v-model="continueAdding"
+                >
+                    {{ $t('Continue Adding') }}
+                </el-checkbox>
+            </div>
+
+            <div class="flex gap-2 items-center">
+                <div @click="row_config = !row_config"
+                     class="cursor-pointer flex items-center px-[9px] py-[9px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                    <img :src="assetUrl('icons/setting-02.svg')" alt="settings"/>
                 </div>
 
-                <div class="flex gap-2 items-center">
-                    <div @click="row_config = !row_config"
-                         class="cursor-pointer flex items-center px-[9px] py-[9px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
-                        <img :src="assetUrl('icons/setting-02.svg')" alt="settings"/>
-                    </div>
+                <NinjaButton
+                    @click="closeModal"
+                    type="secondary"
+                    :btn-text="$t('Cancel')"
+                />
 
-                    <NinjaButton
-                        @click="closeModal"
-                        type="secondary"
-                        :btn-text="$t('Cancel')"
-                    />
+                <NinjaButton
+                    v-if="editId"
+                    @click="addData"
+                    :disabled="btnLoading"
+                    :btn-text="$t('Update')"
+                    :loading="btnLoading"
+                />
+                <NinjaButton
+                    v-else
+                    @click="addData"
+                    :disabled="btnLoading"
+                    :btn-text="$t('Add')"
+                    :loading="btnLoading"
+                />
 
-                    <NinjaButton
-                        v-if="editId"
-                        @click="addData"
-                        :disabled="btnLoading"
-                        :btn-text="$t('Update')"
-                        :loading="btnLoading"
-                    />
-                    <NinjaButton
-                        v-else
-                        @click="addData"
-                        :disabled="btnLoading"
-                        :btn-text="$t('Add')"
-                        :loading="btnLoading"
-                    />
-
-                </div>
             </div>
         </div>
 

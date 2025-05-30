@@ -66,7 +66,7 @@
 
                     <hr>
 
-                    <div class="flex justify-end p-4">
+                    <div class="flex justify-end py-4 px-5">
                         <NinjaButton
                             type="secondary"
                             @click.prevent="show_formulas = false"
