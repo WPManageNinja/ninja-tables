@@ -317,7 +317,7 @@
         </div>
 
         <el-form-item class="mt-4">
-            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.strict">Enable Strict Mode (If Enable, Ninja Table will try to match exact value)</el-checkbox>
+            <el-checkbox :true-value="'yes'" :false-value="'no'" v-model="activeEditor.strict">Enable Strict Mode (If Enable, Ninja Tables will try to match exact value)</el-checkbox>
         </el-form-item>
     </el-form>
 </template>
