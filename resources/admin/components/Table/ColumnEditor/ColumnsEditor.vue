@@ -739,7 +739,7 @@
             </el-tab-pane>
 
             <!-- Buttons -->
-            <div v-if="!updating" class="flex justify-end px-[10px] py-4 gap-2">
+            <div v-if="!updating" class="flex justify-end px-[10px] py-[6px] gap-2">
                 <div class="flex align-center gap-2">
                     <NinjaButton
                         @click.prevent="cancel"
@@ -757,7 +757,7 @@
                 </div>
             </div>
 
-            <div v-else class="flex justify-between items-center px-[10px] py-4">
+            <div v-else class="flex justify-between items-center px-[10px] py-[6px]">
                 <div>
                     <el-button
                         link

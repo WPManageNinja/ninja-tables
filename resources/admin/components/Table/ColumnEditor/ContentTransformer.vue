@@ -56,6 +56,7 @@
                     class="ninja_create-table-modal"
                     title="Supported Excel Formulas"
                     v-model="show_formulas"
+                    align-center
                     width="60%">
 
                     <div class="py-5 px-6 h-[400px] overflow-y-scroll scrollbar-always-visible">
@@ -66,7 +67,7 @@
 
                     <hr>
 
-                    <div class="flex justify-end p-4">
+                    <div class="flex justify-end py-4 px-5">
                         <NinjaButton
                             type="secondary"
                             @click.prevent="show_formulas = false"

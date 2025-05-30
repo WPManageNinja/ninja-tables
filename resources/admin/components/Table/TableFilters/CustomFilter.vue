@@ -116,9 +116,10 @@
             v-model="editorModal"
             width="70%"
             top="50px"
+            align-center
             :append-to-body="true">
             <ninja-filter-editor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor"></ninja-filter-editor>
-            <div class="flex justify-end items-center gap-2 p-5">
+            <div class="flex justify-end items-center gap-2 px-5 py-4">
                 <NinjaButton type="secondary" @click="editorModal = false" :btn-text="$t('Cancel')" />
                 <NinjaButton @click="updateFilter(activeEditor)" :btn-text="$t('Update')" />
             </div>
@@ -131,10 +132,11 @@
             top="50px"
             :append-to-body="true"
             class="ninja_create-table-modal"
+            align-center
         >
             <NinjaFilterEditor v-if="activeEditor" :columns="columns" :columnKeyPairs="columnKeyPairs" :activeEditor="activeEditor" />
 
-            <div class="flex items-center justify-end px-5 py-4 gap-2">
+            <div class="flex items-center justify-end px-5 pb-4 gap-2">
                 <NinjaButton
                     type="secondary"
                     @click="addFilterModal = false"
