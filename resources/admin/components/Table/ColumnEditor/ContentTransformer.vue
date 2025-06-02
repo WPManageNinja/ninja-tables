@@ -37,7 +37,7 @@
                    v-model="settings.formula_support"
                    :disabled="!hasPro"
                />
-               <p class="tex-[14px] font-[400]">{{ $t('Enable Excel Formula support for Transform Value') }}</p>
+               <p class="tex-[14px] font-[400]" :class="{ 'text-[#a8abb2]': !hasPro }">{{ $t('Enable Excel Formula support for Transform Value') }}</p>
            </div>
 
             <div class="bg-[#EBF1FF] p-4 mt-2 rounded-[8px]" v-show="settings.formula_support == 'yes'">
@@ -49,6 +49,7 @@
                     size="small"
                     type="secondary"
                     @click.prevent="show_formulas = true"
+                    :disabled="!hasPro"
                     :btnText="$t('Show Formulas')"
                 />
 
