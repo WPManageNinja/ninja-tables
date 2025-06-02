@@ -155,7 +155,7 @@
             <h4>See the form in action:</h4>
             <br/>
             <div style="position: relative;padding-bottom: 56.25%;padding-top: 25px;height: 0;">
-                <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;" width="700" height="394"
+                <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%; border-radius: 12px" width="700" height="394"
                         src="https://www.youtube.com/embed/uMVnTYnKWM4" frameborder="0"
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen></iframe>
@@ -179,7 +179,7 @@
             <h4>See the form in action:</h4>
             <br/>
             <div style="position: relative;padding-bottom: 56.25%;padding-top: 25px;height: 0;">
-                <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;" width="700" height="394"
+                <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%; border-radius: 12px" width="700" height="394"
                         src="https://www.youtube.com/embed/uMVnTYnKWM4" frameborder="0"
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen></iframe>

@@ -265,7 +265,7 @@
                                 <template #title>
                                     <div class="flex items-center">
                                     <img class="mr-2" :src="assetUrl('icons/elements.svg')"/>
-                                    <span style="font-weight: 500; font-size: 14px;">{{ $t('Table Configuration') }}</span>
+                                    <span style="font-weight: 500; font-size: 14px;">{{ $t('Stackable Table Configuration') }}</span>
                                     </div>
                                 </template>
                                 <div class="form_group label-normalize mt-4">

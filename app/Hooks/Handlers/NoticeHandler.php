@@ -127,7 +127,10 @@ class NoticeHandler
                     $activeNotices[$key] = $html;
                 }
             } catch (\Exception $e) {
-                error_log("Failed to generate notice HTML for key: {$key}. Error: " . $e->getMessage());
+                wp_send_json_error([
+                    'success' => false,
+                    'message' => 'Error rendering notice: ' . $e->getMessage()
+                ]);
             }
         }
 
