@@ -311,7 +311,7 @@
                     <el-tab-pane :label="$t('Table Colors')" name="color_customization">
                         <div class="px-[18px]">
                             <h3 class="text-[16px] mt-4">{{ $t('Select Color Scheme') }}</h3>
-                            <div class="flex rounded-[8px] bg-[#F5F7FA] p-2 h-[36px] items-center my-4 gap-3">
+                            <div class="flex rounded-[8px] bg-[#F5F7FA] p-2 h-[36px] items-center my-4 gap-3 w-fit">
                                 <div 
                                     @click="tableSettings.table_color_type = 'pre_defined_color'" 
                                     :class="{
@@ -485,7 +485,7 @@
                                </el-collapse-item>
                              </el-collapse>
 
-                            <el-collapse accordion class="nt-design-collapse mb-5">
+                            <el-collapse accordion class="nt-design-collapse mb-5" v-model="activeAlternativeColor">
                                 <el-collapse-item name="alternate_color_status">
                                     <template #title>
                                         <div>
@@ -496,6 +496,10 @@
                                                 active-value="yes"
                                                 inactive-value="no"
                                                 inactive-color="gray"
+                                                @click="(e)=>{
+                                                    activeAlternativeColor = tableSettings.alternate_color_status === 'yes' ? ['alternate_color_status'] : []
+                                                    e.stopPropagation();
+                                                }"
                                             />
                                             <span style="font-weight: 500; font-size: 14px;">{{
                                                     $t('Use Alternate Color Schema for Table Rows')
@@ -863,7 +867,8 @@ export default {
             sortableUpgradeNotice: false,
             columnCss: '',
             bus: useEventBus(),
-            activeDesignCollapse: 'styles'
+            activeDesignCollapse: 'styles',
+            activeAlternativeColor: []
         }
     },
     computed: {
