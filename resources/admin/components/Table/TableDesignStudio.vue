@@ -340,7 +340,7 @@
                         </div>
                         <div v-else class="form_group ninja_color_customization">
                              <el-collapse accordion class="nt-design-collapse">
-                                <el-collapse-item name="search_bar">
+                               <el-collapse-item name="search_bar">
                                  <template #title>
                                     <div class="flex items-center">
                                         <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
@@ -483,72 +483,94 @@
                                         </div>
                                     </div>
                                </el-collapse-item>
-                               <el-collapse-item v-if="tableSettings.alternate_color_status == 'yes'" name="ode_row_color" >
-                                  <template #title>
+                             </el-collapse>
+
+                            <el-collapse accordion class="nt-design-collapse mb-5">
+                                <el-collapse-item name="alternate_color_status">
+                                    <template #title>
+                                        <div>
+                                            <el-switch
+                                                size="small"
+                                                v-model="tableSettings.alternate_color_status"
+                                                class="mr-2"
+                                                active-value="yes"
+                                                inactive-value="no"
+                                                inactive-color="gray"
+                                            />
+                                            <span style="font-weight: 500; font-size: 14px;">{{
+                                                    $t('Use Alternate Color Schema for Table Rows')
+                                                }}</span>
+                                        </div>
+                                    </template>
+
+                                    <div class="odd_row_color_group mt-4 mb-8">
                                         <div class="flex items-center">
                                             <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
                                             <span style="font-weight: 500; font-size: 14px;">{{ $t('Odd Row Colors') }}</span>
                                         </div>
-                                    </template>
-                                    <div class="mb-4">
-                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
-                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                                        <ColorPicker labelShow
-                                           v-model="tableSettings.table_alt_2_color_primary"/>
+                                        <div class="mb-4">
+                                            <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
+                                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                             v-model="tableSettings.table_alt_2_color_primary"/>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="mb-1 font-[300] text-[14px]">{{ $t("Text") }}</div>
+                                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                             v-model="tableSettings.table_alt_2_color_secondary"/>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="mb-1 font-[300] text-[14px]">{{ $t("Hover Background") }}</div>
+                                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                             v-model="tableSettings.table_alt_2_color_hover"/>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="mb-4">
-                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Text") }}</div>
-                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                                        <ColorPicker labelShow
-                                            v-model="tableSettings.table_alt_2_color_secondary"/>
-                                        </div>
-                                    </div>
-                                    <div class="mb-4">
-                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Hover Background") }}</div>
-                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                                        <ColorPicker labelShow
-                                            v-model="tableSettings.table_alt_2_color_hover"/>
-                                        </div>
-                                    </div>
-                               </el-collapse-item>
-                               <el-collapse-item v-if="tableSettings.alternate_color_status == 'yes'" name="even_row_color" >
-                                  <template #title>
+
+
+                                    <div class="even_row_color_group">
                                         <div class="flex items-center">
                                             <img class="mr-2" :src="assetUrl('icons/layout.svg')"/>
                                             <span style="font-weight: 500; font-size: 14px;">{{ $t('Even Row Colors') }}</span>
                                         </div>
-                                    </template>
-                                    <div class="mb-4">
-                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
-                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                                        <ColorPicker labelShow
-                                           v-model="tableSettings.table_alt_color_primary"/>
+                                        <div class="mb-4">
+                                            <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
+                                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                             v-model="tableSettings.table_alt_color_primary"/>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="mb-1 font-[300] text-[14px]">{{ $t("Text") }}</div>
+                                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                             v-model="tableSettings.table_alt_color_secondary"/>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="mb-1 font-[300] text-[14px]">{{ $t("Hover Background") }}</div>
+                                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                                <ColorPicker labelShow
+                                                             v-model="tableSettings.table_alt_color_hover"/>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="mb-4">
-                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Text") }}</div>
-                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                                        <ColorPicker labelShow
-                                            v-model="tableSettings.table_alt_color_secondary"/>
-                                        </div>
-                                    </div>
-                                    <div class="mb-4">
-                                        <div class="mb-1 font-[300] text-[14px]">{{ $t("Hover Background") }}</div>
-                                        <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
-                                        <ColorPicker labelShow
-                                            v-model="tableSettings.table_alt_color_hover"/>
-                                        </div>
-                                    </div>
-                               </el-collapse-item>
-                             </el-collapse>
+                                </el-collapse-item>
+                            </el-collapse>
+
+
+
                         
 
-                            <div class="ninja_switch_wrapper px-[18px]">
-                                <el-switch inactive-color="gray" active-text="Use Alternate Color Schema for Table Rows"
-                                    active-value="yes" inactive-value="no"
-                                    v-model="tableSettings.alternate_color_status"></el-switch>
-                            </div>
+<!--                            <div class="ninja_switch_wrapper px-[18px]">-->
+<!--                                <el-switch inactive-color="gray" active-text="Use Alternate Color Schema for Table Rows"-->
+<!--                                    active-value="yes" inactive-value="no"-->
+<!--                                    v-model="tableSettings.alternate_color_status"></el-switch>-->
+<!--                            </div>-->
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="Other" name="other_settings" class="px-4">
