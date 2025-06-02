@@ -33,6 +33,7 @@
           </el-menu>
       </div>
     </div>
+      <Notices/>
 
     <router-view :has-pro="has_pro"></router-view>
   </div>
@@ -42,9 +43,10 @@
     import GetPro from "./Tools/GetPro";
     import NinjaButton from "../@ui-utils/NinjaButton.vue";
     import {assetUrl} from "../utils/ninjatablesadmin";
+    import Notices from "../@ui-utils/Notices.vue";
     export default {
         name: 'home',
-      components: {NinjaButton, GetPro},
+      components: {Notices, NinjaButton, GetPro},
       data() {
             return {
                 has_pro: window.ninja_table_admin.hasPro,
