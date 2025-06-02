@@ -5,6 +5,7 @@
         :tableId="$route.params.table_id">
       </top-nav>
     </div>
+      <Notices/>
     <el-row :gutter="20">
       <el-col :xs="24" :sm="10" :md="9" :lg="8" id="leftside">
         <LeftSideBar :singleItem="singleItem" :initialData="initialData" :selectedDevice="selectedDevice"
@@ -24,6 +25,7 @@ import TopNav from "./TopNav.vue";
 import LeftSideBar from "./Sidebar/LeftSideBar.vue";
 import RightSideBar from "./Sidebar/RightSideBar.vue";
 import { useEventBus } from '../../../admin/eventBus';
+import Notices from "../../@ui-utils/Notices.vue";
 
 export default {
   name: "TableBuilderHome",
@@ -38,6 +40,7 @@ export default {
     };
   },
   components: {
+      Notices,
     TopNav,
     LeftSideBar,
     RightSideBar

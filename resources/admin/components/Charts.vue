@@ -1,4 +1,5 @@
 <template>
+    <Notices/>
     <div class="ninja_charts_welcome_page" :style="{ background: `url(${assetUrl('img/on-board.png')})` }">
         <div class="bg-white w-full lg:w-[550px] mx-auto border border-gray-200 rounded-2xl p-8">
             <div class="flex justify-center">
@@ -37,10 +38,11 @@
 <script>
 import NinjaButton from "../@ui-utils/NinjaButton.vue";
 import {assetUrl} from "../utils/ninjatablesadmin";
+import Notices from "../@ui-utils/Notices.vue";
 
 export default {
     name: "Charts",
-    components: {NinjaButton},
+    components: {Notices, NinjaButton},
     data() {
         return {
             imgUrl: window.ninja_table_admin.img_url,

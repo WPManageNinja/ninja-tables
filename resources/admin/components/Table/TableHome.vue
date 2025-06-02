@@ -50,6 +50,7 @@
             </div>
 
         </div>
+        <Notices/>
 
         <div :class="[is_form_saving ? 'disabled' : '']" :disabled="is_form_saving">
             <div class="bg-white !-mx-5 py-4 px-4 border-b border-[#E1E4EA] overflow-x-auto whitespace-nowrap">
@@ -90,10 +91,12 @@ import { useEventBus } from '../../eventBus';
 import { assetUrl } from "../../utils/ninjatablesadmin";
 import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 import GetPro from "../Tools/GetPro.vue";
+import Notices from "../../@ui-utils/Notices.vue";
 
 export default {
     name: 'table_home',
     components: {
+        Notices,
         GetPro,
         NinjaButton,
         'edit_table': EditTable
