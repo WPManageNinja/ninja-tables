@@ -259,7 +259,7 @@
                     </template>
                 </el-table>
 
-                <div class="ninja-pagination-wrapper flex-wrap gap-y-5 overflow-scroll">
+                <div class="ninja-pagination-wrapper flex-wrap gap-y-5 overflow-auto">
                     <div class="pagination-page-change-option">
                        <span class="flex-shrink-0">
                            Total {{ paginate.total }}

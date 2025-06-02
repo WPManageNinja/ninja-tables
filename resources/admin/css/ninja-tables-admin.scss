@@ -1541,7 +1541,7 @@ ul.ninja_render_features li {
       padding: 13px 15px 0px;
       background: #e5e5e5;
       height: auto;
-      overflow: scroll;
+      overflow: auto;
     }
 
     .el-radio-button--mini .el-radio-button__inner {
@@ -1554,7 +1554,7 @@ ul.ninja_render_features li {
     margin: 24px 0;
     flex: 2;
     min-height: 800px;
-    overflow: scroll;
+    overflow: auto;
   }
 }
 

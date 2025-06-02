@@ -370,7 +370,7 @@
 
 <style lang="scss">
     .ninja_tables_wpposts .el-checkbox-group {
-        overflow: scroll !important;
+        overflow: auto !important;
     }
 
     .ninja_tables_wpposts .el-transfer-panel {

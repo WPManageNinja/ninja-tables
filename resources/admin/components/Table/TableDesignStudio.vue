@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="bg-white p-[20px] rounded-[12px]" >
-                        <div class="nt-instruction" v-if="showProNotice">
+                        <div class="nt-instruction mb-4" v-if="showProNotice">
                             {{ $t('Color customization is a PRO feature. Please upgrade to pro apply this feature.') }}
                             <GetPro class="mt-2" type="primary" />
                         </div>

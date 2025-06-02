@@ -7,7 +7,7 @@
       </NinjaButton>
     </el-tooltip>
     <el-input size="small" :placeholder="$t('Search Icon')" v-model="keyword" style="margin: 10px 0; width: 96%;"></el-input>
-    <div class="flex flex-wrap" style="height: 100px;width: 100%;overflow-y: scroll;">
+    <div class="flex flex-wrap" style="height: 100px;width: 100%;overflow-y: auto;">
         <span v-for="(icon, index) in iconList" :key="index">
             <img @click="chooseIcon(`${icon}`)" :src="getAsset(icon)" width="30px" height="30px">
         </span>
