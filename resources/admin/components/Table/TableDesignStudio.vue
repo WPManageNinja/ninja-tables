@@ -56,7 +56,7 @@
                                 <el-icon class="tooltip-icon-color mr-1"><InfoFilled /></el-icon> {{ $t('For Stackable Tables, Live preview is disabled here. Please check on preview url') }}
                             </p>
                             <p class="text-[14px]">
-                                <b>Note: </b> {{ $t('This preview shows the latest 25 rows. Enable pagination for 10 items per page. Styles may differ on the frontend due to theme CSS. Custom filters and row-inline styling are not supported here. Check the live preview or embedded page for full functionality.') }}
+                                <b>Note: </b> {{ $t("Pagination is enabled by default in this preview. You can set the number of rows per page or disable it by selecting 'Hide pagination'. Front-end styles may vary due to theme CSS. Custom filters and inline row styling are not supported in this view. Check the live preview or embedded page for full functionality.") }}
                             </p>
                         </div>
                     </div>
