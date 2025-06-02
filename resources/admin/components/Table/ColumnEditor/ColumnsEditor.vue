@@ -476,7 +476,7 @@
                     :column="model"
                 />
                 <template v-else-if="dataSourceType == 'wp_woo'">
-                    <dynamic-woo-column
+                    <DynamicWooColumn
                         :columns="columns"
                         :column="model"
                     />

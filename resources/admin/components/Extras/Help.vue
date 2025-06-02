@@ -79,7 +79,7 @@
 
                     <div class="mt-2 flex justify-end mx-auto">
                         <a target="_blank"
-                           class="text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#335CFF] px-5 py-2 rounded-lg no-underline mx-auto"
+                           class="nt-product-button"
                            :href="prod.link">
                             <span class="">{{ $t(prod.linkText) }}</span>
                         </a>
@@ -203,7 +203,7 @@ export default {
         </svg>`,
                     description: "Try the best contact form plugin in WordPress and create forms faster than ever! 500k+ users worldwide enjoy this plugin to build smart forms everyday.",
                     link: "https://wordpress.org/plugins/fluentform/",
-                    linkText: "Try Fluent Forms for Free"
+                    linkText: "Try Fluent Forms"
                 },
                 {
                     name: "FluentCRM",
@@ -215,7 +215,7 @@ export default {
                     image: "fluentcrm-logo.png",
                     description: "Get the fastest email newsletter and CRM solution in WordPress for smart and effective email marketing. Join 60k+ users for happy emailing!",
                     link: "https://wordpress.org/plugins/fluent-crm/",
-                    linkText: "Try FluentCRM for Free"
+                    linkText: "Try FluentCRM"
                 },
                 {
                     name: "Paymattic",
@@ -226,7 +226,7 @@ export default {
             </svg>`,
                     description: "Get the best payment and donation plugin for your WordPress website. It's an ideal solution for businesses, fundraising, or membership programs.",
                     link: "https://wordpress.org/plugins/wp-payment-form/",
-                    linkText: "Try Paymattic for Free"
+                    linkText: "Try Paymattic"
                 },
                 {
                     name: "Fluent Support",
@@ -237,7 +237,7 @@ export default {
             </svg>`,
                     description: "Turn your support agents into superheroes with the best WordPress helpdesk plugin. Streamline customer support with this intuitive and powerful tool.",
                     link: "https://wordpress.org/plugins/fluent-support/",
-                    linkText: "Try Fluent Support for Free"
+                    linkText: "Try Fluent Support"
                 },
                 {
                     name: "FluentBooking",
@@ -280,7 +280,7 @@ export default {
             </svg>`,
                     description: "Get this WordPress social tool to embed live social feeds, reviews, and chat widgets directly into your website to boost engagement and social proof.",
                     link: "https://wordpress.org/plugins/wp-social-reviews/",
-                    linkText: "Try WP Social Ninja for Free"
+                    linkText: "Try WP Social Ninja"
                 },
                 {
                     name: "FluentBoards",
@@ -355,3 +355,14 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.nt-product-button {
+   @apply text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#335CFF] px-5 py-2 rounded-lg no-underline mx-auto;
+
+    &:focus {
+        @apply outline-none shadow-none;
+        color: #FFFFFF;
+    }
+}
+</style>

@@ -1,93 +1,44 @@
-body {
-    background: #e3e8ee !important;
-}
+.nt_preview_wrapper {
+  @apply bg-[#E1E4EA] w-auto min-h-screen h-auto flex justify-center items-center;
 
-.nt_preview {
-  background-color: #e3e8ee;
-  overflow: hidden;
+  .nt_preview {
+    @apply flex flex-col
+    w-full md:w-10/12 lg:w-9/12
+    m-4 md:m-6 lg:m-8 overflow-hidden rounded-[12px];
 
-  &_header {
-    position: absolute;
-    top: 0px;
-    left: 0;
-    right: 0px;
-    padding: 0px 20px 0px 0px;
-    background-color: #c7cdd4;
-    color: black;
-
-    &_title {
-      display: inline-block;
-      font-weight: bold;
-      color: black !important;
-
-      ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-
-        li {
-          display: inline-block;
-          padding: 15px 20px 15px 20px;
-          margin: 0;
-        }
-    }
-  }
-
-    &_action {
-      display: inline-block;
-      float: right;
-      padding: 5px;
-      margin: 10px 0px;
-      font-weight: bold;
-    }
-  }
-
-  &_body {
-    margin-top: 57px;
-    width: 100%;
-    padding-bottom: 40px;
-    min-height: 85vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    * {
-      box-sizing: border-box;
+    .nt_preview_body {
+      @apply bg-white p-[10px];
     }
 
-    &_wrapper {
-      padding: 30px;
-      width: 1160px;
-      background: #e3e8ee;
-      margin: 2%;
-      overflow-x: scroll;
-      box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
-      -moz-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
-      -webkit-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
-      -o-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
-      -ms-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+    .nt_preview_header, .nt_preview_footer {
+      @apply bg-[#F5F7FA] h-[88px] px-6 flex justify-between items-center;
 
-      @media (max-width: 991px) {
-        padding: 15px;
+      .nt_preview_header_title {
+        font-family: Inter;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: #2F3448;
+        background: #FFFFFF;
+        padding: 10px;
+        border-radius: 8px;
       }
-    }
-  }
 
-  &_fotter {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: #c7cdd4;
-    padding: 15px;
-    z-index: 9;
+      .nt_preview_header_action {
+        font-family: Inter;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        color: #335CFF;
+      }
 
-    &_text {
-      display: block;
-      overflow: hidden;
-      max-width: 1000px;
-      margin: 0 auto;
-      font-weight: bold;
-      font-size: 15px;
+      .nt_preview_footer_text {
+        font-family: Inter;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: -1.1%;
+        color: #525866;
+      }
     }
   }
 }
