@@ -77,7 +77,7 @@
 
             <div v-if="dataSourceType === 'default'">
                 <div v-if="!loading && !columns.length && isEditable" class="w-full flex flex-col justify-center items-center py-6" >
-                    <img :src="assetUrl('icons/monitor.svg')" alt="">
+                    <img :src="assetUrl('icons/add-column.svg')" alt="">
                     <p class="text-[14px] mt-2 font-[400] text-[#99A0AE]">{{ $t('To get started please add table columns') }}</p>
                     <NinjaButton class="mt-5" @click="addColumn" :icon="assetUrl('icons/add.svg')" :btnText="$t('Add Column')" />
                 </div>

@@ -1,0 +1,20 @@
+<svg width="148" height="148" viewBox="0 0 148 148" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="148" height="148" rx="74" fill="#F2F5F8"/>
+    <path d="M67.1076 103.43H86.278L88.5101 119.737H64.7442L67.1076 103.43Z" fill="#CACFD8" stroke="#99A0AE" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M62.9885 103.43H82.1589L84.391 119.737H60.625L62.9885 103.43Z" fill="white" stroke="#99A0AE" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M29.0488 38.0411C29.0488 35.257 31.3058 33 34.09 33H120.798C123.582 33 125.839 35.257 125.839 38.0411V98.5348C125.839 101.319 123.582 103.576 120.798 103.576H34.09C31.3058 103.576 29.0488 101.319 29.0488 98.5348V38.0411Z" fill="#E1E4EA" stroke="#99A0AE"/>
+    <path d="M23 38.0411C23 35.257 25.257 33 28.0411 33H114.749C117.533 33 119.79 35.257 119.79 38.0411V98.5348C119.79 101.319 117.533 103.576 114.749 103.576H28.0411C25.257 103.576 23 101.319 23 98.5348V38.0411Z" fill="white" stroke="#99A0AE"/>
+    <path d="M23 88.4531H114.688C117.501 88.4531 119.782 90.7101 119.782 93.4943V98.5354C119.782 101.32 117.501 103.577 114.688 103.577H28.0938C25.2806 103.577 23 101.32 23 98.5354V88.4531Z" fill="#99A0AE"/>
+    <rect width="8" height="8" rx="0.980636" transform="matrix(0 1 1 0 35 43)" fill="#E1E4EA"/>
+    <rect width="24" height="8" rx="0.980636" transform="matrix(0 1 1 0 35 58)" fill="#E1E4EA"/>
+    <rect width="8" height="8" rx="0.980636" transform="matrix(0 1 1 0 51 43)" fill="#E1E4EA"/>
+    <rect width="24" height="8" rx="0.980636" transform="matrix(0 1 1 0 51 58)" fill="#E1E4EA"/>
+    <rect width="8" height="8" rx="0.980636" transform="matrix(0 1 1 0 67 43)" fill="#E1E4EA"/>
+    <rect width="24" height="8" rx="0.980636" transform="matrix(0 1 1 0 67 58)" fill="#E1E4EA"/>
+    <rect width="8" height="8" rx="0.980636" transform="matrix(0 1 1 0 83 43)" fill="#E1E4EA"/>
+    <rect width="24" height="8" rx="0.980636" transform="matrix(0 1 1 0 83 58)" fill="#E1E4EA"/>
+    <rect width="8" height="8" rx="0.980636" transform="matrix(0 1 1 0 99 43)" fill="#E1E4EA"/>
+    <rect width="24" height="8" rx="0.980636" transform="matrix(0 1 1 0 99 58)" fill="#E1E4EA"/>
+    <circle cx="71.4462" cy="96.0868" r="3.44035" fill="white" stroke="#99A0AE" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M94.4336 97.9902L114.3 97.9542" stroke="#99A0AE" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
