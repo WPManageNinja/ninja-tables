@@ -33,7 +33,6 @@
           </el-menu>
       </div>
     </div>
-
     <router-view :has-pro="has_pro"></router-view>
   </div>
 </template>
@@ -43,17 +42,21 @@
     import NinjaButton from "../@ui-utils/NinjaButton.vue";
     import {assetUrl} from "../utils/ninjatablesadmin";
     export default {
-        name: 'home',
-      components: {NinjaButton, GetPro},
-      data() {
+    name: 'home',
+    components: {NinjaButton, GetPro},
+    data() {
             return {
                 has_pro: window.ninja_table_admin.hasPro,
                 topMenus: [],
-                img_url: window.ninja_table_admin.img_url
+                img_url: window.ninja_table_admin.img_url,
+                tools_routes: ['import_tables', 'default_table_appearance', 'permission','licensing','global_settings']
             }
         },
         computed: {
             activeMenu() {
+                if(this.tools_routes.includes(this.$route.name)) {
+                    return 'import_tables'
+                }
                 return ['home', 'import_tables', 'help'].indexOf(this.$route.name) != -1 ? this.$route.name : 'home'
             }
         },
@@ -79,7 +82,7 @@
             return this.img_url+imageName;
           }
         },
-        mounted() {
+    mounted() {
             this.setTopMenu();
         }
     }
