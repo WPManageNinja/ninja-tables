@@ -38,7 +38,7 @@
 
       .el-menu-item {
         height: 36px;
-        color: #0E121B !important;
+        color: #525866;
         font-size: 14px;
         font-style: normal;
         font-weight: 500;
@@ -47,9 +47,9 @@
         padding: 8px 12px;
         gap: 8px;
         border-radius: 8px;
-
         &.is-active {
           background: #F5F7FA;
+          color: #0E121B !important;
         }
 
         &:hover {
