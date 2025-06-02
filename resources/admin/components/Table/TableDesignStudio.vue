@@ -461,7 +461,7 @@
                                             <span style="font-weight: 500; font-size: 14px;">{{ $t('Footer Colors') }}</span>
                                         </div>
                                     </template>
-                                    <div class="mb-4">
+                                    <div class="my-2">
                                         <div class="mb-1 font-[300] text-[14px]">{{ $t("Background") }}</div>
                                         <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
                                         <ColorPicker labelShow
