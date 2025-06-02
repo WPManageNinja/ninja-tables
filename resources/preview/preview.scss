@@ -7,7 +7,7 @@
     m-4 md:m-6 lg:m-8 overflow-hidden rounded-[12px];
 
     .nt_preview_body {
-      @apply bg-white p-[10px];
+      @apply bg-white p-[10px] max-h-[70vh] overflow-y-auto;
     }
 
     .nt_preview_header, .nt_preview_footer {
@@ -38,6 +38,7 @@
         line-height: 24px;
         letter-spacing: -1.1%;
         color: #525866;
+        margin-top: 15px;
       }
     }
   }
