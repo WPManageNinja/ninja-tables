@@ -28,7 +28,7 @@
         <div v-else v-loading="fetching">
             <div class="mb-3 text-[16px] font-[500]">{{ $t("Toolbar Button Settings") }}</div>
             <div>
-                <el-collapse class="ninja-tables_rendering_accordion mb-5" accordion>
+                <el-collapse class="ninja-tables_rendering_accordion mb-5" accordion v-model="activeCollapse">
                     <el-collapse-item name="csv">
                         <template #title>
                             <div>
@@ -38,6 +38,10 @@
                                     class="mr-2"
                                     active-value="yes"
                                     inactive-value="no"
+                                    @click="(e)=>{
+                                        activeCollapse = table_buttons.csv.status === 'yes' ? ['csv'] : []
+                                        e.stopPropagation();
+                                    }"
                                 />
                                 <span style="font-weight: 400; font-size: 14px;">{{
                                         $t('Enable CSV Export Button')
@@ -80,6 +84,10 @@
                                     class="mr-2"
                                     active-value="yes"
                                     inactive-value="no"
+                                    @click="(e)=>{
+                                        activeCollapse = table_buttons.print.status === 'yes' ? ['print'] : []
+                                        e.stopPropagation();
+                                    }"
                                 />
                                 <span style="font-weight: 400; font-size: 14px;">{{ $t('Enable Print Button') }}</span>
                             </div>
@@ -196,6 +204,7 @@ export default {
     data() {
         return {
             print_screen: 'header',
+            activeCollapse: [],
             table_buttons: {
                 csv: {
                     status: 'no',
