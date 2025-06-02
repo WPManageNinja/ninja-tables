@@ -113,10 +113,9 @@
                         </label>
                         <el-date-picker
                             v-model="created_at"
-                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="YYYY-MM-DD HH:mm:ss"
                             type="datetime"
-                            placeholder="Select date and time">
-                        </el-date-picker>
+                            placeholder="Select date and time"/>
                     </div>
                 </div>
 
