@@ -565,16 +565,6 @@
                                     </div>
                                 </el-collapse-item>
                             </el-collapse>
-
-
-
-                        
-
-<!--                            <div class="ninja_switch_wrapper px-[18px]">-->
-<!--                                <el-switch inactive-color="gray" active-text="Use Alternate Color Schema for Table Rows"-->
-<!--                                    active-value="yes" inactive-value="no"-->
-<!--                                    v-model="tableSettings.alternate_color_status"></el-switch>-->
-<!--                            </div>-->
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="Other" name="other_settings" class="px-4">
