@@ -42,7 +42,7 @@ class SettingsController extends Controller
     public function updateTableSettings(Request $request, $id)
     {
         $tableId         = intval($id);
-        $rawColumns      = '';
+        $rawColumns      = [];
         $tablePreference = '';
 
         if (Arr::get($request->all(), 'columns', [])) {

@@ -431,7 +431,8 @@
                 isUpdatingTableSettings: false,
                 externalDataSourceUrl: this.config.table.remoteURL,
                 insertAfterId: false,
-                insertAfterHash: false
+                insertAfterHash: false,
+                deleteLastColumn: false,
             }
         },
         watch: {
@@ -872,8 +873,9 @@
                 this.bus.emit('updateTableColumns', () => {
                     this.showColumnEditor = false;
                     this.currentEditingColumn = false;
-                    if (this.dataSource && this.dataSource != 'default') {
+                    if ((this.dataSource && this.dataSource != 'default') || this.deleteLastColumn) {
                         this.getData();
+                        this.deleteLastColumn = false;
                     }
                 });
             },
@@ -901,6 +903,7 @@
                 this.showColumnEditor = false;
                 this.currentEditingColumn = false;
                 this.config.columns.splice(targetIndex, 1);
+                this.config.columns.length === 0 ? this.deleteLastColumn = true : null;
                 this.$nextTick(() => this.storeSettings());
             },
             compare(key, order) {
