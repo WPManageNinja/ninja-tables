@@ -61,16 +61,16 @@
         </span>
 
         <span v-else-if="item.data.type === 'image'">
-            <a class="hover-item" @click.prevent
-               :href="[hrefAttribute, targetAttribute]"
-               :target="targetAttribute && targetAttribute.target"
-               :style="[displayBlock]"
-               :rel="linkAttributes">
-
-                <img :src="item.data.value"
-                     :style="[displayBlock, dBlockAlign, padding, borderRadius, { 'width': this.item.data.style.size + '%', }]"
-                     :alt="`${item.data.style.alt}`"
-                />
+           <a class="hover-item"
+              @click.prevent
+              :href="JSON.parse(JSON.stringify(item.data.style.link))"
+              :target="handleTarget(item.data.style.target)"
+              :style="[displayBlock]"
+              :rel="linkAttributes"
+           >
+                 <img :src="item.data.value"
+                 :style="[displayBlock, dBlockAlign, padding, borderRadius, { 'width': item.data.style.size + '%' }]"
+                 :alt="item.data.style.alt"/>
             </a>
         </span>
         <span v-else-if="item.data.type === 'list' || item.data.type === 'stylist_list'"
@@ -140,6 +140,9 @@ export default {
         };
     },
     methods: {
+        handleTarget(target) {
+            return target ? '_blank' : '';
+        },
         getAsset(path) {
             if (path.includes(window.location.origin)) {
                 return path;
@@ -164,7 +167,7 @@ export default {
             this.$nextTick(() => {
                 restoreCursorPosition(event.target, cursorPosition);
             });
-            
+
         },
         copyItem(index) {
             this.item.data.value.splice(index + 1, 0, this.item.data.value[index]);
