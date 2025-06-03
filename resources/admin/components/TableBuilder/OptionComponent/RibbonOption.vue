@@ -3,7 +3,7 @@
         <el-tabs v-model="activeTabName">
             <el-tab-pane class="component-wrapper" :label="$t('General')" name="general">
                 <span>{{ $t('Ribbon Type') }}</span>
-                <el-select v-model="item.data.style.ribbonType" style="width: 97%; margin-bottom: 7px;" size="mini">
+                <el-select v-model="item.data.style.ribbonType" style="width: 97%; margin-bottom: 7px;" size="small">
                     <el-option
                         v-for="item in ['side', 'bookmark', 'corner', 'horizontal']"
                         :key="item"
@@ -13,7 +13,7 @@
                 </el-select>
                 <p v-if="item.data.style.ribbonType === 'corner'">{{ $t('Ribbon Position') }}</p>
                 <el-select
-                    size="mini"
+                    size="small"
                     @change="leftToRight"
                     v-if="item.data.style.ribbonType === 'corner'"
                     v-model="item.data.style.ribbonPosition" placeholder="Select">
@@ -118,7 +118,7 @@
             </el-tab-pane>
             <el-tab-pane class="component-wrapper" :label="$t('Text')" name="text">
                 <el-input
-                    size="mini"
+                    size="small"
                     type="text"
                     :placeholder="$t('Ribbon Text')"
                     v-model="item.data.value"

@@ -1,15 +1,7 @@
 <template>
-    <div :class="(only_picker == 'yes') ? 'ninja_only_picker' : 'ninja_date_picker'">
-        <input
-                :placeholder="column.dateFormat"
-                type="text"
-                size="small"
-                v-if="only_picker != 'yes'"
-                v-model="new_column[column.key]"
-                :id="slugify(column.key)"
-                class="form-control"
-        >
-        <el-date-picker
+    <div>
+        <div v-if="only_picker === 'yes'" class="ninja_only_picker">
+            <el-date-picker
                 :type="type"
                 size="small"
                 @blur="$emit('blur')"
@@ -17,25 +9,65 @@
                 :value-format="elementFormat"
                 :format="elementFormat"
                 :picker-options="pickerOptions"
-                placeholder="Pick a day">
-        </el-date-picker>
+                placeholder="Pick a day"
+            />
+        </div>
+
+        <div v-else class="ninja_date_picker">
+            <el-input
+                :placeholder="column.dateFormat"
+                type="text"
+                v-model="new_column[column.key]"
+                :id="slugify(column.key)"
+                class="nt-date-input"
+            >
+
+                <template #prefix>
+                    <el-icon><Calendar /></el-icon>
+                </template>
+
+                <template #append>
+                    <el-date-picker
+                        :type="type"
+                        size="small"
+                        style="width: 150px"
+                        @blur="$emit('blur')"
+                        v-model="new_column[column.key]"
+                        :value-format="elementFormat"
+                        :format="elementFormat"
+                        :picker-options="pickerOptions"
+                        placeholder="Pick a day"
+                    >
+                        <template #prefix>
+                            <el-icon><Calendar /></el-icon>
+                        </template>
+                    </el-date-picker>
+                </template>
+            </el-input>
+        </div>
     </div>
 </template>
 
-<script type="text/babel">
+<script>
+    import {Calendar} from "@element-plus/icons-vue";
+
     export default {
         name: 'ninjaDatePicker',
+        components: {Calendar},
         props: ['column', 'new_column', 'only_picker'],
         computed: {
             elementFormat() {
                 let originalFormat  = this.column.dateFormat;
                 let defaultTimeFormat  = 'h:m:s';
-                let updatedFormat = '';
-                if(originalFormat == 'DD-MMM-YY') {
-                  updatedFormat = 'dd-MMM-yy';
-                } else {
-                  updatedFormat = originalFormat.replace(/Y/g, 'y').replace(/D/g, 'd');
-                }
+
+                // this code snippets is creating a problem after updating to element-plus. without this code, it's working. keep it for now
+                // let updatedFormat = '';
+                // if(originalFormat == 'DD-MMM-YY') {
+                //   updatedFormat = 'dd-MMM-yy';
+                // } else {
+                //   updatedFormat = originalFormat.replace(/Y/g, 'y').replace(/D/g, 'd');
+                // }
+                let updatedFormat = originalFormat;
 
                 if (this.type === 'date') {
                   return updatedFormat;
@@ -69,22 +101,51 @@
 </script>
 
 <style lang="scss">
-    .ninja_date_picker {
-        > .form-control {
-            width: 90%;
-            float: left;
-        }
-        > .el-date-editor {
-            width: 8px !important;
-            padding: 0px;
-            margin: 0px;
-            cursor: pointer;
+.ninja_date_picker {
+    .el-input.nt-date-input {
+        width: 100%;
+        .el-input__wrapper {
+            border-radius: 8px 0 0 8px !important;
+            box-shadow: none;
+            &:hover{
+                box-shadow: none;
+            }
             .el-input__inner {
-                width: 10px !important;
-                padding: 15px;
-                background: rgb(128, 128, 128);
-                height: 34px;
+                background: transparent !important;
+            }
+        }
+        .el-input__wrapper.is-focus{
+            box-shadow: none;
+        }
+
+        .el-input-group__append {
+            border-radius: 0 8px 8px 0 !important;
+            padding: 5px 10px;
+            .el-input {
+                .el-input__wrapper {
+                    border: none;
+                    border-radius: 0 8px 8px 0 !important;
+                    background: transparent !important;
+
+                    .el-input__inner {
+                        background: transparent !important;
+                    }
+                }
             }
         }
     }
+}
+
+.ninja_only_picker {
+    .el-input {
+        .el-input__wrapper {
+            border-radius: 8px !important;
+            padding: 5px;
+           .el-input__inner {
+                border: none;
+                background: transparent !important;
+            }
+        }
+    }
+}
 </style>

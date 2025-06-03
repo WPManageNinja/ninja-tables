@@ -1,10 +1,9 @@
 <template>
     <div class="external-source-nav">
-        <el-collapse>
+        <el-collapse class="nt_accordion_content_white">
             <el-collapse-item name="1">
-                <template slot="title">
-                    <i class="header-icon el-icon-info el-text-info"></i>
-                    <strong>Edit:</strong> {{isEditableMessage}}
+                <template #title>
+                    {{isEditableMessage}}
                 </template>
 
                 <external-data-source

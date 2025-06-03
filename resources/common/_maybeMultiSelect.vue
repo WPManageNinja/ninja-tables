@@ -1,7 +1,8 @@
 <template>
-    <div v-if="appReady" style="max-width: 90%" class="maybe_nt_multi_select">
-        <template v-if="column.isMultiple == 'yes'">
+    <div v-if="appReady" class="maybe_nt_multi_select">
+        <div v-if="column.isMultiSelect === 'yes'">
             <el-select
+                class="ninja-select"
                 style="width: 100%"
                 v-model="newColumn[column.key]"
                 filterable
@@ -19,9 +20,11 @@
                     :value="item">
                 </el-option>
             </el-select>
-        </template>
-        <template v-else>
+        </div>
+
+        <div v-else>
             <el-select
+                class="ninja-select"
                 :size="size"
                 style="width: 100%"
                 v-model="newColumn[column.key]"
@@ -37,7 +40,7 @@
                     :value="item">
                 </el-option>
             </el-select>
-        </template>
+        </div>
     </div>
 </template>
 

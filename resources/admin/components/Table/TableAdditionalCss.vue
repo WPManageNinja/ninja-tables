@@ -1,132 +1,159 @@
 <template>
-    <div>
-        <div v-loading="fetching" v-if="fetching">
-            <h3>Loading... Please wait</h3>
+    <div class="nt-custom-css-js-editor-wrapper mx-5">
+        <div class="flex h-[36px] items-center justify-between rounded-[8px] bg-[#F5F7FA] w-fit px-2 py-2 gap-3">
+            <div @click="current_tab ='additional_css'"
+                 :class="`${current_tab ==='additional_css' && 'bg-white flex items-center justify-center rounded-[8px] shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer`">
+                {{ $t('Custom CSS') }}
+            </div>
+            <div @click="current_tab ='additional_js'"
+                 :class="`${current_tab ==='additional_js' && 'bg-white rounded-[8px]  shadow-md shadow-gray-300'} px-5 py-1 cursor-pointer flex items-center justify-center`">
+                <span>{{ $t('Custom JS') }}</span>
+                <img v-if="!hasPro" :src="assetUrl('icons/get-pro.svg')" class="h-4 w-4 ml-1 !grayscale-0" alt="">
+            </div>
         </div>
-        <div v-else class="section_block">
-            <el-radio-group v-model="current_tab">
-                <el-radio-button label="additional_css">Additional Custom CSS</el-radio-button>
-                <el-radio-button label="additional_js">Custom Javascript</el-radio-button>
-            </el-radio-group>
-            <hr />
-            <template v-if="current_tab == 'additional_css'">
-                <p>
-                    You may add <code>#footable_parent_{{config.table.ID}} </code> as your css selector prefix to target this specific table.
-                    Alternatively, you can use <code>#footable_parent_NT_ID</code> where <b>NT_ID</b> will be replaced with your table ID dynamically.
-                </p>
-                <ace_code_editor editor_id="ninja_custom_css" mode="css" v-model="custom_css"></ace_code_editor>
-                <span>Please don't include <code>&lt;style&gt;&lt;/style&gt;</code> tag</span>
-                <br/>
-                <div style="margin-top: 20px" class="custom_css_submit">
-                    <el-button @click="saveScripts()" type="primary">Save Custom CSS</el-button>
+
+        <div v-if="current_tab === 'additional_css'">
+            <p class="my-[16px] text-[14px]">{{ $t('You may add') }}
+                <code
+                    class='bg-[#D3DCFF] py-[2px] px-[6px] rounded cursor-pointer copy'
+                    :data-clipboard-text="'#footable_parent_'+ config.table.ID"
+                >
+                    #footable_parent_{{ config.table.ID }}
+                </code>
+                {{ $t('as your css selector prefix to target this specific table. Alternatively, you can use') }}
+                <code
+                    class='bg-[#D3DCFF] py-[2px] px-[6px] rounded cursor-pointer copy'
+                    :data-clipboard-text="'#footable_parent_NT_ID'"
+                >#footable_parent_NT_ID</code>
+                {{ $t('where') }} <strong>NT_ID</strong> {{ $t(' will be replaced with your table ID dynamically.') }}
+            </p>
+            <ace_code_editor editor_id="ninja_custom_css" mode="css" v-model="custom_css"></ace_code_editor>
+            <p v-html="styleTagInfo" class="nt-editor-info mt-2"></p>
+
+            <div class="flex justify-end mt-0">
+                <NinjaButton
+                    type="primary"
+                    :btnText="$t('Save Custom CSS')"
+                    @click="saveScripts"
+                />
+            </div>
+        </div>
+
+        <div v-else-if="current_tab === 'additional_js'">
+            <p class="my-4 text-[14px]">
+                {{
+                    $t(`Your additional JS code will run after the table initialized. Please provide valid javascript code. Invalid JS code may break the table UI.`)
+                }}
+            </p>
+            <p class="mb-4 text-[14px]">
+                {{ $t('The Following Javascript variables are available that you can use:') }} <br>
+                <b>$table:</b> {{ $t('The Javascript DOM object of the table') }} <br>
+                <b>tableConfig:</b> {{ $t('The configuration object of the table.') }}
+            </p>
+            <ace_code_editor editor_id="ninja_custom_js" mode="javascript" v-model="custom_js"></ace_code_editor>
+            <p v-html="scriptTagInfo" class="nt-editor-info mt-2"></p>
+
+            <div class="nt-instruction mt-4" v-if="!hasPro">
+                <p class="text-[16px] font-[400] text-[#525866]">{{ $t(`Custom Javascript feature is a pro feature along with many awesome features.`) }}</p>
+                <div class="my-2">
+                    <GetPro />
                 </div>
-            </template>
-            <template v-if="current_tab == 'additional_js'">
-                <p>Your additional JS code will run after ninja table initialized. Please provide valid javascript code. Invalid JS code may break the table UI.</p>
-                <div class="js_instruction">
-                    The Following Javascript variables are available that you can use: <br />
-                    <b>$table</b> : The Javascript DOM object of the table<br />
-                    <b>tableConfig</b> : The configuration object of the table.
-                </div>
-                <ace_js_editor editor_id="ninja_custom_js" mode="javascript" v-model="custom_js"></ace_js_editor>
-                <span>Please don't include <code>&lt;script>&lt;/script&gt;</code> tag</span>
-                <template v-if="!hasPro">
-                    <p>
-                      Custom Javascript feature is a pro feature along with many awesome features.
-                    </p>
+            </div>
 
-                    <a target="_blank" href="https://wpmanageninja.com/ninja-tables/ninja-tables-pro-pricing/?utm_source=ninja-tables&utm_medium=wp&utm_campaign=custom_filters&utm_term=upgrade">
-                      <el-button size="small" class="el-button--danger">
-                        <span>Get Pro</span>
-                      </el-button>
-                    </a>
-                </template>
-                <template v-else>
-                    <div style="margin-top: 20px" class="custom_css_submit">
-                        <el-button @click="saveScripts()" type="primary">Save Custom Javascript</el-button>
-                    </div>
-                </template>
-            </template>
+            <div class="flex justify-end mt-0">
+                <NinjaButton
+                    v-if="hasPro"
+                    type="primary"
+                    :btnText="$t('Save Custom JS')"
+                    @click="saveScripts"
+                />
+            </div>
         </div>
 
-        <div class="section_block">
-
-        </div>
     </div>
 </template>
 
 <script type="text/babel">
-    import ace_code_editor from '../../../common/_ace_editor';
-    import ace_js_editor from '../../../common/_ace_editor_js';
-    export default {
-        name: 'ninja_css_editor',
-        props: ['config'],
-        components: {
-            ace_code_editor,
-            ace_js_editor
-        },
-        data() {
-            return {
-                current_tab: 'additional_css',
-                custom_css: '',
-                custom_js: '',
-                hasPro: !!window.ninja_table_admin.hasPro,
-                fetching: false,
-            }
-        },
-        methods: {
-            saveScripts() {
-                if(!this.hasPro) {
-                    this.custom_js = '';
-                }
-                let tableId = this.config.table.ID;
-                let data = {
-                  table_id: this.config.table.ID,
-                  custom_css: this.custom_css,
-                  custom_js: this.custom_js,
-                }
-                this.$post('settings/'+tableId+'/custom-styles', data)
-                    .then(response => {
-                        this.$message( {
-                            showClose: true,
-                            message: response.data.message,
-                            type: 'success'
-                        } );
-                        this.$set(this.config.table, 'custom_css', this.custom_css );
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-            },
-            getScripts() {
-                this.fetching = true;
-                let tableId = this.config.table.ID;
+import ace_code_editor from '../../../common/_ace_editor';
+import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+import GetPro from "../Tools/GetPro.vue";
+import {assetUrl} from "../../utils/ninjatablesadmin";
 
-                this.$get('settings/'+tableId+'/custom-styles')
-                    .then(response => {
-                        this.custom_css = response.data.custom_css;
-                        this.custom_js = response.data.custom_js;
-                    })
-                    .catch(error => {
-
-                    })
-                    .finally(() => {
-                        this.fetching = false;
-                    });
-            }
-        },
-        mounted() {
-            this.getScripts();
+export default {
+    name: 'ninja_css_editor',
+    props: ['config'],
+    components: {
+        GetPro,
+        NinjaButton,
+        ace_code_editor
+    },
+    data() {
+        return {
+            current_tab: 'additional_css',
+            custom_css: '',
+            custom_js: '',
+            hasPro: !!window.ninja_table_admin.hasPro,
+            fetching: false,
+            styleTagInfo: "Please don't include <code class='bg-[#D3DCFF] py-[2px] px-[6px] rounded'>&lt;style&gt;&lt;/style&gt;</code> tag",
+            scriptTagInfo: "Please don't include <code class='bg-[#D3DCFF] py-[2px] px-[6px] rounded'>&lt;script&gt;&lt;/script&gt;</code> tag"
         }
+    },
+    methods: {
+        assetUrl,
+        saveScripts() {
+            if (!this.hasPro) {
+                this.custom_js = '';
+            }
+            let tableId = this.config.table.ID;
+            let data = {
+                table_id: this.config.table.ID,
+                custom_css: this.custom_css,
+                custom_js: this.custom_js,
+            }
+            this.$post('settings/' + tableId + '/custom-styles', data)
+                .then(response => {
+                    this.$message({
+                        showClose: true,
+                        message: response.data.message,
+                        type: 'success'
+                    });
+                    this.config.table.custom_css = this.custom_css;
+                    this.config.table.custom_js = this.custom_js;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        getScripts() {
+            this.fetching = true;
+            let tableId = this.config.table.ID;
+
+            this.$get('settings/' + tableId + '/custom-styles')
+                .then(response => {
+                    this.custom_css = response.data.custom_css;
+                    this.custom_js = response.data.custom_js;
+                })
+                .catch(error => {
+
+                })
+                .finally(() => {
+                    this.fetching = false;
+                });
+        }
+    },
+    mounted() {
+        this.getScripts();
+        this.clipboard(); // Initialize clipboard functionality
     }
+}
 </script>
 
 <style>
-    .js_instruction {
-        padding: 10px 20px;
-        background: rgb(255, 255, 255);
-        margin-bottom: 20px;
-        font-size: 14px;
-        line-height: 22px;
-    }
+.js_instruction {
+    padding: 10px 20px;
+    background: rgb(255, 255, 255);
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 22px;
+}
 </style>

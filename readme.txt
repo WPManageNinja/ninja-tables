@@ -3,8 +3,8 @@ Contributors: wpmanageninja, techjewel, adreastrian, heera, csesumonpro, sakibmd
 Tags: Table, table builder, datatable, tables, spreadsheet
 Requires at least: 6.0
 Requires PHP: 7.4
-Tested up to: 6.7
-Stable tag: 5.0.21
+Tested up to: 6.8
+Stable tag: 5.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -406,7 +406,20 @@ Ninja Tables [customer support](https://wpmanageninja.com/support-tickets/#/) te
 == Changelog ==
 We released several updates for Ninja Tables in the years of development. These include improvements to the existing features and some wonderful additions to help you design tables more effectively.
 
-### What's New on 5.0.21?
+### What's New in 5.1.0?
+
+= 5.1.0 (Date: June 2, 2025) =
+* Update: Redesigned ui for modern look and better experience
+
+= 5.0.22 (Date: May 20, 2025) =
+* Added: Gutenberg block for table style
+* Fixes: Rest api issue for some server
+* Fixes: file_get_contents issue in Google Sheet integration
+* Fixes: #colspan# and Responsive Breakpoint issue
+* Fixes: Formatted sql issues
+* Fixes: ACF issue for WP post table issue
+* Fixes: Fixes scrolling issues on drag and drop table
+* Fixes: Drag & drop responsive issue for small devices
 
 = 5.0.21 (Date: April 10, 2025) =
 * Fixes: csv/json export issue

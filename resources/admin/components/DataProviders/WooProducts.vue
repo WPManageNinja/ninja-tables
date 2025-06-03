@@ -1,47 +1,53 @@
 <template>
-    <div v-loading="loading" class="woo_table_creator">
-        <div class="nt_module_header">
-            <h3>
-                Construct Table from Your WooCommerce Products
-            </h3>
-            <p class="ninja_subtitle">
-                Displays products content in a searchable, sortable with Ninja Tables.
-              <a target="_blank" href="https://ninjatables.com/docs/woocommerce-integration/">
-                Learn more about woocommerece integration
-              </a>
-            </p>
-        </div>
-        <div class="form-group">
-            <label for="name">{{ $t('Table Title') }}</label>
-            <input v-model="post_title"
-                   type="text" id="name" class="form-control"
-                   placeholder="Enter a title to identify your table"
-            >
-        </div>
+    <div v-loading="loading" class="ninja_modal-body">
+        <h3 class="nt-modal-title">
+            {{ $t('Construct Table from Your WooCommerce Products') }}
+        </h3>
 
-        <woo-nav
-            :query_selections="query_selections"
-            :query_conditions="query_conditions"
+        <p class="nt-modal-description">
+            {{ $t('Displays products content in a searchable, sortable with Ninja Tables.') }}
+            <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/woocommerce-integration/">
+               {{ $t('View Documentation') }}
+            </a>
+            {{$t('or')}}
+            <a class="nt-link" target="_blank" href="https://youtu.be/uIBQoLCFs_M?si=Qtp1zji5ANsGxPSD">
+                {{ $t('Watch Video.') }}
+            </a>
+        </p>
+
+        <div class="my-[30px]">
+            <div class="nt-form-group">
+                <label class="nt-form-label">{{ $t('Table Title') }} <span class="nt-required">*</span></label>
+                <NinjaInput
+                    v-model="post_title"
+                    :placeholder="$t('Enter a title to identify your table')"
+                />
+            </div>
+
+            <woo-nav
+                :query_selections="query_selections"
+                :query_conditions="query_conditions"
             />
+        </div>
 
-        <div class="form-group">
-            <el-button
-                :loading="saving"
-                @click="save()"
-                type="primary"
-                size="small">
-                Create Products Table
-            </el-button>
+
+        <div class="nt-modal-footer">
+            <NinjaButton type="secondary" @click="$emit('modalClose')" :btnText="$t('Cancel')" />
+            <NinjaButton @click="save" :btnText="$t('Create Products Table')" />
         </div>
     </div>
 </template>
 
 <script type="text/babel">
     import WooNav from '../TableNav/WooNav';
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
 
     export default {
         name: 'woo_product_table',
         components: {
+            NinjaButton,
+            NinjaInput,
             WooNav
         },
         data() {

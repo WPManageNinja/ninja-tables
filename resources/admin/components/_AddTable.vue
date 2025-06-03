@@ -1,174 +1,235 @@
 <template>
     <el-container class="ninja-add-table">
-        <el-aside v-if="!table.ID" style="background-color: rgb(35, 40, 45);">
-            <el-menu :collapse="isCollapse"
-                     :default-active="activeTabName"
-                     background-color="#23282d"
-                     text-color="#eee"
-                     active-text-color="#fff"
+        <el-aside v-if="!table.ID" class="ninja-tables-aside">
+            <el-menu
+                 :default-active="activeTabName"
+                 background-color="#FFFFFF"
+                 text-color="#565865"
+                 active-text-color="#335CFF"
+                 min-width="200px"
             >
                 <el-menu-item @click="activeTabName = 'default'" index='default'>
-                    <i class="el-icon-setting"></i>
-                    <span>Default</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Default')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
+
                 <el-menu-item @click="activeTabName = 'drag_and_drop'" index='drag_and_drop'>
-                  <i class="el-icon-s-unfold"></i>
-                  <span>Drag & Drop Table</span>
-                </el-menu-item>
-                <el-menu-item @click="activeTabName = 'import_table'" index="import_table">
-                    <i class="el-icon-upload2"></i>
-                    <span>Import Table</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Drag & Drop Table')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'fluent_form'" index='fluent_form'>
-                    <img :src="fluentFormIcon" alt="fluent form icon" class="el-icon-fluent-form">
-                    <span>Connect Fluent Forms</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Connect Fluent Forms')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'wp_posts'" index='wp_posts'>
-                    <i class="el-icon-news"></i> <span>WP Posts</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('WP Posts')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item v-if="has_woo" @click="activeTabName = 'woo_table'" index='woo_table'>
-                    <img :src="wooIcon" alt="woocomerce icon" class="el-icon-fluent-form">
-                    <span>WooCommerce Table</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('WooCommerce Table')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'google_spread_sheet'" index='google_spread_sheet'>
-                    <span class="dashicons dashicons-media-spreadsheet"></span>
-                    <span>Connect Google Sheets</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Connect Google Sheets')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'csv'" index='csv'>
-                    <i class="el-icon-document"></i>
-                    <span>Connect External CSV</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Connect External CSV')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
                 <el-menu-item @click="activeTabName = 'raw_sql'" index='raw_sql'>
-                    <i class="dashicons dashicons-editor-code"></i>
-                    <span>Custom SQL Query</span>
+                    <div class="tab-label">
+                        <div class="active-bar"></div>
+                        <div class="tab-title">
+                            <span>{{$t('Custom SQL Query')}}</span>
+                            <img :src="assetUrl('icons/active-arrow.svg')"/>
+                        </div>
+                    </div>
                 </el-menu-item>
 
             </el-menu>
         </el-aside>
 
-        <el-main>
-            <template v-if="activeTabName == 'default'">
+        <el-main class="ninja-tables-main">
+            <div v-if="activeTabName === 'default'" class="w-full">
                 <div class="ninja_modal-body">
                     <template v-if="!table.ID">
-                        <h3>Manually Create a Table</h3>
-                        <p class="ninja_subtitle">
+                        <h3 class="nt-modal-title">Manually Create a Table</h3>
+                        <p class="nt-modal-description">
                             Manually create your table columns and rows to get complete
                             control over your data with tons of customizations.
                         </p>
                     </template>
 
-                    <div class="form-group">
-                        <label for="name">{{ $t('Table Title') }}</label>
-                        <input v-model="table.post_title"
-                               type="text" id="name" class="form-control"
-                               placeholder="Enter a title to identify your table"
-                        >
-                    </div>
-                    <div class="form-group">
-                        <label>{{ $t('Table Description') }}</label>
-                        <wp_editor v-model="table.post_content"></wp_editor>
+                    <div class="my-[30px]">
+                        <div class="nt-form-group">
+                            <label class="nt-form-label">{{ $t('Table Title') }}<span class="nt-required ml-[4px]">*</span></label>
+                            <NinjaInput
+                                v-model="table.post_title"
+                                :placeholder="$t('Enter a title to identify your table')"
+                            />
+                        </div>
+
+                        <div class="nt-form-group">
+                            <label class="nt-form-label">{{ $t('Table Description') }}</label>
+                            <WPEditor v-model="table.post_content" />
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <el-button type="primary" size="small" @click="addTable">
-                        <span v-if="table.ID">{{ $t('Update') }}</span>
-                        <span v-else>{{ $t('Add') }}</span>
-                        <i v-if="btnLoading" class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
-                    </el-button>
+
+                <div class="nt-modal-footer">
+                    <NinjaButton type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
+                    <NinjaButton v-if="table.ID" :loading="btnLoading" @click="addTable" :btnText="$t('Update')"/>
+                    <NinjaButton v-else @click="addTable" :loading="btnLoading" :btnText="$t('Add')" />
                 </div>
-            </template>
-            <template v-else-if="activeTabName === 'drag_and_drop'">
-              <right-side-bar :initialData="initialData"></right-side-bar>
-            </template>
+            </div>
 
-            <template v-else-if="activeTabName === 'import_table'">
-                <import-table></import-table>
-            </template>
+            <div v-else-if="activeTabName === 'drag_and_drop'">
+              <RightSideBar :initialData="initialData" />
+            </div>
 
-            <template v-else-if="activeTabName == 'google_spread_sheet'">
-                <external-data-source
-                        type="google-csv"
-                        :tableCreated="fireTableCreated"
-                        :has-pro="hasPro"
-                        :activated_features="activated_features"
+            <div v-else-if="activeTabName === 'google_spread_sheet'">
+                <ExternalDataSource
+                    type="google-csv"
+                    :tableCreated="fireTableCreated"
+                    :has-pro="hasPro"
+                    :activated_features="activated_features"
+                    @modalClose="closeModal"
+                />
+            </div>
+
+            <div v-else-if="activeTabName === 'csv'" class="w-full">
+                <ExternalDataSource
+                    type="csv"
+                    :tableCreated="fireTableCreated"
+                    :has-pro="hasPro"
+                    :activated_features="activated_features"
+                    @modalClose="closeModal"
+                />
+            </div>
+
+            <template v-else-if="activeTabName === 'fluent_form'">
+                <FluentForm
+                    :tableCreated="fireTableCreated"
+                    @modalClose="closeModal"
                 />
             </template>
 
-            <template v-else-if="activeTabName == 'csv'">
-                <external-data-source
-                        type="csv"
-                        :tableCreated="fireTableCreated"
-                        :has-pro="hasPro"
-                        :activated_features="activated_features"
+            <template v-else-if="activeTabName === 'wp_posts'">
+                <WPPosts
+                    :tableCreated="fireTableCreated"
+                    :activated_features="activated_features"
+                    @modalClose="closeModal"
                 />
             </template>
 
-            <template v-else-if="activeTabName == 'fluent_form'">
-                <fluent-form-data-source
-                        :tableCreated="fireTableCreated"
-                />
-            </template>
-
-            <template v-else-if="activeTabName == 'wp_posts'">
-                <wp-posts-data-source
-                        :tableCreated="fireTableCreated"
-                        :activated_features="activated_features"
-                />
-            </template>
-
-            <template v-else-if="activeTabName == 'woo_table'">
-                <woo-data-source
+            <template v-else-if="activeTabName === 'woo_table'">
+                <WooProducts
                     v-if="activated_features.woocommerce_table"
                     :tableCreated="fireTableCreated"
+                    @modalClose="closeModal"
                 />
                 <div v-else-if="has_woo && hasPro">
                     <p>Please update to latest version of <b>Ninja Tables Pro</b> to use WooCommerce integration</p>
                 </div>
                 <div v-else-if="has_woo && !hasPro" class="ninja_no_woo">
-                    <h3>Upgrade to pro for using WooCommerce Integration</h3>
-                    <premium-notice highlight="WooCommerce Integration module where you can create and build table with Woocomerce produsts and increase your conversion rate"/>
+<!--                    <h3>Upgrade to pro for using WooCommerce Integration</h3>-->
+                    <PremiumNotice title="Construct Table from Your WooCommerce Products">
+                        <template #default>
+                            <p class="text-[14px] font-[400] text-[#525866]">
+                                {{ $t('This is a Premium feature. Displays products content in a searchable, sortable with Ninja Tables.') }}
+                                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/woocommerce-integration/">
+                                    {{ $t('View Documentation') }}
+                                </a>
+                                {{$t('or')}}
+                                <a class="nt-link" target="_blank" href="https://youtu.be/uIBQoLCFs_M?si=Qtp1zji5ANsGxPSD">
+                                    {{ $t('Watch Video.') }}
+                                </a>
+                            </p>
+                        </template>
+                    </PremiumNotice>
                 </div>
             </template>
 
-            <template v-else-if="activeTabName == 'raw_sql'">
-                <raw-sql-form
+            <div v-else-if="activeTabName === 'raw_sql'" class="w-full">
+                <RawSqlForm
                     :has_sql_permission="has_sql_permission"
                     :tableCreated="fireTableCreated"
                     :activated_features="activated_features"
+                    @modalClose="closeModal"
                 />
-            </template>
+            </div>
         </el-main>
     </el-container>
 
 </template>
 
 <script type="text/babel">
-    import wp_editor from '../../common/_wp_editor';
+    import WPEditor from '../../common/_wp_editor';
     import WPPosts from './DataProviders/WPPosts';
     import WooProducts from './DataProviders/WooProducts';
-    import FluentForm from './DataProviders/FluentForm';
-    import ExternalDataSource from './DataProviders/ExternalDataSource';
+    import FluentForm from './DataProviders/FluentForm.vue';
+    import ExternalDataSource from './DataProviders/ExternalDataSource.vue';
     import ImportTable from './includes/ImportTable';
     import RawSqlForm from './DataProviders/RawSqlForm'
     import PremiumNotice from './includes/PremiumNotice';
-    import RightSideBar from "./TableBuilder/Sidebar/RightSideBar";
-
+    import RightSideBar from "./TableBuilder/Sidebar/RightSideBar.vue";
+    import {assetUrl} from "../utils/ninjatablesadmin";
+    import NinjaInput from "../@ui-utils/NinjaInput.vue";
+    import NinjaButton from "../@ui-utils/NinjaButton.vue";
 
     export default {
         name: 'add_table',
         components: {
+            NinjaInput,
+            NinjaButton,
             RightSideBar,
-            wp_editor: wp_editor,
-            'wp-posts-data-source': WPPosts,
-            'woo-data-source': WooProducts,
-            'fluent-form-data-source': FluentForm,
-            'external-data-source': ExternalDataSource,
+            WPEditor,
+            WPPosts,
+            WooProducts,
+            FluentForm,
+            ExternalDataSource,
             ImportTable,
             RawSqlForm,
             PremiumNotice
@@ -207,14 +268,12 @@
                         ]
                     }
                 },
-                isCollapse: false,
-                fluentFormIcon: window.ninja_table_admin.fluent_form_icon,
-                wooIcon: window.ninja_table_admin.img_url+'woo-logo.png',
                 has_woo: !!window.ninja_table_admin.has_woocommerce,
                 initialData : {},
             }
         },
         methods: {
+            assetUrl,
             createDragAndDropTable() {
               this.$get("table-builder")
                   .then(response => {
@@ -247,25 +306,39 @@
                         message: response.message,
                         type: 'success'
                       });
-                      window.ninjaTableBus.$emit('addedTable');
+
+                      this.$emit('addedTable');
+
                       if (this.table.ID) {
                         this.closeModal();
                       } else {
-                        this.fireTableCreated(response.table_id);
+                        // Check if response has table_id directly or in data property
+                        const tableId = response.table_id || (response.data && response.data.table_id);
+                        if (tableId) {
+                          this.fireTableCreated(tableId);
+                        } else {
+                          console.error('No table_id found in response:', response);
+                        }
                       }
                       this.btnLoading = false;
                   })
                   .catch(error => {
-                      if (error.responseJSON.data.message) {
+                      if (error.responseJSON && error.responseJSON.data && error.responseJSON.data.message) {
                         this.$message({
                           showClose: true,
                           message: error.responseJSON.data.message,
                           type: 'error'
                         });
-                      } else {
+                      } else if (error.responseText) {
                         this.$message({
                           showClose: true,
                           message: error.responseText,
+                          type: 'error'
+                        });
+                      } else {
+                        this.$message({
+                          showClose: true,
+                          message: 'An error occurred while creating the table',
                           type: 'error'
                         });
                       }
@@ -281,53 +354,10 @@
             fireTableCreated(table_id) {
                 this.$emit('table_inserted', table_id);
             },
-            checkScreenSize() {
-                if (window.innerWidth < 1000) {
-                    this.isCollapse = true;
-                } else {
-                    this.isCollapse = false;
-                }
-            }
         },
         mounted() {
-            this.checkScreenSize();
             this.createDragAndDropTable();
-            jQuery(window).resize(() => {
-                this.checkScreenSize();
-            });
         }
     }
 </script>
 
-<style lang="scss">
-    .ninja-add-table {
-        .el-main {
-            padding: 0 1px 0 15px;
-            min-height: initial;
-        }
-
-        .el-menu {
-            border-right: initial;
-        }
-
-        .el-menu-item {
-            .el-icon-fluent-form {
-                height: 18px;
-            }
-
-            .dashicons {
-                width: 24px;
-                height: 18px;
-                margin-right: 5px;
-            }
-
-            &.is-active {
-                background-color: #0073aa !important;
-            }
-        }
-
-        .el-table .cell {
-            text-overflow: initial;
-        }
-    }
-</style>

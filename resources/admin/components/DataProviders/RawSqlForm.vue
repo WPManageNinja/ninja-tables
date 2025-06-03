@@ -1,14 +1,27 @@
 <template>
-    <div class="ninja_modal-body">
-        <h3>
-            Construct Table from Custom SQL Query
-        </h3>
-        <hr />
-        <template v-if="!hasPro">
-            <premium-notice highlight="SQL module where you can write custom SQL to build your table with "/>
-        </template>
+    <template v-if="!hasPro">
+        <PremiumNotice title="Construct Table from Custom SQL Query">
+            <template #default>
+                <p class="text-[14px] font-[400] text-[#525866]">This is a Premium feature. Create a table by generating a sql query to any custom SQL database.
+                    <a href="https://ninjatables.com/docs/create-table-from-custom-sql/" target="_blank" class="nt-link" > View Documentation. </a>
+                </p>
+            </template>
+        </PremiumNotice>
+    </template>
 
-        <template v-else-if="!has_sql_permission">
+    <div v-else class="ninja_modal-body">
+        <h3 class="nt-modal-title">
+           {{$t('Construct Table from Custom SQL Query')}}
+        </h3>
+        <p class="nt-modal-description">
+            {{$t('Create a table by generating a sql query to any custom SQL database.')}}
+            <a class="nt-link" target="_blank"
+               href="https://ninjatables.com/docs/create-table-from-custom-sql/">
+                {{$t('View documentation.')}}
+            </a>
+        </p>
+
+        <template v-if="!has_sql_permission">
             <el-alert title=""
                       type="error"
                       :closable="false"
@@ -20,22 +33,22 @@
         </template>
 
         <template v-else-if="isActivated">
-            <div class="ninja_modal-body">
-                <div class="form-group">
-                    <label for="name">{{ $t('Table Title') }}</label>
-                    <input v-model="post_title"
-                           type="text" id="name" class="form-control"
-                           placeholder="Enter a title to identify your table"
-                    >
+            <div class="my-[30px]">
+                <div class="nt-form-group">
+                    <label class="nt-form-label">{{ $t('Table Title') }} <span class="nt-required">*</span></label>
+                    <NinjaInput
+                        v-model="post_title"
+                        :placeholder="$t('Enter a title to identify your table')"
+                    />
                 </div>
 
-                <div class="form-group">
-                    <label>{{ $t('Custom SQL Query') }}</label>
-                    <my-sql-editor mode="mysql" editor_id="ninja_mysql_editor" v-model="sql" />
-                    <p>Please write valid SQL query. Your written SQL query will be passed to <code>$wpdb->get_results()</code> function</p>
+                <div class="nt-form-group">
+                    <label class="nt-form-label">{{ $t('Custom SQL Query') }} <span class="nt-required">*</span></label>
+                    <ace_code_editor editor_id="ninja_mysql_editor" mode="mysql" v-model="sql"></ace_code_editor>
+                    <p class="nt-form-description mt-2">Please write valid SQL query. Your written SQL query will be passed to <code>$wpdb->get_results()</code> function</p>
                 </div>
 
-                <div v-if="error_html" class="form-group">
+                <div v-if="error_html" class="nt-form-group">
                     <el-alert
                         title="SQL Error"
                         @close="error_html = ''"
@@ -44,26 +57,31 @@
                     </el-alert>
                 </div>
 
-                <div class="form-group">
-                    <label>{{ $t('SQL COnnection Type') }}</label>
-                    <el-radio-group v-model="connection_type">
-                        <el-radio label="local">Default WP SQL Table</el-radio>
-                        <el-radio label="external">Remote/External SQL</el-radio>
+                <div class="nt-form-group mt-4 flex flex-col">
+                    <label class="nt-form-label mb-2">{{ $t('SQL Connection Type:') }}</label>
+                    <el-radio-group v-model="connection_type" class="ninja_tables_radio_group">
+                        <el-radio border value="local" label="Default WP SQL Table" class="mr-2"/>
+                        <el-radio border value="external" label="Remote/External SQL" />
                     </el-radio-group>
                 </div>
 
-                <div v-if="connection_type == 'external'" class="form-group">
-                    <label>{{ $t('MYSQL Connection Details') }}</label>
+                <div v-if="connection_type === 'external'" class="nt-form-group mt-4">
+                    <label class="nt-form-label">{{ $t('MYSQL Connection Details') }}</label>
                     <remote-sql-connection :connection="remote_connection" />
                 </div>
 
             </div>
 
-            <div class="modal-footer">
-                <el-button type="primary" size="small" @click="save">
-                    <span>{{ $t('Add') }}</span>
-                    <i v-if="btnLoading" class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
-                </el-button>
+            <div class="nt-modal-footer">
+                <NinjaButton
+                    type="secondary"
+                    @click="$emit('modalClose')"
+                    :btn-text="$t('Cancel')"
+                />
+                <NinjaButton
+                    @click="save"
+                    :btn-text="$t('Add')"
+                />
             </div>
         </template>
         <template v-else>
@@ -74,7 +92,7 @@
                       class="update-notice"
             >
                 <p>
-                    Please update Ninja Tables Pro Plugin to latest version. Required Ninja Table Version: 3.3 or later
+                    Please update Ninja Tables Pro Plugin to latest version. Required Ninja Tables Version: 3.3 or later
                 </p>
             </el-alert>
         </template>
@@ -82,13 +100,18 @@
 </template>
 
 <script>
-    import MySqlEditor from '../../../common/_ace_editor_sql';
     import PremiumNotice from '../includes/PremiumNotice';
     import RemoteSqlConnection from '../TableNav/_RemoteSQLConnection'
+    import ace_code_editor from "../../../common/_ace_editor.vue";
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+
     export default {
         name: 'CustomSQLQuery',
         components: {
-            MySqlEditor,
+            NinjaButton,
+            NinjaInput,
+            ace_code_editor,
             PremiumNotice,
             RemoteSqlConnection
         },
@@ -123,7 +146,7 @@
                 },
                 sql: '',
                 error_html: '',
-                isActivated: this.activated_features.raw_sql_query,
+                isActivated: this.activated_features?.raw_sql_query,
                 hasPro: !!ninja_table_admin.hasPro,
                 has_sql_permission: window.ninja_table_admin.has_sql_permission == 'yes'
             };
@@ -141,8 +164,6 @@
                     table_Id: this.config && this.config.table.ID || null
                 })
                     .then((res) => {
-
-                        console.log(res);
 
                         if(typeof res == 'string') {
                             this.error_html = res;

@@ -1,7 +1,7 @@
 <template>
     <div class="table-rows">
         <template v-if="!isEditable">
-            <div v-if="dataSourceType == 'fluent-form'" class="tablenav top">
+            <div v-if="dataSourceType === 'fluent-form'" class="nt-table-edit-nav">
                 <fluent-form-nav
                     :config="config"
                     :model="new_column"
@@ -10,17 +10,19 @@
                     :tableCreated="reloadSettingsAndData"
                 />
             </div>
-            <div v-else-if="dataSourceType.indexOf('csv') != -1" class="tablenav top">
-                <external-source-nav :is-editable-message="isEditableMessage"
-                                     :loading="syncing"
-                                     :config="config"
-                                     :hasPro="has_pro"
-                                     v-model="externalDataSourceUrl"
-                                     :tableCreated="reloadSettingsAndData"
+
+            <div v-else-if="dataSourceType.indexOf('csv') !== -1" class="nt-table-edit-nav">
+                <external-source-nav
+                    :is-editable-message="isEditableMessage"
+                    :loading="syncing"
+                    :config="config"
+                    :hasPro="has_pro"
+                    v-model="externalDataSourceUrl"
+                    :tableCreated="reloadSettingsAndData"
                 />
             </div>
 
-            <div v-else-if="dataSourceType == 'wp-posts' && new_column" class="tablenav top">
+            <div v-else-if="dataSourceType === 'wp-posts' && new_column" class="nt-table-edit-nav">
                 <WPPostsNav
                     :config="config"
                     :model="new_column"
@@ -31,18 +33,19 @@
                 />
             </div>
 
-            <div v-else-if="dataSourceType == 'raw_sql'" class="tablenav top">
-                <raw-sql-nav :is-editable-message="isEditableMessage"
-                             :loading="syncing"
-                             :config="config"
-                             :column_count="columns.length"
-                             :hasPro="has_pro"
-                             :tableCreated="reloadSettingsAndData"
+            <div v-else-if="dataSourceType === 'raw_sql'" class="nt-table-edit-nav">
+                <RawSqlNav
+                    :is-editable-message="isEditableMessage"
+                    :loading="syncing"
+                    :config="config"
+                    :column_count="columns.length"
+                    :hasPro="has_pro"
+                    :tableCreated="reloadSettingsAndData"
                 />
             </div>
 
-            <div v-else-if="dataSourceType == 'wp_woo'" class="tablenav top">
-                <div class="woo_data_source_config">
+            <div v-else-if="dataSourceType === 'wp_woo'" class="nt-table-edit-nav">
+                <div>
                     <woo-nav-edit
                         :model="new_column"
                         :config="config"
@@ -50,10 +53,6 @@
                         @reloadData="getData()"
                     />
                 </div>
-            </div>
-
-            <div v-if="!columns.length && !loading">
-                <h3 style="text-align: center">No Data found based on your data source configaration</h3>
             </div>
         </template>
 
@@ -72,203 +71,269 @@
                             :insertAfterId="insertAfterId"
                             :type="dataModalType"
             ></add_data_modal>
-            <div class="tablenav top">
-                <div class="alignleft actions bulkactions">
-                    <label for="bulk-action-selector-top" class="screen-reader-text">
-                        {{ $t('Select bulk action') }}
-                    </label>
-                    <select name="action" v-model="bulkAction">
-                        <option value="-1">{{ $t('Bulk Actions') }}</option>
-                        <option value="delete">{{ $t('Delete Entries')}}</option>
-                    </select>
-                    <button class="button action" v-on:click.prevent="handleBulkAction">{{ $t('Apply') }}</button>
-                    <label for="compact_view" class="form_group">
-                        <input id="compact_view" type="checkbox" v-model="isCompact"/> Compact View
-                    </label>
-                    <label class="show-meta-data">
-                        | <i title="show meta data" @click="show_meta = !show_meta" class="el-icon-news"></i>
-                    </label>
-                    <label class="form_group search_action" for="search">
-                        <input v-on:keyup.enter="getData" id="search" class="form-control inline" v-model="searchString"
-                               placeholder="Search" type="text"/>
-                        <i @click="getData" class="el-icon-search"></i>
-                    </label>
-
-                    <label class="form_group">
-                        <input type="checkbox" name="checkbox" v-model="sorting">
-                        Sort Manually
-                        <template v-if="!has_pro">(Pro Feature)</template>
-                    </label>
-                </div>
-                <div class="pull-right">
-                    <el-button size="small" @click="addColumn()"> {{ $t('Add Column') }}</el-button>
-                    <el-button size="small" type="primary" @click="add()"> {{ $t('Add Data') }}</el-button>
-                </div>
-            </div>
         </template>
 
-        <div v-if="!loading && !columns.length && isEditable" type="warning"
-             style="margin-top: 15px; text-align: center" class="instruction_block">
-            <h3>{{ $t('To get started please add table columns') }}</h3>
-            <el-button @click="addColumn()" type="primary" size="small">
-                Add Column
-            </el-button>
-        </div>
+        <div class="all_tables_card">
 
-        <template v-if="columns.length">
-            <el-table
-                @sort-change="onSortChange"
-                class="js-sortable-table"
-                v-loading="loading"
-                :data="items"
-                row-key="id"
-                border
-                max-height="600"
-                :class="{ compact: isCompact, sorting: sorting}"
-                :style="'width: '+tableWidth"
-                @selection-change="handleSelectionChange"
-            >
-                <el-table-column
-                    v-if="isEditable"
-                    type="selection"
-                    width="60">
-                </el-table-column>
-                <el-table-column
-                    :sort-orders="['ascending', 'descending']"
-                    :prop="column.key"
-                    :sort-method="compare"
-                    sortable
-                    v-for="(column, index) in columns"
-                    :width="(columnLength == index + 1 ) ? '' : 150"
-                    :key="index">
-                    <template slot-scope="scope">
-                        <show-editable-cell
-                            :row="scope.row"
-                            :column="column"
-                            :columns="columns"
-                            :formula_support="config.settings.formula_support"
-                            :is_editable="isEditable"
-                        />
-                    </template>
+            <div v-if="dataSourceType === 'default'">
+                <div v-if="!loading && !columns.length && isEditable" class="w-full flex flex-col justify-center items-center py-6" >
+                    <img :src="assetUrl('icons/add-column.svg')" alt="">
+                    <p class="text-[14px] mt-2 font-[400] text-[#99A0AE]">{{ $t('To get started please add table columns') }}</p>
+                    <NinjaButton class="mt-5" @click="addColumn" :icon="assetUrl('icons/add.svg')" :btnText="$t('Add Column')" />
+                </div>
 
-                    <template slot="header">
-                        <span>
-                            {{ column.name || column.key }}<i class="el-icon-setting nt-column-config" @click="showColumnConfigModal(column)"/>
-                        </span>
-                    </template>
-                </el-table-column>
-                <template v-if="isEditable">
-                    <template v-if="show_meta">
-                        <el-table-column
-                            label="Row ID"
-                            width="100px"
-                            prop="id"
-                        />
-                        <el-table-column
-                            label="Created By"
-                            width="165px"
-                            prop="created_by"
-                        />
-                        <el-table-column
-                            label="Reference Date"
-                            width="165px"
-                            prop="created_at"
-                        />
-                    </template>
+                <div v-else class="default_nav flex-wrap gap-y-5">
+                    <div class="default_nav_left">
+                        <div class="bulk_action">
+                            <select class="bulk_select" v-model="bulkAction">
+                                <option value="-1" selected>{{ $t('Bulk Actions') }}</option>
+                                <option value="delete" label="Delete">{{ $t('Delete Tables') }}</option>
+                            </select>
+                            <button class="bulk_action_btn" @click="handleBulkAction">
+                                Apply
+                            </button >
+                        </div>
+                    </div>
+
+                    <div class="default_nav_right flex-wrap gap-y-5">
+                        <div class="search_option">
+                            <NinjaInput
+                                v-model="searchString"
+                                placeholder="Search"
+                                prefix-icon="icons/search.svg"
+                                @keyup.enter="getData"
+                            />
+                        </div>
+
+                        <div class="flex items-center gap-3 ml-3">
+                            <div class="flex items-center gap-x-2">
+                                <el-checkbox v-model="isCompact" label="Compact View" class="!mr-1"/>
+                                <span class="mr-1 -mt-1">|</span>
+                                <span><el-icon class="cursor-pointer" @click="show_meta = !show_meta"><Notification /></el-icon></span>
+                            </div>
+
+                            <el-checkbox name="checkbox" v-model="sorting">
+                                <div class="flex items-center cursor-pointer">
+                                    Sort Manually
+                                    <template v-if="!has_pro">
+                                        <img :src="assetUrl('icons/get-pro.svg')" class="h-4 w-4 ml-1 !grayscale-0" alt="">
+                                    </template>
+                                </div>
+                            </el-checkbox>
+
+                        </div>
+
+                        <div class="actions_buttons">
+                            <NinjaButton
+                                @click="add"
+                                type="secondary"
+                                :btnText="$t('Add Data')"
+                                class="mx-2"
+                            />
+
+                            <NinjaButton
+                                @click="addColumn"
+                                :icon="assetUrl('icons/add.svg')"
+                                :btnText="$t('Add Column')"
+                            />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-else class="default_nav flex-wrap -mb-2">
+                <div v-if="!columns.length && !loading" class="flex justify-center w-full text-[18px] font-[600] text-[#525866] mb-2">
+                    {{ $t('No Data found based on your data source configuration') }}
+                </div>
+                <div v-else>
+                    {{ formateDataSourceType(dataSourceType) }} Table
+                </div>
+            </div>
+
+            <div v-if="columns.length">
+                <el-table
+                    @sort-change="onSortChange"
+                    class="ninja_tables js-sortable-table"
+                    v-loading="loading"
+                    :data="items"
+                    row-key="id"
+                    border
+                    max-height="600"
+                    :class="{ compact: isCompact, sorting: sorting}"
+                    :style="{ width: tableWidth }"
+                    @selection-change="handleSelectionChange"
+                >
                     <el-table-column
-                        fixed="right"
-                        label="Actions"
-                        class-name="actions"
-                        width="120">
-                        <template slot-scope="scope">
-                            <a v-if="has_pro" @click="addAfter(scope)">
-                                <el-tooltip placement="top-end" effect="light" content="Add Data after this row"
-                                            :open-delay="500">
-                                    <span class="dashicons dashicons-plus"></span>
-                                </el-tooltip>
-                            </a>
+                        v-if="isEditable"
+                        type="selection"
+                        width="60">
+                    </el-table-column>
+                    <el-table-column
+                        :sort-orders="['ascending', 'descending']"
+                        :prop="column.key"
+                        :sort-method="compare"
+                        sortable
+                        v-for="(column, index) in columns"
+                        :width="(columnLength == index + 1 ) ? '' : 150"
+                        :key="index">
+                        <template #default="scope">
+                            <show-editable-cell
+                                :table_id="tableId"
+                                :row="scope.row"
+                                :column="column"
+                                :columns="columns"
+                                :formula_support="config.settings.formula_support"
+                                :is_editable="isEditable"
+                            />
+                        </template>
 
-                            <a @click="showUpdateModal(scope)">
-                                <el-tooltip placement="top-end" effect="light" content="Edit data" :open-delay="500">
-                                    <span class="dashicons dashicons-edit"></span>
-                                </el-tooltip>
-                            </a>
-
-                            <a @click="duplicateData(scope)">
-                                <el-tooltip placement="top-end" effect="light" content="Duplicate data"
-                                            :open-delay="500">
-                                    <span class="dashicons dashicons-admin-page"></span>
-                                </el-tooltip>
-                            </a>
-                            <delete-pop-over @deleted="deleteItem(scope.row.id)"></delete-pop-over>
+                        <template #header>
+                        <span>
+                            {{ column.name || column.key }}
+                            <el-icon @click="showColumnConfigModal(column)"><Setting /></el-icon>
+                        </span>
                         </template>
                     </el-table-column>
-                </template>
-            </el-table>
-            <div class="tablenav bottom">
-                <div v-if="isEditable" class="alignleft actions bulkactions">
-                    <label for="bulk-action-selector-top" class="screen-reader-text">
-                        {{ $t('Select bulk action') }}
-                    </label>
-                    <select name="action" v-model="bulkAction">
-                        <option value="-1">{{ $t('Bulk Actions') }}</option>
-                        <option value="delete">{{ $t('Delete Entries')}}</option>
-                    </select>
-                    <button class="button action" v-on:click.prevent="handleBulkAction">{{ $t('Apply') }}</button>
-                </div>
-                <div class="pull-right">
+                    <template v-if="isEditable">
+                        <template v-if="show_meta">
+                            <el-table-column
+                                label="Row ID"
+                                width="100px"
+                                prop="id"
+                            />
+                            <el-table-column
+                                label="Created By"
+                                width="165px"
+                                prop="created_by"
+                            />
+                            <el-table-column
+                                label="Reference Date"
+                                width="165px"
+                                prop="created_at"
+                            />
+                        </template>
+                        <el-table-column
+                            fixed="right"
+                            label="Actions"
+                            width="100"
+                            :align="'center'"
+                        >
+
+                        <template #default="scope">
+                            <div class="flex justify-end items-center">
+                                <template  v-if="has_pro">
+                                    <el-tooltip content="Add data after this row" placement="top" effect="light">
+                                    <span @click="addAfter(scope)" class="cursor-pointer mr-2">
+                                        <img :src="assetUrl('icons/add-ico.svg')" class="mb-[3px]" alt="Add"/>
+                                    </span>
+                                    </el-tooltip>
+                                </template>
+                                <el-tooltip content="Edit Row" placement="top" effect="light">
+                                    <span @click="showUpdateModal(scope)" class="cursor-pointer mr-2" >
+                                        <img :src="assetUrl('icons/edit-2.svg')" alt="Edit"/>
+                                    </span>
+                                </el-tooltip>
+                                <el-dropdown>
+                                    <span class="el-dropdown-link">
+                                      <img :src="assetUrl('/icons/more.svg')" alt="more"/>
+                                    </span>
+
+                                    <template #dropdown>
+                                        <el-dropdown-menu class="ninja-dropdown-menu">
+                                            <el-dropdown-item  @click="duplicateData(scope)">
+                                               {{ $t('Duplicate') }}
+                                            </el-dropdown-item>
+
+                                            <el-dropdown-item  @click.prevent="confirmDeleteRows(scope.row.id)">
+                                                {{ $t('Delete') }}
+                                            </el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </template>
+                                </el-dropdown>
+                            </div>
+
+                        </template>
+
+                        </el-table-column>
+                    </template>
+                </el-table>
+
+                <div class="ninja-pagination-wrapper flex-wrap gap-y-5 overflow-auto">
+                    <div class="pagination-page-change-option">
+                       <span class="flex-shrink-0">
+                           Total {{ paginate.total }}
+                       </span>
+
+                        <el-select class="min-w-[100px]" v-model="paginate.per_page" @change="handleSizeChange">
+                            <el-option value="10">{{ $t('10/page') }}</el-option>
+                            <el-option value="15">{{ $t('15/page') }}</el-option>
+                            <el-option value="20">{{ $t('20/page') }}</el-option>
+                            <el-option value="50">{{ $t('50/page') }}</el-option>
+                            <el-option value="100">{{ $t('100/page') }}</el-option>
+                        </el-select>
+                    </div>
+
                     <el-pagination
+                        class="ninja-pagination"
                         @size-change="handleSizeChange"
                         @current-change="goToPage"
                         :current-page.sync="paginate.current_page"
                         :page-sizes="[10, 20, 50, 100, 500, 2000]"
-                        :page-size="paginate.per_page"
-                        layout="total, sizes, prev, pager, next, jumper"
+                        :page-size="Number(paginate.per_page)"
+                        layout="prev, pager, next, jumper"
                         :total="paginate.total">
                     </el-pagination>
                 </div>
             </div>
-        </template>
+
+        </div>
 
         <sortable-upgrade-notice :show="sortableUpgradeNotice" @close="sortableUpgradeNotice = false"/>
 
         <el-dialog
+            v-model="showColumnEditor"
             :close-on-click-modal="false"
-            class="no_padding_body"
+            class="ninja_create-table-modal"
             :append-to-body="true"
-            top="50px"
-            :title="'Edit Table Column : ' +currentEditingColumn.name"
-            width="70%"
-            :visible.sync="showColumnEditor"
+            :top="'50px'"
+            :title="currentEditingColumn ? 'Edit Table Column : ' + currentEditingColumn.name : ''"
+            :width="'70%'"
+            align-center
         >
-            <columns-editor
+            <columnsEditor
+                v-if="showColumnEditor && currentEditingColumn"
                 :dataSourceType="config.table.dataSourceType"
                 :model="currentEditingColumn"
                 :hasPro="has_pro"
                 :updating="true"
                 :columns="columns"
                 :settings="config.settings"
-                v-if="showColumnEditor && currentEditingColumn"
                 @store="storeSettings()"
                 @delete="deleteColumn()"
                 @cancel="showColumnEditor = false"
+                :hideCancel="true"
             />
         </el-dialog>
 
         <el-dialog
+            class="ninja_create-table-modal"
+            v-model="columnModal"
             :close-on-click-modal="false"
-            top="50px"
+            :top="'50px'"
             :append-to-body="true"
-            title="Add Table Column"
-            width="70%"
-            :visible.sync="columnModal">
-            <columns-editor
+            :title="'Add Table Column'"
+            :width="'70%'"
+            align-center
+        >
+            <columnsEditor
+                v-if="columnModal"
                 :model="new_column"
                 :hasPro="has_pro"
                 :columns="config.columns"
                 :settings="config.settings"
                 @add="addNewColumn()"
-                @cancel="columnModal = !columnModal"
+                @cancel="columnModal = false"
             />
         </el-dialog>
     </div>
@@ -283,18 +348,27 @@
     import Alert from '../includes/alert.vue';
     import DeletePopOver from '../includes/DeletePopOver.vue';
     import SortableUpgradeNotice from '../includes/SortableUpgradeNotice.vue';
-    import columnsEditor from './ColumnEditor/ColumnsEditor';
-    import FluentFormNav from '../TableNav/Fluentform';
-    import ExternalSourceNav from '../TableNav/External';
-    import RawSqlNav from '../TableNav/RawSqlNav';
-    import WPPostsNav from '../TableNav/WPPostsNav';
-    import WooNavEdit from '../TableNav/WooNavEdit';
+    import columnsEditor from './ColumnEditor/ColumnsEditor.vue';
+    import FluentFormNav from '../TableNav/Fluentform.vue';
+    import ExternalSourceNav from '../TableNav/External.vue';
+    import RawSqlNav from '../TableNav/RawSqlNav.vue';
+    import WPPostsNav from '../TableNav/WPPostsNav.vue';
+    import WooNavEdit from '../TableNav/WooNavEdit.vue';
 
     import ShowEditableCell from './_ShowEditableCell'
+    import { useEventBus } from '../../eventBus';
+    import { Setting, Notification } from "@element-plus/icons-vue";
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+    import {assetUrl} from "../../utils/ninjatablesadmin";
 
     export default {
         name: 'TableDataItems',
         components: {
+            NinjaButton,
+            NinjaInput,
+            Setting,
+            Notification,
             add_data_modal: addDataModal,
             ninja_pagination: NinjaPagination,
             Alert,
@@ -306,11 +380,12 @@
             WPPostsNav,
             RawSqlNav,
             WooNavEdit,
-            ShowEditableCell
+            ShowEditableCell,
         },
         props: ['config', 'getColumnSettings', 'hasPro'],
         data() {
             return {
+                bus : useEventBus(),
                 columnModal: false,
                 show_meta: false,
                 new_column: {},
@@ -369,7 +444,7 @@
                 if (newVal) {
                     if (!this.has_pro) {
                         this.sorting = false;
-                        window.ninjaTableBus.$emit('show_pro_popup');
+                        this.bus.emit('show_pro_popup');
 
                         return;
                     }
@@ -399,18 +474,19 @@
             },
             dataSourceType() {
                 const c = this.config;
-                return (c && 'dataSourceType' in c.table) ? c.table.dataSourceType : 'default';
+                return (c && c.table && 'dataSourceType' in c.table) ? c.table.dataSourceType : 'default';
             },
             isEditable() {
                 const c = this.config;
-                return (c && 'isEditable' in c.table) ? c.table.isEditable : true;
+                return (c && c.table && 'isEditable' in c.table) ? c.table.isEditable : true;
             },
             isEditableMessage() {
                 const c = this.config;
-                return (c && 'isEditableMessage' in c.table) ? c.table.isEditableMessage : null;
+                return (c && c.table && 'isEditableMessage' in c.table) ? c.table.isEditableMessage : null;
             }
         },
         methods: {
+            assetUrl,
             storeSortingSetting (settings) {
                 let data = {
                     table_settings: settings
@@ -422,6 +498,22 @@
                     .finally(() => {
                         this.savingSettings = false;
                     });
+            },
+
+            formateDataSourceType(dataSource) {
+                const sourceMap = {
+                    'raw_sql': 'SQL',
+                    'wp-posts': 'WP Posts',
+                    'wp_woo': 'WooCommerce',
+                    'fluent-form': 'Fluent Forms',
+                    'csv': 'CSV',
+                    'google-csv': 'Google Sheets',
+                    'google': 'Google Sheets',
+                    'external-csv': 'External CSV',
+                    'drag_and_drop': 'Drag & Drop'
+                };
+
+                return sourceMap[dataSource] || 'Default';
             },
 
             getData() {
@@ -446,9 +538,9 @@
                       this.loading = false;
                     })
             },
-            addTableData() {
+            // addTableData() {
 
-            },
+            // },
             getItemNumber(index) {
                 return this.paginate.per_page * (this.paginate.current_page - 1) + (index + 1);
             },
@@ -461,7 +553,7 @@
                 this.getData();
             },
             confirmDeleteTable(tableId) {
-                if (confirm(this.$t('Are you sure, You want to delete this table'))) {
+                if (confirm(this.$t('Are you sure, you want to delete this table'))) {
                     this.deleteTable(tableId);
                 }
             },
@@ -470,6 +562,7 @@
                     .then((response) => {
                         this.fetchTables();
                         alert(response.message);
+                        this.getData();
                     })
                     .catch((error) => {
                         alert(error.responseJSON.data.message);
@@ -489,7 +582,10 @@
                 this.$confirm(this.$t('This will permanently delete the selected rows. Continue?'), 'Warning', {
                     confirmButtonText: this.$t('Yes, Delete'),
                     cancelButtonText: this.$t('Cancel'),
-                    type: 'warning'
+                    type: 'warning',
+                    customClass: 'nt-delete-confirm',
+                    confirmButtonClass: 'nt-delete-confirm-btn',
+                    cancelButtonClass: 'nt-delete-cancel-btn'
                 }).then(() => {
                     let ids = this.multipleSelection.map(item => item.id);
                     this.deleteItem(ids);
@@ -501,6 +597,23 @@
                 });
 
             },
+            confirmDeleteRows(id) {
+                this.$confirm('Are you sure, you want to delete this row?', 'Warning', {
+                    confirmButtonText: 'Yes, Delete',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning',
+                    customClass: 'nt-delete-confirm',
+                    confirmButtonClass: 'nt-delete-confirm-btn',
+                    cancelButtonClass: 'nt-delete-cancel-btn'
+                }).then(() => {
+                    this.deleteItem(id);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: 'Delete canceled'
+                    });
+                });
+            },
             deleteItem(id) {
                 let data = {
 
@@ -510,7 +623,7 @@
 
                 let that = this;
 
-                this.$del('tables/'+this.tableId+'/item', data)
+                this.$get('tables/'+this.tableId+'/item/delete', data)
                     .then(response => {
                         this.$message({
                             showClose: true,
@@ -673,7 +786,7 @@
                     this.loading = true;
 
                     let promise = new Promise((resolve, reject) => {
-                        window.ninjaTableBus.$emit('initManualSorting', {
+                        this.bus.emit('initManualSorting', {
                             table_id: this.tableId,
                             page: this.paginate.current_page,
                             per_page: this.paginate.per_page,
@@ -756,7 +869,7 @@
                 this.showColumnEditor = true;
             },
             storeSettings() {
-                window.ninjaTableBus.$emit('updateTableColumns', () => {
+                this.bus.emit('updateTableColumns', () => {
                     this.showColumnEditor = false;
                     this.currentEditingColumn = false;
                     if (this.dataSource && this.dataSource != 'default') {
@@ -867,11 +980,6 @@
         &:hover {
             color: #58B7FF;
         }
-    }
-
-    .instruction_block {
-        padding: 30px 20px;
-        background: white;
     }
 
     .js-sortable-table {

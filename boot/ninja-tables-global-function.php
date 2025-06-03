@@ -61,13 +61,13 @@ if ( ! function_exists('getDefaultNinjaTableSettings')) {
         $settings   = get_option('_ninja_table_default_appearance_settings');
         $defaults   = array(
             "perPage"            => 20,
-            "show_all"           => false,
+            "show_all"           => '0',
             "library"            => 'footable',
             "css_lib"            => 'semantic_ui',
-            "enable_ajax"        => false,
+            "enable_ajax"        => '0',
             "css_classes"        => array(),
-            "enable_search"      => true,
-            "column_sorting"     => true,
+            "enable_search"      => '1',
+            "column_sorting"     => '1',
             "default_sorting"    => 'old_first',
             "sorting_type"       => "by_created_at",
             "table_color"        => 'ninja_no_color_table',

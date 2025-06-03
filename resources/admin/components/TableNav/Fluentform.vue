@@ -1,10 +1,9 @@
 <template>
     <div class="fluent-form-nav">
-        <el-collapse>
+        <el-collapse class="nt_accordion_content_white">
             <el-collapse-item name="1">
-                <template slot="title">
-                    <i class="header-icon el-icon-info el-text-info"></i>
-                    <strong>Edit:</strong> {{isEditableMessage}}
+                <template #title>
+                    {{isEditableMessage}}
                 </template>
                 <FluentForm :tableCreated="tableCreated" :editing="true" :config="config" />
             </el-collapse-item>
@@ -14,10 +13,11 @@
 
 <script>
     import FluentForm from '../DataProviders/FluentForm';
+    import {InfoFilled} from "@element-plus/icons-vue";
 
     export default {
         name: "FluentformNav",
-        components: { FluentForm },
+        components: {InfoFilled, FluentForm },
         props: {
             config: {
                 type: Object

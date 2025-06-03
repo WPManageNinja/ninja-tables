@@ -1,13 +1,13 @@
 <template>
   <div>
-    <el-tooltip effect="dark" placement="top-right"
+    <el-tooltip effect="dark" placement="top-end"
                 content="If you choose svg you can customize the color otherwise can't">
-      <el-button size="mini" type="primary" @click.prevent="newIcon" round icon="el-icon-upload">
+      <NinjaButton size="small" type="secondary" @click.prevent="newIcon" round :icon="assetUrl('/icons/upload-02.svg')">
         {{ $t('Choose Icon') }}
-      </el-button>
+      </NinjaButton>
     </el-tooltip>
-    <el-input size="mini" :placeholder="$t('Search Icon')" v-model="keyword" style="margin: 10px 0; width: 96%;"></el-input>
-    <div style="height: 100px;width: 100%;overflow-y: scroll;">
+    <el-input size="small" :placeholder="$t('Search Icon')" v-model="keyword" style="margin: 10px 0; width: 96%;"></el-input>
+    <div class="flex flex-wrap" style="height: 100px;width: 100%;overflow-y: auto;">
         <span v-for="(icon, index) in iconList" :key="index">
             <img @click="chooseIcon(`${icon}`)" :src="getAsset(icon)" width="30px" height="30px">
         </span>
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import NinjaButton from "../../../../@ui-utils/NinjaButton.vue";
+import { assetUrl } from "../../../../utils/ninjatablesadmin";
 import {icons} from "../../libs/icons";
 
 export default {
@@ -27,7 +29,9 @@ export default {
       keyword: ''
     };
   },
+  components: { NinjaButton },
   methods: {
+    assetUrl,
     newIcon() {
       const upload = wp
           .media({

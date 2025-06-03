@@ -4,7 +4,7 @@
       <span>{{ $t('Progress Type') }}</span>
       <el-select v-model="item.data.style.type"
                  :placeholder="$t('Progress Bar Type')"
-                  size="mini"
+                  size="small"
                  style="width: 97%; margin-bottom: 7px;">
         <el-option
             v-for="type in types"

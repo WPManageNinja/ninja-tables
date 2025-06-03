@@ -1,59 +1,78 @@
 <template>
     <div>
-        <div class="table-column-settings">
-            <el-container>
-                <el-aside width="200px">
-                    <el-menu background-color="#545c64"
+        <div class="table-column-settings mx-4">
+            <el-container class="ninja-table-aside">
+                <el-aside class="!w-[70px] lg:!w-[300px] !p-[5px]">
+                    <el-menu background-color="white"
                              :default-active="active_menu"
-                             text-color="#fff"
+                             text-color="#525866"
                              active-text-color="#ffd04b"
                     >
                         <el-menu-item  @click="active_menu = 'columns'" index="columns">
-                            <i class="dashicons dashicons-editor-table"></i>
-                            <span>Columns</span>
+                            <el-tooltip content="Columns" placement="right">
+                                <img class="lg:hidden" :src="assetUrl('/icons/credit-card.svg')"/>
+                            </el-tooltip>
+                            <img class="hidden lg:block" :src="assetUrl('/icons/credit-card.svg')"/>
+                            <span class="hidden lg:block">{{$t('Columns')}}</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'rendering_settings'" index="rendering_settings">
-                            <i class="dashicons dashicons-album"></i>
-                            <span>Rendering Settings</span>
+                            <el-tooltip content="Rendering Settings" placement="right">
+                                <img class="lg:hidden" :src="assetUrl('/icons/credit-card.svg')"/>
+                            </el-tooltip>
+                            <img class="hidden lg:block" :src="assetUrl('/icons/credit-card.svg')"/>
+                            <span class="hidden lg:block">{{$t('Rendering Settings')}}</span>
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'custom_filters'" index="custom_filters">
-                            <i class="dashicons dashicons-filter"></i>
-                            <span>Custom Filters</span>
+                            <el-tooltip content="Custom Filters" placement="right">
+                                <img class="lg:hidden" :src="assetUrl('/icons/customize.svg')"/>
+                            </el-tooltip>
+                            <img class="hidden lg:block" :src="assetUrl('/icons/customize.svg')"/>
+                            <span class="hidden lg:block">{{$t('Custom Filters')}}</span>
+                            <img v-if="!hasPro" class="h-4 w-4 ml-1 !grayscale-0" :src="assetUrl('icons/get-pro.svg')" alt="">
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'button_settings'" index="button_settings">
-                            <i class="dashicons dashicons-images-alt"></i>
-                            <span>Buttons (CSV/Print)</span>
+                            <el-tooltip content="Buttons (CSV/Print)" placement="right">
+                                <img class="lg:hidden" :src="assetUrl('/icons/search-area.svg')"/>
+                            </el-tooltip>
+                            <img class="hidden lg:block" :src="assetUrl('/icons/search-area.svg')"/>
+                            <span class="hidden lg:block">{{$t('Buttons (CSV/Print)')}}</span>
+                            <img v-if="!hasPro" class="h-4 w-4 ml-1 !grayscale-0" :src="assetUrl('icons/get-pro.svg')" alt="">
                         </el-menu-item>
 
                         <el-menu-item  @click="active_menu = 'language_settings'" index="language_settings">
-                            <i class="dashicons dashicons-translation"></i>
-                            <span>Language Settings</span>
+                            <el-tooltip content="Language Settings" placement="right">
+                                <img class="lg:hidden" :src="assetUrl('/icons/language-square.svg')"/>
+                            </el-tooltip>
+                            <img class="hidden lg:block" :src="assetUrl('/icons/language-square.svg')"/>
+                            <span class="hidden lg:block">{{$t('Language Settings')}}</span>
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
-                <el-main>
+                <el-main class="ml-5 lg:ml-10">
                     <template v-if="active_menu == 'columns'">
-                        <div class="ninja_header">
-                            <h2>Table Column Settings</h2>
-                        </div>
+                        <h2 class="text-[18px] font-[600] text-[#0E121B]">{{$t('Table Column Settings')}}</h2>
+                  
                         <div class="ninja_content">
                             <div class="section_widget">
                                 <div class="heading">
                                     <h3 v-if="addColumnStatus || !columns.length" class="title">{{ $t('Add Table Column') }}</h3>
                                     <h3 v-else class="title">{{ $t('Available Columns') }}</h3>
                                     <div v-show="!addColumnStatus" class="inline_action" v-if="addable">
-                                        <el-button size="small" type="primary" v-show="columns.length" @click="addColumnStatus = !addColumnStatus">
-                                            {{ $t('Add Column') }}
-                                        </el-button>
+                                        <NinjaButton 
+                                        v-show="columns.length" 
+                                        @click="addColumnStatus = !addColumnStatus" 
+                                        :btnText="$t('Add Column')"
+                                        type="secondary"
+                                        :icon="assetUrl('/icons/add-01.svg')"
+                                        />
                                     </div>
                                 </div>
-                                <div class="widget_body">
-                                    <div v-if="addColumnStatus || !columns.length" class="column">
+                                <div v-if="addColumnStatus || !columns.length" class="column border border-[#ebeef5] rounded-[8px] mb-4">
                                         <div class="add_column_wrapper">
-                                            <columns-editor
+                                            <ColumnsEditor
                                                 :columns="columns"
                                                 :dataSourceType="config.table.dataSourceType"
                                                 :model="new_column"
@@ -61,53 +80,54 @@
                                                 :has-pro="has_pro"
                                                 @add="addNewColumn()"
                                                 @cancel="addColumnStatus = !addColumnStatus"
+                                                :hideCancel="false"
                                             />
                                         </div>
                                     </div>
-                                    <draggable @end="storeSettings" v-model="columns" handle=".handle" animation="150">
-                                        <div class="column drawer"
-                                             v-for="(column, index) in columns"
-                                             :key="column.key"
-                                        >
-                                            <div class="header">
-                                                <span class="dashicons dashicons-editor-justify handle" />
-                                                <span @click="openDrawer(index)">{{ column.name || column.key }}</span>
-                                                <span class="dashicons dashicons-edit edit_icon" @click="openDrawer(index)" />
+                                <div class="widget_body border border-[#ebeef5]">
+                                    <draggable 
+                                        @end="storeSettings" 
+                                        v-model="columns" 
+                                        handle=".handle" 
+                                        animation="150"
+                                        item-key="key"
+                                    >
+                                        <template #item="{element: column, index}">
+                                            <div class="column drawer" :key="column.key">
+                                                <div class="header flex justify-between items-center" :class="{'border-b border-[#ebeef5]':currentIndex.includes(index)}">
+                                                    <div class="flex items-center gap-2">
+                                                        <!-- <span class="dashicons dashicons-editor-justify handle" /> -->
+                                                         <img class="cursor-move handle" :src="assetUrl('/icons/drag-drop.svg')"/>
+                                                        <span @click="openDrawer(index)" class="text-[14px]">{{ column.name || column.key }}</span>
+                                                    </div>
+                                                    <span @click="openDrawer(index)" class="cursor-pointer">
+                                                        <!-- <img v-if="currentIndex.includes(index)" :src="assetUrl('/icons/chevron-up.svg')"/>
+                                                        <img v-else :src="assetUrl('/icons/chevron-down.svg')"/> -->
+                                                        <img :src="assetUrl('/icons/edit-2.svg')"/>
+                                                    </span>
+                                                </div>
+                                                <div class="drawer_body" :class="'drawer_body_'+index">
+                                                    <columns-editor
+                                                        :columns="columns"
+                                                        :dataSourceType="config.table.dataSourceType"
+                                                        :model="column"
+                                                        :has-pro="has_pro"
+                                                        :settings="config.settings"
+                                                        :updating="true"
+                                                        @delete="deleteColumn(index)"
+                                                        @store="storeSettings()"
+                                                    />
+                                                </div>
                                             </div>
-                                            <div class="drawer_body" :class="'drawer_body_'+index">
-                                                <columns-editor
-                                                    :columns="columns"
-                                                    :dataSourceType="config.table.dataSourceType"
-                                                    :model="column"
-                                                    :has-pro="has_pro"
-                                                    :settings="config.settings"
-                                                    :updating="true"
-                                                    @delete="deleteColumn(index)"
-                                                    @store="storeSettings()"
-                                                />
-                                            </div>
-                                        </div>
+                                        </template>
                                     </draggable>
-                                </div>
-                            </div>
-                            <div class="proms">
-                                <div class="help_section">
-                                    <p>Need help to configure the columns and responsive breakdowns, Please check tutorial with
-                                        video <a
-                                                href="https://ninjatables.com/docs/column-responsive-breakpoints/"
-                                                target="_blank">here</a></p>
-                                </div>
-                                <div v-if="!is_fluent_installed" class="help_section">
-                                    <p>Have you checked out FluentForm yet? We have developed a powerful Drag & Drop WordPress Form
-                                        Builder plugin with some amazing Premium features <a :href="fluent_url">Download from
-                                            WordPress.org</a></p>
                                 </div>
                             </div>
                         </div>
                     </template>
 
                     <template v-else-if="active_menu == 'rendering_settings'">
-                        <ninja-rendering-settings
+                        <NinjaRenderingSettings
                                 @storeSettings="storeSettings"
                                 :tableSettings="tableSettings"
                                 :config="config"
@@ -115,15 +135,15 @@
                     </template>
 
                     <template v-else-if="active_menu == 'language_settings'">
-                        <ninja-language-settings @storeSettings="storeSettings" :tableSettings="tableSettings"></ninja-language-settings>
+                        <NinjaLanguageSettings @storeSettings="storeSettings" :tableSettings="tableSettings"></NinjaLanguageSettings>
                     </template>
 
                     <template v-else-if="active_menu == 'custom_filters'">
-                        <ninja-custom-filters :columns="columns" :table_id="tableId"></ninja-custom-filters>
+                        <NinjaCustomFilters :columns="columns" :table_id="tableId"></NinjaCustomFilters>
                     </template>
 
                     <template v-else-if="active_menu = 'button_settings'">
-                        <ninja-button-settings :table_id="tableId" />
+                        <NinjaButtonSettings :table_id="tableId" />
                     </template>
                 </el-main>
             </el-container>
@@ -136,13 +156,16 @@
     import get from 'lodash/get'
     import size from 'lodash/size'
     import snakeCase from 'lodash/snakeCase'
-    import ColumnsEditor from './ColumnsEditor';
-    import NinjaCustomFilters from '../TableFilters/CustomFilter';
-    import NinjaLanguageSettings from '../Configarations/_LanguageSettings'
-    import NinjaRenderingSettings from '../Configarations/_RenderingSettings'
-    import NinjaButtonSettings from '../Configarations/_buttons'
+    import ColumnsEditor from './ColumnsEditor.vue';
+    import NinjaCustomFilters from '../TableFilters/CustomFilter.vue';
+    import NinjaLanguageSettings from '../Configarations/_LanguageSettings.vue'
+    import NinjaRenderingSettings from '../Configarations/_RenderingSettings.vue'
+    import NinjaButtonSettings from '../Configarations/_buttons.vue'
+    import { useEventBus } from '../../../eventBus';
 
     import { tableLibs } from '../../../data/data'
+    import { assetUrl } from '../../../utils/ninjatablesadmin';
+    import { NinjaButton } from '../../../@ui-utils';
 
     export default {
         name: 'TableConfiguration',
@@ -152,11 +175,14 @@
             NinjaCustomFilters,
             NinjaLanguageSettings,
             NinjaRenderingSettings,
-            NinjaButtonSettings
+            NinjaButtonSettings,
+            NinjaButton
         },
         props: ['config'],
         data() {
             return {
+                bus : useEventBus(),
+                currentIndex: [],
                 hasPro: !!window.ninja_table_admin.hasPro,
                 active_menu: 'columns',
                 table_color_primary: '#000',
@@ -202,8 +228,9 @@
             },
         },
         methods: {
+            assetUrl,
             storeSettings() {
-                window.ninjaTableBus.$emit('tableDoingAjax', true);
+                this.bus.emit('tableDoingAjax', true);
 
                 let data = {
                     table_id: this.tableId,
@@ -217,16 +244,21 @@
                             message: res.message,
                             type: 'success'
                         });
-                        this.$set(this.config, 'columns', this.columns);
-                      window.ninjaTableBus.$emit('tableDoingAjax', false);
+                        this.config.columns = this.columns;
+                      this.bus.emit('tableDoingAjax', false);
                     })
                     .catch((error) => {
-                      window.ninjaTableBus.$emit('tableDoingAjax', false);
+                      this.bus.emit('tableDoingAjax', false);
                     })
 
             },
             openDrawer(index) {
                 jQuery('.drawer_body_' + index).slideToggle();
+                if(this.currentIndex.includes(index)){
+                    this.currentIndex = this.currentIndex.filter(i => i !== index);
+                } else {
+                    this.currentIndex.push(index);
+                }
             },
             validateColumn(column) {
                 if (!column.name) {
@@ -273,13 +305,13 @@
             },
             showProAd(title) {
                 this.addVisible = true;
-                window.ninjaTableBus.$emit('show_pro_popup', 1);
+                this.bus.emit('show_pro_popup', 1);
             },
             size,
             get,
             initManualSorting() {
                 let promise = new Promise((resolve, reject) => {
-                    window.ninjaTableBus.$emit('initManualSorting', {
+                    this.bus.emit('initManualSorting', {
                         table_id: this.tableId,
                         noData: true
                     }, resolve, reject);
@@ -325,7 +357,7 @@
 
 <style lang="scss">
     .table-column-settings {
-        margin-top: 15px;
+        margin-top: 24px;
 
         .el-menu {
             border-right: initial;

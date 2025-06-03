@@ -174,4 +174,13 @@ class TablesController extends Controller
             'table_rows'    => $formatted_data
         ));
     }
+
+    public function dragAndDropHtml($id)
+    {
+        $tableId       = intval($id);
+
+        return [
+            'html' => do_shortcode('[ninja_table_builder id="' . $tableId . '"]')
+        ];
+    }
 }

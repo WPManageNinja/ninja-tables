@@ -1,33 +1,37 @@
 <template>
   <div class="ninja-table-dg-wrapper">
-    <div class="ninja_main_nav">
+    <div class="ninja_main_nav !h-[70px]">
       <top-nav :initialData="initialData" :selectedDevice="selectedDevice" @deviceSelected="deviceSelected"
         :tableId="$route.params.table_id">
       </top-nav>
     </div>
-    <el-row align="middle" :gutter="20">
-      <el-col :xs="24" :sm="10" :md="9" :lg="6" :xl="6" id="leftside">
-        <left-side-bar :singleItem="singleItem" :initialData="initialData" :selectedDevice="selectedDevice"
-          @deviceSelected="deviceSelected"></left-side-bar>
+      <Notices/>
+    <el-row :gutter="20">
+      <el-col :xs="24" :sm="10" :md="9" :lg="8" id="leftside">
+        <LeftSideBar :singleItem="singleItem" :initialData="initialData" :selectedDevice="selectedDevice"
+          @deviceSelected="deviceSelected"></LeftSideBar>
       </el-col>
-      <el-col :xs="24" :sm="14" :md="15" :lg="18" :xl="18">
-        <right-side-bar v-if="initialData" @editItem="editItem" :table="initialData.table"
+      <el-col :xs="24" :sm="14" :md="15" :lg="16">
+        <RightSideBar v-if="initialData" @editItem="editItem" :table="initialData.table"
           :selectedDevice="selectedDevice" :initialData="initialData" :tableId="$route.params.table_id"
           style="height: auto; padding-bottom: 25px;">
-        </right-side-bar>
+        </RightSideBar>
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
-import TopNav from "./TopNav";
-import LeftSideBar from "./Sidebar/LeftSideBar";
-import RightSideBar from "./Sidebar/RightSideBar";
+import TopNav from "./TopNav.vue";
+import LeftSideBar from "./Sidebar/LeftSideBar.vue";
+import RightSideBar from "./Sidebar/RightSideBar.vue";
+import { useEventBus } from '../../../admin/eventBus';
+import Notices from "../../@ui-utils/Notices.vue";
 
 export default {
   name: "TableBuilderHome",
   data() {
     return {
+      bus : useEventBus(),
       tableId: '',
       initialData: {},
       singleItem: {},
@@ -36,6 +40,7 @@ export default {
     };
   },
   components: {
+      Notices,
     TopNav,
     LeftSideBar,
     RightSideBar
@@ -81,14 +86,14 @@ export default {
     }
   },
   created() {
-    window.ninjaTableBus.$on("somethingChanged", () => {
+    this.bus.on("somethingChanged", () => {
       this.changeSomething = true;
       window.onbeforeunload = function () {
         return true;
       }
     });
 
-    window.ninjaTableBus.$on("saveData", () => {
+    this.bus.on("saveData", () => {
       this.changeSomething = false;
       window.onbeforeunload = null;
     });

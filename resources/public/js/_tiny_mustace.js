@@ -1,4 +1,8 @@
-require('es6-object-assign').polyfill();
+import { polyfill } from 'es6-object-assign';
+
+// Initialize polyfill
+polyfill();
+
 function mustache(template, self, parent, invert) {
     var render = mustache
     var output = ""

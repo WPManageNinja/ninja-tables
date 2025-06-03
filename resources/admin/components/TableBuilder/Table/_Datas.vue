@@ -42,7 +42,7 @@
                 :show-score="showRatingScore"
                 :text-color="`${item.data.style.color === '' ? setting.global_styling.options.color.value : item.data.style.color}`"
                 :max="item.data.style.maxStar" :colors='starRatingStyling'
-                :style="[ratingStyle, textAlign, padding]"></el-rate>
+                :style="[ratingStyle, padding, ratingTextAlign]"></el-rate>
         </span>
         <span v-else-if="item.data.type === 'icon'">
             <span :style="[padding, displayBlock]" class="hover-item">
@@ -59,12 +59,18 @@
                 :stroke-width="Number(item.data.style.thickness)">
             </el-progress>
         </span>
+
         <span v-else-if="item.data.type === 'image'">
-            <a class="hover-item" @click.prevent v-bind="[hrefAttribute, targetAttribute]" :style="[displayBlock]"
-                :rel="linkAttributes">
+            <a class="hover-item" @click.prevent
+               :href="[hrefAttribute, targetAttribute]"
+               :target="targetAttribute && targetAttribute.target"
+               :style="[displayBlock]"
+               :rel="linkAttributes">
+
                 <img :src="item.data.value"
-                    :style="[displayBlock, dBlockAlign, padding, borderRadius, { 'width': this.item.data.style.size + '%', }]"
-                    :alt="`${item.data.style.alt}`" />
+                     :style="[displayBlock, dBlockAlign, padding, borderRadius, { 'width': this.item.data.style.size + '%', }]"
+                     :alt="`${item.data.style.alt}`"
+                />
             </a>
         </span>
         <span v-else-if="item.data.type === 'list' || item.data.type === 'stylist_list'"
@@ -78,9 +84,8 @@
                         :style="[fontWeight, verticalAlignMiddle, { 'margin-left': item.data.style.itemSpacing + 'px' }]" />
 
                     <div class="icon-styles remove-elements" v-if="!manage">
-                        <i class="el-icon-copy-document" @click.stop="copyItem(index)">
-                        </i>
-                        <i class="el-icon-delete" @click.stop="deleteItem(index)"></i>
+                        <el-icon @click.stop="copyItem(index)"><CopyDocument /></el-icon>
+                        <el-icon @click.stop="deleteItem(index)"><Delete /></el-icon>
                     </div>
 
                 </li>
@@ -118,11 +123,14 @@
 import { restoreCursorPosition, saveCursorPosition } from "../../../utils/cursorSetup";
 import NinjaTextEditor from "../../Extras/_NinjaTextEditor.vue";
 import { manageDataElement } from "../Mixin/manageDataElement";
+import {CopyDocument, Delete} from "@element-plus/icons-vue";
 export default {
     name: "Datas",
     mixins: [manageDataElement],
     props: ["item", 'manage', 'setting', 'reference', 'row'],
     components: {
+        Delete,
+        CopyDocument,
         NinjaTextEditor
     },
     data() {
@@ -141,13 +149,13 @@ export default {
         },
         updateTextContent(newValue, idx) {
             if (idx !== undefined) {
-                this.$set(this.item.data.value, idx, newValue);
+                this.item.data.value[idx] = newValue;
             } else {
                 this.item.data.value = newValue;
             }
         },
         updateListItem(index, newValue) {
-            this.$set(this.item.data.value, index, newValue);
+            this.item.data.value[index] = newValue;
         },
         updateContent(event) {
             // const $ref = this.$refs.ninja_table_text_editor;
@@ -360,14 +368,15 @@ export default {
                 visibility: hidden;
 
                 i {
-                    background: #3f9eff;
+                    background: #335cff;
                     padding: 0px 1px;
                     font-weight: bold;
+                    font-size: 18px;
                 }
             }
 
             &:hover {
-                border-color: #3f9eff;
+                border-color: #335cff;
                 cursor: pointer;
 
                 .icon-styles {

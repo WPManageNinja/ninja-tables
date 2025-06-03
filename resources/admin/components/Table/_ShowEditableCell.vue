@@ -3,18 +3,28 @@
         <div v-if="is_editing && cell_editable" class="cell_editing">
             <may-be-select
                 @blur="maybeSave('blur')"
-                size="mini"
+                size="small"
                 v-if="column.data_type == 'selection'"
                 :newColumn="row['values']"
                 :column="column"></may-be-select>
-            <ninja-date-picker
+<!--            <ninja-date-picker-->
+<!--                @blur="maybeSave('blur')"-->
+<!--                only_picker="yes"-->
+<!--                v-focus-->
+<!--                v-else-if="column.data_type == 'date'"-->
+<!--                :column="column"-->
+<!--                :new_column="row['values']">-->
+<!--            </ninja-date-picker>-->
+
+            <NinjaDatePicker
                 @blur="maybeSave('blur')"
                 only_picker="yes"
                 v-focus
                 v-else-if="column.data_type == 'date'"
                 :column="column"
-                :new_column="row['values']">
-            </ninja-date-picker>
+                :new_column="row['values']"
+            />
+
             <textarea
                 v-else-if="column.data_type == 'textarea'"
                 v-focus
@@ -56,7 +66,7 @@
 
     export default {
         name: 'show_cell',
-        props: ['row', 'columns', 'column', 'formula_support', 'is_editable'],
+        props: ['table_id', 'row', 'columns', 'column', 'formula_support', 'is_editable'],
         components: {
             mayBeSelect,
             NinjaDatePicker
@@ -77,6 +87,10 @@
                     return;
                 }
 
+                if (this.btnLoading) {
+                    return;
+                }
+
                 let columnKey = this.column.key;
                 let columnValue = this.row.values[columnKey];
 
@@ -87,7 +101,6 @@
 
                 this.inital_value = JSON.stringify(columnValue);
 
-                let rowId = this.row.id;
                 let data = {
                     row_id: this.row.id,
                     column_key: columnKey,
@@ -97,18 +110,20 @@
                 this.btnLoading = true;
                 this.is_editing = false;
 
-                this.$put('tables/'+rowId+'/item', data)
+                this.$post('tables/'+this.table_id+'/item/update', data)
                     .then((response) => {
-                      this.$message.success({
-                        showClose: true,
-                        message: response.data.message,
-                        type: "success"
-                      });
+                        this.$message.success({
+                            showClose: true,
+                            message: response.data.message,
+                            type: "success"
+                        });
                     })
                     .catch((error) => {
                         this.$message.error('Failed to update!');
                     })
-              this.btnLoading = false;
+                    .finally(() => {
+                        this.btnLoading = false; // Move this to finally to ensure it runs
+                    });
             },
             renderTableCell(value, column, row) {
                 if (column.data_type == 'image') {

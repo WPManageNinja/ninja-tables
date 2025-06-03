@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <span style="float:left;">{{label}}</span>
-    <el-input size="mini" style="width: 96%;margin-bottom: 2px;" :value="value" @input="$emit('update', $event)"></el-input>
+    <el-input size="small" style="width: 96%;margin-bottom: 2px;" :value="value" @input="$emit('update', $event)"></el-input>
   </div>
 </template>
 <script>

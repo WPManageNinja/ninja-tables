@@ -1,19 +1,32 @@
 <template>
     <el-dialog
-            v-if="leadVisible"
-            :visible.sync="leadVisible"
-            title="We made a few tweaks to Ninja Tables"
+        class="ninja_create-table-modal"
+        v-if="leadVisible"
+        v-model="leadVisible"
+        title="We made a few tweaks to Ninja Tables"
+        align-center
     >
-        <div v-loading="loading" class="ninja_permission_wrapper">
-            <p>Hey {{display_name}},<br/>
-                Never miss an important update - opt in to our security & feature updates notifications. We will never
-                spam / share your data, We will only send emails about important updates</p>
-            <el-button @click="optin('yes')" type="success">Opt-in and Continue</el-button>
-            <el-button @click="optin('no')" class="pull-right" size="mini">Skip</el-button>
+        <div v-loading="loading" class="p-5">
+            <h3 class="nt-modal-subtitle">Hello {{display_name}},</h3>
+            <p class="nt-modal-description">
+                Never miss an important update - opt in to receive security and feature update notifications. We’ll never spam you or share your data. You’ll only receive emails about essential updates.
+            </p>
 
-            <div class="ninja_permissions">
-                <a @click.prevent="showPermission = !showPermission" href="#">What permissions are being granted?</a>
-                <p v-show="showPermission" class="permissions">
+           <div class="my-5 flex justify-end items-center gap-2">
+               <NinjaButton
+                   type="secondary"
+                   @click="optin('no')"
+                   :btn-text="$t('Skip')"
+               />
+               <NinjaButton
+                   @click="optin('no')"
+                   :btn-text="$t('Opt-in and Continue')"
+               />
+           </div>
+
+            <div class="p-[10px] text-center">
+                <a class="text-[#335CFF] shadow-none focus:shadow-none" @click.prevent="showPermission = !showPermission" href="#">What permissions are being granted?</a>
+                <p v-show="showPermission" class="permissions mt-2">
                     Name, email, Site URL, Plugins info, ip Address and uninstall event
                 </p>
             </div>
@@ -23,8 +36,11 @@
 
 <script type="text/babel">
 
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+
     export default {
         name: 'ninja_lead',
+        components: {NinjaButton},
         data() {
             return {
                 loading: false,

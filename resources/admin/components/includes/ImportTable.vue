@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="ninja_modal-body">
-            <h3>Import Table</h3>
+            <h3>{{ $t('Import Table') }}</h3>
 
             <p class="ninja_subtitle">
-                Import table from existing CSV or JSON file.
+                {{ $t('Import table from existing CSV or JSON file.') }}
             </p>
 
             <div class="form">
@@ -40,11 +40,16 @@
                     <template v-if="imports.format === 'csv'">
                         <p class="hint">
                             Check tutorial for importing data from CSV file
-                            <a href="https://ninjatables.com/docs/import-table-data-from-a-csv/"
+                            <a class="nt-link" href="https://ninjatables.com/docs/import-table-data-from-a-csv/"
                                target="_blank"
                             >here</a>
                         </p>
-                        <el-checkbox true-label="yes" false-label="no" v-model="do_unicode">Convert to UTF-8 format ( Check this if your csv is non-unicode format )</el-checkbox>
+                        <el-checkbox
+                            :true-value="'yes'"
+                            :false-value="'no'"
+                            v-model="do_unicode">
+                            Convert to UTF-8 format ( Check this if your csv is non-unicode format )
+                        </el-checkbox>
                     </template>
 
 
@@ -52,7 +57,7 @@
                     <p v-show="imports.format === 'json' || imports.format === 'ninjaJson'" class="hint">
                         Check tutorial for importing Table from JSON file
 
-                        <a href="https://ninjatables.com/docs/import-ninja-table-json/"
+                        <a class="nt-link" href="https://ninjatables.com/docs/import-ninja-table-json/"
                            target="_blank"
                         >here</a>
                     </p>

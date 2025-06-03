@@ -22,8 +22,9 @@ if (isset($setting['general']['options']['container_max_height']['value'])) {
 }
 ?>
 
-<div class="ntb_table_wrapper" data-responsive='<?php echo esc_attr(json_encode($responsive)); ?>'
+<div class="ntb_table_wrapper <?php echo esc_attr($ntb_instance); ?>"
      id='ninja_table_builder_<?php echo esc_attr($table_id); ?>'
+     data-ninja_table_builder_instance="<?php echo esc_attr($ntb_instance); ?>"
      style="
      <?php echo esc_attr("max-height:$max_height" . "px"); ?>;
      <?php echo esc_attr($max_width != '' ? "max-width: $max_width" . "px;" . $alignment : 'max-width: 1160px'); ?>;">

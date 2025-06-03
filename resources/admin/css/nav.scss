@@ -1,0 +1,124 @@
+// Main Navbar
+.ninja_main_nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  padding: 10px 32px;
+  height: 56px;
+  overflow: hidden;
+  background: #FFFFFF;
+  border-bottom: 1px solid #E1E4EA;
+  margin-top: -10px;
+  margin-left: -20px;
+  margin-right: -20px;
+
+  .plugin-name {
+    display: flex;
+    font-size: 16px;
+    color: #6e6e6e;
+    float: left;
+
+    &:focus {
+      outline: none;
+    }
+
+    .pro-text .pro {
+      margin-left: 5px;
+      position: absolute;
+      font-weight: bold;
+    }
+  }
+
+  .ninja_main_nav_right {
+    .el-menu.el-menu--horizontal {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .el-menu-item {
+        height: 36px;
+        color: #525866;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 20px;
+        letter-spacing: -0.084px;
+        padding: 8px 12px;
+        gap: 8px;
+        border-radius: 8px;
+        &.is-active {
+          background: #F5F7FA;
+          color: #0E121B !important;
+        }
+
+        &:hover {
+          background: #F5F7FA;
+        }
+
+        &.get_pro:hover {
+          background: none;
+        }
+      }
+    }
+
+    .el-menu--horizontal > .el-menu-item,
+    .el-menu--horizontal > .el-menu-item.is-active {
+      border-bottom: none;
+    }
+  }
+}
+
+// TableRows Navbar
+.ninja_inner_nav {
+  background: #FFFFFF;
+  border-bottom: 1px solid #E1E4EA;
+  // height: 72px;
+  margin-top: -10px;
+  margin-right: -20px;
+  margin-left: -20px;
+  padding: 16px 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+
+  .ninja_inner_nav_left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .nav-all-tables,
+    .nav-table-name {
+      text-align: center;
+      font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: -0.084px;
+    }
+
+    .nav-all-tables {
+      color: #525866;
+    }
+
+    .nav-table-name {
+      color: #0E121B;
+      margin-right: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+  }
+
+  .ninja_inner_nav_right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+  }
+}

@@ -14,26 +14,29 @@
         $(findEditClass).attr('style', ' margin-left: ' + marginLeft + 'px !important');
     }
 
+    const timeoutLimit = 300;
+
     $(document).ready(function ($) {
         $('.ntb_table_wrapper').each(function () {
             let mainTable = $(this)[0]
             let desktopFormat = mainTable.innerHTML
 
-            // Get responsive information from data-responsive attr,
-            let responsive = JSON.parse(mainTable.dataset.responsive)
-            let isResponsive = responsive.general.options.enable_responsive_table.value
+            let ntb_instance = mainTable.dataset.ninja_table_builder_instance;
+            let responsive = window[ntb_instance].responsive;
+            let isResponsive = responsive.general.options.enable_responsive_table.value;
 
             // Get responsive settings devices
             let settingsDevices = responsive.responsive_settings.options.devices;
 
             if (isResponsive === true || isResponsive === 'true') {
 
-                const tableId = mainTable.id
-                const rows = $('#' + tableId + ' table')[0].rows
+                // const tableId = mainTable.id
+                const tableClass = ntb_instance; // here this class is unique
+                const rows = $('.' + tableClass + ' table')[0].rows
 
                 // Get the length of th, td
-                const columnLength = $('#' + tableId + ' table').find('tr').length
-                const totalData = $('#' + tableId + ' table tr').find('td').length
+                const columnLength = $('.' + tableClass + ' table').find('tr').length
+                const totalData = $('.' + tableClass + ' table tr').find('td').length
                 const headerLen = Math.ceil(totalData / columnLength)
                 const dataLen = totalData - headerLen
 
@@ -101,7 +104,7 @@
                         const mobileTableAlign = settingsDevices.mobile.mobile_table_alignment.value;
 
                         if (breakpoint === 'false' || breakpoint === false) {
-                            $('#' + tableId + ' table tbody').empty()
+                            $('.' + tableClass + ' table tbody').empty()
                             if (cellDirection === 'row') {
                                 if (Object.keys(rows).length > 1) {
                                     rowWiseTopRowHeaderDesign(itemsPerRow, deviceName, cellBorder, mobileCellPadding);
@@ -164,7 +167,7 @@
                         const tabletTableAlign = settingsDevices.tablet.tablet_table_alignment.value;
 
                         if (breakpoint === 'false' || breakpoint === false) {
-                            $('#' + tableId + ' table tbody').empty()
+                            $('.' + tableClass + ' table tbody').empty()
                             if (cellDirection === 'row') {
                                 if (Object.keys(rows).length > 1) {
                                     rowWiseTopRowHeaderDesign(itemsPerRow, deviceName, cellBorder, tabletCellPadding);
@@ -213,7 +216,7 @@
                         mob = false
                         tab = false
                         desk = true
-                        $('#' + tableId)[0].innerHTML = desktopFormat
+                        $('.' + tableClass)[0].innerHTML = desktopFormat
                     }
 
                     /*
@@ -233,8 +236,12 @@
                  * @return {void}
                  */
                 function rowWiseStaticRowDesign(itemsPerRow, deviceName, cellPadding) {
-                    let wrapperWidth = $('.ntb_table_wrapper').width() * .9;
-                    let tdWidth = (wrapperWidth / itemsPerRow) + 'px';
+                    let tdWidth = '';
+                    setTimeout(function() {
+                        const dynamicWrapper = mainTable.dataset.ninja_table_builder_instance;
+                        let wrapperWidth = $('.' + dynamicWrapper).width() * 0.9;
+                        tdWidth = (wrapperWidth / itemsPerRow) + 'px';
+                    }, timeoutLimit);
 
                     // Data restructured for static row design by row direction
                     // let rowWiseData = rowWiseStaticRowDesignData();
@@ -243,8 +250,8 @@
                     let numberOfRow = Math.ceil(rowSerialData.tdCounter / itemsPerRow)
                     let td = 0;
                     for (let row = 0; row < numberOfRow; row++) {
-                        $('#' + tableId + ' table tbody').append('<tr></tr>')
-                        let tableRow = $('#' + tableId + ' table tbody tr')
+                        $('.' + tableClass + ' table tbody').append('<tr></tr>')
+                        let tableRow = $('.' + tableClass + ' table tbody tr')
                         $(tableRow[row]).addClass('tr_class_' + deviceName + '_' + row)
                         $(tableRow[row]).prop('id', 'tr_id_' + deviceName + '_' + row)
 
@@ -279,8 +286,12 @@
                  * @return {void}
                  */
                 function columnWiseStaticRowDesign(itemsPerRow, deviceName, cellPadding) {
-                    let wrapperWidth = $('.ntb_table_wrapper').width() * .9;
-                    let tdWidth = (wrapperWidth / itemsPerRow) + 'px';
+                    let tdWidth = '';
+                    setTimeout(function() {
+                        const dynamicWrapper = mainTable.dataset.ninja_table_builder_instance;
+                        let wrapperWidth = $('.' + dynamicWrapper).width() * 0.9;
+                        tdWidth = (wrapperWidth / itemsPerRow) + 'px';
+                    }, timeoutLimit);
 
                     // Data restructured for static row design by column direction
                     let columnWiseData = columnWiseSerialDataStructure(totalData, headerLen);
@@ -289,8 +300,8 @@
 
                     // Reconstruct the table with restructured data
                     for (let row = 0; row < numberOfRow; row++) {
-                        $('#' + tableId + ' table tbody').append('<tr></tr>')
-                        let tableRow = $('#' + tableId + ' table tbody tr')
+                        $('.' + tableClass + ' table tbody').append('<tr></tr>')
+                        let tableRow = $('.' + tableClass + ' table tbody tr')
                         $(tableRow[row]).addClass('tr_class_' + deviceName + '_' + row)
                         $(tableRow[row]).prop('id', 'tr_id_' + deviceName + '_' + row)
                         let addedClass = tableRow.addClass('staticRow')
@@ -325,16 +336,20 @@
                  * @return {void}
                  */
                 function rowWiseTopRowHeaderDesign(itemsPerRow, deviceName, cellBorder, cellPadding) {
-                    let wrapperWidth = $('.ntb_table_wrapper').width() * .9;
-                    let tdWidth = (wrapperWidth / (itemsPerRow + 1)) + 'px';
+                    let tdWidth = '';
+                    setTimeout(function() {
+                        const dynamicWrapper = mainTable.dataset.ninja_table_builder_instance;
+                        let wrapperWidth = $('.' + dynamicWrapper).width() * 0.9;
+                        tdWidth = (wrapperWidth / (itemsPerRow + 1)) + 'px';
+                    }, timeoutLimit);
 
                     //Row wise Data restructured as user requirement
                     let rowWiseData = rowWiseTopRowHeaderData(itemsPerRow);
 
                     // Reconstruct table with respect to restructured data
                     for (let [indTr, tRows] of Object.entries(rowWiseData.td)) {
-                        $('#' + tableId + ' table tbody').append('<tr></tr>')
-                        let tableRow = $('#' + tableId + ' table tbody tr')
+                        $('.' + tableClass + ' table tbody').append('<tr></tr>')
+                        let tableRow = $('.' + tableClass + ' table tbody tr')
                         $(tableRow[indTr]).addClass('tr_class_' + deviceName + '_' + indTr)
                         $(tableRow[indTr]).prop('id', 'tr_id_' + deviceName + '_' + indTr)
                         let addedClass = tableRow.addClass('topRowAsHeader')
@@ -379,10 +394,12 @@
                  * @return {void}
                  */
                 function columnWiseTopRowHeaderDesign(itemsPerRow, deviceName, cellBorder, cellPadding) {
-
-                    // let tdWidth = (width / headerLen) + 'px';
-                    let wrapperWidth = $('.ntb_table_wrapper').width() * .9;
-                    let tdWidth = (wrapperWidth / headerLen) + 'px';
+                    let tdWidth = '';
+                    setTimeout(function() {
+                        const dynamicWrapper = mainTable.dataset.ninja_table_builder_instance;
+                        let wrapperWidth = $('.' + dynamicWrapper).width() * 0.9;
+                        tdWidth = (wrapperWidth / headerLen) + 'px';
+                    }, timeoutLimit);
 
                     let totalHeader = Math.ceil(dataLen / (itemsPerRow * headerLen))
                     let dataIndex = 0;
@@ -399,8 +416,8 @@
                                 let isLastRow = false;
 
                                 // row per group including header
-                                $('#' + tableId + ' table tbody').append('<tr></tr>')
-                                let tableRow = $('#' + tableId + ' table tbody tr')
+                                $('.' + tableClass + ' table tbody').append('<tr></tr>')
+                                let tableRow = $('.' + tableClass + ' table tbody tr')
                                 $(tableRow[singleRow]).addClass('tr_class_' + deviceName + '_' + singleRow)
                                 $(tableRow[singleRow]).prop('id', 'tr_id_' + deviceName + '_' + singleRow)
                                 let addedClass = tableRow.addClass('topRowAsHeader')
@@ -411,8 +428,7 @@
 
                                     if (row === 0) {
 
-                                        const dataStyle = columnTopRowData.tableHeader.tdStyles[headerIndex] + columnTopRowData.tableHeader.trStyles[headerIndex];
-
+                                        const dataStyle =  columnTopRowData.tableHeader.trStyles[headerIndex] + columnTopRowData.tableHeader.tdStyles[headerIndex];
                                         insertedTd.innerHTML = columnTopRowData.tableHeader.innerHtml[headerIndex];
                                         $(insertedTd).prop('id', columnTopRowData.tableHeader.tdIds[headerIndex]);
                                         $(insertedTd).addClass(columnTopRowData.tableHeader.tdClasses[headerIndex]);
@@ -667,17 +683,17 @@
                  */
                 function responsiveTableAlign(alignment) {
                     if (alignment === "left") {
-                        $('#' + tableId + ' table').css({
+                        $('.' + tableClass + ' table').css({
                             "margin-left": " 0",
                             "margin-right": "auto"
                         })
                     } else if (alignment === "right") {
-                        $('#' + tableId + ' table').css({
+                        $('.' + tableClass + ' table').css({
                             "margin-left": "auto",
                             "margin-right": "0"
                         })
                     } else {
-                        $('#' + tableId + ' table').css({
+                        $('.' + tableClass + ' table').css({
                             "margin-left": "auto",
                             "margin-right": "auto"
                         })

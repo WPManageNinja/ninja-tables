@@ -48,14 +48,6 @@ class AdminMenuHandler
             'ninja_table_import_menu'
         );
 
-        $submenu['ninja_tables']['tools'] = array(
-            __('Tools', 'ninja-tables'),
-            $capability,
-            'admin.php?page=ninja_tables#/tools',
-            '',
-            'ninja_table_tools_menu'
-        );
-
         if (!defined('NINJA_CHARTS_VERSION')) {
             $submenu['ninja_tables']['ninja_charts'] = array(
                 __('Charts', 'ninja-tables'),
@@ -259,7 +251,7 @@ class AdminMenuHandler
             $slug . '_admin_app',
             $assets . "js/ninja-tables-boot.js",
             array('jquery'),
-            '1.0',
+            NINJA_TABLES_VERSION,
             true
         );
 
@@ -269,7 +261,7 @@ class AdminMenuHandler
             $slug,
             $assets . "js/ninja-tables-admin.js",
             array('jquery'),
-            '1.0',
+            NINJA_TABLES_VERSION,
             true
         );
 
@@ -311,6 +303,8 @@ class AdminMenuHandler
 
         $hasFluentFrom       = defined('FLUENTFORM_VERSION');
         $isFluentFromUpdated = false;
+        $hasTablePress       = defined('TABLEPRESS_ABSPATH');
+        $hasSupsystic        = defined('SUPSYSTIC_TABLES_VALUE_SHORTCODE_NAME');
 
         // check for right version
         if ($hasFluentFrom) {
@@ -356,6 +350,8 @@ class AdminMenuHandler
             'isInstalled'              => $isInstalled,
             'hasPro'                   => defined('NINJATABLESPRO'),
             'hasFluentForm'            => $hasFluentFrom,
+            'hasTablePress'            => $hasTablePress,
+            'hasSupsystic'             => $hasSupsystic,
             'isFluentFormUpdated'      => $isFluentFromUpdated,
             'hasAdvancedFilters'       => class_exists('NinjaTablesPro\App\Hooks\Handlers\CustomFilterHandler'),
             'hasSortable'              => defined('NINJATABLESPRO_SORTABLE'),
@@ -383,8 +379,9 @@ class AdminMenuHandler
             'ninja_charts_url'         => defined('NINJA_CHARTS_VERSION') ? self_admin_url(
                 'admin.php?page=ninja-charts#/chart-list'
             ) : null,
-            'ninja_table_admin_nonce'  => wp_create_nonce('ninja_table_admin_nonce'),
-            'ninja_tables_pro_url'     => defined('NINJATABLESPRO') ? NINJAPROPLUGIN_URL : null
+            'ninja_table_admin_nonce' => wp_create_nonce('ninja_table_admin_nonce'),
+            'ninja_tables_pro_url'    => defined('NINJATABLESPRO') ? NINJAPROPLUGIN_URL : null,
+            'max_upload_file_size'    => apply_filters('ninja_tables/max_upload_file_size', 1024)
         ));
 
         // Elementor plugin have a bug where they throw error to parse #url, and I really don't know why they want to parse
@@ -487,4 +484,3 @@ class AdminMenuHandler
     ";
     }
 }
-

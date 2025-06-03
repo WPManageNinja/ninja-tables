@@ -1,84 +1,93 @@
 <template>
-  <div>
-    <div class="ninja_main_nav">
-           <span class="plugin-name">
-                <img style="height: 36px;" :src="imageUrl('ninja_table.svg')" alt="ninja-tables">
-                <span class="pro" v-if="has_pro">{{ $t('Pro') }}</span>
-          </span>
-      <el-menu
-          style="float: right"
-          :default-active="activeMenu"
-          :router="true"
-          mode="horizontal"
-      >
-        <el-menu-item
-            v-for="menuItem in topMenus"
-            :key="menuItem.route"
-            :index="menuItem.route"
-            :route="{ name: menuItem.route }"
-        >
-          <i :class="menuItem.icon_class"/>
-          <span>
+    <div>
+        <div class="ninja_main_nav">
+            <div class="plugin-name">
+                <div class="logo">
+                    <img style="height: 36px;" :src="imageUrl('ninja_table.svg')" alt="ninja-tables">
+                </div>
+                <div class="pro-text" v-if="has_pro">
+                    <span class="pro">{{ $t('Pro') }}</span>
+                </div>
+            </div>
+
+            <div class="ninja_main_nav_right">
+                <el-menu
+                    style="float: right"
+                    :default-active="activeMenu"
+                    :router="true"
+                    mode="horizontal"
+                    :ellipsis="false"
+                >
+                    <el-menu-item
+                        v-for="menuItem in topMenus"
+                        :key="menuItem.route"
+                        :index="menuItem.route"
+                        :route="{ name: menuItem.route }"
+                    >
                         {{ menuItem.title }}
-                    </span>
-        </el-menu-item>
+                    </el-menu-item>
 
-        <el-menu-item index="buy-pro" v-if="!has_pro">
-          <get-pro size="small"/>
-        </el-menu-item>
-      </el-menu>
+                    <el-menu-item class="get_pro" index="buy-pro" v-if="!has_pro">
+                        <get-pro size="small"/>
+                    </el-menu-item>
+                </el-menu>
+            </div>
+        </div>
+        <Notices/>
+
+        <router-view :has-pro="has_pro"></router-view>
     </div>
-
-    <router-view :has-pro="has_pro"></router-view>
-  </div>
 </template>
 
 <script type="text/babel">
-    import GetPro from "./Tools/GetPro";
-    export default {
-        name: 'home',
-      components: {GetPro},
-      data() {
-            return {
-                has_pro: window.ninja_table_admin.hasPro,
-                topMenus: [],
-                img_url: window.ninja_table_admin.img_url
-            }
-        },
-        computed: {
-            activeMenu() {
-                return ['home', 'import_tables', 'help'].indexOf(this.$route.name) != -1 ? this.$route.name : 'home'
-            }
-        },
-        methods: {
-            setTopMenu() {
-                this.topMenus = this.applyFilters('ninja_table_top_menus', [
-                    {
-                        route: 'home',
-                        title: 'All Tables'
-                    },
-                    {
-                        route: 'import_tables',
-                        title: 'Tools and Settings'
-                    },
-                    {
-                        route: 'help',
-                        title: 'Help & Documentation'
-                    }
-                ]);
-            },
-          imageUrl(imageName) {
-            return this.img_url+imageName;
-          }
-        },
-        mounted() {
-            this.setTopMenu();
-        }
-    }
-</script>
+import GetPro from "./Tools/GetPro";
+import NinjaButton from "../@ui-utils/NinjaButton.vue";
+import {assetUrl} from "../utils/ninjatablesadmin";
+import Notices from "../@ui-utils/Notices.vue";
 
-<style>
-    .el-menu.el-menu--horizontal {
-        border-bottom: none;
+export default {
+    name: 'home',
+    components: {Notices, NinjaButton, GetPro},
+    data() {
+        return {
+            has_pro: window.ninja_table_admin.hasPro,
+            topMenus: [],
+            img_url: window.ninja_table_admin.img_url,
+            tools_routes: ['import_tables', 'default_table_appearance', 'permission', 'licensing', 'global_settings']
+        }
+    },
+    computed: {
+        activeMenu() {
+            if (this.tools_routes.includes(this.$route.name)) {
+                return 'import_tables'
+            }
+            return ['home', 'import_tables', 'help'].indexOf(this.$route.name) != -1 ? this.$route.name : 'home'
+        }
+    },
+    methods: {
+        assetUrl,
+        setTopMenu() {
+            this.topMenus = this.applyFilters('ninja_table_top_menus', [
+                {
+                    route: 'home',
+                    title: 'All Tables'
+                },
+                {
+                    route: 'import_tables',
+                    title: 'Tools and Settings'
+                },
+                {
+                    route: 'help',
+                    title: 'Help & Documentation'
+                }
+            ]);
+        },
+        imageUrl(imageName) {
+            return this.img_url + imageName;
+        }
+    },
+    mounted() {
+        this.setTopMenu();
     }
-</style>
+}
+</script>

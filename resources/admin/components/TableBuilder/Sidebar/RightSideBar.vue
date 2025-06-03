@@ -3,17 +3,20 @@
         <div
             v-if="!tableId"
             :gutter="20"
-            style="height: 500px; overflow-y: scroll; padding: 0px 20px;box-sizing: border-box;"
-        >
-            <template>
-                <h3>{{ $t('Create a Drag & Drop Table') }}</h3>
-                <p class="ninja_subtitle">
-                    {{ $t("Create your drag & drop table columns and rows to get complete control over your data with lots of customizations.") }}
+            >
+            <div class="mb-[30px]">
+                <h3 class="nt-modal-title">{{ $t('Create a Drag & Drop Table') }}</h3>
+                <p class="nt-modal-description">
+                    {{ $t("Create tables fast using drag & drop table mode. Add columns and rows manually, import, or pick a template. Learn more about drag & drop table.") }}
+                    <a class="nt-link" target="_blank" href="https://ninjatables.com/docs-category/simple-mode/">
+                        {{ $t('View Documentation') }}
+                    </a>
                 </p>
-            </template>
+
+            </div>
             <div class="form-group">
-                <label for="name">{{ $t("Table Title") }}</label>
-                <input
+                <div class="font-semibold">{{ $t("Table Title") }}<span class="nt-required ml-[4px]">*</span></div>
+                <NinjaInput
                     style="width: 95%"
                     v-model="initialData.table_data.table_name"
                     type="text"
@@ -24,7 +27,7 @@
             </div>
             <el-row v-if="!newTable" class="new-table-wrapper">
                 <el-col :span="12">
-                    <template>
+                    <div>
                         <div
                             class="new_table"
                             :style="`grid-template-rows:repeat(${initialData.table_data.table.tr},1fr);grid-template-columns:repeat(${initialData.table_data.table.tc},1fr)`"
@@ -50,28 +53,25 @@
                             ></span>
                         </div>
                         <div class="create-button">
-                            <el-button
+                            <NinjaButton
+                                class="w-full"
                                 @click="createTable('default')"
                                 type="primary"
-                                size="mini"
-                            >Create
-                            </el-button
+                                size="small"
                             >
-                            <div class="ntb-choose-template">
-                                <div>OR</div>
-                                <a href="#ntb-templates"> {{ $t('Choose a Template') }}</a>
-                            </div>
+                            <img :src="assetUrl('icons/add.svg')" alt="Create" />
+                            {{$t('Create')}}
+                            </NinjaButton>
                         </div>
-                    </template>
+                       
+                    </div>
                 </el-col>
                 <el-col :span="12">
-                    <h4>{{ $t('Import Table from CSV / JSON File') }}</h4>
-                    <hr>
-                    <div v-if="!file.name">
-                        <el-input :disabled="!hasPro" @mouseover.native="upgradeToPro"
+                    <div class="font-semibold">{{ $t('Import Table from CSV / JSON File') }}</div>
+                    <div v-if="!file.name" class="mb-3 mt-1">
+                        <NinjaInput :disabled="!hasPro" @mouseover.native="upgradeToPro"
                                   :placeholder="$t('Import CSV/JSON from URL')" v-model="url">
-                        </el-input>
-                        <hr>
+                        </NinjaInput>
                     </div>
                     <el-upload
                         v-if="!url"
@@ -83,18 +83,24 @@
                         :on-success="handleFileSuccess"
                         :on-remove="handleRemove"
                     >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">{{ $t('Drop file here or ') }}<em>{{ $t('click to upload') }}</em>
+                        <img class="mx-auto" :src="assetUrl('icons/upload-cloud-2-line.svg')"/>
+                        <div class="el-upload__text">{{ $t('Drop file here or ') }}<span class="nt-link">{{ $t('click to upload') }}</span>
                         </div>
                     </el-upload>
                     <div class="import-button" v-if="(file.name || url)">
-                        <el-button
+                        <NinjaButton
                             :loading="loading"
                             @click="importCJ"
                             type="primary"
-                            size="mini"
+                            size="small"
                         >Import
-                        </el-button>
+                        </NinjaButton>
+                    </div>
+                </el-col>
+                <el-col :span="24">
+                    <div class="ntb-choose-template">
+                        <div>OR</div>
+                        <a href="#ntb-templates"> {{ $t('Choose a Template') }}</a>
                     </div>
                 </el-col>
             </el-row>
@@ -105,29 +111,25 @@
                     v-for="(table, key) in initialData.ready_made_tables"
                     :key="key"
                 >
-                    <div class="table-type-heading">
-                        <h2 class="ready-made-name">{{ table.name }}</h2>
+                    <div class="table-type-heading mb-[20px]">
+                        <h4 class="ready-made-name text-center text-lg font-semibold">{{ table.name }}</h4>
                     </div>
                     <el-row>
-                        <el-col :span="8" v-for="(item, key) in table.tables" :key="key">
+                        <el-col class="mb-[20px]" :span="8" v-for="(item, key) in table.tables" :key="key">
                             <div class="ready-made-table-image">
                                 <img
-                                    style="
-                    margin: 0 auto;
-                    width: 180px;
-                    display: flex;
-                  "
+                                    style="margin: 0 auto;width: 180px;display: flex;"
                                     :src="getAsset(item.key + '.jpg')"
                                     alt=""
                                 />
                                 <div class="ready-made-table-button">
-                                    <el-button
-                                        size="mini"
+                                    <NinjaButton
+                                        size="small"
                                         @click="createTable(item.key, item)"
                                         type="primary"
                                     >
                                         <span>{{ (!hasPro && item.has_pro) ? 'Unlock in Pro' : 'Create' }}</span>
-                                    </el-button
+                                    </NinjaButton
                                     >
                                 </div>
                             </div>
@@ -138,31 +140,39 @@
                 </el-col>
             </el-row>
         </div>
-        <el-row v-else-if="tableId">
-            <table-layout
+        <el-row v-else-if="tableId" :justify="tableAlignment === 'left' ? 'start' : 
+           tableAlignment === 'right' ? 'end' : 'center'">
+            <TableLayout
                 @editItem="editItem"
                 :initialData="initialData"
                 :tableData="initialData.table_data"
                 :setting="initialData.settings"
                 :responsive="initialData.responsive"
                 :selectedDevice="selectedDevice"
-            ></table-layout>
+            ></TableLayout>
         </el-row>
     </div>
     
 </template>
 <script>
 import draggable from "vuedraggable";
-import TableLayout from "../Table/Layout";
+import TableLayout from "../Table/Layout.vue";
 import {helpers} from "../Mixin/helpers";
+import {UploadFilled} from "@element-plus/icons-vue";
+import NinjaInput from "../../../@ui-utils/NinjaInput.vue";
+import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+import { assetUrl } from "../../../utils/ninjatablesadmin";
 
 export default {
     name: "RightSideBar",
     props: ["initialData", "tableId", "selectedDevice"],
     mixins: [helpers],
     components: {
+        UploadFilled,
         draggable,
         TableLayout,
+        NinjaInput,
+        NinjaButton
     },
     data() {
         return {
@@ -179,9 +189,13 @@ export default {
         },
         hasPro() {
             return !!window.ninja_table_admin.hasPro;
+        },
+        tableAlignment() {
+            return this.initialData?.settings?.general?.options?.table_alignment?.value;
         }
     },
     methods: {
+        assetUrl,
         upgradeToPro() {
             if (!this.hasPro) {
                 return this.upgradeMessage();
@@ -283,21 +297,20 @@ export default {
 <style lang="scss">
 .new-table-wrapper {
     .table-type-heading {
-        h2 {
-            background-color: #1C2024;
+        h4 {
+            background-color: rgba(71, 108, 255, 0.1);
             text-align: center;
             padding: 10px;
-            color: #ffffff;
-
-            .ready-made-name {
-                margin-top: 40px;
-            }
+            color: #335CFF;
+            font-size: 16px;
+            font-weight: 600;
         }
     }
 
     .table-title-style {
         display: table;
         margin: 5px auto 20px;
+        font-size: 16px;
     }
 
     .ready-made-table-image {
@@ -341,7 +354,7 @@ export default {
         }
 
         .table-row-input {
-            left: -120px;
+            left: -124px;
             position: absolute;
             transform: rotate(-90deg);
             top: 80px;
@@ -355,12 +368,10 @@ export default {
     }
 
     .create-button {
-        .el-button {
-            margin-top: 10px;
-            width: 200px;
-            left: 42px;
-            position: relative;
-        }
+        margin-top: 10px;
+        width: 200px;
+        left: 42px;
+        position: relative;
     }
 
     .import-button {

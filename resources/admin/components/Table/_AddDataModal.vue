@@ -1,130 +1,175 @@
 <template>
     <el-dialog
+        class="ninja_create-table-modal"
         :title="title"
-        :visible.sync="showModal"
+        v-model="showModal"
         top="50px"
         :close-on-click-modal="false"
         :append-to-body="true"
-        @close="closeModal">
-        <div v-if="showModal">
-            <div v-for="column in columns" :key="column.key" class="form-group">
-                <label :for="slugify(column.key)">{{ column.name || column.key }}</label>
-                <div v-if="column.data_type == 'textarea'">
-                    <textarea :placeholder="column.name" :id="slugify(column.key)" class="form-control"
-                              v-model="newColumn[column.key]"></textarea>
-                </div>
-                <div v-else-if="column.data_type == 'html'">
-                    <wp_editor :editor_id="slugify(column.key)" v-model="newColumn[column.key]"></wp_editor>
-                </div>
-                <div v-else-if="column.data_type == 'date'">
-                    <ninja-date-picker :column="column" :new_column="newColumn"></ninja-date-picker>
-                </div>
-                <div v-else-if="column.data_type == 'selection'">
-                    <may-be-select :column="column" :newColumn="newColumn"></may-be-select>
-                </div>
-
-                <div v-else-if="column.data_type == 'image' && has_pro">
-                    <image-selector :adding_counter="adding_counter" :column="column" :newColumn="newColumn"></image-selector>
-                </div>
-                <div v-else-if="column.data_type == 'button' && has_pro">
-                    <input placeholder="Valid button URL" type="url" :id="slugify(column.key)" class="form-control"
-                           v-model="newColumn[column.key]">
-                    <small>Please provide valid URL</small>
-                </div>
-
-                <div v-else>
-                    <input :placeholder="column.name" type="text" :id="slugify(column.key)" class="form-control"
-                           v-model="newColumn[column.key]">
-                </div>
-            </div>
-            <div v-if="!editId && manualSort && !insertAfterPosition">
-                Add at
-                <input type="radio" v-model="position" value="last" style="margin-left: 5px;">Last
-                <input type="radio" v-model="position" value="first" style="margin-left: 10px;">First
-            </div>
-        </div>
-
-        <div class="row_config_container" v-if="row_config">
-            <template v-if="has_pro">
-                <h3>Row Settings</h3>
-                <div class="form_row_full">
-                    <div class="form-group form_row_half">
-                        <label>Row Background Color</label>
-                        <el-color-picker v-model="item_settings.row_bg" show-alpha></el-color-picker>
+        @close="closeModal"
+        align-center
+    >
+        <div class="ninja_modal-body p-[20px]" style="max-height: 75vh; overflow-y: auto;">
+            <div v-if="showModal">
+                <div v-for="column in columns" :key="column.key" class="form-group">
+                    <label :for="slugify(column.key)" class="nt-form-label">{{ column.name || column.key }}</label>
+                    <div v-if="column.data_type === 'textarea'">
+                        <el-input
+                            type="textarea"
+                            v-model="newColumn[column.key]"
+                            :placeholder="column.name"
+                            :id="slugify(column.key)"
+                            :autosize="{ minRows: 4, maxRows: 8}"
+                        />
                     </div>
-                    <div class="form-group form_row_half">
-                        <label>Row Text Color</label>
-                        <el-color-picker v-model="item_settings.text_color" show-alpha></el-color-picker>
+                    <div v-else-if="column.data_type === 'html'">
+                        <wp_editor :editor_id="slugify(column.key)" v-model="newColumn[column.key]"></wp_editor>
+                    </div>
+                    <div v-else-if="column.data_type === 'date'">
+                        <NinjaDatePicker :column="column" :new_column="newColumn" />
+                    </div>
+                    <div v-else-if="column.data_type === 'selection'">
+                        <may-be-select :column="column" :newColumn="newColumn"></may-be-select>
+                    </div>
+
+                    <div v-else-if="column.data_type === 'image' && has_pro">
+                        <image-selector :adding_counter="adding_counter" :column="column" :newColumn="newColumn"></image-selector>
+                    </div>
+                    <div v-else-if="column.data_type === 'button' && has_pro">
+                        <NinjaInput
+                            placeholder="Valid button URL"
+                            type="url"
+                            :id="slugify(column.key)"
+                            class="form-control"
+                            v-model="newColumn[column.key]"
+                        />
+                        <small>{{ $t('Please provide valid URL') }}</small>
+                    </div>
+
+                    <div v-else>
+                        <NinjaInput
+                            :placeholder="column.name"
+                            :id="slugify(column.key)"
+                            v-model="newColumn[column.key]"
+                        />
                     </div>
                 </div>
-                <h3>Cell Color Customization</h3>
-                <table class="wp-list-table widefat fixed striped">
-                    <thead>
-                    <tr>
-                        <th>Column</th>
-                        <th>Background Color</th>
-                        <th>Text Color</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="column in columns" :key="column.key">
-                        <td>{{ column.name }}</td>
-                        <td>
-                            <el-color-picker v-model="item_settings.cell[column.key]['background-color']"
-                                             show-alpha></el-color-picker>
-                        </td>
-                        <td>
-                            <el-color-picker v-model="item_settings.cell[column.key]['color']"
-                                             show-alpha></el-color-picker>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div v-if="!insertAfterPosition" style="margin-top: 20px" class="form-group">
-                    <label>
-                        Data Create Date
-                        <el-tooltip placement="top-start" effect="light">
-                            <span slot="content">
-                              <h3>Create Date</h3>
-                              Set the date of the data creation.<br>
-                              This is useful when you want to sort the data by date
-                            </span>
-                            <i class="el-icon-info el-text-info"></i>
-                        </el-tooltip>
-                    </label>
-                    <el-date-picker
-                        v-model="created_at"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        type="datetime"
-                        placeholder="Select date and time">
-                    </el-date-picker>
+                <div v-if="!editId && manualSort && !insertAfterPosition" class="flex items-center gap-2">
+                    <label class="nt-form-label">{{ $t('Add at') }}</label>
+                    <el-radio-group
+                        v-model="position"
+                        class="ninja_tables_radio_group"
+                    >
+                        <el-radio value="last" border>Last</el-radio>
+                        <el-radio value="first" border>First</el-radio>
+                    </el-radio-group>
                 </div>
-            </template>
-            <template v-else>
-                <h3>Row and Cell Color Customization</h3>
-                <p>Using this module, You can set cell and row level colors of your data, It's a pro feature, Please
-                    purchase pro to unlock this feature</p>
-               <get-pro/>
-            </template>
-        </div>
-        <div slot="footer" class="dialog-footer" :class="{ 'single-child': shouldNotContinueAdding }">
-            <template v-if="!shouldNotContinueAdding">
-                <div>
-                    <label for="adding_more" class="dialog-footer-item">
-                        <input type="checkbox" id="adding_more" v-model="continueAdding"/> Continue Adding
-                    </label>
+            </div>
+
+            <div v-if="row_config">
+                <div v-if="has_pro" class="mt-[30px] border border-[#E1E4EA] p-[20px] rounded-[12px]">
+                    <h3 class="nt-modal-subtitle mb-4">Row Settings</h3>
+                    <div class="grid grid-cols-2 gap-x-5">
+                        <div class="flex flex-col">
+                            <label class="nt-form-label">Row Background Color</label>
+                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                <ColorPicker v-model="item_settings.row_bg" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="nt-form-label">Row Text Color</label>
+                            <div class="border-solid border border-[lightgray] px-[5] py-1 w-full rounded-lg">
+                                <ColorPicker v-model="item_settings.text_color" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="nt-modal-subtitle mt-4">Cell Color Customization</h3>
+                    <el-table :data="columns" border class="nt-inner-table">
+                        <el-table-column prop="name" label="Column" />
+                        <el-table-column label="Background Color">
+                            <template #default="scope">
+                                <ColorPicker :showValue="false" v-model="item_settings.cell[scope.row.key]['background-color']" />
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="Text Color">
+                            <template #default="scope">
+                                <ColorPicker :showValue="false" v-model="item_settings.cell[scope.row.key]['color']" />
+                            </template>
+                        </el-table-column>
+                    </el-table>
+
+                    <div v-if="!insertAfterPosition"  class="flex flex-col mt-4">
+                        <label class="nt-form-label">
+                            Data Create Date
+                            <el-tooltip placement="top-start" effect="light">
+                                <template #content>
+                                  <h3 class="font-bold">Create Date</h3>
+                                  Set the date of the data creation.<br>
+                                  This is useful when you want to sort the data by date
+                                </template>
+                                <el-icon class="tooltip-icon-color"><InfoFilled /></el-icon>
+                            </el-tooltip>
+                        </label>
+                        <el-date-picker
+                            v-model="created_at"
+                            format="YYYY-MM-DD HH:mm:ss"
+                            type="datetime"
+                            placeholder="Select date and time"/>
+                    </div>
                 </div>
-            </template>
-            <div class="dialog-footer-item">
-                <el-button @click="row_config = !row_config" size="small"><i class="el-icon-setting"></i>
-                </el-button>
-                <el-button v-loading="btnLoading" :disabled="btnLoading" type="primary" size="small" @click="addData">
-                    <span v-if="editId"> {{ $t('Update') }}</span>
-                    <span v-else>{{ $t('Add') }}</span>
-                    <i v-if="btnLoading" class="fooicon fooicon-spin fooicon-circle-o-notch"></i>
-                </el-button>
+
+                <div v-else class="nt-instruction">
+                    <h3 class="nt-modal-title mb-3">{{ $t('Row and Cell Color Customization') }}</h3>
+                    <p class="text-[14px] font-[400] text-[#525866]">{{ $t(`Using this module, You can set cell and row level colors of your data, It's a pro feature, Please
+                        purchase pro to unlock this feature`) }}</p>
+                   <div class="mt-4">
+                       <get-pro/>
+                   </div>
+                </div>
             </div>
         </div>
+
+        <div class="px-[20px] py-[16px] flex justify-between items-center" :class="{ 'single-child': shouldNotContinueAdding }">
+            <div>
+                <el-checkbox
+                    v-if="!shouldNotContinueAdding"
+                    v-model="continueAdding"
+                >
+                    {{ $t('Continue Adding') }}
+                </el-checkbox>
+            </div>
+
+            <div class="flex gap-2 items-center">
+                <div @click="showRowConfig"
+                     class="cursor-pointer flex items-center px-[9px] py-[9px] bg-white border-[#D6DAE1] border-solid border rounded-[8px]">
+                    <img :src="assetUrl('icons/setting-02.svg')" alt="settings"/>
+                </div>
+
+                <NinjaButton
+                    @click="closeModal"
+                    type="secondary"
+                    :btn-text="$t('Cancel')"
+                />
+
+                <NinjaButton
+                    v-if="editId"
+                    @click="addData"
+                    :disabled="btnLoading"
+                    :btn-text="$t('Update')"
+                    :loading="btnLoading"
+                />
+                <NinjaButton
+                    v-else
+                    @click="addData"
+                    :disabled="btnLoading"
+                    :btn-text="$t('Add')"
+                    :loading="btnLoading"
+                />
+
+            </div>
+        </div>
+
     </el-dialog>
 </template>
 
@@ -136,6 +181,11 @@
     import ImageSelector from '../../../common/ImageSelector';
     import NinjaDatePicker from '../Extras/_NinjaDatePicker'
     import GetPro from "../Tools/GetPro";
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import {assetUrl} from "../../utils/ninjatablesadmin";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+    import ColorPicker from "../../@ui-utils/ColorPicker.vue";
+    import NinjaColorPicker from "../Extras/ColorPicker.vue";
 
     export default {
         name: 'add_data',
@@ -185,6 +235,7 @@
             }
         },
         methods: {
+            assetUrl,
             addData() {
                 let valid = false;
                 each(this.newColumn, (value) => {
@@ -258,10 +309,25 @@
                             type: 'error'
                         });
                     })
-                   this.btnLoading = false;
+                    .finally(() => {
+                        this.btnLoading = false;
+                    });
             },
             closeModal() {
                 this.$emit('modal_close');
+            },
+            showRowConfig() {
+                this.row_config = !this.row_config;
+
+                this.$nextTick(() => {
+                    const modalBody = document.querySelector('.ninja_create-table-modal .ninja_modal-body');
+                    if (modalBody) {
+                        modalBody.scrollTo({
+                            top: modalBody.scrollHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
             },
             initNewColumnObj() {
                 let columnObj = {};
@@ -282,13 +348,17 @@
                     this.item_settings = this.item.settings;
                 }
                 if (!this.item_settings.cell) {
-                    this.$set(this.item_settings, 'cell', {});
+                    this.item_settings.cell = {};
                 }
                 each(this.columns, (column) => {
-                    if (!this.item_settings.cell[column.key]) {
-                        this.$set(this.item_settings.cell, column.key, {});
-                    }
+                    this.item_settings.cell[column.key] = {};
                 });
+
+                if (this.item_settings.text_color || this.item_settings.bg_color) {
+                    this.item_settings.text_color = '';
+                    this.item_settings.row_bg = '';
+                }
+
                 if (this.item) {
                     this.created_at = this.item.created_at;
                 }
@@ -315,6 +385,10 @@
             this.initNewColumnObj();
         },
         components: {
+            NinjaColorPicker,
+            ColorPicker,
+            NinjaButton,
+            NinjaInput,
           GetPro,
             wp_editor: wp_editor,
             NinjaDatePicker,

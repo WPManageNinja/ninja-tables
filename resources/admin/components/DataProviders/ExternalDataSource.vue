@@ -1,285 +1,391 @@
 <template>
-    <div>
+    <div v-if="!hasPro" class="mb-4">
+        <PremiumNotice v-if="type === 'google-csv'"
+                       title="Connect Google Sheets"
+                       content="This is a Premium feature. Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro."
+        >
+            <template #default>
+                <p class="text-[14px] font-[400] text-[#525866]">
+                    {{ $t('This is a Premium feature. Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro.') }}
+                    <a class="nt-link" target="_blank"
+                       href="https://ninjatables.com/docs/google-sheets-integration/">
+                        {{ $t('View Documentation') }}
+                    </a>
+                    {{ $t('or') }}
+                    <a class="nt-link" target="_blank"
+                       href="https://youtu.be/wcJ3m7krRRM?si=22JC8p6O8FjPtQDu/">
+                        {{ $t('Watch Video.') }}
+                    </a>
+                </p>
+            </template>
+        </PremiumNotice>
+
+
+        <PremiumNotice v-else-if="type === 'csv'"
+                       title="Connect External CSV"
+        >
+            <template #default>
+                <p class="text-[14px] font-[400] text-[#525866]">{{ $t('This is a Premium feature. Construct table from remote CSV file. Whenever your remote CSV data changes it will automatically sync here.') }}
+                    <a href="https://ninjatables.com/docs/construct-table-from-csv/" target="_blank" class="nt-link" > View Documentation </a>
+                </p>
+            </template>
+        </PremiumNotice>
+    </div>
+
+    <div v-else-if="!activated_features.external_data_source" class="mb-4">
+        <UpgradeNotice/>
+    </div>
+
+    <div v-else>
         <div class="ninja_modal-body" v-if="!editing">
-
-            <el-steps :active="active_step" align-center>
-                <el-step title="Step 1"></el-step>
-                <el-step title="Step 2"></el-step>
-            </el-steps>
-
-            <template v-if="active_step == 0">
-                <template v-if="type == 'google-csv'">
-                    <h3>
-                        Construct Table from Google Sheets
+            <div class="external-link-heading">
+                <template v-if="type === 'google-csv'">
+                    <h3 class="nt-modal-title">
+                        {{ $t('Connect Google Sheets') }}
                     </h3>
-                    <p class="ninja_subtitle">
-                        Whenever your Google Sheets data changes it will be automatically reflected here. You won't have
-                        to do a thing. Please provide the publishable public URL of your google sheet.
-                        <a target="_blank"
+                    <p class="nt-modal-description">
+                        {{ $t('Auto-sync your published Google Sheet and display the entries on a customized table in Ninja Tables Pro.') }}
+                        <a class="nt-link" target="_blank"
                            href="https://ninjatables.com/docs/google-sheets-integration/">
-                          View Documentation Here</a>
+                            {{ $t('View Documentation') }}
+                        </a>
+                        {{ $t('or') }}
+                        <a class="nt-link" target="_blank"
+                           href="https://youtu.be/wcJ3m7krRRM?si=22JC8p6O8FjPtQDu/">
+                            {{ $t('Watch Video.') }}
+                        </a>
                     </p>
                 </template>
 
-                <template v-if="type == 'csv'">
-                    <h3>
-                        Construct Table from Remote CSV File
+                <template v-if="type === 'csv'">
+                    <h3 class="nt-modal-title">
+                        {{ $t('Connect External CSV') }}
                     </h3>
-                    <p class="ninja_subtitle">
-                        Whenever your remote CSV data changes it will be synced here automatically.
+                    <p class="nt-modal-description">
+                        {{ $t('Construct table from remote CSV file. Whenever your remote CSV data changes it will automatically sync here.') }}
+                        <a href="https://ninjatables.com/docs/construct-table-from-csv/" target="_blank" class="nt-link" > {{ $t('View Documentation') }} </a>
                     </p>
                 </template>
+            </div>
 
-                <div class="form-group">
-                    <label for="name">{{ $t('Table Title') }}</label>
-                    <input v-model="table.post_title"
-                           type="text"
-                           id="name"
-                           class="form-control"
-                           placeholder="Enter a title to identify your table"
-                           :disabled="!activated_features.external_data_source"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="remote_url">{{ $t('Data Source URL') }}</label>
-                    <input v-model="table.remote_url"
-                           id="remote_url"
-                           type="text"
-                           class="form-control"
-                           placeholder="Enter your source URL"
-                           :disabled="!activated_features.external_data_source"
-                    />
-                </div>
-            </template>
-
-            <template v-else>
-                <el-table
-                        v-loading="fetching"
-                        ref="rowSelectableTable"
-                        :data="fields"
-                        style="width:100% !important"
-                        @selection-change="handleFieldsSelectionChange"
+            <div class="my-[30px]">
+                <el-steps
+                    class="mx-auto my-5 max-w-[350px] nt-steps"
+                    :active="active_step"
+                    align-center
                 >
-                    <el-table-column type="selection"></el-table-column>
-                    <el-table-column prop="name" label="Select Entry Fields"></el-table-column>
-                </el-table>
-            </template>
-        </div>
+                    <el-step title="Step 1"></el-step>
+                    <el-step title="Step 2"></el-step>
+                </el-steps>
+            </div>
 
-        <template v-else>
-            <el-table
-                    :loading="fetching"
-                    ref="rowSelectableTable"
-                    :data="fields"
-                    style="width:100% !important"
-                    @selection-change="handleFieldsSelectionChange"
-            >
-                <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="name" label="Select Entry Fields"></el-table-column>
-            </el-table>
-        </template>
-
-        <template v-if="!hasPro">
-            <premium-notice/>
-        </template>
-        <template v-else-if="!activated_features.external_data_source">
-            <UpgradeNotice/>
-        </template>
-
-        <div style="margin-top: 20px" class="modal-footer">
-            <el-row v-if="!editing">
-                <el-col :md="12">
-                    <el-button type="primary" style="float:left" size="small" @click="nextStep">
-                        {{ active_step > 0 ? 'Prev' : 'Next' }}
-                    </el-button>
-                </el-col>
-                <el-col :md="12" v-if="active_step > 0">
-                    <el-button
-                            style="float: right"
-                            type="success"
-                            size="small"
-                            :loading="saving"
-                            @click="save"
+            <div>
+                <template v-if="active_step === 0">
+                    <div class="nt-form-group">
+                        <label for="nt-form-label">{{ $t('Table Title') }} <span class="nt-required">*</span></label>
+                        <NinjaInput
+                            v-model="table.post_title"
+                            :placeholder="$t('Enter a title to identify your table')"
                             :disabled="!activated_features.external_data_source"
-                    >{{ $t('Save') }}
-                    </el-button>
-                </el-col>
-            </el-row>
+                        />
+                    </div>
+
+                    <div class="nt-form-group">
+                        <label for="remote_url" class="nt-form-label">{{ $t('Data Source URL') }} <span class="nt-required">*</span></label>
+                        <NinjaInput
+                            v-model="table.remote_url"
+                            :placeholder="$t('Enter your source URL')"
+                            :disabled="!activated_features.external_data_source"
+                        />
+                    </div>
+                </template>
+
+                <template v-else>
+                    <div class="nt-checkbox-group-wrapper">
+                        <div class="nt-checkbox-group-header"
+                             style="border-bottom: 1px solid #E1E4EA">
+                            <div>{{ $t('Select Entry Fields') }}</div>
+                            <div>
+                                <el-checkbox
+                                    v-model="checkAll"
+                                    :indeterminate="isIndeterminate"
+                                    @change="handleCheckAllChange"
+                                >
+                                    {{ $t('Select all') }}
+                                </el-checkbox>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div v-if="fetching" class="text-center mt-2 text-gray-500 text-sm">
+                                <el-icon class="is-loading">
+                                    <Loading/>
+                                </el-icon>
+                            </div>
+
+                            <el-checkbox-group
+                                v-else
+                                v-model="selectedFields"
+                                @change="handleFieldsSelectionChange"
+                                class="nt-checkbox-group"
+                                v-loading="fetching"
+                                element-loading-text="Loading fields..."
+                            >
+                                <el-checkbox v-for="field in fields" :key="field.name" :value="field.name">
+                                    {{ field.name }}
+                                </el-checkbox>
+                            </el-checkbox-group>
+                        </div>
+                    </div>
+                </template>
+            </div>
         </div>
 
-        <div style="margin-top: 15px;" v-if="editing">
-            <el-input
-                    placeholder="Remote URL..."
+        <!--  for table edit nav -->
+        <div v-else class="mt-5">
+            <div class="nt-checkbox-group-wrapper">
+                <div class="nt-checkbox-group-header"
+                     style="border-bottom: 1px solid #E1E4EA">
+                    <div>{{ $t('Select Entry Fields') }}</div>
+                    <div>
+                        <el-checkbox
+                            v-model="checkAll"
+                            :indeterminate="isIndeterminate"
+                            @change="handleCheckAllChange"
+                        >
+                            {{ $t('Select all') }}
+                        </el-checkbox>
+                    </div>
+                </div>
+                <div class="p-4">
+
+                    <div v-if="fetching" class="text-center mt-2 text-gray-500 text-sm">
+                        <el-icon class="is-loading">
+                            <Loading/>
+                        </el-icon>
+                    </div>
+
+                    <el-checkbox-group
+                        v-else
+                        v-model="selectedFields"
+                        @change="handleFieldsSelectionChange"
+                        class="nt-checkbox-group pb-2"
+                        v-loading="fetching"
+                        element-loading-text="Loading fields..."
+                    >
+                        <el-checkbox v-for="field in fields" :key="field.name" :value="field.name">
+                            {{ field.name }}
+                        </el-checkbox>
+                    </el-checkbox-group>
+                </div>
+            </div>
+        </div>
+
+        <div class="nt-modal-footer" v-if="!editing">
+            <div v-if="active_step > 0" class="flex items-center gap-4">
+                <NinjaButton @click="nextStep" type="secondary" :btnText="$t('Previous')"/>
+                <NinjaButton @click="save" :loading="saving" :btnText="$t('Save')"
+                             :disabled="!activated_features.external_data_source"/>
+            </div>
+
+            <div v-else class="flex items-center gap-4">
+                <NinjaButton @click="$emit('modalClose')" :btnText="$t('Cancel')" type="secondary"/>
+                <NinjaButton :disables="!hasPro" :loading="fetching" @click="nextStep" :btnText="$t('Next')"/>
+            </div>
+        </div>
+
+        <div v-if="editing" class="mt-5 mb-2">
+
+            <div class="flex gap-5">
+                <el-input
+                    size="small"
+                    :placeholder="$t('Remote URL...')"
                     v-model="table.remoteURL"
-                    v-on:keyup.enter="fatchRemoteData"
-            >
-                <el-button
-                        :loading="fetching"
-                        @click="fatchRemoteData"
-                        slot="prepend"
-                        size="small"
-                        plain
-                >{{ $t('Fetch Columns') }}
-                </el-button>
+                    @keyup.enter="fatchRemoteData"
+                >
+                    <template #suffix>
+                        <NinjaButton
+                            size="small"
+                            :btn-text="$t('Fetch Columns')"
+                            :icon="assetUrl('icons/refresh.svg')"
+                            :loading="fetching"
+                            @click="fatchRemoteData"
+                            loading="fetching"
+                            type="secondary"
+                        />
+                    </template>
+                </el-input>
 
-                <el-button
-                        :loading="saving"
-                        @click="save"
-                        slot="append"
-                        size="small"
-                        plain
-                        type="primary"
-                >{{ $t('Update Settings') }}
-                </el-button>
-
-            </el-input>
+                <NinjaButton
+                    :loading="saving"
+                    @click="save"
+                    :btn-text="$t('Update')"
+                />
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import PremiumNotice from '../includes/PremiumNotice';
-    import UpgradeNotice from '../includes/UpgradeNotice';
+import PremiumNotice from '../includes/PremiumNotice';
+import UpgradeNotice from '../includes/UpgradeNotice';
+import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+import {assetUrl} from "../../utils/ninjatablesadmin";
 
-    export default {
-        name: 'Remote-Data-Source',
-        components: {
-            PremiumNotice,
-            UpgradeNotice
+export default {
+    name: 'Remote-Data-Source',
+    components: {
+        NinjaButton,
+        NinjaInput,
+        PremiumNotice,
+        UpgradeNotice
+    },
+    props: {
+        columns: {
+            type: Array
         },
-        props: {
-            columns: {
-                type: Array
-            },
-            type: {
-                type: String,
-                required: true
-            },
-            tableCreated: {
-                type: Function,
-                required: true
-            },
-            hasPro: {
-                required: true
-            },
-            table: {
-                type: Object,
-                default: () => ({
-                    post_title: '',
-                    remote_url: '',
-                    fields: [],
-                    table_id: null,
-                })
-            },
-            editing: {
-                type: Boolean,
-                default: false
-            },
-            activated_features: {
-                type: Object,
-                default: function () {
-                    return {}
-                }
-            }
+        type: {
+            type: String,
+            required: true
         },
-        data() {
-            return {
+        tableCreated: {
+            type: Function,
+            required: true
+        },
+        hasPro: {
+            required: true
+        },
+        table: {
+            type: Object,
+            default: () => ({
+                post_title: '',
+                remote_url: '',
                 fields: [],
-                active_step: 0,
-                saving: false,
-                fetching: false,
-            }
+                table_id: null,
+            })
         },
-        methods: {
-            nextStep() {
-                let message = '';
-                if (!this.table.post_title) {
-                    message += ' The title field is required.';
-                }
-                if (!this.table.remote_url) {
-                    message += ' The url field is required.';
-                }
-
-                if ((message = jQuery.trim(message))) {
-                    this.active_step = 0;
-                    this.$message({showClose: true, message: message, type: 'error'});
-                    return;
-                }
-
-                if (this.active_step++ >= 1) {
-                    this.active_step = 0;
-                } else {
-                    this.fatchRemoteData();
-                }
-            },
-            fatchRemoteData() {
-                // if (this.fields.length) return;
-                this.fetching = true;
-
-                let data = {
-                    action: 'ninja_table_external_data_source_create',
-                    ...this.table,
-                    type: this.type,
-                    get_headers_only: true
-                }
-
-                delete data.custom_css;
-
-                this.$post(data)
-                    .then(res => {
-                        let fields = [];
-                        jQuery.each(res.data, v => fields.push({name: v}));
-                        this.fields = fields;
-
-                        if (this.editing) {
-                            let selected = this.columns.map(c => c.original_name);
-                            this.$nextTick(() => {
-                                this.fields.filter(f => selected.indexOf(f.name) != -1).forEach(row => {
-                                    this.$refs.rowSelectableTable.toggleRowSelection(row);
-                                });
-                            });
-                        }
-                    })
-                    .fail(res => {
-                        let message = '';
-                        let messages = res.responseJSON.data.message;
-                        for (let key in messages) {
-                            message += ' ' + messages[key];
-                        }
-                        this.$message({showClose: true, message: message, type: 'error'});
-                    })
-                    .always(res => this.fetching = false);
-            },
-            handleFieldsSelectionChange(val) {
-                this.table.fields = val;
-            },
-            save(event) {
-                this.saving = true;
-                let data = {
-                    ...this.table,
-                    type: this.type,
-                    action: 'ninja_table_external_data_source_create'
-                }
-                delete data.custom_css;
-                this.$post(data)
-                    .then(({data}) => this.tableCreated(data.ID))
-                    .fail(error => {
-                        let message = '';
-                        let messages = error.responseJSON.data.message;
-                        for (let key in messages) {
-                            message += ' ' + messages[key];
-                        }
-                        this.$message({showClose: true, message: message, type: 'error'});
-                    })
-                    .always(() => this.saving = false);
-            }
+        editing: {
+            type: Boolean,
+            default: false
         },
-        created() {
-            if (this.editing) {
-                this.table.table_id = this.table.ID;
-                this.fatchRemoteData();
+        activated_features: {
+            type: Object,
+            default: function () {
+                return {}
             }
         }
-    };
+    },
+    data() {
+        return {
+            fields: [],
+            active_step: 0,
+            saving: false,
+            fetching: false,
+            selectedFields: [],
+            checkAll: false,
+            isIndeterminate: false
+        }
+    },
+    methods: {
+        assetUrl,
+        nextStep() {
+            let message = '';
+            if (!this.table.post_title) {
+                message += ' The title field is required.';
+            }
+            if (!this.table.remote_url) {
+                message += ' The url field is required.';
+            }
+
+            if ((message = jQuery.trim(message))) {
+                this.active_step = 0;
+                this.$message({showClose: true, message: message, type: 'error'});
+                return;
+            }
+
+            if (this.active_step++ >= 1) {
+                this.active_step = 0;
+            } else {
+                this.fatchRemoteData();
+            }
+        },
+        fatchRemoteData() {
+            // if (this.fields.length) return;
+            this.fetching = true;
+
+            let data = {
+                action: 'ninja_table_external_data_source_create',
+                ...this.table,
+                type: this.type,
+                get_headers_only: true
+            }
+
+            delete data.custom_css;
+
+            this.$post(data)
+                .then(res => {
+                    let fields = [];
+                    jQuery.each(res.data, v => fields.push({name: v}));
+                    this.fields = fields;
+
+                    if (this.editing) {
+                        let selected = this.columns.map(c => c.original_name);
+                        this.selectedFields = selected.filter(name =>
+                            this.fields.some(f => f.name === name)
+                        );
+                        this.updateCheckAllState();
+                    }
+                })
+                .fail(res => {
+                    let message = '';
+                    let messages = res.responseJSON.data.message;
+                    for (let key in messages) {
+                        message += ' ' + messages[key];
+                    }
+                    this.$message({showClose: true, message: message, type: 'error'});
+                })
+                .always(res => this.fetching = false);
+        },
+        handleCheckAllChange(val) {
+            this.selectedFields = val ? this.fields.map(field => field.name) : [];
+            this.handleFieldsSelectionChange(this.selectedFields);
+        },
+        handleFieldsSelectionChange(value) {
+            this.table.fields = this.fields.filter(field => value.includes(field.name));
+            this.updateCheckAllState();
+        },
+        updateCheckAllState() {
+            const fieldsCount = this.fields.length;
+            const selectedCount = this.selectedFields.length;
+            this.checkAll = fieldsCount > 0 && selectedCount === fieldsCount;
+            this.isIndeterminate = selectedCount > 0 && selectedCount < fieldsCount;
+        },
+        save(event) {
+            this.saving = true;
+            let data = {
+                ...this.table,
+                type: this.type,
+                action: 'ninja_table_external_data_source_create'
+            }
+            delete data.custom_css;
+            this.$post(data)
+                .then(({data}) => this.tableCreated(data.ID))
+                .fail(error => {
+                    let message = '';
+                    let messages = error.responseJSON.data.message;
+                    for (let key in messages) {
+                        message += ' ' + messages[key];
+                    }
+                    this.$message({showClose: true, message: message, type: 'error'});
+                })
+                .always(() => this.saving = false);
+        }
+    },
+    created() {
+        if (this.editing) {
+            this.table.table_id = this.table.ID;
+            this.fatchRemoteData();
+        }
+    }
+};
 </script>

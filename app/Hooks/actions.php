@@ -42,13 +42,14 @@ $app->addAction('wp_ajax_nopriv_wp_ajax_ninja_tables_public_action', [AjaxHandle
 $app->addAction('wp_loaded', [PreviewHandler::class, 'defaultTable']);
 $app->addAction('wp_loaded', [PreviewHandler::class, 'dragAndDropTable']);
 
-$app->addAction('init', [EditorBlockHandler::class, 'loadGutenBlock']);
 $app->addAction('init', [EditorBlockHandler::class, 'addTablesToEditor']);
 
 $app->addAction('admin_print_styles', [StyleHandler::class, 'adminMenuStyle']);
 
-$app->addAction('ninja_table_check_db_integrity',
-    [\NinjaTables\Database\Migrations\NinjaTableItemsMigrator::class, 'checkDBMigrations']);
+$app->addAction(
+    'ninja_table_check_db_integrity',
+    [\NinjaTables\Database\Migrations\NinjaTableItemsMigrator::class, 'checkDBMigrations']
+);
 
 global $pagenow;
 if ($pagenow == 'plugins.php') {
@@ -57,8 +58,6 @@ if ($pagenow == 'plugins.php') {
 $app->addAction('wp_ajax_ninja-tables_deactivate_feedback', [DeactivationHandler::class, 'saveDeactivationFeedback']);
 
 $app->addAction('wp_head', [NinjaTableAdminHandler::class, 'addNinjaTableAdminScript']);
-$app->addAction('admin_notices', [NinjaTableAdminHandler::class, 'adminNotices']);
-$app->addAction('init', [NinjaTableAdminHandler::class, 'remindMeLater']);
 
 $app->addAction('save_post', [NinjaTableAdminHandler::class, 'saveNinjaTableFlagOnShortCode']);
 
@@ -83,3 +82,6 @@ if (defined('NINJAPROPLUGIN_VERSION') && version_compare(NINJAPROPLUGIN_VERSION,
 
 $app->addAction('wp_ajax_ninja-tables-default-export', [ExportHandler::class, 'defaultExport']);
 $app->addAction('wp_ajax_ninja-tables-drag-and-drop-export', [ExportHandler::class, 'dragAndDropExport']);
+
+(new \NinjaTables\App\Modules\Gutenberg\GutenbergModule())->register();
+(new \NinjaTables\App\Hooks\Handlers\NoticeHandler())->register();

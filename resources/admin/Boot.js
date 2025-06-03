@@ -1,9 +1,14 @@
-import NINJATABLE from './NINJATABLES';
+import NINJATABLE from './NINJATABLES'
 
-var oldOnError = window.onerror;
+// Error handling
+const oldOnError = window.onerror
 window.onerror = function() {
-    if(oldOnError) oldOnError.apply(this, arguments);  // Call any previously assigned handler
-    return true;
-};
+    if(oldOnError) oldOnError.apply(this, arguments)
+    return true
+}
 
-window.NINJATABLE = new NINJATABLE();
+// Initialize NINJATABLE and make it globally available
+window.NINJATABLE = new NINJATABLE()
+
+// Export for use in other files
+export default window.NINJATABLE

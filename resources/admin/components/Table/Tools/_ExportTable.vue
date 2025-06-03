@@ -1,55 +1,69 @@
 <template>
-    <div>
+    <div class="export-table-wrapper ml-2">
+        <div class="text-[18px] font-[600] text-[#0E121B] my-5">{{ $t('Export Table') }}</div>
+        <div v-if="config.table.isExportable">
+            <div class="text-[14px] font-[400] text-[#0E121B] my-5 w-1/2">{{
+                    $t("You can download the table in CSV or JSON format. If you download it as JSON, you can import the table into a Ninja Tables installation.")
+                }}
+            </div>
 
-        <div class="ninja_header">
-            <h2>{{$t('Export Data')}}</h2>
-        </div>
-        <div v-if="config.table.isExportable" class="ninja_content">
-            <div class="ninja_suggest">
-                <p>You can download the table data as CSV or JSON format, If you download as json then you can import the table to any Ninja Table Installation</p>
+
+            <div class="text-[14px] font-[400] text-[#0E121B] my-2 w-1/2">
+                {{ $t('Format') }}
+                <el-tooltip placement="right" effect="light"
+                            popper-class="nt-custom-tooltip"
+                            :content="$t('Select the format in which you want to export your table data. CSV format is suitable for spreadsheet applications, while JSON format preserves all table settings for importing into another Ninja Tables installation.')">
+                    <el-icon class="tooltip-icon-color">
+                        <InfoFilled/>
+                    </el-icon>
+                </el-tooltip>
             </div>
-            <div class="ninja_export_block">
-                {{ $t('Format:') }}
-                <select v-model="selected">
-                    <option v-for="(option, key) in exportOptions" :value="key">
-                        {{ option }}
-                    </option>
-                </select>
-                <el-button type="primary" icon="el-icon-download" size="small"
-                           @click.prevent="doExport()">
-                    {{ $t('Export') }}
-                </el-button>
+            <div class="flex w-1/2 gap-2">
+                <el-select class="ninja-select" v-model="selected">
+                    <el-option value="csv" label="CSV"/>
+                    <el-option value="json" label="JSON"/>
+                </el-select>
+
+                <NinjaButton class="min-w-[130px]" type="primary" @click="doExport" :btnText="$t('Export Table')"/>
             </div>
+
+
         </div>
-        <div v-else class="ninja_content">
-            <div class="ninja_suggest">
-                <p>Sorry! You can not export the data as the table data is configured as external source ({{ config.table.dataSourceType }})</p>
+        <div v-else>
+            <div class="text-[14px] font-[400] text-[#0E121B] my-5 w-1/2">
+                {{ $t('Sorry! You can not export the data as the table data is configured as external source') }}
+                ({{ config.table.dataSourceType }})
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'ExportTable',
-        props: ['config'],
-        data() {
-            return {
-                tableId: this.$route.params.table_id,
-                exportOptions: {
-                    csv : 'CSV',
-                    json: 'JSON'
-                },
-                selected: 'csv'
-            }
+import {Download, InfoFilled} from "@element-plus/icons-vue";
+import NinjaButton from "../../../@ui-utils/NinjaButton.vue";
+
+export default {
+    name: 'ExportTable',
+    props: ['config'],
+    components: {
+        NinjaButton,
+        Download,
+        InfoFilled
+    },
+
+    data() {
+        return {
+            tableId: this.$route.params.table_id,
+            selected: 'csv'
+        }
+    },
+    methods: {
+        downloadLink(format = 'csv') {
+            return `${window.ajaxurl}?action=ninja-tables-default-export&table_id=${this.$route.params.table_id}&format=${format}`;
         },
-        methods: {
-            downloadLink(format = 'csv') {
-                return `${window.ajaxurl}?action=ninja-tables-default-export&table_id=${this.$route.params.table_id}&format=${format}`;
-            },
-            doExport() {
-               location.href = this.downloadLink(this.selected);
-            }
+        doExport() {
+            location.href = this.downloadLink(this.selected);
         }
     }
+}
 </script>

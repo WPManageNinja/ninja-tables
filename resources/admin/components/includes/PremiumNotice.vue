@@ -1,21 +1,24 @@
 <template>
-    <el-alert title=""
-              type="warning"
-              :closable="false"
-              class="premium-notice"
-    >
-        <p>
+    <div class="nt-instruction">
+        <h3 class="nt-modal-title mb-3">{{title}}</h3>
+        <slot>
+        <p v-if="content" class="text-[14px] font-[400]">
+            {{ content }}
+        </p>
+        <p v-else class="text-[14px] font-[400] text-[#525866]">
             This is a Premium feature. Get
-            <b v-if="highlight">{{highlight}},</b>
+            <b v-if="highlight">{{ highlight }},</b>
             <b>unlimited customizations</b>,
             <b>data filters</b>,
             <b>professional looks</b>,
             <b>Many More Integrations</b>
             and so many things from the Pro version.
         </p>
-
-        <get-pro/>
-    </el-alert>
+        </slot>
+        <div class="mt-4">
+            <GetPro/>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -23,7 +26,7 @@
     export default {
       name: "PremiumNotice",
       components: {GetPro},
-      props: ['highlight']
+      props: ['highlight', 'title', 'content']
     }
 </script>
 

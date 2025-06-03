@@ -284,10 +284,29 @@ class PublicDataHandler
         if (!$table || $table->post_type != 'ninja-table') {
             return;
         }
+
+        static $tableBuilderInstances = [];
+        $tableInstance = 'ninja_table_builder_instance_' . count($tableBuilderInstances);
+        $tableBuilderInstances[] = $tableInstance;
+
         $ninja_table_builder_html = get_post_meta($table->ID, '_ninja_table_builder_table_html', true);
         $ninja_table_builder_table_data = get_post_meta($table->ID, '_ninja_table_builder_table_data', true);
         $ninja_table_builder_setting = get_post_meta($table->ID, '_ninja_table_builder_table_settings', true);
         $ninja_table_builder_responsive = get_post_meta($table->ID, '_ninja_table_builder_table_responsive', true);
+        
+        // Add the instance to window object via wp_footer
+        add_action('wp_footer', function () use ($tableInstance, $table_id, $ninja_table_builder_responsive, $ninja_table_builder_setting) {
+            ?>
+            <script type="text/javascript">
+                window.<?php echo $tableInstance; ?> = {
+                    tableId: <?php echo $table_id; ?>,
+                    responsive: <?php echo wp_json_encode($ninja_table_builder_responsive); ?>,
+                    settings: <?php echo wp_json_encode($ninja_table_builder_setting); ?>
+                };
+            </script>
+            <?php
+        });
+
         $html = do_shortcode($ninja_table_builder_html);
         $this->enqueueNinjaTableBuilderScript();
 
@@ -299,8 +318,8 @@ class PublicDataHandler
             'ninja_table_builder_html' => $html,
             'table_data'               => $ninja_table_builder_table_data,
             'setting'                  => $ninja_table_builder_setting,
-            'responsive'               => $ninja_table_builder_responsive,
-            'table_id'                 => $table_id
+            'table_id'                 => $table_id,
+            'ntb_instance'             => $tableInstance
         ]);
     }
 

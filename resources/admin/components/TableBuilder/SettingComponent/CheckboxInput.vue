@@ -2,22 +2,30 @@
     <div class="block nt-checkbox-group">
         <span>{{ label }}</span>
         <el-checkbox-group
-            size="mini"
-            :value="value"
-            @input="$emit('update', $event)">
-            <el-checkbox v-for="option in options" :key="option.value" :label="option.value">{{ option.value }}</el-checkbox>
+            size="small"
+            :model-value="modelValue"
+            @update:model-value="$emit('update:modelValue', $event)"
+            >
+
+            <el-checkbox
+                v-for="option in options"
+                :key="option.value"
+                :label="option.value"
+                :value="option.value"
+            />
+
         </el-checkbox-group>
     </div>
 </template>
 <script>
 export default {
     name: "CheckboxInput",
-    
-    model: {
-        prop: "value",
-        event: "update"
-    },
+    emits: ['update:modelValue'],
     props: {
+        modelValue: {
+            type: Array,
+            default: () => []
+        },
         value: {
             type: Array,
             default: () => []

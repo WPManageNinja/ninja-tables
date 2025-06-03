@@ -1,6 +1,6 @@
 <template>
     <div class="component-wrapper">
-        <el-button size="medium" type="primary" @click.prevent="replaceImage" round icon="el-icon-upload">
+        <el-button type="primary" @click.prevent="replaceImage" round icon="el-icon-upload">
             {{ $t('Replace Image') }}
         </el-button>
         <alignment :label="$t('Alignment')" v-model="item.data.style.alignment"></alignment>
