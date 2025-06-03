@@ -654,17 +654,17 @@
                                 class="">
                                 <span>{{ $t('Sort Type') }}
                                     <el-select class="ninja-select" v-model="tableSettings.default_sorting">
-                                        <option value="new_first">{{ $t('Show New Items First') }}</option>
-                                        <option value="old_first">{{ $t('Show Old Items First') }}</option>
+                                        <el-option value="new_first">{{ $t('Show New Items First') }}</el-option>
+                                        <el-option value="old_first">{{ $t('Show Old Items First') }}</el-option>
                                     </el-select>
                                 </span>
                             </div>
                             <div v-else-if="tableSettings.sorting_type == 'by_column'" class="flex items-center justify-between gap-2">
                                 <div class="w-full">{{ $t('Select Column') }}
                                     <el-select size="small" class="ninja-select" v-model="tableSettings.sorting_column">
-                                        <option v-for="column in config.columns" :key="column.key" :value="column.key">
+                                        <el-option v-for="column in config.columns" :key="column.key" :value="column.key">
                                             {{ column.name }}
-                                        </option>
+                                        </el-option>
                                     </el-select>
                                 </div>
                                 <div class="w-full">{{ $t('Sort Type') }}
