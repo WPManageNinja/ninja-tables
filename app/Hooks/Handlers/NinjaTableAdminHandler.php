@@ -2,6 +2,9 @@
 
 namespace NinjaTables\App\Hooks\Handlers;
 
+use NinjaTables\Framework\Support\Sanitizer;
+use NinjaTables\Framework\Support\Arr;
+
 class NinjaTableAdminHandler
 {
     public function addNinjaTableAdminScript()
@@ -50,6 +53,23 @@ class NinjaTableAdminHandler
             update_post_meta($post_id, '_has_ninja_tables', $ids);
         } elseif (get_post_meta($post_id, '_has_ninja_tables', true)) {
             update_post_meta($post_id, '_has_ninja_tables', 0);
+        }
+    }
+
+    public function remindMeLater()
+    {
+        $key = Sanitizer::sanitizeTextField(Arr::get($_GET, 'key', 'admin_notice'));
+        $action = Sanitizer::sanitizeTextField(Arr::get($_GET, 'action', ''));
+        $prefix = 'ninja_tables_';
+
+        if ($key && $action === 'remindMeLater') {
+            ninjaTablesValidateNonce('ninja_table_admin_nonce');
+            setcookie(
+                $prefix.$key,
+                NINJA_TABLES_VERSION,
+                time() + (60 * 60 * 24 * 30)
+            );
+            wp_redirect(admin_url('admin.php?page=ninja_tables#home'));
         }
     }
 }
