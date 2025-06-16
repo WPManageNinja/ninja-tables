@@ -48,7 +48,7 @@ class InitConfig
     {
         return [
             'id'         => '',
-            'table_name' => 'Table Name',
+            'table_name' => '',
             'data'       => [],
             'table_type' => null,
             'table'      => $this->getOtherTableConfig()
