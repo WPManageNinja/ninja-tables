@@ -23,27 +23,56 @@
               </template>
             </el-table-column>
 
-            <el-table-column :label="$t('Title')" class-name="title" prop="post_title" sortable="custom" width="200">
+            <el-table-column :label="$t('Title')" class-name="title" prop="post_title" sortable="custom" width="250">
                 <template #default="scope">
-                    <template v-if="shouldBeVisible(scope.row) && scope.row.ID">
+                    <div v-if="shouldBeVisible(scope.row) && scope.row.ID">
                         <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
-                            {{$t(scope.row.post_title)}}
+                            <el-tooltip placement="top" effect="light">
+                                <template #content>
+                                    {{ scope.row.post_title }}
+                                </template>
+                                <span>
+                                    {{ scope.row.post_title }}
+                                </span>
+                            </el-tooltip>
                         </router-link>
+
                         <router-link v-else :to="{ name: 'data_items', params: { table_id: scope.row.ID } }">
-                            {{$t(scope.row.post_title)}}
+                            <el-tooltip placement="top" effect="light">
+                                <template #content>
+                                    {{ scope.row.post_title }}
+                                </template>
+                                <span>
+                                    {{ scope.row.post_title }}
+                                </span>
+                            </el-tooltip>
                         </router-link>
-                    </template>
-                    <template v-else-if="shouldBeVisible(scope.row) && !scope.row.ID">
-                        {{$t(scope.row.post_title)}}
-                    </template>
+                    </div>
+                    <div v-else-if="shouldBeVisible(scope.row) && !scope.row.ID">
+                        <el-tooltip>
+                            <template #content>
+                                {{ scope.row.post_title }}
+                            </template>
+                            <span class="text-[#a8abb2]">
+                                {{ scope.row.post_title }}
+                            </span>
+                        </el-tooltip>
+                    </div>
 
-                        <template v-else>
-                            {{ scope.row.post_title }}
-                        </template>
+                    <div v-else>
+                       <el-tooltip placement="top" effect="light">
+                            <template #content>
+                                {{ scope.row.post_title }}
+                            </template>
+                            <span class="text-[#a8abb2]">
+                                {{ scope.row.post_title }}
+                            </span>
+                        </el-tooltip>
+                    </div>
 
-                        <span v-show="scope.row.post_status !== 'publish'">
-                            ({{ scope.row.post_status }})
-                        </span>
+                    <span v-show="scope.row.post_status !== 'publish'">
+                        ({{ scope.row.post_status }})
+                    </span>
                 </template>
             </el-table-column>
 
@@ -53,7 +82,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column :label="$t('Data Source')" width="200">
+            <el-table-column :label="$t('Data Source')" width="180">
                 <template #default="scope">
                     <div class="flex items-center gap-2">
                         <img class="w-5 h-5" :src="assetUrl('icons/' + scope.row.dataSourceType + '.svg')" alt="">
@@ -62,7 +91,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column :label="$t('ShortCode')" :width="250">
+            <el-table-column :label="$t('ShortCode')" :width="230">
                 <template #default="scope">
                     <div class="flex items-center" type="info" :style="{ cursor: 'pointer' }">
                         <div class="bg-[#F5F6F7] px-2 py-1 rounded-[8px] flex items-center copy"
@@ -71,7 +100,7 @@
                                 `[ninja_tables id='${scope.row.ID}']`"
                              style="border: 1px solid #E1E4EA">
                             <img class="mr-2" :src="assetUrl('icons/copy-02.svg')"/> 
-                            <span class="text-sm overflow-hidden text-ellipsis whitespace-nowrap max-w-[140px]">
+                            <span class="text-sm overflow-hidden text-ellipsis whitespace-nowrap max-w-[155px]">
                                 {{ scope.row.dataSourceType === 'drag_and_drop' ? 
                                    `[ninja_table_builder id='${scope.row.ID}']` : 
                                    `[ninja_tables id='${scope.row.ID}']` }}
