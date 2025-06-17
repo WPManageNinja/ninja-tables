@@ -257,7 +257,7 @@ export default {
             });
         },
         createTable(tableType, item = {}) {
-            if (!this.initialData?.table_data?.table_name) {
+            if (!this.initialData?.table_data?.table_name && tableType === 'default') {
                 this.failedMessage('Table title field is required');
                 return;
             }
@@ -266,7 +266,6 @@ export default {
             if (!this.hasPro && item.has_pro) {
                 return this.upgradeMessage();
             } else {
-                if (this.initialData.table_data.table_name) {
                     if (type === "default") {
                         this.initialData.table_data.table_type = "";
                     } else {
@@ -288,9 +287,6 @@ export default {
                         .catch((error) => {
                             this.failedMessage();
                         });
-                } else {
-                    this.failedMessage();
-                }
             }
         },
         getAsset(path) {
