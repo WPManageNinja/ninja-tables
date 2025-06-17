@@ -408,21 +408,22 @@ We released several updates for Ninja Tables in the years of development. These 
 
 ### What's New in 5.1.1?
 
-= 5.1.1 (Date: June 2, 2025) =
-* Added tooltip on table title column
-* Fixes: last column delete Issue
-* Fixes: Drag and Drop Button/link issue 
-* Fixes: Drag and Drop CSV/JSON import issue
+= 5.1.1 (Date: June 17, 2025) =
+* Added: Tooltip on table title column
+* Fixes: Last column delete Issue
+* Fixes: Drag and drop Button/link issue
+* Fixes: Drag and drop CSV/JSON import issue
 * Fixes: Drag and Drop Selected cell color issue
 * Fixes: Merged cell elements edit issue in Drag and Drop,
 * Fixes: Table design alternate row color issue,
-* Fixes: Drag and Drop list element edit issue,
-* Fixes: Drag & Drop text color box disappearing issue
-* Fixes: Drag and Drop rating filed issue
+* Fixes: Drag and drop list element edit issue,
+* Fixes: Drag & drop text color box disappearing issue
+* Fixes: Drag and drop rating filed issue
 * Fixes: Drag & Drop responsive issue for imported JSON
+* Fixes: Drag & Drop font size issue for imported JSON
 * Fixes: Rating Notice Disappear Issue
 * Improve: Column width in Table List
-* Remove: Default 'Table Title' on Drag & Drop
+* Remove: Default 'table title' on Drag & Drop
 
 = 5.1.0 (Date: June 2, 2025) =
 * Update: Redesigned ui for modern look and better experience
