@@ -1,5 +1,5 @@
 === Ninja Tables – Easy Data Table Builder ===
-Contributors: wpmanageninja, techjewel, adreastrian, heera, csesumonpro, sakibmd, naeemhaque
+Contributors: wpmanageninja, techjewel, adreastrian, heera, csesumonpro, sakibmd, naeemhaque, ziaul53
 Tags: Table, table builder, datatable, tables, spreadsheet
 Requires at least: 6.0
 Requires PHP: 7.4
