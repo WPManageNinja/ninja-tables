@@ -41,7 +41,7 @@
             <el-rate class="ntb-rating hover-item" :score-template="scoreTemplate" v-model="ratingValue" allow-half
                 :show-score="showRatingScore"
                 :text-color="`${item.data.style.color === '' ? setting.global_styling.options.color.value : item.data.style.color}`"
-                :max="item.data.style.maxStar" :colors='starRatingStyling'
+                :max="Number(item.data.style.maxStar)" :colors='starRatingStyling'
                 :style="[ratingStyle, padding, ratingTextAlign]"></el-rate>
         </span>
         <span v-else-if="item.data.type === 'icon'">

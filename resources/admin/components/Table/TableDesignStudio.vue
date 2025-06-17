@@ -485,10 +485,10 @@
                                </el-collapse-item>
                              </el-collapse>
 
-                            <el-collapse accordion class="nt-design-collapse mb-5" v-model="activeAlternativeColor">
+                            <el-collapse accordion class="nt-design-collapse mb-5" v-model="activeAlternativeColor" @change="handleAlternativeColorChange">
                                 <el-collapse-item name="alternate_color_status">
                                     <template #title>
-                                        <div>
+                                        <div class="flex items-center">
                                             <el-switch
                                                 size="small"
                                                 v-model="tableSettings.alternate_color_status"
@@ -501,9 +501,8 @@
                                                     e.stopPropagation();
                                                 }"
                                             />
-                                            <span style="font-weight: 500; font-size: 14px;">{{
-                                                    $t('Use Alternate Color Schema for Table Rows')
-                                                }}</span>
+                                            <p class="text-[14px] font-[500]">
+                                                {{ $t('Use Alternate Color Schema for Table Rows') }}</p>
                                         </div>
                                     </template>
 
@@ -534,7 +533,6 @@
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <div class="even_row_color_group">
                                         <div class="flex items-center">
@@ -1067,13 +1065,17 @@ export default {
     },
     methods: {
         assetUrl,
-     isStyleActive(styleKey) {
+        isStyleActive(styleKey) {
             if (!Array.isArray(this.tableSettings.css_classes)) {
                 this.tableSettings.css_classes = [];
             }
             return this.tableSettings.css_classes.includes(styleKey);
         },
-        
+        handleAlternativeColorChange(activeNames) {
+            if (this.tableSettings.alternate_color_status !== 'yes' && activeNames.includes('alternate_color_status')) {
+                this.activeAlternativeColor = [];
+            }
+        },
         toggleStyle(styleKey, isActive) {
             if (!Array.isArray(this.tableSettings.css_classes)) {
                 this.tableSettings.css_classes = [];
