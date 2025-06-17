@@ -54,6 +54,11 @@ export default {
     ColorInput,
     SelectInput,
   },
+  created() {
+    if (this.item.type === 'slider' && typeof this.item.value === 'string') {
+      this.item.value = Number(this.item.value);
+    }
+  },
   computed: {
     enableResponsive() {
       return this.initialData ? Boolean(this.initialData.responsive.general.options.enable_responsive_table.value) : false;

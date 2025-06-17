@@ -91,7 +91,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column :label="$t('ShortCode')" :width="230">
+            <el-table-column :label="$t('ShortCode')" :width="200">
                 <template #default="scope">
                     <div class="flex items-center" type="info" :style="{ cursor: 'pointer' }">
                         <div class="bg-[#F5F6F7] px-2 py-1 rounded-[8px] flex items-center copy"
@@ -100,8 +100,8 @@
                                 `[ninja_tables id='${scope.row.ID}']`"
                              style="border: 1px solid #E1E4EA">
                             <img class="mr-2" :src="assetUrl('icons/copy-02.svg')"/> 
-                            <span class="text-sm overflow-hidden text-ellipsis whitespace-nowrap max-w-[155px]">
-                                {{ scope.row.dataSourceType === 'drag_and_drop' ? 
+                            <span class="text-sm overflow-hidden text-ellipsis whitespace-nowrap max-w-[140px]">
+                                {{ scope.row.dataSourceType === 'drag_and_drop' ?
                                    `[ninja_table_builder id='${scope.row.ID}']` : 
                                    `[ninja_tables id='${scope.row.ID}']` }}
                             </span>
