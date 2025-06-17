@@ -501,8 +501,9 @@
                                                     e.stopPropagation();
                                                 }"
                                             />
-                                            <p class="text-[14px] font-[500]">
-                                                {{ $t('Use Alternate Color Schema for Table Rows') }}</p>
+                                            <p class="text-[14px] font-[500] text-left">
+                                                {{ $t('Use Alternate Color Schema for Table Rows') }}
+                                            </p>
                                         </div>
                                     </template>
 
