@@ -4,7 +4,7 @@ Tags: Table, table builder, datatable, tables, spreadsheet
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 5.1.0
+Stable tag: 5.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -406,7 +406,23 @@ Ninja Tables [customer support](https://wpmanageninja.com/support-tickets/#/) te
 == Changelog ==
 We released several updates for Ninja Tables in the years of development. These include improvements to the existing features and some wonderful additions to help you design tables more effectively.
 
-### What's New in 5.1.0?
+### What's New in 5.1.1?
+
+= 5.1.1 (Date: June 2, 2025) =
+* Added tooltip on table title column
+* Fixes: last column delete Issue
+* Fixes: Drag and Drop Button/link issue 
+* Fixes: Drag and Drop CSV/JSON import issue
+* Fixes: Drag and Drop Selected cell color issue
+* Fixes: Merged cell elements edit issue in Drag and Drop,
+* Fixes: Table design alternate row color issue,
+* Fixes: Drag and Drop list element edit issue,
+* Fixes: Drag & Drop text color box disappearing issue
+* Fixes: Drag and Drop rating filed issue
+* Fixes: Drag & Drop responsive issue for imported JSON
+* Fixes: Rating Notice Disappear Issue
+* Improve: Column width in Table List
+* Remove: Default 'Table Title' on Drag & Drop
 
 = 5.1.0 (Date: June 2, 2025) =
 * Update: Redesigned ui for modern look and better experience
