@@ -87,7 +87,7 @@ export default {
     },
     methods: {
         updateValue(newValue) {
-            this.$emit('update:modelValue', newValue);
+            this.$emit('update:modelValue', Number(newValue));
         }
     }
 };
