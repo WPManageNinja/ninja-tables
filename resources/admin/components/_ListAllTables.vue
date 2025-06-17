@@ -25,7 +25,7 @@
 
             <el-table-column :label="$t('Title')" class-name="title" prop="post_title" sortable="custom" width="250">
                 <template #default="scope">
-                    <div v-if="shouldBeVisible(scope.row) && scope.row.ID">
+                    <div v-if="shouldBeVisible(scope.row) && scope.row.ID" class="overflow-hidden whitespace-nowrap text-ellipsis">
                         <router-link v-if="scope.row.dataSourceType === 'drag_and_drop'" :to="{ name: 'table_builder_edit_table', params: { table_id: scope.row.ID } }">
                             <el-tooltip placement="top" effect="light">
                                 <template #content>
