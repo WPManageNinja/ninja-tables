@@ -43,6 +43,7 @@ export default {
     methods: {
         updateText(event) {
             const element = event.target;
+            console.log(element);
             const cursorPosition = saveCursorPosition(element);
             this.item.data.value = element.innerHTML;
             this.$nextTick(() => {

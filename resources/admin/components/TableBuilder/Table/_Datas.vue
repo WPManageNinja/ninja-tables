@@ -1,5 +1,5 @@
 <template>
-    <div :style="[margin]" class="ntb-datas-wrapper">
+    <div style="margin: 1px;" class="ntb-datas-wrapper">
         <NinjaTextEditor class="hover-item" v-if="item.data.type === 'text'" :value="item.data.value" @input="updateTextContent"
             :style="[padding, fontWeight, fontSize, displayBlock, textAlign, color, textStyle]" />
 
@@ -123,7 +123,7 @@
 import { restoreCursorPosition, saveCursorPosition } from "../../../utils/cursorSetup";
 import NinjaTextEditor from "../../Extras/_NinjaTextEditor.vue";
 import { manageDataElement } from "../Mixin/manageDataElement";
-import {CopyDocument, Delete} from "@element-plus/icons-vue";
+import { CopyDocument, Delete } from "@element-plus/icons-vue";
 export default {
     name: "Datas",
     mixins: [manageDataElement],
@@ -360,12 +360,12 @@ export default {
                 position: absolute;
                 height: auto;
                 width: auto;
-                opacity: 0;
+                // opacity: 0;
                 z-index: 1;
                 justify-content: flex-end;
                 font-size: 12px;
                 color: #ffffff;
-                visibility: hidden;
+                display: none;
 
                 i {
                     background: #335cff;
@@ -383,7 +383,8 @@ export default {
                     top: -17px;
                     opacity: 1;
                     right: 0;
-                    visibility: visible;
+                    // visibility: visible;
+                    display: unset;
                 }
             }
         }

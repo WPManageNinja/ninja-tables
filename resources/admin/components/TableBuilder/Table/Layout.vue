@@ -245,6 +245,9 @@ export default {
                 jQuery('#leftside').click((l) => {
                     this.isSelectedTdId = true
                 })
+                jQuery('.el-color-dropdown').click((l) => {
+                    this.isSelectedTdId = true
+                })
                 a.onclick = () => {
                     this.isSelectedTdId = true
                 }
@@ -862,12 +865,10 @@ export default {
                     top: -15px;
                     height: auto;
                     font-size: 14px;
-                    width: 100%;
-                    opacity: 0;
-                    left: 0;
+                    // width: 100%;
+                    // left: 0;
                     right: 0;
-                    display: flex;
-                    justify-content: flex-end;
+                    display: none;
                     color: #ffffff;
                     .el-icon{
                         font-size: 18px;
@@ -903,7 +904,8 @@ export default {
                     }
 
                     .icon-style {
-                        opacity: 1;
+                        // opacity: 1;
+                        display: unset;
                     }
                 }
             }
@@ -921,7 +923,8 @@ export default {
                     }
 
                     .icon-style {
-                        opacity: 1;
+                        // opacity: 1;
+                        display: unset;
                         justify-content: flex-start;
                         z-index: 3;
                         top: 0;
