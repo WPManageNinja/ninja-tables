@@ -17,8 +17,12 @@ export const manageDataElement = {
             }
         },
         fontSize() {
+            const itemFontSize = Number(this.item.data.style.fontSize) || 10; // default font size 10
+            const globalFontSize = Number(this.setting.global_styling.options.font_size.value);
+            const fontSize = (itemFontSize === 10) ? globalFontSize : itemFontSize;
+
             return {
-                'font-size': (this.item.data.style.fontSize === '' || this.item.data.style.fontSize === 10) ? this.setting.global_styling.options.font_size.value + 'px' : this.item.data.style.fontSize + 'px',
+                'font-size': fontSize + 'px'
             }
         },
         displayBlock() {
