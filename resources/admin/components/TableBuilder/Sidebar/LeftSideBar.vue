@@ -128,7 +128,7 @@
             <el-collapse v-model="activeNames" class="accordions nt-design-collapse" @change="handleChange">
                 <el-collapse-item :title="$t('Export Table')" class="">
                     <select-input :items="exports.items" v-model="exports.format"
-                                  :label="$t('Select Format')"></select-input>
+                                  :label="$t('Select Format')" class="my-2"></select-input>
                     <NinjaButton @click="exportTable" class="w-full my-2" size="small">{{ $t('Export') }}</NinjaButton>
                 </el-collapse-item>
             </el-collapse>

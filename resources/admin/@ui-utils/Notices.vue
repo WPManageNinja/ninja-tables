@@ -24,6 +24,7 @@ export default {
         },
 
         handleClick(event) {
+            event.preventDefault();
             const button = event.target.closest('[data-notice-type]');
             if (!button) return;
 

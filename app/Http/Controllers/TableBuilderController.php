@@ -29,7 +29,7 @@ class TableBuilderController extends Controller
         $table_name = Sanitizer::sanitizeTextField(Arr::get($data, 'table_data.table_name'));
 
         if (isset($table_type) && $table_type !== '') {
-            return $this->generateByTemplateConfig($table_type); // for ready-made table
+            return $this->generateByTemplateConfig($table_type, $table_name); // for ready-made table
         }
 
 
@@ -57,18 +57,21 @@ class TableBuilderController extends Controller
         ], 200);
     }
 
-    public function generateByTemplateConfig($table_type)
+    public function generateByTemplateConfig($table_type, $table_name)
     {
         $table            = (new ReadyMadeTable())->tableByType($table_type);
         $table_settings   = $table['table_settings'];
         $table_responsive = $table['table_responsive'];
         $table_data       = $table['table_data'];
 
+        if ( ! empty($table_name)) {
+            $table_data['table_name'] = $table_name;
+        }
+
         $table_id = $this->wpInsertPost($table_data['table_name']);
 
         $data = [
             'table_id'         => $table_id,
-            'table_name'       => $table_type,
             'table_settings'   => $table_settings,
             'table_responsive' => $table_responsive,
             'table_data'       => $table_data,

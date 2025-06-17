@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h3>{{ $t('General Color Options') }}</h3>
+    <h3 class="font-semibold">{{ $t('General Color Options') }}</h3>
     <div class="component-wrapper">
       <color-input :label="$t('Header Background')" v-model="headerBackground"></color-input>
       <color-input :label="$t('Even Row Background')" v-model="manageCell.data.setting.background.options.even_row_background.value"></color-input>
       <color-input :label="$t('Odd Row Background')" v-model="manageCell.data.setting.background.options.odd_row_background.value"></color-input>
     </div>
-    <template>
+    <div>
 
-      <template v-if="manageCell.data.tdIds.length === 1">
+      <div v-if="manageCell.data.tdIds.length === 1">
         <br>
-        <h3>{{ $t('Selected Color Options') }}</h3>
+        <h3 class="font-semibold">{{ $t('Selected Color Options') }}</h3>
         <div class="component-wrapper">
           <div class="block space-between">
             <span>{{ $t('Selected Cell Row Background') }}</span>
@@ -21,27 +21,23 @@
           </div>
           <div class="block space-between">
             <span>{{ $t('Selected Cell Column Background') }}</span>
-            <el-color-picker
-                size="small"
+            <color-input
+                v-model="cellBackground"
                 @active-change="changeTdBackground"
                 @change="changeTdBackground"
-                v-model="cellBackground"
                 :predefine="predefineColors"
-                class="color-picker-margin"
-            ></el-color-picker>
+            ></color-input>
           </div>
         </div>
-      </template>
+      </div>
       <div class="block component-spacing space-between" v-if="manageCell.data.tdIds.length >= 1">
         <span>{{ $t('Selected Cell Background') }}</span>
-        <el-color-picker
-            size="small"
+        <color-input
+            v-model="cellBackground"
             @active-change="changeSelectedCellBackground"
             @change="changeSelectedCellBackground"
-            v-model="cellBackground"
             :predefine="predefineColors"
-            class="color-picker-margin"
-        ></el-color-picker>
+        ></color-input>
       </div>
 
       <h5 v-if="manageCell.data.tdIds.length <= 0">
@@ -49,7 +45,7 @@
             $t('Select a row/column/cell to change their background properties. Hold "SHIFT" and click on cells to select multiple cells.')
           }}</b>
       </h5>
-    </template>
+    </div>
   </div>
 </template>
 

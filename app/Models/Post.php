@@ -125,7 +125,12 @@ class Post extends Model
         $formattedTablePreference = array();
         $provider                 = ninja_table_get_data_provider($tableId);
 
-        if ($rawColumns && is_array($rawColumns)) {
+        if (is_array($rawColumns) && empty($rawColumns) && ! $tablePreference) {
+                update_post_meta($tableId, '_ninja_table_columns', $tableColumns);
+                if ($provider === 'default') {
+                    NinjaTableItem::where('table_id', $tableId)->delete();
+                } 
+        } elseif (is_array($rawColumns) && ! empty($rawColumns)) {
             foreach ($rawColumns as $column) {
                 foreach ($column as $column_index => $column_value) {
                     if ($provider === 'google-csv' && gettype($column_value) === 'string') {

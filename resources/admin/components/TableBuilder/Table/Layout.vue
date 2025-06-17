@@ -27,7 +27,7 @@
                     @click="mergeCell()"
                     :disabled="tdIds.length < 2 || merge.visible === false"
                 >
-                    <el-icon><FolderChecked /></el-icon>
+                    <el-icon class="mr-1"><FolderChecked /></el-icon>
                     {{ $t('Merge') }}
                 </el-button>
 
@@ -37,7 +37,7 @@
                     @click="splitCell"
                     :disabled="split.visible === false"
                 >
-                    <el-icon><Scissor /></el-icon>
+                    <el-icon class="mr-1"><Scissor /></el-icon>
                     {{ $t('Split') }}
                 </el-button>
 

@@ -98,7 +98,7 @@
                                                     <div class="flex items-center gap-2">
                                                         <!-- <span class="dashicons dashicons-editor-justify handle" /> -->
                                                          <img class="cursor-move handle" :src="assetUrl('/icons/drag-drop.svg')"/>
-                                                        <span @click="openDrawer(index)" class="text-[14px]">{{ column.name || column.key }}</span>
+                                                        <span @click="openDrawer(index)" class="text-[14px] cursor-pointer">{{ column.name || column.key }}</span>
                                                     </div>
                                                     <span @click="openDrawer(index)" class="cursor-pointer">
                                                         <!-- <img v-if="currentIndex.includes(index)" :src="assetUrl('/icons/chevron-up.svg')"/>

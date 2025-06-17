@@ -249,19 +249,23 @@ export default {
         editItem(data) {
             this.$emit("editItem", data);
         },
-        failedMessage() {
+        failedMessage($message = null) {
             return this.$message({
                 showClose: true,
-                message: this.$t("Something went wrong, please try again."),
+                message: this.$t($message ?? "Something went wrong, please try again."),
                 type: "warning",
             });
         },
         createTable(tableType, item = {}) {
+            if (!this.initialData?.table_data?.table_name && tableType === 'default') {
+                this.failedMessage('Table title field is required');
+                return;
+            }
+
             const type = tableType;
             if (!this.hasPro && item.has_pro) {
                 return this.upgradeMessage();
             } else {
-                if (this.initialData.table_data.table_name) {
                     if (type === "default") {
                         this.initialData.table_data.table_type = "";
                     } else {
@@ -283,9 +287,6 @@ export default {
                         .catch((error) => {
                             this.failedMessage();
                         });
-                } else {
-                    this.failedMessage();
-                }
             }
         },
         getAsset(path) {

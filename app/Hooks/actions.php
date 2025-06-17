@@ -56,6 +56,7 @@ if ($pagenow == 'plugins.php') {
     $app->addAction('admin_footer', [DeactivationHandler::class, 'renderDeactivationFeedback']);
 }
 $app->addAction('wp_ajax_ninja-tables_deactivate_feedback', [DeactivationHandler::class, 'saveDeactivationFeedback']);
+$app->addAction('init', [NinjaTableAdminHandler::class, 'remindMeLater']);
 
 $app->addAction('wp_head', [NinjaTableAdminHandler::class, 'addNinjaTableAdminScript']);
 
