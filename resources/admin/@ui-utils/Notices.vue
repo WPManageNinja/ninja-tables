@@ -24,9 +24,9 @@ export default {
         },
 
         handleClick(event) {
-            event.preventDefault();
             const button = event.target.closest('[data-notice-type]');
             if (!button) return;
+            event.preventDefault();
 
             const notice = button.closest('[data-notice-key]');
             const noticeKey = notice?.dataset.noticeKey;
@@ -48,13 +48,10 @@ export default {
             })
                 .done(response => {
                     if (response?.success) {
-                        jQuery(notice).slideUp(300, function () {
-                            jQuery(this).remove();
+                        jQuery(notice).slideUp(300, () => {
+                            delete this.notices[noticeKey];
                         });
                     }
-                })
-                .fail(() => {
-                    // handle error if needed
                 })
                 .always(() => {
                     button.disabled = false;
