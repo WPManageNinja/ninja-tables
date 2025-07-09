@@ -2,7 +2,7 @@
     "name": "wpfluent/framework",
     "description": "A lightweight rest api based framework to build WordPress plugins.",
     "license": "MIT",
-    "version": "2.10.42",
+    "version": "2.10.49",
     "authors": [
         {
             "name": "Sheikh Heera",

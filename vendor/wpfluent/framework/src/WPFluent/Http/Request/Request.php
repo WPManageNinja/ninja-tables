@@ -107,12 +107,13 @@ class Request
         $this->app = $app;
         $this->server = $_SERVER;
         $this->cookie = $_COOKIE;
-        $this->files = $this->prepareFiles($files);
-
+        
         $this->request = array_merge(
             $this->get = $this->clean($get),
             $this->post = $this->clean($post)
         );
+
+        $this->files = $this->prepareFiles($files);
     }
 
     /**
@@ -565,7 +566,7 @@ class Request
     /**
      * Get all inputs
      * 
-     * @return array $this->request
+     * @return array
      */
     protected function inputs()
     {
@@ -575,12 +576,7 @@ class Request
             }
         }
 
-        if ($this->safe === true) {
-            $this->safe = false;
-            return $this->validated;
-        }
-
-        return $this->request;
+        return $this->safe === true ? $this->validated : $this->request;
     }
 
     /**
@@ -590,9 +586,11 @@ class Request
      */
     public function safe()
     {
-        $this->safe = true;
+        $clone = clone $this;
 
-        return $this;
+        $clone->safe = true;
+
+        return $clone;
     }
 
     /**
@@ -688,13 +686,7 @@ class Request
      */
     public function abort($status = 403, $message = null)
     {
-        if (is_object($status)) {
-            if (method_exists($status, 'errors')) {
-                throw new ValidationException(
-                    'Unprocessable Entity!', 422, null, $status->errors()
-                );
-            }
-        }
+        $this->maybeThrowValidationException($status);
 
         if (!$message && !is_numeric($status) && is_string($status)) {
             $message = $status;
@@ -706,6 +698,47 @@ class Request
         return new \WP_REST_Response(
             is_array($message) ? $message : ['message' => (string) $message], $status
         );
+    }
+
+    /**
+     * Terminate the request.
+     * 
+     * @param  integer $status
+     * @param  string  $message
+     * @return \WP_REST_Response
+     */
+    public function terminate($status = 200, $message = null)
+    {
+        $this->maybeThrowValidationException($status);
+
+        if (!$message && !is_numeric($status) && is_string($status)) {
+            $message = $status;
+            $status = 403;
+        }
+
+        $message = $message
+            ?: "Request has benn terminated with status {$status}.";
+
+        return wp_send_json(
+            is_array($message) ? $message : ['message' => (string) $message], $status
+        );
+    }
+
+    /**
+     * Throw a validation exception if status is validation exception.
+     * @param  mixed $status
+     * @return void
+     * @throws \NinjaTables\Framework\Http\Request\ValidationException
+     */
+    protected function maybeThrowValidationException($status)
+    {
+        if (is_object($status)) {
+            if (method_exists($status, 'errors')) {
+                throw new ValidationException(
+                    'Unprocessable Entity!', 422, null, $status->errors()
+                );
+            }
+        }
     }
 
     /**
@@ -726,9 +759,7 @@ class Request
      */
     public function user()
     {
-        return new WPUserProxy(
-            new \WP_User(get_current_user_id())
-        );
+        return $this->app->user();
     }
 
     /**

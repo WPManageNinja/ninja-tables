@@ -293,13 +293,24 @@ class Helper
     }
 
     /**
-     * Creates an \stdClass from an array
+     * Creates an \stdClass from an array recursively.
+     *
      * @param  array $array
      * @return \stdClass
      */
     public static function objectCreate(array $array)
     {
-        return StdObject::create($array);
+        $object = new \stdClass;
+
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $object->{$key} = static::objectCreate($value);
+            } else {
+                $object->{$key} = $value;
+            }
+        }
+
+        return $object;
     }
 
     /**
@@ -309,7 +320,7 @@ class Helper
      */
     public static function objectToArray(\stdClass $object)
     {
-        return StdObject::toArray($object);
+        return json_decode(json_encode($object), true);
     }
 
     /**

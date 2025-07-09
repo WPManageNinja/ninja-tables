@@ -54,6 +54,7 @@ class URL
 	 * Sign a URL
 	 * 
 	 * @param  string $url
+	 * @param  array $params
 	 * @return string
 	 */
 	public function sign($url, $params = [])

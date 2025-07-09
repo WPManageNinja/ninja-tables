@@ -8,6 +8,7 @@ use LogicException;
 use RuntimeException;
 use DateTimeInterface;
 use InvalidArgumentException;
+use NinjaTables\Framework\Foundation\App;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Str;
 use NinjaTables\Framework\Support\Helper;
@@ -23,13 +24,14 @@ use NinjaTables\Framework\Database\Query\ConditionExpression;
 use NinjaTables\Framework\Support\ArrayableInterface;
 use NinjaTables\Framework\Database\ConnectionInterface;
 use NinjaTables\Framework\Database\Concerns\BuildsQueries;
+use NinjaTables\Framework\Database\Concerns\BuildsWhereDateClauses;
 use NinjaTables\Framework\Database\Concerns\ExplainsQueries;
 use NinjaTables\Framework\Database\Orm\Relations\Relation;
 use NinjaTables\Framework\Database\Orm\Builder as OrmBuilder;
 
 class Builder
 {
-    use BuildsQueries, ExplainsQueries, ForwardsCalls, MacroableTrait {
+    use BuildsQueries, BuildsWhereDateClauses, ExplainsQueries, ForwardsCalls, MacroableTrait {
         __call as macroCall;
     }
 
@@ -3224,6 +3226,7 @@ class Builder
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
+     * @param  int|null  $total
      * @return \NinjaTables\Framework\Pagination\LengthAwarePaginatorInterface
      */
     public function paginate(
@@ -3239,7 +3242,9 @@ class Builder
 
         $perPage = $perPage instanceof Closure ? $perPage($total) : $perPage;
 
-        $results = $total ? $this->forPage($page, $perPage)->get($columns) : Helper::collect();
+        $results = $total
+            ? $this->forPage($page, $perPage)->get($columns)
+            : Helper::collect();
 
         return $this->paginator($results, $total, $perPage, $page, [
             'path' => Paginator::resolveCurrentPath(),
@@ -3258,7 +3263,12 @@ class Builder
      * @param  int|null  $page
      * @return \NinjaTables\Framework\Pagination\PaginatorInterface
      */
-    public function simplePaginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
+    public function simplePaginate(
+        $perPage = 15,
+        $columns = ['*'],
+        $pageName = 'page',
+        $page = null
+    )
     {
         $page = $page ?: Paginator::resolveCurrentPage($pageName);
 
@@ -3271,9 +3281,11 @@ class Builder
     }
 
     /**
-     * Get a paginator only supporting simple next and previous links.
+     * Get a cursor paginator for efficient pagination of large datasets.
      *
-     * This is more efficient on larger data-sets, etc.
+     * Cursor pagination uses a unique column value (or multiple columns)
+     * as a pointer, allowing for consistent, efficient
+     * navigation without large OFFSETs.
      *
      * @param  int|null  $perPage
      * @param  array  $columns
@@ -3281,9 +3293,16 @@ class Builder
      * @param  \NinjaTables\Framework\Pagination\Cursor|string|null  $cursor
      * @return \NinjaTables\Framework\Pagination\CursorPaginatorInterface
      */
-    public function cursorPaginate($perPage = 15, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
+    public function cursorPaginate(
+        $perPage = 15,
+        $columns = ['*'],
+        $cursorName = 'cursor',
+        $cursor = null
+    )
     {
-        return $this->paginateUsingCursor($perPage, $columns, $cursorName, $cursor);
+        return $this->paginateUsingCursor(
+            $perPage, $columns, $cursorName, $cursor
+        );
     }
 
     /**
@@ -3413,7 +3432,31 @@ class Builder
                 $this->toSql(), $this->getBindings(), ! $this->useWritePdo
             );
         }))->map(function ($item) {
-            return $this->applyAfterQueryCallbacks(Helper::collect([$item]))->first();
+            return $this->applyAfterQueryCallbacks(
+                Helper::collect([$item])
+            )->first();
+        })->reject(fn ($item) => is_null($item));
+    }
+
+    /**
+     * Get a lazy collection for the given query.
+     *
+     * @return \NinjaTables\Framework\Support\LazyCollection
+     */
+    public function rawCursor()
+    {
+        if (is_null($this->columns)) {
+            $this->columns = ['*'];
+        }
+
+        return (new LazyCollection(function () {
+            yield from $this->connection->rawCursor(
+                $this->toSql(), $this->getBindings(), ! $this->useWritePdo
+            );
+        }))->map(function ($item) {
+            return $this->applyAfterQueryCallbacks(
+                Helper::collect([$item])
+            )->first();
         })->reject(fn ($item) => is_null($item));
     }
 
@@ -3427,7 +3470,9 @@ class Builder
     protected function enforceOrderBy()
     {
         if (empty($this->orders) && empty($this->unionOrders)) {
-            throw new RuntimeException('You must specify an orderBy clause when using this function.');
+            throw new RuntimeException(
+                'You must specify an orderBy clause when using this function.'
+            );
         }
     }
 

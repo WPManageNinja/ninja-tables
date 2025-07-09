@@ -6,7 +6,6 @@ use NinjaTables\Framework\Events\DispatcherInterface;
 use NinjaTables\Framework\Events\NullDispatcher;
 use NinjaTables\Framework\Support\Arr;
 use InvalidArgumentException;
-use ReflectionClass;
 
 trait HasEvents
 {

@@ -14,19 +14,6 @@ class App
     protected static $instance = null;
 
     /**
-     * Resolve dynamically accessed class.
-     * 
-     * @param  string $module
-     * @return string
-     */
-    protected static function resolve($module)
-    {
-        $pieces = explode('\\', __NAMESPACE__);
-        array_pop($pieces) && $prefix = implode('\\', $pieces);
-        return $prefix . '\\' . str_replace('.', '\\', $module);
-    }
-
-    /**
      * Set the application instance
      * 
      * @param NinjaTables\Framework\Foundation\Application $app
@@ -45,20 +32,11 @@ class App
      */
     public static function getInstance($module = null, $parameters = [])
     {
-        try {
-            if ($module) {
-                return static::$instance->make($module, $parameters);
-            }
-
-            return static::$instance;
-
-        } catch (BindingResolutionException $e) {
-            if (class_exists($class = static::resolve($module))) {
-                return static::$instance->make($class, $parameters);
-            }
-
-            throw $e;
+        if ($module) {
+            return static::$instance->make($module, $parameters);
         }
+
+        return static::$instance;
     }
 
     /**

@@ -2068,6 +2068,17 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     }
 
     /**
+     * Get the relation resolver callback.
+     * 
+     * @param  string $method
+     * @return mixed
+     */
+    public function getRelationResolver($method)
+    {
+        return static::$relationResolvers[get_class($this)][$method] ?? null;
+    }
+
+    /**
      * Handle dynamic method calls into the model.
      *
      * @param  string  $method
@@ -2080,9 +2091,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
             return $this->$method(...$parameters);
         }
 
-        if ($resolver = (
-            static::$relationResolvers[get_class($this)][$method] ?? null
-        )) {
+        if ($resolver = $this->getRelationResolver($method)) {
             return $resolver($this);
         }
 

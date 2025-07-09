@@ -955,7 +955,25 @@ class Builder
         return $this->applyScopes()->query->cursor()->map(function ($record) {
             $model = $this->newModelInstance()->newFromBuilder($record);
 
-            return $this->applyAfterQueryCallbacks($this->newModelInstance()->newCollection([$model]))->first();
+            return $this->applyAfterQueryCallbacks(
+                $this->newModelInstance()->newCollection([$model])
+            )->first();
+        })->reject(fn ($model) => is_null($model));
+    }
+
+    /**
+     * Get a lazy collection for the given query using raw query.
+     *
+     * @return \NinjaTables\Framework\Support\LazyCollection
+     */
+    public function rawCursor()
+    {
+        return $this->applyScopes()->query->rawCursor()->map(function ($record) {
+            $model = $this->newModelInstance()->newFromBuilder($record);
+
+            return $this->applyAfterQueryCallbacks(
+                $this->newModelInstance()->newCollection([$model])
+            )->first();
         })->reject(fn ($model) => is_null($model));
     }
 

@@ -9,7 +9,7 @@ use NinjaTables\Framework\Http\Client;
 use NinjaTables\Framework\Foundation\Config;
 use NinjaTables\Framework\Container\Container;
 use NinjaTables\Framework\Foundation\ComponentBinder;
-use NinjaTables\Framework\Foundation\FoundationTrait;
+use NinjaTables\Framework\Foundation\Concerns\FoundationTrait;
 
 class Application extends Container
 {
@@ -72,6 +72,13 @@ class Application extends Container
     protected $onReady = [];
 
     /**
+     * Flag to check if components are bound.
+     * 
+     * @var boolean
+     */
+    protected $componentsBound = false;
+
+    /**
      * Construct the application instance
      * 
      * @param string $file The main plugin file's absolute path
@@ -100,6 +107,12 @@ class Application extends Container
         $this->baseUrl = plugin_dir_url($this->file);
     }
 
+    /**
+     * Load the environment bariables from .env file.
+     * 
+     * @param  string $path
+     * @return void
+     */
     protected function loadEnvironmentVars($path = null)
     {
         $path = $path ?: $this->basePath . '.env';
@@ -160,7 +173,6 @@ class Application extends Container
         $this->loadConfigIfExists();
         $this->registerTextdomain();
         $this->bindCoreComponents();
-        // $this->registerAsyncActions();
         $this->requireCommonFiles($this);
         $this->addRestApiInitAction($this);
     }
@@ -238,6 +250,7 @@ class Application extends Container
 
     /**
      * Resolve the given type from the container.
+     * This method is required for unit testing.
      *
      * @param  string  $abstract
      * @param  array   $parameters
@@ -291,7 +304,10 @@ class Application extends Container
      */
     protected function bindCoreComponents()
     {
-        (new ComponentBinder($this))->bindComponents();
+        if (!$this->componentsBound) {
+            $this->componentsBound = true;
+            (new ComponentBinder($this))->bindComponents();
+        }
     }
 
     /**
@@ -482,25 +498,15 @@ class Application extends Container
     }
 
     /**
-     * Register plugin booted callbacks.
+     * Register plugin ready (booted) callbacks.
      * 
      * @param  callable $callback
      * @return void
      */
-    protected function ready(callable $callback)
+    public function ready(callable $callback)
     {
         $this->onReady[] = $callback;
     }
-
-    /**
-     * Register Async Actions.
-     * 
-     * @return void
-     */
-    // protected function registerAsyncActions()
-    // {
-    //     Client::registerAsyncRequestHandler();
-    // }
 
     /**
      * Execute plugin booted callbacks.

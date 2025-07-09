@@ -5,6 +5,7 @@ namespace NinjaTables\Framework\Pagination;
 use Closure;
 use Exception;
 use ArrayAccess;
+use NinjaTables\Framework\Foundation\App;
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Str;
 use NinjaTables\Framework\Support\Tappable;
@@ -463,6 +464,10 @@ abstract class AbstractCursorPaginator
      */
     public function setPath($path)
     {
+        if (!preg_match('/^https?:\/\//i', $path)) {
+            $path = App::make('request')->url() . '/' . trim($path, '/');
+        }
+
         $this->path = $path;
 
         return $this;

@@ -81,30 +81,13 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Create a new database connection instance.
      *
-     * @param  $wpdb $pdo
-     * @param string $database
-     * @param string $tablePrefix
-     * @param array $config
+     * @param \wpdb $wpdb The WordPress database instance.
      * @return void
      */
-    public function __construct(
-        $pdo, $database = '', $tablePrefix = '', array $config = []
-    )
+    public function __construct($wpdb)
     {
-        $this->setupWpdbInstance($pdo);
+        $this->setupWpdbInstance($wpdb);
 
-        // First we will setup the default properties. We keep track of the DB
-        // name we are connected to since it is needed when some reflective
-        // type commands are run such as checking whether a table exists.
-        $this->database = $database;
-
-        $this->tablePrefix = $tablePrefix;
-
-        $this->config = $config;
-
-        // We need to initialize a query grammar and the query post processors
-        // which are both very important parts of the database abstractions
-        // so we initialize these to their default values while starting.
         $this->useDefaultQueryGrammar();
 
         $this->useDefaultPostProcessor();
@@ -122,9 +105,19 @@ class WPDBConnection implements ConnectionInterface
     {
         $this->wpdb = $wpdb;
 
-        if (!str_starts_with(App::env(), 'prod')) {
-            $this->wpdb->show_errors(false);
-        }
+        $this->wpdb->show_errors(
+            $this->shouldShowErrors()
+        );
+    }
+
+    /**
+     * Determine if database errors should be shown.
+     *
+     * @return bool
+     */
+    protected function shouldShowErrors()
+    {
+        return strpos(App::env(), 'prod') === false;
     }
 
     /**
@@ -350,11 +343,11 @@ class WPDBConnection implements ConnectionInterface
      * @param array $bindings
      * @param bool $useReadPdo
      * @return \Generator
+     * @throws \NinjaTables\Framework\Database\QueryException
      */
     public function cursor($query, $bindings = [], $useReadPdo = true)
     {
-        // When the underlying driver is not the mysqli.
-        // it's not a pure cursor just mimicked like one.
+        // If not mysqli, just mimic the cursor but does not do the cursor query
         if (!$this->wpdb->dbh instanceof \mysqli) {
             foreach ($this->select($query, $bindings) as $row) {
                 yield $row;
@@ -362,7 +355,7 @@ class WPDBConnection implements ConnectionInterface
             return;
         }
 
-        // The underlying driver is the mysqli
+        // Flush previous queries and check connection
         $this->wpdb->flush();
         $this->wpdb->insert_id = 0;
         $this->wpdb->check_current_query = true;
@@ -379,58 +372,109 @@ class WPDBConnection implements ConnectionInterface
             $this->wpdb->timer_start();
         }
 
+        // Prepare the statement
         $statement = $this->wpdb->dbh->prepare(
             $this->bindParamsForSqli($query, $bindings)
         );
 
-        $bindings && $statement->bind_param(
-            str_repeat('s', count($bindings)),
-            ...$bindings
-        );
+        // Check if the statement preparation failed
+        if ($statement === false) {
+            throw new QueryException(
+                $query, $bindings, new Exception(
+                    'Failed to prepare statement: ' . $this->wpdb->dbh->error
+                )
+            );
+        }
 
-        $start = microtime(true);
-
-        if ($statement->execute()) {
-
-            $result = $statement->get_result();
-
-            $this->wpdb->num_queries++;
-            $this->wpdb->last_query = $query;
-            $this->wpdb->num_rows = $result->num_rows;
-
-            if (defined('SAVEQUERIES') && SAVEQUERIES) {
-                $this->wpdb->log_query(
-                    $query,
-                    $this->wpdb->timer_stop(),
-                    $this->wpdb->get_caller(),
-                    $this->wpdb->time_start,
-                    []
+        // Bind parameters if necessary
+        if ($bindings) {
+            $types = '';
+            foreach ($bindings as $binding) {
+                $types .= is_int($binding) ? 'i' : (
+                    is_double($binding) ? 'd' : 's'
                 );
             }
 
-            $time = $this->getElapsedTime($this->wpdb->time_start);
+            $statement->bind_param($types, ...$bindings);
+        }
 
-            $this->event->dispatch(
-                new QueryExecuted($query, $bindings, $time, $this)
-            );
+        // Execute the statement and check if it's successful
+        if ($statement->execute()) {
+            // Check if the statement has a result set
+            if ($result = $statement->get_result()) {
+                $i = 0;
+                while ($row = $result->fetch_assoc()) {
+                    $this->wpdb->last_result[$i] = $row;
+                    $i++;
+                    yield $row;
+                }
 
-            $i = 0;
-            while ($row = $result->fetch_assoc()) {
-                $this->wpdb->last_result[$i] = $row;
-                $i++;
-                yield $row;
+                $result->free();
+            } else {
+                // Handle the case where no result is returned
+                throw new QueryException(
+                    $query, $bindings, new Exception(
+                        'No result set returned from query.'
+                    )
+                );
             }
 
             return;
         }
 
+        // Error handling if statement execution fails
         if ($statement->error || $statement->errno) {
+            $err = $statement->error
+                ? $statement->error
+                : 'Mysqli Error No: ' . $statement->errno;
 
-            $this->wpdb->last_error = $statement->error || 'Mysqli Error No: ' . $statement->errno;
+            $this->wpdb->last_error = $err;
 
             throw new QueryException(
+                $query, $bindings, new Exception($err)
+            );
+        }
+    }
+
+    /**
+     * Raw cursor query for MySQLi (non-prepared).
+     * 
+     * @param  string $query
+     * @param  array  $bindings
+     * @return \Generator
+     * @throws \NinjaTables\Framework\Database\QueryException
+     */
+    public function rawCursor($query, $bindings = [])
+    {
+        // Sanitize bindings manually
+        if (!empty($bindings)) {
+            foreach ($bindings as $binding) {
+                $escaped = $this->wpdb->dbh->real_escape_string($binding);
+                // Replace the first occurrence of ? with the escaped binding
+                $query = preg_replace('/\?/', "'{$escaped}'", $query, 1);
+            }
+        }
+
+        // If not mysqli, mimic cursor
+        if (!$this->wpdb->dbh instanceof \mysqli) {
+            foreach ($this->select($query) as $row) {
+                yield $row;
+            }
+            return;
+        }
+
+        // Real raw cursor
+        $stmt = $this->wpdb->dbh->query($query, MYSQLI_USE_RESULT);
+
+        if ($stmt) {
+            while ($row = $stmt->fetch_assoc()) {
+                yield $row;
+            }
+        } else {
+            $err = $this->wpdb->dbh->error;
+            throw new QueryException(
                 $query, $bindings, new Exception(
-                    $statement->error || 'Mysqli Error No: ' . $statement->errno
+                    $err ? $err : 'MySQL Error: ' . $this->wpdb->dbh->errno
                 )
             );
         }

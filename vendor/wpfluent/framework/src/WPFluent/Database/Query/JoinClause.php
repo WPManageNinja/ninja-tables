@@ -141,6 +141,10 @@ class JoinClause extends Builder
     {
         $class = $this->parentClass;
 
-        return new $class($this->parentConnection, $this->parentGrammar, $this->parentProcessor);
+        return new $class(
+            $this->parentConnection,
+            $this->parentGrammar,
+            $this->parentProcessor
+        );
     }
 }

@@ -697,7 +697,8 @@ trait EnumeratesValues
     }
 
     /**
-     * Pass the collection through a series of callable pipes and return the result.
+     * Pass the collection through a series of callable pipes
+     * and return the result.
      *
      * @param  array<callable>  $pipes
      * @return mixed

@@ -192,11 +192,16 @@ class Async
 	}
 
 	/**
-	 * Queue the async handler and register the shutdown handler
-	 * Queued handlers will be dispatched in a single request
-	 * 
-	 * @param  string (Class@handler or with __invoke method) $handler
+	 * Queue an async handler to be executed during shutdown.
+	 *
+	 * Queued handlers are grouped by queue name and dispatched
+	 * together in a single async HTTP request.
+	 *
+	 * @param string        $handler The handler 'Class@method'|invokable class.
+	 * @param array|string  $params  Array of args or the queue name if a string.
+	 * @param string        $name    The name of the queue (default is 'default').
 	 * @return self
+	 *
 	 * @throws \InvalidArgumentException
 	 */
 	public static function queue(
@@ -233,7 +238,7 @@ class Async
 	 * Validate the handler and add a sign to mark as dispatched.
 	 * 
 	 * @param  string (Class@handler or with __invoke method) $handler
-	 * @return string
+	 * @return array
 	 * @throws \InvalidArgumentException
 	 */
 	public function validate($handler, $params, $sign)

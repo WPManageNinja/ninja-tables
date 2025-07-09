@@ -4,6 +4,7 @@ namespace NinjaTables\Framework\Http;
 
 use Closure;
 use Exception;
+use Throwable;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -661,9 +662,8 @@ class Route
     {
         try {
             return $this->handleAfterMiddleware(
-                $response = $this->dispatchRouteAction()
+                $this->dispatchRouteAction()
             );
-
         } catch (ValidationException $e) {
             return $this->app->response->sendError(
                 $e->errors(), $e->getCode()
@@ -672,7 +672,8 @@ class Route
             return $this->app->response->sendError([
                 'message' => $e->getMessage()
             ], 404);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
+            $this->fireExceptionEvent($e);
             return $this->app->response->sendError([
                 'message' => $e->getMessage()
             ], $e->getCode() ?: 500);
@@ -726,6 +727,19 @@ class Route
         }
 
         return $response;
+    }
+
+    /**
+     * Fire exception action hook.
+     * 
+     * @param  Exception $exception
+     * @return void
+     */
+    protected function fireExceptionEvent($exception)
+    {
+        if ($this->app->isDebugOn()) {
+            $this->app->doCustomAction('exception', $exception);
+        }
     }
 
     /**

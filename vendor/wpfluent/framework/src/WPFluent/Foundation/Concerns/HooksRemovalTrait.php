@@ -1,6 +1,6 @@
 <?php
 
-namespace NinjaTables\Framework\Foundation;
+namespace NinjaTables\Framework\Foundation\Concerns;
 
 trait HooksRemovalTrait
 {

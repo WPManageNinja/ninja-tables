@@ -435,6 +435,10 @@ abstract class AbstractPaginator
      */
     public function setPath($path)
     {
+        if (!preg_match('/^https?:\/\//i', $path)) {
+            $path = App::make('request')->url() . '/' . trim($path, '/');
+        }
+
         $this->path = $path;
 
         return $this;

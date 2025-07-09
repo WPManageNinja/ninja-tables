@@ -1,12 +1,12 @@
 <?php
 
-namespace NinjaTables\Framework\Foundation;
+namespace NinjaTables\Framework\Foundation\Concerns;
 
 use NinjaTables\Framework\Http\Request\WPUserProxy;
 
 trait FoundationTrait
 {
-    use HooksRemovalTrait;
+    use AjaxTrait, HooksRemovalTrait;
 
     /**
      * Check if wp debug mode is on.
@@ -476,74 +476,21 @@ trait FoundationTrait
     }
 
     /**
-     * Get the current user.
+     * Get the current authenticated user.
+     *
+     * Returns a WPUserProxy instance if the 'init' action has fired,
+     * otherwise logs a warning in debug mode and returns null.
      * 
-     * @return \NinjaTables\Framework\Http\Request\WPUserProxy
+     * @return \NinjaTables\Framework\Http\Request\WPUserProxy|null
      */
     public function user()
     {
-        return new WPUserProxy(wp_get_current_user());
-    }
-
-    /**
-     * Add ajax action
-     * @param string $action
-     * @param string|Clousure $handler
-     * @param int $priority
-     * @param string $scope
-     */
-    private function addAjaxAction($action, $handler, $priority, $scope)
-    {
-        $action = $this->config->get('app.hook_prefix').'.'.$action;
-        
-        if ($scope == 'admin') {
-            return add_action(
-                'wp_ajax_'.$action,
-                $this->parseHookHandler($handler),
-                $priority
-            );
+        if (did_action('init')) {
+            return new WPUserProxy(wp_get_current_user());
         }
 
-        if ($scope == 'public') {
-            return add_action(
-                'wp_ajax_nopriv_'.$action,
-                $this->parseHookHandler($handler),
-                $priority
-            );
+        if ($this->isDebugOn()) {
+            error_log("User not available—'init' action hasn't fired yet.");
         }
-    }
-
-    /**
-     * Add ajax actions including non_prive
-     * @param string $action
-     * @param string|Clousure $handler
-     * @param int $priority
-     */
-    public function addAjaxActions($action, $handler, $priority = 10)
-    {
-        $this->addAjaxAction($action, $handler, $priority, 'admin');
-        $this->addAjaxAction($action, $handler, $priority, 'public');
-    }
-
-    /**
-     * Add ajax action for privilaged user
-     * @param string $action
-     * @param string|Clousure $handler
-     * @param int $priority
-     */
-    public function addAdminAjaxAction($action, $handler, $priority = 10)
-    {
-        return $this->addAjaxAction($action, $handler, $priority, 'admin');
-    }
-
-    /**
-     * Add ajax action for non-privilaged user
-     * @param string $action
-     * @param string|Clousure $handler
-     * @param int $priority
-     */
-    public function addPublicAjaxAction($action, $handler, $priority = 10)
-    {
-        return $this->addAjaxAction($action, $handler, $priority, 'public');
     }
 }

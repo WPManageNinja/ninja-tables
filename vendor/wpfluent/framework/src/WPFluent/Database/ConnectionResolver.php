@@ -2,6 +2,7 @@
 
 namespace NinjaTables\Framework\Database;
 
+use InvalidArgumentException;
 use NinjaTables\Framework\Foundation\App;
 use NinjaTables\Framework\Database\ConnectionResolverInterface;
 
@@ -47,14 +48,14 @@ class ConnectionResolver implements ConnectionResolverInterface
         }
 
         if (is_null($name)) {
-            return $this->getDefaultConnection();
+            $name = $this->getDefaultConnection();
         }
 
         if (isset($this->connections[$name])) {
             return $this->connections[$name];
         }
 
-        return $this->getDefaultConnection();
+        throw new InvalidArgumentException("Connection [{$name}] not found.");
     }
 
     /**
@@ -87,7 +88,7 @@ class ConnectionResolver implements ConnectionResolverInterface
      */
     public function getDefaultConnection()
     {
-        return $this->default ?: App::getInstance('db');
+        return $this->default;
     }
 
     /**

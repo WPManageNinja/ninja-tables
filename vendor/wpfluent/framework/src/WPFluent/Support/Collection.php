@@ -639,6 +639,23 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     }
 
     /**
+     * Intersect the collection with the given items,
+     * comparing both keys and values.
+     *
+     * @param  mixed  $items
+     * @return static
+     */
+    public function intersectAssoc($items)
+    {
+        return new static(
+            array_intersect_assoc(
+                $this->items,
+                $this->getArrayableItems($items)
+            )
+        );
+    }
+
+    /**
      * Intersect the collection with the given items by key.
      *
      * @param  mixed  $items
@@ -1532,6 +1549,17 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
         $this->items = $this->map($callback)->all();
 
         return $this;
+    }
+
+    /**
+     * Flattens a multi-dimensional collection into
+     * a single level collection with dots.
+     *
+     * @return static
+     */
+    public function dot()
+    {
+        return new static(Arr::dot($this->all()));
     }
 
     /**

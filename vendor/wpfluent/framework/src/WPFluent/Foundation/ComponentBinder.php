@@ -7,7 +7,7 @@ use NinjaTables\Framework\View\View;
 use NinjaTables\Framework\Cache\Cache;
 use NinjaTables\Framework\Http\URL;
 use NinjaTables\Framework\Http\Router;
-use NinjaTables\Framework\Support\Facade;
+use NinjaTables\Framework\Support\Mail;
 use NinjaTables\Framework\Support\Pipeline;
 use NinjaTables\Framework\Http\Request\Request;
 use NinjaTables\Framework\Http\Response\Response;
@@ -16,6 +16,7 @@ use NinjaTables\Framework\Encryption\Encrypter;
 use NinjaTables\Framework\Database\Orm\Model;
 use NinjaTables\Framework\Validator\Validator;
 use NinjaTables\Framework\Foundation\RequestGuard;
+use NinjaTables\Framework\Database\DBManager;
 use NinjaTables\Framework\Database\ConnectionResolver;
 use NinjaTables\Framework\Database\Query\WPDBConnection;
 use NinjaTables\Framework\Pagination\AbstractCursorPaginator;
@@ -26,6 +27,8 @@ use WpOrg\Requests\Exception\Http\Status401;
 
 class ComponentBinder
 {
+    use Concerns\DynamicFacadeTrait;
+
     /**
      * The application instance
      * @var \NinjaTables\Framework\Foundation\Application
@@ -47,6 +50,7 @@ class ComponentBinder
         'DB',
         'URL',
         'Router',
+        'Mail',
         'Paginator',
         'Pipeline',
     ];
@@ -99,70 +103,6 @@ class ComponentBinder
                 $app->make('validator')
             ));
         });
-    }
-
-    /**
-     * Register the dynamic facade resolver.
-     * @param  \NinjaTables\Framework\Foundation\Application $app
-     * @return null
-     */
-    protected function registerFacadeResolver($app)
-    {
-        Facade::setFacadeApplication($app);
- 
-        spl_autoload_register(function($class) use ($app) {
-
-            $ns = substr(($fqn = __NAMESPACE__), 0, strpos($fqn, '\\'));
-
-            if (str_contains($class, ($facade = $ns.'\Facade'))) {
-                $this->createFacadeFor($facade, $class, $app);
-            }
-        }, true, true);
-    }
-
-    /**
-     * Create a facade resolver class dynamically
-     * @param  string $facade
-     * @param  string $class
-     * @param  \NinjaTables\Framework\Foundation\Application $app
-     * @return null
-     */
-    protected function createFacadeFor($facade, $class, $app)
-    {
-        $facadeAccessor = $this->resolveFacadeAccessor($facade, $class, $app);
-
-        $anonymousClass = new class($facadeAccessor) extends Facade {
-
-            protected static $facadeAccessor;
-
-            public function __construct($facadeAccessor) {
-                static::$facadeAccessor = $facadeAccessor;
-            }
-
-            protected static function getFacadeAccessor() {
-                return static::$facadeAccessor;
-            }
-        };
-
-        class_alias(get_class($anonymousClass), $class, true);
-    }
-
-    /**
-     * Resolve the binding name.
-     * @param  string $facade
-     * @param  string $class
-     * @param  \NinjaTables\Framework\Foundation\Application $app
-     * @return string
-     */
-    protected function resolveFacadeAccessor($facade, $class,$app)
-    {
-        $name = strtolower(trim(str_replace($facade, '', $class), '\\'));
-        
-        if ($name == 'route') $name = 'router';
-
-        if ($app->bound($name)) {
-            return $name;
-        }
     }
 
     /**
@@ -286,15 +226,21 @@ class ComponentBinder
      */
     protected function bindDB()
     {
-        $this->app->singleton('db', function($app) {
-            return new WPDBConnection(
-                $GLOBALS['wpdb'], $app->config->get('database')
-            );
-        });
+        $resolver = new ConnectionResolver([
+            'mysql' => new WPDBConnection(
+                $GLOBALS['wpdb']
+            ),
+        ]);
 
-        Model::setEventDispatcher($this->app['events']);
+        $resolver->setDefaultConnection('mysql');
+
+        Model::setConnectionResolver($resolver);
         
-        Model::setConnectionResolver(new ConnectionResolver);
+        Model::setEventDispatcher($this->app['events']);
+
+        $this->app->singletonIf('db', function($app) use ($resolver) {
+            return new DBManager($resolver);
+        });
     }
 
     /**
@@ -321,6 +267,19 @@ class ComponentBinder
         });
 
         $this->app->alias(Router::class, 'router');
+    }
+
+    /**
+     * Bind the mail instance into the container.
+     * @return null
+     */
+    protected function bindMail()
+    {
+        $this->app->bind(Mail::class, function($app) {
+            return new Mail($app);
+        });
+
+        $this->app->alias(Mail::class, 'mail');
     }
 
     /**

@@ -334,11 +334,23 @@ class Encrypter
     /**
      * Get the application encryption key.
      * 
+     * Developers may override the database key name using the filter:
+     * `{slug}.encryption.option_key`
+     *
      * @return string
      */
     public function getSlug()
     {
-    	return App::config()->get('app.slug') . '_enc_key';
+        $slug = App::config()->get('app.slug');
+
+        $default = $slug . '_enc_key';
+
+        /**
+         * Allow developer to override the encryption key option name.
+         *
+         * @param string $default Default option key name.
+         */
+        return App::applyFilters($slug . '.encryption.option_key', $default);
     }
 
     /**
@@ -363,10 +375,65 @@ class Encrypter
     /**
      * Get the current encryption key and all previous encryption keys.
      *
-     * @return array
+     * This is useful for key rotation, allowing decryption of data
+     * encrypted with older keys.
+     *
+     * @return array Array of binary encryption keys.
      */
     public function getAllKeys()
     {
-        return [$this->key];
+        $keys = [$this->key];
+
+        // Get the old keys option name, allowing override via filter
+        $oldKeysOption = App::applyFilters(
+            $this->slug . '.encryption.old_keys_option',
+            $this->slug . '_old_enc_key'
+        );
+
+        $oldKeys = get_option($oldKeysOption, []);
+
+        foreach ($oldKeys as $encodedKey) {
+            $decoded = base64_decode($encodedKey, true);
+            if ($decoded !== false) {
+                $keys[] = $decoded;
+            }
+        }
+        
+        return $keys;
+    }
+
+    /**
+     * Rotate the encryption key.
+     *
+     * This method archives the current key in the old keys list,
+     * generates a new encryption key, stores it in the database,
+     * and updates the encrypter instance with the new key.
+     *
+     * @return void
+     */
+    public function rotateKey()
+    {
+        $currentEncoded = base64_encode($this->key);
+
+        // Get the old keys option name, allowing override via filter
+        $oldKeysOption = App::applyFilters(
+            $this->slug . '.encryption.old_keys_option',
+            $this->slug . '_old_enc_key'
+        );
+
+        $oldKeys = get_option($oldKeysOption, []);
+
+        // Add current key to old list if not already present
+        if (!in_array($currentEncoded, $oldKeys, true)) {
+            $oldKeys[] = $currentEncoded;
+            update_option($oldKeysOption, $oldKeys);
+        }
+
+        // Generate and store new key
+        $newKey = base64_encode(static::generateKey($this->cipher));
+        update_option($this->slug, $newKey);
+
+        // Update instance property with decoded new key
+        $this->key = base64_decode($newKey);
     }
 }

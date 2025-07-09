@@ -3,6 +3,7 @@
 namespace NinjaTables\Framework\Http\Request;
 
 use NinjaTables\Framework\Support\Helper;
+use NinjaTables\Framework\Support\Collection;
 
 trait InteractsWithFilesTrait
 {
@@ -140,11 +141,9 @@ trait InteractsWithFilesTrait
      *
      * @return array
      */
-    public function files($asCollection = false)
+    public function files($key = null)
     {
-        return $asCollection ? Helper::collect(
-            $this->files
-        ) : $this->files;
+        return Helper::dataGet($this->files, $key, $this->files);
     }
 
     /**
@@ -152,8 +151,46 @@ trait InteractsWithFilesTrait
      *
      * @return array
      */
-    public function fileCollection()
+    public function fileCollection($key = null)
+    {   
+        $collection = Helper::collect(
+            Helper::dataGet($this->files, $key, $this->files)
+        );
+
+        if (!method_exists($collection, 'save')) {
+            $this->addSaveMethod($collection);
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Add a save method on the runtime.
+     * 
+     * @param Collection &$files
+     * @return void
+     */
+    protected function addSaveMethod(Collection &$files)
     {
-        return $this->files(true);
+        Collection::macro('save', function ($path = null) use ($files) {
+            return $files->map(function ($file) use ($path) {
+                // When developer will use the method without key name:
+                // i.e: $request->fileCollection(), an array of arrays
+                // ['images' => [0 => File, 1 => File]] will be
+                // returned, so $file will contain an array
+                // of File objects, [0 => File, 1 => File].
+                if (is_array($file)) {
+                    $savedFiles = [];
+                    foreach ($file as $fileObject) {
+                        $savedFiles[] = $fileObject->save($path);
+                    }
+                    return $savedFiles;
+                }
+
+                // For $request->fileCollection('images')
+                // [0 => File, 1 => File] will be returned.
+                return $file->save($path);
+            })->all();
+        });
     }
 }
