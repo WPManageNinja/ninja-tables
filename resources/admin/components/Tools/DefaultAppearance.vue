@@ -1,0 +1,303 @@
+<template>
+    <div class="nt-table-default-appearance">
+        <div class="text-[18px] font-[600] text-[#0E121B]">{{ $t('Global Appearance Settings') }}</div>
+        <div class="text-[14px] font-[400] text-[#0E121B] my-5">
+            {{
+                $t(`The following settings will be applied to the newly created tables. Of course, you can customize the
+                    appearance settings to each table level.`)
+            }}
+        </div>
+
+        <div v-loading="fetching" class="nt-table-default-appearance-content">
+            <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Styling Library') }}</div>
+            <div class="flex items-center w-fit rounded-[8px] bg-[#F5F7FA] px-2 gap-3 h-[36px]">
+                <div
+                    @click="default_settings.css_lib = 'semantic_ui'"
+                    :class="{'bg-white rounded-[8px] h-[26px] flex items-center shadow-md shadow-gray-300': default_settings.css_lib === 'semantic_ui', 'px-2 cursor-pointer': true}"
+                >
+                    {{ $t('Semantic UI') }}
+                </div>
+                <div
+                    @click="default_settings.css_lib = 'bootstrap4'"
+                    :class="{'bg-white rounded-[8px] h-[26px] shadow-md flex items-center shadow-gray-300': default_settings.css_lib === 'bootstrap4', 'px-2 cursor-pointer': true}"
+                >
+                    {{ $t('Bootstrap 4') }}
+                </div>
+                <div
+                    @click="default_settings.css_lib = 'bootstrap3'"
+                    :class="{'bg-white rounded-[8px] h-[26px] flex items-center shadow-md shadow-gray-300': default_settings.css_lib === 'bootstrap3', 'px-2 cursor-pointer': true}"
+                >
+                    {{ $t('Bootstrap 3') }}
+                </div>
+            </div>
+            <div v-if="availableStyles" class="my-3 form_group label-normalize">
+                <label v-for="tableStyle in availableStyles" :key="tableStyle.key"
+                       :for="'table_style_' + tableStyle.key">
+                    <div class="flex items-center gap-2 mb-3">
+                        <el-switch
+                            size="small"
+                            :model-value="isStyleActive(tableStyle.key)"
+                            @change="(val) => toggleStyle(tableStyle.key, val)"
+                            :id="'table_style_' + tableStyle.key">
+                        </el-switch>
+                        <span>
+                             {{ tableStyle.title }}
+                             <el-tooltip placement="right" effect="light"
+                                         :content="tableStyle.description">
+                                 <el-icon class="tooltip-icon-color">
+                                     <InfoFilled/>
+                                 </el-icon>
+                             </el-tooltip>
+                        </span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Features') }}</div>
+            <div class="form_group label-normalize">
+                <div for="show_title" class="my-1 flex items-center gap-2 mb-3">
+                    <el-switch
+                        size="small"
+                        v-model="default_settings.show_title"
+                        active-value="1"
+                        inactive-value="0"
+                        :id="'show_title'">
+                    </el-switch>
+                    <span>
+                         {{ $t('Show Table Title') }}
+                        <el-tooltip placement="right" effect="light"
+                                    content="Enable this if you want to show table title in frontend">
+                            <el-icon class="tooltip-icon-color">
+                                <InfoFilled/>
+                            </el-icon>
+                        </el-tooltip>
+                    </span>
+                </div>
+
+                <div for="show_description" class="my-1 flex items-center gap-2 mb-3">
+                    <el-switch
+                        size="small"
+                        v-model="default_settings.show_description"
+                        active-value="1"
+                        inactive-value="0"
+                        :id="'show_description'">
+                    </el-switch>
+                    <span>
+                        {{ $t('Show Table Description') }}
+                        <el-tooltip placement="right" effect="light"
+                                    content="Enable this if you want to show table description in frontend">
+                            <el-icon class="tooltip-icon-color">
+                                <InfoFilled/>
+                            </el-icon>
+                        </el-tooltip>
+                    </span>
+                </div>
+
+                <div for="enable_search" class="my-1 flex items-center gap-2 mb-3">
+                    <el-switch
+                        size="small"
+                        v-model="default_settings.enable_search"
+                        active-value="1"
+                        inactive-value="0"
+                        :id="'enable_search'">
+                    </el-switch>
+                    <span>
+                        {{ $t('Enable the visitor to filter or search the table.') }}
+                    </span>
+                </div>
+
+                <div for="column_sorting" class="my-1 flex items-center gap-2 mb-3">
+                    <el-switch
+                        size="small"
+                        v-model="default_settings.column_sorting"
+                        active-value="1"
+                        inactive-value="0"
+                        :id="'column_sorting'">
+                    </el-switch>
+                    <span>{{ $t('Enable sorting of the table by the visitor') }}</span>
+                </div>
+
+                <div for="hide_all_borders" class="my-1 flex items-center gap-2 mb-3">
+                    <el-switch
+                        size="small"
+                        v-model="default_settings.hide_all_borders"
+                        active-value="1"
+                        inactive-value="0"
+                        :id="'hide_all_borders'">
+                    </el-switch>
+                    <span>{{ $t('Hide All Borders') }}</span>
+                </div>
+            </div>
+
+            <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Pagination Setting') }}</div>
+            <div class="form_group label-normalize">
+                <div for="hide_pagination" class="flex items-center gap-2 mb-3">
+                    <el-switch
+                        size="small"
+                        v-model="default_settings.show_all"
+                        active-value="1"
+                        inactive-value="0"
+                        :id="'hide_pagination'">
+                    </el-switch>
+                    <span>{{ $t('Hide Pagination (Show all data at once)') }}</span>
+                </div>
+
+                <div class="w-1/2 mt-2">
+                    <label class="font-[400] block">{{ $t('Items Per Page') }}</label>
+                    <NinjaInput
+                        type="number"
+                        style="height: 38px;"
+                        :min="1"
+                        :model-value="Number(default_settings.perPage) || 20"
+                        @update:model-value="default_settings.perPage = Number($event) || 20"
+                        :disabled="default_settings.show_all == true || default_settings.show_all == '1'"
+                    />
+                </div>
+            </div>
+
+            <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Font Setting') }}</div>
+            <div class="grid grid-cols-2 items-center gap-5">
+                <div>
+                    <label class="font-[400]">{{ $t('Font Family') }}</label>
+                    <el-select class="ninja-select" v-model="default_settings.table_font_family"
+                               :placeholder="$t('Select Font')">
+                        <el-option v-for="(family, key) in fontFamily" :key="key"
+                                   :label="family === 'inherit' ? 'theme-font' : family"
+                                   :value="family"></el-option>
+                    </el-select>
+                </div>
+
+                <div>
+                    <label class="font-[400] block">{{ $t('Font Size') }}</label>
+                    <NinjaInput
+                        type="number"
+                        style="height: 38px;"
+                        :min="1"
+                        :max="50"
+                        :model-value="Number(default_settings.table_font_size) || 14"
+                        @update:model-value="default_settings.table_font_size = Number($event) || 14"
+                    />
+                </div>
+            </div>
+
+
+            <div class="text-[#0E121B] text-[16px] font-[500] mt-4 mb-2">{{ $t('Default Table Color') }}</div>
+            <div class="w-1/2">
+                <label class="font-[400]">{{ $t('Select Color') }}</label>
+                <el-select class="ninja-select" v-model="default_settings.table_color" placeholder="Select Color">
+                    <el-option v-for="(colorName, colorKey) in tableColors" :key="colorKey"
+                               :label="colorName"
+                               :value="colorKey"></el-option>
+                </el-select>
+            </div>
+
+            <div class="flex justify-end mt-4">
+                <NinjaButton type="primary" @click="store" :btn-text="$t('Save Settings')"/>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import {tableLibs} from '../../data/data'
+import intersection from 'lodash/intersection';
+import forEach from 'lodash/forEach'
+import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+
+export default {
+    name: "Privacy",
+    components: {NinjaInput, NinjaButton},
+    data() {
+        return {
+            fetching: false,
+            saving: false,
+            tableLibs: {},
+            default_settings: {},
+            fontFamily: ['inherit', 'cursive', 'fantasy', 'monospace', 'sans-serif', 'serif', 'system-ui', 'ui-monospace', 'ui-rounded', 'ui-sans-serif', 'ui-serif']
+        };
+    },
+    computed: {
+        tableColors() {
+            let lib = tableLibs();
+            return lib.footable.colors;
+        },
+        table_styles() {
+            let lib = tableLibs();
+            return lib.footable.css_libs;
+        },
+        availableStyles() {
+            let lib = this.table_styles[this.default_settings.css_lib];
+            if (lib)
+                return lib.styles;
+            return false;
+        }
+    },
+    methods: {
+        isStyleActive(styleKey) {
+            if (!Array.isArray(this.default_settings.css_classes)) {
+                this.default_settings.css_classes = [];
+            }
+            return this.default_settings.css_classes.includes(styleKey);
+        },
+        toggleStyle(styleKey, isActive) {
+            if (!Array.isArray(this.default_settings.css_classes)) {
+                this.default_settings.css_classes = [];
+            }
+
+            // Create a new array to maintain reactivity
+            const updatedStyles = [...this.default_settings.css_classes];
+
+            if (isActive && !updatedStyles.includes(styleKey)) {
+                updatedStyles.push(styleKey);
+            } else if (!isActive && updatedStyles.includes(styleKey)) {
+                const index = updatedStyles.indexOf(styleKey);
+                updatedStyles.splice(index, 1);
+            }
+
+            // Update the default_settings
+            this.default_settings.css_classes = updatedStyles;
+        },
+        get() {
+            this.fetching = true;
+            this.$get('tables/tools/default-settings')
+                .then(response => {
+                    this.default_settings = response.data.default_settings;
+                })
+                .catch(e => {
+                })
+                .finally(() => {
+                    this.fetching = false;
+                });
+        },
+        store() {
+            this.saving = true;
+            let validStyles = [];
+            forEach(this.availableStyles, (style) => {
+                validStyles.push(style.key);
+            });
+            this.default_settings.css_classes = intersection(validStyles, this.default_settings.css_classes);
+            this.$post('tables/tools/default-settings', {
+                default_settings: this.default_settings
+            })
+                .then(response => {
+                    this.$message.success({
+                        showClose: true,
+                        message: response.data.message,
+                        type: "success"
+                    });
+                })
+                .catch(e => {
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
+        }
+    },
+    mounted() {
+        this.get();
+    }
+};
+</script>
+
+

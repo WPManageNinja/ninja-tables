@@ -1,0 +1,148 @@
+
+// @import './ninja-tables-admin.scss';
+@use './ninja-tables-admin' as *;
+
+.toplevel_page_ninja_tables{
+    background: #F4F5FA;
+    font-family: 'Inter', sans-serif;
+}
+
+.el-input {
+    input[readonly] {
+        background: white !important;
+    }
+    input {
+        margin: 0;
+    }
+}
+
+.el-select__input {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.el-text-info {
+    color: #58B7FF;
+}
+.el-picker-panel.el-date-picker.el-popper {
+    z-index: 20159999 !important;
+}
+
+.el-table {
+    .cell {
+        text-overflow: initial;
+    }
+
+    td {
+        padding: 5px 0;
+        max-width: 0;
+    }
+}
+
+.js-sortable-table.el-table {
+    .cell {
+        text-overflow: ellipsis !important;
+    }
+}
+
+.el-popper[x-placement^=top], .el-tooltip__popper {
+    z-index: 99999 !important;
+}
+
+.el-popper {
+    z-index: 99999 !important;
+}
+
+.el-table-column--selection .cell * {
+    overflow: visible !important;
+}
+
+
+.doingAJaxLoading.el-loading-parent--relative {
+    z-index: 9999999999;
+    text-align: center;
+    position: fixed !important;
+    background: none !important;
+    top: 20px;
+    left: 50%;
+    right: 50%;
+    .el-loading-mask {
+        background: rgba(0, 0, 0, 0);
+    }
+}
+
+.el-dialog__wrapper {
+    .el-dialog {
+        background: transparent;
+    }
+    .el-dialog__header {
+        display: block;
+        overflow: hidden;
+        background: #F5F5F5;
+        border: 1px solid #DDDDDD;
+        padding: 10px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        .el-dialog__headerbtn {
+            top: 12px;
+        }
+    }
+    .el-dialog__footer {
+        background: #F5F5F5;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+    .el-dialog__body {
+        padding: 20px;
+        background: white;
+        border-radius: 0;
+        .dialog-footer {
+            padding: 10px 20px 20px;
+            text-align: right;
+            box-sizing: border-box;
+            background: #F5F5F5;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            width: auto;
+            display: block;
+            margin: 0px -20px -20px;
+        }
+    }
+}
+
+.footable.table, .footable-details.table {
+    max-width: 100% !important;
+}
+p#dolly {
+    display: none;
+}
+
+.create-table-modal {
+    .el-dialog__body {
+        padding: 0px !important;
+    }
+    main.el-main {
+        padding: 20px 20px 40px !important;
+    }
+}
+
+.image_selector {
+  background: whitesmoke;
+  padding: 10px;
+}
+
+.basic_settings {
+    label.el-form-item__label {
+        //line-height: 120%;
+    }
+}
+.el-select-dropdown__wrap {
+    max-height: 320px;
+}
+
+.tooltip-icon-color {
+    color: #58B7FF !important;
+}
+
+@import './_tailwind.scss';
+@import './ui_utils';

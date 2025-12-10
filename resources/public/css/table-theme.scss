@@ -1,0 +1,535 @@
+$themes: (
+    red : (
+        bg-color: rgba(231, 76, 60, 1),
+        text-color: rgba(255, 255, 255, 1),
+        footable-details:(
+            bg-color: rgba(65, 65, 65, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(65, 65, 65, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(231, 76, 60, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(129, 123, 122, 1),
+                    text-color: rgba(255, 255, 255, 1),
+                    border-color: rgba(255, 255, 255, 0.99)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(255, 255, 255, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(231, 76, 60, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(231, 76, 60, 1)
+        )
+    ),
+    orange : (
+        bg-color: rgba(253, 95, 32, 1),
+        text-color: rgba(255, 255, 255, 1),
+        footable-details:(
+            bg-color: rgba(75, 87, 117, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(75, 87, 117, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(253, 95, 32, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(255, 183, 155, 1),
+                    text-color: rgba(75, 87, 117, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(255, 255, 255, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(253, 95, 32, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(253, 95, 32, 1)
+        )
+    ),
+    yellow : (
+        bg-color: rgba(246, 185, 59, 1),
+        text-color: rgba(0, 0, 0, 1),
+        footable-details:(
+            bg-color: rgba(89, 89, 89, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(89, 89, 89, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(246, 185, 59, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(255, 229, 176, 1),
+                    text-color: rgba(0, 0, 0, 1),
+                    border-color: rgba(246, 185, 59, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(0, 0, 0, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(246, 185, 59, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(246, 185, 59, 1)
+        )
+    ),
+    olive : (
+        bg-color: rgba(182, 203, 49, 1),
+        text-color: rgba(38, 38, 38, 1),
+        footable-details:(
+            bg-color: rgba(67, 72, 37, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(67, 72, 37, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(182, 203, 49, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(145, 162, 39, 1),
+                    text-color: rgba(255, 255, 255, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(0, 0, 0, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(182, 203, 49, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(182, 203, 49, 1)
+        )
+    ),
+    green : (
+        bg-color: rgba(45, 185, 76, 1),
+        text-color: rgba(38, 38, 38, 1),
+        footable-details:(
+            bg-color: rgba(59, 80, 63, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(59, 80, 63, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(45, 185, 76, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(38, 153, 64, 1),
+                    text-color: rgba(255, 255, 255, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(0, 0, 0, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(45, 185, 76, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(45, 185, 76, 1)
+        )
+    ),
+    teal : (
+        bg-color: rgba(28, 181, 173, 1),
+        text-color: rgba(45, 45, 45, 1),
+        footable-details:(
+            bg-color: rgba(12, 85, 81, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(12, 85, 81, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(28, 181, 173, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(23, 156, 148, 1),
+                    text-color: rgba(255, 255, 255, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(0, 0, 0, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(28, 181, 173, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(28, 181, 173, 1)
+        )
+    ),
+    blue : (
+        bg-color: rgba(41, 135, 206, 1),
+        text-color: rgba(255, 255, 255, 1),
+        footable-details:(
+            bg-color: rgba(23, 71, 108, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(23, 71, 108, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(41, 135, 206, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(31, 105, 162, 1),
+                    text-color: rgba(255, 255, 255, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(255, 255, 255, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(41, 135, 206, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(41, 135, 206, 1)
+        )
+    ),
+    violet : (
+        bg-color: rgba(108, 92, 231, 1),
+        text-color: rgba(255, 255, 255, 1),
+        footable-details:(
+            bg-color: rgba(44, 37, 96, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(44, 37, 96, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color:rgba(108, 92, 231, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(72, 61, 156, 1),
+                    text-color: rgba(255, 255, 255, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(255, 255, 255, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(108, 92, 231, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(108, 92, 231, 1)
+        )
+    ),
+    purple : (
+        bg-color: rgba(145, 111, 205, 1),
+        text-color: rgba(255, 255, 255, 1),
+        footable-details:(
+            bg-color: rgba(65, 48, 94, 1),
+            text-color: rgba(252, 252, 252, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(65, 48, 94, 1),
+            text-color: rgba(252, 252, 252, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(145, 111, 205, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(104, 78, 150, 1),
+                    text-color: rgba(255, 255, 255, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(255, 255, 255, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(145, 111, 205, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(145, 111, 205, 1)
+        )
+    ),
+    pink : (
+        bg-color: rgba(253, 121, 168, 1),
+        text-color: rgba(255, 255, 255, 1),
+        footable-details:(
+            bg-color: rgba(69, 69, 69, 1),
+            text-color: rgba(252, 252, 252, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(69, 69, 69, 1),
+            text-color: rgba(252, 252, 252, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(253, 121, 168, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(208, 98, 137, 1),
+                    text-color: rgba(255, 255, 255, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(255, 255, 255, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(253, 121, 168, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(253, 121, 168, 1)
+        )
+    ),
+    grey : (
+        bg-color: rgba(99, 110, 114, 1),
+        text-color: rgba(255, 255, 255, 1),
+        footable-details:(
+            bg-color: rgba(69, 69, 69, 1),
+            text-color: rgba(252, 252, 252, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(69, 69, 69, 1),
+            text-color: rgba(252, 252, 252, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(99, 110, 114, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(185, 195, 199, 1),
+                    text-color: rgba(56, 61, 63, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(255, 255, 255, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(99, 110, 114, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(99, 110, 114, 1)
+        )
+    ),
+    black : (
+        bg-color: rgba(33, 33, 33, 1),
+        text-color: rgba(181, 181, 181, 1),
+        footable-details:(
+            bg-color: rgba(0, 206, 201, 1),
+            text-color: #202020
+        ),
+        footable-header:(
+            bg-color: rgba(0, 206, 201, 1),
+            text-color: #202020
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(27, 28, 29, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(185, 195, 199, 1),
+                    text-color: rgba(56, 61, 63, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(255, 255, 255, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(27, 28, 29, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(27, 28, 29, 1)
+        )
+    ),
+    white : (
+        bg-color: rgba(255, 255, 255, 1),
+        text-color: rgba(123, 123, 123, 1),
+        footable-details:(
+            bg-color: rgba(0, 206, 201, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-header:(
+            bg-color: rgba(0, 206, 201, 1),
+            text-color: rgba(255, 255, 255, 1)
+        ),
+        footable-filtering:(
+            bg-color: rgba(255, 255, 255, 1),
+            text-color: rgba(0, 206, 201, 1)
+        ),
+        tbody: (
+            tr: (
+                hover: (
+                    bg-color: rgba(185, 195, 199, 1),
+                    text-color: rgba(56, 61, 63, 1),
+                    border-color: rgba(255, 255, 255, 1)
+                ),
+            ),
+            td: (
+                collapse-icon: (
+                    bg-color: rgba(56, 61, 63, 1)
+                ),
+            )
+        ),
+        tfoot: (
+            footable-paging: (
+                footable-page: (
+                    bg-color: rgba(0, 206, 201, 1),
+                    text-color: rgba(0, 0, 0, 0.5)
+                )
+            )
+        ),
+        input-group: (
+            bg-color: rgba(0, 206, 201, 1)
+        )
+    ),
+);

@@ -1,0 +1,340 @@
+<template>
+    <div class="ninja_modal-body">
+        <h3 v-if="!editing" class="nt-modal-title">
+            {{ $t('Construct Table from Fluent Forms Entries') }}
+        </h3>
+
+        <template v-if="isFluentFormUpdated">
+            <p class="nt-modal-description" v-if="!editing">
+                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. Click here to learn more about Fluent Forms integration') }}
+                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
+                   {{ $t('View Documentation.') }}
+                </a>
+            </p>
+
+            <div :class="!editing ? 'my-[30px]' : 'my-[20px]'">
+                <div class="nt-form-group" v-if="!editing">
+                    <label for="name" class="nt-form-label">{{ $t('Table Title') }}<span class="nt-required ml-[4px]">*</span></label>
+                    <NinjaInput
+                        v-model="post_title"
+                        :placeholder="$t('Enter a title to identify your table')"
+                    />
+                </div>
+
+                <div class="nt-form-group" v-if="!editing">
+                    <label for="name" class="nt-form-label">{{ $t('Choose Form') }}<span class="nt-required ml-[4px]">*</span></label>
+                    <el-select
+                        filterable
+                        class="ninja-select"
+                        v-loading="fetching"
+                        v-model="form.id"
+                        style="width:100%"
+                        :placeholder="$t('Select a Form')"
+                        @change="handleFormSelectionChange">
+                        <el-option
+                            v-for="form in forms"
+                            :key="form.id"
+                            :label="form.id +' : '+ form.title"
+                            :value="form.id">
+                        </el-option>
+                    </el-select>
+                </div>
+
+                <div v-if="fields.length > 0 && form.id" class="nt-checkbox-group-wrapper">
+                    <div class="nt-checkbox-group-header"
+                         style="border-bottom: 1px solid #E1E4EA">
+                        <div>{{ $t('Select Form Fields') }}<span class="nt-required ml-[4px]">*</span></div>
+                        <div>
+                            <el-checkbox
+                                v-model="checkAll"
+                                :indeterminate="isIndeterminate"
+                                @change="handleCheckAllChange"
+                            >
+                                {{ $t('Select all') }}
+                            </el-checkbox>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div v-if="fetching" class="text-center mt-2 text-gray-500 text-sm">
+                            <el-icon class="is-loading">
+                                <Loading />
+                            </el-icon>
+                        </div>
+
+                        <el-checkbox-group
+                            v-else
+                            v-model="selectedFields"
+                            @change="handleFieldsSelectionChange"
+                            class="nt-checkbox-group"
+                        >
+                            <el-checkbox v-for="fld in fields" :key="fld.name" :value="fld.name">
+                                {{ fld.label }}
+                            </el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+                </div>
+
+                <div class="my-4">
+                    <p class="mb-2"><strong>{{ $t('Options (Optional)') }}</strong></p>
+                    <hr>
+                </div>
+
+                <div class="nt-form-group flex justify-start items-center gap-8">
+                    <div class="flex flex-col">
+                        <div class="flex gap-1">
+                            <el-tooltip
+                                placement="right"
+                                effect="light"
+                                content="Maximum records to show in frontend, keep empty to show all."
+                            >
+                                <el-icon class="tooltip-icon-color">
+                                    <InfoFilled/>
+                                </el-icon>
+                            </el-tooltip>
+                            <label class="nt-form-label">{{ $t('Max Records:') }}</label>
+                        </div>
+                        <NinjaInput v-model="form.entry_limit" />
+                    </div>
+
+                    <div class="flex flex-col">
+                        <div class="flex gap-1">
+                            <el-tooltip
+                                placement="right"
+                                effect="light"
+                                content="Select what type of entries you want to show from Fluent Forms."
+                            >
+                                <el-icon class="tooltip-icon-color">
+                                    <InfoFilled/>
+                                </el-icon>
+                            </el-tooltip>
+                            <label class="nt-form-label">{{ $t('Entry Type:') }}</label>
+                        </div>
+                        <el-radio-group v-model="form.entry_status" class="ninja_tables_radio_group">
+                            <el-radio border value="all" :label="$t('All')" class="mr-2" />
+                            <el-radio border value="read" :label="$t('Read')" class="mr-2" />
+                            <el-radio border value="unread" :label="$t('Unread')" />
+                        </el-radio-group>
+                    </div>
+                </div>
+
+                <div class="nt-form-group mt-4">
+                    <template v-if="config && config.table">
+                        <el-checkbox
+                            :true-value="'yes'"
+                            :false-value="'no'"
+                            v-model="config.table.current_user_entry_only"
+                        >
+                           {{ $t('Show current user submissions only at frontend') }}
+                        </el-checkbox>
+                    </template>
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <div>
+<!--                    Empty div for maintain spacing in both edit & create-->
+                </div>
+               <div class="flex items-center gap-2">
+                   <NinjaButton v-if="!editing" type="secondary" @click="closeModal" :btnText="$t('Cancel')" />
+                   <NinjaButton v-if="editing"  @click="save" :btnText="$t('Update')"/>
+                   <NinjaButton v-else  @click="save" :btnText="$t('Save')" />
+               </div>
+            </div>
+        </template>
+
+        <template v-else-if="hasFluentForm">
+            <el-alert title=""
+                      type="warning"
+                      :closable="false"
+                      show-icon
+                      class="premium-notice"
+            >
+                <p>To use this feature your WP Fluent Forms need to be updated. Please update WP Fluent From from plugins screen</p>
+            </el-alert>
+
+            <h4>See the form in action:</h4>
+            <br/>
+            <div style="position: relative;padding-bottom: 56.25%;padding-top: 25px;height: 0;">
+                <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%; border-radius: 12px" width="700" height="394"
+                        src="https://www.youtube.com/embed/uMVnTYnKWM4" frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+            </div>
+        </template>
+
+        <div v-else class="fluent-form-promo">
+            <p class="nt-modal-description">
+                {{ $t('Prepare your table from your existing WP Fluent Forms submissions. It can be used to easily showcase your form submissions. Click here to learn more about') }}
+                <a class="nt-link" target="_blank" href="https://ninjatables.com/docs/wp-fluent-forms-integration/">
+                    {{ $t('Fluent Forms Integration') }}
+                </a>
+            </p>
+            <div class="my-4">
+                <NinjaButton v-loading="installing" @click="installFluentFrom">
+                    <span v-if="installing">Installing WP Fluent From...</span><span
+                        v-else>Install Fluent Forms Now</span>
+                </NinjaButton>
+                <p v-if="installing">Please wait while installing WP Fluent From</p>
+            </div>
+            <h4>See the form in action:</h4>
+            <br/>
+            <div style="position: relative;padding-bottom: 56.25%;padding-top: 25px;height: 0;">
+                <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%; border-radius: 12px" width="700" height="394"
+                        src="https://www.youtube.com/embed/uMVnTYnKWM4" frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import NinjaInput from "../../@ui-utils/NinjaInput.vue";
+    import {InfoFilled} from "@element-plus/icons-vue";
+    import NinjaButton from "../../@ui-utils/NinjaButton.vue";
+
+    export default {
+        name: 'FluentForm',
+        components: {NinjaButton, InfoFilled, NinjaInput},
+        props: {
+            tableCreated: {
+                type: Function,
+                required: true
+            },
+            editing: {
+                type: Boolean
+            },
+            config: {
+                type: Object
+            }
+        },
+        data() {
+            return {
+                installing: false,
+                fetching: false,
+                forms: [],
+                fields: [],
+                btnLoading: false,
+                post_title: '',
+                form: {
+                    id: null,
+                    fields: [],
+                    entry_status: 'all',
+                    entry_limit: 1000,
+                },
+                isIndeterminate: false,
+                checkAll: false,
+                hasFluentForm: !!window.ninja_table_admin.hasFluentForm,
+                isFluentFormUpdated: !!window.ninja_table_admin.isFluentFormUpdated,
+                selectedFields: [],
+            };
+        },
+        methods: {
+            fetchForms() {
+                this.fetching = true;
+                this.$get('fluent-forms')
+                    .then(res => this.forms = res.data)
+                    .catch(error => console.log(error))
+               this.fetching = false;
+            },
+            handleFormSelectionChange(formId) {
+                this.$get('fluent-forms/' + formId)
+                    .then(res => {
+                        this.fields = res.data;
+                        this.selectedFields = [];
+
+                        if (this.editing) {
+                            this.form.entry_limit = this.config.table.entry_limit;
+                            this.form.entry_status = this.config.table.entry_status;
+
+                            // Set selected fields based on config
+                            if (this.config.columns) {
+                                this.selectedFields = this.config.columns
+                                    .map(c => c.original_name)
+                                    .filter(name => this.fields.some(f => f.name === name));
+                                this.updateCheckAllState();
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            },
+            handleFieldsSelectionChange(value) {
+                this.form.fields = this.fields.filter(field => value.includes(field.name));
+                this.updateCheckAllState();
+            },
+            handleCheckAllChange(val) {
+                this.selectedFields = val ? this.fields.map(field => field.name) : [];
+                this.updateCheckAllState();
+            },
+            updateCheckAllState() {
+                const fieldsCount = this.fields.length;
+                const selectedCount = this.selectedFields.length;
+                this.checkAll = selectedCount === fieldsCount;
+                this.isIndeterminate = selectedCount > 0 && selectedCount < fieldsCount;
+            },
+            save() {
+                this.btnLoading = true;
+
+                if(this.config && this.config.table && this.config.table.current_user_entry_only) {
+                    this.form.current_user_entry_only = this.config.table.current_user_entry_only;
+                }
+
+                // Make sure form.fields is properly set from selectedFields
+                this.form.fields = this.fields.filter(field => this.selectedFields.includes(field.name));
+
+                let data = {
+                  post_title: this.post_title,
+                  form: this.form,
+                  table_Id: this.config && this.config.table.ID || null
+                }
+
+                this.$post('fluent-forms/save', data)
+                    .then(res => this.tableCreated(res.data.table_id))
+                    .catch(error => {
+                        let message = '';
+                        let messages = error.responseJSON.data.message;
+                        for (let key in messages) {
+                            message += ' ' + messages[key];
+                        }
+                        this.$message({showClose: true, message: message, type: 'error'});
+                    })
+                this.btnLoading = false
+            },
+
+            closeModal() {
+                this.$emit('modalClose');
+            },
+            installFluentFrom() {
+                this.installing = true;
+                this.$post('install/fluent-forms')
+                    .then(response => {
+                        this.$message.success(response.data.message);
+                        if (response.data.redirect_url) {
+                            window.location.href = response.data.redirect_url;
+                        }
+                    })
+                    .catch(error => {
+                        this.$message.error(error.responseJSON.message);
+                    })
+                this.installing = false;
+            }
+        },
+        mounted() {
+            if (this.hasFluentForm) {
+                !this.editing ? this.fetchForms() : this.handleFormSelectionChange(
+                    this.form.id = this.config.table.fluentFormFormId
+                );
+            }
+        }
+    };
+</script>
+
+<style lang="scss">
+    .fluent-form-promo {
+        p {
+            font-size: initial;
+        }
+    }
+</style>

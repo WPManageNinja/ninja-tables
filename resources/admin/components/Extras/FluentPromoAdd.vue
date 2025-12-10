@@ -1,0 +1,56 @@
+<template>
+    <div v-if="will_it_show" class="ninja_suggest_plugin">
+        <div v-if="dismisable" @click="dismiss()" class="ninja_dismiss">X</div>
+        <div class="ninja_form_banner">
+            <img :src="image_url('fluentform_banner.jpg')"/>
+        </div>
+        <div class="ninja_fluent_copy">
+            <h3>Have you checked out FluentForm yet?</h3>
+            <p>The Last Form Plugin You will Ever Need</p>
+            <a class="button button-primary" :href="fluent_url">Download from WordPress.org</a>
+            <a target="_blank" class="button" :href="fluent_wp_url">View Details</a>
+        </div>
+    </div>
+</template>
+<script type="text/babel">
+    export default {
+        name: 'fluentpromo',
+        props: ['dismisable'],
+        data() {
+            return {
+                img_url_path: window.ninja_table_admin.img_url,
+                fluent_url: window.ninja_table_admin.fluentform_url,
+                fluent_wp_url: window.ninja_table_admin.fluent_wp_url,
+                is_installed: window.ninja_table_admin.isInstalled,
+                already_dismissed: window.ninja_table_admin.dismissed
+            }
+        },
+        computed: {
+            will_it_show() {
+                if(this.is_installed) {
+                    return false;
+                }
+                if(this.dismisable && this.already_dismissed) {
+                    return false;
+                }
+                return true;
+            }
+        },
+        methods: {
+            image_url(image_name) {
+                return this.img_url_path+image_name;
+            },
+            dismiss() {
+                this.$post('tables/dismiss-fluent-suggest')
+                    .then(response => {
+
+                    })
+                    .catch(error => {
+
+                    })
+              this.is_installed = true;
+
+            }
+        }
+    }
+</script> 

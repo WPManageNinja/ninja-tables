@@ -1,0 +1,105 @@
+.footable_parent {
+  .fooicon {
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 12px; // Adjust the width and height as needed
+      height: 12px;
+      background-repeat: no-repeat;
+    }
+  }
+  .fooicon-search {
+    &::before {
+      width: 16px;
+      height: 16px;
+      background-image: url('../../libs/icons/search-outline.svg');
+    }
+  }
+  .fooicon-sort-desc {
+    &::before {
+      mask-image: url('../../libs/icons/caret-down-outline.svg');
+      -webkit-mask-image: url('../../libs/icons/caret-down-outline.svg');
+      background-color: #000000;
+    }
+  }
+  .fooicon-sort-asc {
+    &::before {
+      mask-image: url('../../libs/icons/caret-up-outline.svg');
+      -webkit-mask-image: url('../../libs/icons/caret-up-outline.svg');
+      background-color: #000000;
+    }
+  }
+  .fooicon-sort {
+    &::before {
+      mask-image: url('../../libs/icons/caret-up-down-outline.svg');
+      -webkit-mask-image: url('../../libs/icons/caret-up-down-outline.svg');
+      background-color: #000000;
+    }
+  }
+  .fooicon-remove {
+    &::before {
+      background-image: url('../../libs/icons/remove.svg');
+    }
+  }
+  .fooicon-minus {
+    &::before {
+      mask-image: url('../../libs/icons/remove-outline.svg');
+      -webkit-mask-image: url('../../libs/icons/remove-outline.svg');
+      background-color: #000000;
+    }
+  }
+  .fooicon-plus {
+    &::before {
+      mask-image: url('../../libs/icons/add-outline.svg');
+      -webkit-mask-image: url('../../libs/icons/add-outline.svg');
+      background-color: #000000;
+    }
+  }
+  .fooicon-loader {
+    &::before {
+      width: 24px;
+      height: 24px;
+      background-image: url('../../libs/icons/refresh-outline.svg');
+    }
+  }
+  .fooicon-delete {
+    &::before {
+      background-image: url('../../libs/icons/trash-sharp.svg');
+    }
+  }
+  .footable-edit {
+    background-color: #ffffff !important;
+  }
+  .fooicon-pencil {
+    &::before {
+      background-image: url('../../libs/icons/pencil-sharp.svg');
+    }
+  }
+  .footable-delete {
+      background-color: #ffffff !important;
+  }
+  .fooicon-trash {
+    &::before {
+      background-image: url('../../libs/icons/trash-sharp.svg');
+    }
+  }
+  .fooicon-remove-1 {
+    &::before {
+      background-image: url('../../libs/icons/remove.svg');
+    }
+  }
+  .fooicon-bag {
+    &::before {
+      width: 16px;
+      height: 16px;
+      background-image: url('../../libs/icons/bag-handle.svg');
+    }
+  }
+  .fooicon-basket {
+    &::before {
+      width: 16px;
+      height: 16px;
+      background-image: url('../../libs/icons/cart-outline.svg');
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+    "packages": [
+        {
+            "name": "wpfluent/framework",
+            "version": "2.10.49",
+            "version_normalized": "2.10.49.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:wpfluent/framework.git",
+                "reference": "6c2905030646399efe96dcfdbc2fd50ea678beab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wpfluent/framework/zipball/6c2905030646399efe96dcfdbc2fd50ea678beab",
+                "reference": "6c2905030646399efe96dcfdbc2fd50ea678beab",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.3|^8.0"
+            },
+            "time": "2025-07-06T23:17:55+00:00",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "WPFluent\\": "src/WPFluent"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sheikh Heera",
+                    "email": "heera.sheikh77@gmail.com"
+                }
+            ],
+            "description": "A lightweight rest api based framework to build WordPress plugins.",
+            "support": {
+                "source": "https://github.com/wpfluent/framework/tree/2.10.49",
+                "issues": "https://github.com/wpfluent/framework/issues"
+            },
+            "install-path": "../wpfluent/framework"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

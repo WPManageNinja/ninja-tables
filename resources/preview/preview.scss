@@ -1,0 +1,45 @@
+.nt_preview_wrapper {
+  @apply bg-[#E1E4EA] w-auto min-h-screen h-auto flex justify-center items-center;
+
+  .nt_preview {
+    @apply flex flex-col
+    w-full md:w-10/12 lg:w-9/12
+    m-4 md:m-6 lg:m-8 overflow-hidden rounded-[12px];
+
+    .nt_preview_body {
+      @apply bg-white p-[10px] max-h-[70vh] overflow-y-auto;
+    }
+
+    .nt_preview_header, .nt_preview_footer {
+      @apply bg-[#F5F7FA] h-[88px] px-6 flex justify-between items-center;
+
+      .nt_preview_header_title {
+        font-family: Inter;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: #2F3448;
+        background: #FFFFFF;
+        padding: 10px;
+        border-radius: 8px;
+      }
+
+      .nt_preview_header_action {
+        font-family: Inter;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        color: #335CFF;
+      }
+
+      .nt_preview_footer_text {
+        font-family: Inter;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: -1.1%;
+        color: #525866;
+        margin-top: 15px;
+      }
+    }
+  }
+}
