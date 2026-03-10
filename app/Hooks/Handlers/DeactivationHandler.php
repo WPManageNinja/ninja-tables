@@ -105,7 +105,7 @@ class DeactivationHandler
             "does_not_work" => array(
                 "label"              => "The plugin didn't work",
                 "custom_placeholder" => "",
-                "custom_label"       => 'Kindly tell us any suggestion so we can improve',
+                "custom_label"       => 'Please share any suggestions so we can improve.',
                 'has_custom'         => true
             ),
             "temporary"     => array(
