@@ -33,9 +33,8 @@ class DeactivationHandler
                 'ninja_doing_action' => 'deactivate'
             );
             wp_remote_post(self::$apiUrl, array(
-                'method'    => 'POST',
-                'sslverify' => false,
-                'body'      => $data
+                'method' => 'POST',
+                'body'   => $data
             ));
         }
     }
@@ -147,8 +146,7 @@ class DeactivationHandler
 
         wp_remote_post(static::$apiUrl, array(
             'method' => 'POST',
-            'sslverify' => false,
-            'body' => $data
+            'body'   => $data
         ));
 
         wp_send_json_success(array(

@@ -73,9 +73,8 @@ class LeadOptIn
             'ninja_doing_action' => 'activate'
         );
         wp_remote_post($this->apiUrl, array(
-            'method'    => 'POST',
-            'sslverify' => false,
-            'body'      => $data
+            'method' => 'POST',
+            'body'   => $data
         ));
     }
 
