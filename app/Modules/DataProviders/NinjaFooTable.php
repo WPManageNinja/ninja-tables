@@ -524,7 +524,7 @@ class NinjaFooTable
                 $cartItems = WC()->cart->get_cart();
                 ?>
                 <script type="text/javascript">
-                    window['ninjaTableCartItems'] = <?php echo json_encode($cartItems); ?>;
+                    window['ninjaTableCartItems'] = <?php echo wp_json_encode($cartItems); ?>;
                 </script>
                 <?php
             });
@@ -768,7 +768,7 @@ class NinjaFooTable
         add_action('wp_footer', function () use ($vars, $table_id, $table_instance_name) {
             ?>
             <script type="text/javascript">
-                window['<?php echo esc_attr($table_instance_name);?>'] = <?php echo json_encode($vars, true); ?>
+                window['<?php echo esc_attr($table_instance_name);?>'] = <?php echo wp_json_encode($vars); ?>
             </script>
             <?php
         });
