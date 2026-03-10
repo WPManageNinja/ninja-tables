@@ -190,7 +190,7 @@ class PublicDataHandler
                 $dataArray = array_values($data);
 
                 if (isset($dataArray[$column])) {
-                    $value = $data[$column];
+                    $value = $dataArray[$column];
                     if (is_array($value)) {
                         $value = $this->processCellInfoArray($value, $column, $id);
                     }
