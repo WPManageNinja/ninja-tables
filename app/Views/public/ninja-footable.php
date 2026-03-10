@@ -39,7 +39,7 @@
         </div>
     <?php endif; ?>
 
-    <?php if (is_user_logged_in() && ninja_table_admin_role()): ?>
+    <?php if (is_user_logged_in() && current_user_can(ninja_table_admin_role())): ?>
         <a class="nt_edit_link" href="<?php echo esc_url(admin_url('admin.php?page=ninja_tables#/tables/' . $table->ID)); ?>">
             <?php esc_attr_e('Edit Table', 'ninja-tables') ?>
         </a>
