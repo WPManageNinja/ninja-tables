@@ -103,7 +103,25 @@ class ImportController extends Controller
             ], 423);
         }
 
+        if (empty($reader)) {
+            return $this->sendError([
+                'data' => [
+                    'errors'  => array(),
+                    'message' => __('The imported CSV file is empty.', 'ninja-tables')
+                ]
+            ], 423);
+        }
+
         $header = array_shift($reader);
+
+        if (empty($header) || !is_array($header)) {
+            return $this->sendError([
+                'data' => [
+                    'errors'  => array(),
+                    'message' => __('The imported CSV file is missing a header row.', 'ninja-tables')
+                ]
+            ], 423);
+        }
 
         $tableId = $this->createTable(array(
             'post_title'   => $fileName,
@@ -425,6 +443,13 @@ class ImportController extends Controller
         }
 
         $data = ninja_tables_sanitize_array($data);
+
+        if (empty($data)) {
+            return $this->sendError([
+                'errors'  => array(),
+                'message' => __('The imported file does not contain any rows.', 'ninja-tables')
+            ], 423);
+        }
 
         $tableId = $this->savedDragAndDropTable($data, $fileName);
 
