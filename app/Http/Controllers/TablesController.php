@@ -120,6 +120,12 @@ class TablesController extends Controller
 
         $post = get_post($oldPostId);
 
+        if (!$post || $post->post_type !== $this->cptName) {
+            $this->json(array(
+                'message' => __('Table not found.', 'ninja-tables')
+            ), 404);
+        }
+
         // Duplicate table itself.
         $attributes = array(
             'post_title'   => $post->post_title . '( Duplicate )',
