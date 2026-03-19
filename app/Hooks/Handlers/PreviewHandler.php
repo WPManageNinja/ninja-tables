@@ -16,7 +16,9 @@ class PreviewHandler
         }
 
         if ($tableId) {
-            if (ninja_table_admin_role()) {
+            $role = ninja_table_admin_role();
+
+            if ($role && current_user_can($role)) {
                 do_action('ninja_tables_will_render_table', $tableId);
 
                 wp_enqueue_style('ninja-tables-preview',
@@ -39,7 +41,9 @@ class PreviewHandler
     public function dragAndDropTable()
     {
         if (isset($_GET['ninjatable_builder_preview']) && intval(wp_unslash($_GET['ninjatable_builder_preview']))) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            if (ninja_table_admin_role()) {
+            $role = ninja_table_admin_role();
+
+            if ($role && current_user_can($role)) {
                 $tableId = intval(wp_unslash($_GET['ninjatable_builder_preview'])); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
                 do_action('ninja_tables_will_render_table', $tableId);
