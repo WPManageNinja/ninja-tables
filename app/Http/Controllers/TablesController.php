@@ -190,8 +190,15 @@ class TablesController extends Controller
         $deletableKeys = Arr::get($request->all(), 'deletable_keys', []);
 
         $getAllColumns = get_post_meta($id, '_ninja_table_columns', true);
+        if ( ! is_array($getAllColumns)) {
+            $getAllColumns = [];
+        }
 
         $filteredColumns = array_values(array_filter($getAllColumns, function ($column) use ($deletableKeys) {
+            if ( ! is_array($column) || ! isset($column['key'])) {
+                return true;
+            }
+
             return ! in_array($column['key'], $deletableKeys);
         }));
 
