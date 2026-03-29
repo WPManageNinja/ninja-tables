@@ -62,9 +62,9 @@ class FluentFormProvider
             return [
                 'payment_total'  => PaymentHelper::formatMoney($value->payment_total, $value->currency),
                 'payment_status' => $value->payment_status,
-                'payer_name'     => $transaction->payer_name,
-                'payer_email'    => $transaction->payer_email,
-                'charge_id'      => $transaction->charge_id,
+                'payer_name'     => $transaction ? $transaction->payer_name : '',
+                'payer_email'    => $transaction ? $transaction->payer_email : '',
+                'charge_id'      => $transaction ? $transaction->charge_id : '',
                 'created_at'     => $value->created_at
             ];
         }
