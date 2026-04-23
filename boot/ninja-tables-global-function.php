@@ -392,7 +392,7 @@ function ninja_tables_sanitize_table_content_array(array $array, $tableId)
 function ninjaTableGetExternalCachedData($tableId)
 {
     $tableSettings = get_post_meta($tableId, '_ninja_table_settings', true);
-    if ( ! isset($tableSettings['caching_interval']) && $tableSettings['caching_interval']) {
+    if (empty($tableSettings['caching_interval'])) {
         return false;
     }
     $intervalMinutes = intval($tableSettings['caching_interval']);
@@ -412,7 +412,7 @@ function ninjaTableGetExternalCachedData($tableId)
 function ninjaTableSetExternalCacheData($tableId, $data)
 {
     $tableSettings = get_post_meta($tableId, '_ninja_table_settings', true);
-    if ( ! isset($tableSettings['caching_interval']) && $tableSettings['caching_interval']) {
+    if (empty($tableSettings['caching_interval'])) {
         return false;
     }
 
@@ -1234,4 +1234,3 @@ function ninjaTablesGetRemoteContent($url)
 
     return wp_remote_retrieve_body($remoteContent);
 }
-
