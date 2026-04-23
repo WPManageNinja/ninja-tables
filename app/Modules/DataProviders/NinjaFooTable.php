@@ -73,7 +73,7 @@ class NinjaFooTable
             'i18n'                     => array(
                 'search_in'      => __('Search in', 'ninja-tables'),
                 'search'         => __('Search', 'ninja-tables'),
-                'empty_text'     => __('No Result Found', 'ninja-tables'),
+                'empty_text'     => __('No Results Found', 'ninja-tables'),
                 'clear_all'      => __('Clear All', 'ninja-tables'),
                 'caption_format' => __('Selected', 'ninja-tables'),
                 'pikaday' => [
@@ -381,7 +381,7 @@ class NinjaFooTable
                 'search'         => (isset($settings['search_placeholder']))
                     ? sanitize_text_field($settings['search_placeholder']) : __('Search', 'ninja-tables'),
                 'no_result_text' => (isset($settings['no_result_text']))
-                    ? sanitize_text_field($settings['no_result_text']) : __('No Result Found', 'ninja-tables'),
+                    ? sanitize_text_field($settings['no_result_text']) : __('No Results Found', 'ninja-tables'),
             ),
             'shouldNotCache'        => isset($settings['shouldNotCache']) ? $settings['shouldNotCache'] : false,
             'skip_rows'             => Arr::get($settings, 'skip_rows', 0),
