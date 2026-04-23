@@ -80,6 +80,13 @@ class TableItemsController extends Controller
         $rowId = intval(Arr::get($request->all(), 'row_id'));
 
         $row = NinjaTableItem::where('id', $rowId)->first();
+        if ( ! $row) {
+            return $this->sendError([
+                'data' => [
+                    'message' => __('Row not found.', 'ninja-tables')
+                ]
+            ], 404);
+        }
 
         if (user_can_richedit()) {
             $data = ninja_tables_sanitize_table_content_array($request->all(), $row->table_id);
