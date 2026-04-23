@@ -51,7 +51,7 @@ class EditorBlockHandler
                 title: '<?php esc_html_e('Insert Ninja Tables Shortcode', 'ninja-tables'); ?>',
                 select_error: '<?php esc_html_e('Please select a table', 'ninja-tables'); ?>',
                 insert_text: '<?php esc_html_e('Insert Shortcode', 'ninja-tables'); ?>',
-                tables: <?php echo json_encode($tables); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped $tables is already escaped before being passed in. ?>,
+                tables: <?php echo wp_json_encode($tables); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped $tables is already escaped before being passed in. ?>,
                 logo: '<?php echo esc_url(NINJA_TABLES_DIR_URL . 'assets/img/ninja-table-editor-button-2x.png'); ?>'
             }
         </script>
