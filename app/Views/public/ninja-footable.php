@@ -33,7 +33,7 @@
     </table>
     <?php do_action('ninja_tables_after_table_print', $table, $table_vars); ?>
 
-    <?php if (strpos($table_classes, 'ninja_require_initial_hide') != false): ?>
+    <?php if (strpos($table_classes, 'ninja_require_initial_hide') !== false): ?>
         <div class="footable-loader">
             <span class="fooicon fooicon-loader"></span>
         </div>
