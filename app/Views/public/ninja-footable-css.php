@@ -218,7 +218,7 @@
         border-color: <?php echo esc_attr($colors['table_color_border']); ?> !important;
         }
     <?php endif; ?>
-    <?php if(isset($css_prefix['alternate_color_status']) && $css_prefix['alternate_color_status'] == 'yes'): ?>
+    <?php if(isset($colors['alternate_color_status']) && $colors['alternate_color_status'] == 'yes'): ?>
         <?php echo esc_attr($stackPrefix); ?> tbody tr:nth-child(even) {
         background-color: <?php echo esc_attr($colors['table_alt_color_primary']); ?>;
         color: <?php echo esc_attr($colors['table_alt_color_secondary']); ?>;
