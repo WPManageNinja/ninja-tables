@@ -73,6 +73,22 @@ class PluginInstallerController extends Controller
 
     public function installNinjaCharts(Request $request)
     {
+        if ( ! current_user_can('install_plugins')) {
+            return $this->sendError([
+                'data' => [
+                    'message' => __('You do not have permission to install a plugin. Please ask your administrator to install Ninja Charts.', 'ninja-tables')
+                ]
+            ], 423);
+        }
+
+        if (is_multisite()) {
+            return $this->sendError([
+                'data' => [
+                    'message' => __('You are using a WordPress multisite environment, so please install Ninja Charts manually.', 'ninja-tables')
+                ]
+            ], 423);
+        }
+
         $plugin = [
             'name'      => 'Ninja Charts',
             'repo-slug' => 'ninja-charts',
