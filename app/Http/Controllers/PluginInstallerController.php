@@ -61,6 +61,10 @@ class PluginInstallerController extends Controller
 
         $upgrader = new PluginInstaller(new AjaxInstaller());
         $api      = plugins_api('plugin_information', array('slug' => $slug, 'fields' => array('sections' => false)));
+        if (is_wp_error($api)) {
+            return $api;
+        }
+
         $result   = $upgrader->installPlugin($api->download_link);
 
         if (is_wp_error($result)) {
