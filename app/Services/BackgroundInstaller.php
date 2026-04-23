@@ -25,7 +25,7 @@ class BackgroundInstaller
             // See if the plugin is installed already.
             if (isset($installed_plugins[$plugin_dir_url])) {
                 $installed = true;
-                $activate  = ! is_plugin_active($plugin_file);
+                $activate  = ! is_plugin_active($plugin_dir_url);
             }
 
             // Install this thing!
