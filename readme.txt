@@ -3,8 +3,8 @@ Contributors: wpmanageninja, techjewel, adreastrian, heera
 Tags: Table, table builder, datatable, tables, spreadsheet
 Requires at least: 6.0
 Requires PHP: 7.4
-Tested up to: 6.8
-Stable tag: 5.2.4
+Tested up to: 7.0
+Stable tag: 5.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,8 +59,7 @@ Some of the tables Ninja Tables creates for you:
 Creating tables is super easy with Ninja Tables. Pick from multiple table creation options and start building your data table.
 
 
-<iframe width="611" height="360" src="https://www.youtube.com/embed/GXqaXMVsnl8?si=x78rF8j2glYq4pmV" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+[youtube https://www.youtube.com/watch?v=GXqaXMVsnl8]
 
 **Table Options**
 – Default (Manual table creation)
@@ -144,8 +143,7 @@ No time to configure columns and rows? Select the Drag and Drop Table Mode and c
 Even coloring table cells is easy. This mode also has the import-export option and some built-in templates inside.
 
 
-<iframe width="611" height="360" src="https://www.youtube.com/embed/CgMJvKdr1iI?si=bQpCC14aKQfO2mto" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+[youtube https://www.youtube.com/watch?v=CgMJvKdr1iI]
 
 ### Advanced Customization
 Ninja Tables lets you choose from 100+ different table styles and 3 popular CSS libraries with unlimited color schemes! Customize your tables with CSS, use Bootstrap 3 & 4, or semantic library to showcase the best version of your table.
@@ -187,8 +185,7 @@ When you have to migrate your tables from other table builder plugins, Ninja Tab
 
 
 **You are one click away from migrating all your TablePress data to Ninja Tables**
-<iframe width="611" height="360" src="https://www.youtube.com/embed/w1iXIxYXFPQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+[youtube https://www.youtube.com/watch?v=w1iXIxYXFPQ]
 
 ### Free Table Templates
 Ninja Tables makes sure to save your time and energy. To give you more flexibility and ease in creating tables, Ninja Tables provides 50+ customizable free **table templates.**
@@ -197,8 +194,7 @@ Ninja Tables makes sure to save your time and energy. To give you more flexibili
 For easy and quick table creation, it’s the perfect solution.
 
 
-<iframe width="611" height="360" src="https://www.youtube.com/embed/AMVLZaqIt6g" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+[youtube https://www.youtube.com/watch?v=AMVLZaqIt6g]
 
 – Pick a template
 – Download the ZIP and get the JSON file
@@ -213,8 +209,7 @@ Users of [Fluent Forms](https://fluentforms.com/) and Ninja Tables have it easy.
 Add Fluent Forms entries to your tables effortlessly by connecting Fluent Forms with Ninja Tables. Ninja Tables is deeply integrated with **[Fluent Forms.](https://wordpress.org/plugins/fluentform/)**
 
 
-<iframe width="611" height="360" src="https://www.youtube.com/embed/uMVnTYnKWM4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+[youtube https://www.youtube.com/watch?v=uMVnTYnKWM4]
 ### FluentCart Table [NEW]
 You can integrate Ninja Tables with FluentCart and display all your products in styled and customized tables. This integration is available in both free and pro versions of Ninja Tables.
 
@@ -260,8 +255,7 @@ Get [Ninja Tables Pro](https://ninjatables.com/pricing/) to present WooCommerce 
 Woo products in a tabular display increase sales by presenting all product data in one row.
 
 
-<iframe width="611" height="360" src="https://www.youtube.com/embed/uIBQoLCFs_M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+[youtube https://www.youtube.com/watch?v=uIBQoLCFs_M]
 
 ### Construct Table from Google Sheets
 Ninja Tables automatically [syncs with Google Spreadsheets](https://ninjatables.com/how-to-make-a-table-in-google-sheets/). This connection enables you to create tables using the Google Sheets data in the premium version.
@@ -420,6 +414,41 @@ Ninja Tables [customer support](https://wpmanageninja.com/support-tickets/#/) te
 
 == Changelog ==
 We released several updates for Ninja Tables in the years of development. These include improvements to the existing features and some wonderful additions to help you design tables more effectively.
+
+= 5.2.9 (Date: May 23, 2026) =
+ * Fixed: Row query scoping by table_id in manual sort operations
+ * Security: IDOR protections for table row access and post-meta write operations
+ * Security: Gutenberg block save restricted to ninja-table post type with admin role validation
+ * Security: Stricter HTML sanitization for non-admin frontend submissions
+ * Security: Prevented frontend users from editing columns they are not allowed to modify
+ * Security: Prevented unauthorized users from activating, deactivating, or viewing license details
+ * Security: Restricted license management to network admin on multisite installations
+ * Security: Strengthened content filtering for non-admin frontend table submissions
+ * Security: Enforced ninja-table post-type checks on settings, FluentCart, and column-delete endpoints
+ * Improved: Security by adding directory listing protection across all plugin directories
+ * Improved: Input validation on license key submissions
+
+= 5.2.8 (Date: April 16, 2026) =
+ * Added: DataTables support for table rendering.
+ * Improved: Accessibility for custom filters.
+
+= 5.2.7 (Date: February 04, 2026) =
+* Security: Improved permissions for FluentCart table creation
+
+= 5.2.6 (Date: January 27, 2026) =
+ * Added: Bulk delete for tables
+ * Added: Trash and restore tables
+ * Added: Single-row modal view
+ * Added: Click to copy cell Content
+ * Fixed: Print issues with conditional formatting
+ * Fixed: Print issues with responsive breakpoints
+ * Fixed: FluentForm payment form warnings
+ * Fixed: FluentCart permalink issues
+ * Fixed: Drag & drop color picker issue
+ * Security: Limited ninja_table_info & ninja_table_cell access to public posts.
+
+= 5.2.5 (Date: December 17, 2025) =
+ • Security: Improved OrderBy sanitization to prevent SQL injection.
 
 = 5.2.4 (Date: November 27, 2025) =
  • Security: Improved REST API sanitization to prevent SQL injection.
