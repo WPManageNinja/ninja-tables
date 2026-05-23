@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+?>
 <div class="ninja-deactivation-feedback <?php echo esc_attr($ninja_tables_slug); ?>_modal no-confirmation-message">
     <div class="ninja-modal-dialog">
         <div class="ninja-modal-header">

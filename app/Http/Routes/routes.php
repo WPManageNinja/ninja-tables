@@ -4,6 +4,10 @@
  * @var $router NinjaTables\Framework\Http\Router\Router
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 use NinjaTables\App\Http\Controllers\FluentFormsController;
 use NinjaTables\App\Http\Controllers\ImportController;
 use NinjaTables\App\Http\Controllers\PluginInstallerController;

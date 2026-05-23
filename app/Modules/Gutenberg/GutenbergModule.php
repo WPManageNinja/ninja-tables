@@ -2,6 +2,10 @@
 
 namespace NinjaTables\App\Modules\Gutenberg;
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 use NinjaTables\App\App;
 use NinjaTables\App\Models\Post;
 use NinjaTables\Framework\Support\Arr;

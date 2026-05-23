@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?><?php
 $ninja_tables_max_width = "";
 if (isset($setting['general']['options']['container_max_width_switch']['value']) && $setting['general']['options']['container_max_width_switch']['value'] == 'true') {
     $ninja_tables_max_width      = $setting['general']['options']['container_max_width_switch']['childs']['container_max_width']['value'];

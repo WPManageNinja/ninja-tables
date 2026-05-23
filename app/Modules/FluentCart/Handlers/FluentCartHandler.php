@@ -2,6 +2,10 @@
 
 namespace NinjaTables\App\Modules\FluentCart\Handlers;
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 use FluentCart\Api\Resource\FrontendResource\CartResource;
 use NinjaTables\App\App;
 use NinjaTables\App\Modules\FluentCart\Traits\FluentCartTrait;

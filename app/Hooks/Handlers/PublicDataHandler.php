@@ -2,6 +2,10 @@
 
 namespace NinjaTables\App\Hooks\Handlers;
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 use NinjaTables\App\App;
 use NinjaTables\App\Models\NinjaTableItem;
 use NinjaTables\App\Modules\DataProviders\NinjaFooTable;

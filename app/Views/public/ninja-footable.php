@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 <div id="footable_parent_<?php echo esc_attr($table_id); ?>"
     <?php
     $ninja_tables_loader = \NinjaTables\Framework\Support\Arr::get($settings, 'frontend_loader', 'yes');

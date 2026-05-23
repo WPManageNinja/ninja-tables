@@ -2,6 +2,10 @@
 
 namespace NinjaTables\App\Hooks\Handlers;
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 use NinjaTables\App\App;
 use NinjaTables\App\Modules\I18nStrings;
 use NinjaTables\Framework\Support\Arr;

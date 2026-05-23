@@ -2,8 +2,11 @@
 
 namespace NinjaTables\App\Features;
 
-use NinjaTables\Framework\Support\Arr;
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
+use NinjaTables\Framework\Support\Arr;
 class ProductComparison
 {
     public function register()

@@ -2,6 +2,10 @@
 
 namespace NinjaTables\App\Modules\DataProviders;
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 use NinjaTables\App\App;
 use NinjaTables\App\Helper\Helper;
 use NinjaTables\App\Models\NinjaTableItem;

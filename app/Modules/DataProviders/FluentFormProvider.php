@@ -2,6 +2,10 @@
 
 namespace NinjaTables\App\Modules\DataProviders;
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 use NinjaTables\Framework\Support\Arr;
 use NinjaTables\Framework\Support\Sanitizer;
 use FluentFormPro\Payments\PaymentHelper;
